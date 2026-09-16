@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  min-height: 100%;
+  background: #050805;
+}
+
+body {
+  position: relative;
+  color: #c8ffc0;
+  background-image:
+    linear-gradient(rgba(5, 8, 5, 0.72), rgba(5, 8, 5, 0.88)),
+    linear-gradient(rgba(57, 255, 20, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 255, 20, 0.04) 1px, transparent 1px);
+  background-size: auto, 32px 32px, 32px 32px;
+  background-attachment: fixed;
+}
+
+/* Scanlines are the house style, but they fight dense text — keep them faint. */
+body::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.08),
+    rgba(0, 0, 0, 0.08) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+::selection {
+  background: #39ff14;
+  color: #050805;
+}
+
+:focus-visible {
+  outline: 2px solid #00f0ff;
+  outline-offset: 2px;
+}
+
+@layer components {
+  .panel {
+    background: rgba(11, 18, 12, 0.88);
+    border: 1px solid rgba(57, 255, 20, 0.24);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 28px rgba(57, 255, 20, 0.06);
+  }
+
+  .panel-quiet {
+    background: rgba(11, 18, 12, 0.6);
+    border: 1px solid rgba(57, 255, 20, 0.14);
+  }
+
+  .label {
+    @apply text-[10px] font-medium uppercase tracking-[0.24em] text-mint/55;
+  }
+
+  .eyebrow {
+    @apply text-[10px] uppercase tracking-[0.22em] text-cyan/85;
+  }
+
+  /* Static metadata pill. Not a control — never wire a click to it. */
+  .tag {
+    @apply inline-flex items-center rounded-sm border border-acid/20 bg-void/60 px-1.5 py-0.5 font-mono text-[10px] lowercase tracking-[0.08em] text-mint/70;
+  }
+
+  /* Clickable filter/nav pill. */
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-sm border border-acid/25 bg-void/70 px-2 py-1 font-mono text-[11px] uppercase tracking-[0.12em] text-mint transition hover:border-cyan hover:text-cyan;
+  }
+
+  .chip[data-active="true"] {
+    @apply border-acid bg-acid/15 text-acid shadow-glow;
+  }
+
+  .field {
+    @apply w-full rounded-sm border border-acid/25 bg-void px-3 py-2 font-mono text-sm text-mint outline-none transition placeholder:text-mint/30 focus:border-cyan focus:shadow-cyan;
+  }
+
+  /* Facet row: a checkbox and a count, dense enough to scan 20 of them. */
+  .facet {
+    @apply flex w-full items-center gap-2 rounded-sm px-1.5 py-1 text-left font-mono text-[12px] text-mint/85 transition hover:bg-acid/10 hover:text-acid;
+  }
+
+  .facet[data-active="true"] {
+    @apply bg-acid/10 text-acid;
+  }
+
+  .facet-box {
+    @apply grid h-3.5 w-3.5 shrink-0 place-items-center border border-acid/40 text-[9px] leading-none text-void;
+  }
+
+  .facet[data-active="true"] .facet-box {
+    @apply border-acid bg-acid;
+  }
+
+  .link {
+    @apply text-cyan underline-offset-4 transition hover:text-acid hover:underline;
+  }
+}
+
+.scroll-list {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(57, 255, 20, 0.3) transparent;
+}
+
+.scroll-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-list::-webkit-scrollbar-thumb {
+  background: rgba(57, 255, 20, 0.28);
+}
+
+.glitch {
+  position: relative;
+  display: inline-block;
+  color: #c8ffc0;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #050805;
+}
+
+.glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 rgba(255, 43, 214, 0.7);
+  clip: rect(24px, 550px, 90px, 0);
+  animation: glitch-anim 3s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+  left: -2px;
+  text-shadow: -2px 0 rgba(0, 240, 255, 0.7);
+  clip: rect(85px, 550px, 140px, 0);
+  animation: glitch-anim 2.5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% { clip: rect(10px, 9999px, 83px, 0); }
+  5% { clip: rect(69px, 9999px, 35px, 0); }
+  10% { clip: rect(4px, 9999px, 78px, 0); }
+  15% { clip: rect(13px, 9999px, 10px, 0); }
+  20% { clip: rect(72px, 9999px, 96px, 0); }
+  25% { clip: rect(54px, 9999px, 32px, 0); }
+  30% { clip: rect(98px, 9999px, 20px, 0); }
+  35% { clip: rect(24px, 9999px, 60px, 0); }
+  40% { clip: rect(40px, 9999px, 15px, 0); }
+  45% { clip: rect(88px, 9999px, 50px, 0); }
+  50% { clip: rect(14px, 9999px, 90px, 0); }
+  55% { clip: rect(78px, 9999px, 45px, 0); }
+  60% { clip: rect(32px, 9999px, 72px, 0); }
+  65% { clip: rect(60px, 9999px, 24px, 0); }
+  70% { clip: rect(20px, 9999px, 98px, 0); }
+  75% { clip: rect(90px, 9999px, 14px, 0); }
+  80% { clip: rect(50px, 9999px, 88px, 0); }
+  85% { clip: rect(15px, 9999px, 40px, 0); }
+  90% { clip: rect(96px, 9999px, 72px, 0); }
+  95% { clip: rect(35px, 9999px, 69px, 0); }
+  100% { clip: rect(83px, 9999px, 10px, 0); }
+}

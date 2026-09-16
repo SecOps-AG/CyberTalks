@@ -1,0 +1,225 @@
+{
+  "villageSlug": "car-hacking-village",
+  "villageName": "Car Hacking Village",
+  "eventSlug": "defcon-25",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PL9fPq3eQfaaA42Iq_PjgbnDhmptBiWQgx",
+  "description": "Car Hacking Village at DEF CON 25 explores automotive security vulnerabilities, wireless attacks, and vehicle network exploitation. The 11 talks cover heavy truck logging devices, GPS spoofing, relay attacks, smart car vulnerabilities, wireless interfaces, AUTOSAR security, V2X frameworks, and remote automotive exploits.",
+  "talks": [
+    {
+      "youtubeId": "uIj7wkAoJ6Y",
+      "slug": "corey-theun-heavy-truck-and-electronic-logging-devices",
+      "title": "Heavy Truck and Electronic Logging Devices",
+      "speakers": [
+        "Corey Theun"
+      ],
+      "track": "red-team",
+      "topics": [
+        "automotive-security",
+        "eld-systems",
+        "logging-devices",
+        "heavy-vehicles",
+        "cans-bus"
+      ],
+      "teaser": "Security vulnerabilities in electronic logging devices (ELDs) used in heavy trucks and commercial vehicles.",
+      "summary": "### Heavy Vehicle Architecture and the Federal ELD Mandate\nAt 00:00 and 01:31, Corey Thuen introduces automotive security research focusing on commercial freight transport. He explains how the Federal Motor Carrier Safety Administration (FMCSA) mandated Electronic Logging Devices (ELDs) across millions of commercial heavy trucks to automatically monitor driver Hours of Service (HOS). Unlike passenger cars with isolated gateways, heavy trucks rely on standardized SAE J1939 CAN bus networks operating at 250 kbps across standard 9-pin Deutsch diagnostic ports.\n\n### Regulatory Checklists vs. Real-World Security\nAt 06:06 and 09:10, Thuen critiques the federal regulatory framework, emphasizing that the government established strict compliance checklists for data logging without including a single cybersecurity requirement. In response to the mandate, numerous hardware vendors rushed uncertified aftermarket dongles to commercial truck stops, creating a vast attack surface plugged directly into safety-critical vehicle networks.\n\n### Hardware Teardowns and Firmware Reverse Engineering\nAt 12:13 and 15:14, Thuen analyzes teardowns of popular commercial ELD devices. The hardware architectures typically consist of a low-cost microcontroller, a J1939 CAN transceiver, and an unauthenticated Bluetooth or cellular modem. Firmware extracted from these devices revealed hardcoded credentials, unvalidated over-the-air firmware updates, and completely unauthenticated serial communication bridges linking external wireless signals directly to the drivetrain bus.\n\n### Wireless CAN Injection and Fleet Manipulation\nAt 18:15 and 21:17, the presentation details how an attacker within Bluetooth range or via cellular interfaces can inject arbitrary J1939 CAN frames. Because the J1939 protocol lacks cryptographic authentication, rogue packets can spoof truck velocity, falsify driver duty status to evade law enforcement inspections, or trigger diagnostic fault codes that force commercial trucks into limp mode or disable cruise control systems.\n\n### Systemic Supply Chain and Infrastructure Risks\nConcluding between 25:49 and 30:27, Thuen discusses the systemic economic and physical dangers posed by compromised ELD fleets. A wormable exploit propagating across cellular-connected logging devices could simultaneously immobilize commercial shipping corridors, strand freight logistics, or disrupt municipal supply chains, highlighting the urgent need for robust gateway isolation in commercial transport.\n\n(AI summary — Gemini 3.8 Flash)",
+      "durationSeconds": 1917
+    },
+    {
+      "youtubeId": "0O3pwRHYYKg",
+      "slug": "weston-hecker-grand-theft-radio-stopping-sdr-relay-attacks",
+      "title": "Grand Theft Radio: Stopping SDR Relay Attacks",
+      "speakers": [
+        "Weston Hecker"
+      ],
+      "track": "red-team",
+      "topics": [
+        "relay-attacks",
+        "sdr",
+        "car-key-fobs",
+        "wireless-compromise",
+        "automotive"
+      ],
+      "teaser": "Wireless relay attacks on vehicle key fobs using software-defined radios and mitigation strategies.",
+      "summary": "Automotive security: Grand Theft Radio: Stopping SDR Relay Attacks. Vehicle network and system exploitation.\n\n(AI summary — Claude Haiku)",
+      "durationSeconds": 1520
+    },
+    {
+      "youtubeId": "9Wg4lzMasMo",
+      "slug": "vlad-gostomelsky",
+      "title": "GPS System Integrity",
+      "speakers": [
+        "Vlad Gostomelsky"
+      ],
+      "track": "red-team",
+      "topics": [
+        "gps-spoofing",
+        "gnss-attacks",
+        "navigation-systems",
+        "automotive",
+        "signal-spoofing"
+      ],
+      "teaser": "GPS spoofing attacks against vehicle navigation and autonomous systems.",
+      "summary": "### The Architecture of Satellite Navigation\nAt 00:00 and 01:30, Vlad Gostomelsky introduces the structural dependencies and vulnerabilities of Global Navigation Satellite Systems (GNSS), focusing on the United States GPS constellation. He explains how receivers calculate geographic coordinates and precise timing via time-of-flight trilateration from orbital atomic clocks. However, because civilian GPS L1 C/A signals transmit without cryptographic encryption or authentication, receivers inherently trust any broadcast that matches the expected radio frequency format.\n\n### RF Jamming Mechanisms and Fleet Disruption\nAt 03:08 and 06:10, Gostomelsky differentiates between jamming and spoofing attacks. Simple RF jamming floods the 1575.42 MHz frequency band with noise, causing immediate denial-of-service and forcing receivers into signal acquisition drift. He highlights how commercial drivers routinely deploy cheap \"cigarette-lighter\" jammers to evade company telematics and geofencing tracking, inadvertently blinding emergency services, cell tower timing synchronizers, and airport approach radars within a several-mile radius.\n\n### SDR-Based Spoofing and Coordinated Manipulation\nAt 09:14 and 12:16, the presentation examines sophisticated signal spoofing enabled by low-cost Software Defined Radios (such as HackRF and BladeRF) running open-source toolkits like `gps-sdr-sim`. Rather than knocking out signals, spoofers transmit mathematically coherent, slightly stronger satellite signals that gradually desynchronize the receiver's internal clock and manipulate reported coordinates without triggering loss-of-lock alarms.\n\n### Maritime, Aviation, and Automotive Threat Vectors\nAt 13:51 and 16:51, Gostomelsky reviews documented real-world attacks, including widespread GPS spoofing incidents in the Black Sea that caused dozens of commercial transport vessels to report positions miles inland. He illustrates how automotive telematics and semi-autonomous driving systems rely heavily on GPS for road navigation and speed limit data, demonstrating that falsified positioning can cause vehicles to execute unexpected lane maneuvers or misroute entirely.\n\n### Mitigation Strategies and Hardened Receiver Design\nConcluding between 20:05 and 23:06, Gostomelsky outlines defensive countermeasures for GNSS-dependent systems. Effective mitigations include integrating multi-constellation receivers (incorporating Galileo and GLONASS), pairing satellite positioning with inertial dead reckoning (accelerometers and wheel tick sensors), monitoring automatic gain control (AGC) anomalies, and deploying Receiver Autonomous Integrity Monitoring (RAIM) algorithms to detect out-of-sequence pseudoranges.\n\n(AI summary — Gemini 3.8 Flash)",
+      "durationSeconds": 1432
+    },
+    {
+      "youtubeId": "LmBixGkhEuI",
+      "slug": "tim-b1tbane-mitch-johnson-ehntoo-thats-no-car-its-a-network",
+      "title": "That's No Car: Its a Network",
+      "speakers": [
+        "Tim b1tbane",
+        "Mitch Johnson",
+        "ehntoo"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vehicle-networks",
+        "can-bus",
+        "lin-bus",
+        "automotive-protocols",
+        "network-security"
+      ],
+      "teaser": "Vehicle communication networks, protocols, and attack surfaces on automotive bus systems.",
+      "summary": "Automotive security: That's No Car: Its a Network. Vehicle network and system exploitation.\n\n(AI summary — Claude Haiku)",
+      "durationSeconds": 2122
+    },
+    {
+      "youtubeId": "heKMPMahF2E",
+      "slug": "sheila-ayelen-berta-claudio-caracciolo-the-bicho",
+      "title": "The Bicho",
+      "speakers": [
+        "Sheila Ayelen Berta",
+        "Claudio Caracciolo"
+      ],
+      "track": "red-team",
+      "topics": [
+        "automotive-hacking",
+        "reverse-engineering",
+        "firmware-analysis",
+        "vehicle-hardware",
+        "exploitation"
+      ],
+      "teaser": "Reverse engineering and exploitation of vehicle embedded systems and automotive hardware.",
+      "summary": "### The Inherent Insecurities of Controller Area Networks\nAt 00:00 and 03:19, Sheila Ayelen Berta and Claudio Caracciolo open with an overview of automotive internal networks. Modern vehicles rely on the Controller Area Network (CAN) bus for inter-ECU communication. However, because CAN was designed without built-in authentication, encryption, or origin validation, any node connected to the physical bus can sniff broadcast traffic and inject malicious control frames with total impunity.\n\n### Introducing The Bicho Hardware Implant\nAt 06:21 and 09:23, the speakers unveil \"The Bicho,\" an open-source, low-cost hardware implant engineered for clandestine automotive backdooring. Designed to be wired covertly behind the OBD-II diagnostic port or tapped directly into internal dashboard wiring harnesses, The Bicho combines a low-power microcontroller, a CAN transceiver, and an integrated GSM/GPS cellular modem, granting remote interactive access to the vehicle from anywhere in the world.\n\n### Dual Modes: Configuration and Autonomous Attack\nAt 15:28 and 18:31, the presenters explain The Bicho's dual operational modes. In programming mode, researchers configure targeted CAN frame IDs, payload masks, and trigger logic via a dedicated GUI or serial console. In autonomous attack mode, the device monitors the bus in real time, executing preprogrammed payload injections whenever specific vehicular conditions—such as exceeding a defined speed or activating turn signals—are satisfied.\n\n### Remote Telematics Control and Live Injection Demos\nAt 21:32 and 26:16, the speakers demonstrate live vehicle manipulation via SMS commands sent across the cellular network. The Bicho intercepts the SMS instruction, formats the corresponding CAN payload, and transmits frames into the vehicle network. Video demonstrations illustrate remote actuation of headlights, manipulation of digital instrument cluster speedometers and fuel gauges, cycling windshield wipers, and suppressing critical dashboard warning lights while the vehicle is driven.\n\n### CAN Reversing Methodologies and Countermeasures\nConcluding between 27:49 and 30:52, Berta and Caracciolo outline reverse-engineering methodologies for proprietary CAN databases without manufacturer DBC files. They detail differential packet analysis to isolate actuator frames from noisy sensor broadcasts and advocate for hardware-level automotive intrusion detection systems (IDS) and cryptographically authenticated protocols like AUTOSAR SecOC to neutralize physical implants.\n\n(AI summary — Gemini 3.8 Flash)",
+      "durationSeconds": 1926
+    },
+    {
+      "youtubeId": "EzSVIaykTs0",
+      "slug": "sameer-dixit-vlad-gostomelsky-abusing-smart-cars-with-qr-codes",
+      "title": "Abusing Smart Cars with QR Codes",
+      "speakers": [
+        "Sameer Dixit",
+        "Vlad Gostomelsky"
+      ],
+      "track": "red-team",
+      "topics": [
+        "qr-code-attacks",
+        "mobile-interfaces",
+        "connected-vehicles",
+        "smart-cars",
+        "iot-security"
+      ],
+      "teaser": "Using QR codes to exploit smart car interfaces and connected vehicle systems.",
+      "summary": "Automotive security: Abusing Smart Cars with QR Codes. Vehicle network and system exploitation.\n\n(AI summary — Claude Haiku)",
+      "durationSeconds": 1443
+    },
+    {
+      "youtubeId": "knEV4u7yJdU",
+      "slug": "montalbano-gillispie-connett",
+      "title": "Attacking Wireless Interfaces",
+      "speakers": [
+        "Montalbano",
+        "Gillispie",
+        "Connett"
+      ],
+      "track": "red-team",
+      "topics": [
+        "wireless-interfaces",
+        "bluetooth",
+        "wifi-automotive",
+        "vehicle-communication",
+        "rf-attacks"
+      ],
+      "teaser": "Wireless attack vectors on Bluetooth, WiFi, and RF interfaces in modern vehicles.",
+      "summary": "### Automotive Wireless Attack Surfaces\nAt 00:00 and 01:31, Justin Montalbano and Dave Connett of Delphi Automotive introduce the expanding wireless attack perimeter of modern passenger vehicles. Connected cars integrate dozens of RF communication protocols, including cellular telematics, Bluetooth hands-free systems, in-cabin Wi-Fi hotspots, Tire Pressure Monitoring Systems (TPMS), and sub-GHz Remote Keyless Entry (RKE), each presenting distinct avenues for wireless compromise.\n\n### Low-Cost SDR Tooling and Spectrum Reconnaissance\nAt 07:46 and 10:46, the presenters demonstrate how accessible Software Defined Radio (SDR) hardware has transformed automotive RF auditing. Equipment that previously required million-dollar RF laboratory instruments can now be analyzed using affordable tools like the HackRF, RTL-SDR, and open-source software like GQRX and GNU Radio. Researchers can effortlessly capture over-the-air signals, analyze spectrum occupancy, and characterize modulation schemes across 315 MHz and 433 MHz bands.\n\n### Reverse Engineering TPMS and Key Fob Telemetry\nAt 13:48 and 16:49, Dave Connett walks through the \"secret sauce\" of extracting raw binary data from RF transmissions. Following methodologies popularized by Michael Ossmann, he demonstrates how to calculate symbol rates, isolate Amplitude Shift Keying (ASK) and Frequency Shift Keying (FSK) modulations, and apply digital threshold slicing. By reversing Manchester encoding in Python, they extract unencrypted sensor IDs, pressure readings, and battery telemetry from rolling TPMS sensors.\n\n### RF Chamber Testing and Anechoic Containment\nAt 23:33 and 26:33, the team details professional RF test setups required to safely assess automotive RF without violating federal transmission regulations. They showcase specialized Faraday isolation tents and multi-pane RF anechoic chambers deployed in industrial automotive labs, emphasizing that wireless pen testing on production telematics or keyless entry must occur within shielded enclosures to contain stray transmissions.\n\n### Defense-in-Depth and Wireless Gateway Hardening\nConcluding between 31:04 and 34:14, the speakers review essential automotive wireless security controls. They explain how implementing cryptographic rolling codes (such as Keeloq variants) mitigates naive replay attacks on keyless entry systems and emphasize that RF transceivers should terminate in isolated gateway ECUs rather than maintaining direct, unfiltered bus connectivity to safety-critical powertrain controllers.\n\n(AI summary — Gemini 3.8 Flash)",
+      "durationSeconds": 2063
+    },
+    {
+      "youtubeId": "X4szarzU3Rc",
+      "slug": "jeffrey-quesnelle-an-introduction-to-autosar-secure-onboard",
+      "title": "An Introduction to AUTOSAR Secure Onboard",
+      "speakers": [
+        "Jeffrey Quesnelle"
+      ],
+      "track": "red-team",
+      "topics": [
+        "autosar",
+        "automotive-software",
+        "secure-coding",
+        "vehicle-firmware",
+        "embedded-security"
+      ],
+      "teaser": "AUTOSAR standard and secure onboard diagnostic protocols for automotive embedded systems.",
+      "summary": "Automotive security: An Introduction to AUTOSAR Secure Onboard. Vehicle network and system exploitation.\n\n(AI summary — Claude Haiku)",
+      "durationSeconds": 2625
+    },
+    {
+      "youtubeId": "FEpMtMLAxOU",
+      "slug": "woodbury-haltmeyer",
+      "title": "Linux Stack Based V2X Framework",
+      "speakers": [
+        "Woodbury",
+        "Haltmeyer"
+      ],
+      "track": "red-team",
+      "topics": [
+        "v2x",
+        "vehicle-communication",
+        "dsrc",
+        "connected-vehicles",
+        "linux-automotive"
+      ],
+      "teaser": "Vehicle-to-everything (V2X) communication protocols and Linux-based implementations in connected vehicles.",
+      "summary": "### The Promise and Architecture of Connected Vehicles\nAt 00:00 and 01:35, Jared Woodbury and Christian Haltmeyer introduce Vehicle-to-Everything (V2X) communication, detailing how Dedicated Short-Range Communications (DSRC) based on IEEE 802.11p at 5.9 GHz allows vehicles to exchange situational safety telemetry. By transmitting continuous Basic Safety Messages (BSMs), V2X systems enable collision warnings, electronic emergency brake alerts, blind-spot detections, and cooperative cruise control.\n\n### Limitations of Proprietary Automotive Test Stacks\nAt 04:37 and 07:37, the presenters evaluate the commercial V2X testing landscape, explaining that existing commercial evaluation kits and proprietary protocol stacks are cost-prohibitive, opaque, and difficult for independent security researchers to audit. Furthermore, proprietary parsers frequently diverge in their implementations of SAE J2735 message standards, leaving edge-case vulnerabilities unscrutinized.\n\n### Developing an Open-Source Linux V2X Framework\nAt 10:38 and 13:41, the authors unveil their open-source Linux stack-based V2X framework. Leveraging commodity 802.11p-compatible Wi-Fi chipsets (such as Atheros `ath9k` under Linux `mac80211`), they demonstrate bridging raw link-layer radio frames into user space. By mapping custom IEEE 1609 network and transport layer protocols, the framework provides interactive scripting capabilities for inspecting, injecting, and fuzzing V2X payloads.\n\n### Packet Injection, PCAP Integration, and Message Spoofing\nAt 16:42 and 19:47, Woodbury and Haltmeyer demonstrate how their tool utilizes standard `libpcap` and raw sockets to inject crafted J2735 messages into active vehicular channels. They show how researchers can forge emergency vehicle preemption alerts, manipulate traffic signal priority requests, or simulate ghost vehicles stopped in traffic lanes, demonstrating how unauthenticated or improperly validated messages trigger erratic automated vehicle braking reactions.\n\n### PKI Vulnerabilities and Resilient V2X Ecosystems\nConcluding between 22:48 and 27:21, the speakers examine the security services defined in IEEE 1609.2, focusing on Public Key Infrastructure (PKI) and certificate verification bottlenecks. They analyze vulnerabilities surrounding certificate revocation, identity spoofing, and roadside unit (RSU) trust models, urging the open-source community to collaborate on hardening connected vehicle protocols against over-the-air manipulation.\n\n(AI summary — Gemini 3.8 Flash)",
+      "durationSeconds": 1711
+    },
+    {
+      "youtubeId": "-aJUUdKRy_k",
+      "slug": "badge-life-defcon-unofficial-badges-panel",
+      "title": "Badge Life: DEFCON Unofficial Badges Panel",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "badge-community",
+        "hardware-projects",
+        "defcon-culture",
+        "diy-electronics",
+        "maker-community"
+      ],
+      "teaser": "Community discussion on DIY electronic badges at DEF CON and the maker culture.",
+      "summary": "Badge/hardware: Badge Life: DEFCON Unofficial Badges Panel. Custom hardware and badge design discussions.\n\n(AI summary — Claude Haiku)",
+      "durationSeconds": 2991
+    },
+    {
+      "youtubeId": "5QBOmr_ZyLo",
+      "slug": "mickey-shkatov-jesse-michael-oleksandr-bazhaniuk-driving-down-th",
+      "title": "Driving down the rabbit hole",
+      "speakers": [
+        "Mickey Shkatov",
+        "Jesse Michael",
+        "Oleksandr Bazhaniuk"
+      ],
+      "track": "red-team",
+      "topics": [
+        "automotive-research",
+        "vulnerability-disclosure",
+        "reverse-engineering",
+        "firmware-hacking",
+        "car-security"
+      ],
+      "teaser": "Deep dive into complex vehicle vulnerabilities and the discovery process for modern automotive exploits.",
+      "summary": "### Scrapyard Automotive Research on a Budget\nAt 00:00 and 03:04, Mickey Shkatov, Jesse Michael, and Alex Bazhaniuk describe building a functional automotive hacking testbed without an enterprise budget. Rather than purchasing a brand-new vehicle, the researchers scouted salvage auto yards, acquired disassembled electronic modules and wire harnesses from a wrecked 2015 Nissan Leaf, and successfully resurrected the drive-by-wire and telematics subsystems on their laboratory workbench (around 06:05).\n\n### Dissecting the Telematics Control Unit (TCU)\nAt 07:35 and 10:39, the team explores the Nissan Leaf's Telematics Control Unit (TCU), which connects the car to cellular networks for remote status checks and climate control. Upon opening the TCU enclosure and removing the SIM card (at 15:16), they discovered that the unit communicated over international GSM roaming networks and contained embedded URLs, unauthenticated web API endpoints, and direct serial AT command interfaces.\n\n### Uncovering the Infineon Baseband Processor\nAt 16:46 and 18:16, hardware inspection revealed that the TCU's cellular communications were handled by an Infineon baseband processor—the exact same chip architecture utilized years earlier in the original Apple iPhone and iPhone 3G. Despite being phased out of smartphones, the silicon had been repurposed in automotive supply chains without receiving crucial firmware updates or security mitigations.\n\n### Remote Over-the-Air Baseband Exploitation\nAt 19:46 and 21:18, the researchers detail how they leveraged publicly documented baseband vulnerabilities (from Ralf-Philipp Weinmann's research). Using a software-defined radio to establish a rogue GSM base station, they delivered a malformed cellular payload that triggered a remote stack-based buffer overflow, hijacking the ARM program counter (`r15`). This gave the team unauthenticated arbitrary remote code execution inside the TCU over the cellular air interface.\n\n### Memory Dumping, Firmware Extraction, and Supply Chain Risk\nAt 24:20 and 28:53, the speakers explain how they weaponized the baseband exploit to dump the processor's internal memory space in 13,000 incremental bursts, reconstructing the complete baseband firmware, cryptographic keys, and CAN messaging routines. Concluding from 31:53 to 37:57, they highlight the broader automotive supply chain risk: legacy, discontinued consumer chipsets harboring well-known public exploits frequently linger in vehicles for decades, demanding rigorous vulnerability lifecycle management from automakers.\n\n(AI summary — Gemini 3.8 Flash)",
+      "durationSeconds": 2286
+    }
+  ]
+}

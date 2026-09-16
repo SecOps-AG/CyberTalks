@@ -1,0 +1,111 @@
+{
+  "villageSlug": "afk",
+  "villageName": "AFK",
+  "eventSlug": "defcon-25",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PL9fPq3eQfaaCY7ExCkHnLDPuKjhYC2euI",
+  "description": "AFK at DEF CON 25 is an assorted collection of 6 talks from various villages and tracks covering diverse security topics including reconnaissance, cryptography, healthcare security, program analysis, AI, and privacy.",
+  "talks": [
+    {
+      "youtubeId": "uBy2N0NmS2o",
+      "slug": "recon-village-rhett-greenhagen-skip-tracing-for-fun-and-profit",
+      "title": "Skip Tracing For Fun and Profit",
+      "speakers": [
+        "Rhett Greenhagen"
+      ],
+      "track": "recon",
+      "topics": [
+        "recon",
+        "threat-intel",
+        "privacy"
+      ],
+      "teaser": "Skip Tracing For Fun and Profit",
+      "summary": "Research talk: Skip Tracing For Fun and Profit. Investigative approach to security analysis.\n\n(AI summary — Claude Haiku)",
+      "durationSeconds": 2602
+    },
+    {
+      "youtubeId": "49KU9NDcCgI",
+      "slug": "gus-fritschie-evan-teitelman-backdooring-the-lottery-and-other-s",
+      "title": "Backdooring the Lottery and Other Security Tales",
+      "speakers": [
+        "Gus Fritschie, Evan Teitelman"
+      ],
+      "track": "red-team",
+      "topics": [
+        "threat-intel",
+        "privacy",
+        "appsec"
+      ],
+      "teaser": "Backdooring the Lottery and Other Security Tales",
+      "summary": "### Evolution of Casino and Gaming Exploitation\nAt 01:30, the speakers provide an overview of the regulatory and security landscape governing casinos, state lotteries, and tribal gaming. Starting at 06:00, they examine historical mechanical cheating techniques, profiling notorious slot machine fraudster Tommy Carmichael. Carmichael engineered physical tools—such as the monkey paw, the slider, and the optical light wand—which bypassed coin-counting microswitches and blinded optical sensors inside payout hoppers to trigger automated jackpot dumps.\n\n### Insider Tampering: The Ron Harris Case\nAt 07:31, the presentation explores the infamous case of Ron Harris, a computer technician and investigator for the Nevada Gaming Control Board. Leveraging his official mandate to audit and approve gaming hardware, Harris accessed proprietary slot machine source code and secretly burned modified EPROMs containing malicious logic bombs. He also calculated computerized Keno pseudorandom number generator (PRNG) cycles, successfully rigging games until his arrest in Atlantic City in 1995.\n\n### The MUSL Hot Lotto Insider Attack\nAt 12:03, the focus turns to the landmark Eddie Tipton case at the Multi-State Lottery Association (MUSL). Serving as Information Security Director, Tipton held administrative control over the computerized random number generation systems powering multi-state drawings. At 13:36, surveillance footage captured Tipton personally purchasing a winning $16.5 million Hot Lotto ticket in Iowa, violating strict bans on lottery employees participating in drawings.\n\n### Forensic Analysis of the qv_rng.dll Backdoor\nAt 16:40 and 19:41, the speakers dissect the forensic investigation conducted by Cyber Security Turner, which analyzed hard drive images from the lottery draw machines. Investigators discovered that Tipton had injected malicious code into `qv_rng.dll`, a core dynamic-link library responsible for seeding the PRNG. When drawings occurred on three specific dates of the year, falling on particular days of the week and matching exact clock times, the software bypassed atmospheric noise seeds and initialized a predictable linear congruential PRNG algorithm, giving Tipton the exact winning number sequences in advance.\n\n### Russian Slot Machine PRNG Reverse Engineering\nAt 27:16 and 28:48, the speakers describe a sophisticated international syndicate active from 2011 to 2014 that targeted Aristocrat Mark VI slot machines. Operatives inside casinos recorded video clips of spinning reels using mobile phones and transmitted the footage to remote analysis servers in Saint Petersburg. By calculating the internal state of the machine's PRNG, the servers timed spin commands down to the millisecond, sending haptic vibration alerts to the operative's phone indicating the exact moment to press the spin button for guaranteed payouts.\n\n### Security Vulnerabilities and Network Segmentation in Modern Gaming\nConcluding between 33:21 and 36:21, the presenters evaluate architectural vulnerabilities across modern gaming operations. They emphasize that while casinos enforce strict physical surveillance, internal IT networks frequently suffer from excessive vendor trust, unsegmented floor networks, and compliance checklists that fail to prevent determined insiders and advanced hardware attacks.\n\n(AI summary — Gemini 3.8 Flash)",
+      "durationSeconds": 2254
+    },
+    {
+      "youtubeId": "1nvYGi7-Lxo",
+      "slug": "svea-eckert-andreas-dewes",
+      "title": "Dark Data",
+      "speakers": [
+        "Svea Eckert, Andreas Dewes"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "threat-intel",
+        "appsec"
+      ],
+      "teaser": "Dark Data",
+      "summary": "Privacy research: Dark Data. Privacy technologies and data protection.\n\n(AI summary — Claude Haiku)",
+      "durationSeconds": 2336
+    },
+    {
+      "youtubeId": "XL9kWQ3YpLo",
+      "slug": "yan-shoshitaishvili",
+      "title": "25 Years of Program Analysis",
+      "speakers": [
+        "Yan Shoshitaishvili"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "ai-security",
+        "threat-intel"
+      ],
+      "teaser": "25 Years of Program Analysis",
+      "summary": "### The Core Disciplines of Program Analysis\nAt 04:37, Yan Shoshitaishvili introduces the three foundational disciplines of program analysis: static analysis, dynamic analysis, and symbolic/abstract execution. Tracing software flaws back to Charles Babbage's 1830s Analytical Engine (at 06:10) and early computing history, he notes that automated vulnerability detection has evolved into an essential discipline to counter escalating software complexity and vulnerability density.\n\n### The Fundamental Hurdles: Reachability, Specification, and State Space\nAt 09:11 and 10:41, Shoshitaishvili outlines the persistent theoretical and practical bottlenecks of program analysis. He breaks down the reachability problem—where an analyst must determine if concrete inputs can navigate through complex logic to reach a vulnerable state—and the specification problem, which challenges tools to define what constitutes erroneous behavior without formal ground-truth specifications. While static analysis covers broad codebases rapidly, it suffers from high false-positive alert rates (discussed around 12:11).\n\n### Symbolic Execution and SMT Solving Mechanics\nAt 19:44 and 22:48, Shoshitaishvili details the inner workings of symbolic execution engines, including angr. Rather than passing concrete integers or strings into a program, inputs are treated as symbolic variables that accumulate mathematical constraints across conditional branches. At 25:49, he demonstrates constraint accumulation along diverging paths (`username == \"service\"` vs. `username != \"service\"`), which are solved using SMT engines like Z3. However, at 27:19, he illustrates how loops, path explosions, and environmental dependencies often limit pure symbolic execution on real-world software.\n\n### The Evolution of Fuzzing and Dynamic Analysis\nAt 31:54, Shoshitaishvili charts dynamic analysis from Barton Miller's 1990s random fuzz testing to modern coverage-guided fuzzers like AFL. While fuzzing excels at executing millions of concrete test cases per second, it frequently stalls when encountering strict magic values, cryptographic hashes, or complex multi-byte checks (explained around 34:59).\n\n### Empirical Insights from the DARPA Cyber Grand Challenge\nAt 41:10 and 42:40, Shoshitaishvili presents benchmark data from the DARPA Cyber Grand Challenge (CGC), the world's first fully autonomous cyber hacking competition. Across the CGC dataset, pure symbolic execution found only 9 vulnerabilities, whereas coverage fuzzers discovered 106. However, hybrid concolic systems—such as Shellphish's \"Driller,\" which leverages AFL for broad state exploration and angr's symbolic solver to bypass narrow conditional checks—demonstrated superior overall bug-finding capabilities. At 47:13, he illustrates how hybrid systems revive stalled fuzzer coverage curves, shaping the modern paradigm of automated binary analysis.\n\n(AI summary — Gemini 3.8 Flash)",
+      "durationSeconds": 2985
+    },
+    {
+      "youtubeId": "g5Hx86H3-mc",
+      "slug": "chris-sumner-rage-against-the-weaponized-ai-propaganda-machine",
+      "title": "Rage Against the Weaponized AI Propaganda Machine",
+      "speakers": [
+        "Chris Sumner"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai-security",
+        "threat-intel",
+        "privacy"
+      ],
+      "teaser": "Rage Against the Weaponized AI Propaganda Machine",
+      "summary": "AI and security: Rage Against the Weaponized AI Propaganda Machine. Discussion of artificial intelligence and security implications.\n\n(AI summary — Claude Haiku)",
+      "durationSeconds": 2646
+    },
+    {
+      "youtubeId": "l0q37IJi-CQ",
+      "slug": "crypto-village-ryan-lackey",
+      "title": "Cypherpunks History",
+      "speakers": [
+        "Ryan Lackey"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "threat-intel",
+        "appsec"
+      ],
+      "teaser": "Cypherpunks History",
+      "summary": "### Origins of the Cypherpunks Mailing List\nAt 01:30, Ryan Lackey recounts his teenage experiences maintaining an early Macintosh mailing list mirror for the Cypherpunks. Founded in 1992 by Eric Hughes, John Gilmore, and Timothy C. May, the Cypherpunks operated under the guiding ethos that privacy is necessary for an open society and that \"Cypherpunks write code.\" Rather than relying solely on legislative lobbying, the group focused on developing and deploying open cryptographic tools to safeguard individual liberties in the digital era.\n\n### Legal Precedents and the First Crypto Wars\nAt 03:00, Lackey explores the pivotal legal conflicts shaped by mailing list members during the 1990s. The community spearheaded resistance against government surveillance initiatives like the Clipper Chip and actively contested International Traffic in Arms Regulations (ITAR) export controls on strong cryptography. By publishing source code in printed books—exploiting constitutional First Amendment protections for print media—activists systematically undermined export restrictions, setting foundational precedents for digital privacy law.\n\n### Anonymous Remailers and Pseudonymous Communication\nAt 07:30, the discussion examines the architectural evolution of anonymous remailers, from early Type I Cypherpunk remailers to Mixmaster (Type II). Lackey explains how message pooling, uniform packet sizing, and multi-hop nested encryption eliminated metadata trails and timing correlations. These early remailer networks established the core traffic-analysis countermeasures that later inspired modern onion routing and Tor.\n\n### Digital Cash Experiments and Information Markets\nAt 09:01, Lackey reviews pre-Bitcoin monetary experiments, discussing David Chaum's blind-signature protocol in DigiCash (e-cash) and early centralized systems like E-Gold. At 10:32, he analyzes early debates surrounding electronic prediction markets and information escrow systems, as well as radical theoretical concepts such as Jim Bell's \"Assassination Politics,\" which explored how untraceable payments and anonymous networks might erode state monopolies on information and coercion.\n\n### Hardware Security Tokens, Export Realities, and Archival\nAt 16:35 and 18:05, Lackey discusses early developments in cryptographic hardware, including dedicated crypto coprocessors, smart cards, and tamper-resistant dongles designed to safeguard private keys from host-level compromise. Around 21:13 and 24:14, he examines the international dynamics between US and European contributors under differing export regimes. Concluding the talk, Lackey announces the restoration and public hosting of the comprehensive cypherpunks mailing list archive (`cypherpunks.venona.com`), preserving crucial primary sources from the dawn of digital privacy activism.\n\n(AI summary — Gemini 3.8 Flash)",
+      "durationSeconds": 1532
+    }
+  ]
+}

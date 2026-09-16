@@ -1,0 +1,145 @@
+{
+  "villageSlug": "car-hacking-village",
+  "villageName": "Car Hacking Village",
+  "eventSlug": "defcon-33",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PL9fPq3eQfaaCDPzJmwuy0kwiuO4JOMqiY",
+  "description": "Car Hacking Village at DEF CON 33 explores automotive cybersecurity, vehicle bus architectures, connected infrastructure, and embedded head units. Talks cover TPMS spoofing, odometer manipulation, dealer API vulnerabilities, and EV charging modem exploitation.",
+  "talks": [
+    {
+      "youtubeId": "QKHJZ1K-7p0",
+      "slug": "hacking-a-head-unit-with-malicious-png",
+      "title": "Hacking a Head Unit with Malicious PNG",
+      "speakers": [
+        "Danilo Erazo"
+      ],
+      "track": "hardware",
+      "topics": [
+        "automotive",
+        "hardware",
+        "rtos",
+        "reverse-engineering",
+        "vulnerability-research"
+      ],
+      "teaser": "Demonstrates how reverse engineering an automotive real-time operating system uncovered image parser flaws exploitable via a crafted PNG file to backdoor head units.",
+      "summary": "Automotive In-Vehicle Infotainment Architecture\n\nModern automotive head units run complex operating systems that process user media, navigation data, and vehicular status. While many run Linux or Android, thousands of commercial vehicles utilize proprietary real-time operating systems (RTOS).\n\nReverse Engineering Automotive RTOS Firmware\n\nHardware extraction and reverse engineering of proprietary RTOS firmware revealed numerous undocumented diagnostic services, insecure memory management routines, and unhardened media parsing libraries.\n\nExploiting Image Parsers via Malicious PNG Payloads\n\nAnalyzing the built-in image rendering engine uncovered memory corruption vulnerabilities triggered during PNG header and chunk processing. Crafting a malformed PNG file delivered via USB allows arbitrary code execution and establishes an unauthenticated backdoor on the head unit.\n\nImplications for In-Vehicle Security\n\nCompromising head units provides a potential pivot point toward connected vehicle CAN buses, demonstrating the necessity of memory-safe parsing libraries and isolated sandboxes in automotive RTOS designs.",
+      "durationSeconds": 1431
+    },
+    {
+      "youtubeId": "K5Kltw5kQpM",
+      "slug": "uncovering-the-secrets-of-tire-pressure-monitoring-systems",
+      "title": "Uncovering the Secrets of Tire Pressure Monitoring Systems",
+      "speakers": [
+        "Yago Lizarribar"
+      ],
+      "track": "wireless",
+      "topics": [
+        "automotive",
+        "tpms",
+        "rf",
+        "spoofing",
+        "tracking"
+      ],
+      "teaser": "Reveals how unencrypted RF broadcasts from direct Tire Pressure Monitoring Systems (TPMS) enable vehicle tracking and custom message injection to spoof ECUs.",
+      "summary": "Wireless Architecture of Direct TPMS\n\nDirect Tire Pressure Monitoring Systems (TPMS) rely on battery-powered sensor modules installed inside each vehicle tire. These sensors periodically broadcast pressure, temperature, and unique sensor identification numbers over unencrypted RF frequencies (typically 315 MHz or 433 MHz).\n\nVehicle Tracking via Unencrypted Sensor IDs\n\nBecause TPMS sensor identifiers remain fixed and transmit in plaintext without cryptographic authentication, low-cost radio receivers positioned along roadways or parking garages can capture these signals to track specific vehicles persistently.\n\nCustom Packet Crafting and ECU Spoofing\n\nUsing software-defined radios (SDR), researchers developed tools to forge custom TPMS packets, transmitting manipulated pressure readings directly to the vehicle's electronic control unit (ECU) to trigger false warning indicators or instrument cluster anomalies.\n\nAutomotive Wireless Security Defenses\n\nSecuring future TPMS architectures requires implementing rolling cryptographic identifiers, authenticated message frames, and RF shielding within wheel wells to prevent passive surveillance and signal spoofing.",
+      "durationSeconds": 1558
+    },
+    {
+      "youtubeId": "FYHvL8V_m-Q",
+      "slug": "modern-odometer-manipulation-collin-and-oblivion",
+      "title": "Modern Odometer Manipulation",
+      "speakers": [
+        "collin",
+        "oblivion"
+      ],
+      "track": "hardware",
+      "topics": [
+        "automotive",
+        "can-bus",
+        "reverse-engineering",
+        "firmware",
+        "hardware"
+      ],
+      "teaser": "Reverse engineers a commercial odometer rollback tool, extracting locked STM32 firmware and showing how CAN messages are intercepted and rewritten.",
+      "summary": "The Underground Market for Odometer Fraud\n\nCommercial odometer manipulation tools sold on automotive forums claim compatibility with dozens of vehicle brands, enabling illicit mileage rollbacks that undermine vehicle valuation and consumer safety.\n\nHardware Teardown and Glitch Extraction\n\nAnalyzing a commercial inline manipulation tool revealed an STM32 microcontroller wired directly between the vehicle's instrument cluster and the primary CAN bus harness. Researchers extracted internal flash from the protected microcontroller using open-source hardware exploit techniques.\n\nReverse Engineering Binary Interception Logic\n\nDecompiling the extracted firmware showed how the device intercepts broadcast CAN speed and distance frames, modifying payload bytes on the fly before forwarding altered values to the dashboard display.\n\nForensic Detection and Removal Traces\n\nWhile the inline device alters visual display readings, residual mileage data stored across secondary control units (such as transmission and ABS modules) allows forensic investigators to detect prior odometer tampering.",
+      "durationSeconds": 1581
+    },
+    {
+      "youtubeId": "qNuS0rvqc8c",
+      "slug": "how-api-flaws-led-to-admin-access-to-1k-usa-dealers-and-control",
+      "title": "How API Flaws Led to Admin Access to 1k+ USA Dealers & Control of Yr Car",
+      "speakers": [
+        "Eaton Zveare"
+      ],
+      "track": "appsec",
+      "topics": [
+        "automotive",
+        "api-security",
+        "access-control-bypass",
+        "web",
+        "appsec"
+      ],
+      "teaser": "Reveals critical API vulnerabilities in a major automotive dealer platform that allowed national admin account creation and remote vehicle command access.",
+      "summary": "Centralized Dealer Management Platforms\n\nAutomotive dealerships across the United States rely on centralized software platforms to manage inventory, service appointments, customer records, and connected vehicle features.\n\nDiscovering Broken Object Level Authorization Flaws\n\nEaton Zveare identified fundamental access control vulnerabilities in a leading automaker's dealer platform APIs. Unauthenticated parameter tampering allowed researchers to elevate privileges and create national administrative accounts.\n\nRemote Vehicle Telematics Compromise\n\nWith national administrator access, researchers could query customer profiles, retrieve vehicle identification numbers (VINs), and transmit remote commands to lock, unlock, start, and track thousands of customer vehicles nationwide.\n\nLessons for Connected Automotive Ecosystems\n\nSecuring automotive dealer management portals demands strict API authentication, multi-factor authorization on administrative endpoints, and rigorous architectural reviews of third-party vendor platforms.",
+      "durationSeconds": 1346
+    },
+    {
+      "youtubeId": "VchCd-o25z0",
+      "slug": "context-aware-anomaly-detection-in-automotive-can-without-decodi",
+      "title": "Context Aware Anomaly Detection in Automotive CAN Without Decoding",
+      "speakers": [
+        "Ravi Rajput"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "automotive",
+        "can-bus",
+        "anomaly-detection",
+        "telemetry",
+        "machine-learning"
+      ],
+      "teaser": "Introduces a sequence-learning approach that analyzes inter-signal correlations in raw CAN bus payloads to detect stealthy contextual automotive attacks.",
+      "summary": "Limitations of Traditional Automotive CAN Anomaly Detectors\n\nTraditional CAN bus intrusion detection systems rely on message frequency tracking or require proprietary DBC decoding files to inspect signal contents. However, sophisticated attackers can inject plausible payloads that blend into expected frequencies.\n\nContext-Aware Sequence Learning on Raw Payloads\n\nRavi Rajput introduces a deep sequence-learning model that analyzes temporal correlations and contextual relationships across raw CAN payloads without requiring proprietary reverse engineering of message structures.\n\nDetecting Contextual Manipulation Attacks\n\nBy learning multi-signal correlations (such as vehicle speed relative to wheel tick sensors and steering angle), the model detects stealthy state manipulation attacks that traditional rule-based detectors miss.\n\nValidation on Automotive Datasets and Testbeds\n\nEvaluating the architecture against real-world vehicular CAN traffic and simulated attack benchmarks demonstrated high detection accuracy and low latency suitable for real-time in-vehicle deployment.",
+      "durationSeconds": 1121
+    },
+    {
+      "youtubeId": "AOp0QtUORBc",
+      "slug": "smart-bus-smart-hacking-free-wifi-to-total-control",
+      "title": "Smart Bus Smart Hacking: Free WiFi to Total Control",
+      "speakers": [
+        "Kai Ching Wang",
+        "Chiao-Lin Yu"
+      ],
+      "track": "wireless",
+      "topics": [
+        "automotive",
+        "wifi",
+        "iot",
+        "transportation",
+        "vulnerability-research"
+      ],
+      "teaser": "Demonstrates an attack chain starting from passenger public Wi-Fi to breach vehicular routers, hijack on-board units, and manipulate smart bus displays.",
+      "summary": "Connected Public Transit Architecture\n\nModern smart buses integrate On-Board Units (OBUs), passenger Wi-Fi routers, automated fare collection, and Advanced Public Transportation Services (APTS) communicating over internal vehicle networks.\n\nFrom Passenger Wi-Fi to Vehicular Router Compromise\n\nKai Ching Wang and Chiao-Lin Yu demonstrate over ten vulnerabilities discovered across connected transit systems, showing how connecting to unsegmented passenger Wi-Fi allows attackers to exploit vehicular routers and access private internal subnets.\n\nHijacking ADAS, APTS, and Onboard Displays\n\nOnce inside the vehicular network, attackers can manipulate LED route displays, intercept passenger and driver telemetry, spoof GPS coordinates, and pivot to transport company backend API servers.\n\nPolicy and Supply Chain Recommendations\n\nAddressing smart transit vulnerabilities requires enforcing strict network isolation between public Wi-Fi and vehicle telemetry, removing vendor backdoors, and updating public transit cybersecurity specifications.",
+      "durationSeconds": 1265
+    },
+    {
+      "youtubeId": "SQz4nySj4hg",
+      "slug": "one-modem-to-brick-them-all-vulns-in-ev-charging-comms",
+      "title": "One Modem to Brick Them All -Vulns in EV Charging Comms",
+      "speakers": [
+        "Jan Berens",
+        "Marcell Szakaly"
+      ],
+      "track": "hardware",
+      "topics": [
+        "ev-charging",
+        "hardware",
+        "firmware",
+        "v2g",
+        "vulnerability-research"
+      ],
+      "teaser": "Discloses vulnerabilities in QCA 7000 HomePlug modems used across CCS and NACS EV charging systems that enable communication hijacking and denial of service.",
+      "summary": "Power-Line Communication in EV Charging Systems\n\nElectric Vehicle (EV) charging systems rely on Combined Charging System (CCS) and North American Charging Standard (NACS) protocols, which utilize HomePlug Green PHY power-line communication (PLC) for vehicle-to-grid data exchange.\n\nVulnerabilities in the QCA 7000 Modem Series\n\nJan Berens and Marcell Szakaly analyze the widely used Qualcomm QCA 7000 modem series, uncovering multiple critical vulnerabilities in PLC message processing and firmware execution.\n\nRemote Communication Hijacking and Denial of Service\n\nExploiting flaws in HomePlug link negotiation allows attackers to intercept charging session telemetry at a distance, inject spoofed control commands, or trigger persistent denial-of-service conditions that prevent vehicle charging.\n\nFirmware Reverse Engineering and Code Execution\n\nReverse engineering the QCA 7000 firmware revealed memory corruption vulnerabilities enabling arbitrary code execution on the modem hardware, highlighting urgent security needs across global EV charging infrastructure.",
+      "durationSeconds": 2603
+    }
+  ]
+}
