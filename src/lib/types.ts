@@ -47,6 +47,8 @@ export type StoredVillageEdition = {
   villageSlug: string;
   villageName: string;
   eventSlug: string;
+  /** Conference family slug, e.g. "defcon". Shared by every talk in this edition. */
+  conference: string;
   playlistUrl: string;
   description: string;
   talks: StoredTalk[];
@@ -65,6 +67,7 @@ export type VillageEdition = {
   villageSlug: string;
   villageName: string;
   eventSlug: string;
+  conference: string;
   eventName: string;
   eventShortName: string;
   year: number;
@@ -92,6 +95,7 @@ export type Talk = StoredTalk & {
   villageSlug: string;
   villageName: string;
   eventSlug: string;
+  conference: string;
   eventName: string;
   eventShortName: string;
   year: number;
@@ -115,6 +119,7 @@ export type TalkIndexEntry = {
   youtubeId: string;
   year: number;
   eventSlug: string;
+  conference: string;
   eventShortName: string;
   villageSlug: string;
   villageName: string;

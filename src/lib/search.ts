@@ -83,6 +83,7 @@ export function buildIndexEntry(talk: Talk): TalkIndexEntry {
     youtubeId: talk.youtubeId,
     year: talk.year,
     eventSlug: talk.eventSlug,
+    conference: talk.conference,
     eventShortName: talk.eventShortName,
     villageSlug: talk.villageSlug,
     villageName: talk.villageName,

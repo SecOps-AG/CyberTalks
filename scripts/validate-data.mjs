@@ -42,10 +42,14 @@ const VILLAGE_FIELDS = new Set([
   "villageSlug",
   "villageName",
   "eventSlug",
+  "conference",
   "playlistUrl",
   "description",
   "talks",
 ]);
+
+/** Known conference family slugs. Extend when adding a new conference. */
+const KNOWN_CONFERENCES = new Set(["defcon"]);
 
 const MAX_TOPICS = 6;
 const MAX_TEASER = 220;
@@ -125,13 +129,18 @@ for (const file of files) {
   for (const key of Object.keys(village)) {
     if (!VILLAGE_FIELDS.has(key)) warn(where, `unknown field "${key}"`);
   }
-  for (const field of ["villageSlug", "villageName", "eventSlug", "playlistUrl"]) {
+  for (const field of ["villageSlug", "villageName", "eventSlug", "conference", "playlistUrl"]) {
     if (typeof village[field] !== "string" || !village[field].trim()) {
       error(where, `"${field}" must be a non-empty string`);
     }
   }
   if (!SLUG.test(village.villageSlug ?? "")) {
     error(where, `villageSlug "${village.villageSlug}" is not kebab-case`);
+  }
+  if (!SLUG.test(village.conference ?? "")) {
+    error(where, `conference "${village.conference}" is not kebab-case`);
+  } else if (!KNOWN_CONFERENCES.has(village.conference)) {
+    error(where, `conference "${village.conference}" is not a known conference (expected one of: ${[...KNOWN_CONFERENCES].join(", ")})`);
   }
   if (!eventSlugs.has(village.eventSlug)) {
     error(where, `eventSlug "${village.eventSlug}" is not in data/events.json`);
