@@ -8,8 +8,9 @@ export function SiteFooter() {
     <footer className="border-t border-acid/15 px-4 py-6">
       <div className="mx-auto max-w-7xl space-y-3">
         <p className="max-w-3xl text-[12px] leading-relaxed text-mint/55">
-          An unofficial archive, not affiliated with or endorsed by DEF CON or the Dark
-          Tangent.
+          This is an unofficial archive. Cyber Talks is not affiliated with or endorsed by DEF CON,
+          the Dark Tangent, Black Hat, RSA Conference, TROOPERS, or any other conference
+          organizer.
         </p>
         <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-[11px] uppercase tracking-[0.16em] text-mint/50">
           <div className="flex flex-wrap gap-x-5 gap-y-1">

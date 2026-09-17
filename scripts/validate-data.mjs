@@ -6,6 +6,7 @@
  *
  *   node scripts/validate-data.mjs [--strict]
  */
+import fs from "node:fs";
 import path from "node:path";
 import {
   DATA_DIR,
@@ -36,6 +37,9 @@ const TALK_FIELDS = new Set([
   "summary",
   "durationSeconds",
   "publishedAt",
+  "language",
+  "viewCount",
+  "viewCountFetchedAt",
 ]);
 
 const VILLAGE_FIELDS = new Set([
@@ -43,6 +47,7 @@ const VILLAGE_FIELDS = new Set([
   "villageName",
   "eventSlug",
   "conference",
+  "language",
   "playlistUrl",
   "description",
   "talks",
@@ -52,6 +57,7 @@ const VILLAGE_FIELDS = new Set([
 const KNOWN_CONFERENCES = new Set(["defcon", "black-hat", "rsa", "troopers"]);
 
 const MAX_TOPICS = 6;
+const LANGUAGE = /^[a-z]{2,3}(?:-[A-Z]{2})?$/;
 const MAX_TEASER = 220;
 
 const YOUTUBE_HOSTS = new Set([
@@ -141,6 +147,9 @@ for (const file of files) {
     error(where, `conference "${village.conference}" is not kebab-case`);
   } else if (!KNOWN_CONFERENCES.has(village.conference)) {
     error(where, `conference "${village.conference}" is not a known conference (expected one of: ${[...KNOWN_CONFERENCES].join(", ")})`);
+  }
+  if (village.language != null && !LANGUAGE.test(village.language)) {
+    error(where, `language "${village.language}" must be a BCP 47 tag like "en" or "pt-BR"`);
   }
   if (!eventSlugs.has(village.eventSlug)) {
     error(where, `eventSlug "${village.eventSlug}" is not in data/events.json`);
@@ -254,7 +263,40 @@ for (const file of files) {
     if (talk.durationSeconds != null && !Number.isFinite(talk.durationSeconds)) {
       error(at, "durationSeconds must be a number");
     }
+    if (talk.language != null && !LANGUAGE.test(talk.language)) {
+      error(at, `language "${talk.language}" must be a BCP 47 tag like "en" or "pt-BR"`);
+    }
+    if (talk.viewCount != null && !(Number.isInteger(talk.viewCount) && talk.viewCount >= 0)) {
+      error(at, "viewCount must be a non-negative integer");
+    }
+    if (talk.viewCountFetchedAt != null && Number.isNaN(Date.parse(talk.viewCountFetchedAt))) {
+      error(at, "viewCountFetchedAt must be an ISO timestamp");
+    }
   });
+}
+
+/* ---------- view counts ---------- */
+
+const viewCountsFile = path.join(DATA_DIR, "view-counts.json");
+let viewCountTotal = 0;
+if (fs.existsSync(viewCountsFile)) {
+  const where = "view-counts.json";
+  let counts = {};
+  try {
+    counts = readJson(viewCountsFile).counts ?? {};
+  } catch (cause) {
+    error(where, `is not valid JSON (${cause.message})`);
+  }
+  for (const [id, entry] of Object.entries(counts)) {
+    viewCountTotal += 1;
+    if (!seenVideoIds.has(id)) warn(where, `"${id}" is not a talk in data/villages`);
+    if (!Number.isInteger(entry?.viewCount) || entry.viewCount < 0) {
+      error(where, `"${id}" viewCount must be a non-negative integer`);
+    }
+    if (Number.isNaN(Date.parse(entry?.fetchedAt))) {
+      error(where, `"${id}" fetchedAt must be an ISO timestamp`);
+    }
+  }
 }
 
 /* ---------- taxonomy drift ---------- */
@@ -280,6 +322,7 @@ console.log(`  events   ${events.length}`);
 console.log(`  villages ${files.length}`);
 console.log(`  talks    ${talkTotal}`);
 console.log(`  topics   ${topicCounts.size}`);
+if (viewCountTotal > 0) console.log(`  views    ${viewCountTotal} talks with a count`);
 if (missingSummaries > 0) console.log(`  no summary yet: ${missingSummaries}`);
 
 if (warnings.length > 0) {

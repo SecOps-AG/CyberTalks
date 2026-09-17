@@ -27,11 +27,11 @@ const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").re
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "DEF CON Talk Archive",
-    template: "%s — DEF CON Talk Archive",
+    default: "Cyber Talks",
+    template: "%s — Cyber Talks",
   },
   description:
-    "Searchable archive of DEF CON village talks, with YouTube video and a written summary for every talk.",
+    "Cyber Talks: a searchable archive of cybersecurity conference talks from DEF CON, Black Hat, RSAC, and TROOPERS, with YouTube video and written summaries.",
 };
 
 export default function RootLayout({

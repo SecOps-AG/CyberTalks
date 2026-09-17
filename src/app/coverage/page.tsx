@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Coverage Report",
-  description: "Summary coverage across DEF CON events and villages",
+  description: "Summary coverage across Cyber Talks events and villages",
 };
 
 export default function CoveragePage() {

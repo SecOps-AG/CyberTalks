@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { conferenceLabel } from "@/lib/labels";
 import { formatDuration } from "@/lib/search";
 import type { SearchEntry, TalkIndexEntry } from "@/lib/types";
 import { BookmarkButton } from "@/components/BookmarkButton";
@@ -12,6 +13,7 @@ export function TalkCard({ talk }: { talk: TalkIndexEntry | Partial<SearchEntry>
   const shown = (talk.topics ?? []).slice(0, MAX_TOPICS);
   const overflow = (talk.topics ?? []).length - shown.length;
   const duration = formatDuration(talk.durationSeconds);
+  const language = talk.language?.toUpperCase();
 
   return (
     <article className="panel group flex h-full flex-col overflow-hidden transition hover:border-acid/50">
@@ -51,10 +53,6 @@ export function TalkCard({ talk }: { talk: TalkIndexEntry | Partial<SearchEntry>
           <Link href={`/villages/${talk.villageSlug}`} className="text-cyan hover:text-acid">
             {talk.villageName}
           </Link>
-          <span className="text-mint/25">/</span>
-          <Link href={`/tracks/${talk.track}`} className="text-mag/90 hover:text-acid">
-            {talk.trackName}
-          </Link>
           {duration ? (
             <>
               <span className="text-mint/25">·</span>
@@ -62,6 +60,41 @@ export function TalkCard({ talk }: { talk: TalkIndexEntry | Partial<SearchEntry>
             </>
           ) : null}
         </p>
+
+        {/* Static facts, each shown only when the data has it. Track is the one link. */}
+        <ul aria-label="Talk details" className="flex flex-wrap gap-1.5">
+          {talk.conference ? (
+            <li className="meta-chip border-acid/35 text-acid/90">{conferenceLabel(talk.conference)}</li>
+          ) : null}
+          {talk.track && talk.trackName ? (
+            <li>
+              <Link
+                href={`/tracks/${talk.track}`}
+                className="meta-chip border-mag/35 text-mag/90 hover:border-mag hover:text-acid"
+              >
+                {talk.trackName}
+              </Link>
+            </li>
+          ) : null}
+          {talk.dateLabel ? (
+            <li className="meta-chip">
+              <span className="sr-only">Date: </span>
+              {talk.dateLabel}
+            </li>
+          ) : null}
+          {talk.locationLabel ? (
+            <li className="meta-chip">
+              <span className="sr-only">Location: </span>
+              {talk.locationLabel}
+            </li>
+          ) : null}
+          {language ? (
+            <li className="meta-chip border-cyan/30 text-cyan/85" title={`Language: ${language}`}>
+              <span className="sr-only">Language: </span>
+              {language}
+            </li>
+          ) : null}
+        </ul>
 
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-display text-base font-semibold leading-snug text-acid">

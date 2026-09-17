@@ -1,22 +1,40 @@
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
-import { getTalkIndex, getTaxonomy } from "@/lib/data";
+import { MostWatched } from "@/components/MostWatched";
+import { TrackChart } from "@/components/TrackChart";
+import {
+  getConferenceCounts,
+  getMostWatched,
+  getStats,
+  getTalkIndex,
+  getTaxonomy,
+  getTrackCounts,
+} from "@/lib/data";
 
 const EXAMPLES = ["ransomware", "osint", "supply chain", "purple team"];
 
 /**
  * Home is the browser. Not a hub that links to one: the first thing on the page
- * is the archive itself, framed by a masthead and entered through search.
+ * is a hero holding the masthead and the search field, then the filters and
+ * talk grid, with the Most Watched rail and track chart below (hidden while
+ * searching or filtering).
  */
 export default function HomePage() {
+  const stats = getStats();
+  const conferences = getConferenceCounts();
   const masthead = (
-    <header key="masthead" className="relative pb-6 pt-4 flex flex-col items-start text-left">
-      <h1 
-        className="font-display text-4xl font-bold tracking-[0.05em] sm:text-[4rem] glitch" 
-        data-text="DEFCON Talks Archive"
+    <header key="masthead" className="relative flex flex-col items-start text-left">
+      <p className="eyebrow">Conference talk archive</p>
+      <h1
+        className="mt-2 font-display text-4xl font-bold tracking-[0.05em] sm:text-[3.25rem] sm:leading-tight pb-1 glitch"
+        data-text="Cyber Talks"
       >
-        DEFCON Talks Archive
+        Cyber Talks
       </h1>
-      <div className="mt-8 w-full h-px bg-gradient-to-r from-acid/45 via-acid/15 to-transparent" />
+      <p className="mt-7 max-w-2xl text-sm leading-relaxed text-mint/70">
+        {stats.talks.toLocaleString("en-US")} talks from{" "}
+        {conferences.map((c) => c.label).join(", ")} ·{" "}
+        {stats.speakers.toLocaleString("en-US")} speakers.
+      </p>
     </header>
   );
 
@@ -25,6 +43,13 @@ export default function HomePage() {
       talks={getTalkIndex()}
       topicLabels={getTaxonomy().topicLabels}
       masthead={masthead}
+      hero
+      footer={
+        <>
+          <MostWatched talks={getMostWatched(12)} />
+          <TrackChart counts={getTrackCounts()} />
+        </>
+      }
       size="lg"
       examples={EXAMPLES}
       emptyHint="No talks match these filters."

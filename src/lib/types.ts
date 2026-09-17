@@ -40,6 +40,12 @@ export type StoredTalk = {
   durationSeconds?: number;
   publishedAt?: string;
   kind?: TalkKind;
+  /** Spoken language, BCP 47 (e.g. "en", "de"). Falls back to the edition's. */
+  language?: string;
+  /** Normally joined in from data/view-counts.json; an inline value wins. */
+  viewCount?: number;
+  /** ISO timestamp the view count was read. */
+  viewCountFetchedAt?: string;
 };
 
 /** One village at one event — the unit one ingest run produces. */
@@ -49,6 +55,8 @@ export type StoredVillageEdition = {
   eventSlug: string;
   /** Conference family slug, e.g. "defcon". Shared by every talk in this edition. */
   conference: string;
+  /** Default spoken language for talks in this edition, BCP 47. */
+  language?: string;
   playlistUrl: string;
   description: string;
   talks: StoredTalk[];
@@ -102,6 +110,10 @@ export type Talk = StoredTalk & {
   youtubeUrl: string;
   trackName: string;
   kind: TalkKind;
+  /** Event month and year, e.g. "Aug 2025". */
+  dateLabel: string;
+  /** Event city (or "Online"), short enough for a chip. */
+  locationLabel: string;
 };
 
 /**
@@ -128,6 +140,9 @@ export type TalkIndexEntry = {
   topics: string[];
   durationSeconds?: number;
   kind: TalkKind;
+  dateLabel?: string;
+  locationLabel?: string;
+  language?: string;
 };
 
 /**

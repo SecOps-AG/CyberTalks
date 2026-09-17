@@ -25,7 +25,7 @@ import {
 } from "@/lib/search";
 import type { TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
 
-type Dimension = "years" | "villages" | "tracks" | "speakers" | "lengths";
+type Dimension = "conferences" | "years" | "villages" | "tracks" | "speakers" | "lengths";
 
 export type TalkBrowserProps = {
   talks: TalkIndexEntry[];
@@ -37,6 +37,13 @@ export type TalkBrowserProps = {
   emptyHint?: string;
   /** Rendered above the search field — the page's own framing. */
   masthead?: ReactNode;
+  /**
+   * Rendered below the results and pagination — home's rails and charts.
+   * Hidden once a query or filter is active, so they never compete with results.
+   */
+  footer?: ReactNode;
+  /** Set the masthead and search together in one hero block, search inside it. */
+  hero?: boolean;
   /** "lg" gives the search field top billing; "md" keeps it inline. */
   size?: "md" | "lg";
   /** One-click starter queries, shown only while the field is empty. */
@@ -59,6 +66,8 @@ export function TalkBrowser({
   syncUrl = true,
   emptyHint = "No talks match these filters.",
   masthead,
+  footer,
+  hero = false,
   size = "md",
   examples = [],
   searchPlaceholder = "Search titles, speakers, villages, topics…",
@@ -199,6 +208,16 @@ export function TalkBrowser({
           </label>
         </div>
       ) : null}
+      {/* A page that is all one conference (an event, a village) has nothing to pick. */}
+      {!hide.includes("conferences") &&
+      (facets.conferences.length > 1 || filters.conferences.length > 0) ? (
+        <FacetList
+          label="Conference"
+          options={facets.conferences}
+          selected={filters.conferences}
+          onToggle={(value) => update({ conferences: toggleValue(filters.conferences, value) })}
+        />
+      ) : null}
       {!hide.includes("years") ? (
         <FacetList
           label="Year"
@@ -294,10 +313,19 @@ export function TalkBrowser({
 
   return (
     <div className="space-y-6">
-      {masthead ? <div key="masthead">{masthead}</div> : null}
+      {hero ? (
+        <section className="hero panel relative overflow-hidden px-4 py-5 sm:px-7 sm:py-7">
+          {masthead}
+          <div className="relative mt-5 max-w-3xl">{search}</div>
+        </section>
+      ) : (
+        <>
+          {masthead ? <div key="masthead">{masthead}</div> : null}
 
-      {/* Search comes first; the facet rail refines from there. */}
-      {search ? <div key="search">{search}</div> : null}
+          {/* Search comes first; the facet rail refines from there. */}
+          <div key="search">{search}</div>
+        </>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start lg:gap-8">
         {/* Desktop rail: own overflow so it can scroll without waiting out the results list. */}
@@ -399,6 +427,10 @@ export function TalkBrowser({
           <Pagination page={paged.page} totalPages={paged.totalPages} onChange={goToPage} />
           </div>
       </div>
+
+      {footer && activeCount === 0 ? (
+        <div className="space-y-10 border-t border-acid/15 pt-8">{footer}</div>
+      ) : null}
     </div>
   );
 }

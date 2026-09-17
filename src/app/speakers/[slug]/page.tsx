@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!speaker) return { title: "Speaker not found" };
   return {
     title: speaker.name,
-    description: `Every DEF CON talk by ${speaker.name} in the archive.`,
+    description: `Every talk by ${speaker.name} on Cyber Talks.`,
   };
 }
 

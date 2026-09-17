@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { topic } = await params;
   return {
     title: `Topic: ${labelFor(topic)}`,
-    description: `DEF CON talks tagged ${labelFor(topic)}.`,
+    description: `Conference talks tagged ${labelFor(topic)}.`,
   };
 }
 

@@ -6,7 +6,8 @@ Five axes, each with its own home, so no single page has to carry everything:
 
 | Axis | Cardinality | Where it lives |
 | --- | --- | --- |
-| **Event** (year) | one per DEF CON | `/<event>`, and the year facet on `/` |
+| **Conference** | DEF CON, Black Hat, RSAC, TROOPERS | the conference facet on `/` |
+| **Event** (year) | one per conference edition | `/<event>`, and the year facet on `/` |
 | **Village** | tens, repeating yearly | `/villages`, `/villages/<village>` across years, `/<event>/<village>` for one year |
 | **Track** | fixed vocabulary of 20 | `/tracks`, `/tracks/<track>` |
 | **Topic** | thousands, growing | `/topics`, `/topics/<topic>` — never on top of another page |
@@ -15,11 +16,16 @@ Five axes, each with its own home, so no single page has to carry everything:
 
 ## Home is the browser
 
-`/` is not a hub that links to the archive — it *is* the archive: a masthead
-(counts, one line of framing), then the search field, then the same faceted
-browser every other listing page uses. There is no browse-by-year grid, no track
-row, and no "latest talks" strip, because each was a second, worse way to reach
-what the facet rail already does, and each grew or went stale as the archive did.
+`/` is not a hub that links to the archive — it *is* the archive: a hero holding
+the masthead (counts, one line of framing) and the search field, then the same
+faceted browser every other listing page uses. There is no browse-by-year grid
+and no "latest talks" strip above the results, because each was a second, worse
+way to reach what the facet rail already does.
+
+Below the results, and only while no query or filter is active, sit a **Most
+Watched** rail (top talks by YouTube view count, from `data/view-counts.json`,
+refreshed by `scripts/fetch-view-counts.mjs`) and a talks-per-track bar chart.
+They are for browsing when nothing is selected, so they never push results down.
 
 `/talks` redirects to `/` with its query string intact, so links shared from the
 old address still land filtered.
@@ -87,7 +93,7 @@ events** (120 village files, 3,713 static pages): the home page is 1.6 MB
 uncompressed and **95 KB gzipped**, served static with a TTFB of ~20 ms. Facets
 collapse to their top eight with a filter box, and pagination reports 117 pages.
 
-Filter state lives in the URL (`?q=&year=&village=&track=&topic=&sort=&page=`) via
+Filter state lives in the URL (`?q=&conference=&year=&village=&track=&topic=&sort=&page=`) via
 `history.replaceState`, so a filtered view is shareable without a server round
 trip or a history entry per keystroke.
 

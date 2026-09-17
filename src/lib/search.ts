@@ -2,6 +2,7 @@
  * Pure filtering/faceting used by both the server (for counts and static pages)
  * and the client browser component. No fs, no React — safe to import anywhere.
  */
+import { conferenceLabel } from "./labels";
 import type { SearchEntry, Talk, TalkIndexEntry, TalkSummaryEntry } from "./types";
 
 export const PAGE_SIZE = 24;
@@ -49,6 +50,7 @@ export function slugifySpeaker(value: string): string {
 
 export type Filters = {
   q: string;
+  conferences: string[];
   years: number[];
   villages: string[];
   tracks: string[];
@@ -62,6 +64,7 @@ export type Filters = {
 
 export const EMPTY_FILTERS: Filters = {
   q: "",
+  conferences: [],
   years: [],
   villages: [],
   tracks: [],
@@ -92,6 +95,9 @@ export function buildIndexEntry(talk: Talk): TalkIndexEntry {
     topics: talk.topics,
     durationSeconds: talk.durationSeconds,
     kind: talk.kind,
+    dateLabel: talk.dateLabel,
+    locationLabel: talk.locationLabel,
+    language: talk.language,
   };
 }
 
@@ -156,7 +162,7 @@ export function queryTerms(q: string): string[] {
   return q.trim().toLowerCase().split(/\s+/).filter(Boolean);
 }
 
-type Dimension = "q" | "years" | "villages" | "tracks" | "topics" | "speakers" | "lengths";
+type Dimension = "q" | "conferences" | "years" | "villages" | "tracks" | "topics" | "speakers" | "lengths";
 
 function matchesDimension(
   entry: SearchEntry,
@@ -166,6 +172,12 @@ function matchesDimension(
 ): boolean {
   if (skip !== "q" && terms.length > 0 && !matchesQuery(entry, terms)) return false;
   if (!filters.includeExtras && entry.kind !== "talk") return false;
+  if (
+    skip !== "conferences" &&
+    filters.conferences.length > 0 &&
+    !filters.conferences.includes(entry.conference)
+  )
+    return false;
   if (skip !== "years" && filters.years.length > 0 && !filters.years.includes(entry.year))
     return false;
   if (
@@ -283,6 +295,7 @@ export type FacetOption<T extends string | number> = {
 };
 
 export type Facets = {
+  conferences: FacetOption<string>[];
   years: FacetOption<number>[];
   villages: FacetOption<string>[];
   tracks: FacetOption<string>[];
@@ -324,6 +337,12 @@ export function computeFacets(entries: SearchEntry[], filters: Filters): Facets 
   const terms = queryTerms(filters.q);
   const subset = (skip: Dimension) =>
     entries.filter((entry) => matchesDimension(entry, filters, terms, skip));
+
+  const conferences = [
+    ...tally(subset("conferences"), (e) => [
+      { value: e.conference, label: conferenceLabel(e.conference) },
+    ]).values(),
+  ].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 
   const years = [...tally(subset("years"), (e) => [{ value: e.year, label: String(e.year) }]).values()]
     .sort((a, b) => b.value - a.value);
@@ -380,12 +399,13 @@ export function computeFacets(entries: SearchEntry[], filters: Filters): Facets 
     { value: "45-plus", label: "45+ min", count: lengthCounts["45-plus"] },
   ].filter((opt) => opt.count > 0 || filters.lengths.includes(opt.value));
 
-  return { years, villages, tracks, topics, speakers, lengths };
+  return { conferences, years, villages, tracks, topics, speakers, lengths };
 }
 
 export function countActive(filters: Filters): number {
   return (
     (filters.q.trim() ? 1 : 0) +
+    filters.conferences.length +
     filters.years.length +
     filters.villages.length +
     filters.tracks.length +
@@ -414,6 +434,7 @@ export function paginate<T>(items: T[], page: number, pageSize = PAGE_SIZE) {
 
 /** URL key -> filter field. `speakers` is plural to match /speakers/<slug>. */
 const LIST_KEYS = {
+  conference: "conferences",
   year: "years",
   village: "villages",
   track: "tracks",
@@ -435,6 +456,7 @@ export function filtersFromParams(params: URLSearchParams): Filters {
 
   return {
     q: params.get("q") ?? "",
+    conferences: list("conference"),
     years: list("year")
       .map((value) => Number.parseInt(value, 10))
       .filter((value) => Number.isFinite(value)),

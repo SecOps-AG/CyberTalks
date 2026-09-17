@@ -22,6 +22,7 @@ import type {
   VillageEdition,
   VillageSeries,
 } from "./types";
+import { conferenceLabel, dateLabel, locationLabel } from "./labels";
 import { buildIndexEntry, slugifySpeaker } from "./search";
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -51,6 +52,15 @@ export const getTracks = memo((): Track[] => getTaxonomy().tracks);
 function canonicalizeTopic(topic: string, taxonomy: Taxonomy): string {
   return taxonomy.topicAliases?.[topic] ?? topic;
 }
+
+type ViewCounts = Record<string, { viewCount: number; fetchedAt: string }>;
+
+/** data/view-counts.json, written by scripts/fetch-view-counts.mjs. Optional. */
+const getViewCounts = memo((): ViewCounts => {
+  const file = path.join(DATA_DIR, "view-counts.json");
+  if (!fs.existsSync(file)) return {};
+  return readJson<{ counts?: ViewCounts }>(file).counts ?? {};
+});
 
 const getStoredEditions = memo((): StoredVillageEdition[] =>
   fs
@@ -112,6 +122,7 @@ const getArchive = memo((): Archive => {
   const taxonomy = getTaxonomy();
   const eventBySlug = new Map(getEvents().map((event) => [event.slug, event]));
   const trackBySlug = new Map(getTracks().map((track) => [track.slug, track]));
+  const viewCounts = getViewCounts();
 
   const editions: VillageEdition[] = [];
   const talks: Talk[] = [];
@@ -151,8 +162,12 @@ const getArchive = memo((): Archive => {
         return canonical;
       });
 
+      const views = viewCounts[talk.youtubeId];
       talks.push({
         ...talk,
+        language: talk.language ?? stored.language,
+        viewCount: talk.viewCount ?? views?.viewCount,
+        viewCountFetchedAt: talk.viewCountFetchedAt ?? views?.fetchedAt,
         topics: canonicalTopics,
         id: `${id}-${talk.youtubeId}`,
         villageId: id,
@@ -166,6 +181,8 @@ const getArchive = memo((): Archive => {
         youtubeUrl: `https://www.youtube.com/watch?v=${talk.youtubeId}`,
         trackName: trackBySlug.get(talk.track)?.name ?? talk.track,
         kind: deriveKind(talk, stored.villageSlug),
+        dateLabel: dateLabel(event.dates, event.year),
+        locationLabel: locationLabel(event.location),
       });
     }
   }
@@ -369,6 +386,25 @@ export const getStats = memo((): ArchiveStats => {
     topics: getTopicCounts().length,
     speakers: getSpeakers().length,
   };
+});
+
+/** Talks with a known view count, most watched first. Clips and extras are left out. */
+export function getMostWatched(limit = 12): Talk[] {
+  return getTalks()
+    .filter((talk) => talk.kind === "talk" && typeof talk.viewCount === "number")
+    .sort((a, b) => (b.viewCount ?? 0) - (a.viewCount ?? 0) || a.title.localeCompare(b.title))
+    .slice(0, limit);
+}
+
+/** Talk counts per conference family, largest first. */
+export const getConferenceCounts = memo((): { slug: string; label: string; count: number }[] => {
+  const counts = new Map<string, number>();
+  for (const talk of getTalks()) {
+    counts.set(talk.conference, (counts.get(talk.conference) ?? 0) + 1);
+  }
+  return [...counts.entries()]
+    .map(([slug, count]) => ({ slug, label: conferenceLabel(slug), count }))
+    .sort((a, b) => b.count - a.count);
 });
 
 /** Slim, client-safe records for the browser UI. */
