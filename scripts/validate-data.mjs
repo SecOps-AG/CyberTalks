@@ -49,7 +49,7 @@ const VILLAGE_FIELDS = new Set([
 ]);
 
 /** Known conference family slugs. Extend when adding a new conference. */
-const KNOWN_CONFERENCES = new Set(["defcon"]);
+const KNOWN_CONFERENCES = new Set(["defcon", "black-hat", "rsa", "troopers"]);
 
 const MAX_TOPICS = 6;
 const MAX_TEASER = 220;
