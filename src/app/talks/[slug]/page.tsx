@@ -8,6 +8,7 @@ import { YouTubeEmbed } from "@/components/YouTubeEmbed";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import { WatchedMarker } from "@/components/WatchedMarker";
 import { getTalkBySlug, getTalkIndex, getTalks, getTaxonomy } from "@/lib/data";
+import { isDefconVillageTalk, villageEditionPath, villageSeriesPath } from "@/lib/hubs";
 import { formatDuration, slugifySpeaker } from "@/lib/search";
 import type { Talk } from "@/lib/types";
 
@@ -89,7 +90,14 @@ export default async function TalkPage({ params }: Props) {
           {talk.eventName}
         </Link>
         <span className="text-mint/25">/</span>
-        <Link href={`/${talk.eventSlug}/${talk.villageSlug}`} className="hover:text-acid">
+        <Link
+          href={
+            isDefconVillageTalk(talk)
+              ? villageEditionPath(talk)
+              : `/${talk.eventSlug}/${talk.villageSlug}`
+          }
+          className="hover:text-acid"
+        >
           {talk.villageName}
         </Link>
       </nav>
@@ -134,9 +142,13 @@ export default async function TalkPage({ params }: Props) {
           <Link href={`/tracks/${talk.track}`} className="chip">
             {talk.trackName}
           </Link>
-          <Link href={`/villages/${talk.villageSlug}`} className="chip">
-            {talk.villageName}
-          </Link>
+          {isDefconVillageTalk(talk) ? (
+            <Link href={villageSeriesPath(talk.villageSlug)} className="chip">
+              {talk.villageName}
+            </Link>
+          ) : (
+            <span className="chip !cursor-default">{talk.villageName}</span>
+          )}
           {duration ? (
             <span className="chip !border-mint/30 !text-mint/80">
               {duration}

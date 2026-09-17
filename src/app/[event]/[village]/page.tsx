@@ -10,6 +10,7 @@ import {
   getTalksForEdition,
   getTaxonomy,
 } from "@/lib/data";
+import { inDefconVillage, villageEditionPath, villageSeriesPath } from "@/lib/hubs";
 
 type Props = { params: Promise<{ event: string; village: string }> };
 
@@ -35,7 +36,8 @@ export default async function VillageEditionPage({ params }: Props) {
   const edition = getEdition(event, village);
   if (!edition) notFound();
 
-  const series = getSeries(edition.villageSlug);
+  const isVillage = inDefconVillage(edition);
+  const series = isVillage ? getSeries(edition.villageSlug) : undefined;
   const otherEditions = series?.editions.filter((item) => item.id !== edition.id) ?? [];
   const talks = getTalkIndex(getTalksForEdition(edition.id));
 
@@ -47,9 +49,11 @@ export default async function VillageEditionPage({ params }: Props) {
             {edition.eventName}
           </Link>
           <span className="text-mint/25">/</span>
-          <Link href={`/villages/${edition.villageSlug}`} className="hover:text-acid">
-            {edition.villageName} across years
-          </Link>
+          {isVillage ? (
+            <Link href={villageSeriesPath(edition.villageSlug)} className="hover:text-acid">
+              {edition.villageName} across years
+            </Link>
+          ) : null}
         </p>
         <h1 className="font-display text-3xl font-bold tracking-[0.05em] text-acid">
           {edition.villageName}{" "}
@@ -71,7 +75,7 @@ export default async function VillageEditionPage({ params }: Props) {
           {otherEditions.map((other) => (
             <Link
               key={other.id}
-              href={`/${other.eventSlug}/${other.villageSlug}`}
+              href={villageEditionPath(other)}
               className="chip"
             >
               {other.eventShortName}
@@ -83,7 +87,7 @@ export default async function VillageEditionPage({ params }: Props) {
 
       <TalkBrowser
         talks={talks}
-        hide={["years", "villages"]}
+        hide={isVillage ? ["years", "villages", "conferences"] : ["years", "villages", "conferences"]}
         topicLabels={getTaxonomy().topicLabels}
         emptyHint="No talks in this village match these filters."
       />

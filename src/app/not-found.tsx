@@ -12,8 +12,8 @@ export default function NotFound() {
         <Link href="/talks" className="chip">
           Browse talks
         </Link>
-        <Link href="/villages" className="chip">
-          Villages
+        <Link href="/defcon/villages" className="chip">
+          DEF CON villages
         </Link>
       </div>
     </section>

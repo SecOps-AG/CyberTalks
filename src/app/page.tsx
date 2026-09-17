@@ -1,4 +1,5 @@
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
+import { HeroConferences } from "@/components/HeroConferences";
 import { MostWatched } from "@/components/MostWatched";
 import { TrackChart } from "@/components/TrackChart";
 import {
@@ -30,17 +31,18 @@ export default function HomePage() {
       >
         Cyber Talks
       </h1>
-      <p className="mt-7 max-w-2xl text-sm leading-relaxed text-mint/70">
-        {stats.talks.toLocaleString("en-US")} talks from{" "}
-        {conferences.map((c) => c.label).join(", ")} ·{" "}
-        {stats.speakers.toLocaleString("en-US")} speakers.
-      </p>
+      <HeroConferences
+        talks={stats.talks}
+        speakers={stats.speakers}
+        conferences={conferences}
+      />
     </header>
   );
 
   return (
     <TalkBrowser
       talks={getTalkIndex()}
+      hide={["villages"]}
       topicLabels={getTaxonomy().topicLabels}
       masthead={masthead}
       hero

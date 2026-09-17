@@ -2,6 +2,7 @@
  * Pure filtering/faceting used by both the server (for counts and static pages)
  * and the client browser component. No fs, no React — safe to import anywhere.
  */
+import { inDefconVillage } from "./hubs";
 import { conferenceLabel } from "./labels";
 import type { SearchEntry, Talk, TalkIndexEntry, TalkSummaryEntry } from "./types";
 
@@ -189,7 +190,7 @@ function matchesDimension(
   if (
     skip !== "villages" &&
     filters.villages.length > 0 &&
-    !filters.villages.includes(entry.villageSlug)
+    (!inDefconVillage(entry) || !filters.villages.includes(entry.villageSlug))
   )
     return false;
   if (skip !== "tracks" && filters.tracks.length > 0 && !filters.tracks.includes(entry.track))
@@ -348,7 +349,9 @@ export function computeFacets(entries: SearchEntry[], filters: Filters): Facets 
     .sort((a, b) => b.value - a.value);
 
   const villages = [
-    ...tally(subset("villages"), (e) => [{ value: e.villageSlug, label: e.villageName }]).values(),
+    ...tally(subset("villages"), (e) =>
+      inDefconVillage(e) ? [{ value: e.villageSlug, label: e.villageName }] : [],
+    ).values(),
   ].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 
   const tracks = [

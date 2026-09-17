@@ -46,7 +46,11 @@ const nextConfig: NextConfig = {
   // The browser lives at "/" now. Keep the old address working — Next carries
   // the query string over, so shared /talks?q=… links still land filtered.
   async redirects() {
-    return [{ source: "/talks", destination: "/", permanent: false }];
+    return [
+      { source: "/talks", destination: "/", permanent: false },
+      { source: "/villages", destination: "/defcon/villages", permanent: true },
+      { source: "/villages/:village", destination: "/defcon/villages/:village", permanent: true },
+    ];
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

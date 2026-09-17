@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { GitHubStarButton } from "@/components/GitHubStarButton";
+import { HUBS } from "@/lib/hubs";
 
 const NAV = [
   { href: "/", label: "All talks" },
-  { href: "/villages", label: "Villages" },
+  ...HUBS.map((hub) => ({ href: hub.href, label: hub.label })),
   { href: "/tracks", label: "Tracks" },
   { href: "/topics", label: "Topics" },
   { href: "/speakers", label: "Speakers" },
