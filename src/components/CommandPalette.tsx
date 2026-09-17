@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { inDefconVillage, villageSeriesPath } from "@/lib/hubs";
 import { filterTalks, withHaystack, slugifySpeaker, EMPTY_FILTERS } from "@/lib/search";
 import type { TalkIndexEntry } from "@/lib/types";
 
@@ -30,13 +31,14 @@ function buildResults(query: string, talks: TalkIndexEntry[]): ResultItem[] {
     href: `/talks/${t.slug}`,
   }));
 
-  // Villages
+  // Villages — DEF CON only
   const villageMap = new Map<string, string>();
   for (const talk of talks) {
+    if (!inDefconVillage(talk)) continue;
     if (!villageMap.has(talk.villageSlug)) villageMap.set(talk.villageSlug, talk.villageName);
   }
   for (const [slug, name] of [...villageMap.entries()].filter(([, n]) => n.toLowerCase().includes(q)).slice(0, 3)) {
-    results.push({ type: "village", label: name, sub: "Village", href: `/villages/${slug}` });
+    results.push({ type: "village", label: name, sub: "Village", href: villageSeriesPath(slug) });
   }
 
   // Tracks

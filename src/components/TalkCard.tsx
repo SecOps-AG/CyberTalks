@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { isDefconVillageTalk, villageSeriesPath } from "@/lib/hubs";
 import { conferenceLabel } from "@/lib/labels";
 import { formatDuration } from "@/lib/search";
 import type { SearchEntry, TalkIndexEntry } from "@/lib/types";
@@ -14,6 +15,10 @@ export function TalkCard({ talk }: { talk: TalkIndexEntry | Partial<SearchEntry>
   const overflow = (talk.topics ?? []).length - shown.length;
   const duration = formatDuration(talk.durationSeconds);
   const language = talk.language?.toUpperCase();
+  const showVillageLink =
+    talk.conference != null &&
+    talk.eventSlug != null &&
+    isDefconVillageTalk({ conference: talk.conference, eventSlug: talk.eventSlug });
 
   return (
     <article className="panel group flex h-full flex-col overflow-hidden transition hover:border-acid/50">
@@ -50,9 +55,13 @@ export function TalkCard({ talk }: { talk: TalkIndexEntry | Partial<SearchEntry>
 
       <div className="flex flex-1 flex-col gap-2.5 p-4">
         <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] uppercase tracking-[0.16em]">
-          <Link href={`/villages/${talk.villageSlug}`} className="text-cyan hover:text-acid">
-            {talk.villageName}
-          </Link>
+          {showVillageLink && talk.villageSlug ? (
+            <Link href={villageSeriesPath(talk.villageSlug)} className="text-cyan hover:text-acid">
+              {talk.villageName}
+            </Link>
+          ) : (
+            <span className="text-cyan/90">{talk.villageName}</span>
+          )}
           {duration ? (
             <>
               <span className="text-mint/25">·</span>

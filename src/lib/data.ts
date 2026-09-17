@@ -22,6 +22,7 @@ import type {
   VillageEdition,
   VillageSeries,
 } from "./types";
+import { inDefconVillage } from "./hubs";
 import { conferenceLabel, dateLabel, locationLabel } from "./labels";
 import { buildIndexEntry, slugifySpeaker } from "./search";
 
@@ -226,18 +227,17 @@ export function getEdition(
   );
 }
 
-/** Villages grouped across years: one "Recon Village", however many events it ran at. */
-export const getVillageSeries = memo((): VillageSeries[] => {
+function buildVillageSeries(editions: VillageEdition[]): VillageSeries[] {
   const bySlug = new Map<string, VillageEdition[]>();
-  for (const edition of getEditions()) {
+  for (const edition of editions) {
     const list = bySlug.get(edition.villageSlug) ?? [];
     list.push(edition);
     bySlug.set(edition.villageSlug, list);
   }
 
   return [...bySlug.entries()]
-    .map(([slug, editions]) => {
-      const sorted = editions.slice().sort((a, b) => b.year - a.year);
+    .map(([slug, grouped]) => {
+      const sorted = grouped.slice().sort((a, b) => b.year - a.year);
       const latest = sorted[0];
       return {
         slug,
@@ -249,10 +249,22 @@ export const getVillageSeries = memo((): VillageSeries[] => {
       };
     })
     .sort((a, b) => a.name.localeCompare(b.name));
-});
+}
+
+/** Villages grouped across years: one "Recon Village", however many events it ran at. */
+export const getVillageSeries = memo((): VillageSeries[] => buildVillageSeries(getEditions()));
+
+/** DEF CON village series only — used for facets, nav, and village hub pages. */
+export const getDefconVillages = memo((): VillageSeries[] =>
+  buildVillageSeries(getEditions().filter(inDefconVillage)),
+);
+
+export function getDefconEditions(): VillageEdition[] {
+  return getEditions().filter(inDefconVillage);
+}
 
 export function getSeries(slug: string): VillageSeries | undefined {
-  return getVillageSeries().find((series) => series.slug === slug);
+  return getDefconVillages().find((series) => series.slug === slug);
 }
 
 export function getTalksForEdition(editionId: string): Talk[] {
@@ -260,7 +272,7 @@ export function getTalksForEdition(editionId: string): Talk[] {
 }
 
 export function getTalksForSeries(villageSlug: string): Talk[] {
-  return getTalks().filter((talk) => talk.villageSlug === villageSlug);
+  return getTalks().filter((talk) => talk.villageSlug === villageSlug && inDefconVillage(talk));
 }
 
 export function getTalkBySlug(slug: string): Talk | undefined {
@@ -335,7 +347,7 @@ export const getSpeakers = memo((): Speaker[] => {
       record.spellings.set(name, (record.spellings.get(name) ?? 0) + 1);
       record.talkCount += 1;
       record.years.add(talk.year);
-      record.villages.add(talk.villageSlug);
+      if (inDefconVillage(talk)) record.villages.add(talk.villageSlug);
 
       // Add co-speakers (other speakers on this talk)
       for (const otherName of talk.speakers) {
@@ -380,7 +392,7 @@ export const getStats = memo((): ArchiveStats => {
   const talks = getTalks();
   return {
     talks: talks.length,
-    villages: getVillageSeries().length,
+    villages: getDefconVillages().length,
     events: getEvents().length,
     tracks: getTrackCounts().length,
     topics: getTopicCounts().length,
@@ -496,7 +508,7 @@ export type VillageCoverage = {
 };
 
 export const getCoverageByVillage = memo((): VillageCoverage[] => {
-  return getEditions().map((edition) => ({
+  return getDefconEditions().map((edition) => ({
     edition,
     stats: getCoverageForEdition(edition.id),
   }));

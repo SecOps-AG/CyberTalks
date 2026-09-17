@@ -41,6 +41,7 @@ export default function HomePage() {
   return (
     <TalkBrowser
       talks={getTalkIndex()}
+      hide={["villages"]}
       topicLabels={getTaxonomy().topicLabels}
       masthead={masthead}
       hero

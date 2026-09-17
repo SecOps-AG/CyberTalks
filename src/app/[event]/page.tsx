@@ -11,6 +11,7 @@ import {
   getTalks,
   getTaxonomy,
 } from "@/lib/data";
+import { inDefconVillage, villageEditionPath } from "@/lib/hubs";
 
 type Props = { params: Promise<{ event: string }> };
 
@@ -34,7 +35,9 @@ export default async function EventPage({ params }: Props) {
   if (!event) notFound();
 
   const editions = getEditionsForEvent(event.slug);
+  const defconEditions = editions.filter(inDefconVillage);
   const talks = getTalkIndex(getTalks().filter((talk) => talk.eventSlug === event.slug));
+  const isDefconEvent = defconEditions.length > 0;
 
   return (
     <div className="space-y-10">
@@ -44,17 +47,21 @@ export default async function EventPage({ params }: Props) {
           {event.name}
         </h1>
         <p className="text-sm text-mint/60">
-          {editions.length} village{editions.length === 1 ? "" : "s"} · {talks.length} talks
+          {isDefconEvent
+            ? `${defconEditions.length} village${defconEditions.length === 1 ? "" : "s"}`
+            : `${editions.length} session${editions.length === 1 ? "" : "s"}`}{" "}
+          · {talks.length} talks
         </p>
       </header>
 
+      {isDefconEvent ? (
       <section>
         <SectionHeading title="Villages at this event" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {editions.map((edition) => (
+          {defconEditions.map((edition) => (
             <Link
               key={edition.id}
-              href={`/${edition.eventSlug}/${edition.villageSlug}`}
+              href={villageEditionPath(edition)}
               className="panel group flex flex-col gap-2 p-5 transition hover:border-acid/50"
             >
               <p className="font-display text-base font-semibold text-acid group-hover:text-cyan">
@@ -70,12 +77,36 @@ export default async function EventPage({ params }: Props) {
           ))}
         </div>
       </section>
+      ) : editions.length > 0 ? (
+      <section>
+        <SectionHeading title="Sessions at this event" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {editions.map((edition) => (
+            <Link
+              key={edition.id}
+              href={villageEditionPath(edition)}
+              className="panel group flex flex-col gap-2 p-5 transition hover:border-acid/50"
+            >
+              <p className="font-display text-base font-semibold text-acid group-hover:text-cyan">
+                {edition.villageName}
+              </p>
+              <p className="text-[11px] uppercase tracking-[0.14em] text-mint/50">
+                {edition.talkCount} talks
+              </p>
+              <p className="line-clamp-3 pt-1 text-sm leading-relaxed text-mint/70">
+                {edition.description}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </section>
+      ) : null}
 
       <section>
         <SectionHeading title={`All ${event.shortName} talks`} />
         <TalkBrowser
           talks={talks}
-          hide={["years"]}
+          hide={isDefconEvent ? ["years"] : ["years", "villages"]}
           topicLabels={getTaxonomy().topicLabels}
           emptyHint={`No ${event.name} talks match these filters.`}
         />
