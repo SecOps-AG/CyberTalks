@@ -8,7 +8,76 @@ const CONFERENCE_LABELS: Record<string, string> = {
   "black-hat": "Black Hat",
   rsa: "RSAC",
   troopers: "TROOPERS",
+  bsides: "BSides",
 };
+
+/** Homepage hero: name these families, in this order, when they have talks. */
+export const S_TIER_CONFERENCES: { slugs: readonly string[]; label: string }[] = [
+  { slugs: ["defcon"], label: "DEF CON" },
+  { slugs: ["black-hat", "blackhat"], label: "Black Hat" },
+  { slugs: ["rsa", "rsac"], label: "RSAC" },
+  { slugs: ["troopers"], label: "TROOPERS" },
+  { slugs: ["bsides"], label: "BSides" },
+];
+
+function foldConferenceName(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function slugMatchesSTier(
+  slug: string,
+  spec: (typeof S_TIER_CONFERENCES)[number],
+  kind: "exact" | "prefix",
+): boolean {
+  const value = slug.toLowerCase();
+  if (kind === "exact") return spec.slugs.includes(value);
+  return spec.slugs.some((alias) => value.startsWith(`${alias}-`));
+}
+
+function labelMatchesSTier(
+  conference: { slug: string; label: string },
+  spec: (typeof S_TIER_CONFERENCES)[number],
+): boolean {
+  const folded = foldConferenceName(conference.label);
+  return (
+    foldConferenceName(spec.label) === folded ||
+    spec.slugs.some((alias) => foldConferenceName(alias) === folded)
+  );
+}
+
+function pickSTier<T extends { slug: string; label: string }>(
+  conferences: T[],
+  spec: (typeof S_TIER_CONFERENCES)[number],
+  used: Set<string>,
+): T | undefined {
+  const available = conferences.filter((conference) => !used.has(conference.slug));
+  return (
+    available.find((conference) => slugMatchesSTier(conference.slug, spec, "exact")) ??
+    available.find((conference) => labelMatchesSTier(conference, spec)) ??
+    available.find((conference) => slugMatchesSTier(conference.slug, spec, "prefix"))
+  );
+}
+
+/** S-tier names for the hero, plus everyone else for the More control. */
+export function splitHeroConferences<T extends { slug: string; label: string }>(
+  conferences: T[],
+): { featured: string[]; rest: T[] } {
+  const used = new Set<string>();
+  const featured: string[] = [];
+
+  for (const spec of S_TIER_CONFERENCES) {
+    const match = pickSTier(conferences, spec, used);
+    if (match) {
+      used.add(match.slug);
+      featured.push(spec.label);
+    }
+  }
+
+  return {
+    featured,
+    rest: conferences.filter((conference) => !used.has(conference.slug)),
+  };
+}
 
 export function conferenceLabel(slug: string): string {
   return CONFERENCE_LABELS[slug] ?? slug.replace(/-/g, " ").toUpperCase();
