@@ -9,6 +9,9 @@ const SEARCHABLE_AT = 12;
 /**
  * A counted, checkbox-style facet. Long lists collapse to the top few and grow
  * a filter box, so even a long village list stays one short block.
+ *
+ * `compact` keeps the full count-sorted list in a ~5-row box with its own
+ * scrollbar so a long conference list cannot stretch the filter rail.
  */
 export function FacetList<T extends string | number>({
   label,
@@ -16,12 +19,14 @@ export function FacetList<T extends string | number>({
   selected,
   onToggle,
   collapsedCount = COLLAPSED,
+  compact = false,
 }: {
   label: string;
   options: FacetOption<T>[];
   selected: T[];
   onToggle: (value: T) => void;
   collapsedCount?: number;
+  compact?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [needle, setNeedle] = useState("");
@@ -34,17 +39,18 @@ export function FacetList<T extends string | number>({
     return options.filter((option) => option.label.toLowerCase().includes(query));
   }, [options, needle]);
 
-  // Selected values always stay visible, even below the collapse cut.
+  // Compact: every matching option stays in the scroll box. Otherwise selected
+  // values always stay visible, even below the collapse cut.
   const visible = useMemo(() => {
-    if (expanded || needle.trim()) return matching;
+    if (compact || expanded || needle.trim()) return matching;
     const head = matching.slice(0, collapsedCount);
     const pinned = matching.filter(
       (option) => selected.includes(option.value) && !head.includes(option),
     );
     return [...head, ...pinned];
-  }, [matching, expanded, needle, collapsedCount, selected]);
+  }, [compact, matching, expanded, needle, collapsedCount, selected]);
 
-  const hidden = matching.length - visible.length;
+  const hidden = compact ? 0 : matching.length - visible.length;
 
   if (options.length === 0) return null;
 
@@ -63,7 +69,11 @@ export function FacetList<T extends string | number>({
         />
       ) : null}
 
-      <div className="scroll-list max-h-72 space-y-0.5 overflow-y-auto pr-1">
+      <div
+        className={`scroll-list space-y-0.5 overflow-y-auto pr-1 ${
+          compact ? "max-h-36" : "max-h-72"
+        }`}
+      >
         {visible.map((option) => {
           const active = selected.includes(option.value);
           return (

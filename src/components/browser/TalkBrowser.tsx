@@ -216,6 +216,7 @@ export function TalkBrowser({
           options={facets.conferences}
           selected={filters.conferences}
           onToggle={(value) => update({ conferences: toggleValue(filters.conferences, value) })}
+          compact
         />
       ) : null}
       {!hide.includes("years") ? (
@@ -287,10 +288,19 @@ export function TalkBrowser({
           value={draftQuery}
           onChange={(event) => setDraftQuery(event.target.value)}
           placeholder={searchPlaceholder}
-          className={`w-full bg-transparent font-mono text-mint outline-none placeholder:text-mint/30 ${
+          className={`w-full bg-transparent font-mono text-mint outline-none placeholder:text-mint/30 [&::-webkit-search-cancel-button]:hidden ${
             large ? "text-base sm:text-lg" : "text-sm"
           }`}
         />
+        {draftQuery ? (
+          <button
+            type="button"
+            onClick={() => setDraftQuery("")}
+            className="shrink-0 text-[11px] uppercase tracking-[0.14em] text-mag hover:text-acid"
+          >
+            Clear
+          </button>
+        ) : null}
       </div>
 
       {examples.length > 0 && !draftQuery ? (
@@ -328,9 +338,9 @@ export function TalkBrowser({
       )}
 
       <div className="grid gap-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start lg:gap-8">
-        {/* Desktop rail: own overflow so it can scroll without waiting out the results list. */}
+        {/* Desktop rail grows with the page; only compact facets scroll internally. */}
         <aside className="hidden lg:block">
-          <div className="sticky top-20 max-h-[calc(100vh-5.5rem)] space-y-5 overflow-y-auto overscroll-contain scroll-list pr-1">
+          <div className="space-y-5">
             <div className="flex items-center justify-between">
               <p className="font-display text-xs uppercase tracking-[0.2em] text-acid">Filters</p>
               {activeCount > 0 ? (
