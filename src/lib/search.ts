@@ -369,7 +369,19 @@ function speakerName(entries: SearchEntry[], slug: string): string {
  * *other* facet, so the numbers say "what would I get if I also picked this"
  * instead of going stale the moment something is selected.
  */
-export function computeFacets(entries: SearchEntry[], filters: Filters): Facets {
+export type FacetOptions = {
+  /**
+   * Homepage: always list beginner→expert even when nothing is classified yet
+   * (counts may be 0). Other pages still hide empty levels unless selected.
+   */
+  alwaysShowDifficulties?: boolean;
+};
+
+export function computeFacets(
+  entries: SearchEntry[],
+  filters: Filters,
+  options: FacetOptions = {},
+): Facets {
   const terms = queryTerms(filters.q);
   const subset = (skip: Dimension) =>
     entries.filter((entry) => matchesDimension(entry, filters, terms, skip));
@@ -437,8 +449,8 @@ export function computeFacets(entries: SearchEntry[], filters: Filters): Facets 
     { value: "45-plus", label: "45+ min", count: lengthCounts["45-plus"] },
   ].filter((opt) => opt.count > 0 || filters.lengths.includes(opt.value));
 
-  // Only classified talks are counted, in fixed easiest-to-hardest order. With
-  // nothing classified the list is empty and the facet does not render.
+  // Only classified talks are counted, in fixed easiest-to-hardest order.
+  // Unclassified talks have no difficulty field and are not implied by a 0 count.
   const difficultyCounts = tally(subset("difficulties"), (e) => {
     const level = normalizeDifficulty(e.difficulty);
     return level ? [{ value: level, label: difficultyLabel(level) }] : [];
@@ -447,7 +459,12 @@ export function computeFacets(entries: SearchEntry[], filters: Filters): Facets 
     value: level,
     label: difficultyLabel(level),
     count: difficultyCounts.get(level)?.count ?? 0,
-  })).filter((opt) => opt.count > 0 || filters.difficulties.includes(opt.value));
+  })).filter(
+    (opt) =>
+      options.alwaysShowDifficulties ||
+      opt.count > 0 ||
+      filters.difficulties.includes(opt.value),
+  );
 
   return { conferences, years, villages, tracks, topics, speakers, lengths, difficulties };
 }

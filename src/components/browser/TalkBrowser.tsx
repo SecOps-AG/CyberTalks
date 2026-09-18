@@ -57,6 +57,11 @@ export type TalkBrowserProps = {
   /** One-click starter queries, shown only while the field is empty. */
   examples?: string[];
   searchPlaceholder?: string;
+  /**
+   * Keep the Difficulty facet on screen even when no talks are classified
+   * (homepage). Other pages still hide an empty list.
+   */
+  alwaysShowDifficulties?: boolean;
 };
 
 const SORTS: { value: SortKey; label: string }[] = [
@@ -80,6 +85,7 @@ export function TalkBrowser({
   size = "md",
   examples = [],
   searchPlaceholder = "Search titles, speakers, villages, topics…",
+  alwaysShowDifficulties = false,
 }: TalkBrowserProps) {
   // `q` deliberately lives outside `filters`. If a keystroke updated `filters`,
   // every downstream memo would recompute on the urgent render *and* again on
@@ -183,7 +189,10 @@ export function TalkBrowser({
     return mergeSummaries(base, summaries, terms);
   }, [talks, summaries, draftQuery]);
 
-  const facets = useMemo(() => computeFacets(searchable, effective), [searchable, effective]);
+  const facets = useMemo(
+    () => computeFacets(searchable, effective, { alwaysShowDifficulties }),
+    [searchable, effective, alwaysShowDifficulties],
+  );
   const filtered = useMemo(() => filterTalks(searchable, effective), [searchable, effective]);
   const sorted = useMemo(
     () => sortTalks(filtered, effective.sort, effective.q),
