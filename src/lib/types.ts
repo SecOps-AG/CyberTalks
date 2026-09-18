@@ -27,6 +27,12 @@ export type Taxonomy = {
 
 export type TalkKind = "talk" | "clip" | "interview" | "announcement";
 
+/**
+ * How much background a talk assumes. Classified offline by talk-ingest;
+ * a missing value means the same as "unknown".
+ */
+export type Difficulty = "beginner" | "intermediate" | "advanced" | "expert" | "unknown";
+
 /** A talk exactly as authored in data/villages/<event>-<village>.json. */
 export type StoredTalk = {
   youtubeId: string;
@@ -46,6 +52,7 @@ export type StoredTalk = {
   viewCount?: number;
   /** ISO timestamp the view count was read. */
   viewCountFetchedAt?: string;
+  difficulty?: Difficulty;
 };
 
 /** One village at one event — the unit one ingest run produces. */
@@ -145,6 +152,8 @@ export type TalkIndexEntry = {
   language?: string;
   /** YouTube views when known; missing counts sort as 0. */
   viewCount?: number;
+  /** Omitted when unclassified, to keep the index slim. */
+  difficulty?: Difficulty;
 };
 
 /**

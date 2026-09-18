@@ -26,7 +26,14 @@ import {
 import { inDefconVillage } from "@/lib/hubs";
 import type { TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
 
-type Dimension = "conferences" | "years" | "villages" | "tracks" | "speakers" | "lengths";
+type Dimension =
+  | "conferences"
+  | "years"
+  | "villages"
+  | "tracks"
+  | "speakers"
+  | "lengths"
+  | "difficulties";
 
 export type TalkBrowserProps = {
   talks: TalkIndexEntry[];
@@ -246,6 +253,14 @@ export function TalkBrowser({
           options={facets.lengths}
           selected={filters.lengths}
           onToggle={(value) => update({ lengths: toggleValue(filters.lengths, value) })}
+        />
+      ) : null}
+      {!hide.includes("difficulties") ? (
+        <FacetList
+          label="Difficulty"
+          options={facets.difficulties}
+          selected={filters.difficulties}
+          onToggle={(value) => update({ difficulties: toggleValue(filters.difficulties, value) })}
         />
       ) : null}
       {!hide.includes("villages") ? (

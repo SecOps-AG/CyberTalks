@@ -1,11 +1,19 @@
 import Link from "next/link";
 import { isDefconVillageTalk, villageSeriesPath } from "@/lib/hubs";
-import { conferenceLabel } from "@/lib/labels";
+import { conferenceLabel, difficultyLabel, normalizeDifficulty } from "@/lib/labels";
 import { formatDuration } from "@/lib/search";
-import type { SearchEntry, TalkIndexEntry } from "@/lib/types";
+import type { Difficulty, SearchEntry, TalkIndexEntry } from "@/lib/types";
 import { BookmarkButton } from "@/components/BookmarkButton";
 
 const MAX_TOPICS = 3;
+
+/** Thumbnail badge colours, cool to hot as the level rises. */
+const DIFFICULTY_STYLES: Record<Exclude<Difficulty, "unknown">, string> = {
+  beginner: "border-cyan/50 text-cyan",
+  intermediate: "border-acid/50 text-acid",
+  advanced: "border-warn/60 text-warn",
+  expert: "border-mag/60 text-mag",
+};
 
 /**
  * Cards take a TalkIndexEntry, or optionally a SearchEntry with matched summary info.
@@ -15,6 +23,8 @@ export function TalkCard({ talk }: { talk: TalkIndexEntry | Partial<SearchEntry>
   const overflow = (talk.topics ?? []).length - shown.length;
   const duration = formatDuration(talk.durationSeconds);
   const language = talk.language?.toUpperCase();
+  // Unknown gets no badge: an unclassified talk should look like it always has.
+  const difficulty = normalizeDifficulty(talk.difficulty);
   const showVillageLink =
     talk.conference != null &&
     talk.eventSlug != null &&
@@ -46,6 +56,13 @@ export function TalkCard({ talk }: { talk: TalkIndexEntry | Partial<SearchEntry>
             {talk.eventShortName}
           </span>
         </div>
+        {difficulty !== "unknown" ? (
+          <span
+            className={`absolute bottom-2 left-2 rounded-sm border bg-void/90 px-1.5 py-0.5 text-[10px] uppercase tracking-[0.14em] ${DIFFICULTY_STYLES[difficulty]}`}
+          >
+            {difficultyLabel(difficulty)}
+          </span>
+        ) : null}
         {duration ? (
           <span className="absolute bottom-2 right-2 rounded-sm border border-mint/20 bg-void/90 px-1.5 py-0.5 font-mono text-[10px] text-mint/90">
             {duration}

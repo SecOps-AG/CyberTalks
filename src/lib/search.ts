@@ -3,8 +3,8 @@
  * and the client browser component. No fs, no React — safe to import anywhere.
  */
 import { inDefconVillage } from "./hubs";
-import { conferenceLabel } from "./labels";
-import type { SearchEntry, Talk, TalkIndexEntry, TalkSummaryEntry } from "./types";
+import { conferenceLabel, DIFFICULTIES, difficultyLabel, normalizeDifficulty } from "./labels";
+import type { Difficulty, SearchEntry, Talk, TalkIndexEntry, TalkSummaryEntry } from "./types";
 
 export const PAGE_SIZE = 24;
 
@@ -67,6 +67,7 @@ export type Filters = {
   topics: string[];
   speakers: string[];
   lengths: string[];
+  difficulties: Difficulty[];
   includeExtras: boolean;
   sort: SortKey;
   page: number;
@@ -81,6 +82,7 @@ export const EMPTY_FILTERS: Filters = {
   topics: [],
   speakers: [],
   lengths: [],
+  difficulties: [],
   includeExtras: false,
   sort: "relevance",
   page: 1,
@@ -109,6 +111,7 @@ export function buildIndexEntry(talk: Talk): TalkIndexEntry {
     locationLabel: talk.locationLabel,
     language: talk.language,
     viewCount: talk.viewCount,
+    difficulty: normalizeDifficulty(talk.difficulty) === "unknown" ? undefined : talk.difficulty,
   };
 }
 
@@ -173,7 +176,16 @@ export function queryTerms(q: string): string[] {
   return q.trim().toLowerCase().split(/\s+/).filter(Boolean);
 }
 
-type Dimension = "q" | "conferences" | "years" | "villages" | "tracks" | "topics" | "speakers" | "lengths";
+type Dimension =
+  | "q"
+  | "conferences"
+  | "years"
+  | "villages"
+  | "tracks"
+  | "topics"
+  | "speakers"
+  | "lengths"
+  | "difficulties";
 
 function matchesDimension(
   entry: SearchEntry,
@@ -195,6 +207,13 @@ function matchesDimension(
     skip !== "lengths" &&
     filters.lengths.length > 0 &&
     (!entry.durationSeconds || !filters.lengths.includes(getLengthBucket(entry.durationSeconds) as string))
+  )
+    return false;
+  // Missing difficulty counts as "unknown", so that option can be picked too.
+  if (
+    skip !== "difficulties" &&
+    filters.difficulties.length > 0 &&
+    !filters.difficulties.includes(normalizeDifficulty(entry.difficulty))
   )
     return false;
   if (
@@ -320,6 +339,7 @@ export type Facets = {
   topics: FacetOption<string>[];
   speakers: FacetOption<string>[];
   lengths: FacetOption<string>[];
+  difficulties: FacetOption<Difficulty>[];
 };
 
 function tally<T extends string | number>(
@@ -419,7 +439,23 @@ export function computeFacets(entries: SearchEntry[], filters: Filters): Facets 
     { value: "45-plus", label: "45+ min", count: lengthCounts["45-plus"] },
   ].filter((opt) => opt.count > 0 || filters.lengths.includes(opt.value));
 
-  return { conferences, years, villages, tracks, topics, speakers, lengths };
+  // Fixed easiest-to-hardest order rather than by count.
+  const difficultyCounts = tally(subset("difficulties"), (e) => {
+    const level = normalizeDifficulty(e.difficulty);
+    return [{ value: level, label: difficultyLabel(level) }];
+  });
+  // Until anything is classified, "Unknown" alone would be a facet with nothing to pick.
+  const anyKnown = [...difficultyCounts.keys()].some((level) => level !== "unknown");
+  const difficulties: FacetOption<Difficulty>[] =
+    anyKnown || filters.difficulties.length > 0
+      ? DIFFICULTIES.map((level) => ({
+          value: level,
+          label: difficultyLabel(level),
+          count: difficultyCounts.get(level)?.count ?? 0,
+        })).filter((opt) => opt.count > 0 || filters.difficulties.includes(opt.value))
+      : [];
+
+  return { conferences, years, villages, tracks, topics, speakers, lengths, difficulties };
 }
 
 export function countActive(filters: Filters): number {
@@ -432,6 +468,7 @@ export function countActive(filters: Filters): number {
     filters.topics.length +
     filters.speakers.length +
     filters.lengths.length +
+    filters.difficulties.length +
     (filters.includeExtras ? 1 : 0)
   );
 }
@@ -461,6 +498,7 @@ const LIST_KEYS = {
   topic: "topics",
   speakers: "speakers",
   length: "lengths",
+  difficulty: "difficulties",
 } as const;
 
 export function filtersFromParams(params: URLSearchParams): Filters {
@@ -484,6 +522,9 @@ export function filtersFromParams(params: URLSearchParams): Filters {
     topics: list("topic"),
     speakers: list("speakers"),
     lengths: list("length").filter((v) => ["under-20", "20-45", "45-plus"].includes(v)),
+    difficulties: list("difficulty").filter((v): v is Difficulty =>
+      DIFFICULTIES.includes(v as Difficulty),
+    ),
     includeExtras: params.get("extras") === "1" || params.get("extras") === "true",
     sort: SORT_KEYS.includes(sort as SortKey) ? (sort as SortKey) : "relevance",
     page: Number.isFinite(page) && page > 0 ? page : 1,
