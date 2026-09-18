@@ -23,6 +23,7 @@ import {
   type Filters,
   type SortKey,
 } from "@/lib/search";
+import { inDefconVillage } from "@/lib/hubs";
 import type { TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
 
 type Dimension = "conferences" | "years" | "villages" | "tracks" | "speakers" | "lengths";
@@ -54,6 +55,7 @@ export type TalkBrowserProps = {
 const SORTS: { value: SortKey; label: string }[] = [
   { value: "relevance", label: "Relevance" },
   { value: "newest", label: "Newest" },
+  { value: "views", label: "View count" },
   { value: "duration", label: "Duration" },
   { value: "title", label: "Title" },
   { value: "village", label: "Village" },
@@ -84,6 +86,17 @@ export function TalkBrowser({
 
   const hasExtras = useMemo(() => talks.some((t) => t.kind !== "talk"), [talks]);
   const allExtras = useMemo(() => talks.length > 0 && talks.every((t) => t.kind !== "talk"), [talks]);
+  // Village sort is DEF CON-only: hide it on the homepage and other non-village browsers.
+  const sortOptions = useMemo(() => {
+    const hideVillage = hide.includes("villages") || !talks.some((talk) => inDefconVillage(talk));
+    return hideVillage ? SORTS.filter((option) => option.value !== "village") : SORTS;
+  }, [hide, talks]);
+
+  useEffect(() => {
+    if (!sortOptions.some((option) => option.value === filters.sort)) {
+      setFilters((current) => (current.sort === "relevance" ? current : { ...current, sort: "relevance" }));
+    }
+  }, [sortOptions, filters.sort]);
 
   // Read deep-linked state after mount rather than during render: the page is
   // statically rendered, so reading the URL in the initial state would mismatch.
@@ -407,7 +420,7 @@ export function TalkBrowser({
                   onChange={(event) => update({ sort: event.target.value as SortKey })}
                   className="rounded-sm border border-acid/25 bg-void px-2 py-1 font-mono text-[11px] text-mint outline-none focus:border-cyan"
                 >
-                  {SORTS.map((option) => (
+                  {sortOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
