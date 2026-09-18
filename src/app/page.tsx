@@ -43,6 +43,7 @@ export default function HomePage() {
     <TalkBrowser
       talks={getTalkIndex()}
       hide={["villages"]}
+      alwaysShowDifficulties
       topicLabels={getTaxonomy().topicLabels}
       masthead={masthead}
       hero
