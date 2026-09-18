@@ -143,6 +143,8 @@ export type TalkIndexEntry = {
   dateLabel?: string;
   locationLabel?: string;
   language?: string;
+  /** YouTube views when known; missing counts sort as 0. */
+  viewCount?: number;
 };
 
 /**

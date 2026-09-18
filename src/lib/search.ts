@@ -8,7 +8,16 @@ import type { SearchEntry, Talk, TalkIndexEntry, TalkSummaryEntry } from "./type
 
 export const PAGE_SIZE = 24;
 
-export type SortKey = "relevance" | "newest" | "duration" | "title" | "village";
+export type SortKey = "relevance" | "newest" | "views" | "duration" | "title" | "village";
+
+export const SORT_KEYS: readonly SortKey[] = [
+  "relevance",
+  "newest",
+  "views",
+  "duration",
+  "title",
+  "village",
+];
 
 export type LengthBucket = "under-20" | "20-45" | "45-plus";
 
@@ -99,6 +108,7 @@ export function buildIndexEntry(talk: Talk): TalkIndexEntry {
     dateLabel: talk.dateLabel,
     locationLabel: talk.locationLabel,
     language: talk.language,
+    viewCount: talk.viewCount,
   };
 }
 
@@ -243,6 +253,13 @@ export function sortTalks(
   switch (sort) {
     case "title":
       return sorted.sort((a, b) => a.title.localeCompare(b.title));
+    case "views":
+      return sorted.sort(
+        (a, b) =>
+          (b.viewCount ?? 0) - (a.viewCount ?? 0) ||
+          b.year - a.year ||
+          a.title.localeCompare(b.title),
+      );
     case "duration":
       return sorted.sort(
         (a, b) =>
@@ -455,7 +472,6 @@ export function filtersFromParams(params: URLSearchParams): Filters {
 
   const sort = params.get("sort") as SortKey | null;
   const page = Number.parseInt(params.get("page") ?? "1", 10);
-  const validSorts: readonly SortKey[] = ["relevance", "newest", "duration", "title", "village"];
 
   return {
     q: params.get("q") ?? "",
@@ -469,7 +485,7 @@ export function filtersFromParams(params: URLSearchParams): Filters {
     speakers: list("speakers"),
     lengths: list("length").filter((v) => ["under-20", "20-45", "45-plus"].includes(v)),
     includeExtras: params.get("extras") === "1" || params.get("extras") === "true",
-    sort: validSorts.includes(sort as SortKey) ? (sort as SortKey) : "relevance",
+    sort: SORT_KEYS.includes(sort as SortKey) ? (sort as SortKey) : "relevance",
     page: Number.isFinite(page) && page > 0 ? page : 1,
   };
 }
