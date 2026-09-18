@@ -111,7 +111,7 @@ export function buildIndexEntry(talk: Talk): TalkIndexEntry {
     locationLabel: talk.locationLabel,
     language: talk.language,
     viewCount: talk.viewCount,
-    difficulty: normalizeDifficulty(talk.difficulty) === "unknown" ? undefined : talk.difficulty,
+    difficulty: normalizeDifficulty(talk.difficulty) ?? undefined,
   };
 }
 
@@ -209,13 +209,11 @@ function matchesDimension(
     (!entry.durationSeconds || !filters.lengths.includes(getLengthBucket(entry.durationSeconds) as string))
   )
     return false;
-  // Missing difficulty counts as "unknown", so that option can be picked too.
-  if (
-    skip !== "difficulties" &&
-    filters.difficulties.length > 0 &&
-    !filters.difficulties.includes(normalizeDifficulty(entry.difficulty))
-  )
-    return false;
+  // Picking a level hides unclassified talks; there is no "unclassified" option.
+  if (skip !== "difficulties" && filters.difficulties.length > 0) {
+    const level = normalizeDifficulty(entry.difficulty);
+    if (!level || !filters.difficulties.includes(level)) return false;
+  }
   if (
     skip !== "villages" &&
     filters.villages.length > 0 &&
@@ -439,21 +437,17 @@ export function computeFacets(entries: SearchEntry[], filters: Filters): Facets 
     { value: "45-plus", label: "45+ min", count: lengthCounts["45-plus"] },
   ].filter((opt) => opt.count > 0 || filters.lengths.includes(opt.value));
 
-  // Fixed easiest-to-hardest order rather than by count.
+  // Only classified talks are counted, in fixed easiest-to-hardest order. With
+  // nothing classified the list is empty and the facet does not render.
   const difficultyCounts = tally(subset("difficulties"), (e) => {
     const level = normalizeDifficulty(e.difficulty);
-    return [{ value: level, label: difficultyLabel(level) }];
+    return level ? [{ value: level, label: difficultyLabel(level) }] : [];
   });
-  // Until anything is classified, "Unknown" alone would be a facet with nothing to pick.
-  const anyKnown = [...difficultyCounts.keys()].some((level) => level !== "unknown");
-  const difficulties: FacetOption<Difficulty>[] =
-    anyKnown || filters.difficulties.length > 0
-      ? DIFFICULTIES.map((level) => ({
-          value: level,
-          label: difficultyLabel(level),
-          count: difficultyCounts.get(level)?.count ?? 0,
-        })).filter((opt) => opt.count > 0 || filters.difficulties.includes(opt.value))
-      : [];
+  const difficulties: FacetOption<Difficulty>[] = DIFFICULTIES.map((level) => ({
+    value: level,
+    label: difficultyLabel(level),
+    count: difficultyCounts.get(level)?.count ?? 0,
+  })).filter((opt) => opt.count > 0 || filters.difficulties.includes(opt.value));
 
   return { conferences, years, villages, tracks, topics, speakers, lengths, difficulties };
 }

@@ -28,10 +28,10 @@ export type Taxonomy = {
 export type TalkKind = "talk" | "clip" | "interview" | "announcement";
 
 /**
- * How much background a talk assumes. Classified offline by talk-ingest;
- * a missing value means the same as "unknown".
+ * How much background a talk assumes. Classified offline by talk-ingest.
+ * There is no "unknown" level: an unclassified talk simply has no value.
  */
-export type Difficulty = "beginner" | "intermediate" | "advanced" | "expert" | "unknown";
+export type Difficulty = "beginner" | "intermediate" | "advanced" | "expert";
 
 /** A talk exactly as authored in data/villages/<event>-<village>.json. */
 export type StoredTalk = {
@@ -152,7 +152,7 @@ export type TalkIndexEntry = {
   language?: string;
   /** YouTube views when known; missing counts sort as 0. */
   viewCount?: number;
-  /** Omitted when unclassified, to keep the index slim. */
+  /** Absent when the talk is unclassified. */
   difficulty?: Difficulty;
 };
 

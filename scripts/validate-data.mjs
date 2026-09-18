@@ -58,7 +58,7 @@ const VILLAGE_FIELDS = new Set([
 const KNOWN_CONFERENCES = new Set(["defcon", "black-hat", "rsa", "troopers"]);
 
 const MAX_TOPICS = 6;
-const DIFFICULTIES = new Set(["beginner", "intermediate", "advanced", "expert", "unknown"]);
+const DIFFICULTIES = new Set(["beginner", "intermediate", "advanced", "expert"]);
 const LANGUAGE = /^[a-z]{2,3}(?:-[A-Z]{2})?$/;
 const MAX_TEASER = 220;
 
@@ -274,8 +274,12 @@ for (const file of files) {
     if (talk.viewCountFetchedAt != null && Number.isNaN(Date.parse(talk.viewCountFetchedAt))) {
       error(at, "viewCountFetchedAt must be an ISO timestamp");
     }
-    if (talk.difficulty != null && !DIFFICULTIES.has(talk.difficulty)) {
-      error(at, `difficulty "${talk.difficulty}" must be one of ${[...DIFFICULTIES].join(", ")}`);
+    // Unclassified talks omit the field; there is no "unknown" value.
+    if ("difficulty" in talk && !DIFFICULTIES.has(talk.difficulty)) {
+      error(
+        at,
+        `difficulty ${JSON.stringify(talk.difficulty)} must be one of ${[...DIFFICULTIES].join(", ")} — omit the field when unclassified`,
+      );
     }
   });
 }

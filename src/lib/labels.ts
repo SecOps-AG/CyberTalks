@@ -122,26 +122,19 @@ export function formatViews(count: number): string {
   return String(count);
 }
 
-/** Easiest first; "unknown" sorts last wherever levels are listed. */
-export const DIFFICULTIES: readonly Difficulty[] = [
-  "beginner",
-  "intermediate",
-  "advanced",
-  "expert",
-  "unknown",
-];
+/** Easiest first, wherever levels are listed. */
+export const DIFFICULTIES: readonly Difficulty[] = ["beginner", "intermediate", "advanced", "expert"];
 
 const DIFFICULTY_LABELS: Record<Difficulty, string> = {
   beginner: "Beginner",
   intermediate: "Intermediate",
   advanced: "Advanced",
   expert: "Expert",
-  unknown: "Unknown",
 };
 
-/** Anything missing or unrecognised reads as "unknown". */
-export function normalizeDifficulty(value: unknown): Difficulty {
-  return DIFFICULTIES.includes(value as Difficulty) ? (value as Difficulty) : "unknown";
+/** A level, or null for an unclassified talk (missing or unrecognised value). */
+export function normalizeDifficulty(value: unknown): Difficulty | null {
+  return DIFFICULTIES.includes(value as Difficulty) ? (value as Difficulty) : null;
 }
 
 export function difficultyLabel(value: Difficulty): string {

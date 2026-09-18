@@ -156,7 +156,7 @@ export default async function TalkPage({ params }: Props) {
               {duration}
             </span>
           ) : null}
-          {difficulty !== "unknown" ? (
+          {difficulty ? (
             <Link href={`/?difficulty=${difficulty}`} className="chip" title="Difficulty">
               {difficultyLabel(difficulty)}
             </Link>

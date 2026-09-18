@@ -8,7 +8,7 @@ import { BookmarkButton } from "@/components/BookmarkButton";
 const MAX_TOPICS = 3;
 
 /** Thumbnail badge colours, cool to hot as the level rises. */
-const DIFFICULTY_STYLES: Record<Exclude<Difficulty, "unknown">, string> = {
+const DIFFICULTY_STYLES: Record<Difficulty, string> = {
   beginner: "border-cyan/50 text-cyan",
   intermediate: "border-acid/50 text-acid",
   advanced: "border-warn/60 text-warn",
@@ -23,7 +23,7 @@ export function TalkCard({ talk }: { talk: TalkIndexEntry | Partial<SearchEntry>
   const overflow = (talk.topics ?? []).length - shown.length;
   const duration = formatDuration(talk.durationSeconds);
   const language = talk.language?.toUpperCase();
-  // Unknown gets no badge: an unclassified talk should look like it always has.
+  // An unclassified talk gets no badge and looks like it always has.
   const difficulty = normalizeDifficulty(talk.difficulty);
   const showVillageLink =
     talk.conference != null &&
@@ -56,7 +56,7 @@ export function TalkCard({ talk }: { talk: TalkIndexEntry | Partial<SearchEntry>
             {talk.eventShortName}
           </span>
         </div>
-        {difficulty !== "unknown" ? (
+        {difficulty ? (
           <span
             className={`absolute bottom-2 left-2 rounded-sm border bg-void/90 px-1.5 py-0.5 text-[10px] uppercase tracking-[0.14em] ${DIFFICULTY_STYLES[difficulty]}`}
           >
