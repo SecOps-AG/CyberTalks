@@ -1,6 +1,7 @@
 /**
  * Short display labels for card chips. Pure — safe on server and client.
  */
+import type { Difficulty } from "./types";
 
 /** Display names for the `conference` family slug stored on each village file. */
 const CONFERENCE_LABELS: Record<string, string> = {
@@ -119,4 +120,23 @@ export function formatViews(count: number): string {
   if (count >= 1_000_000) return compact(count / 1_000_000, "M");
   if (count >= 1_000) return compact(count / 1_000, "K");
   return String(count);
+}
+
+/** Easiest first, wherever levels are listed. */
+export const DIFFICULTIES: readonly Difficulty[] = ["beginner", "intermediate", "advanced", "expert"];
+
+const DIFFICULTY_LABELS: Record<Difficulty, string> = {
+  beginner: "Beginner",
+  intermediate: "Intermediate",
+  advanced: "Advanced",
+  expert: "Expert",
+};
+
+/** A level, or null for an unclassified talk (missing or unrecognised value). */
+export function normalizeDifficulty(value: unknown): Difficulty | null {
+  return DIFFICULTIES.includes(value as Difficulty) ? (value as Difficulty) : null;
+}
+
+export function difficultyLabel(value: Difficulty): string {
+  return DIFFICULTY_LABELS[value];
 }

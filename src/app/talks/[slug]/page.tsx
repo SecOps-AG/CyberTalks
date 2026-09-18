@@ -9,6 +9,7 @@ import { BookmarkButton } from "@/components/BookmarkButton";
 import { WatchedMarker } from "@/components/WatchedMarker";
 import { getTalkBySlug, getTalkIndex, getTalks, getTaxonomy } from "@/lib/data";
 import { isDefconVillageTalk, villageEditionPath, villageSeriesPath } from "@/lib/hubs";
+import { difficultyLabel, normalizeDifficulty } from "@/lib/labels";
 import { formatDuration, slugifySpeaker } from "@/lib/search";
 import type { Talk } from "@/lib/types";
 
@@ -82,6 +83,7 @@ export default async function TalkPage({ params }: Props) {
   const labels = getTaxonomy().topicLabels;
   const related = getTalkIndex(relatedTalks(talk));
   const duration = formatDuration(talk.durationSeconds);
+  const difficulty = normalizeDifficulty(talk.difficulty);
 
   return (
     <article className="space-y-8">
@@ -153,6 +155,11 @@ export default async function TalkPage({ params }: Props) {
             <span className="chip !border-mint/30 !text-mint/80">
               {duration}
             </span>
+          ) : null}
+          {difficulty ? (
+            <Link href={`/?difficulty=${difficulty}`} className="chip" title="Difficulty">
+              {difficultyLabel(difficulty)}
+            </Link>
           ) : null}
           <WatchedMarker talkId={talk.id} youtubeUrl={talk.youtubeUrl} />
           <BookmarkButton talkId={talk.id} variant="full" />
