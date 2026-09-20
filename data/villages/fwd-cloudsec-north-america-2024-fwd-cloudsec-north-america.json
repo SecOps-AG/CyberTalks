@@ -1,0 +1,864 @@
+{
+  "villageSlug": "fwd-cloudsec-north-america",
+  "villageName": "fwd:cloudsec North America",
+  "eventSlug": "fwd-cloudsec-north-america-2024",
+  "conference": "fwd-cloudsec",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLCPCP1pNWD7PoUaDtU_T9XJSJ6d7cSfjl",
+  "description": "fwd:cloudsec North America talks from fwd:cloudsec North America 2024.",
+  "talks": [
+    {
+      "youtubeId": "WY9VqDC5fTY",
+      "slug": "welcome-to-fwd-cloudsec-2024",
+      "title": "Welcome to fwd:cloudsec 2024!",
+      "speakers": [
+        "Aaron Zollman"
+      ],
+      "track": "cloud",
+      "topics": [
+        "welcome",
+        "cloudsec",
+        "vulnerability-research"
+      ],
+      "teaser": "Aaron Zollman details Welcome to fwd:cloudsec 2024!.",
+      "summary": "Overview: fwd:cloudsec organizers deliver the 2024 North America welcome address, declaring independence from co-location with re:Invent to preserve the conference's practitioner-focused community identity.\n\nKey Topics: fwd:cloudsec's fifth year and first intentional scheduling separation from AWS re:Invent; the value of independent cloud security dialogue; commitment to open knowledge sharing; and building community for the next five years.\n\nTechnical Details: Organizers frame the scheduling change as deliberate independence, allowing open dialogue between researchers, developers, and practitioners without vendor conference dynamics influencing content or attendance.\n\nTakeaways: Independent security conferences serve distinct community needs that vendor-adjacent events cannot fulfill. Practitioners should support communities prioritizing open dialogue over marketing.",
+      "durationSeconds": 457,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "eV7QOjUkwW8",
+      "slug": "im-doing-my-part-by-mapping-cloud-incidents-to-att-and-ck-techni",
+      "title": "I'm Doing My Part! By Mapping Cloud Incidents to ATT&CK Techniques",
+      "speakers": [
+        "Casey Knerr"
+      ],
+      "track": "cloud",
+      "topics": [
+        "doing",
+        "part",
+        "cloud",
+        "incident",
+        "technique"
+      ],
+      "teaser": "Casey Knerr examines I'm Doing My Part! By Mapping Cloud Incidents to ATT&CK Techniques.",
+      "summary": "Why Map Cloud Incidents to ATT&CK\n\nMITRE ATT&CK enterprise lead Casey Nur argues mapping threat reports to ATT&CK techniques enables a common language for sharing intelligence, spotting trends, and finding defensive gaps. ATT&CK Cloud spans IaaS, SaaS, Google Workspace, Office 365, and Azure AD (with ongoing cleanup as platforms evolve).\n\nThree Mapping Questions\n\nAnalysts must extract atomic behaviors from prose, determine adversary goals to select tactics (often intertwined in cloud), then match techniques and sub-techniques using descriptions and keyword search. Multiple techniques may apply; perfection is less important than consistent community feedback.\n\nWorked Example: Midnight Blizzard\n\nUsing Microsoft reporting on APT29/Midnight Blizzard, Nur isolates password spraying against a non-MFA test tenant with low-and-slow attempts to evade detection. She notes cloud mapping can feel repetitive when reports collapse to valid cloud accounts, but diverse techniques exist beyond that pattern when reports are parsed carefully.",
+      "durationSeconds": 1226,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "I3YQJXVbpII",
+      "slug": "one-click-six-services-abusing-the-dangerous-multi-service-orche",
+      "title": "One Click, Six Services: Abusing The Dangerous Multi-service Orchestration Pattern",
+      "speakers": [
+        "Liv Matan"
+      ],
+      "track": "cloud",
+      "topics": [
+        "click",
+        "service",
+        "abusing",
+        "dangerou",
+        "multi-service",
+        "orchestration"
+      ],
+      "teaser": "Liv Matan investigates One Click, Six Services: Abusing The Dangerous Multi-service Orchestration Pattern.",
+      "summary": "Hidden Cloud Dependencies\n\nTenable researcher Liv Matan explains how creating one GCP Cloud Function silently provisions storage buckets, Artifact Registry, Cloud Build, Cloud Run, and Eventarc triggers. This Jenga-like orchestration expands the attack surface beyond what operators see in the console.\n\nService Agents and Privilege Paths\n\nBehind-the-scenes work runs under Google-managed service agents analogous to AWS service-linked roles or Azure managed identities. Second-generation Cloud Functions add complexity by combining Cloud Run and Eventarc, creating cross-service privilege-escalation opportunities such as Cloud Run access to container images.\n\nConfused Function Vulnerability\n\nMatan details a bounty-awarded flaw where permission to update a Cloud Function lets an attacker inject a malicious npm dependency into package.json. During deployment, Cloud Build installs it under the default Cloud Build service account, whose broad permissions can be stolen via IMDS credential exfiltration.\n\nDefender Takeaways\n\nGCP's mitigation lets customers choose custom service accounts for build and runtime, deprecates the legacy default Cloud Build account, and adds organization policies. Matan warns defaults remain dangerous and minimum permissions for deployment still leave residual risk across all major cloud providers.",
+      "durationSeconds": 1195,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "4v6Y6NZne8c",
+      "slug": "forged-in-fire-forging-multi-cloud-open-source-swiss-army-knife",
+      "title": "Forged in Fire: Forging Multi-Cloud Open Source Swiss-Army Knife",
+      "speakers": [
+        "Toni de la Fuente",
+        "Sergio Garcia"
+      ],
+      "track": "cloud",
+      "topics": [
+        "open-source",
+        "multi-cloud",
+        "forged",
+        "fire",
+        "forging"
+      ],
+      "teaser": "Toni de la Fuente details Forged in Fire: Forging Multi-Cloud Open Source Swiss-Army Knife.",
+      "summary": "Overview:\nToni de la Fuente, creator and CEO of Prowler, and Sergio Garcia, core maintainer, present the technical evolution and architectural lessons from building Prowler, a multi-cloud open-source security tool. Presented at fwd:cloudsec, the talk details how Prowler evolved from an AWS-focused Bash script into a multi-cloud Python engine supporting AWS, Microsoft Azure, Google Cloud Platform (GCP), and Kubernetes with nearly 600 security checks and over 8 million downloads.\n\nKey Topics:\n- Evolution of Prowler from a 2016 Bash script into an enterprise Python platform\n- Standardization of disparate multi-cloud findings using OCSF and ASFF schemas\n- SDK and API inconsistencies across AWS (Boto3), Azure SDKs, GCP, and Kubernetes\n- Concurrency, rate-limit throttling mitigation, and agentless compliance mapping\n\nTechnical Details:\nProwler was initiated in 2016 as a single Bash script built atop the AWS CLI to automate the CIS AWS Benchmark 1.0. To overcome operating system portability issues (such as divergent core utilities between Linux, BSD, and macOS) and manage rapid feature expansion, the tool was entirely rewritten in Python. Expanding to multi-cloud required reconciling fundamentally inconsistent cloud resource hierarchies. The maintainers adopted the Open Cybersecurity Schema Format (OCSF) and AWS Security Finding Format (ASFF) to establish a unified data contract. In this model, AWS Account IDs, Azure Subscriptions, GCP Projects, and Kubernetes Clusters are mapped to a standardized `account_uid`, while Azure locations and Kubernetes namespaces are normalized into unified regional fields.\n\nThe speakers contrast the developer experience across cloud provider SDKs and APIs. AWS provides a mature, centralized SDK (`boto3`/`botocore`) featuring built-in paginators and configurable retry options (`max_retries`) that allow Prowler to handle API throttling during concurrent, multi-threaded regional scans. AWS also publishes a global JSON file detailing service-region availability, which Prowler queries via GitHub Actions to ensure scan coverage across commercial, GovCloud, and China partitions. Conversely, Azure requires dozens of fragmented client libraries with erratic versioning, causing frequent breaking dependencies managed via Dependabot, alongside asynchronous requirements for Microsoft Graph (`aioazure`). GCP requires asynchronous execution without native client paginators, requiring manual iteration and explicit error handling for disabled service APIs.\n\nCompliance mapping presented another major engineering hurdle. Because regulatory frameworks (CIS, PCI DSS, MITRE ATT&CK) provide high-level requirements without cloud-specific implementation details, Prowler implemented a custom JSON compliance schema. This schema maps generic compliance requirements (such as storage encryption-at-rest) directly to technical checks across S3, RDS, Azure Blob, and GCP Cloud Storage. The architecture remains entirely agentless, utilizing least-privilege, read-only audit roles (e.g., SecurityAudit in AWS) to evaluate configurations, delivering findings through CSV, JSON, and interactive Plotly Dash dashboards.\n\nKey Takeaways:\nDeveloping multi-cloud security tooling requires strict abstraction layers and reliance on open data schemas like OCSF to prevent vendor lock-in and decouple assessment logic from provider APIs. Security teams should perform exhaustive multi-region and multi-partition scans by default, as unmonitored secondary regions frequently harbor rogue or forgotten cloud resources. When designing high-concurrency API scanners, developers must engineer adaptive retry mechanisms with exponential backoffs and continuous dependency integration to absorb frequent cloud SDK breaking changes.\n\n(AI summary — Gemini Flash)",
+      "durationSeconds": 2678,
+      "conference": "fwd-cloudsec",
+      "aiSummary": "Overview:\nToni de la Fuente, creator and CEO of Prowler, and Sergio Garcia, core maintainer, present the technical evolution and architectural lessons from building Prowler, a multi-cloud open-source security tool. Presented at fwd:cloudsec, the talk details how Prowler evolved from an AWS-focused Bash script into a multi-cloud Python engine supporting AWS, Microsoft Azure, Google Cloud Platform (GCP), and Kubernetes with nearly 600 security checks and over 8 million downloads.\n\nKey Topics:\n- Evolution of Prowler from a 2016 Bash script into an enterprise Python platform\n- Standardization of disparate multi-cloud findings using OCSF and ASFF schemas\n- SDK and API inconsistencies across AWS (Boto3), Azure SDKs, GCP, and Kubernetes\n- Concurrency, rate-limit throttling mitigation, and agentless compliance mapping\n\nTechnical Details:\nProwler was initiated in 2016 as a single Bash script built atop the AWS CLI to automate the CIS AWS Benchmark 1.0. To overcome operating system portability issues (such as divergent core utilities between Linux, BSD, and macOS) and manage rapid feature expansion, the tool was entirely rewritten in Python. Expanding to multi-cloud required reconciling fundamentally inconsistent cloud resource hierarchies. The maintainers adopted the Open Cybersecurity Schema Format (OCSF) and AWS Security Finding Format (ASFF) to establish a unified data contract. In this model, AWS Account IDs, Azure Subscriptions, GCP Projects, and Kubernetes Clusters are mapped to a standardized `account_uid`, while Azure locations and Kubernetes namespaces are normalized into unified regional fields.\n\nThe speakers contrast the developer experience across cloud provider SDKs and APIs. AWS provides a mature, centralized SDK (`boto3`/`botocore`) featuring built-in paginators and configurable retry options (`max_retries`) that allow Prowler to handle API throttling during concurrent, multi-threaded regional scans. AWS also publishes a global JSON file detailing service-region availability, which Prowler queries via GitHub Actions to ensure scan coverage across commercial, GovCloud, and China partitions. Conversely, Azure requires dozens of fragmented client libraries with erratic versioning, causing frequent breaking dependencies managed via Dependabot, alongside asynchronous requirements for Microsoft Graph (`aioazure`). GCP requires asynchronous execution without native client paginators, requiring manual iteration and explicit error handling for disabled service APIs.\n\nCompliance mapping presented another major engineering hurdle. Because regulatory frameworks (CIS, PCI DSS, MITRE ATT&CK) provide high-level requirements without cloud-specific implementation details, Prowler implemented a custom JSON compliance schema. This schema maps generic compliance requirements (such as storage encryption-at-rest) directly to technical checks across S3, RDS, Azure Blob, and GCP Cloud Storage. The architecture remains entirely agentless, utilizing least-privilege, read-only audit roles (e.g., SecurityAudit in AWS) to evaluate configurations, delivering findings through CSV, JSON, and interactive Plotly Dash dashboards.\n\nKey Takeaways:\nDeveloping multi-cloud security tooling requires strict abstraction layers and reliance on open data schemas like OCSF to prevent vendor lock-in and decouple assessment logic from provider APIs. Security teams should perform exhaustive multi-region and multi-partition scans by default, as unmonitored secondary regions frequently harbor rogue or forgotten cloud resources. When designing high-concurrency API scanners, developers must engineer adaptive retry mechanisms with exponential backoffs and continuous dependency integration to absorb frequent cloud SDK breaking changes.\n\n(AI summary — Gemini Flash)"
+    },
+    {
+      "youtubeId": "opvv9h3Qe0s",
+      "slug": "gcpwn-a-pentesting-tool-for-gcp",
+      "title": "GCPwn: A Pentesting Tool For GCP",
+      "speakers": [
+        "Scott Weston"
+      ],
+      "track": "cloud",
+      "topics": [
+        "pentesting",
+        "gcp",
+        "gcpwn",
+        "tool"
+      ],
+      "teaser": "Scott Weston investigates GCPwn: A Pentesting Tool For GCP.",
+      "summary": null,
+      "durationSeconds": 1411,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "iRbGLnmmuTM",
+      "slug": "cloudy-with-a-chance-of-chaos",
+      "title": "Cloudy with a Chance of Chaos",
+      "speakers": [
+        "Kushagra Sharma"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloudy",
+        "chance",
+        "chao",
+        "chaos"
+      ],
+      "teaser": "Kushagra Sharma details Cloudy with a Chance of Chaos.",
+      "summary": null,
+      "durationSeconds": 1275,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "7hWepdMRckg",
+      "slug": "intercloud-identities-the-risks-and-mitigations-of-access-betwee",
+      "title": "Intercloud Identities: The Risks and Mitigations of Access Between Cloud Providers",
+      "speakers": [
+        "Intercloud Identities"
+      ],
+      "track": "cloud",
+      "topics": [
+        "mitigations",
+        "intercloud",
+        "identitie",
+        "risk",
+        "mitigation",
+        "acces"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Intercloud Identities: The Risks and Mitigations of Access Between Cloud Providers.",
+      "summary": null,
+      "durationSeconds": 1523,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "ETCM46vuS64",
+      "slug": "who-touched-my-gcp-project-understanding-the-principal-part-in-c",
+      "title": "Who Touched My GCP Project? Understanding the Principal Part in Cloud Audit Logs",
+      "speakers": [
+        "Gabriel Fried"
+      ],
+      "track": "cloud",
+      "topics": [
+        "gcp",
+        "touched",
+        "project",
+        "understanding",
+        "principal",
+        "part"
+      ],
+      "teaser": "Gabriel Fried analyzes Who Touched My GCP Project? Understanding the Principal Part in Cloud Audit Logs.",
+      "summary": null,
+      "durationSeconds": 1349,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "SodD-AS7t-k",
+      "slug": "trust-me-bro-preexisting-trust-is-the-new-initial-access-vector",
+      "title": "Trust Me Bro: Preexisting Trust is the New Initial Access Vector",
+      "speakers": [
+        "Nick Frichette"
+      ],
+      "track": "red-team",
+      "topics": [
+        "initial-access",
+        "trust",
+        "preexisting",
+        "initial",
+        "acces",
+        "vector"
+      ],
+      "teaser": "Nick Frichette details Trust Me Bro: Preexisting Trust is the New Initial Access Vector.",
+      "summary": null,
+      "durationSeconds": 2406,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "xifpJbTepCs",
+      "slug": "freeing-identity-from-infrastructure",
+      "title": "Freeing Identity From Infrastructure",
+      "speakers": [
+        "Ian Ferguson"
+      ],
+      "track": "cloud",
+      "topics": [
+        "identity",
+        "infrastructure",
+        "freeing"
+      ],
+      "teaser": "Ian Ferguson examines Freeing Identity From Infrastructure.",
+      "summary": null,
+      "durationSeconds": 1616,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "1Z8BA83X0YE",
+      "slug": "behind-the-curtain-unmasking-the-hidden-apis-of-azure-and-entra",
+      "title": "Behind the Curtain: Unmasking the Hidden APIs of Azure and Entra",
+      "speakers": [
+        "Aled Mehta"
+      ],
+      "track": "cloud",
+      "topics": [
+        "azure",
+        "curtain",
+        "unmasking",
+        "hidden",
+        "api"
+      ],
+      "teaser": "Aled Mehta details Behind the Curtain: Unmasking the Hidden APIs of Azure and Entra.",
+      "summary": null,
+      "durationSeconds": 1108,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "QI7ysTls1as",
+      "slug": "how-a-control-plane-fail-can-help-you-learn-about-azure-security",
+      "title": "How a control plane fail can help you learn about Azure security",
+      "speakers": [
+        "Tyson Garrett"
+      ],
+      "track": "cloud",
+      "topics": [
+        "azure",
+        "control",
+        "plane",
+        "fail",
+        "help",
+        "learn"
+      ],
+      "teaser": "Tyson Garrett details How a control plane fail can help you learn about Azure security.",
+      "summary": null,
+      "durationSeconds": 1550,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "q51Fe_B6qY4",
+      "slug": "open-sourcing-aws-pentest-methodology",
+      "title": "Open-Sourcing AWS Pentest Methodology",
+      "speakers": [
+        "Lizzie Moratti"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "methodology",
+        "open-sourcing",
+        "pentest"
+      ],
+      "teaser": "Lizzie Moratti investigates Open-Sourcing AWS Pentest Methodology.",
+      "summary": null,
+      "durationSeconds": 1245,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "FCqtqrEiSbg",
+      "slug": "detecting-cloud-threats-with-dynamic-clouds",
+      "title": "Detecting Cloud Threats with Dynamic Clouds",
+      "speakers": [
+        "Nathaniel Quist",
+        "William Gamazo"
+      ],
+      "track": "cloud",
+      "topics": [
+        "detecting",
+        "cloud",
+        "threat",
+        "dynamic",
+        "threats"
+      ],
+      "teaser": "Nathaniel Quist explores Detecting Cloud Threats with Dynamic Clouds.",
+      "summary": null,
+      "durationSeconds": 1591,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "4gWb9H8wq2c",
+      "slug": "engineering-chaos-to-secure-cloud-foundations",
+      "title": "Engineering Chaos to Secure Cloud Foundations",
+      "speakers": [
+        "Jonathan Walker"
+      ],
+      "track": "cloud",
+      "topics": [
+        "engineering",
+        "chao",
+        "cloud",
+        "foundation",
+        "chaos"
+      ],
+      "teaser": "Jonathan Walker analyzes Engineering Chaos to Secure Cloud Foundations.",
+      "summary": null,
+      "durationSeconds": 1094,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "B88082y-M_w",
+      "slug": "thinking-outside-the-cloud-preventing-cloud-compromise-by-focusi",
+      "title": "Thinking outside the cloud: Preventing cloud compromise by focusing on-premise",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "thinking",
+        "outside",
+        "cloud",
+        "preventing",
+        "compromise",
+        "focusing"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Thinking outside the cloud: Preventing cloud compromise by focusing on-premise.",
+      "summary": null,
+      "durationSeconds": 1501,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "eWT8U4p7O1E",
+      "slug": "illuminating-azure-navigating-log-complexities-with-a-novel-key",
+      "title": "Illuminating Azure: Navigating Log Complexities with a Novel Key",
+      "speakers": [
+        "Nathan Eades"
+      ],
+      "track": "cloud",
+      "topics": [
+        "azure",
+        "illuminating",
+        "navigating",
+        "complexitie",
+        "novel",
+        "complexities"
+      ],
+      "teaser": "Nathan Eades details Illuminating Azure: Navigating Log Complexities with a Novel Key.",
+      "summary": null,
+      "durationSeconds": 1429,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "HcNmkCRXFdE",
+      "slug": "the-eks-hacking-playbook-lessons-from-3-years-of-cloud-security",
+      "title": "The EKS Hacking Playbook: Lessons From 3 Years of Cloud Security Research",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "security-research",
+        "cloud-security",
+        "playbook",
+        "lesson",
+        "from",
+        "year"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for The EKS Hacking Playbook: Lessons From 3 Years of Cloud Security Research.",
+      "summary": null,
+      "durationSeconds": 1489,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "s6TYbNrmjtY",
+      "slug": "bulletproofing-your-cloud-lessons-from-inside-the-borg",
+      "title": "Bulletproofing Your Cloud: Lessons from inside the Borg",
+      "speakers": [
+        "David Challoner"
+      ],
+      "track": "cloud",
+      "topics": [
+        "bulletproofing",
+        "cloud",
+        "lesson",
+        "inside",
+        "borg"
+      ],
+      "teaser": "David Challoner analyzes Bulletproofing Your Cloud: Lessons from inside the Borg.",
+      "summary": null,
+      "durationSeconds": 2322,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "grvQsKyhdKM",
+      "slug": "hunting-aws-threat-actors-with-access-analyzer-policy-suggestion",
+      "title": "Hunting AWS Threat Actors with Access Analyzer Policy Suggestions",
+      "speakers": [
+        "Rodrigo Montoro"
+      ],
+      "track": "cloud",
+      "topics": [
+        "policy",
+        "aws",
+        "threat-actors"
+      ],
+      "teaser": "Rodrigo Montoro analyzes Hunting AWS Threat Actors with Access Analyzer Policy Suggestions.",
+      "summary": null,
+      "durationSeconds": 1443,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "8VwAPAlyi5k",
+      "slug": "yubidisaster-building-robust-emergency-admin-access-to-aws-accou",
+      "title": "yubidisaster: Building Robust Emergency Admin Access to AWS Accounts",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "yubidisaster",
+        "building",
+        "robust",
+        "emergency",
+        "admin"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for yubidisaster: Building Robust Emergency Admin Access to AWS Accounts.",
+      "summary": null,
+      "durationSeconds": 1604,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "TKiHLabwtRk",
+      "slug": "dont-water-your-ai-security-frameworks-garden",
+      "title": "Don't water your AI Security frameworks garden!",
+      "speakers": [
+        "Natalia Semenova"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "water",
+        "framework",
+        "garden",
+        "frameworks"
+      ],
+      "teaser": "Natalia Semenova investigates Don't water your AI Security frameworks garden!.",
+      "summary": null,
+      "durationSeconds": 1259,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "5uIALSU1MyE",
+      "slug": "discover-the-aws-account-id-of-any-s3-bucket",
+      "title": "Discover the AWS Account ID of any S3 bucket",
+      "speakers": [
+        "Sam Cox"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "discover",
+        "account",
+        "bucket"
+      ],
+      "teaser": "Sam Cox details Discover the AWS Account ID of any S3 bucket.",
+      "summary": null,
+      "durationSeconds": 1351,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "k7vsJu0e9BE",
+      "slug": "making-insights-driven-decisions-in-an-ecosystem-of-ecosystems-p",
+      "title": "Making Insights Driven Decisions in an Ecosystem of Ecosystems -Prahathess Rengasamy & Stephanie Shi",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "making",
+        "insight",
+        "driven",
+        "decision",
+        "prahathes"
+      ],
+      "teaser": "Security researchers examine technical aspects of Making Insights Driven Decisions in an Ecosystem of Ecosystems -Prahathess Rengasamy & Stephanie Shi.",
+      "summary": null,
+      "durationSeconds": 1515,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "QUON6bdTxyU",
+      "slug": "normalization-of-csp-audit-logs-with-open-standards-how-to-searc",
+      "title": "Normalization of CSP audit logs with open standards. How to search everywhere at once.",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "standards",
+        "normalization",
+        "audit",
+        "log",
+        "standard"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Normalization of CSP audit logs with open standards. How to search everywhere at once..",
+      "summary": null,
+      "durationSeconds": 1392,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "ciTq7it5wDQ",
+      "slug": "the-oracle-awakens-demystifying-privilege-escalation-in-the-clou",
+      "title": "The Oracle Awakens: Demystifying Privilege Escalation in the cloud",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "privilege-escalation",
+        "oracle",
+        "awaken",
+        "demystifying",
+        "privilege"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding The Oracle Awakens: Demystifying Privilege Escalation in the cloud.",
+      "summary": null,
+      "durationSeconds": 1303,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "vj4RW39KICA",
+      "slug": "hacking-clouds-using-the-power-of-the-sun",
+      "title": "Hacking clouds using the power of the sun",
+      "speakers": [
+        "Ian Mckay"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "vulnerability-research",
+        "clouds"
+      ],
+      "teaser": "Ian Mckay examines Hacking clouds using the power of the sun.",
+      "summary": null,
+      "durationSeconds": 1514,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "f066e7WndTQ",
+      "slug": "responding-to-sophisticated-ransom-attacks-in-the-cloud-a-real-w",
+      "title": "Responding to Sophisticated Ransom Attacks in the Cloud: A Real-World Case Study",
+      "speakers": [
+        "Yotam Meitar"
+      ],
+      "track": "cloud",
+      "topics": [
+        "case-study",
+        "responding",
+        "sophisticated",
+        "ransom",
+        "attack",
+        "cloud"
+      ],
+      "teaser": "Yotam Meitar analyzes Responding to Sophisticated Ransom Attacks in the Cloud: A Real-World Case Study.",
+      "summary": null,
+      "durationSeconds": 2792,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "dFktwwpjR90",
+      "slug": "lucr-3-cloud-clepto-and-saas-y-scattered-spider-shenanigans",
+      "title": "LUCR-3: Cloud Clepto & SaaS-y Scattered Spider Shenanigans",
+      "speakers": [
+        "Ian Ahl"
+      ],
+      "track": "cloud",
+      "topics": [
+        "lucr-3",
+        "cloud",
+        "clepto",
+        "saas-y",
+        "scattered",
+        "spider"
+      ],
+      "teaser": "Ian Ahl explores LUCR-3: Cloud Clepto & SaaS-y Scattered Spider Shenanigans.",
+      "summary": null,
+      "durationSeconds": 1413,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "qYp0WAk52f4",
+      "slug": "balancing-security-and-costs-in-aws-vpc-interface-endpoints",
+      "title": "Balancing Security and Costs in AWS VPC Interface Endpoints",
+      "speakers": [
+        "Meg Ashby"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "cost",
+        "interface",
+        "endpoint",
+        "costs"
+      ],
+      "teaser": "Meg Ashby details Balancing Security and Costs in AWS VPC Interface Endpoints.",
+      "summary": null,
+      "durationSeconds": 1377,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "2KqU4fsHzuQ",
+      "slug": "aws-data-perimeter-at-usaa-things-we-knew-things-we-thought-we-k",
+      "title": "AWS Data Perimeter at USAA: Things we knew, things we thought we knew and things you should know!",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "perimeter",
+        "usaa",
+        "thing"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in AWS Data Perimeter at USAA: Things we knew, things we thought we knew and things you should know!.",
+      "summary": null,
+      "durationSeconds": 2380,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "IBq-rtUx6Hc",
+      "slug": "one-extra-large-cloud-assessment-please-why-testing-at-scale-nee",
+      "title": "One extra large cloud assessment please? - Why testing at scale needs a different approach",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "extra",
+        "large",
+        "cloud",
+        "assessment",
+        "please"
+      ],
+      "teaser": "Security researchers examine technical aspects of One extra large cloud assessment please? - Why testing at scale needs a different approach.",
+      "summary": null,
+      "durationSeconds": 1518,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "Bltr5Bn2-70",
+      "slug": "pipeline-precognition-predicting-attack-paths-before-apply",
+      "title": "Pipeline Precognition: Predicting Attack Paths Before Apply",
+      "speakers": [
+        "Brad Geesaman"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "pipeline",
+        "precognition",
+        "predicting",
+        "attack",
+        "path"
+      ],
+      "teaser": "Brad Geesaman details Pipeline Precognition: Predicting Attack Paths Before Apply.",
+      "summary": null,
+      "durationSeconds": 1500,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "iMYbne-tD20",
+      "slug": "whats-the-worst-that-could-happen-sharing-your-aws-account-id-wi",
+      "title": "What's the Worst That Could Happen: Sharing Your AWS Account ID With the World",
+      "speakers": [
+        "Jarom Brown"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "worst",
+        "happen"
+      ],
+      "teaser": "Jarom Brown explores What's the Worst That Could Happen: Sharing Your AWS Account ID With the World.",
+      "summary": null,
+      "durationSeconds": 1215,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "qUjnb8drZ1M",
+      "slug": "taking-over-vms-the-cloud-native-ways",
+      "title": "Taking Over VMs the Cloud-native Ways",
+      "speakers": [
+        "Jay Chen"
+      ],
+      "track": "cloud",
+      "topics": [
+        "taking",
+        "cloud-native",
+        "cloud"
+      ],
+      "teaser": "Jay Chen investigates Taking Over VMs the Cloud-native Ways.",
+      "summary": null,
+      "durationSeconds": 1267,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "agzrIBY0ScQ",
+      "slug": "the-path-to-zero-touch-production",
+      "title": "The Path to Zero-Touch Production",
+      "speakers": [
+        "Rami McCarthy"
+      ],
+      "track": "cloud",
+      "topics": [
+        "path",
+        "zero-touch",
+        "production",
+        "zero",
+        "touch"
+      ],
+      "teaser": "Rami McCarthy explores The Path to Zero-Touch Production.",
+      "summary": null,
+      "durationSeconds": 2892,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "gpa3Y5aTyKY",
+      "slug": "a-practitioners-playbook-to-shift-left-and-build-secure-serverle",
+      "title": "A practitioner's playbook to shift left & build secure serverless GenAI applications in public cloud",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "serverless",
+        "practitioner",
+        "playbook",
+        "shift",
+        "build"
+      ],
+      "teaser": "Security researchers examine technical aspects of A practitioner's playbook to shift left & build secure serverless GenAI applications in public cloud.",
+      "summary": null,
+      "durationSeconds": 1518,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "txPePBzm1XA",
+      "slug": "cloud-partnership-portals-a-perfect-storm-of-half-baked-iam-cont",
+      "title": "Cloud Partnership Portals: A Perfect Storm of Half-Baked IAM Controls",
+      "speakers": [
+        "Laura Haller"
+      ],
+      "track": "cloud",
+      "topics": [
+        "iam",
+        "cloud",
+        "partnership",
+        "portal",
+        "perfect",
+        "storm"
+      ],
+      "teaser": "Laura Haller details Cloud Partnership Portals: A Perfect Storm of Half-Baked IAM Controls.",
+      "summary": null,
+      "durationSeconds": 1511,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "iqQaz4DFP68",
+      "slug": "is-llm-all-you-need-for-cloudtrail-analysis",
+      "title": "Is LLM all you need for Cloudtrail analysis",
+      "speakers": [
+        "Rex Guo",
+        "Diane Lin"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "llm",
+        "cloudtrail",
+        "analysi",
+        "analysis"
+      ],
+      "teaser": "Rex Guo explores Is LLM all you need for Cloudtrail analysis.",
+      "summary": null,
+      "durationSeconds": 2724,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "jEFGzLbG1r4",
+      "slug": "get-into-aws-security-research-as-a-n00bcake",
+      "title": "Get into AWS security research as a n00bcake",
+      "speakers": [
+        "Daniel Grzelak"
+      ],
+      "track": "cloud",
+      "topics": [
+        "security-research",
+        "aws",
+        "into",
+        "research",
+        "n00bcake"
+      ],
+      "teaser": "Daniel Grzelak details Get into AWS security research as a n00bcake.",
+      "summary": null,
+      "durationSeconds": 1488,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "6cpnz2x_0q4",
+      "slug": "the-dark-economy-of-stolen-cloud-accounts-in-phishing-attacks-al",
+      "title": "The Dark Economy of Stolen Cloud Accounts in Phishing Attacks- Alessandro Brucato & Stefano Chierici",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "phishing",
+        "dark",
+        "economy",
+        "stolen",
+        "cloud",
+        "account"
+      ],
+      "teaser": "Security researchers examine technical aspects of The Dark Economy of Stolen Cloud Accounts in Phishing Attacks- Alessandro Brucato & Stefano Chierici.",
+      "summary": null,
+      "durationSeconds": 1439,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "a4RmZEBefGY",
+      "slug": "from-intrusion-to-insight-lessons-learned-from-of-a-month-long-a",
+      "title": "From Intrusion to Insight: Lessons learned from of a month long AWS compromise",
+      "speakers": [
+        "Korstiaan Stam"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "lessons-learned",
+        "intrusion",
+        "insight",
+        "lesson"
+      ],
+      "teaser": "Korstiaan Stam explores From Intrusion to Insight: Lessons learned from of a month long AWS compromise.",
+      "summary": null,
+      "durationSeconds": 1585,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "PJAwa0G_NEU",
+      "slug": "ransomware-riddle-untying-cloud-security-mysteries",
+      "title": "Ransomware Riddle: Untying Cloud Security Mysteries",
+      "speakers": [
+        "Ram Pliskin"
+      ],
+      "track": "hardware",
+      "topics": [
+        "cloud",
+        "ransomware",
+        "cloud-security"
+      ],
+      "teaser": "Ram Pliskin examines Ransomware Riddle: Untying Cloud Security Mysteries.",
+      "summary": null,
+      "durationSeconds": 1282,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "HlTBGgQgNL4",
+      "slug": "forrest-brazeal-performance-at-fwd-cloudsec-2024",
+      "title": "@forrest_brazeal Performance at fwd:cloudsec 2024!",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "forrest",
+        "brazeal",
+        "performance",
+        "cloudsec"
+      ],
+      "teaser": "Security researchers examine technical aspects of @forrest_brazeal Performance at fwd:cloudsec 2024!.",
+      "summary": null,
+      "durationSeconds": 2644,
+      "conference": "fwd-cloudsec"
+    }
+  ]
+}

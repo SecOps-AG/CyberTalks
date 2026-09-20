@@ -1,0 +1,248 @@
+{
+  "villageSlug": "linux-security-summit-europe",
+  "villageName": "Linux Security Summit Europe",
+  "eventSlug": "linux-security-summit-europe-2022",
+  "conference": "community",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLbzoR-pLrL6q_BmgE0TN93cx7yYwsJ_Kz",
+  "description": "Linux Security Summit Europe talks from Linux Security Summit Europe 2022.",
+  "talks": [
+    {
+      "youtubeId": "AaaH6skUEI8",
+      "slug": "io-uring-so-fast-its-scary",
+      "title": "io_uring: So Fast. It's Scary.",
+      "speakers": [
+        "Paul Moore",
+        "Microsoft"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "uring-fast",
+        "fast-scary",
+        "uring",
+        "fast",
+        "scary"
+      ],
+      "teaser": "Details io_uring: So Fast. Its Scary and evaluates key implications for security practitioners.",
+      "summary": "Overview: A presenter at Linux Security Summit Europe delivers a deep dive on io_uring, Linux's high-performance asynchronous I/O interface, examining its security implications.\n\nKey Topics: io_uring as asynchronous I/O replacing synchronous syscall overhead; submission and completion queues; shared memory rings between kernel and userspace; and security considerations for the attack surface.\n\nTechnical Details: The talk explains io_uring's architecture where applications submit multiple I/O requests without waiting, using shared ring buffers for kernel-userspace communication. The speaker notes this replaces traditional open/read/write syscall paths.\n\nTakeaways: io_uring's performance benefits come with a new attack surface via shared kernel-userspace memory. Security researchers and defenders should audit io_uring usage in privileged applications.",
+      "durationSeconds": 3023
+    },
+    {
+      "youtubeId": "nrojq96szcA",
+      "slug": "flexible-array-transformations-and-array-bounds-checking-gustavo",
+      "title": "Flexible Array Transformations and Array-bounds Checking - Gustavo A. R. Silva, The Linux Foundation",
+      "speakers": [
+        "Flexible Array Transformations",
+        "Array-bounds Checking"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "flexible-array",
+        "array-transformations",
+        "transformations-array-bounds",
+        "array-bounds-checking",
+        "checking-gustavo"
+      ],
+      "teaser": "Evaluates flexible Array Transformations and Array-bounds Checking - Gustavo A. R. Silva, The Linux Foundation and evaluates key implications for security practitioners.",
+      "summary": "Kernel Background\n\nGustavo Silva of the Linux kernel self-protection project and Google OSS security explains how C arrays, trailing arrays, and flexible structures underpin much kernel code—and many bugs.\n\nFlexible Array History\n\nKernel code historically declared variable-length trailing data using one-element or zero-length array hacks predating C99 flexible array members. One-element arrays skew size calculations and invite off-by-one allocation mistakes.\n\nTrue vs Fake Flex Arrays\n\nC99 flexible array members are the standards-based approach, unlike GNU zero-length extensions or deprecated one-element patterns. Silva shows why developers must subtract phantom element sizes or use struct_size helpers when allocating.\n\nProject Goals\n\nMultiple incompatible flexible-array styles block reliable bounds checking across the tree. The ongoing transformation work audits size usage, updates user API call sites, and aims to remove ambiguity so the kernel can enforce safer array access.",
+      "durationSeconds": 2784
+    },
+    {
+      "youtubeId": "1KSLTsgxaSU",
+      "slug": "hotbpf-an-on-demand-and-on-the-fly-memory-protection-for-the-lin",
+      "title": "HotBPF - An On-demand and On-the-fly Memory Protection for the Linux Ker... Yueqi Chen & Zhenpeng Li",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "hotbpf-on-demand",
+        "on-demand-on-the-fly",
+        "on-the-fly-memory",
+        "memory-protection",
+        "protection-linux"
+      ],
+      "teaser": "Analyzes hotBPF - An On-demand and On-the-fly Memory Protection for the Linux Ker... Yueqi Chen & Zhenpeng Li and evaluates key implications for security practitioners.",
+      "summary": "Overview:\nYueqi (Louis) Chen, Assistant Professor at the University of Colorado Boulder, presents \"HotBPF\" alongside co-author Zhenpeng Li (Northwestern University), developed in collaboration with researchers at IBM Watson Research Center and Virginia Tech. The presentation addresses the critical 66-day vulnerability window between bug discovery and patch deployment in the Linux kernel. To mitigate heap memory corruptions without requiring kernel recompilation or system reboots, the authors present HotBPF, an on-demand, live memory protection system powered by extended Berkeley Packet Filters (eBPF) and dynamic binary instrumentation.\n\nKey Topics:\n- The 66-day vulnerability-to-patch exposure window in upstream and downstream Linux kernels\n- Mechanics of slab-based heap exploitation (Use-After-Free, heap spraying, and cross-cache attacks)\n- Automated root-cause and allocation site identification using crash call traces and backward taint analysis\n- Live-patching and memory isolation via eBPF trampolines, int3 software breakpoints, and dedicated memory pools\n\nTechnical Details:\nChen explains that the lifecycle of kernel vulnerabilities introduces a protracted exposure window averaging 66 days between bug reporting (via KASAN, syzbot, or static analysis) and patch deployment. During this interval, attackers exploit slab-allocator vulnerabilities—primarily Use-After-Free (UAF) and out-of-bounds corruptions—by executing heap sprays to groom freed memory slots and overwrite sensitive function pointers. Traditional live patching (such as kpatch) requires manual, error-prone C patch development, while recompiling and rebooting production servers incurs unacceptable downtime. HotBPF resolves this by automating temporary heap isolation directly from existing bug reports.\n\nThe system's pipeline operates in two stages. First, an automated analysis tool inspects crash reports and call traces generated by native debugging panics or KASAN checks. By performing backward taint analysis on critical conditional check variables, HotBPF traces memory access back to the root vulnerable structure (for example, identifying `tun_file` as the vulnerable object enclosing an `napi_struct`). It then maps source-level allocation sites to runtime binary addresses using DWARF debugging symbols. Second, HotBPF synthesizes an eBPF protection program and deploys it live into the running kernel. It instruments kernel allocation (`kmalloc`, `kmem_cache_alloc`) and free functions by rewriting call instructions with `int3` software interrupts or BPF trampolines. HotBPF intercepts allocations of the identified vulnerable objects and redirects them into dedicated, isolated memory regions (such as distinct `vmalloc` spaces or isolated slab caches), preventing attackers from overlapping freed slots with sprayed objects. On deallocation, HotBPF queries an eBPF map (~1,500 ns) and updates object state (~6,000 ns), neutralizing double-free attempts.\n\nKey Takeaways:\nHotBPF proves that eBPF combined with dynamic binary patching can successfully shield the Linux kernel from heap exploitation without downtime or recompilation. Evaluated against 46 real-world kernel bug reports, HotBPF achieved zero false negatives (FN = 0) with negligible operational overhead under standard LMbench benchmarks compared to standard system call latencies (e.g., 420,000 ns for `read`). Enterprise infrastructure teams can leverage automated eBPF heap isolation to defend production systems during the sensitive vulnerability disclosure window, though specialized hardware allocations like DMA buffers remain design limitations requiring physical memory contiguity.\n\n(AI summary — Gemini Flash)",
+      "durationSeconds": 1597,
+      "aiSummary": "Overview:\nYueqi (Louis) Chen, Assistant Professor at the University of Colorado Boulder, presents \"HotBPF\" alongside co-author Zhenpeng Li (Northwestern University), developed in collaboration with researchers at IBM Watson Research Center and Virginia Tech. The presentation addresses the critical 66-day vulnerability window between bug discovery and patch deployment in the Linux kernel. To mitigate heap memory corruptions without requiring kernel recompilation or system reboots, the authors present HotBPF, an on-demand, live memory protection system powered by extended Berkeley Packet Filters (eBPF) and dynamic binary instrumentation.\n\nKey Topics:\n- The 66-day vulnerability-to-patch exposure window in upstream and downstream Linux kernels\n- Mechanics of slab-based heap exploitation (Use-After-Free, heap spraying, and cross-cache attacks)\n- Automated root-cause and allocation site identification using crash call traces and backward taint analysis\n- Live-patching and memory isolation via eBPF trampolines, int3 software breakpoints, and dedicated memory pools\n\nTechnical Details:\nChen explains that the lifecycle of kernel vulnerabilities introduces a protracted exposure window averaging 66 days between bug reporting (via KASAN, syzbot, or static analysis) and patch deployment. During this interval, attackers exploit slab-allocator vulnerabilities—primarily Use-After-Free (UAF) and out-of-bounds corruptions—by executing heap sprays to groom freed memory slots and overwrite sensitive function pointers. Traditional live patching (such as kpatch) requires manual, error-prone C patch development, while recompiling and rebooting production servers incurs unacceptable downtime. HotBPF resolves this by automating temporary heap isolation directly from existing bug reports.\n\nThe system's pipeline operates in two stages. First, an automated analysis tool inspects crash reports and call traces generated by native debugging panics or KASAN checks. By performing backward taint analysis on critical conditional check variables, HotBPF traces memory access back to the root vulnerable structure (for example, identifying `tun_file` as the vulnerable object enclosing an `napi_struct`). It then maps source-level allocation sites to runtime binary addresses using DWARF debugging symbols. Second, HotBPF synthesizes an eBPF protection program and deploys it live into the running kernel. It instruments kernel allocation (`kmalloc`, `kmem_cache_alloc`) and free functions by rewriting call instructions with `int3` software interrupts or BPF trampolines. HotBPF intercepts allocations of the identified vulnerable objects and redirects them into dedicated, isolated memory regions (such as distinct `vmalloc` spaces or isolated slab caches), preventing attackers from overlapping freed slots with sprayed objects. On deallocation, HotBPF queries an eBPF map (~1,500 ns) and updates object state (~6,000 ns), neutralizing double-free attempts.\n\nKey Takeaways:\nHotBPF proves that eBPF combined with dynamic binary patching can successfully shield the Linux kernel from heap exploitation without downtime or recompilation. Evaluated against 46 real-world kernel bug reports, HotBPF achieved zero false negatives (FN = 0) with negligible operational overhead under standard LMbench benchmarks compared to standard system call latencies (e.g., 420,000 ns for `read`). Enterprise infrastructure teams can leverage automated eBPF heap isolation to defend production systems during the sensitive vulnerability disclosure window, though specialized hardware allocations like DMA buffers remain design limitations requiring physical memory contiguity.\n\n(AI summary — Gemini Flash)"
+    },
+    {
+      "youtubeId": "MJmfkd-8UoA",
+      "slug": "device-attestation-in-hardware-tee-based-confidential-computing",
+      "title": "Device Attestation in Hardware TEE based Confidential Computing",
+      "speakers": [
+        "Jiewen Yao",
+        "Jun Nakajima",
+        "Intel"
+      ],
+      "track": "hardware",
+      "topics": [
+        "device-attestation",
+        "attestation-hardware",
+        "hardware-based",
+        "based-confidential",
+        "confidential-computing"
+      ],
+      "teaser": "Examines device Attestation in Hardware TEE based Confidential Computing and evaluates key implications for security practitioners.",
+      "summary": "## Confidential Computing Context\n\nArjun Nakajima and Joel present device attestation for hardware TEE-based confidential computing, a prerequisite for TEE I/O (assigning devices to trusted VMs like Intel TDX). Direct device assignment is not yet available for hardware TEE VMs, making attestation the critical first step.\n\n## TDISP Architecture\n\nThe talk introduces the Trusted Device Interface Security Protocol (TDISP). Key entities include the TSM (TEE Security Manager) in the platform trust boundary and the DSM (Device Security Manager) on each device, communicating over a secure channel.\n\n## Two Attestation Challenges\n\nFirst, the TEE must verify device identity via X.509 certificate chains and firmware measurements (SVM) against policy manifests. Second, it must validate dynamic interface configuration—capabilities, MMIO mappings, and other VMM-assigned settings attackers could spoof.\n\n## Data Protection Models\n\nFor TEE I/O use cases, standard PCR-based identity streams protect DMA paths; for TEE device models, bounce-buffer encryption uses negotiated keys. The speakers position attestation as foundational plumbing before confidential VMs can safely use physical devices.",
+      "durationSeconds": 1815
+    },
+    {
+      "youtubeId": "7R0rnQfi86I",
+      "slug": "amd-sev-snp-attestation-establishing-trust-in-guests",
+      "title": "AMD SEV-SNP Attestation: Establishing Trust in Guests",
+      "speakers": [
+        "Jeremy Powell",
+        "Advanced Micro Devices"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "sev-snp-attestation",
+        "attestation-establishing",
+        "establishing-trust",
+        "trust-guests",
+        "sev-snp"
+      ],
+      "teaser": "Demonstrates AMD SEV-SNP Attestation: Establishing Trust in Guests and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2823
+    },
+    {
+      "youtubeId": "kUCIaaoZXHY",
+      "slug": "secure-and-dynamic-hardware-partitioning-management-on-heterogen",
+      "title": "Secure and Dynamic Hardware Partitioning Management on Heterogeneous SoC",
+      "speakers": [
+        "Zahra Tarkhani",
+        "Microsoft"
+      ],
+      "track": "hardware",
+      "topics": [
+        "secure-dynamic",
+        "dynamic-hardware",
+        "hardware-partitioning",
+        "partitioning-management",
+        "management-heterogeneous"
+      ],
+      "teaser": "Provides secure and Dynamic Hardware Partitioning Management on Heterogeneous SoC and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1746
+    },
+    {
+      "youtubeId": "KmFVPyHyfqQ",
+      "slug": "sanitizing-the-linux-kernel-on-kasan-and-other-dynamic-bug-findi",
+      "title": "Sanitizing the Linux Kernel - On KASAN and other Dynamic Bug-finding Tools",
+      "speakers": [
+        "Andrey Konovalov"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "sanitizing-linux",
+        "linux-kernel",
+        "kernel-kasan",
+        "kasan-other",
+        "other-dynamic"
+      ],
+      "teaser": "Investigates sanitizing the Linux Kernel - On KASAN and other Dynamic Bug-finding Tools and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 3560
+    },
+    {
+      "youtubeId": "ho05QK1g8SM",
+      "slug": "finally-a-smack-reference-policy-casey-schaufler-the-smack-proje",
+      "title": "Finally, a Smack Reference Policy - Casey Schaufler, The Smack Project",
+      "speakers": [],
+      "track": "policy",
+      "topics": [
+        "finally-smack",
+        "smack-reference",
+        "reference-policy",
+        "policy-casey",
+        "casey-schaufler"
+      ],
+      "teaser": "Outlines finally, a Smack Reference Policy - Casey Schaufler, The Smack Project and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2723
+    },
+    {
+      "youtubeId": "XTbQRmeCw-Y",
+      "slug": "whats-new-in-the-user-namespace",
+      "title": "What's New in the User Namespace",
+      "speakers": [
+        "Stephane Graber",
+        "Canonical Ltd.",
+        "Christian Brauner",
+        "Microsoft"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "what-user",
+        "user-namespace",
+        "user",
+        "namespace"
+      ],
+      "teaser": "Demonstrates whats New in the User Namespace and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2496
+    },
+    {
+      "youtubeId": "VeD_eSPFxV0",
+      "slug": "state-of-intel-sgx-in-linux",
+      "title": "State of Intel SGX in Linux",
+      "speakers": [
+        "Jarkko Sakkinen",
+        "Roman Volosatovs",
+        "Profian Inc"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "state-intel",
+        "intel-linux",
+        "state",
+        "intel",
+        "linux"
+      ],
+      "teaser": "Discusses state of Intel SGX in Linux and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2760
+    },
+    {
+      "youtubeId": "iJtoluBkeGI",
+      "slug": "introducing-io-devices-into-trusted-execution-environments",
+      "title": "Introducing IO Devices into Trusted Execution Environments",
+      "speakers": [
+        "Jun Nakajima",
+        "Intel Corporation"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "introducing-devices",
+        "devices-into",
+        "into-trusted",
+        "trusted-execution",
+        "execution-environments"
+      ],
+      "teaser": "Details introducing IO Devices into Trusted Execution Environments and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2449
+    },
+    {
+      "youtubeId": "odrxFf1ECk8",
+      "slug": "improving-unmodified-classic-application-confinement",
+      "title": "Improving Unmodified Classic Application Confinement",
+      "speakers": [
+        "John Johansen",
+        "Georgia Garcia",
+        "Canonical"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "improving-unmodified",
+        "unmodified-classic",
+        "classic-application",
+        "application-confinement",
+        "improving"
+      ],
+      "teaser": "Investigates improving Unmodified Classic Application Confinement and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2982
+    }
+  ]
+}

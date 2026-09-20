@@ -1,0 +1,404 @@
+{
+  "villageSlug": "x33fcon",
+  "villageName": "x33fcon",
+  "eventSlug": "x33fcon-2022",
+  "conference": "x33fcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PL7ZDZo2Xu332DOLSQlWlJPWRRAlpsLZQ-",
+  "description": "x33fcon talks from x33fcon 2022.",
+  "talks": [
+    {
+      "youtubeId": "5l5gAfRpMFA",
+      "slug": "01-keynote-how-i-met-your-beacon-by-dominic-chell",
+      "title": "01. Keynote: How I Met Your Beacon by Dominic Chell",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "keynote-your",
+        "your-beacon",
+        "beacon-dominic",
+        "dominic-chell"
+      ],
+      "teaser": "Presents 01. Keynote: how teams Met Your Beacon by Dominic Chell and evaluates key implications for security practitioners.",
+      "summary": "Overview:\nDominic Chell, co-founder and Director at MDSec, delivers the opening keynote at x33fcon analyzing advanced methodologies for detecting post-exploitation command and control (C2) implants on Windows. Providing deep technical analysis of leading commercial and adversary frameworks—specifically Cobalt Strike (v4.6.1) and Brute Ratel C4—Chell examines the cat-and-mouse game between red team evasion tradecraft and blue team telemetry. He details memory sleep obfuscation trade-offs, call stack spoofing techniques, and introduces MDSec's open-source hunting tool, BeaconHunter.\n\nKey Topics:\n- Architectural analysis of in-memory C2 implants: Cobalt Strike and Brute Ratel C4\n- Evaluating memory sleep obfuscation trade-offs: RX versus RWX memory permissions and sleep mask limits\n- Thread execution anomalies, unbacked memory regions, and wait functions (SleepEx, NtDelayExecution)\n- Advanced call stack evasion: stack truncation, synthetic thread context cloning, and fiber switching\n\nTechnical Details:\nChell examines the internal mechanics of C2 sleep obfuscation. While Cobalt Strike employs user-defined sleep masks to encrypt its payload during idle periods, operating strictly within read-execute (RX) memory (`userwx=false`) prevents the sleep hook from encrypting the `.text` section, leaving it vulnerable to memory YARA scans. Conversely, encrypting `.text` requires transitioning memory to read-write-execute (RWX), creating an obvious behavioral indicator. Analyzing Brute Ratel C4, Chell revealed that while its documentation touted complex sleep mechanisms using timers, wait objects, and ROP gadgets, its default implementation only protected the `.text` section. Consequently, unencrypted heap and data sections retained distinct strings—including patched AMSI and ETW indicators (`AmsiScanBuffer patched`, `EtwEventWrite patched`) and the reflective DLL export `BruteLoader`—allowing trivial YARA detection and automated config extraction across memory and disk samples.\n\nMoving beyond string signatures, Chell details structural behavioral detection by analyzing thread states and call stacks. Sleeping beacons consistently wait inside delay routines like `SleepEx` or `NtDelayExecution`. When call stack frames trace back to unbacked memory—memory allocations not backed by a valid disk PE image—defenders have high-confidence indicators of malicious injection. Chell reviews how modern C2s evade stack inspection: operators truncate stacks by setting the target return address to null, clone contexts from legitimate worker threads (updating the Thread Information Block / TIB), or convert threads to fibers via `CreateFiberEx` and `SwitchToFiber` (as used in Cobalt Strike) to swap out the active stack during sleep. Additionally, Brute Ratel exhibited a static thread creation pattern, consistently setting initial thread start addresses to `TpReleaseCleanupGroupMembers + 0x550`.\n\nKey Takeaways:\nThreat hunters and detection engineers must focus on behavioral thread anomalies rather than volatile binary signatures. Security teams should deploy tools like BeaconHunter to inspect thread stacks waiting in execution delay APIs for calls originating from unbacked or dynamically modified memory. Furthermore, defenders should monitor for synthetic call stack patterns, fiber conversions, and anomalous memory page protection transitions (such as alternating RX/RWX allocations) to uncover evasive C2 implants regardless of proprietary sleep masking.\n\n(AI summary — Gemini Flash)",
+      "durationSeconds": 2791,
+      "conference": "x33fcon",
+      "aiSummary": "Overview:\nDominic Chell, co-founder and Director at MDSec, delivers the opening keynote at x33fcon analyzing advanced methodologies for detecting post-exploitation command and control (C2) implants on Windows. Providing deep technical analysis of leading commercial and adversary frameworks—specifically Cobalt Strike (v4.6.1) and Brute Ratel C4—Chell examines the cat-and-mouse game between red team evasion tradecraft and blue team telemetry. He details memory sleep obfuscation trade-offs, call stack spoofing techniques, and introduces MDSec's open-source hunting tool, BeaconHunter.\n\nKey Topics:\n- Architectural analysis of in-memory C2 implants: Cobalt Strike and Brute Ratel C4\n- Evaluating memory sleep obfuscation trade-offs: RX versus RWX memory permissions and sleep mask limits\n- Thread execution anomalies, unbacked memory regions, and wait functions (SleepEx, NtDelayExecution)\n- Advanced call stack evasion: stack truncation, synthetic thread context cloning, and fiber switching\n\nTechnical Details:\nChell examines the internal mechanics of C2 sleep obfuscation. While Cobalt Strike employs user-defined sleep masks to encrypt its payload during idle periods, operating strictly within read-execute (RX) memory (`userwx=false`) prevents the sleep hook from encrypting the `.text` section, leaving it vulnerable to memory YARA scans. Conversely, encrypting `.text` requires transitioning memory to read-write-execute (RWX), creating an obvious behavioral indicator. Analyzing Brute Ratel C4, Chell revealed that while its documentation touted complex sleep mechanisms using timers, wait objects, and ROP gadgets, its default implementation only protected the `.text` section. Consequently, unencrypted heap and data sections retained distinct strings—including patched AMSI and ETW indicators (`AmsiScanBuffer patched`, `EtwEventWrite patched`) and the reflective DLL export `BruteLoader`—allowing trivial YARA detection and automated config extraction across memory and disk samples.\n\nMoving beyond string signatures, Chell details structural behavioral detection by analyzing thread states and call stacks. Sleeping beacons consistently wait inside delay routines like `SleepEx` or `NtDelayExecution`. When call stack frames trace back to unbacked memory—memory allocations not backed by a valid disk PE image—defenders have high-confidence indicators of malicious injection. Chell reviews how modern C2s evade stack inspection: operators truncate stacks by setting the target return address to null, clone contexts from legitimate worker threads (updating the Thread Information Block / TIB), or convert threads to fibers via `CreateFiberEx` and `SwitchToFiber` (as used in Cobalt Strike) to swap out the active stack during sleep. Additionally, Brute Ratel exhibited a static thread creation pattern, consistently setting initial thread start addresses to `TpReleaseCleanupGroupMembers + 0x550`.\n\nKey Takeaways:\nThreat hunters and detection engineers must focus on behavioral thread anomalies rather than volatile binary signatures. Security teams should deploy tools like BeaconHunter to inspect thread stacks waiting in execution delay APIs for calls originating from unbacked or dynamically modified memory. Furthermore, defenders should monitor for synthetic call stack patterns, fiber conversions, and anomalous memory page protection transitions (such as alternating RX/RWX allocations) to uncover evasive C2 implants regardless of proprietary sleep masking.\n\n(AI summary — Gemini Flash)"
+    },
+    {
+      "youtubeId": "v-Os34bfJlU",
+      "slug": "02-applockwork-orange-by-grzegorz-tworek",
+      "title": "02. AppLockwork Orange by Grzegorz Tworek",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "applockwork-orange",
+        "orange-grzegorz",
+        "grzegorz-tworek",
+        "applockwork",
+        "orange"
+      ],
+      "teaser": "Evaluates 02. AppLockwork Orange by Grzegorz Tworek and evaluates key implications for security practitioners.",
+      "summary": "AppLocker Architecture Review\n\nGrzegorz Tworek (introduced as Greg) presents AppLockwork Orange at x33fcon, motivated by prior AppLocker deployments. AppLocker combines user-mode policy via AppIDSvc with kernel enforcement through a driver, supporting path, hash, and publisher rules in audit or enforce modes for executables, scripts, and DLLs.\n\nUnexpected Enforcement Gaps\n\nTworek highlights internal behaviors that produce surprising results. Processes carrying the SeTcbPrivilege token bypass AppLocker entirely—no block, audit, or log entry—making privileged-token monitoring important. Teams often deploy executable rules first and skip DLL rules for simplicity, leaving blind spots.\n\nHash Rule Weaknesses\n\nHash-based allow rules trust file content, but offline VHD manipulation shows an attacker can alter bytes after hashing while the rule still permits execution if the hash was captured earlier. He also compares extended attributes to alternate data streams on steroids, demonstrating how metadata manipulation interacts with enforcement logging.",
+      "durationSeconds": 1386,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "JaHX7pjYj4c",
+      "slug": "03-chasing-the-white-whale-of-malware-by-rushikesh-d-nandedkar",
+      "title": "03. Chasing the White Whale of Malware by Rushikesh D. Nandedkar",
+      "speakers": [],
+      "track": "malware",
+      "topics": [
+        "chasing-white",
+        "white-whale",
+        "whale-malware",
+        "malware-rushikesh",
+        "rushikesh-nandedkar"
+      ],
+      "teaser": "Details 03. Chasing the White Whale of Malware by Rushikesh D. Nandedkar and evaluates key implications for security practitioners.",
+      "summary": "Motivation and OT Visibility Gap\n\nMandiant researcher Rushikesh Nandedkar explains hunting cyber-physical (OT) malware after keyword searches for PLC/SCADA binaries returned thousands of irrelevant hits. Only six major OT campaigns were publicly known across twelve years since Stuxnet, suggesting massive under-detection.\n\nWhy OT Binaries Hide\n\nSandboxes mis-flag legitimate OT traffic as malicious because Modbus-like client-server PCAP patterns violate generic rules. OT software is custom, expensive, poorly documented, distributed in parts, and rarely indexed online—making static/dynamic analysis and VirusTotal-style hunting unreliable.\n\nSelection Criteria Framework\n\nFacing analyst pushback (“why is this OT-relevant?”), he developed deduction tests to justify binary classification. Criteria include proprietary protocols, closed-source builds without debug symbols, vendor-specific hardware coupling, and behaviors normal in IT sandboxes but benign in OT contexts.\n\nArchitecture and Hunting Outlook\n\nOT often sits between corporate IT and isolated plant networks that are not truly air-gapped. The talk advocates better legit-OT corpora, improved sandbox tuning, and systematic collection to expand beyond the handful of famous ICS incidents.",
+      "durationSeconds": 2167,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "Gqq2K95cf1Y",
+      "slug": "04-crisis-management-gone-wrong-by-maciej-jan-broniarz",
+      "title": "04. Crisis Management Gone Wrong by Maciej Jan Broniarz",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "crisis-management",
+        "management-gone",
+        "gone-wrong",
+        "wrong-maciej",
+        "maciej-broniarz"
+      ],
+      "teaser": "Explores 04. Crisis Management Gone Wrong by Maciej Jan Broniarz and evaluates key implications for security practitioners.",
+      "summary": "Incident response themes\n\nSecurity consultant Michal Bronisz at x33fcon presents anti-patterns in crisis management drawn from real client work, warning that audits and IR engagements often surface deliberate omissions that delay root-cause analysis for days.\n\nOrganizational denial\n\nHe compares ignored known risks to the Challenger disaster metaphor: teams see exploitable weaknesses outside their silo and assume someone else owns them. IT security teams frequently tell consultants leadership already ignored identical warnings until external consultants repeat them.\n\nConcrete failures\n\nExamples include U2F keys left on desks because replacements were expensive, CEOs angrily complying with weekend phishing tests, firewalls logging massive Tor activity before ransomware, ISO 27001 remote audits delivered with answer keys, alert floods filtered into oblivion, and checkbox security matrices where only the responsible engineer remains unchecked.\n\nFix the basics\n\nBronisz argues companies over-focus on mapping entire security domains while attackers exploit the simplest path. He recommends tuning noisy tools, assigning real ownership outside IT-only models, and fixing one issue at a time for meaningful gains rather than paper compliance.",
+      "durationSeconds": 2296,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "SzXWuJFWAG4",
+      "slug": "05-bring-your-own-module-and-enjoy-the-ride-by-stefan-uraskovic",
+      "title": "05. Bring Your Own Module and Enjoy the Ride by Stefan Đurašković",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "bring-your",
+        "your-module",
+        "module-enjoy",
+        "enjoy-ride",
+        "ride-stefan"
+      ],
+      "teaser": "Outlines 05. Bring Your Own Module and Enjoy the Ride by Stefan Đurašković and evaluates key implications for security practitioners.",
+      "summary": "## Overview\nStefan Đurašković explains DLL hijacking and proxying (\"Bring Your Own Module\") for red teams and defenders at x33fcon.\n\n## Windows Loader Basics\nDLLs extend applications via import and export address tables. The loader resolves function names and ordinals, patching the importing module's IAT before execution proceeds.\n\n## Hijack vs. Proxy\nPlacing a malicious DLL on the search path can work, but incomplete export implementations crash apps. Proxy DLLs forward calls (e.g., GetFileVersionInfoA) to the legitimate version.dll while injecting malicious code on load.\n\n## Takeaways\nBYOM remains viable because many applications load DLLs predictably. Defenders should monitor unusual module loads; red teams gain stealthy execution without patching binaries.",
+      "durationSeconds": 2122,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "vDTSzfoJnus",
+      "slug": "06-pwned-in-space-by-paul-coggin",
+      "title": "06. Pwned in Space by Paul Coggin",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "pwned-space",
+        "space-paul",
+        "paul-coggin",
+        "pwned",
+        "space"
+      ],
+      "teaser": "Demonstrates 06. Pwned in Space by Paul Coggin and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1849,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "cD8ZlPVlcic",
+      "slug": "07-can-you-trust-a-files-digital-signature-by-golan-cohen",
+      "title": "07. Can You Trust a File’s Digital Signature? by Golan Cohen",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "trust-file",
+        "file-digital",
+        "digital-signature",
+        "signature-golan",
+        "golan-cohen"
+      ],
+      "teaser": "Evaluates 07. Can You Trust a Files Digital Signature? by Golan Cohen and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1743,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "cdtqaDPKn3E",
+      "slug": "08-the-pyramid-of-ttp-pain-by-chistopher-peacock",
+      "title": "08. The Pyramid of TTP Pain by Chistopher Peacock",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "pyramid-pain",
+        "pain-chistopher",
+        "chistopher-peacock",
+        "pyramid",
+        "pain"
+      ],
+      "teaser": "Examines 08. The Pyramid of TTP Pain by Chistopher Peacock and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2476,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "6S6A4wnjT2w",
+      "slug": "09-those-among-us-by-robert-sell",
+      "title": "09. Those Among Us by Robert Sell",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "those-among",
+        "among-robert",
+        "robert-sell"
+      ],
+      "teaser": "Reviews 09. Those Among practitioners by Robert Sell and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2225,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "IPFpyulNcRQ",
+      "slug": "10-i-can-see-an-apple-behind-your-windows-red-teaming-macos-envi",
+      "title": "10. I Can See an Apple Behind Your Windows - Red Teaming macOS Environments by Wojciech Reguła",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "apple-behind",
+        "behind-your",
+        "your-windows",
+        "windows-teaming",
+        "teaming-macos"
+      ],
+      "teaser": "Outlines 10. organizations can See an Apple Behind Your Windows - Red Teaming macOS Environments by Wojciech Reguła and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2731,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "IbA7Ung39o4",
+      "slug": "11-evasion-in-depth-techniques-across-the-kill-chain-by-mariusz",
+      "title": "11. Evasion in Depth - Techniques Across the Kill-Chain by Mariusz Banach",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "evasion-depth",
+        "depth-techniques",
+        "techniques-across",
+        "across-kill-chain",
+        "kill-chain-mariusz"
+      ],
+      "teaser": "Explores 11. Evasion in Depth - Techniques Across the Kill-Chain by Mariusz Banach and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2933,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "AucQUjJBJuw",
+      "slug": "12-morph-your-malware-by-sebastian-feldmann",
+      "title": "12. Morph Your Malware! by Sebastian Feldmann",
+      "speakers": [],
+      "track": "malware",
+      "topics": [
+        "morph-your",
+        "your-malware",
+        "malware-sebastian",
+        "sebastian-feldmann",
+        "morph"
+      ],
+      "teaser": "Details 12. Morph Your Malware! by Sebastian Feldmann and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2032,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "rnj-e5pqYbs",
+      "slug": "13-we-need-a-major-step-in-maturating-security-blueteam-advice-f",
+      "title": "13. We Need a Major Step in Maturating Security (BlueTeam Advice from RedTeamer :-)) Tomasz Bukowski",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "need-major",
+        "major-step",
+        "step-maturating",
+        "maturating-blueteam",
+        "blueteam-advice"
+      ],
+      "teaser": "Discusses 13. teams Need a Major Step in Maturating Security (BlueTeam Advice from RedTeamer :-)) Tomasz Bukowski and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2030,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "CR5YAwkGJQo",
+      "slug": "14-the-code-signing-certificate-you-never-knew-you-had-by-dima-v",
+      "title": "14. The Code Signing Certificate You Never Knew You Had by Dima van de Wouw",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "code-signing",
+        "signing-certificate",
+        "certificate-never",
+        "never-knew",
+        "knew-dima"
+      ],
+      "teaser": "Discusses 14. The Code Signing Certificate You Never Knew You Had by Dima van de Wouw and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2468,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "0QnNftUKP7g",
+      "slug": "15-purple-perspective-execution-methods-by-tim-schulz",
+      "title": "15. Purple Perspective: Execution Methods by Tim Schulz",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "purple-perspective",
+        "perspective-execution",
+        "execution-methods",
+        "methods-schulz",
+        "purple"
+      ],
+      "teaser": "Details 15. Purple Perspective: Execution Methods by Tim Schulz and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2570,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "PAxYI99A0mg",
+      "slug": "16-byot-build-your-own-tools-for-fun-and-profit-by-cas-van-coote",
+      "title": "16. BYOT: Build Your Own Tools for Fun and Profit by Cas van Cooten",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "byot-build",
+        "build-your",
+        "your-tools",
+        "tools-profit",
+        "profit-cooten"
+      ],
+      "teaser": "Discusses 16. BYOT: Build Your Own Tools for Fun and Profit by Cas van Cooten and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2714,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "ZY3JlAj6Gwo",
+      "slug": "17-continuation-of-politics-by-other-means-ti-during-crisis-even",
+      "title": "17. \"... continuation of politics by other means\" - TI During Crisis Events by Kamil Bojarski",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "continuation-politics",
+        "politics-other",
+        "other-means",
+        "means-during",
+        "during-crisis"
+      ],
+      "teaser": "Presents 17. ... continuation of politics by other means - TI During Crisis Events by Kamil Bojarski and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2366,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "TjzGiG3IZdE",
+      "slug": "robert-sell-interview",
+      "title": "Robert Sell interview",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "robert-sell",
+        "sell-interview",
+        "robert",
+        "sell",
+        "interview"
+      ],
+      "teaser": "Investigates robert Sell interview and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 173,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "si1n2aDyVeY",
+      "slug": "tim-schulz-interview",
+      "title": "Tim Schulz interview",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "schulz-interview",
+        "schulz",
+        "interview",
+        "security-operations",
+        "incident-response"
+      ],
+      "teaser": "Reviews tim Schulz interview and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 232,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "62IJKLAY2Ps",
+      "slug": "jorge-orchilles-interview",
+      "title": "Jorge Orchilles interview",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "jorge-orchilles",
+        "orchilles-interview",
+        "jorge",
+        "orchilles",
+        "interview"
+      ],
+      "teaser": "Demonstrates jorge Orchilles interview and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 177,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "-JlbMwzLjHs",
+      "slug": "cas-van-cooten-interview",
+      "title": "Cas Van Cooten interview",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "cooten-interview",
+        "cooten",
+        "interview",
+        "security-operations",
+        "incident-response"
+      ],
+      "teaser": "Demonstrates cas Van Cooten interview and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 250,
+      "conference": "x33fcon"
+    },
+    {
+      "youtubeId": "rLXzVhZ0exs",
+      "slug": "abraham-aranguren-interview",
+      "title": "Abraham Aranguren interview",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "abraham-aranguren",
+        "aranguren-interview",
+        "abraham",
+        "aranguren",
+        "interview"
+      ],
+      "teaser": "Reviews abraham Aranguren interview and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 168,
+      "conference": "x33fcon"
+    }
+  ]
+}
