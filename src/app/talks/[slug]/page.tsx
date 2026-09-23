@@ -18,8 +18,10 @@ type Props = { params: Promise<{ slug: string }> };
 const RELATED = 3;
 
 export function generateStaticParams() {
-  return getTalks().map((talk) => ({ slug: talk.slug }));
+  return [];
 }
+
+export const dynamicParams = true;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

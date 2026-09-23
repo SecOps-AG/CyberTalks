@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
-import { getTalkIndex, getTalksForTopic, getTaxonomy, getTopicCounts } from "@/lib/data";
+import { getTalkIndex, getTalksForTopic, getTaxonomy } from "@/lib/data";
 
 type Props = { params: Promise<{ topic: string }> };
 
 export function generateStaticParams() {
-  return getTopicCounts().map(({ topic }) => ({ topic }));
+  return [];
 }
+
+export const dynamicParams = true;
 
 function labelFor(topic: string): string {
   return getTaxonomy().topicLabels[topic] ?? topic;

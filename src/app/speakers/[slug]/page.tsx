@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import {
   getSpeaker,
-  getSpeakers,
   getTalkIndex,
   getTalksForSpeaker,
   getTaxonomy,
@@ -13,8 +12,10 @@ import {
 type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return getSpeakers().map((speaker) => ({ slug: speaker.slug }));
+  return [];
 }
+
+export const dynamicParams = true;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

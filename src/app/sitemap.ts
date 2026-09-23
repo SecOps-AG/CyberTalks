@@ -3,9 +3,6 @@ import {
   getDefconVillages,
   getEditions,
   getEvents,
-  getSpeakers,
-  getTalks,
-  getTopicCounts,
   getTracks,
 } from "@/lib/data";
 import { HUBS } from "@/lib/hubs";
@@ -54,32 +51,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const topicPages: MetadataRoute.Sitemap = getTopicCounts().map(({ topic }) => ({
-    url: `${baseUrl}/topics/${topic}`,
-    changeFrequency: "weekly",
-    priority: 0.6,
-  }));
-
-  const speakerPages: MetadataRoute.Sitemap = getSpeakers().map((speaker) => ({
-    url: `${baseUrl}/speakers/${speaker.slug}`,
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }));
-
-  const talkPages: MetadataRoute.Sitemap = getTalks().map((talk) => ({
-    url: `${baseUrl}/talks/${talk.slug}`,
-    changeFrequency: "monthly",
-    priority: 0.9,
-  }));
-
+  // Talk / speaker / topic detail URLs are omitted so sitemap generation stays
+  // light; those pages are served on-demand via dynamicParams.
   return [
     ...staticPages,
     ...eventPages,
     ...editionPages,
     ...villagePages,
     ...trackPages,
-    ...topicPages,
-    ...speakerPages,
-    ...talkPages,
   ];
 }
