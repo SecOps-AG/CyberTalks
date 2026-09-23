@@ -24,7 +24,7 @@ import {
   type SortKey,
 } from "@/lib/search";
 import { inDefconVillage } from "@/lib/hubs";
-import { fetchTalkIndexShards } from "@/lib/fetch-talk-index";
+import { fetchAdditionalTalkIndexChunks } from "@/lib/fetch-talk-index";
 import type { TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
 
 type Dimension =
@@ -107,35 +107,52 @@ export function TalkBrowser({
   const [remoteTalks, setRemoteTalks] = useState<TalkIndexEntry[]>([]);
   const [catalogReady, setCatalogReady] = useState(!remoteIndex);
   const [catalogLoading, setCatalogLoading] = useState(remoteIndex);
+  const loadedChunkFilesRef = useRef<Set<string>>(new Set());
+  const remoteTalksRef = useRef<TalkIndexEntry[]>([]);
+  remoteTalksRef.current = remoteTalks;
+
+  const yearFilterKey = filters.years.join(",");
+  const conferenceFilterKey = filters.conferences.join(",");
 
   useEffect(() => {
-    if (!remoteIndex) return;
+    if (!remoteIndex || !ready) return;
     let cancelled = false;
-    setCatalogReady(false);
+    const controller = new AbortController();
+
     setCatalogLoading(true);
-    fetchTalkIndexShards((talks, meta) => {
-      if (cancelled) return;
-      setRemoteTalks(talks);
-      // Usable as soon as the newest year lands.
-      setCatalogReady(true);
-      setCatalogLoading(meta.loaded < meta.total);
-    })
-      .then((talks) => {
+
+    fetchAdditionalTalkIndexChunks({
+      years: filters.years.length > 0 ? filters.years : undefined,
+      conferences: filters.conferences.length > 0 ? filters.conferences : undefined,
+      loadedFiles: loadedChunkFilesRef.current,
+      existingTalks: remoteTalksRef.current,
+      signal: controller.signal,
+      onChunk: (talks, meta) => {
         if (cancelled) return;
+        if (meta.file) loadedChunkFilesRef.current.add(meta.file);
+        setRemoteTalks(talks);
+        setCatalogReady(true);
+        setCatalogLoading(!meta.complete);
+      },
+    })
+      .then(({ talks, loadedFiles }) => {
+        if (cancelled) return;
+        for (const file of loadedFiles) loadedChunkFilesRef.current.add(file);
         setRemoteTalks(talks);
         setCatalogReady(true);
         setCatalogLoading(false);
       })
       .catch(() => {
         if (cancelled) return;
-        setRemoteTalks([]);
         setCatalogReady(true);
         setCatalogLoading(false);
       });
+
     return () => {
       cancelled = true;
+      controller.abort();
     };
-  }, [remoteIndex]);
+  }, [remoteIndex, ready, yearFilterKey, conferenceFilterKey]);
 
   const talks = remoteIndex ? remoteTalks : talksProp;
 
@@ -465,7 +482,7 @@ export function TalkBrowser({
                 <span className="text-mint/30"> / {talks.length}</span>
               ) : null}
               {catalogLoading ? (
-                <span className="text-mint/30"> · loading years…</span>
+                <span className="text-mint/30"> · loading catalog…</span>
               ) : null}
             </p>
             <div className="flex flex-wrap items-center gap-3">
