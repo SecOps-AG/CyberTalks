@@ -1,0 +1,749 @@
+{
+  "villageSlug": "black-hat-asia",
+  "villageName": "Black Hat Asia",
+  "eventSlug": "black-hat-asia-2022",
+  "conference": "black-hat",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLH15HpR5qRsW2vrD-6pHklASq8T_CPZBv",
+  "description": "Black Hat Asia talks from Black Hat Asia 2022.",
+  "talks": [
+    {
+      "youtubeId": "TsIIm6g21Kc",
+      "slug": "bypass-cfg-in-chrome",
+      "title": "Bypass CFG in Chrome",
+      "speakers": [
+        "Yunhai Zhang"
+      ],
+      "track": "red-team",
+      "topics": [
+        "bypass-chrome",
+        "bypass",
+        "chrome",
+        "offensive-security",
+        "penetration-testing"
+      ],
+      "teaser": "Investigates bypass CFG in Chrome and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1600,
+      "conference": "black-hat",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "8y8saWvzeLw",
+      "slug": "amsi-and-bypass-review-of-known-amsi-bypass-techniques-and-intro",
+      "title": "AMSI & Bypass: Review of Known AMSI Bypass Techniques and Introducing a New One",
+      "speakers": [
+        "Maor Korkos"
+      ],
+      "track": "red-team",
+      "topics": [
+        "amsi-bypass",
+        "bypass-review",
+        "review-known",
+        "known-amsi",
+        "bypass-techniques"
+      ],
+      "teaser": "Investigates AMSI & Bypass: Review of Known AMSI Bypass Techniques and Introducing a New One and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2317,
+      "conference": "black-hat",
+      "aiSummary": "## Overview\n\nThe presentation, delivered by Maor Korkos—a security researcher team leader at Deep Instinct and former vulnerability researcher—examines the Antimalware Scan Interface (AMSI). Korkos outlines the internal architecture of AMSI, reviews how consumers and providers interact, and sets up an analysis of known bypass techniques, vendor defensive countermeasures, and the introduction of a new bypass methodology.\n\nAMSI acts as an interface standard allowing scriptable and content-executing applications to integrate with antimalware products before executing potentially untrusted code. Scripting engines and applications call Windows APIs to request scans of buffers and content prior to execution.\n\n---\n\n## AMSI Architecture and Operating Model\n\nAMSI functions through a consumer-provider architecture brokered by the Windows operating system:\n\n- **Mediation Layer (`amsi.dll`):** The mediator between consumers and providers is implemented as `amsi.dll`, which must be loaded into the address space of any AMSI-protected process.\n- **Consumers:** Applications that invoke AMSI to scan content. In-built Windows consumers include PowerShell (integrated from version 3 onward), JavaScript, VBScript/VBA, WMI, and UAC elevations. Newer consumers include Excel 4.0 macros, Volume Shadow Copies operations, and .NET in-memory assembly loads. Third-party developers can also consume AMSI by loading `amsi.dll` into their memory space and calling its exported APIs.\n- **Providers:** Antimalware vendors that register to receive scan requests dispatched through AMSI. Examples highlighted include Microsoft Defender, Deep Instinct, and SentinelOne.\n\n---\n\n## Process Memory Layout and Key APIs\n\nWhen an application integrates with AMSI, its memory layout and runtime operations follow a specific execution flow:\n\n1. **`AmsiInitialize`:** Called to initialize AMSI services. It accepts two parameters:\n   - The application name requesting the service.\n   - A reference to the context structure (`AMSI_CONTEXT`).\n2. **Context Structure (`AMSI_CONTEXT`):** Once initialized, this structure stores four fields:\n   - `signature`: Contains the literal string `\"AMSI\"` to identify the structure in memory.\n   - `appName`: The application name passed as a parameter.\n   - `antimalware`: A pointer/reference to an instance of an internal class named `CAmsiAntimalware`.\n   - `sessionCount`: A random number assigned during initialization.\n3. **`AmsiOpenSession`:** Opens a new AMSI session for subsequent scanning operations.\n4. **`AmsiScanBuffer`:** Requests a scan on content buffers. It receives the context, the buffer content to evaluate, and a reference to receive the scan result (`AMSI_RESULT`).\n   - The values returned in `AMSI_RESULT` include `AMSI_RESULT_CLEAN` and `AMSI_RESULT_DETECTED` (indicating a malicious indicator was identified).\n   - Internally, `AmsiScanBuffer` invokes the `Scan` method defined on the `CAmsiAntimalware` class instance, which iterates through all registered providers on the machine and executes their respective exported `Scan` functions.\n\n---\n\n## Attack Surface and Bypass Foundations\n\nKorkos outlines the basic attack surface from an adversary's perspective:\n- In the simplest antimalware provider implementations, detection relies on static signatures or lists of known malicious strings and substrings.\n- When providers inspect the scanned buffer for known signatures, attackers traditionally attempt string manipulation, obfuscation, or encoding techniques to evade simple substring matching.\n- Understanding these internal mechanics—specifically the loading of `amsi.dll`, the `AMSI_CONTEXT` layout, and the `CAmsiAntimalware` provider invocation chain—serves as the foundation for examining advanced memory patching, provider evasion, and novel bypass techniques.",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "cVOVCAIeeyY",
+      "slug": "hunting-and-exploiting-recursive-mmio-flaws-in-qemu-kvm",
+      "title": "Hunting and Exploiting Recursive MMIO Flaws in QEMU KVM",
+      "speakers": [
+        "Qiuhao Li",
+        "Gaoning Pan",
+        "Hui He",
+        "Chunming Wu"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "hunting-exploiting",
+        "exploiting-recursive",
+        "recursive-mmio",
+        "mmio-flaws",
+        "flaws-qemu"
+      ],
+      "teaser": "Discusses hunting and Exploiting Recursive MMIO Flaws in QEMU KVM and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1329,
+      "conference": "black-hat",
+      "aiSummary": "Overview:\nResearchers from Harbin Institute of Technology and Zhejiang University reveal a critical class of vulnerabilities in the QEMU/KVM hypervisor termed \"recursive MMIO\" (Memory-Mapped I/O). The speakers demonstrate how improper isolation between Direct Memory Access (DMA) and MMIO allows a malicious guest operating system to trigger reentrant hardware emulation loops that violate virtual device state machines. By modeling recursive execution paths using CodeQL, the authors uncover multiple exploitable flaws, showcasing a complete virtual machine escape via a Use-After-Free (UAF) condition in an emulated NVMe controller paired with Intel HDA heap feng shui.\n\nKey Topics:\n- Architecture of QEMU/KVM hypervisor: VM-exits, MMIO interception, and user-space DMA emulation\n- Root cause of Recursive MMIO: incomplete isolation between DMA target physical addresses and device MMIO regions\n- Failure modes of recursion: Use-After-Free (UAF), Out-of-Bounds (OOB) memory access, and infinite recursion DoS\n- Automated path hunting across virtual devices using custom CodeQL AST queries and transitive closure predicates\n- Exploitation engineering: constructing controllable malloc primitives in Intel HDA to exploit an NVMe UAF and escape the VM\n\nTechnical Details:\nIn QEMU/KVM environments, the guest OS executes instructions directly on host CPU cores via KVM until privileged operations trigger VM-exits, which KVM passes to QEMU user space to emulate hardware behavior. Virtual devices implement DMA transfers via user-space memory copies (such as address_space_write, dma_memory_write, and pci_dma_write). However, because virtual devices share an address space encompassing system RAM and other device MMIO regions, a guest can set a device DMA destination address to overlap with MMIO registers. When the DMA write executes, it directly invokes the destination device MMIO write handler, creating recursive execution flows while the initial I/O operation is still active.\n\nThese recursive interactions violate internal device state machine invariants. For example, in a direct recursion scenario, an attacker configures a device DMA target to its own reset register; the resulting write executes the reset routine, freeing internal data structures while the parent DMA routine is mid-execution. When control returns, the parent routine accesses the freed structure, triggering a Use-After-Free (UAF). Indirect recursion occurs when device A triggers DMA to device B, which in turn invokes device A MMIO handlers. Other failure modes include Out-of-Bounds (OOB) memory corruption—caused by modifying global transfer size or index variables via MMIO during DMA transfers—or hypervisor crashes caused by unbounded recursive loops.\n\nTo automate vulnerability discovery across QEMU vast device codebase, the researchers authored CodeQL queries. They characterized MMIO handlers in MemoryRegionOps structs, Bottom-Half callbacks (qemu_bh_new_guarded), and timer callbacks as sources, and physical memory write APIs as sinks. Using CodeQL pathgraph module and transitive closure predicates, they mapped intersection paths linking MMIO handlers, DMA writes, and device reset functions. To exploit an NVMe controller UAF, the authors required a primitive to reallocate the freed chunk before nvme_enqueue_req_completion executed. They leveraged the Intel HDA sound card emulation, where setting the run bit in stream control registers allocates buffer descriptor list chunks in guest-controlled multiples of 16 bytes via the LVI register, successfully grooming the heap and achieving arbitrary host code execution.\n\nKey Takeaways:\nHypervisors must strictly isolate DMA from MMIO address spaces, actively blocking DMA memory copies from targeting emulated device register regions to prevent reentrant state corruption. Static analysis using CodeQL pathgraphs is highly effective for identifying multi-hop reentrancy vulnerabilities across complex hypervisor device drivers. Peripheral device emulations with flexible, user-controlled heap allocations (such as Intel HDA) provide potent heap grooming primitives that turn theoretical hypervisor UAF flaws into practical VM escapes.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "CkHCnXt7APk",
+      "slug": "the-virtual-battlefield-in-2022-russia-ukraine-war-and-its-polic",
+      "title": "The Virtual Battlefield in 2022: Russia Ukraine War & Its Policy Implications",
+      "speakers": [
+        "Kenneth Geers"
+      ],
+      "track": "policy",
+      "topics": [
+        "virtual-battlefield",
+        "battlefield-2022",
+        "2022-russia",
+        "russia-ukraine",
+        "ukraine-policy"
+      ],
+      "teaser": "Provides the Virtual Battlefield in 2022: Russia Ukraine War & Its Policy Implications and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2375,
+      "conference": "black-hat",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "1titzBiuxSc",
+      "slug": "taking-kernel-hardening-to-the-next-level",
+      "title": "Taking Kernel Hardening to the Next Level",
+      "speakers": [
+        "Jinbum Park",
+        "Haehyun Cho",
+        "Seolheui Kim",
+        "Yeji Kim",
+        "Bumhan Kim",
+        "Taesoo Kim",
+        "Sungbae Yoo"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "taking-kernel",
+        "kernel-hardening",
+        "hardening-next",
+        "next-level",
+        "taking"
+      ],
+      "teaser": "Details taking Kernel Hardening to the Next Level and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2301,
+      "conference": "black-hat",
+      "aiSummary": "Overview:\nJinho Jung from Samsung Research and Samsung Mobile Security presents advanced kernel hardening techniques addressing Control-Flow Integrity (CFI) and Use-After-Free (UAF) vulnerabilities in modern operating system kernels. Evaluating the precision and compatibility constraints of ARM Pointer Authentication (PAC) in C-based kernels like Linux, Jung introduces \"K-L\" (published at USENIX Security), which binds dynamic function pointers to invariant struct member names to achieve fine-grained CFI without compatibility failures. Additionally, Jung details a whole-kernel static binary validator to detect compiler-introduced signing oracles and introduces \"B-Tag\" (published at ASPLOS), a high-performance single-memory-access UAF defense mechanism.\n\nKey Topics:\n- ARM Pointer Authentication Code (PAC) internals: pacia/autia instructions, QARMA block cipher, and context-dependent pointer signing\n- Precision vs. compatibility trade-offs in kernel CFI: type-based equivalence classes vs. storage address context failures during memcpy operations\n- \"obj_bind\" fine-grained CFI: binding function pointers to invariant struct member name fields and static verification of compiler passes\n- Scalable kernel Use-After-Free (UAF) mitigation: optimizing access validation via \"B-Tag\" base-identifier slot math and Top-Byte-Ignore (TBI)\n\nTechnical Details:\nARM Pointer Authentication (PAC) utilizes hardware instructions (pacia, autia) and the QARMA cipher to sign pointers using a 64-bit address, secret key, and context modifier, storing the PAC in unused upper pointer bits. In standard type-based CFI (like PARTS), contexts are static hashes of function prototypes, creating broad equivalence classes where hundreds of indirect branches share identical contexts. While Apple's iOS kernel CFI achieves higher precision for C++ vtables by combining static function hashes with dynamic storage addresses, applying storage addresses to C kernels (like Linux) causes fatal compatibility failures: when structs containing signed function pointers are duplicated via memcpy(), the storage address changes while the context embedded in the PAC does not, causing kernel panics upon dereference.\n\nTo solve this, Jung proposed obj_bind. Instead of volatile storage addresses, obj_bind binds function pointers to invariant struct fields—such as constant name string pointers initialized at object creation. Because memcpy() copies both the function pointer and its adjacent invariant context field simultaneously, subsequent authentication succeeds without pointer resigning. Evaluated across 87 core Linux kernel structs, obj_bind eliminated 100% of broad equivalence classes with only 3–7% performance overhead. Furthermore, Jung discovered that LLVM compiler optimization passes introduce subtle vulnerabilities into PA-enabled kernels, creating Time-of-Check to Time-of-Use (TOCTOU) stack-spill races and signing oracles where attacker-controlled registers reach signing instructions. Jung developed a whole-kernel static binary validator enforcing four compiler safety principles to audit binaries.\n\nFor kernel Use-After-Free defenses, traditional access validation requires allocating random IDs in pointer bits and validating them against an external table, incurring three additional memory lookups per dereference via multi-level tables. Jung's B-Tag design stores the object ID directly in the object header and divides unused pointer bits into an 8-bit Base Identifier (BI) and an 8-bit random security tag. Assuming 4KB maximum object regions and 64-byte alignment, the kernel calculates the exact object header address from any interior pointer in a single memory access using bitmasking and slot offsets, reducing UAF mitigation overhead to ~20% (or 1–2% overhead when using ARM Top-Byte-Ignore [TBI] for start-pointer-only checks).\n\nKey Takeaways:\nHardware-assisted CFI cannot rely solely on static function prototypes; adopting invariant struct members as dynamic PAC contexts (obj_bind) delivers fine-grained protection without breaking kernel memory operations like memcpy. Kernel compiler pipelines must be verified with binary-level static analysis to ensure compiler optimizations do not emit PAC signing oracles or register-spill TOCTOU vulnerabilities. Kernel UAF mitigations must balance physical memory limits and pointer arithmetic; combining bit-split base identifiers with alignment-based slot math allows single-lookup access validation without multi-level page table traversals.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "SRCiMKlCavs",
+      "slug": "start-arbitrary-activity-app-components-as-the-system-user-vulne",
+      "title": "Start Arbitrary Activity App Components as the System User Vulnerability Affecting Samsung Android",
+      "speakers": [
+        "Ryan Johnson",
+        "Mohamed Elsabagh",
+        "Angelos Stavrou"
+      ],
+      "track": "mobile",
+      "topics": [
+        "start-arbitrary",
+        "arbitrary-activity",
+        "activity-components",
+        "components-system",
+        "system-user"
+      ],
+      "teaser": "Investigates start Arbitrary Activity App Components as the System User Vulnerability Affecting Samsung Android and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1556,
+      "conference": "black-hat",
+      "aiSummary": "## Overview and Background\n\nThe talk, presented by Ryan Johnson (collaborating with Angelos Stavrou and Mohamed Elsabagh from Kryptowire), addresses a privilege escalation vulnerability discovered in Samsung Android devices. Kryptowire—founded out of a 2011 DARPA project and working with agencies such as DHS S&T and NIST—specializes in software assurance, mobile device management, threat feeds, and security analytics.\n\nThe research focuses on the top layer of the Android software stack: pre-installed system applications. While Google provides the core Android framework via the Android Open Source Project (AOSP), original equipment manufacturers (OEMs) fork and customize AOSP to differentiate their devices. These vendor modifications introduce proprietary code that lacks the broad visibility of AOSP and can introduce severe security vulnerabilities. Consequently, vendors like Samsung, Huawei, Motorola, Nokia, OnePlus, and Oppo maintain independent security bulletins to patch flaws in their custom components.\n\n## Pre-Installed System Apps and Privilege Models\n\nPre-installed applications are shipped natively with the device, meaning users typically cannot uninstall or even disable them. If a flaw exists in one of these applications, users must wait for an official vendor software update.\n\nCrucially, pre-installed apps can run under specialized, high-privilege User IDs (UIDs), such as:\n- **System user (`uid 1000`)**: The primary target of this vulnerability research.\n- **Radio**: Used for telephony/phone functions, Bluetooth, Keystore, NFC, and Secure Element.\n\nBecause of their pre-installed status and privileged UIDs, these apps can obtain system permissions inaccessible to third-party applications downloaded from app stores. For instance, the `MASTER_CLEAR` permission requires a protection level of `privileged` and `signature`. A `signature` permission requires the requesting app to be signed with the exact same cryptographic key as the declaring application (in this case, the Android framework running under the system user).\n\n## Android Component Model and Intent Messaging Architecture\n\nAndroid applications are non-monolithic and lack a single execution entry point. Instead, they are composed of framework components defined within the mandatory `AndroidManifest.xml` manifest file:\n- **Activities**: UI components containing names, permission requirements, and intent filters.\n- **Services**: Background execution components.\n- **Broadcast Receivers**: Asynchronous event handlers.\n- **Content Providers**: Data management and sharing interfaces.\n\nInter-component and inter-process communication (IPC) is accomplished via **Intents** using **Binder** as the underlying transport mechanism. Intents function as message abstractions:\n- An app creates an Intent specifying an abstract action string (e.g., `CALL_PRIVILEGED`) and a data URI (such as a phone number).\n- The system resolves and routes the Intent to registered components that match the action filters.\n- Internally, Intent messages carry payloads using the `Bundle` data type, which stores key-value pairs.\n- Bundles support primitive types, arrays, and objects implementing the `Serializable` or `Parcelable` interfaces, where `Parcelable` provides fast serialization via explicitly implemented read/write routines.\n\n## Scope and Methodology\n\nThe presentation outlines an investigation into intent injection vulnerabilities within Samsung's customizations, specifically enabling third-party unprivileged applications to force privileged system-level pre-installed components (running as `uid 1000`) to execute arbitrary activity components. The methodology incorporates dynamic testing to confirm exploit use cases, followed by coordinated vulnerability disclosure and analysis of impacted Android/Samsung firmware versions.",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "OPv3PI3YFS0",
+      "slug": "remote-memory-deduplication-attacks",
+      "title": "Remote Memory-Deduplication Attacks",
+      "speakers": [
+        "Erik Kraft",
+        "Daniel Gruss",
+        "Martin Schwarzl"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "remote-memory-deduplication",
+        "memory-deduplication-attacks",
+        "remote",
+        "memory-deduplication"
+      ],
+      "teaser": "Details remote Memory-Deduplication Attacks and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1839,
+      "conference": "black-hat",
+      "aiSummary": "Overview:\nResearchers Daniel Gruss and Erik Kraft from Graz University of Technology present the first practical remote memory deduplication side-channel attack executed entirely across the Internet. While operating systems and hypervisors previously disabled cross-domain deduplication, modern virtualization environments re-enabled page deduplication within individual security domains or virtual machines under the assumption that intra-domain sharing carries no threat. The authors overturn this assumption, demonstrating that a network adversary without local code execution can exploit standard web and network APIs to detect Copy-on-Write (CoW) page fault latency differences across 14 Internet hops, leaking memory contents and fingerprinting software.\n\nKey Topics:\n- Operating system and hypervisor memory deduplication mechanisms (Kernel Samepage Merging / KSM)\n- The flawed intra-domain deduplication threat model in virtualized cloud environments\n- Exploiting network APIs to allocate page-aligned data and trigger in-place memory modifications\n- Overcoming Internet timing jitter, packet loss, and latency variations across 14 network hops\n- Constructing a remote memory oracle to fingerprint loaded libraries and disclose confidential data\n\nTechnical Details:\nMemory deduplication—such as Kernel Samepage Merging (KSM) in Linux or equivalent hypervisor mechanisms—scans physical RAM to identify pages with identical contents. When duplicates are detected, the kernel merges them into a single physical page, adjusts virtual page table mappings, and marks the page read-only with Copy-on-Write (CoW) semantics. Following initial local cross-VM deduplication attacks, vendors restricted deduplication to intra-domain boundaries, assuming that deduplication within a single customer domain or virtual machine posed no security hazard against external actors.\n\nThe authors demonstrate that this security boundary fails when systems host network-accessible services. To execute a remote deduplication attack, an attacker requires two fundamental primitives: the ability to upload attacker-controlled, page-aligned data that remains stored in the victim server memory, and an API endpoint that modifies that data in-place. The attacker transmits a candidate memory page corresponding to a specific target library or known secret. Once the server background scanner merges the attacker page with an identical page already present in the victim process memory, the page is marked CoW.\n\nWhen the attacker subsequently submits an update request modifying the uploaded data, the server CPU triggers a Copy-on-Write page fault, requiring the operating system to allocate a new physical page and duplicate the memory contents. This CoW fault introduces a measurable execution latency (several microseconds locally). While skeptics assumed network jitter across the public Internet would drown out microsecond timing deltas, the researchers proved that repeated statistical sampling across 14 Internet hops successfully isolates the CoW signal. Testing against an Ubuntu virtual machine hosted on KVM, the authors reliably fingerprinted running software libraries and extracted secrets remotely.\n\nKey Takeaways:\nRestricting memory deduplication to the same security domain or single virtual machine fails to mitigate side-channel risks, as remote network APIs can be weaponized as timing probes. Copy-on-Write microsecond timing anomalies are statistically detectable over wide-area networks despite Internet routing jitter and latency noise. Cloud providers and system administrators should completely disable memory deduplication mechanisms on hosts running network-exposed services handling sensitive or multi-tenant workloads.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "scnCP1YLtZI",
+      "slug": "autospear-towards-automatically-bypassing-and-inspecting-web-app",
+      "title": "AutoSpear: Towards Automatically Bypassing and Inspecting Web Application Firewalls",
+      "speakers": [
+        "Zhenqing Qu",
+        "Xiang Ling",
+        "Chunming Wu"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "autospear-towards",
+        "towards-automatically",
+        "automatically-bypassing",
+        "bypassing-inspecting",
+        "inspecting-application"
+      ],
+      "teaser": "Demonstrates autoSpear: Towards Automatically Bypassing and Inspecting Web Application Firewalls and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2124,
+      "conference": "black-hat",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "d8J9Orz1pU0",
+      "slug": "to-loot-or-not-to-loot-that-is-not-a-question-when-state-nexus-a",
+      "title": "To Loot or Not to Loot? That Is Not a Question When State Nexus APT Targets Online Entertainment",
+      "speakers": [],
+      "track": "threat-intel",
+      "topics": [
+        "loot-loot",
+        "loot-that",
+        "that-question",
+        "question-when",
+        "when-state"
+      ],
+      "teaser": "Evaluates to Loot or Not to Loot? That Is Not a Question When State Nexus APT Targets Online Entertainment and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2248,
+      "conference": "black-hat",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "6DE5Ix9b9ck",
+      "slug": "the-next-generation-of-windows-exploitation-attacking-the-common",
+      "title": "The Next Generation of Windows Exploitation: Attacking the Common Log File System",
+      "speakers": [
+        "Shijie Xu",
+        "Jianyang Song",
+        "Linshuang Li"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "next-generation",
+        "generation-windows",
+        "windows-exploitation",
+        "exploitation-attacking",
+        "attacking-common"
+      ],
+      "teaser": "Demonstrates the Next Generation of Windows Exploitation: Attacking the Common Log File System and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1784,
+      "conference": "black-hat",
+      "aiSummary": "## Overview\n\nSecurity researchers from the Qihoo Vulnerability Research Institute—focused primarily on Windows platform bug bounties—presented research on the attack surface of the Windows Common Log File System (CLFS). Introduced in Windows Vista, CLFS is a universal logging subsystem that provides high-performance logging and recovery support for dedicated or multiplexed user-mode applications.\n\nApplications interact with CLFS via APIs such as `CreateLogFile` and `CloseHandle`. Drawing prior insights from research by Alice, Uniscod Lab, and Cisco Talos, the authors divided the CLFS attack surface into two primary categories within the CLFS system driver:\n1. Base log file (`.blf`) parsing vulnerabilities.\n2. Error handling of file code vulnerabilities.\n\n---\n\n## Fuzzing Methodology\n\nTo uncover vulnerabilities in CLFS, the researchers engineered a structure-aware file format fuzzer targeting `.blf` files:\n\n1. **Log Generation**: Created base `.blf` files (either dedicated or multiplexed, with optional container additions) using `CreateLogFile` and container-related APIs.\n2. **Reverse Engineering & Target Structures**: Identified driver parsing logic using IDA Pro, noting that functions prefixed with `Get*` and `Acquire*` read file contents directly (e.g., `GetBaseLogRecord`, `GetControlRecord`, `AcquireMetadataBlock`, and `AcquireTraceContent`).\n3. **CRC Check Bypass**: Reversing revealed that CLFS performs a CRC check whenever a `.blf` file is parsed. The fuzzer systematically recalculates or bypasses this CRC check after mutating structured file data.\n4. **Driver Invocation**: Executed various CLFS operational functions documented in MSDN or recovered from the driver (including log storage, record reservation, archive, and restore functions) to force the driver to read and parse the mutated `.blf` files.\n\n---\n\n## Vulnerability Analysis & Findings\n\nThe fuzzer triggered multiple crashes, from which two specific out-of-bounds (OOB) vulnerabilities were detailed:\n\n### 1. CVE-2022-21916 (CLFS Control Record OOB Index)\n* **Structure & Location**: Located in the `CLFS_CONTROL_RECORD` structure at offset `0x70` of the `.blf` file.\n* **Key Fields**:\n  * `eExtensionState`: Set to `CLFS_EXTEND_STATE_FLUSH_BLOCK` (`true`), which guides execution into the vulnerable function `ShiftMetadataBlockDescriptor`.\n  * `iExtensionBlock`: Identifies the block index being extended (e.g., value `24`).\n  * `iFlushBlock`: Identifies the block index being flushed (e.g., value `3`).\n* **Root Cause**: When parsing metadata in `ShiftMetadataBlockDescriptor`, the driver fails to properly validate `iExtensionBlock` and `iFlushBlock`. When `iFlushBlock` is utilized directly as an index, it triggers an out-of-bounds access. The issue was reported to MSRC and assigned CVE-2022-21916.\n\n### 2. CLFS Log FCB Pool Overflow\n* **Vulnerable Context**: Resides within the `ClfsLogFcbPhysicalOverflowReversal` function, associated with owner page operations.\n* **Mechanism**: The function `CClfsBaseFile::HighWaterMarkSanitizing` calculates a client ID by reading the `cNextClient` field from the `CLFS_BASE_RECORD_HEADER` structure and subtracting 1 (`cNextClient - 1`).\n* **Root Cause**: Mutating `cNextClient` in the `.blf` file to an unexpected value leads to an invalid index calculation. When the resulting client ID exceeds `0x70`, an out-of-bounds condition occurs.\n* **Impact**: Results in a kernel pool overflow with a page pool size of `0x1000`. The driver writes CLFS internal values (such as CLFS ALS) and stale owner page data directly into the header of the adjacent kernel pool.",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "D42av_IfRMA",
+      "slug": "the-hidden-rce-surfaces-that-control-the-droids",
+      "title": "The Hidden RCE Surfaces That Control the Droids",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "hidden-surfaces",
+        "surfaces-that",
+        "that-control",
+        "control-droids",
+        "hidden"
+      ],
+      "teaser": "Presents the Hidden RCE Surfaces That Control the Droids and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2538,
+      "conference": "black-hat",
+      "aiSummary": "Overview:\nResearchers from Chaitin Security Lab present an investigation into overlooked remote code execution (RCE) attack surfaces across the Android operating system. While modern Android has fortified standard attack vectors—such as sandboxing browser WebViews and re-architecting media parsers following Stagefright—the speakers identify persistent vulnerabilities in enterprise configuration components and legacy file format handlers. Specifically, they dissect the Android Open Source Project (AOSP) Proxy Auto-Configuration (PAC) service, demonstrating how an un-isolated V8 JavaScript engine executing in a platform application context exposes devices to remote exploitation.\n\nKey Topics:\n- Classification of Android remote attack vectors: Wi-Fi, NFC, Bluetooth, baseband, and file/format parsing\n- Architecture of Android AOSP Proxy Auto-Configuration (PacService, PacProcessor, libpac)\n- Security architectural flaw: un-isolated V8 JavaScript engine instances running in platform application contexts\n- Exploitation of upstream-downstream patch gaps between Chromium V8 and AOSP external/v8\n- Weaponizing CVE-2020-0240 (integer overflow in NewFixedDoubleArray) to bypass JIT mitigations and gain RCE\n\nTechnical Details:\nWhile Android isolated application WebViews in Android 8.0 (Oreo) and partitioned media parsing services, the speakers discovered that an un-isolated V8 JavaScript engine remained operational within the platform application context via the Proxy Auto-Configuration (PAC) mechanism. PAC enables Wi-Fi access points and enterprise networks to distribute a JavaScript file defining a FindProxyForURL(url, host) function to automate routing. In AOSP (packages/services/PacProcessor), network proxy requests invoke PacNative.makeProxyRequest(), which calls into libjni_pacprocessor.so and libpac.so to initialize a V8 context and execute the PAC script.\n\nThe researchers uncovered multiple severe structural flaws in this architecture. First, AOSP maintained an independent downstream branch of V8 in external/v8 that suffered from substantial patch gaps; security patches merged into upstream Chromium were delayed by months or years in Android, leaving known n-day exploits viable on deployed devices. Second, although Google attempted to neutralize JavaScript exploits by disabling JIT compilation via the --no-opt flag, non-JIT memory corruption bugs remained fully exploitable. Third, because PacProcessor executed within the privileged platform application context rather than an isolated sandbox, code execution inside the engine directly yielded platform privileges.\n\nThe authors demonstrated remote code execution using CVE-2020-0240 (Chromium issue 938251), an integer overflow in NewFixedDoubleArray. Because the allocation routine failed to account for negative length values, an attacker could supply crafted parameters to create an array with an out-of-bounds length without requiring JIT optimizations. This primitive provided arbitrary memory read and write capabilities. By overwriting an executable WebAssembly (Wasm) memory page with native shellcode, the researchers redirected execution flow to gain arbitrary code execution in the platform application context. While PacProcessor lacks SMS or storage permissions, gaining platform context provides an ideal launchpad to target local kernel drivers and IPC interfaces to achieve complete device takeover.\n\nKey Takeaways:\nDisabling JIT compilation does not prevent JavaScript engine exploitation when core array allocations and memory handling functions harbor integer overflows or logic bugs. Downstream code repositories in large operating systems (such as AOSP external/v8) must maintain aggressive upstream synchronization to prevent extended patch gaps from exposing users to known exploits. Legacy system utilities and network configuration services that execute untrusted scripts must be strictly quarantined within restricted, multi-process application sandboxes.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "0UAnaJx-GjE",
+      "slug": "the-firmware-supply-chain-security-is-broken-can-we-fix-it",
+      "title": "The Firmware Supply-Chain Security Is Broken: Can We Fix It?",
+      "speakers": [
+        "Alex Matrosov",
+        "Alex Ermolov",
+        "Kai Michaelis",
+        "Richard Hughes"
+      ],
+      "track": "hardware",
+      "topics": [
+        "firmware-supply-chain",
+        "supply-chain-broken",
+        "supply-chain",
+        "broken",
+        "hardware-security"
+      ],
+      "teaser": "Explores the Firmware Supply-Chain Security Is Broken: Can teams Fix It and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2222,
+      "conference": "black-hat",
+      "aiSummary": "Overview:\nAlex Matrosov and Richard Hughes examine the systemic vulnerabilities and coordination breakdowns plaguing the multi-tiered UEFI firmware supply chain. The presentation details how code moves across silicon vendors, independent BIOS vendors (IBVs), original design manufacturers (ODMs), and original equipment manufacturers (OEMs), creating substantial lag and security regressions. By combining telemetry from the Linux Vendor Firmware Service (LVFS) with Binarly’s vulnerability research, the speakers highlight real-world firmware flaws and propose automated, ecosystem-wide verification mechanisms.\n\nKey Topics:\n- Multi-tier UEFI firmware supply chain architecture\n- Silent patching, embargo breaches, and supply chain collisions\n- SMM memory corruption in legacy modules (USBRT and Overclock SMI)\n- Ecosystem telemetry from LVFS and automated rule scanning with FirmwareHunt\n\nTechnical Details:\nThe UEFI supply chain relies on a complex hierarchy where reference code developed by silicon vendors (Intel, AMD) is modified by IBVs (Insyde, AMI, Phoenix), customized by ODMs (Compal, Quanta), and rebranded by OEMs (Dell, HP, Lenovo). This multi-stage pipeline introduces severe synchronization issues. The speakers detail \"supply chain collisions\" and silent patching, where an IBV or OEM fixes a vulnerability without assigning a CVE or coordinating disclosure. In some instances, vendors release patches before the embargo date, enabling attackers to binary-diff firmware images and create 0-day exploits against competing vendors whose patches remain delayed. Conversely, some critical fixes take up to two years to propagate across all affected OEM device catalogs.\n\nThe authors present several high-impact firmware vulnerabilities uncovered in production devices. Legacy modules such as USBRT (USB Runtime) and the Overclock SMI handler contain persistent memory corruption bugs. Specifically, the Overclock SMI handler exhibited an out-of-bounds write primitive allowing attackers to achieve arbitrary SMM (System Management Mode) code execution, completely bypassing SMM Code Check mitigations via Return-Oriented Programming (ROP). In the Pre-EFI Initialization (PEI) phase, stack overflows in NVRAM variable parsing execute before SMM initialization, granting attackers control before hardware security locks are applied. In the Driver Execution Environment (DXE) phase, improper size handling during GetVariable calls for PCIe power management variables triggers stack-based buffer overflows.\n\nTo quantify the ecosystem problem, Richard Hughes analyzes empirical data from LVFS, which supports over 150 hardware vendors, 1,000 device models, and has distributed over 51 million firmware updates using fwupd. Analyzing 9,000 UEFI updates and 300 popular CVEs revealed that over half of monitored devices ship outdated Intel microcode, leaving hardware exposed to speculative execution vulnerabilities long after disclosure. Flagship hardware receives patches rapidly, while older models and low-margin devices are left unpatched. To combat this, Binarly and LVFS introduced FirmwareHunt (Fwhunt), an open-source semantic rule engine integrated with CERT's VINCE platform to scan firmware shards, verify CVE fixes, and alert vendors to silent or premature updates.\n\nKey Takeaways:\nHardware OEMs and ODMs must adopt automated, semantic firmware validation pipelines to verify that upstream security patches and microcode updates are correctly integrated into all device builds. Legacy and high-risk components like USBRT and overclock SMI handlers should be eliminated from production firmware images. The industry requires centralized, transparent coordination mechanisms like LVFS and VINCE to synchronize disclosure embargoes and eliminate multi-month vulnerability windows.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Z2Dgt7XhHGs",
+      "slug": "backdooring-of-real-time-automotive-os-devices",
+      "title": "Backdooring of Real Time Automotive OS Devices",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "backdooring-real",
+        "real-time",
+        "time-automotive",
+        "automotive-devices",
+        "backdooring"
+      ],
+      "teaser": "Demonstrates backdooring of Real Time Automotive OS Devices and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1742,
+      "conference": "black-hat",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "u1zqh-DEdVs",
+      "slug": "dynamic-process-isolation",
+      "title": "Dynamic Process Isolation",
+      "speakers": [
+        "Pietro Borrello",
+        "Andreas Kogler",
+        "Martin Schwarz"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "dynamic-process",
+        "process-isolation",
+        "dynamic",
+        "process",
+        "isolation"
+      ],
+      "teaser": "Details dynamic Process Isolation and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1503,
+      "conference": "black-hat",
+      "aiSummary": "## Overview\n\nAt the conference, speakers Pietro Borrello, Andreas Kogler, and Martin Schwarz from a University of Technology presented on \"Dynamic Process Isolation,\" evaluating the security posture of edge computing platforms like Cloudflare Workers against microarchitectural attacks. Cloudflare Workers serve as edge computing systems deployed between origin servers and clients to intercept and modify HTTP requests (for instance, to gather statistics or inject ads into request bodies). To maintain high performance and eliminate the heavy resource overhead of classical virtualization, these platforms employ **in-process isolation**, running different users' workers and code within the exact same process.\n\n---\n\n## Defensive Preconditions and Assumptions\n\nThe speakers explored whether running multiple untrusted workers within a single shared process creates vulnerabilities to Spectre-style attacks. The platform operators implement several defensive preconditions and resource controls designed to obstruct such exploits:\n\n- **Timer Disabling:** Local high-resolution timers are disabled to eliminate the standard mechanisms used to measure microarchitectural timing differences.\n- **Request Limiting:** Platforms strictly limit both sub-requests and overall outgoing requests that workers can issue.\n- **Memory Restrictions:** Available memory per worker is constrained.\n- **Performance Constraints:** Any defensive mechanism or isolation solution deployed to mitigate speculative execution attacks must have very low overhead to avoid compromising the edge platform's high-performance goals.\n\n---\n\n## Cache Side Channels: Flash and Reload\n\nTo explain how in-process boundaries can be breached, the presenters walked through foundational cache mechanics and the **Flush+Reload** cache side-channel technique:\n\n1. **CPU Caches & Memory Access:** CPUs rely on caches for low-latency memory access. When an access misses the cache, data must be fetched from DRAM (resulting in a slow access time) and loaded into the cache. Subsequent accesses result in cache hits with significantly faster access times.\n2. **Shared Memory Prerequisite:** Flush+Reload assumes an attacker and a victim share physical memory pages (such as shared libraries or memory loaded within the same host process).\n3. **Execution Steps:**\n   - **Flush:** The attacker flushes specific shared memory addresses so that the corresponding cache lines are evicted from the CPU cache.\n   - **Victim Execution:** The victim process or worker executes and potentially accesses one of those shared cache lines, reloading it into the cache.\n   - **Reload:** The attacker accesses the memory line again and measures the access latency. A fast access time (cache hit) reveals that the victim accessed that address, leaking information about the victim's execution and internal state.\n\n---\n\n## Spectre and Speculative Execution Foundations\n\nThe presenters mapped how Flush+Reload primitives combine with CPU speculation to bypass architectural boundary checks:\n\n- **Attacker Control:** An attacker supplies an index used to read from a data array. Although an explicit boundary check exists (e.g., ensuring `index < 4`), modern CPUs execute instructions ahead of time via branch prediction before the check resolves.\n- **Secret Access:** Even though architectural logic restricts access to designated victim data and forbids accessing secret keys out-of-bounds, speculative execution still executes the out-of-bounds read transiently.\n- **Shared Lookup Tables (LUT):** The secret data value retrieved transiently is used as an offset to index into a shared lookup table (`LUT[data]`). This transient memory access alters the cache state of the shared lookup table based on the secret value, establishing the microarchitectural covert channel.",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "RmpPBwdEW0w",
+      "slug": "like-lightning-from-the-cloud-finding-rces-in-an-embedded-tls-li",
+      "title": "Like Lightning From the Cloud: Finding RCEs in an Embedded TLS Library",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "like-lightning",
+        "lightning-from",
+        "from-cloud",
+        "cloud-finding",
+        "finding-rces"
+      ],
+      "teaser": "Presents like Lightning From the Cloud: Finding RCEs in an Embedded TLS Library and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1714,
+      "conference": "black-hat",
+      "aiSummary": "Overview:\nArmis researchers Yuval and Gal present \"TLStorm,\" a collection of critical vulnerabilities identified within the proprietary NanoSSL embedded TLS library (developed by Mocana, later acquired by DigiCert) and its implementation across enterprise hardware. The research demonstrates how improper error handling and state machine desynchronization in networking and power devices enable pre-authentication remote code execution. The speakers showcase exploitation across Aruba switches, Avaya network appliances, and Schneider Electric / APC Smart-UPS devices, demonstrating captive portal bypasses, lateral network movement, and physical equipment damage.\n\nKey Topics:\n- Embedded software supply chain security and the dynamics of proprietary vs. open-source libraries (NanoSSL)\n- TLStorm: eight critical vulnerabilities impacting Aruba switches, Avaya networking, and APC Smart-UPS hardware\n- TLS packet reassembly state machine confusion and internal heap buffer overflow mechanics\n- Exploiting unauthenticated captive portal interfaces for root execution, VLAN hopping, and lateral movement\n- Attacking IoT cloud management architectures (APC SmartConnect) to induce physical hardware damage\n\nTechnical Details:\nThe presentation examines systemic software supply chain risks in embedded hardware, where third-party libraries comprise roughly 70 percent of firmware codebases (mirroring the widespread impact of vulnerabilities like Log4Shell and Urgent/11). The researchers audited Mocana NanoSSL, a closed-source TLS stack widely deployed across enterprise systems. While proprietary libraries often rely on obscurity to deter attackers, the lack of public community auditing frequently conceals brittle integration interfaces where subtle vendor implementation mistakes lead to critical vulnerabilities.\n\nThe authors analyzed the NanoSSL packet reassembly engine. NanoSSL allocates a static 0x1000-byte internal buffer to hold incoming TCP streams. When processing fragmented TLS records, the library parses the record length header (e.g., 0x3000 bytes) and reallocates the buffer to fit the complete payload. However, if an attacker sends an oversized record length header (e.g., 0x5000 bytes) exceeding internal limits, the validation check fails and the parsing function aborts without expanding the internal buffer.\n\nIn vulnerable implementations across Aruba and Avaya switches, the calling loop failed to properly handle the receive API error code. Instead of terminating the TLS session upon failure, the loop continued executing, reading the subsequent incoming TCP packet while the parser remained in an active reassembly state. Because the initial buffer expansion was skipped, the incoming chunk was copied directly into the original 0x1000-byte buffer, triggering a controllable heap buffer overflow. In Aruba switches, the authors targeted this flaw against the unauthenticated captive portal interface, obtaining root code execution, bypassing network access controls, and pivoting across enterprise VLANs. In APC Smart-UPS systems (deployed across millions of enterprise networks), manipulating the cloud-connected SmartConnect TLS interface enabled attackers to alter power control logic and trigger physical hardware failure.\n\nKey Takeaways:\nIntegrating third-party embedded cryptographic libraries requires strict adherence to error-handling contracts; applications must unconditionally terminate network sessions upon encountering any TLS parsing error. Proprietary, closed-source firmware components do not provide inherent security and frequently suffer from integration oversights that community-audited libraries avoid. Critical infrastructure hardware, including enterprise switches and smart power distribution units, must never expose unauthenticated captive portals or management bridges to untrusted network segments.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "Zi7FKB2AU58",
+      "slug": "unix-domain-socket-a-hidden-door-leading-to-privilege-escalation",
+      "title": "Unix Domain Socket: A Hidden Door Leading to Privilege Escalation in the Android Ecosystem",
+      "speakers": [
+        "Dongxiang Ke",
+        "Lewei Qu",
+        "Han Yan",
+        "Daozheng Lin"
+      ],
+      "track": "mobile",
+      "topics": [
+        "unix-domain",
+        "domain-socket",
+        "socket-hidden",
+        "hidden-door",
+        "door-leading"
+      ],
+      "teaser": "Explores unix Domain Socket: A Hidden Door Leading to Privilege Escalation in the Android Ecosystem and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2588,
+      "conference": "black-hat",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "JpPWp-LjmZU",
+      "slug": "usma-share-kernel-code-with-me",
+      "title": "USMA: Share Kernel Code With Me",
+      "speakers": [
+        "Yong Liu",
+        "Jun Yao",
+        "Xiaodong Wang"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "usma-share",
+        "share-kernel",
+        "kernel-code",
+        "code-with",
+        "usma"
+      ],
+      "teaser": "Analyzes USMA: Share Kernel Code With Me and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1610,
+      "conference": "black-hat",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "anPZh5tYgY4",
+      "slug": "the-little-seal-bug-optical-sound-recovery-from-lightweight-refl",
+      "title": "The Little Seal Bug: Optical Sound Recovery from Lightweight Reflective Objects",
+      "speakers": [
+        "Ben Nassi",
+        "Raz Swissa",
+        "Boris Zadov"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "little-seal",
+        "seal-optical",
+        "optical-sound",
+        "sound-recovery",
+        "recovery-from"
+      ],
+      "teaser": "Discusses the Little Seal Bug: Optical Sound Recovery from Lightweight Reflective Objects and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2123,
+      "conference": "black-hat",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "8iq6dfuD1gc",
+      "slug": "sms-pva-services-fueled-by-compromised-supply-chain-mobile-botne",
+      "title": "SMS PVA Services Fueled by Compromised Supply-Chain Mobile Botnets",
+      "speakers": [
+        "Paul Christian Pajares",
+        "Vladimir Kropotov",
+        "Zhengyu Dong"
+      ],
+      "track": "mobile",
+      "topics": [
+        "services-fueled",
+        "fueled-compromised",
+        "compromised-supply-chain",
+        "supply-chain-mobile",
+        "mobile-botnets"
+      ],
+      "teaser": "Reviews SMS PVA Services Fueled by Compromised Supply-Chain Mobile Botnets and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1989,
+      "conference": "black-hat",
+      "aiSummary": "## Overview\n\nThe presentation explores mobile botnets fueled by compromised firmware supply chains and how cybercriminals monetize them through SMS Phone Verified Accounts (PVA) and proxy services. The research, conducted by threat researchers including Zhengyu Dong, Theodore Ryan, and Vladimir Kropotov, focuses on how threat actors deliberately embed malicious loaders into mobile devices during the manufacturing and distribution lifecycle. \n\nA central actor highlighted is the \"Lemon Group,\" a group of Chinese-speaking individuals responsible for operating mobile botnets built from compromised supply chains.\n\n---\n\n## Supply Chain Architecture and Attack Vectors\n\nThe mobile supply chain involves multiple stages where tampering can occur:\n- **OEM vs. ODM Roles:** Original Equipment Manufacturers (OEMs, such as LG and Samsung) have factories that produce phones. Original Design Manufacturers (ODMs) also operate factories and typically manufacture devices in bulk.\n- **Image Hand-off and Third-Party Modification:** An OEM or ODM embeds the basic Android OS into a system image and transfers it to third-party vendors to add software features. Once modifications are complete, the image is returned to the OEM for final retail preparation.\n- **Budget and Quality Assurance Pressures:** Manufacturers of low-cost mobile devices frequently mass-produce hardware and negotiate with third-party vendors for low pricing. Budget, resource, and time constraints can lead to overlooked quality assurance (QA), providing an opening for malicious loaders to be introduced.\n- **Persistence via Firmware:** Firmware represents the lowest software tier with direct hardware interaction. Because malware is embedded in the firmware, it activates immediately upon first boot. While antivirus tools can repeatedly detect the threats, standard disinfection is insufficient; the device must be reflashed with clean firmware to remove the infection.\n\n---\n\n## Prevalent Malware Families and Historic Incidents\n\nThe speakers highlighted historic milestones and notable malware families associated with mobile supply chain attacks:\n\n- **Triada and Guerrilla:** These represent two of the most prevalent malware families in mobile supply chain attacks. Google researchers (notably a researcher named Lucas) previously reported on Triada's involvement in mobile supply chains and assisted OEMs in disinfecting affected devices.\n- **Rise of ROM Customization:** Growth in the open-source Android market drove significant demand for ROM flashing and customization services in China, creating further opportunities for unauthorized modifications.\n- **The \"Silent Plug-in\" Incident (2011–2013):**\n  - Developed between 2011 and 2012 as reflashing became less lucrative, this trojan was designed to illegally collect private data and send personal information to command servers starting in mid-2012.\n  - The operation compromised data across devices, stealing approximately 20 million contacts.\n  - The scheme involved collusion among three separate companies (one promoting an app store, another handling development, and a third providing ROM packages to promote software for fees) along with 10 individuals.\n  - In 2013, domestic law enforcement intervened and arrested the perpetrators; one actor received a 3.5-year prison sentence and a fine of 700 to 800 US dollars.\n  - Analysis indicated the compromised samples were neither Triada nor Guerrilla, but rather tampered FOTA (Firmware Over-The-Air) update mechanisms.\n\n---\n\n## Monetization and Threat Implications\n\n- **PVA Abuse:** Platforms and service providers rely on Phone Verified Accounts (PVA) as a security mechanism to prevent fake accounts, bot registrations, spam, fake news, and online harms. Compromised mobile devices enable threat actors to intercept verification SMS messages and sell SMS PVA bypass services.\n- **Secondary Monetization:** Beyond SMS PVA interception, botnet operators monetize these infected devices through proxy services, app promotion schemes, and the exfiltration and sale of private user data.",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "AZ0vvNgXFSo",
+      "slug": "non-intrusive-vulnerability-localization-and-hotpatching-for-ind",
+      "title": "Non-Intrusive Vulnerability Localization and Hotpatching for Industrial Control Systems",
+      "speakers": [],
+      "track": "ics-ot",
+      "topics": [
+        "non-intrusive-vulnerability",
+        "vulnerability-localization",
+        "localization-hotpatching",
+        "hotpatching-industrial",
+        "industrial-control"
+      ],
+      "teaser": "Investigates non-Intrusive Vulnerability Localization and Hotpatching for Industrial Control Systems and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1738,
+      "conference": "black-hat",
+      "aiSummary": "Overview:\nMichail Maniatakos and Prashant Rajput from New York University Abu Dhabi present an automated framework for non-intrusive vulnerability localization and dynamic hotpatching in Industrial Control Systems (ICS). The research addresses the critical challenge of securing Programmable Logic Controllers (PLCs) running real-time operating systems where operational downtime and reboots are prohibited. By combining binary symbolic execution with dynamic memory manipulation, the authors demonstrate how to identify and remediate vulnerabilities in running control applications without interrupting industrial processes.\n\nKey Topics:\n- Insecurity of modern digitized ICS/OT architectures running embedded Linux with real-time extensions (RT-PREEMPT)\n- Memory corruption vulnerabilities arising from structured text pointers within the IEC 61131-3 control application\n- Exploiting execution control flow in the CODESYS runtime to suppress the primary PLC logic loop (PLC_PRG)\n- Non-intrusive binary hotpatching utilizing the angr symbolic execution framework, live base address resolution, and an LCM patcher\n\nTechnical Details:\nThe presenters highlight the architectural evolution of modern PLCs, which increasingly employ general-purpose operating systems like Linux equipped with real-time kernel patches (RT-PREEMPT) to run complex runtimes such as CODESYS. In these environments, the IEC 61131-3 control logic executes as a task that shares process memory space directly with the underlying CODESYS runtime. While this digitization enables advanced connectivity (SSH, FTP), it imports IT-style memory corruption risks. In an experimental testbed simulating a multi-stage flash (MSF) desalination plant in Simulink controlled by a WAGO PFC100 PLC, the researchers demonstrate how pointer manipulation in Structured Text (ST)—enabled by weak static compiler checks—allows an attacker to write arbitrary values to runtime stack memory.\n\nSpecifically, the exploit targets the prologue code executed prior to PLC_PRG (the control application's equivalent to main). The assembly routine retrieves a stack address via register r10, loads an offset into register r6, fetches a value into r4, and checks if it equals zero. If zero, execution proceeds normally to PLC_PRG; if non-zero, it branches away and returns early. By using structured text pointers to write a non-zero value to stack offset 4649 during the 100th operation cycle, the attack completely suppresses PLC_PRG execution, halting all sensor reading and actuator updating while leaving the underlying runtime process seemingly healthy.\n\nTo remediate such vulnerabilities without rebooting or halting the physical process, the authors introduce a non-intrusive hotpatching pipeline. The workflow deploys a twin test PLC running an identical CODESYS runtime and IEC project subjected to the exploit input. The system extracts application state—comprising memory hex dumps of the CODESYS binary, the IEC application, shared libraries (libc, libm), and register states (notably the program counter and stack pointer)—to a dedicated patch server. The patch server uses the angr binary analysis framework to symbolically locate the vulnerability and compute relative patching offsets. Finally, the framework queries the live target PLC for its base memory address, synthesizes an in-memory binary patch, and applies it via a Local Control Module (LCM) patcher to the active CODESYS runtime without process interruption.\n\nKey Takeaways:\nOT asset owners cannot rely on proprietary PLC compiler checks to prevent memory corruption when structured text utilizes raw pointer mechanics. Runtimes like CODESYS require architectural memory isolation between the runtime core and IEC control applications to prevent user-space logic from altering host execution stacks. Automated binary analysis combined with dynamic in-memory hotpatching offers a viable defensive mechanism to remediate critical vulnerabilities on active PLCs without incurring costly plant shutdowns.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "Nvpo-kP6C9s",
+      "slug": "macos-vulnerabilities-hiding-in-plain-sight",
+      "title": "macOS Vulnerabilities Hiding in Plain Sight",
+      "speakers": [
+        "Csaba Fitzel"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "macos-vulnerabilities",
+        "vulnerabilities-hiding",
+        "hiding-plain",
+        "plain-sight",
+        "macos"
+      ],
+      "teaser": "Explores macOS Vulnerabilities Hiding in Plain Sight and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2137,
+      "conference": "black-hat",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "zcFg0ZJ2E_A",
+      "slug": "droidguard-a-deep-dive-into-safetynet",
+      "title": "DroidGuard: A Deep Dive into SafetyNet",
+      "speakers": [
+        "Romain Thomas"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "droidguard-deep",
+        "deep-dive",
+        "dive-into",
+        "into-safetynet",
+        "droidguard"
+      ],
+      "teaser": "Discusses droidGuard: A Deep Dive into SafetyNet and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1803,
+      "conference": "black-hat",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "Qh6THzT0fxk",
+      "slug": "explosion-the-hidden-mines-in-the-android-ion-driver",
+      "title": "ExplosION: The Hidden Mines in the Android ION Driver",
+      "speakers": [
+        "Le Wu",
+        "Xuen Li",
+        "Tim Xia"
+      ],
+      "track": "mobile",
+      "topics": [
+        "explosion-hidden",
+        "hidden-mines",
+        "mines-android",
+        "android-driver",
+        "explosion"
+      ],
+      "teaser": "Investigates explosION: The Hidden Mines in the Android ION Driver and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2032,
+      "conference": "black-hat",
+      "aiSummary": "## Overview\n\nIn the presentation *\"ExplosION: The Hidden Mines in the Android ION Driver,\"* security researchers Le Wu, Xuen Li, and Tim Xia from Baidu Security present their discovery of over 40 vulnerabilities in Android's ION memory management subsystem, a series of flaws collectively termed **ExplosION**. \n\nGoogle originally introduced ION as a generalized memory pool manager to unify and resolve fragmented memory management interfaces across Android devices. Before ION, disparate drivers handled distinct allocation tasks—such as allocating physically contiguous buffers versus non-contiguous buffers. ION consolidated these requirements by introducing configurable memory pools known as **ION heaps** (such as the system heap based on `vmalloc`), while allowing hardware vendors to implement custom heaps for specialized hardware needs.\n\n## Why Target the Android ION Driver?\n\nThe research team focused on ION due to several key systemic factors:\n- **Broad Attack Surface:** As a common Android driver, vulnerabilities within ION impact millions of devices across vendors.\n- **Untrusted App Accessibility:** The ION device interface is directly accessible by untrusted user applications, making it an attractive target for local privilege escalation similar to the Android Binder driver.\n- **Criticality of Memory Managers:** Memory management flaws have historically led to severe kernel exploitation (e.g., Dirty COW).\n- **Turbulent Refactoring History:** Upstream ION underwent substantial refactoring cycles—first introduced around 2012 (\"Legacy ION\"), refactored in 2017, refactored again in 2019, and eventually replaced by `dma-buf` heaps starting in Android 12 (2021). Despite this phase-out, Android ecosystem fragmentation ensures ION remains widely deployed across millions of legacy devices.\n\n## ION Architecture and Memory Operations\n\nThe speakers analyzed the foundational design of Legacy ION to illustrate how operations are exposed between user space and kernel space:\n\n- **Buffer Allocation:** A user space process opens the ION device to obtain a client file descriptor (`client fd`). Invoking the `ION_IOC_ALLOC` `ioctl` command prompts ION to create an `ion_handle` object associated with an underlying `ion_buffer` representing the allocated memory. The handle ID is returned to user space for further operations.\n- **Buffer Deallocation:** Applications release memory buffers by passing the handle ID back via the `ION_IOC_FREE` command, triggering the release of associated kernel objects and physical memory.\n- **Buffer Sharing via DMA-BUF:** User processes request buffer sharing via `ION_IOC_SHARE`. ION binds a `dma-buf` object to the `ion_buffer` and exports its file descriptor (`fd`) to user space. Processes can map this file descriptor to access shared memory across user space and kernel space simultaneously.\n- **Kernel-Level Interfaces:** In addition to user space `ioctl` entry points, ION functions as a foundational driver offering internal kernel APIs (such as `ion_alloc`, `ion_free`, and `ion_map_kernel`) utilized directly by other kernel drivers.\n\n## Research Findings & Significance\n\nBy auditing the core design and vendor implementations of ION, the researchers uncovered more than 40 vulnerabilities (\"ExplosION\"). The extensive refactoring and eventual deprecation of the subsystem reflected chronic architectural and implementation security challenges that lingered across vendor kernels, leaving millions of active Android devices vulnerable to exploitation.",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "6-169NlRkZM",
+      "slug": "cooper-knows-the-shortest-stave-finding-134-bugs-in-the-binding",
+      "title": "Cooper Knows the Shortest Stave: Finding 134 Bugs in the Binding Code of Scripting Languages",
+      "speakers": [
+        "Xu Peng",
+        "Yanhao Wang",
+        "Hong Hu",
+        "Purui Su"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "cooper-knows",
+        "knows-shortest",
+        "shortest-stave",
+        "stave-finding",
+        "finding-bugs"
+      ],
+      "teaser": "Demonstrates cooper Knows the Shortest Stave: Finding 134 Bugs in the Binding Code of Scripting Languages and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1818,
+      "conference": "black-hat",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "4NmeRLrsoiI",
+      "slug": "codema-attack-controlling-your-smart-home-through-dangling-manag",
+      "title": "Codema Attack: Controlling Your Smart Home Through Dangling Management Channels",
+      "speakers": [
+        "Yan Jia",
+        "Bin Yuan",
+        "Luyi Xing"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "codema-attack",
+        "attack-controlling",
+        "controlling-your",
+        "your-smart",
+        "smart-home"
+      ],
+      "teaser": "Presents codema Attack: Controlling Your Smart Home Through Dangling Management Channels and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1565,
+      "conference": "black-hat",
+      "aiSummary": "Overview:\nJian Jia from Nankai University and Bing Yuan from the University of Science and Technology of China uncover the \"Codema\" attack, a systematic vulnerability class affecting multi-ecosystem smart home devices. The presentation details how integrating heterogeneous smart home standards—such as Apple HomeKit, Zigbee, and vendor proprietary clouds—creates uncoordinated, dangling device management channels (DMCs). The researchers demonstrate how attackers and untrusted temporary guests can exploit these dangling states to hijack smart locks, lighting systems, and security alarms.\n\nKey Topics:\n- The Device Management Channel (DMC) architecture spanning on-device firmware, cloud backends, hubs, and mobile applications\n- Security desynchronization between disjointed manufacturer and third-party management channels (e.g., Apple HomeKit and Zigbee)\n- The four-state DMC finite state machine model: Factory, Waiting for Network, Waiting for Binding, and Running\n- Practical exploitation case studies: Smart garage openers, Philips Hue smart bulbs, August Smart Locks, and Abode home security systems\n\nTechnical Details:\nModern IoT manufacturers frequently support multiple ecosystems on a single device to maximize market compatibility, creating parallel Device Management Channels (DMCs) that operate across disjointed software stacks and communication protocols. The authors model the lifecycle of a DMC through a four-stage state machine: Factory, Waiting for Network, Waiting for Binding, and Running. Vulnerabilities arise because these independent DMCs lack cross-channel synchronization and mutual access control enforcement, leaving unconfigured channels in a \"dangling\" state ready for unauthorized binding.\n\nIn simple disjointed architectures, such as a smart garage door opener supporting both a proprietary vendor channel and Apple HomeKit, an owner who configures only HomeKit leaves the vendor DMC dangling in the \"Waiting for Binding\" state. An attacker can bind the manufacturer channel over the local network or cloud and operate the garage door without authorization. Similarly, Philips Hue smart bulbs feature independent Bluetooth and Zigbee DMCs with separate communication timings; if an owner pairs the bulb via Zigbee, the Bluetooth channel remains unauthenticated and dangling, permitting nearby attackers to bind via Bluetooth and seize full control of lighting.\n\nIn more complex implementations, vendors attempt cross-channel binding controls that attackers can still subvert in shared access scenarios (e.g., Airbnb guests or babysitters). The August Smart Lock integrates Apple HomeKit using Additional Authorization Data (AAD)—a cryptographic secret validated by the lock before executing operations. When an owner grants temporary access via the August mobile app, a malicious guest can quietly bind the lock to their own Apple HomeKit ecosystem and extract the AAD. Even after the owner revokes the guest's credentials in the August app, the attacker retains persistent control via the HomeKit DMC. If the owner uses an Android device, they lack any visibility or management interface to detect or revoke the unauthorized iOS HomeKit binding. The authors demonstrate a similar persistence attack against the Abode home security alarm, where temporary vendor access allows an attacker to steal the hidden HomeKit setup code and maintain backdoor access.\n\nKey Takeaways:\nIoT device manufacturers must implement unified cross-channel state synchronization ensuring that binding one management channel automatically secures or disables dangling secondary channels. Access revocation must propagate globally across all supported protocols and ecosystems rather than operating within single vendor applications. Multi-ecosystem devices must provide cross-platform visibility so users on any mobile operating system can monitor and revoke authorizations granted across third-party smart home frameworks.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "Rhmddj_N0Bg",
+      "slug": "backdoor-investigation-and-incident-response-from-zero-to-profit",
+      "title": "Backdoor Investigation and Incident Response: From Zero to Profit",
+      "speakers": [
+        "Anthony LAI",
+        "Ken Wong",
+        "Alan Ho",
+        "Zetta Ke"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "backdoor-investigation",
+        "investigation-incident",
+        "incident-response",
+        "response-from",
+        "from-zero"
+      ],
+      "teaser": "Evaluates backdoor Investigation and Incident Response: From Zero to Profit and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2427,
+      "conference": "black-hat",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "yOCV0NKF6fY",
+      "slug": "using-zero-to-attack-zero-knowledge-proof-zkp-plonk",
+      "title": "Using Zero to Attack Zero-Knowledge Proof (ZKP) PLONK",
+      "speakers": [
+        "Quan Thoi Minh Nguyen"
+      ],
+      "track": "privacy",
+      "topics": [
+        "using-zero",
+        "zero-attack",
+        "attack-zero-knowledge",
+        "zero-knowledge-proof",
+        "proof-plonk"
+      ],
+      "teaser": "Evaluates using Zero to Attack Zero-Knowledge Proof (ZKP) PLONK and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2215,
+      "conference": "black-hat",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "txIjZSMHq38",
+      "slug": "keynote-fireside-chat-with-u-s-national-cyber-director-chris-ing",
+      "title": "Keynote: Fireside Chat with U.S. National Cyber Director Chris Inglis",
+      "speakers": [
+        "Chris Inglis"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "keynote-fireside",
+        "fireside-chat",
+        "chat-with",
+        "with-national",
+        "national-director"
+      ],
+      "teaser": "Evaluates keynote: Fireside Chat with U.S. National Cyber Director Chris Inglis and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2445,
+      "conference": "black-hat",
+      "aiSummary": "## Overview\n\nDuring a fireside chat moderated by Jeff Moss, U.S. National Cyber Director Chris Inglis discussed the fundamental dynamics of cybersecurity governance, the centrality of people and civil society, and the evolution of public-private partnerships. Moss noted that civil society, private companies, and individual developers create and maintain the core infrastructure of cyberspace. Against this backdrop, the discussion contrasted state-mandated models (such as in China, where companies are legally required to support the government) with Western, voluntary strategic partnerships operating over dual-use cyber technologies.\n\n## Flawed Models of Public-Private Interaction\n\nInglis identified three historical models of interaction that fail to deliver meaningful cybersecurity collaboration:\n\n* **Deconfliction:** Parties operate independently, only interacting when an accidental conflict occurs (\"bumping into each other in the middle of the night\") and then resetting to separate silos.\n* **Division of Effort:** An explicit arrangement where one party handles task A and the other handles task B under the assumption of a clean seam between them. Inglis emphasized this functions as an \"agreement to not collaborate,\" leaving each side unaware of what both could discern together.\n* **Subordination:** Attempting to impose a hierarchy where one entity reports to or is subordinated by another. Inglis noted this approach fails because cyberspace is inherently non-hierarchical.\n\nInglis observed that organizations routinely overestimate what the government knows, underestimate what the private sector knows, and neglect what both sides could discover jointly.\n\n## Genuine Collaboration and Collective Discovery\n\nTo build effective defense, Inglis argued for moving beyond simple information pooling or passive information sharing. Instead, public and private entities require \"professional intimacy\" to connect disparate data points:\n* **Fusing Incomplete Intelligence:** Defending cyberspace requires pairing shards, shreds, or hunches from one side with unanalyzed or unknown data on the other to reveal insights that neither could identify alone.\n* **Non-Hierarchical Frameworks:** Collaboration must be structured horizontally to reflect the decentralized, dual-use nature of digital infrastructure.\n\n## International & Domestic Implementations\n\nInglis highlighted operational efforts actively implementing this collaborative model:\n* **United Kingdom:** The National Cyber Security Centre (NCSC).\n* **Israel:** Analogous integrated public-private initiatives.\n* **United States:** The Cybersecurity and Infrastructure Security Agency (CISA) through its Joint Cyber Defense Collaborative (JCDC). Inglis noted that while bringing multiple public and private entities together onto a single operational floor can be noisy and complex, the collaborative model is actively proving its value by surfacing critical security insights.",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "HiHhwQ0eCyk",
+      "slug": "keynote-measure-security-effectively",
+      "title": "Keynote: Measure Security Effectively",
+      "speakers": [
+        "George Do"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "keynote-measure",
+        "measure-effectively",
+        "measure",
+        "effectively"
+      ],
+      "teaser": "Provides keynote: Measure Security Effectively and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 3521,
+      "conference": "black-hat",
+      "aiSummary": "Overview:\nIn this Black Hat Singapore keynote session, conference organizers and George Do, CISO at Gojek and GoTo Financial, explore developer-centric security models and actionable cybersecurity measurement. The introductory remarks highlight the necessity of empowering software developers to own security given extreme personnel ratios and cloud abstraction. George Do then presents strategies for security leaders to escape the organizational perception of being \"Mordac, the Preventer of Information Services,\" arguing that security initiatives must be quantitatively measured against real business risk rather than operated in a bureaucratic vacuum.\n\nKey Topics:\n- The developer-to-security expert staffing imbalance (often 100:1) and the shift-left security paradigm\n- Transforming security teams from gating checkpoints into developer-enabling advisors within cloud and infrastructure-as-code environments\n- Overcoming the organizational perception of security as \"Mordac\" or \"CIS-No\"\n- Establishing quantitative, business-aligned security metrics that demonstrate tangible risk reduction from the trenches to the boardroom\n\nTechnical Details:\nThe keynote opens by addressing the structural realities of modern software engineering and enterprise infrastructure. With infrastructure, networking, and cloud configurations now defined entirely as code (IaC), development teams dictate operational velocity. The speaker emphasizes that security teams cannot act as centralized gating bottlenecks because developer-to-AppSec specialist ratios frequently reach 100 to 1. Denying developers access to open-source components merely forces them to write proprietary code that carries equal or greater defect density. To achieve scalable security, organizations must embed AppSec specialists directly into development squads and deploy tooling that mirrors native developer workflows rather than legacy compliance scanners.\n\nGeorge Do takes the stage to address the governance challenge of demonstrating value and moving the security needle from technical trenches to the executive boardroom. Reflecting on leadership roles across NASA, Equinix, Exodus/CenturyLink, and TiVo, Do illustrates the common organizational dysfunction where security is viewed as \"Mordac, the Preventer of Information Services\" (from the Dilbert comic) or \"CIS-No.\" This occurs when security policies are formulated in isolation without regard for business friction, imposing absurd hurdles—analogous to requiring users to \"stare directly at the sun to log in\"—that alienate engineering teams and impede operational efficiency.\n\nTo counteract this dynamic, Do argues that security leaders must replace subjective compliance checklists with empirical, risk-adjusted metrics. Security programs must measure whether ongoing investments in tooling, personnel, and process engineering actually reduce business-impacting attack surfaces. Meaningful metrics must capture the operational velocity of remediation, the resilience of critical business workflows, and the alignment of defensive controls with regulatory requirements, enabling CISOs to articulate security value effectively to executive boards.\n\nKey Takeaways:\nEnterprises must transition to developer-first security models where security teams act as supportive enablers rather than obstructive gating authorities. AppSec tooling must integrate directly into existing developer pipelines with minimal friction to achieve adoption across high developer-to-security ratios. Cybersecurity leadership must replace bureaucratic mandates with clear, business-aligned metrics that measure actual risk reduction and maintain executive alignment.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "_3sLY-UUpGU",
+      "slug": "locknote-conclusions-and-key-takeaways-from-black-hat-asia-2022",
+      "title": "Locknote: Conclusions and Key Takeaways from Black Hat Asia 2022",
+      "speakers": [
+        "Ryan Flores",
+        "Lidia Giuliano",
+        "Vandana Verma",
+        "Stefano Zanero"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "locknote-conclusions",
+        "conclusions-takeaways",
+        "takeaways-from",
+        "from-black",
+        "black-asia"
+      ],
+      "teaser": "Analyzes locknote: Conclusions and Key Takeaways from Black Hat Asia 2022 and evaluates key implications for security practitioners.",
+      "summary": "Black Hat Asia 2022 closing locknote panel discussing conference takeaways and future InfoSec strategy.",
+      "durationSeconds": 2804,
+      "conference": "black-hat"
+    },
+    {
+      "youtubeId": "B2dFcxXlyZ8",
+      "slug": "keynote-hackingdemocracy-will-our-societies-hold",
+      "title": "Keynote: #HackingDemocracy: Will Our Societies Hold?",
+      "speakers": [
+        "Samir Saran"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "keynote-hackingdemocracy",
+        "hackingdemocracy-will",
+        "will-societies",
+        "societies-hold"
+      ],
+      "teaser": "Evaluates keynote: #HackingDemocracy: Will enterprise Societies Hold and evaluates key implications for security practitioners.",
+      "summary": "Black Hat Asia 2022 opening keynote arguing technology threatens democracy and calling for transnational platform governance.",
+      "durationSeconds": 3132,
+      "conference": "black-hat",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "SFV68XHAeKk",
+      "slug": "sidewinder-uncoils-to-strike",
+      "title": "SideWinder Uncoils to Strike",
+      "speakers": [
+        "Noushin Shabab"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "sidewinder-uncoils",
+        "uncoils-strike",
+        "sidewinder",
+        "uncoils",
+        "strike"
+      ],
+      "teaser": "Examines sideWinder Uncoils to Strike and evaluates key implications for security practitioners.",
+      "summary": "Covers sidewinder uncoils to strike related to sidewinder uncoils, uncoils strike, sidewinder.",
+      "durationSeconds": 2467,
+      "conference": "black-hat",
+      "aiSummary": "## Overview\n\nPresented by Noushin Shabab, a security researcher with over a decade of malware analysis experience from Kaspersky's Global Research and Analysis Team (GReAT), this talk analyzes the recent evolution of the advanced persistent threat (APT) group known as **SideWinder** (also tracked as **Rattlesnake** or **T-APT-04**). Active since at least 2012, SideWinder was first reported on by Kaspersky in January 2018. \n\nOver the past two years, the threat actor demonstrated an unusually high operational tempo, executing over 1,000 new attacks—a volume rarely observed among tracked APT groups. While historically concentrated in Central and South Asian countries such as Pakistan, Bangladesh, Sri Lanka, and Nepal, SideWinder's targeting has expanded geographically to include Europe, the Middle East, Africa, and broader Asia. Targeted profiles span:\n* Military, maritime, and naval entities\n* Police and law enforcement\n* Foreign affairs ministries and associated diplomatic departments\n* Scientific, defense, and aviation organizations\n* IT entities and law firms\n\n---\n\n## Infrastructure & Operational Scale\n\nTo sustain its aggressive campaign volume while evading detection, SideWinder relies on an expansive network infrastructure:\n* **Domain and Subdomain Redundancy:** The group actively provisions and maintains hundreds of domains and subdomains serving dual roles as command-and-control (C2) communication points and stage-download servers.\n* **Continuous Domain Rotation:** New domains and subdomains are constantly registered to ensure operations persist even after prior infrastructure is identified and burned.\n* **URL Splitting:** The actor splits the full C2 communication URLs across distinct attack stages and components. Consequently, extracting and reverse-engineering a single stage sample is insufficient to reconstruct the full destination URL without the preceding fragments.\n\n---\n\n## Infection Vectors & Malware Delivery\n\nSideWinder employs multi-stage infection chains relying heavily on common initial delivery formats, memory execution, and LOLBins (Living off the Land Binaries):\n\n* **Exploit Documents:** Attackers deliver malicious Rich Text Format (RTF) files targeting known, unpatched vulnerabilities in Microsoft Word.\n* **LNK Shortcuts:** In alternate delivery chains, Windows shortcut (`.lnk`) files execute embedded commands that reach out to remote servers and leverage `mshta.exe` to run remote payloads.\n* **HTA / Obfuscated JavaScript:** Delivery documents or shortcuts trigger HTML Application (`.hta`) files containing heavily obfuscated JavaScript.\n\n---\n\n## Multi-Stage Execution Chain & Evasion Techniques\n\nThe threat actor exhibits a high degree of technical sophistication designed to prolong dwell time and frustrate forensic analysis:\n\n* **Staged Loading:**\n  * **First Stage (Downloader):** The initial `.hta` drops and executes an obfuscated JavaScript routine that loads an in-memory .NET downloader module.\n  * **Download Server Callback:** The downloader fetches a secondary `.hta` file hosting another layer of obfuscated JavaScript.\n  * **Installer & Side-Loading:** The secondary JavaScript unpacks a .NET installer module that drops the components of the final backdoor. It loads a backdoor loader into memory via **DLL side-loading**, which subsequently executes the core backdoor module.\n  * **Streamlined Variant:** In alternative chains, the actor streamlines execution by omitting the initial intermediate downloader stage, directly delivering the `.hta`/JavaScript installer module from the exploit document.\n* **Defense Evasion:** \n  * In-memory resident payloads to minimize disk footprints.\n  * Layered script obfuscation across all HTA components.\n  * Multi-layer encryption utilizing distinct, unique cryptographic keys for each individual malware sample.",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "4uG1bssE0pE",
+      "slug": "the-next-gen-plugx-shadowpad-a-dive-into-the-emerging-china-nexu",
+      "title": "The Next Gen PlugX/ShadowPad? A Dive into the Emerging China-Nexus Modular Trojan, Pangolin8RAT",
+      "speakers": [],
+      "track": "malware",
+      "topics": [
+        "next-plugx",
+        "plugx-shadowpad",
+        "shadowpad-dive",
+        "dive-into",
+        "into-emerging"
+      ],
+      "teaser": "Analyzes the Next Gen PlugX/ShadowPad? A Dive into the Emerging China-Nexus Modular Trojan, Pangolin8RAT and evaluates key implications for security practitioners.",
+      "summary": "Covers the next gen plugx/shadowpad? a dive into the emerging china-nexus modular trojan, pangolin8rat related to next plugx, plugx shadowpad, shadowpad dive.",
+      "durationSeconds": 2506,
+      "conference": "black-hat",
+      "aiSummary": "Overview:\nSylvia and Leon from threat intelligence firm TeamT5 present an in-depth analysis of Pangolin8RAT, an emerging modular Trojan associated with Chinese state-sponsored espionage. The speakers compare Pangolin8RAT with prolific malware families like PlugX and ShadowPad, detailing shared toolsets and infrastructure across threat groups such as APT41 (Amoeba), Fishmaster (Lushkar Earth), and a newly tracked cluster designated Tianwu. The presentation breaks down Pangolin8RAT's architecture, multi-protocol communication capabilities, and advanced anti-analysis mechanisms observed in real-world campaigns across the Asia-Pacific region.\n\nKey Topics:\n- Lineage, evolution, and modular architecture comparisons between PlugX, ShadowPad, and Pangolin8RAT\n- Threat actor attribution linking Tianwu, APT41 (Amoeba), and Fishmaster (Lushkar Earth / TAC-022)\n- Multi-stage installer execution, COM Session Moniker UAC bypass, and memory-only module execution\n- Evasion and persistence mechanics: AES encrypted resource blobs, EnumSystemCodePagesW callback execution, and KCP C2 communication\n\nTechnical Details:\nThe researchers trace the history of Chinese-nexus modular malware, beginning with PlugX (active for over a decade and widely distributed across multiple threat clusters) and ShadowPad (introduced in 2015 as a tightly controlled, highly obfuscated successor). Since late 2019, TeamT5 observed the emergence of Pangolin8RAT, named after its internal PDB path containing \"pangolin\" and Runtime Type Information (RTTI) strings containing \"pla\". Pangolin8RAT shares core tactical patterns with tools used by APT41 (Amoeba) and Fishmaster (Lushkar Earth), including modular extensibility, KCP communication protocols, and custom Cobalt Strike beacons. TeamT5 tracks the primary threat cluster deploying Pangolin8RAT across the APAC region under the moniker Tianwu.\n\nPangolin8RAT’s infection pipeline begins with an installer written in C++ using Microsoft Foundation Classes (MFC), identified in debugging paths as ffc_loader. To escalate privileges on modern Windows environments, the installer employs a COM Session Moniker technique (Elevation:Administrator!new:{...}). The loader drops an encrypted configuration file named sm-cache.dat and loads encrypted modules embedded within its PE resource section. The custom resource structure stores metadata including module size, a CRC checksum, and an AES key/IV pair delimited by a hash symbol (#). The loader decrypts the payload using Windows Crypto APIs, decompresses the data via RtlDecompressBuffer, and verifies data integrity against the stored CRC checksum before execution.\n\nOver its evolution, the malware transitioned away from hardcoded cryptographic parameters toward dynamic in-memory execution. To evade Endpoint Detection and Response (EDR) agents, Pangolin8RAT converts its core functionality into position-independent shellcode using pe_to_shellcode and a native loader. It executes shellcode in memory by abusing benign Windows callback APIs, specifically invoking EnumSystemCodePagesW. The core module communicates with command-and-control (C2) servers over more than eight protocols—including custom TCP/UDP channels and KCP—while maintaining a streamlined \"light core\" variant supporting three serial communication protocols.\n\nKey Takeaways:\nDefenders must monitor for suspicious COM Session Moniker instantiations used for stealthy UAC bypass during user-space execution. Detection engineering should focus on identifying abnormal thread execution originating from undocumented Windows callback functions like EnumSystemCodePagesW. Organizations targeting APAC sectors must deploy telemetry capable of inspecting non-standard C2 transport mechanisms, such as KCP, and unbacked memory regions hosting injected shellcode.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "advanced"
+    }
+  ]
+}

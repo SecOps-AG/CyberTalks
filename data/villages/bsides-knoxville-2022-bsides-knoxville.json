@@ -1,0 +1,305 @@
+{
+  "villageSlug": "bsides-knoxville",
+  "villageName": "BSides Knoxville",
+  "eventSlug": "bsides-knoxville-2022",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLSLl20f41MU4xeVXtsjn9YC5hEJ7Qo9E7",
+  "description": "BSides Knoxville talks from BSides Knoxville 2022.",
+  "talks": [
+    {
+      "youtubeId": "WEr6tHv9pfw",
+      "slug": "joe-gray-netflosint-taking-an-often-overlooked-data-source-and-o",
+      "title": "Joe Gray - NetflOSINT: taking an often-overlooked data source and operationalizing it",
+      "speakers": [
+        "Joe Gray - NetflOSINT"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "gray-netflosint",
+        "netflosint-taking",
+        "taking-often-overlooked",
+        "often-overlooked-data",
+        "data-source"
+      ],
+      "teaser": "Outlines joe Gray - NetflOSINT: taking an often-overlooked data source and operationalizing it and evaluates key implications for security practitioners.",
+      "summary": "Operationalizing an often-overlooked Netflix OSINT data source.",
+      "durationSeconds": 2885,
+      "conference": "bsides",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "-k7XIyLIqec",
+      "slug": "angie-shue-defense-in-depth-for-email-security",
+      "title": "Angie Shue - Defense in Depth for Email Security",
+      "speakers": [
+        "Angie Shue"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "angie-shue",
+        "shue-defense",
+        "defense-depth",
+        "depth-email",
+        "angie"
+      ],
+      "teaser": "Discusses angie Shue - Defense in Depth for Email Security and evaluates key implications for security practitioners.",
+      "summary": "Defense-in-depth strategies for securing email systems.",
+      "durationSeconds": 2728,
+      "conference": "bsides",
+      "aiSummary": "Overview:\nAngie Shue, a cybersecurity engineer at TeamHealth, presents a defense-in-depth architecture for enterprise email security in healthcare, where protected health information (PHI) is heavily targeted. Shue explains the technical integration between cloud email security gateways and on-premises Microsoft Exchange across administrative and clinician domains. She details the coordination of Cisco Secure Email Cloud Gateway (CES) and Armorblox to mitigate advanced phishing, executive impersonation, and internal account compromise.\n\nKey Topics:\n- Healthcare-targeted email threats: PHI value, executive impersonation, and recipient-tailored phishing\n- Cisco Secure Email Cloud Gateway (CES) multi-stage filtering and Cisco Talos threat intelligence\n- Administrative filtering: CLI-based regex message filters, GUI content filters, and outbreak quarantines\n- API-driven post-delivery remediation and internal mail inspection using Armorblox via Exchange Web Services (EWS)\n\nTechnical Details:\nHealthcare organizations face relentless social engineering, from fake delivery notices and voicemail alerts to executive impersonation soliciting wire transfers or gift cards. Because TeamHealth operates an on-premises Microsoft Exchange environment split into an administrative domain and a high-mailbox, low-volume clinician domain, cloud-native security requires hybrid integration. To secure perimeter traffic, TeamHealth deploys Cisco Secure Email Cloud Gateway (CES, formerly IronPort/ESA) across two cloud data centers housing six virtual ESAs and a central Security Management Appliance (SMA), communicating over B2B IPsec VPNs for syslog and LDAP recipient validation (RAD).\n\nInbound mail traverses sequential inspection stages in CES. Cisco Talos sender reputation scores mail server IPs from -10 to +10; connections scoring below -5 are dropped, scores between -2 and -5 are rate-limited, and scores above +5 pass with standard throughput. CES then validates SPF, DKIM, and DMARC DNS records and applies geolocation filters that drop unauthorized regions (such as Russian mail servers) by default. Next, CLI-configured regex message filters inspect all headers. Cisco's anti-spam engine scores messages from 1 to 100, dropping emails rated 65+ and routing scores 35–65 to junk folders. Attachments are scrutinized by Sophos antivirus and Cisco Advanced Malware Protection (AMP) sandboxing, while outbreak filters temporarily hold suspicious messages until Talos issues updated signatures. If AMP detects a malicious file post-delivery, it leverages EWS APIs through an AWS WAF to execute automated mailbox remediation.\n\nTo monitor internal-only traffic and address perimeter bypasses, TeamHealth integrates Armorblox as a secondary layer. Armorblox interfaces directly with on-premises Exchange via EWS APIs. Operating post-delivery, it inspects messages within seconds, executing automated remediation before users open malicious emails. Armorblox also ingests reports from the employee abuse mailbox (reportphishing@teamhealth.com). When analysts confirm a malicious report, Armorblox executes automated bulk deletion across all matching emails organization-wide and maps whether victims forwarded the phishing email internally.\n\nKey Takeaways:\nEnterprise email defense requires combining pre-delivery gateway filtering with post-delivery API analysis. Gateways like Cisco CES must enforce strict Sender Reputation thresholds, comprehensive SPF/DKIM/DMARC validation, and attachment sandboxing. Secondary API solutions like Armorblox are essential to inspect internal email for compromised accounts, provide sub-second remediation via EWS, and automate fleet-wide removal of user-reported phishing campaigns.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "1TuUmqqtFTs",
+      "slug": "ross-flynn-say-hi-to-the-new-guy-how-diverse-backgrounds-can-mat",
+      "title": "Ross Flynn - Say Hi to the New Guy: How Diverse Backgrounds Can Mature Your Security Program",
+      "speakers": [
+        "Ross Flynn"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "ross-flynn",
+        "flynn-diverse",
+        "diverse-backgrounds",
+        "backgrounds-mature",
+        "mature-your"
+      ],
+      "teaser": "Outlines ross Flynn - Say Hi to the New Guy: How Diverse Backgrounds Can Mature Your Security Program and evaluates key implications for security practitioners.",
+      "summary": "How diverse backgrounds can mature a security program.",
+      "durationSeconds": 3194,
+      "conference": "bsides",
+      "aiSummary": "Overview:\nRoss Flynn, an information security professional with a background in crisis counseling, logistics, and transportation, delivers a presentation at BSides exploring how non-traditional career paths strengthen organizational cybersecurity programs. Flynn addresses the acute talent shortage and industry burnout within security teams, arguing that rigid hiring filters centered exclusively on computer science degrees or standard IT helpdesk progression limit problem-solving capacity. He details the specific operational, cultural, and interpersonal advantages that candidates from diverse career backgrounds contribute to enterprise security operations.\n\nKey Topics:\n- Cybersecurity talent acquisition challenges and hiring gatekeeping\n- Unique operational perspectives of non-traditional candidates\n- Cultural impact, self-directed learning, and remote team dynamics\n- Transferable skills: crisis communication, conflict de-escalation, and empathy\n\nTechnical Details:\nFlynn begins by examining the hiring landscape in cybersecurity, noting that organizations face expanding threat domains—such as those categorized in Henry Zhang’s cybersecurity domain map—yet continue to impose narrow qualifications on entry-level applicants. Standard job descriptions routinely demand five or more years of experience and advanced technical certifications for junior roles, creating unnecessary gatekeeping and reinforcing cognitive homogeneity. Drawing from his personal career transition from commercial truck driving, residential youth management, and logistics coordination into incident response and compliance, Flynn analyzes how non-standard experiences directly address key security challenges.\n\nThe presentation details three core areas where non-traditional hires deliver measurable value: perspective, culture, and transferable problem-solving capabilities. From a perspective standpoint, individuals who previously worked in business operations or administrative roles possess intuitive empathy for end users. They understand why employees circumvent cumbersome security controls or fall victim to phishing simulations, allowing security teams to craft realistic training and bridge the persistent cultural divide between IT security and business units. Furthermore, Flynn highlights how crisis counseling methodologies provide vital skills in de-escalating conflicts during audit findings, negotiating risk remediation with recalcitrant stakeholders, and establishing trust during high-stress disaster recovery planning.\n\nCulturally, Flynn argues that hiring managers should prioritize \"cultural contribution\" over passive \"cultural fit.\" Career changers frequently demonstrate immense personal drive, investing their own time and financial resources into self-directed study, home labs, and foundational training. Introducing this continuous learning mindset helps counter team complacency and cynicism often observed in traditional IT pipelines. He warns against the cognitive trap of the \"law of the instrument\" (treating every problem like a nail when the only tool is a hammer), demonstrating that non-technical backgrounds foster multi-disciplinary, lateral thinking essential for handling modern, unpredictable incident scenarios.\n\nKey Takeaways:\nSecurity leadership should reform recruiting pipelines by removing arbitrary credential barriers and evaluating candidates on problem-solving aptitude, critical thinking, and communication skills. Incorporating professionals from non-traditional disciplines enhances security culture, reduces adversarial friction between security teams and business units, and improves end-user security awareness programs. Organizations must establish structured onboarding and mentorship programs to rapidly bridge technical domain gaps for high-aptitude career transitioners.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "fYi1eSpNt04",
+      "slug": "ben-sadeghipour-would-i-even-be-here-if-it-wasnt-for-the-interne",
+      "title": "Ben Sadeghipour - Would I even be here if it wasn't for the Internet?",
+      "speakers": [
+        "Ben Sadeghipour"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "sadeghipour-would",
+        "would-even",
+        "even-here",
+        "here-wasn",
+        "wasn-internet"
+      ],
+      "teaser": "Explores ben Sadeghipour - Would practitioners even be here if it wasnt for the Internet and evaluates key implications for security practitioners.",
+      "summary": "Reflective talk on how the internet shaped a security career path.",
+      "durationSeconds": 3312,
+      "conference": "bsides",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "K_lW3bYdYok",
+      "slug": "david-branscome-using-dettect-and-the-mitre-att-and-ck-framework",
+      "title": "David Branscome - Using DeTTECT and the MITRE ATT&CK Framework to Assess Your Security Posture",
+      "speakers": [
+        "David Branscome"
+      ],
+      "track": "adversary-emulation",
+      "topics": [
+        "david-branscome",
+        "branscome-using",
+        "using-dettect",
+        "dettect-mitre",
+        "mitre-framework"
+      ],
+      "teaser": "Outlines david Branscome - Using DeTTECT and the MITRE ATT&CK Framework to Assess Your Security Posture and evaluates key implications for security practitioners.",
+      "summary": "Using DeTTECT and MITRE ATT&CK to assess security posture.",
+      "durationSeconds": 2914,
+      "conference": "bsides",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "CYih199QmoY",
+      "slug": "keith-weber-siemplifying-your-ir-playbook",
+      "title": "Keith Weber - SIEMplifying your IR playbook",
+      "speakers": [
+        "Keith Weber"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "keith-weber",
+        "weber-siemplifying",
+        "siemplifying-your",
+        "your-playbook",
+        "keith"
+      ],
+      "teaser": "Explores keith Weber - SIEMplifying your IR playbook and evaluates key implications for security practitioners.",
+      "summary": "SIEMplifying incident response playbooks for faster response.",
+      "durationSeconds": 2053,
+      "conference": "bsides",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "44ryfsRsUsk",
+      "slug": "brian-saylor-i-hate-you-getting-along-with-dev-teams",
+      "title": "Brian Saylor - I Hate You (getting along with dev teams)",
+      "speakers": [
+        "Brian Saylor"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "brian-saylor",
+        "saylor-hate",
+        "hate-getting",
+        "getting-along",
+        "along-with"
+      ],
+      "teaser": "Evaluates brian Saylor - practitioners Hate You (getting along with dev teams) and evaluates key implications for security practitioners.",
+      "summary": "Getting along with development teams as a security practitioner.",
+      "durationSeconds": 2362,
+      "conference": "bsides",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Oq_epUA1puk",
+      "slug": "nivedita-murthy-how-to-start-and-mature-an-appsec-program",
+      "title": "Nivedita Murthy - How to Start and Mature an AppSec Program",
+      "speakers": [
+        "Nivedita Murthy"
+      ],
+      "track": "appsec",
+      "topics": [
+        "nivedita-murthy",
+        "murthy-start",
+        "start-mature",
+        "mature-appsec",
+        "appsec-program"
+      ],
+      "teaser": "Provides nivedita Murthy - How to Start and Mature an AppSec Program and evaluates key implications for security practitioners.",
+      "summary": "How to start and mature an application security program.",
+      "durationSeconds": 2416,
+      "conference": "bsides",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "yb6RzNiHy5M",
+      "slug": "christine-horwege-measuring-cyber-programmatic-success-risk-or-s",
+      "title": "Christine Horwege - Measuring cyber programmatic success: risk or security?",
+      "speakers": [
+        "Christine Horwege"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "christine-horwege",
+        "horwege-measuring",
+        "measuring-programmatic",
+        "programmatic-success",
+        "success-risk"
+      ],
+      "teaser": "Details christine Horwege - Measuring cyber programmatic success: risk or security and evaluates key implications for security practitioners.",
+      "summary": "Measuring programmatic success by risk versus security outcomes.",
+      "durationSeconds": 2800,
+      "conference": "bsides",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "S8QsrgLNE0M",
+      "slug": "tim-schulz",
+      "title": "Tim Schulz",
+      "speakers": [
+        "Automating Adaptive Adversaries"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "schulz",
+        "security-operations",
+        "incident-response",
+        "detection-engineering",
+        "threat-hunting"
+      ],
+      "teaser": "Discusses tim Schulz and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2466,
+      "conference": "bsides"
+    },
+    {
+      "youtubeId": "v1GtAhLoYfM",
+      "slug": "brian-contos-cameras-cacs-and-clocks-enterprise-iot-security-suc",
+      "title": "Brian Contos - Cameras, CaCs & Clocks: Enterprise IoT Security Sucks",
+      "speakers": [
+        "Brian Contos"
+      ],
+      "track": "hardware",
+      "topics": [
+        "brian-contos",
+        "contos-cameras",
+        "cameras-cacs",
+        "cacs-clocks",
+        "clocks-enterprise"
+      ],
+      "teaser": "Details brian Contos - Cameras, CaCs & Clocks: Enterprise IoT Security Sucks and evaluates key implications for security practitioners.",
+      "summary": "Covers enterprise IoT security weaknesses involving cameras, clocks, and related devices.",
+      "durationSeconds": 2971,
+      "conference": "bsides",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "H3iL8_LzAjE",
+      "slug": "travis-goodspeed-an-amateurs-guide-to-microchip-decapsulation-ch",
+      "title": "Travis Goodspeed - An Amateur's Guide to Microchip Decapsulation Chemistry",
+      "speakers": [
+        "Travis Goodspeed"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "travis-goodspeed",
+        "goodspeed-amateur",
+        "amateur-guide",
+        "guide-microchip",
+        "microchip-decapsulation"
+      ],
+      "teaser": "Examines travis Goodspeed - An Amateurs Guide to Microchip Decapsulation Chemistry and evaluates key implications for security practitioners.",
+      "summary": "Guide to microchip decapsulation chemistry for hardware security research.",
+      "durationSeconds": 2454,
+      "conference": "bsides",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "hgwnh_iqecI",
+      "slug": "hudson-bush-goodbye-hacktive-directory-removing-active-directory",
+      "title": "Hudson Bush - Goodbye Hacktive Directory: Removing Active Directory default read permissions",
+      "speakers": [
+        "Hudson Bush"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "hudson-bush",
+        "bush-goodbye",
+        "goodbye-hacktive",
+        "hacktive-directory",
+        "directory-removing"
+      ],
+      "teaser": "Reviews hudson Bush - Goodbye Hacktive Directory: Removing Active Directory default read permissions and evaluates key implications for security practitioners.",
+      "summary": "Removing default Active Directory read permissions to reduce attack surface.",
+      "durationSeconds": 2937,
+      "conference": "bsides",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "PsRsMqus-so",
+      "slug": "adam-compton-to-burnout-and-back-again-a-hillbillys-journey",
+      "title": "Adam Compton - To Burnout and Back again, A Hillbilly's Journey",
+      "speakers": [
+        "Adam Compton"
+      ],
+      "track": "policy",
+      "topics": [
+        "adam-compton",
+        "compton-burnout",
+        "burnout-back",
+        "back-again",
+        "again-hillbilly"
+      ],
+      "teaser": "Discusses adam Compton - To Burnout and Back again, A Hillbillys Journey and evaluates key implications for security practitioners.",
+      "summary": "Personal story about burnout and recovery in security careers.",
+      "durationSeconds": 2705,
+      "conference": "bsides",
+      "difficulty": "beginner"
+    }
+  ]
+}

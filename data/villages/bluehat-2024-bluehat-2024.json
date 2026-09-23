@@ -1,0 +1,664 @@
+{
+  "villageSlug": "bluehat-2024",
+  "villageName": "BlueHat 2024",
+  "eventSlug": "bluehat-2024",
+  "conference": "community",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLXkmvDo4MfuttJeOeu9UGJQJOaN_eb0aO",
+  "description": "BlueHat 2024 talks from BlueHat 2024.",
+  "talks": [
+    {
+      "youtubeId": "w6SAqT4ZQik",
+      "slug": "day-1-keynote-chris-wysopal-aka-weld-pond-veracode-l0pht",
+      "title": "Day 1 Keynote: Chris Wysopal (AKA Weld Pond), VeraCode / L0pht",
+      "speakers": [
+        "Chris Wysopal"
+      ],
+      "track": "community",
+      "topics": [
+        "chri",
+        "wysopal",
+        "weld",
+        "pond",
+        "veracode"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Day 1 Keynote: Chris Wysopal (AKA Weld Pond), VeraCode / L0pht.",
+      "summary": "Day 1 keynote by Chris Wysopal (Weld Pond) on Microsoft's Secure Future Initiative.",
+      "durationSeconds": 2832,
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "hBGkmpBD20o",
+      "slug": "s01-the-two-sides-of-unoauthorized",
+      "title": "S01: The two sides of UnOAuthorized",
+      "speakers": [],
+      "track": "appsec",
+      "topics": [
+        "side",
+        "unoauthorized",
+        "vulnerability-research",
+        "sides"
+      ],
+      "teaser": "Security researchers examine technical aspects of S01: The two sides of UnOAuthorized.",
+      "summary": "Two sides of UnOAuthorized Azure privilege escalation with researcher and MSRC perspectives.",
+      "durationSeconds": 2409,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "diJl15Uwv8I",
+      "slug": "s02-tokens-and-takeovers-cloud-powered-supply-chain-attacks",
+      "title": "S02: Tokens & Takeovers: Cloud-Powered Supply Chain Attacks",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "supply-chain",
+        "token",
+        "takeover",
+        "cloud-powered",
+        "supply",
+        "chain"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning S02: Tokens & Takeovers: Cloud-Powered Supply Chain Attacks.",
+      "summary": "Tokens and takeovers: cloud-powered supply chain attacks via CI compromise.",
+      "durationSeconds": 2267,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "4Yrslt6wXN4",
+      "slug": "s03-double-agent-exploiting-pass-through-authentication-credenti",
+      "title": "S03: Double Agent: Exploiting Pass-through Authentication Credential Validation in AAD",
+      "speakers": [],
+      "track": "red-team",
+      "topics": [
+        "authentication",
+        "double",
+        "exploiting",
+        "pass-through",
+        "credential"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding S03: Double Agent: Exploiting Pass-through Authentication Credential Validation in AAD.",
+      "summary": "Double Agent exploits pass-through authentication credential validation in AAD.",
+      "durationSeconds": 1717,
+      "aiSummary": "Overview:\nAvi Ben-Maimon, co-founder and CTO at Cymulate, presents security research conducted by colleagues Eliran and Ohad exposing architectural flaws in Microsoft Azure Active Directory (AAD) Pass-through Authentication (PTA). The presentation details how hybrid identity environments utilizing Azure AD Connect to link multiple on-premises Active Directory forests to a single cloud tenant can be exploited. Ben-Maimon demonstrates how compromising an on-premises PTA agent enables cleartext credential harvesting, unauthorized cross-domain lateral movement, and tenant-wide cloud privilege escalation.\n\nKey Topics:\n- Architecture and operational mechanics of Azure AD Pass-through Authentication (PTA)\n- Multi-domain race conditions within unsegregated cloud authentication queues\n- Reverse engineering the .NET PTA agent and hooking credential validation routines\n- Cross-domain lateral movement, credential theft, and cloud privilege escalation vectors\n\nTechnical Details:\nIn hybrid Microsoft deployments, Pass-through Authentication validates cloud sign-ins against on-premises Active Directory domain controllers without storing password hashes in Azure. When a user authenticates at the Azure login portal, the credentials are encrypted and placed into a cloud queue. On-premises PTA agents establish outbound connections to poll this queue, forward credential pairs to local domain controllers via Kerberos or NTLM, and return a binary validation response to Azure. The researchers discovered that when multiple on-premises Active Directory domains (e.g., Domain A and Domain B) are synced to the same Azure tenant, Azure's queue fails to segregate requests by originating domain. Instead, all PTA agents poll from an unified queue, causing a race condition where Domain A's PTA agent frequently intercepts authentication requests originating from Domain B.\n\nTo exploit this behavior, the researchers decompiled the .NET-based PTA agent using standard .NET reverse engineering tools, targeting the internal `ValidateCredential` function. They developed a dynamic attack framework consisting of an unmanaged DLL injected into the running PTA process using Process Hacker and the CLR hosting interface, which in turn loaded a managed .NET DLL. The injected module hooks `ValidateCredential` at two critical stages: a pre-execution hook logs all incoming plaintext usernames and passwords traversing the agent, while a post-execution hook forces the function to unconditionally return `true`.\n\nBy running this hook on a compromised server in Domain A, attackers achieve two devastating impacts. First, they intercept and harvest credentials submitted by users across all synced domains that randomly land on the hooked agent. Second, by forcing positive authentication returns, attackers authenticate to Azure as any target user from any synced domain—even without possessing valid passwords. This facilitates seamless cross-forest lateral movement between completely isolated on-premises domains lacking trust relationships, and enables direct privilege escalation to Azure AD Global Administrator.\n\nKey Takeaways:\nSecurity teams must treat servers hosting Azure AD Connect and PTA agents as Tier 0 identity assets, applying stringent host-based access controls and behavioral monitoring. Organizations must enforce phishing-resistant Multi-Factor Authentication (MFA) via Conditional Access policies, as second-factor requirements prevent attackers from accessing cloud resources even if PTA validation is artificially bypassed. Identity architects should also review multi-forest synchronizations, ensuring tenant boundaries properly segregate critical authentication paths.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "UStCMhvRPPo",
+      "slug": "s04-creating-a-transparent-cloud-industry",
+      "title": "S04: Creating a Transparent Cloud Industry",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "creating",
+        "transparent",
+        "cloud",
+        "industry"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in S04: Creating a Transparent Cloud Industry.",
+      "summary": "Discussion on creating a more transparent cloud industry.",
+      "durationSeconds": 1682,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "OyTQB9oXe3s",
+      "slug": "s05-echoes-of-intrusion-demystifying-ms-graph-api-attacks",
+      "title": "S05: Echoes of Intrusion: Demystifying MS Graph API Attacks",
+      "speakers": [],
+      "track": "appsec",
+      "topics": [
+        "graph",
+        "echoe",
+        "intrusion",
+        "demystifying",
+        "attack",
+        "echoes"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning S05: Echoes of Intrusion: Demystifying MS Graph API Attacks.",
+      "summary": "Demystifying attacks against the Microsoft Graph API.",
+      "durationSeconds": 1617,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "wgXichA5ukY",
+      "slug": "s06-deprecating-azure-ad-graph-api-is-easy-and-other-lies-we-tel",
+      "title": "S06: Deprecating Azure AD Graph API is Easy and Other Lies We Tell Ourselves",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "azure",
+        "azure-ad",
+        "graph"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding S06: Deprecating Azure AD Graph API is Easy and Other Lies We Tell Ourselves.",
+      "summary": "Challenges deprecating Azure AD Graph API and migration realities.",
+      "durationSeconds": 1115,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "DzIkehasir4",
+      "slug": "s07-dcom-research-for-everyone",
+      "title": "S07: DCOM Research for Everyone!",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "dcom",
+        "everyone",
+        "research"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in S07: DCOM Research for Everyone!.",
+      "summary": "DCOM research made accessible for broader security researchers.",
+      "durationSeconds": 2722,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "EQh6apPSRP0",
+      "slug": "s08-outlook-unleashing-rce-chaos-cve-2024-30103-and-cve-2024-380",
+      "title": "S08: Outlook Unleashing RCE Chaos CVE-2024-30103 & CVE-2024-38021 & CVE-2024-38173",
+      "speakers": [],
+      "track": "red-team",
+      "topics": [
+        "rce",
+        "outlook",
+        "chao",
+        "cve-2024-30103",
+        "cve-2024-38021"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in S08: Outlook Unleashing RCE Chaos CVE-2024-30103 & CVE-2024-38021 & CVE-2024-38173.",
+      "summary": "Outlook vulnerabilities enabling RCE: CVE-2024-30103, CVE-2024-38021, CVE-2024-38173.",
+      "durationSeconds": 2346,
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "-3jxVIFGuQw",
+      "slug": "s09-pointer-problems-why-were-refactoring-the-windows-kernel",
+      "title": "S09: Pointer Problems - Why We’re Refactoring the Windows Kernel",
+      "speakers": [],
+      "track": "wireless",
+      "topics": [
+        "pointer",
+        "problems",
+        "refactoring",
+        "windows",
+        "kernel"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning S09: Pointer Problems - Why We’re Refactoring the Windows Kernel.",
+      "summary": "Why Microsoft is refactoring the Windows kernel due to pointer problems.",
+      "durationSeconds": 2643,
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "kfuOzDwv874",
+      "slug": "s10-how-microsoft-is-scaling-dast",
+      "title": "S10: How Microsoft is Scaling DAST",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "microsoft",
+        "dast",
+        "scaling"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning S10: How Microsoft is Scaling DAST.",
+      "summary": "How Microsoft scales DAST across its development pipeline.",
+      "durationSeconds": 1774,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "FRW7g_SHC8Q",
+      "slug": "s11-when-the-levee-breaks-exposing-critical-flaws-in-wi-fi-camer",
+      "title": "S11: When the Levee Breaks: Exposing Critical Flaws in Wi-Fi Camera Ecosystems",
+      "speakers": [],
+      "track": "wireless",
+      "topics": [
+        "wi-fi",
+        "levee",
+        "break",
+        "exposing",
+        "critical"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for S11: When the Levee Breaks: Exposing Critical Flaws in Wi-Fi Camera Ecosystems.",
+      "summary": "Exposing critical security flaws across Wi-Fi camera ecosystems.",
+      "durationSeconds": 2651,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "Uij5AGtIKCI",
+      "slug": "s12-sweet-quadreams-or-nightmare-before-christmas-dissecting-an",
+      "title": "S12: Sweet QuaDreams or Nightmare Before Christmas? Dissecting an iOS 0-day",
+      "speakers": [],
+      "track": "mobile",
+      "topics": [
+        "ios",
+        "sweet",
+        "quadream",
+        "nightmare",
+        "christma"
+      ],
+      "teaser": "Security researchers examine technical aspects of S12: Sweet QuaDreams or Nightmare Before Christmas? Dissecting an iOS 0-day.",
+      "summary": "Dissecting an iOS zero-day linked to QuaDream spyware.",
+      "durationSeconds": 1828,
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "sGQ7cQChdMQ",
+      "slug": "lt01-world-of-scams-presented-by-amit-tambe-f-secure",
+      "title": "LT01: World of Scams Presented by Amit Tambe (F-Secure)",
+      "speakers": [
+        "Amit Tambe"
+      ],
+      "track": "hardware",
+      "topics": [
+        "lt01",
+        "scam",
+        "presented",
+        "amit",
+        "tambe"
+      ],
+      "teaser": "Security researchers examine technical aspects of LT01: World of Scams Presented by Amit Tambe (F-Secure).",
+      "summary": "LT01 World of Scams presented by Amit Tambe (F-Secure).",
+      "durationSeconds": 824,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "qLrbP1po6gs",
+      "slug": "lt02-creating-a-developer-friendly-security-tool-by-susan-krkash",
+      "title": "LT02: Creating a Developer-Friendly Security Tool by Susan Krkasharian (Microsoft)",
+      "speakers": [
+        "Susan Krkasharian"
+      ],
+      "track": "hardware",
+      "topics": [
+        "lt02",
+        "creating",
+        "developer-friendly",
+        "tool",
+        "susan",
+        "krkasharian"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in LT02: Creating a Developer-Friendly Security Tool by Susan Krkasharian (Microsoft).",
+      "summary": "LT02 creating a developer-friendly security tool by Susan Krkasharian.",
+      "durationSeconds": 650,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "o-W8YcUmLqM",
+      "slug": "lt03-my-best-frenemy-presented-by-svetlana-gaivoronski-and-david",
+      "title": "LT03: My Best Frenemy Presented by Svetlana Gaivoronski and David B. Cross (Oracle)",
+      "speakers": [
+        "Svetlana Gaivoronski",
+        "David B. Cross"
+      ],
+      "track": "community",
+      "topics": [
+        "lt03",
+        "frenemy",
+        "presented",
+        "svetlana",
+        "gaivoronski"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for LT03: My Best Frenemy Presented by Svetlana Gaivoronski and David B. Cross (Oracle).",
+      "summary": "LT03 My Best Frenemy by Svetlana Gaivoronski and David B. Cross.",
+      "durationSeconds": 764,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5gt18zjFWBM",
+      "slug": "lt04-scaling-out-securing-open-source-presented-by-zachary-stein",
+      "title": "LT04: Scaling Out Securing Open Source Presented by Zachary Steindler from Microsoft",
+      "speakers": [
+        "Zachary Steindler"
+      ],
+      "track": "hardware",
+      "topics": [
+        "open-source",
+        "lt04",
+        "scaling",
+        "securing",
+        "open"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning LT04: Scaling Out Securing Open Source Presented by Zachary Steindler from Microsoft.",
+      "summary": "LT04 scaling out securing open source by Zachary Steindler.",
+      "durationSeconds": 828,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Kl7Dop1IGko",
+      "slug": "lt05-entitlements-on-macos-and-why-they-matter-by-yves-younan-ci",
+      "title": "LT05: Entitlements on macOS and why they matter by Yves Younan (Cisco Talos)",
+      "speakers": [
+        "Yves Younan"
+      ],
+      "track": "mobile",
+      "topics": [
+        "macos",
+        "cisco",
+        "lt05",
+        "entitlement",
+        "maco",
+        "they"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding LT05: Entitlements on macOS and why they matter by Yves Younan (Cisco Talos).",
+      "summary": "LT05 entitlements on macOS and why they matter by Yves Younan.",
+      "durationSeconds": 611,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "KOUaJIX9JEY",
+      "slug": "day-2-keynote-amanda-silver-cvp-microsoft-developer-division",
+      "title": "Day 2 Keynote: Amanda Silver, CVP, Microsoft Developer Division",
+      "speakers": [
+        "Amanda Silver"
+      ],
+      "track": "community",
+      "topics": [
+        "amanda",
+        "silver",
+        "microsoft",
+        "developer",
+        "division"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Day 2 Keynote: Amanda Silver, CVP, Microsoft Developer Division.",
+      "summary": "Day 2 keynote by Amanda Silver, CVP Microsoft Developer Division.",
+      "durationSeconds": 2760,
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "n7GVxDxwOUc",
+      "slug": "s13-patterns-in-the-shadows-scaling-threat-hunting-and-intel-for",
+      "title": "S13: Patterns in the Shadows: Scaling Threat Hunting & Intel for Modern Adversaries",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "threat-hunting",
+        "pattern",
+        "shadow",
+        "threat",
+        "hunting"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for S13: Patterns in the Shadows: Scaling Threat Hunting & Intel for Modern Adversaries.",
+      "summary": "Patterns in the shadows: scaling threat hunting and intelligence.",
+      "durationSeconds": 2326,
+      "aiSummary": "Overview:\nColin Cowie, Senior Threat Intelligence Analyst at Sophos, and Mark Parsons, Threat Hunter at Sophos, present an operational methodology for scaling threat hunting and intelligence clustering across 25,000 Managed Detection and Response (MDR) client environments. The speakers examine how the expansion of modern attack surfaces and the criminal gig economy necessitate structured threat clustering frameworks. The talk outlines Sophos's internal tracking system, detailing how analysts classify, track, and correlate evolving adversaries using behavioral patterns, graph visualization, and cross-functional telemetry.\n\nKey Topics:\n- Evolution of industry threat clustering methodologies from APT1 to modern gig economy tracking\n- Operational architecture of Sophos Threat Activity Clusters (STACs)\n- Graph-based correlation of malware, tools, and incidents using pyvis\n- Multi-tiered adversary intelligence modeling across tactical, operational, and strategic domains\n\nTechnical Details:\nThe presenters review the historical evolution of threat clustering across the cybersecurity sector, tracing modern practices back to Mandiant's 2013 APT1 report tracking Chinese state-sponsored espionage, CrowdStrike's geographical attribution taxonomy using animal naming conventions (such as pandas, kittens, and bears), and Mandiant's 2014 FIN4 reports introducing motivation-centric tracking. They highlight the necessity of temporary tracking constructs like Mandiant's Uncategorized (UNC) groups and reference Microsoft's research into the ransomware-as-a-service (RaaS) gig economy and 2023 threat actor taxonomy updates. In modern intrusion environments, the fragmentation of labor between initial access brokers (IABs), malware-as-a-service providers, and ransomware affiliates prevents analysts from relying strictly on static IOCs or single-firewall telemetry.\n\nTo manage intrusions across tens of thousands of client endpoints, Sophos developed Sophos Threat Activity Clusters (STACs), represented by numerical identifiers such as STAC 1870 and STAC 4663. When incoming security telemetry reveals suspicious activity, analysts first evaluate whether behaviors overlap with existing clusters. If novel activity is detected, a new STAC is instantiated based on the adversary's strategic motivation—differentiating state-sponsored actors, ideologically motivated hacktivists, initial access brokers, ransomware affiliates, or general financial criminals. Complex relationships between malware variants, distinct incidents, offensive tools, and clusters are dynamically mapped and visualized using pyvis, an open-source Python network graph library.\n\nThe lifecycle of a STAC is tracked across three structured knowledge layers: tactical knowledge (ephemeral observables, IPs, domains, and IOCs), operational knowledge (adversary intrusion timing, operating hours, and behavioral cadence), and strategic knowledge (affiliations, attribution, and long-term motives). When ongoing investigations yield deeper telemetry—such as instances where distinct Command-and-Control (C2) implants reveal divergent codebases upon reverse engineering—analysts continuously split or merge clusters to preserve attribution accuracy.\n\nKey Takeaways:\nSecurity operations protecting diverse environments must implement formal behavioral threat clustering models to track adversaries across fragmented toolsets and initial access brokers. Organizations should decouple operational hunting from rigid attribution early in investigations, utilizing uncategorized cluster containers (such as STACs) to monitor evolving intrusion patterns. Threat hunting workflows require close collaboration between telemetry analysts and malware reverse engineers to identify when multiple distinct actors or implants occupy the same compromised network.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "0jGUiaWAU04",
+      "slug": "s14-scaling-appsec-with-an-sdl-for-citizen-development",
+      "title": "S14: Scaling AppSec with an SDL for Citizen Development",
+      "speakers": [],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "citizen",
+        "development"
+      ],
+      "teaser": "Security researchers examine technical aspects of S14: Scaling AppSec with an SDL for Citizen Development.",
+      "summary": "Scaling application security with an SDL for citizen development.",
+      "durationSeconds": 2782,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "fFcyn6E98H8",
+      "slug": "s15-embedding-sysmon-logs-for-enhanced-threat-detection-a-practi",
+      "title": "S15: Embedding Sysmon Logs for Enhanced Threat Detection: A Practical Approach to RAG",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "threat-detection",
+        "detection",
+        "rag"
+      ],
+      "teaser": "Security researchers examine technical aspects of S15: Embedding Sysmon Logs for Enhanced Threat Detection: A Practical Approach to RAG.",
+      "summary": "Embedding Sysmon logs for enhanced threat detection using RAG.",
+      "durationSeconds": 2639,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "YFThifuJbMM",
+      "slug": "s16-three-decades-of-network-security-evolution",
+      "title": "S16: Three Decades of Network Security Evolution",
+      "speakers": [],
+      "track": "hardware",
+      "topics": [
+        "network-security",
+        "network",
+        "three",
+        "decade",
+        "evolution",
+        "decades"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for S16: Three Decades of Network Security Evolution.",
+      "summary": "Survey of network security evolution over three decades.",
+      "durationSeconds": 2444,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "U7p0J8aMZhM",
+      "slug": "s17-mstic-a-threat-intelligence-year-in-review",
+      "title": "S17: MSTIC - A Threat Intelligence Year in Review",
+      "speakers": [],
+      "track": "threat-intel",
+      "topics": [
+        "threat-intelligence",
+        "intelligence",
+        "mstic",
+        "threat",
+        "review"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning S17: MSTIC - A Threat Intelligence Year in Review.",
+      "summary": "Microsoft MSTIC threat intelligence year in review.",
+      "durationSeconds": 1885,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "J1QMbdgnY8M",
+      "slug": "s18-minting-silver-bullets-is-challenging",
+      "title": "S18: Minting Silver Bullets is Challenging",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "minting",
+        "silver",
+        "bullet",
+        "challenging",
+        "bullets"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in S18: Minting Silver Bullets is Challenging.",
+      "summary": "Why minting silver bullet security solutions is challenging.",
+      "durationSeconds": 1908,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "qi2DneFkRf4",
+      "slug": "s19-lessons-from-red-teaming-100-generative-ai-products",
+      "title": "S19: Lessons From Red Teaming 100 Generative AI Products",
+      "speakers": [],
+      "track": "ai-security",
+      "topics": [
+        "red-teaming",
+        "lesson",
+        "teaming",
+        "generative",
+        "product",
+        "lessons"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding S19: Lessons From Red Teaming 100 Generative AI Products.",
+      "summary": "Lessons from red teaming 100 generative AI products.",
+      "durationSeconds": 2099,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "jGSs4tiH7WM",
+      "slug": "s21-breaking-llm-apps-advances-in-prompt-injection-exploitation",
+      "title": "S21: Breaking LLM Apps - Advances in Prompt Injection Exploitation by Johann Rehberger",
+      "speakers": [
+        "Johann Rehberger"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "exploitation",
+        "llm",
+        "injection",
+        "prompt-injection"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding S21: Breaking LLM Apps - Advances in Prompt Injection Exploitation by Johann Rehberger.",
+      "summary": "Breaking LLM apps with advances in prompt injection exploitation.",
+      "durationSeconds": 2276,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "RFnOIYMOEeE",
+      "slug": "s22-pyrit-from-llm-security-research-to-practical-attacks",
+      "title": "S22: PyRIT: From LLM Security Research to Practical Attacks",
+      "speakers": [],
+      "track": "ai-security",
+      "topics": [
+        "security-research",
+        "llm",
+        "pyrit",
+        "from",
+        "research",
+        "practical"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning S22: PyRIT: From LLM Security Research to Practical Attacks.",
+      "summary": "PyRIT: from LLM security research to practical attacks.",
+      "durationSeconds": 1651,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "CEZYfTanQFk",
+      "slug": "s23-slip-securing-llms-ip-using-weights-decomposition",
+      "title": "S23: SLIP: Securing LLMs IP Using Weights Decomposition",
+      "speakers": [],
+      "track": "ai-security",
+      "topics": [
+        "slip",
+        "llm",
+        "weight",
+        "decomposition"
+      ],
+      "teaser": "Security researchers examine technical aspects of S23: SLIP: Securing LLMs IP Using Weights Decomposition.",
+      "summary": "SLIP secures LLM intellectual property using weights decomposition.",
+      "durationSeconds": 1740,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "wna5aIVfucI",
+      "slug": "s24-automate-ai-red-teaming-in-your-existing-tool-chain-with-pyr",
+      "title": "S24: Automate AI Red Teaming in your existing tool chain with PyRIT",
+      "speakers": [],
+      "track": "ai-security",
+      "topics": [
+        "red-teaming",
+        "automate",
+        "teaming",
+        "existing",
+        "tool"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in S24: Automate AI Red Teaming in your existing tool chain with PyRIT.",
+      "summary": "Automate AI red teaming in your existing toolchain with PyRIT.",
+      "durationSeconds": 1506,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "JKgMJMHO34Q",
+      "slug": "lt06-getting-in-tune-with-an-enterprise-by-brett-hawkins-ibm",
+      "title": "LT06: Getting \"In Tune\" with an Enterprise by Brett Hawkins (IBM)",
+      "speakers": [
+        "Brett Hawkins"
+      ],
+      "track": "community",
+      "topics": [
+        "lt06",
+        "getting",
+        "tune",
+        "brett",
+        "hawkin"
+      ],
+      "teaser": "Security researchers examine technical aspects of LT06: Getting \"In Tune\" with an Enterprise by Brett Hawkins (IBM).",
+      "summary": "LT06 getting in tune with an enterprise by Brett Hawkins.",
+      "durationSeconds": 848,
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "UWPlw7VvSA4",
+      "slug": "lt07-ais-got-muffins-the-rag-a-muffins-by-vivek-vinod-sharma-mic",
+      "title": "LT07: AI's got Muffins- the RAG-a-muffins!!! by Vivek Vinod Sharma (Microsoft)",
+      "speakers": [
+        "Vivek Vinod Sharma"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "lt07",
+        "muffins",
+        "rag-a-muffin",
+        "vivek",
+        "vinod",
+        "sharma"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for LT07: AI's got Muffins- the RAG-a-muffins!!! by Vivek Vinod Sharma (Microsoft).",
+      "summary": "LT07 AI's got Muffins - the RAG-a-muffins by Vivek Vinod Sharma.",
+      "durationSeconds": 800,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "tKgYjA86ah4",
+      "slug": "lt08-ransomware-resilience-turning-the-tide-against-cyber-extort",
+      "title": "LT08: Ransomware Resilience: Turning the Tide Against Cyber Extortion by Tom Williams",
+      "speakers": [
+        "Tom Williams"
+      ],
+      "track": "malware",
+      "topics": [
+        "ransomware",
+        "lt08",
+        "turning",
+        "tide"
+      ],
+      "teaser": "Security researchers examine technical aspects of LT08: Ransomware Resilience: Turning the Tide Against Cyber Extortion by Tom Williams.",
+      "summary": "LT08 ransomware resilience turning the tide by Tom Williams.",
+      "durationSeconds": 900,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "tt2RNENASZo",
+      "slug": "lt09-safechatai-presented-by-ayobami-olatunji-microsoft",
+      "title": "LT09: SafeChatAI Presented by Ayobami Olatunji (Microsoft)",
+      "speakers": [
+        "Ayobami Olatunji"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "lt09",
+        "safechatai",
+        "presented",
+        "ayobami",
+        "olatunji",
+        "microsoft"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for LT09: SafeChatAI Presented by Ayobami Olatunji (Microsoft).",
+      "summary": "LT09 SafeChatAI presented by Ayobami Olatunji.",
+      "durationSeconds": 839,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "1R4X3ST_aZg",
+      "slug": "lt10-firmware-security-middle-child-of-security-presented-by-nit",
+      "title": "LT10: Firmware Security: Middle Child of Security Presented by Nithin Sade (Google)",
+      "speakers": [
+        "Nithin Sade"
+      ],
+      "track": "hardware",
+      "topics": [
+        "firmware-security",
+        "lt10",
+        "hardware",
+        "middle",
+        "child",
+        "presented"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for LT10: Firmware Security: Middle Child of Security Presented by Nithin Sade (Google).",
+      "summary": "LT10 firmware security middle child by Nithin Sade (Google).",
+      "durationSeconds": 1071,
+      "difficulty": "advanced"
+    }
+  ]
+}

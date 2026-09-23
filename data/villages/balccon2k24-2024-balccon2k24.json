@@ -1,0 +1,541 @@
+{
+  "villageSlug": "balccon2k24",
+  "villageName": "BalCCon2k24",
+  "eventSlug": "balccon2k24-2024",
+  "conference": "balccon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLyHRd2YK1T4wzTNWtb4tPaz52Vry6XxQ7",
+  "description": "BalCCon2k24 talks from BalCCon2k24 2024.",
+  "talks": [
+    {
+      "youtubeId": "UtWNyTM9Uzg",
+      "slug": "ali-dev-ally",
+      "title": "Ali - Dev Ally",
+      "speakers": [
+        "Zero Days Foe"
+      ],
+      "track": "community",
+      "topics": [
+        "ally",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Security researchers investigate Ali - Dev Ally and analyze defensive countermeasures.",
+      "summary": "Ali, application security lead at Canon, shares a year of experiments testing runtime application self-protection (RASP) solutions. He discusses practical experiences evaluating different RASP products and his belief in sharing security knowledge through conferences.",
+      "durationSeconds": 3469,
+      "conference": "balccon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "0JQehQlrVx8",
+      "slug": "brian-darknet-data-deluge-a-script-kiddies-guide-to-efficient-le",
+      "title": "Brian - Darknet Data Deluge - A Script Kiddies Guide to Efficient Leak Analysis",
+      "speakers": [
+        "Darknet Data Deluge"
+      ],
+      "track": "community",
+      "topics": [
+        "darknet",
+        "brian",
+        "deluge",
+        "script",
+        "kiddie"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Brian - Darknet Data Deluge - A Script Kiddies Guide to Efficient Leak Analysis.",
+      "summary": "Brian from Switzerland's federal cyber security department presents a workflow for darknet data leak analysis. He covers terminology for structured vs unstructured leaks, how leaks are found and downloaded, analysis methods, and what an ideal analysis system would look.",
+      "durationSeconds": 3051,
+      "conference": "balccon",
+      "aiSummary": "Overview:\nSwiss cyber security specialist Brian presents a tactical guide to discovering, acquiring, and analyzing ransomware leaks and darknet data dumps at BalcCon. Drawing on experiences investigating real-world cyber extortion campaigns, Brian outlines the technical challenges of downloading multi-gigabyte and terabyte-scale archives over high-latency anonymity networks. He details custom automation pipelines built to scrape ransomware leak portals, bypass anti-bot protections, and systematically triage unstructured leak repositories to identify compromised corporate credentials and partner data.\n\nKey Topics:\n- Monitoring ransomware leak portals across cybercriminal gangs (Play, LockBit, 8Base) and darknet forums\n- Optimizing Tor connectivity and throughput using create_torrc and containerized proxies\n- Automating darknet scraping and bypassing anti-DDoS CAPTCHAs using Playwright and AI models\n- Tactical triage and forensic analysis of unstructured leak archives (user homes, cloud migrations, password files)\n\nTechnical Details:\nBrian outlines the operational landscape of darknet data dumps, spanning structured database breaches (such as NATO database sales on BreachForums or 440 GB Fortinet leaks in public S3 buckets) to massive unstructured dumps published by double-extortion ransomware groups. Because darknet onion services frequently suffer from extreme latency, low bandwidth, and single-source bottlenecks—sometimes requiring up to 20 days to download a single terabyte-scale leak—Brian developed custom tooling to optimize acquisition. To accelerate throughput, he utilizes create_torrc to query public node telemetry, filtering Tor routing tables to include only the 1,000 fastest relays situated within his local country, trading anonymity for download speed. He encapsulates this optimized Tor daemon within Docker containers to serve as an HTTP/SOCKS proxy for headless curl and Python clients.\n\nWhen ransomware groups implement JavaScript queuing systems, WebSockets, or CAPTCHA challenges to block automated scrapers (observed on portals like Play and Cloak), simple HTTP scraping fails. To overcome this, Brian implemented browser automation using Playwright and Chromium. To bypass CAPTCHAs, he trained a custom machine learning model on an hour of manually labeled CAPTCHA samples, allowing headless browsers to solve image challenges, navigate directory listings, and log webpage changes every 15 minutes via his \"Play Watcher\" daemon. This scraper detected when broken archive files were re-uploaded, allowing rapid re-fetching. For high-volume file transfers, he leverages tools like Aria2c, JDownloader with multi-threaded connection chunking, or seedboxes and services like Real-Debrid for clearnet torrent magnets.\n\nFor post-acquisition analysis, Brian examines real-world case studies including NullBulge's 1.22 TB leak of Disney Slack messages (retrieved via Web Archive copies of suspended clearnet sites and torrent seedboxes) and the Play ransomware leak targeting Swiss software provider Xplain. To efficiently triage unstructured dumps, Brian recommends inspecting user home directories (Desktop, Downloads) where employees store unencrypted password.txt files and unmanaged database backups from migrations. He also demonstrates search methodologies: searching for internal company codenames, business partner domains, and checking adjacent files—such as finding plaintext passwords written in plain text files directly alongside \"unbreakable\" encrypted zip archives.\n\nKey Takeaways:\nDefensive organizations and intelligence teams must actively monitor darknet ransomware portals to detect supply chain compromises and credential exposures before third-party incidents are publicly acknowledged. Accelerating leak ingestion requires specialized infrastructure: curated Tor routing configurations, multi-connection download managers, and headless browser automation with CAPTCHA-solving capabilities. Finally, enterprises must enforce automated endpoint hygiene to prevent staff from storing sensitive credentials, database exports, and migration dumps in personal desktop and download folders.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "0Hnnx1htlWo",
+      "slug": "cluosh-here-be-dragons",
+      "title": "cluosh - Here be Dragons",
+      "speakers": [
+        "Ghidra Decompiler API Adventures"
+      ],
+      "track": "malware",
+      "topics": [
+        "cluosh",
+        "dragon",
+        "dragons"
+      ],
+      "teaser": "Ghidra Decompiler API Adventures details cluosh - Here be Dragons.",
+      "summary": "Clash explores Ghidra decompiler API internals for advanced reverse engineering. The talk targets practitioners already familiar with Ghidra, diving into the C++ decompiler binary and API-level tooling beyond basic tutorials.",
+      "durationSeconds": 3306,
+      "conference": "balccon",
+      "aiSummary": "Overview:\nSecurity researcher cluosh presents an in-depth reverse engineering analysis of Ghidra's C++ decompiler architecture and the SLEIGH processor specification engine at BalcCon. The speaker details the decoupling between Ghidra's Java-based GUI and its standalone C++ native binaries, explaining the XML-based inter-process communication mechanisms used during analysis. Through practical demonstrations, cluosh illustrates how to directly interface with Ghidra's native libraries (sleigh, libdecomp) to build custom, high-speed command-line disassemblers and decompilers without invoking the Java runtime.\n\nKey Topics:\n- Ghidra dual architecture: Java front-end GUI and loaders versus C++ native decompiler (decompile, sleigh)\n- SLEIGH processor specification language, .sla bytecode files, and .pspec context variables\n- Low-level P-code intermediate representation: varnodes, address spaces, and Static Single Assignment (SSA) form\n- Building standalone native reverse engineering utilities using libdecomp, AssemblyEmit, and PcodeEmit\n\nTechnical Details:\ncluosh explains that Ghidra isolates its heavy lifting in C++ native binaries (decompile / decompile.exe and sleigh) running in separate processes, deliberately avoiding the Java Native Interface (JNI) so that decompiler segmentation faults do not crash the main Java application. Communication between the Java GUI and native back-end occurs over pipes using serialized XML streams. Architecture support is driven by SLEIGH, a domain-specific processor specification language compiled into binary .sla files (located under Ghidra/Processors/<arch>/data/languages/). When loading architectures like x86 or RISC-V, SLEIGH relies on processor specification (.pspec) files to establish hardware context variables, such as address size (addrsize) or execution mode flags (e.g., 16-bit, 32-bit, or 64-bit decoding).\n\nSLEIGH lifts machine instructions into P-code, an intermediate representation composed of P-code operations (PcodeOp) acting upon varnodes (Varnode). Varnodes represent storage locations defined by an address space (AddressSpace, such as memory, register, stack, or constant) and an offset. During decompilation, raw low-level P-code is transformed into High P-code structured in Static Single Assignment (SSA) form, introducing synthetic operations like MULTIEQUAL (phi-nodes) and INDIRECT to merge divergent execution paths and track memory aliases. The decompiler aggressively eliminates dead code; cluosh cautions that incorrect function prototypes or missing volatile annotations on memory-mapped I/O (MMIO) regions—such as those encountered when reverse engineering the BalcCon hardware badge—will cause Ghidra's dead-code elimination passes to completely purge active code sequences.\n\nTo bypass the Java UI entirely, cluosh details the programmatic interfaces within libdecomp (specifically the Translate interface, AssemblyEmit, and PcodeEmit). By instantiating a raw loader (LoadImage) that implements loadFill() via memcpy and mapping target binary dumps into memory, a developer can load an .sla file into a Sleigh instance, configure processor context registers, and iterate through address ranges to output disassembled assembly or lift raw P-code directly from the command line.\n\nKey Takeaways:\nReverse engineers can harness Ghidra's native C++ engine (libdecomp and compiled .sla specifications) as standalone, headless libraries for high-performance binary analysis, fuzzing, and custom tool development without Java GUI overhead. Analysts working on embedded and hardware targets must explicitly tag memory-mapped I/O address ranges as volatile and ensure precise function prototypes to prevent Ghidra's optimization passes from erroneously removing valid operations. Finally, examining intermediate P-code via Ghidra's debug XML exports provides crucial visibility into decompiler transformation bugs.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "BXkkykwVp-M",
+      "slug": "diogo-lemos-and-fabio-pinto-building-vs-buying-a-tale-of-develop",
+      "title": "Diogo Lemos & Fábio Pinto - Building vs. Buying - A Tale of Developing an In House SC",
+      "speakers": [
+        "Building vs. Buying"
+      ],
+      "track": "community",
+      "topics": [
+        "diogo",
+        "lemo",
+        "pinto",
+        "building",
+        "buying",
+        "tale"
+      ],
+      "teaser": "Security researchers examine technical aspects of Diogo Lemos & Fábio Pinto - Building vs. Buying - A Tale of Developing an In House SC.",
+      "summary": "Diogo Lemos and Fábio Pinto describe their decision at a large organization to build an in-house software composition analysis tool rather than purchase one. They share their engineering backgrounds and the story of developing SCA capabilities internally.",
+      "durationSeconds": 2555,
+      "conference": "balccon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "4waDha2DxK8",
+      "slug": "direct",
+      "title": "Direct",
+      "speakers": [
+        "Badge"
+      ],
+      "track": "community",
+      "topics": [
+        "direct",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Security researchers investigate Direct and analyze defensive countermeasures.",
+      "summary": "The BalCCon badge creator presents this year's conference badge, continuing last year's creative programmable design approach. The talk covers badge hardware, design process, documentation, and encourages attendees to experiment with the badge.",
+      "durationSeconds": 1525,
+      "conference": "balccon",
+      "aiSummary": "Overview:\nHardware hacker Flo introduces the design, firmware, and architectural trade-offs of the official BalCCon electronic conference badge. Presented at BalCCon, the talk outlines the engineering decisions behind building an ultra-low-cost, hackable RISC-V badge. Flo details the board's microcontroller constraints, analog input multiplexing, inter-badge communication bus, and built-in interactive firmware features developed with contributor Meo.\n\nKey Topics:\n- Low-cost embedded engineering using the WCH CH32V003 RISC-V microcontroller\n- Programming under tight resource constraints (16 KB Flash, 2 KB SRAM, no malloc)\n- Analog input multiplexing using resistor ladders and ADC GPIOs\n- Inter-badge communication via I2C, WCH-Link programming, and multiplayer games\n\nTechnical Details:\nTo deliver a free, functional badge to conference attendees while minimizing production costs, Flo selected the WCH CH32V003 microcontroller, an entry-level 32-bit RISC-V core costing approximately ten cents in volume. The microchip presents extreme memory and execution constraints: exactly 16 kilobytes of Flash ROM for executable code and 2 kilobytes of effective SRAM. These limitations completely rule out dynamic memory allocation, meaning standard C `malloc` cannot be used; all data structures, buffers, and state machines must be statically allocated in registers and global RAM. Power is delivered directly from an attached 3V to 5V battery pack without reverse-polarity, over-voltage, or under-voltage protection circuitry to minimize Bill-of-Materials (BOM) cost.\n\nThe badge hardware incorporates an ST7735 color LCD display connected via SPI, a piezo buzzer driven by toggling GPIO output frequencies to synthesize square-wave tones, and six tactile buttons split into two 3-button gamepads. To conserve limited microcontroller GPIO pins, the buttons are multiplexed onto two analog-to-digital converter (ADC) pins using resistor ladder networks. Pressing individual buttons or simultaneous combinations alters the circuit resistance, producing distinct analog voltage levels that firmware routines decode into digital input events. The PCB features six edge connectors that route shared power, ground, and I2C communication lines, allowing the badge to draw power and communicate with previous-year BalCCon badges or link multiple badges together in daisy-chained topologies.\n\nThe badge firmware ships with two primary interactive applications: a Melody Maker music composer (developed by Meo) allowing users to sequence musical notes, silences, and adjustable BPM speeds, and a fully functional Pong game. Pong can be played in single-player mode, two-player local mode sharing the split gamepad buttons, or multi-device mode where two badges exchange paddle coordinates and ball vectors over an I2C protocol defined in the open-source firmware headers. Firmware flashing is conducted using WCH-Link hardware debuggers via the Rust-based `wlink` CLI tool or custom ESP32 and Raspberry Pi programmer bridges.\n\nKey Takeaways:\nModern RISC-V microcontrollers like the CH32V003 make it feasible to build feature-rich, interactive embedded devices under extreme budget constraints when paired with careful resource management. Developers targeting constrained microcontrollers must utilize static memory allocation and analog multiplexing techniques like resistor ladders to maximize limited pinouts and RAM. Providing open-source schematics, standard I2C expansion headers, and accessible flashing workflows fosters active community engagement and custom firmware experimentation at hardware hacking events.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "tu-ei6OnbhE",
+      "slug": "erethon-dionysis-grigoropoulos-around-the-rf-world-in-60-minutes",
+      "title": "Erethon - Dionysis Grigoropoulos - Around the RF world in 60 minutes",
+      "speakers": [
+        "Dionysis Grigoropoulos"
+      ],
+      "track": "wireless",
+      "topics": [
+        "erethon",
+        "dionysi",
+        "grigoropoulo",
+        "around",
+        "dionysis"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Erethon - Dionysis Grigoropoulos - Around the RF world in 60 minutes.",
+      "summary": null,
+      "durationSeconds": 2860,
+      "conference": "balccon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "XywLVTbIRPE",
+      "slug": "fladnag-max-protecting-web-applications-with-foss",
+      "title": "fladnaG - Max - Protecting web applications with FOSS",
+      "speakers": [
+        "FOSS"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "fladnag",
+        "protecting",
+        "application",
+        "fos",
+        "applications"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for fladnaG - Max - Protecting web applications with FOSS.",
+      "summary": null,
+      "durationSeconds": 1900,
+      "conference": "balccon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "_LOwSJ1tiO8",
+      "slug": "goran-mahovlic-emi-emc-pre-compliance-on-cheap",
+      "title": "Goran Mahovlic - EMI EMC pre compliance on cheap",
+      "speakers": [
+        "Goran Mahovlic"
+      ],
+      "track": "policy",
+      "topics": [
+        "compliance",
+        "goran",
+        "mahovlic",
+        "cheap"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Goran Mahovlic - EMI EMC pre compliance on cheap.",
+      "summary": null,
+      "durationSeconds": 2469,
+      "conference": "balccon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "KSM6ocm2Cg4",
+      "slug": "igor-and-goran-reversing-and-repurposing-resin-3d-printer",
+      "title": "Igor and Goran - Reversing and repurposing resin 3D printer",
+      "speakers": [
+        "Igor",
+        "Goran"
+      ],
+      "track": "malware",
+      "topics": [
+        "igor",
+        "goran",
+        "reversing",
+        "repurposing",
+        "resin",
+        "printer"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Igor and Goran - Reversing and repurposing resin 3D printer.",
+      "summary": null,
+      "durationSeconds": 2433,
+      "conference": "balccon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "dX2E_3WZqq0",
+      "slug": "igor-brkic",
+      "title": "Igor Brkic",
+      "speakers": [
+        "Jellyfish Open Power Profiler"
+      ],
+      "track": "community",
+      "topics": [
+        "igor",
+        "brkic",
+        "vulnerability-research"
+      ],
+      "teaser": "Jellyfish Open Power Profiler analyzes Igor Brkic.",
+      "summary": null,
+      "durationSeconds": 2534,
+      "conference": "balccon"
+    },
+    {
+      "youtubeId": "Ys599cTXwuk",
+      "slug": "jani-kovacs-digital-twins-solving-a-puzzle-for-fleet-management",
+      "title": "Jani Kovacs - Digital Twins - Solving a puzzle for fleet management",
+      "speakers": [
+        "Digital Twins"
+      ],
+      "track": "community",
+      "topics": [
+        "jani",
+        "kovac",
+        "twin",
+        "solving",
+        "puzzle"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Jani Kovacs - Digital Twins - Solving a puzzle for fleet management.",
+      "summary": null,
+      "durationSeconds": 3071,
+      "conference": "balccon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "sJqyJ8pDqKY",
+      "slug": "kirils-solovjovs-remotely-snooping-on-traffic-patterns-using-net",
+      "title": "Kirils Solovjovs - Remotely snooping on traffic patterns using network protocols",
+      "speakers": [
+        "Kirils Solovjovs"
+      ],
+      "track": "community",
+      "topics": [
+        "kirils",
+        "solovjovs",
+        "remotely",
+        "snooping",
+        "traffic"
+      ],
+      "teaser": "Security researchers examine technical aspects of Kirils Solovjovs - Remotely snooping on traffic patterns using network protocols.",
+      "summary": null,
+      "durationSeconds": 2564,
+      "conference": "balccon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "tQtsbjydn6Q",
+      "slug": "lennert-preuth-its-only-light-right-hacking-the-shadows-of-govee",
+      "title": "Lennert Preuth - It's Only Light, Right - Hacking the Shadows of Govee",
+      "speakers": [
+        "Lennert Preuth"
+      ],
+      "track": "community",
+      "topics": [
+        "lennert",
+        "preuth",
+        "light",
+        "shadow"
+      ],
+      "teaser": "Security researchers examine technical aspects of Lennert Preuth - It's Only Light, Right - Hacking the Shadows of Govee.",
+      "summary": null,
+      "durationSeconds": 1429,
+      "conference": "balccon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "2dpb_JbEw7M",
+      "slug": "leyrer",
+      "title": "Leyrer",
+      "speakers": [
+        "Modern Command Line Tools"
+      ],
+      "track": "community",
+      "topics": [
+        "leyrer",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Modern Command Line Tools examines Leyrer.",
+      "summary": "### Overview\nIn this presentation at BalCCon, Martin Leyrer introduces a curated selection of modern command-line utilities written in the Rust programming language. Leyrer emphasizes that as computing environments have modernized—shifting from single-core architectures with limited RAM to multicore processors, gigabytes to terabytes of memory, and fast NVMe/SSD storage—legacy Unix utilities can fall short. Grounded in the Unix philosophy originally defined by Douglas McIlroy (doing one thing well, composing programs via pipelines, and handling text data), these Rust-based alternatives introduce modern optimizations, sensible defaults, Git awareness, and richer visual output without leaning into cloud dependencies or npm bloat.\n\n### Key Topics\n- **Philosophy and Design Conventions**: Rust-written CLI tools consistently adopt modern conventions: aggressive parallelization, respecting `.gitignore` files and hidden files automatically, reducing repetitive error noise (e.g., file permission warnings), and presenting colorful terminal output.\n- **File System and Text Utilities**: Replacements for staple tools like `cat`, `diff`, `find`, `grep`, and `ls` with tools that offer syntax highlighting, structural understanding, and regex optimizations.\n- **Disk and Process Inspection**: Utilities aimed at inspecting disk usage, mount points, and container-aware process tables.\n- **Data Wrangling and Security Applications**: Command-line utilities designed for structured data like CSV, HTML, and DNS records, as well as specialized tools for sanitizing wordlists and computing set operations across text files.\n\n### Technical Details\nLeyrer reviews numerous specific utilities across different domains:\n- **Text and Diffing**: `bat` acts as a `cat` clone with syntax highlighting, line numbers, non-printable character display, Git modification markers, and an automatic pager that shuts off when piped. `difftastic` performs structural diffs based on syntax and nesting rather than simple line-by-line comparisons. `sd` serves as an intuitive search-and-replace tool alternative to `sed`, featuring a string literal mode and simplified syntax.\n- **Navigation and File Search**: `zoxide` remembers visited paths for fast directory switching across major shells. `xcp` replaces `cp` with a progress bar and aggressive parallel IO tailored for modern SSDs. `fd` replaces `find` with faster execution, shorter syntax, default regex, and extension filtering (`-e`). `ripgrep` (`rg`) provides fast line-oriented searching that honors Git ignore rules and outperforms legacy search across large codebases like the Linux kernel.\n- **Directory and Disk Inspection**: `eza` (formerly `exa`) and `lsd` replace `ls`, adding file icons, tree views, mount details, Git repo status, and SELinux contexts. `diskonaut` / `dysk` (`dis`) lists file systems and physical disks with JSON output and SI/IEC unit options. `dust` improves upon `du` by providing an intuitive visual tree of disk usage while suppressing redundant permission denial warnings. `erdtree` (`et`) combines file system tree navigation, regex searching, and disk usage visualization.\n- **Process and File Management**: `procs` replaces `ps`, supporting dark/light theme detection, multi-column search, watch mode, and container inspection for Docker and Podman. `rip` acts as a safe removal tool, moving deleted files to a graveyard with restore capabilities (`rip -u`). `yazi` offers an asynchronous terminal file manager with inline preview, batch renaming, and `fzf` integration.\n- **Data, Logs, and Networking**: `tailspin` highlights log components (IPs, dates, numbers, error traces) on the fly, while `spacer` inserts visual demarcations when a command's output pauses. `csvlens` provides an interactive terminal viewer, searcher, and filter for CSV files. `dog` acts as a `dig` replacement supporting DNS over TLS (DoT) and DNS over HTTPS (DoH) with JSON output. `f-select` enables SQL queries against file systems and zip archives. `htmlq` operates like `jq` for HTML using CSS selectors. `inlyne` leverages the GPU to render markdown and HTML locally. `xh` is a fast HTTP tool with formatted responses and download progress indicators. `starship` supplies a fast, customizable shell prompt.\n- **Security and Set Operations**: For security auditing and password analysis, `tidy` efficiently merges and cleans large wordlists (deduplicating, trimming whitespace, and stripping specific character sets). `zet` performs fast mathematical set operations (union, intersect, diff, single) across multiple text files in parallel.\n\n### Takeaways\nWhile Leyrer notes that consultants and administrators may often be constrained to stock POSIX utilities on client systems, adopting these modern tools on local machines significantly speeds up daily tasks. Incorporating them via shell aliases, pairing them with interactive fuzzy finders like `fzf`, and utilizing emerging projects like Rust's `uutils` (a Rust implementation of coreutils) provides a safer, faster, and more ergonomic command-line workflow.",
+      "durationSeconds": 3671,
+      "conference": "balccon"
+    },
+    {
+      "youtubeId": "s54iUB5zaMU",
+      "slug": "maclemon-fonts-and-typography-how-do-they-work",
+      "title": "MacLemon - Fonts and Typography How do they work",
+      "speakers": [
+        "MacLemon"
+      ],
+      "track": "community",
+      "topics": [
+        "maclemon",
+        "font",
+        "typography",
+        "they",
+        "fonts"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for MacLemon - Fonts and Typography How do they work.",
+      "summary": null,
+      "durationSeconds": 4274,
+      "conference": "balccon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "e8jYtK4wMg8",
+      "slug": "max-k-taking-the-b-out-of-dba-an-unconventional-attack-path-agai",
+      "title": "Max K - Taking the B Out of DBA - An Unconventional Attack Path Against AD FS",
+      "speakers": [
+        "Max K"
+      ],
+      "track": "red-team",
+      "topics": [
+        "taking",
+        "unconventional",
+        "attack",
+        "path"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Max K - Taking the B Out of DBA - An Unconventional Attack Path Against AD FS.",
+      "summary": null,
+      "durationSeconds": 1630,
+      "conference": "balccon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "pbBBtHOf7Ow",
+      "slug": "nikolay-sivko-zero-instrumentation-observability-based-on-ebpf",
+      "title": "Nikolay Sivko - Zero instrumentation observability based on eBPF",
+      "speakers": [
+        "Nikolay Sivko"
+      ],
+      "track": "community",
+      "topics": [
+        "ebpf",
+        "nikolay",
+        "sivko",
+        "zero",
+        "instrumentation"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Nikolay Sivko - Zero instrumentation observability based on eBPF.",
+      "summary": null,
+      "durationSeconds": 2933,
+      "conference": "balccon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "TYFwyxu7REw",
+      "slug": "nip-rfid-going-deeper-quest-and-tools",
+      "title": "nip - RFID going deeper, quest and tools",
+      "speakers": [
+        "nip"
+      ],
+      "track": "wireless",
+      "topics": [
+        "rfid",
+        "deeper",
+        "quest",
+        "tool",
+        "tools"
+      ],
+      "teaser": "Security researchers examine technical aspects of nip - RFID going deeper, quest and tools.",
+      "summary": null,
+      "durationSeconds": 1120,
+      "conference": "balccon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "d2aWrkh8rjk",
+      "slug": "sandra-bardon-and-marc-rivero-lopez",
+      "title": "Sandra Bardón & Marc Rivero Lopez",
+      "speakers": [
+        "Dr. Jekyll",
+        "Mr. Hyde"
+      ],
+      "track": "community",
+      "topics": [
+        "sandra",
+        "bard",
+        "marc",
+        "rivero",
+        "lopez"
+      ],
+      "teaser": "Dr. Jekyll explores Sandra Bardón & Marc Rivero Lopez.",
+      "summary": null,
+      "durationSeconds": 3574,
+      "conference": "balccon"
+    },
+    {
+      "youtubeId": "tbSO6KdOFXs",
+      "slug": "vanja-svajcer",
+      "title": "Vanja Svajcer",
+      "speakers": [
+        "Exploring malicious Windows drivers"
+      ],
+      "track": "community",
+      "topics": [
+        "vanja",
+        "svajcer",
+        "vulnerability-research"
+      ],
+      "teaser": "Exploring malicious Windows drivers explores Vanja Svajcer.",
+      "summary": null,
+      "durationSeconds": 3230,
+      "conference": "balccon"
+    },
+    {
+      "youtubeId": "EROxio59wg8",
+      "slug": "vladan-nikolic",
+      "title": "Vladan Nikolic",
+      "speakers": [
+        "OT",
+        "SCADA security"
+      ],
+      "track": "community",
+      "topics": [
+        "vladan",
+        "nikolic",
+        "vulnerability-research"
+      ],
+      "teaser": "Security researchers investigate Vladan Nikolic and analyze defensive countermeasures.",
+      "summary": null,
+      "durationSeconds": 2846,
+      "conference": "balccon"
+    },
+    {
+      "youtubeId": "tO7xyTQ4Q10",
+      "slug": "vlatko-kosturjak-2",
+      "title": "Vlatko Kosturjak",
+      "speakers": [
+        "Hardware made Shadow"
+      ],
+      "track": "hardware",
+      "topics": [
+        "vlatko",
+        "kosturjak",
+        "vulnerability-research"
+      ],
+      "teaser": "Hardware made Shadow examines Vlatko Kosturjak.",
+      "summary": null,
+      "durationSeconds": 2932,
+      "conference": "balccon"
+    },
+    {
+      "youtubeId": "jaJAvCBL040",
+      "slug": "wolfgang-hotwagner-attackmate-a-modern-open-source-tool-for-auto",
+      "title": "Wolfgang Hotwagner - AttackMate - A modern open source tool for automating cyberattack",
+      "speakers": [
+        "Wolfgang Hotwagner"
+      ],
+      "track": "red-team",
+      "topics": [
+        "open-source",
+        "wolfgang",
+        "hotwagner",
+        "attackmate",
+        "modern"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Wolfgang Hotwagner - AttackMate - A modern open source tool for automating cyberattack.",
+      "summary": null,
+      "durationSeconds": 1842,
+      "conference": "balccon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "FvoZkoTFZIc",
+      "slug": "yuriy-arbitman-the-future-of-threat-mitigation-ai-in-the-battle",
+      "title": "Yuriy Arbitman - The Future of Threat Mitigation - AI in the Battle Against Sec Vuln",
+      "speakers": [
+        "Yuriy Arbitman"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "yuriy",
+        "arbitman",
+        "threat",
+        "mitigation",
+        "battle"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Yuriy Arbitman - The Future of Threat Mitigation - AI in the Battle Against Sec Vuln.",
+      "summary": null,
+      "durationSeconds": 2914,
+      "conference": "balccon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "8bn6d22Eu8Y",
+      "slug": "zarko-zivanov-using-trse-for-development-for-retro-computers",
+      "title": "Zarko Zivanov - Using TRSE for development for retro computers",
+      "speakers": [
+        "Zarko Zivanov"
+      ],
+      "track": "community",
+      "topics": [
+        "zarko",
+        "zivanov",
+        "trse",
+        "development",
+        "retro",
+        "computer"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Zarko Zivanov - Using TRSE for development for retro computers.",
+      "summary": null,
+      "durationSeconds": 3586,
+      "conference": "balccon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "-ql2P608Ukc",
+      "slug": "niharika-singhal-ethics-based-oenwashing-in-the-ai-licensing-dom",
+      "title": "Niharika Singhal - Ethics Based Oenwashing in the AI Licensing Domain",
+      "speakers": [
+        "Niharika Singhal"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ethics",
+        "niharika",
+        "singhal",
+        "ethic",
+        "oenwashing"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Niharika Singhal - Ethics Based Oenwashing in the AI Licensing Domain.",
+      "summary": "### Overview\nIn this talk, IT lawyer Niharika Singhal discusses research delivered alongside the Free Software Foundation Europe (FSFE) for the European Commission concerning ethics-based \"open washing\" in the artificial intelligence licensing domain. Singhal explains how AI vendors market models and software as \"open\" or \"free\" to gain public trust and reputational credit without providing full access to training data, model weights, or source code. She highlights the risks this practice poses to the free and open source software (FOSS) ecosystem, including legal ambiguity, erosion of established open-source standards, and regulatory circumvention.\n\n### Key Topics\n- **Understanding FOSS vs. AI Openness**: Traditional free software guarantees four core freedoms (to use, study, share, and improve), while open source ensures standardized, unencumbered access and legal interoperability. Singhal notes that AI systems are fundamentally distinct from traditional software because they comprise interconnected elements—such as machine learning frameworks, tokenizers, training datasets, and model weights.\n- **The Rise of Behavioral and Ethical Restrictions**: In recent years, licenses have increasingly integrated behavioral restrictions, such as the Hippocratic License (which restricts human rights violations), Meta’s Llama 2 and Llama 3 licenses (which impose use prohibitions and special commercial licensing thresholds), and the BigScience OpenRAIL-M license. While often created with good intentions, these clauses conflict directly with open-source definitions.\n- **Open Washing and Regulatory Drivers**: Under legal frameworks such as the European Union’s AI Act, open-source AI systems may receive exemptions or lighter regulatory and technical documentation burdens. Consequently, providers are incentivized to label restricted models as open to claim both regulatory benefits and public goodwill.\n\n### Technical Details & Industry Initiatives\n- **Defining AI Openness**: Currently, a universally accepted definition for open-source AI is lacking, though the Open Source Initiative (OSI) has been actively developing the Open Source AI Definition through numerous drafts (noting nine versions discussed in the talk). Key proposals evaluate AI openness either along a gradient (from maximally open to fully closed) or using scoring matrices assessing availability, documentation, and access.\n- **Legal and Architectural Challenges**: Model weights are outputs of running training data rather than source code in the traditional sense, complicating traditional software copyright and licensing mechanisms. Singhal argues that until comprehensive, dedicated AI licenses emerge, attempts to modify traditional open-source licensing models with custom restrictive terms break legal certainty.\n- **Interoperability and Downstream Harm**: Adding vague behavioral or commercial restrictions causes license proliferation, breaks compatibility with standard FOSS codebases, limits derivative works, prevents third-party code auditing, and subjects downstream users to vendor lock-in.\n\n### Takeaways & Recommendations\nSinghal and the FSFE advocate several core recommendations for policymakers and developers:\n- **Preserve Established Terminology**: The terms \"open\" and \"free\" must conform to definitions curated by the Free Software Foundation and OSI over 40 years. Models with behavioral or user-based limitations should instead be designated as \"responsible\" or \"restrictive\" licenses rather than open source.\n- **Separate Ethics from Licensing**: Ethical constraints and risk mitigations should be enforced via legislation, standard evaluation benchmarks, auditing tools (for fairness, explainability, and robustness), and institutional governance committees (e.g., Meta’s Oversight Board, Google DeepMind’s Responsibility and Safety Council, Microsoft’s AETHER committee), rather than ambiguous license clauses.\n- **Promote Future Legal Interoperability**: Any future dedicated AI licenses should remain legally interoperable with traditional free software licenses to ensure sustainable research, accessibility, and collaboration across the software ecosystem.",
+      "durationSeconds": 1871,
+      "conference": "balccon",
+      "difficulty": "beginner"
+    }
+  ]
+}

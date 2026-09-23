@@ -1,0 +1,2905 @@
+{
+  "villageSlug": "carolinacon",
+  "villageName": "CarolinaCon",
+  "eventSlug": "channel-carolinacon-ucty3dpz-2022",
+  "conference": "carolinacon",
+  "playlistUrl": "https://www.youtube.com/channel/UCTY3Dpz68CyrjwRzqkE4sFw/videos",
+  "description": "CarolinaCon talks from CarolinaCon 2022.",
+  "talks": [
+    {
+      "youtubeId": "oaxaYTCrfVg",
+      "slug": "strengthening-supply-chain-security-a-devsecops-perspective-by-a",
+      "title": "Strengthening Supply Chain Security: A DevSecOps Perspective by Ankit Giri",
+      "speakers": [
+        "Ankit Giri"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "devsecops",
+        "strengthening",
+        "supply",
+        "chain",
+        "devsecop",
+        "perspective"
+      ],
+      "teaser": "Strengthening Supply Chain Security: A DevSecOps Perspective by Ankit Giri.",
+      "summary": "Overview: Ankit Giri of BreachLock presents at CarolinaCon on supply chain security from a DevSecOps perspective, covering risks, challenges, and solutions across the software development lifecycle.\n\nKey Topics: Integrating security into CI/CD pipelines; Infrastructure-as-Code security gaps; AI/ML development tool risks; container and dependency scanning; and building developer-friendly security processes.\n\nTechnical Details: Giri warns that IaC templates consumed without security review propagate misconfigurations across entire infrastructures. He discusses how AI-powered development tools introduce new attack surfaces requiring updated security processes.\n\nTakeaways: Supply chain security requires securing code before it becomes infrastructure. DevSecOps teams must address IaC, dependencies, and AI-assisted development as interconnected risk vectors.",
+      "durationSeconds": 2378,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "m5qOSHUj_Kc",
+      "slug": "repercussions-from-the-absence-of-threat-actor-taxonomy-by-jeffr",
+      "title": "Repercussions from the Absence of Threat Actor Taxonomy by Jeffrey Bell",
+      "speakers": [
+        "Jeffrey Bell"
+      ],
+      "track": "community",
+      "topics": [
+        "repercussion",
+        "absence",
+        "threat",
+        "actor",
+        "taxonomy",
+        "jeffrey"
+      ],
+      "teaser": "Repercussions from the Absence of Threat Actor Taxonomy by Jeffrey Bell.",
+      "summary": "The Naming Problem\n\nJeffrey Bell argues inconsistent threat-actor naming undermines IOC accumulation and ATT&CK mapping. Without uniform taxonomy, the same actor appears under many aliases—he cites Kim Suuki referenced sixteen different ways across industry reports—fragmenting intelligence sharing.\n\nThreat Actor Categories\n\nBell groups actors into criminal (financial motives, e.g., Scattered Spider casino breaches), state-sponsored (geopolitical targets including elections, ICS, and research), and hacktivist (ideological, e.g., SiegedSec actions against Heritage Foundation). Overlaps exist, but buckets clarify motive and targeting context.\n\nMITRE ATT&CK as a Shared Language\n\nUsing a fictional SOC scenario, he shows vendors like CrowdStrike and Unit 42 independently observing overlapping infrastructure yet struggling to merge attribution. Bell proposes MITRE ATT&CK’s open knowledge base as a neutral framework to align TTPs across naming schemes, improving collective defense without marketing-driven alias proliferation.",
+      "durationSeconds": 1279,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ippHmk42hzs",
+      "slug": "explosive-overflow-lessons-from-rocket-science-by-mark-el-khoury",
+      "title": "Explosive overflow: Lessons from rocket science by Mark El-Khoury",
+      "speakers": [
+        "Explosive overflow"
+      ],
+      "track": "community",
+      "topics": [
+        "explosive",
+        "overflow",
+        "lesson",
+        "rocket",
+        "mark"
+      ],
+      "teaser": "Explosive overflow: Lessons from rocket science by Mark El-Khoury.",
+      "summary": "From Pentest PDFs to Systems Thinking\n\nMark El-Khoury recounts moving from repetitive penetration testing (“bug-to-PDF factory”) to product security engineering, inspired by Kelly Shortridge’s view that security is a subset of system resilience—not isolated component checks.\n\nAriane 5 and Integer Overflow\n\nThe Ariane 5 maiden flight exploded 30 seconds after launch when a 64-bit inertial velocity value converted to 16-bit overflowed, crashing guidance software—a famous case of reused Ariane 4 assumptions without range analysis despite static analysis tooling available pre-launch.\n\nSecure Development Reality\n\nEffective programs pair static analysis, dependency review, IaC scanning, secret removal, threat modeling, and training with engineering-friendly culture: low friction, psychological safety, and avoiding reflexive “no” that teams ignore. White House cyber policy highlights hardware, formal methods, and memory-safe languages—each costly at scale (e.g., rewriting massive C++ game engines impractical).\n\nGoogle and Industry Memory Safety\n\nGoogle’s advancing memory safety paper acknowledges gradual Rust adoption plus hardening C/C++ because full rewrites are unrealistic. Formal verification (Amazon s2n-TLS) works but demands enormous specialized effort; Ken Thompson’s trusting-trust essay reminds limits of any single assurance layer.",
+      "durationSeconds": 2988,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "ce645h848ss",
+      "slug": "ok-i-guess-we-doin-shells-now-creating-a-secure-web-server-from",
+      "title": "\"Ok I guess we doin' shells now:\" Creating a Secure Web Server from Two Vulnerable Web Servers",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "web",
+        "gues",
+        "doin",
+        "shell",
+        "creating",
+        "server"
+      ],
+      "teaser": "\"Ok I guess we doin' shells now:\" Creating a Secure Web Server from Two Vulnerable Web Servers.",
+      "summary": "Consensus-based defense\n\nThe speaker proposes building a secure web front end from two different vulnerable servers using Shell HTTP Response Factory logic: instead of detecting exploits after compromise, compare normalized HTTP responses from both backends on each request. If at least one stack is secure for a given flaw, mismatched output blocks the attack.\n\nNormalization challenges\n\nResponses must be made comparable by stripping or harmonizing server headers, cookies, JavaScript dictionary ordering, and similar differences before equality checks. The proxy needs no exploit-specific signatures or historical baseline—only live agreement between peers.\n\nHistorical examples\n\nCode Red's IIS buffer overflow would diverge from a Linux peer. Heartbleed-style memory leaks would not match a properly responding sibling. A CrowdStrike-like host failure can trigger failover to cold spares while preserving consensus guarantees. XZ Utils' liblzma backdoor affected many Linux tools but not Windows lz32.dll, so heterogeneous pairs reduce supply-chain single-point risk.\n\nUse cases\n\nThe approach suits legacy binaries, mixed-platform stacks, and deliberate risk diversification when one component is known vulnerable.",
+      "durationSeconds": 2616,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "G5PVVjIcLEU",
+      "slug": "recon-101-huge-needles-small-haystack-by-corey-overstreet",
+      "title": "Recon 101: Huge Needles, Small Haystack by Corey Overstreet",
+      "speakers": [
+        "Corey Overstreet"
+      ],
+      "track": "recon",
+      "topics": [
+        "recon",
+        "huge",
+        "needle",
+        "small",
+        "haystack",
+        "corey"
+      ],
+      "teaser": "Recon 101: Huge Needles, Small Haystack by Corey Overstreet.",
+      "summary": "CarolinaCon Recon 101 talk on finding needles in a haystack.",
+      "durationSeconds": 2300,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "fTYRr6ozr2s",
+      "slug": "the-hash-cat-factory-by-elrey741-alex-r",
+      "title": "The (hash)Cat Factory by elrey741 (Alex R.)",
+      "speakers": [
+        "elrey741"
+      ],
+      "track": "community",
+      "topics": [
+        "hash",
+        "factory",
+        "elrey741",
+        "alex"
+      ],
+      "teaser": "The (hash)Cat Factory by elrey741 (Alex R.).",
+      "summary": "carolinacon session on The (hash)Cat Factory by elrey741 (Alex R.).",
+      "durationSeconds": 2736,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "LLhDMDbT9dw",
+      "slug": "icy-bridge-project-needs-your-help-by-john-f-davis-math400",
+      "title": "Icy bridge project needs your help! by John F. Davis (Math400)",
+      "speakers": [
+        "John F. Davis"
+      ],
+      "track": "community",
+      "topics": [
+        "bridge",
+        "project",
+        "help",
+        "john"
+      ],
+      "teaser": "Icy bridge project needs your help! by John F. Davis (Math400).",
+      "summary": "John F. Davis presents an open-source project to detect dangerous ice on bridges using NCDOT traffic camera imagery and machine learning. Runs on GCP and AWS microservices and seeks volunteer contributors.",
+      "durationSeconds": 3509,
+      "conference": "carolinacon"
+    },
+    {
+      "youtubeId": "rNgpPeuP_kM",
+      "slug": "deconstructing-firewalls-by-trevon",
+      "title": "Deconstructing Firewalls by Trevon",
+      "speakers": [
+        "Trevon"
+      ],
+      "track": "community",
+      "topics": [
+        "firewalls",
+        "deconstructing",
+        "firewall",
+        "trevon"
+      ],
+      "teaser": "Coverage of Deconstructing Firewalls by Trevon from the conference program.",
+      "summary": "CarolinaCon talk on deconstructing firewalls.",
+      "durationSeconds": 1590,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "HscfPavffxs",
+      "slug": "kali-ma-pen-testing-the-connection-between-imds-and-hmds-by-dyla",
+      "title": "Kali Ma: Pen-Testing the Connection Between IMDs and HMDs by Dylan Schopmann",
+      "speakers": [
+        "Kali Ma"
+      ],
+      "track": "community",
+      "topics": [
+        "kali",
+        "pen-testing",
+        "connection",
+        "imd",
+        "hmd"
+      ],
+      "teaser": "Kali Ma: Pen-Testing the Connection Between IMDs and HMDs by Dylan Schopmann.",
+      "summary": "CarolinaCon talk on pen-testing connections between IMDs and HMDs.",
+      "durationSeconds": 1170,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "vlXhTUR4V9A",
+      "slug": "fuzzing-finding-your-own-bugs-and-0days-by-rodolpho-concurde-rod",
+      "title": "Fuzzing: Finding Your Own Bugs and 0days! by Rodolpho Concurde (ROd0X)",
+      "speakers": [
+        "Fuzzing"
+      ],
+      "track": "appsec",
+      "topics": [
+        "fuzzing",
+        "finding",
+        "bug",
+        "0day",
+        "rodolpho"
+      ],
+      "teaser": "Fuzzing: Finding Your Own Bugs and 0days! by Rodolpho Concurde (ROd0X).",
+      "summary": "CarolinaCon talk on fuzzing to find your own bugs and 0days.",
+      "durationSeconds": 2522,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "5h2hviuFIkg",
+      "slug": "dynamic-database-credentials-a-secure-and-efficient-approach-by",
+      "title": "Dynamic Database Credentials: A Secure and Efficient Approach by Harvey Cary",
+      "speakers": [
+        "Dynamic Database Credentials"
+      ],
+      "track": "appsec",
+      "topics": [
+        "database",
+        "credentials",
+        "dynamic",
+        "credential",
+        "efficient",
+        "approach"
+      ],
+      "teaser": "Dynamic Database Credentials: A Secure and Efficient Approach by Harvey Cary.",
+      "summary": "CarolinaCon talk on dynamic database credentials.",
+      "durationSeconds": 2482,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "wrwttOr2-Ho",
+      "slug": "shining-a-light-into-the-security-blackhole-of-iot-and-ot-by-hux",
+      "title": "Shining a light into the security blackhole of IoT and OT by Huxley Barbee",
+      "speakers": [
+        "Huxley Barbee"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "iot",
+        "shining",
+        "light",
+        "blackhole",
+        "huxley",
+        "barbee"
+      ],
+      "teaser": "Shining a light into the security blackhole of IoT and OT by Huxley Barbee.",
+      "summary": "CarolinaCon talk on IoT and OT security black holes.",
+      "durationSeconds": 1416,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "jJo2NV52fuo",
+      "slug": "protecting-yourself-from-people-like-me-by-chris-horner",
+      "title": "Protecting Yourself From People Like Me by Chris Horner",
+      "speakers": [
+        "Chris Horner"
+      ],
+      "track": "community",
+      "topics": [
+        "protecting",
+        "yourself",
+        "people",
+        "chri",
+        "horner"
+      ],
+      "teaser": "Protecting Yourself From People Like Me by Chris Horner.",
+      "summary": "CarolinaCon talk on protecting yourself from people like me.",
+      "durationSeconds": 1229,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "YdTgRVjr9uo",
+      "slug": "how-to-rob-a-bank-over-the-phone-by-joshua-crumbaugh",
+      "title": "How to Rob a Bank Over the Phone by Joshua Crumbaugh",
+      "speakers": [
+        "Joshua Crumbaugh"
+      ],
+      "track": "community",
+      "topics": [
+        "bank",
+        "phone",
+        "joshua",
+        "crumbaugh"
+      ],
+      "teaser": "How to Rob a Bank Over the Phone by Joshua Crumbaugh.",
+      "summary": "CarolinaCon talk on how to rob a bank over the phone.",
+      "durationSeconds": 2945,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5Eim48Hp-_E",
+      "slug": "hacking-humans-using-osint-to-put-together-social-engineering-sc",
+      "title": "Hacking Humans: Using OSINT to put together Social Engineering Scenarios that Always Work",
+      "speakers": [
+        "Hacking Humans"
+      ],
+      "track": "osint",
+      "topics": [
+        "social-engineering",
+        "social",
+        "human",
+        "osint",
+        "together",
+        "engineering"
+      ],
+      "teaser": "Hacking Humans: Using OSINT to put together Social Engineering Scenarios that Always Work.",
+      "summary": "CarolinaCon talk on using OSINT for social engineering scenarios.",
+      "durationSeconds": 3016,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "4y-Hz6JlBHo",
+      "slug": "crash-course-on-web-application-penetration-testing-thinking-out",
+      "title": "Crash Course on Web Application Penetration Testing - Thinking Outside the OWASP 10",
+      "speakers": [],
+      "track": "appsec",
+      "topics": [
+        "penetration-testing",
+        "web",
+        "owasp"
+      ],
+      "teaser": "Crash Course on Web Application Penetration Testing - Thinking Outside the OWASP 10.",
+      "summary": "CarolinaCon crash course on web application penetration testing.",
+      "durationSeconds": 2783,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ajb_t0TMi2A",
+      "slug": "host-based-detection-forensics-and-response-with-velociraptor",
+      "title": "Host-Based Detection, Forensics, and Response with Velociraptor",
+      "speakers": [
+        "Velociraptor"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "forensics",
+        "detection",
+        "velociraptor"
+      ],
+      "teaser": "Host-Based Detection, Forensics, and Response with Velociraptor.",
+      "summary": "CarolinaCon talk on host-based detection, forensics, and response with Velociraptor.",
+      "durationSeconds": 3212,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "iO84c4zCtqA",
+      "slug": "fuzzing-by-first-principles",
+      "title": "Fuzzing by First Principles",
+      "speakers": [],
+      "track": "appsec",
+      "topics": [
+        "fuzzing",
+        "principle",
+        "first"
+      ],
+      "teaser": "Coverage of Fuzzing by First Principles from the conference program.",
+      "summary": "CarolinaCon talk on fuzzing by first principles.",
+      "durationSeconds": 2470,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "wIfKO3ydJcA",
+      "slug": "practical-infrastructure-automation-for-red-teams",
+      "title": "Practical Infrastructure Automation For Red Teams",
+      "speakers": [],
+      "track": "red-team",
+      "topics": [
+        "automation",
+        "infrastructure",
+        "practical",
+        "team"
+      ],
+      "teaser": "Practical Infrastructure Automation For Red Teams.",
+      "summary": "CarolinaCon talk on practical infrastructure automation for red teams.",
+      "durationSeconds": 2505,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "jbhRRXyMHT8",
+      "slug": "catching-the-can-bus-car-hacking-on-a-budget",
+      "title": "Catching the CAN Bus: Car Hacking on a Budget",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "can-bus",
+        "car-hacking",
+        "catching",
+        "budget"
+      ],
+      "teaser": "Catching the CAN Bus: Car Hacking on a Budget.",
+      "summary": "CarolinaCon talk on catching the CAN bus and car hacking on a budget.",
+      "durationSeconds": 1501,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "jkv-JMlTn-4",
+      "slug": "hack-in-your-sleep",
+      "title": "Hack in Your Sleep",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "hack",
+        "sleep",
+        "your"
+      ],
+      "teaser": "Coverage of Hack in Your Sleep from the conference program.",
+      "summary": null,
+      "durationSeconds": 2808,
+      "conference": "carolinacon"
+    },
+    {
+      "youtubeId": "ibRVf3NagBI",
+      "slug": "dns-tunneling-down-the-rabbit-hole",
+      "title": "DNS tunneling down the rabbit hole",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "dns",
+        "tunneling",
+        "rabbit",
+        "hole"
+      ],
+      "teaser": "Coverage of DNS tunneling down the rabbit hole from the conference program.",
+      "summary": "CarolinaCon talk on DNS tunneling down the rabbit hole.",
+      "durationSeconds": 1260,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "CeTVYsDCrJc",
+      "slug": "your-ipv6-is-showing",
+      "title": "Your IPv6 is Showing",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "ipv6",
+        "showing",
+        "your"
+      ],
+      "teaser": "Coverage of Your IPv6 is Showing from the conference program.",
+      "summary": "CarolinaCon talk on your IPv6 is showing.",
+      "durationSeconds": 1802,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "3fsRF10kDYA",
+      "slug": "zero-day-net-and-nvidia-gfe-vulnerabilities-explained",
+      "title": "Zero-day .NET and Nvidia GFE Vulnerabilities Explained",
+      "speakers": [],
+      "track": "red-team",
+      "topics": [
+        "vulnerabilities",
+        "zero-day",
+        "vulnerabilitie",
+        "explained"
+      ],
+      "teaser": "Zero-day .NET and Nvidia GFE Vulnerabilities Explained.",
+      "summary": "CarolinaCon talk explaining zero-day .NET and Nvidia GFE vulnerabilities.",
+      "durationSeconds": 1629,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "SsN9ugxRXFE",
+      "slug": "fast-neural-networks-a-no-brainer-the-actor-model-as-neuron-by-r",
+      "title": "Fast Neural Networks... a no brainer! The Actor model as neuron (by Riccardo Terrell)",
+      "speakers": [
+        "Riccardo Terrell"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "neural-networks",
+        "networks",
+        "fast",
+        "neural",
+        "network",
+        "brainer"
+      ],
+      "teaser": "Fast Neural Networks... a no brainer! The Actor model as neuron (by Riccardo Terrell).",
+      "summary": "CarolinaCon talk on fast neural networks and the actor model.",
+      "durationSeconds": 3392,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "bYx1SXoSf8o",
+      "slug": "hidensneak-a-framework-to-obfuscate-attack-traffic-by-mike-hodge",
+      "title": "HideNSneak - A framework to obfuscate attack traffic (by Mike Hodges)",
+      "speakers": [
+        "Mike Hodges"
+      ],
+      "track": "malware",
+      "topics": [
+        "framework",
+        "hidensneak",
+        "obfuscate",
+        "attack",
+        "traffic",
+        "mike"
+      ],
+      "teaser": "HideNSneak - A framework to obfuscate attack traffic (by Mike Hodges).",
+      "summary": "CarolinaCon talk on HideNSneak framework for obfuscating attack traffic.",
+      "durationSeconds": 1935,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "OiA_guLR_NQ",
+      "slug": "blockchain-the-new-digital-swiss-army-knife-by-g-mark-hardy",
+      "title": "Blockchain: The New Digital Swiss Army Knife? (by G. Mark Hardy)",
+      "speakers": [
+        "Blockchain"
+      ],
+      "track": "privacy",
+      "topics": [
+        "blockchain",
+        "swis",
+        "army",
+        "knife",
+        "mark"
+      ],
+      "teaser": "Blockchain: The New Digital Swiss Army Knife? (by G. Mark Hardy).",
+      "summary": "CarolinaCon talk on blockchain as a digital Swiss Army knife.",
+      "durationSeconds": 3699,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "xN24EKUfKOY",
+      "slug": "show-the-threat-data-visualization-and-infosec-by-tj-reonfleek",
+      "title": "Show the Threat: Data Visualization and InfoSec (by TJ (@reonfleek))",
+      "speakers": [
+        "TJ"
+      ],
+      "track": "community",
+      "topics": [
+        "visualization",
+        "show",
+        "threat",
+        "reonfleek"
+      ],
+      "teaser": "Show the Threat: Data Visualization and InfoSec (by TJ (@reonfleek)).",
+      "summary": "CarolinaCon talk on showing the threat with data visualization.",
+      "durationSeconds": 1914,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "bT_k06Xg-BE",
+      "slug": "writing-freebsd-malware-by-shawn-webb",
+      "title": "Writing FreeBSD Malware (by Shawn Webb)",
+      "speakers": [
+        "Shawn Webb"
+      ],
+      "track": "malware",
+      "topics": [
+        "writing",
+        "freebsd",
+        "malware-analysis",
+        "shawn",
+        "webb"
+      ],
+      "teaser": "Writing FreeBSD Malware (by Shawn Webb).",
+      "summary": "CarolinaCon talk on writing FreeBSD malware.",
+      "durationSeconds": 2893,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "k81xKjCEeqE",
+      "slug": "honeypots-deception-and-frankenstein-by-phillip-maddux",
+      "title": "Honeypots, Deception, and Frankenstein (by Phillip Maddux)",
+      "speakers": [
+        "Phillip Maddux"
+      ],
+      "track": "red-team",
+      "topics": [
+        "deception",
+        "honeypot",
+        "frankenstein",
+        "phillip",
+        "maddux"
+      ],
+      "teaser": "Honeypots, Deception, and Frankenstein (by Phillip Maddux).",
+      "summary": "CarolinaCon talk on honeypots, deception, and Frankenstein.",
+      "durationSeconds": 3423,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "joixfiF6piM",
+      "slug": "how-playing-ctf-made-me-a-better-hacker-is-this-your-password-by",
+      "title": "How playing CTF made me a better hacker... is this your password? (by Jeff Macko)",
+      "speakers": [
+        "Jeff Macko"
+      ],
+      "track": "appsec",
+      "topics": [
+        "ctf",
+        "playing",
+        "thi"
+      ],
+      "teaser": "How playing CTF made me a better hacker... is this your password? (by Jeff Macko).",
+      "summary": "CarolinaCon talk on how playing CTF made me a better hacker.",
+      "durationSeconds": 1213,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "1fIKltK29ws",
+      "slug": "presenting-p-cketr-quet-an-auditory-ids-network-auralizer-by-kil",
+      "title": "Presenting P@cketR@quet: An Auditory IDS/Network Auralizer (by Killian Ditch)",
+      "speakers": [
+        "Presenting P@cketR@quet"
+      ],
+      "track": "red-team",
+      "topics": [
+        "network",
+        "presenting",
+        "cketr",
+        "quet",
+        "auditory",
+        "auralizer"
+      ],
+      "teaser": "Presenting P@cketR@quet: An Auditory IDS/Network Auralizer (by Killian Ditch).",
+      "summary": "CarolinaCon talk presenting P@cketR@quet auditory IDS.",
+      "durationSeconds": 1626,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "M_kGkYyqWvs",
+      "slug": "liverstrong-deviant-ollam",
+      "title": "Liverstrong (Deviant Ollam)",
+      "speakers": [
+        "Deviant Ollam"
+      ],
+      "track": "community",
+      "topics": [
+        "liverstrong",
+        "deviant",
+        "ollam"
+      ],
+      "teaser": "Coverage of Liverstrong (Deviant Ollam) from the conference program.",
+      "summary": null,
+      "durationSeconds": 4314,
+      "conference": "carolinacon"
+    },
+    {
+      "youtubeId": "Uv0mlcOStpQ",
+      "slug": "oom-oom-pow-deserialization-by-jason-gillam",
+      "title": "OOM OOM POW (Deserialization) (by Jason Gillam)",
+      "speakers": [
+        "Jason Gillam"
+      ],
+      "track": "appsec",
+      "topics": [
+        "deserialization",
+        "jason",
+        "gillam"
+      ],
+      "teaser": "OOM OOM POW (Deserialization) (by Jason Gillam).",
+      "summary": "CarolinaCon talk on deserialization attacks.",
+      "durationSeconds": 2530,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "na7Vd4kSruU",
+      "slug": "hardware-hacking-ginsu-chef-style-by-deral-heiland-percent-x",
+      "title": "Hardware Hacking Ginsu Chef Style (by Deral Heiland (percent_x))",
+      "speakers": [
+        "Deral Heiland"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware-hacking",
+        "hardware",
+        "ginsu",
+        "chef",
+        "style",
+        "deral"
+      ],
+      "teaser": "Hardware Hacking Ginsu Chef Style (by Deral Heiland (percent_x)).",
+      "summary": "CarolinaCon talk on hardware hacking Ginsu chef style.",
+      "durationSeconds": 3438,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Z1NkYFJpWKE",
+      "slug": "osint-for-everyone-understanding-risks-and-protecting-your-data",
+      "title": "OSINT for Everyone: Understanding Risks and Protecting Your Data (by Micah Hoffman and Josh Huff)",
+      "speakers": [
+        "Micah Hoffman",
+        "Josh Huff"
+      ],
+      "track": "osint",
+      "topics": [
+        "osint",
+        "everyone",
+        "understanding",
+        "risk",
+        "protecting"
+      ],
+      "teaser": "OSINT for Everyone: Understanding Risks and Protecting Your Data (by Micah Hoffman and Josh Huff).",
+      "summary": "CarolinaCon talk on OSINT for everyone and protecting your data.",
+      "durationSeconds": 2608,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "C-MMUtg_sSM",
+      "slug": "kernel-mod-rootkits-on-modern-linux-systems-by-alex-caceres",
+      "title": "Kernel Mod Rootkits on Modern Linux Systems (by Alex Caceres)",
+      "speakers": [
+        "Alex Caceres"
+      ],
+      "track": "malware",
+      "topics": [
+        "linux",
+        "kernel",
+        "rootkit",
+        "modern",
+        "system",
+        "alex"
+      ],
+      "teaser": "Kernel Mod Rootkits on Modern Linux Systems (by Alex Caceres).",
+      "summary": "CarolinaCon talk on kernel mod rootkits on modern Linux.",
+      "durationSeconds": 2414,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "AkoCeu2ANRU",
+      "slug": "master-baiting-dont-click-bait-click-yourself-by-bace16",
+      "title": "Master Baiting - Don’t Click Bait, Click Yourself! (by BACE16)",
+      "speakers": [
+        "Master Baiting"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "master",
+        "baiting",
+        "click",
+        "bait",
+        "yourself",
+        "bace16"
+      ],
+      "teaser": "Master Baiting - Don’t Click Bait, Click Yourself! (by BACE16).",
+      "summary": "CarolinaCon social engineering talk on clickbait awareness.",
+      "durationSeconds": 2446,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "RuwcLc-KC9w",
+      "slug": "getting-access-with-spear-phishing-by-kevin-wang",
+      "title": "Getting Access with Spear Phishing (by Kevin Wang)",
+      "speakers": [
+        "Spear Phishing (by Kevin Wang)"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "phishing",
+        "spear-phishing",
+        "getting",
+        "acces",
+        "spear",
+        "kevin"
+      ],
+      "teaser": "Getting Access with Spear Phishing (by Kevin Wang).",
+      "summary": "CarolinaCon talk on getting access with spear phishing.",
+      "durationSeconds": 2074,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "pKSu6HOVH94",
+      "slug": "the-ghs-shoot-house-for-wifi-pat-wylie-and-shawn-brown",
+      "title": "The GHS Shoot-house for WiFi (Pat Wylie and Shawn Brown)",
+      "speakers": [
+        "Pat Wylie",
+        "Shawn Brown"
+      ],
+      "track": "wireless",
+      "topics": [
+        "wifi",
+        "shoot-house",
+        "wylie",
+        "shawn",
+        "brown"
+      ],
+      "teaser": "The GHS Shoot-house for WiFi (Pat Wylie and Shawn Brown).",
+      "summary": "CarolinaCon talk on the GHS shoot-house for WiFi.",
+      "durationSeconds": 774,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "kxn3LQMqkVU",
+      "slug": "the-unofficial-security-enthusiasts-meme-filled-guide-of-breakin",
+      "title": "The Unofficial Security Enthusiast's Meme Filled Guide of Breaking Into InfoSec",
+      "speakers": [
+        "Josh Huff"
+      ],
+      "track": "community",
+      "topics": [
+        "unofficial",
+        "enthusiast",
+        "meme",
+        "filled",
+        "guide",
+        "breaking"
+      ],
+      "teaser": "The Unofficial Security Enthusiast's Meme Filled Guide of Breaking Into InfoSec.",
+      "summary": "CarolinaCon guide for breaking into InfoSec.",
+      "durationSeconds": 1599,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "k9O1Y9N3bvU",
+      "slug": "honeypy-and-honeydb",
+      "title": "HoneyPy & HoneyDB",
+      "speakers": [
+        "Phillip Maddux"
+      ],
+      "track": "community",
+      "topics": [
+        "honeypy",
+        "honeydb",
+        "vulnerability-research"
+      ],
+      "teaser": "Coverage of HoneyPy & HoneyDB from the conference program.",
+      "summary": "CarolinaCon talk on HoneyPy and HoneyDB.",
+      "durationSeconds": 1735,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "1wR6NjbiU-o",
+      "slug": "how-to-patch-stupid-a-modern-approach-to-remediating-user-risk",
+      "title": "How to Patch Stupid - A modern approach to remediating user risk",
+      "speakers": [
+        "Joshua Crumbaugh"
+      ],
+      "track": "community",
+      "topics": [
+        "patch",
+        "stupid",
+        "modern",
+        "approach",
+        "remediating",
+        "user"
+      ],
+      "teaser": "How to Patch Stupid - A modern approach to remediating user risk.",
+      "summary": "CarolinaCon talk on a modern approach to remediating user risk.",
+      "durationSeconds": 3285,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "aniRxovrAiE",
+      "slug": "forgotten-history-of-cyberwar",
+      "title": "Forgotten History of Cyberwar",
+      "speakers": [
+        "Sean Pierce (@secure_sean)"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "history",
+        "forgotten",
+        "cyberwar"
+      ],
+      "teaser": "Coverage of Forgotten History of Cyberwar from the conference program.",
+      "summary": "CarolinaCon talk on forgotten history of cyberwar.",
+      "durationSeconds": 2748,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "v6maOSKC_yA",
+      "slug": "getting-started-with-powershell-or-one-tool-to-hack-them-all",
+      "title": "Getting Started with PowerShell or One Tool to Hack them all",
+      "speakers": [
+        "Michael Wharton"
+      ],
+      "track": "community",
+      "topics": [
+        "powershell",
+        "getting",
+        "tool",
+        "hack",
+        "them"
+      ],
+      "teaser": "Getting Started with PowerShell or One Tool to Hack them all.",
+      "summary": "CarolinaCon talk on getting started with PowerShell for hacking.",
+      "durationSeconds": 3296,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "iNO2dT21USc",
+      "slug": "a-rop-primer",
+      "title": "A ROP Primer",
+      "speakers": [
+        "Pandatrax"
+      ],
+      "track": "community",
+      "topics": [
+        "rop",
+        "primer",
+        "vulnerability-research"
+      ],
+      "teaser": "Coverage of A ROP Primer from the conference program.",
+      "summary": "CarolinaCon ROP primer talk.",
+      "durationSeconds": 3476,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "08r0xBnEpjw",
+      "slug": "hacking-the-invasion-of-things-or-as-my-wife-calls-it-what-did-y",
+      "title": "Hacking The Invasion of Things (or as my wife calls it, what did you spend our money on this time)",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "invasion",
+        "thing",
+        "wife",
+        "call",
+        "spend"
+      ],
+      "teaser": "Hacking The Invasion of Things (or as my wife calls it, what did you spend our money on this time).",
+      "summary": "CarolinaCon talk on hacking the invasion of things.",
+      "durationSeconds": 3158,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "8u7yyFYvzC4",
+      "slug": "opsec-for-infosec",
+      "title": "OpSec for InfoSec",
+      "speakers": [
+        "Justin Nordine"
+      ],
+      "track": "community",
+      "topics": [
+        "opsec",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Coverage of OpSec for InfoSec from the conference program.",
+      "summary": "CarolinaCon talk on OpSec for InfoSec.",
+      "durationSeconds": 2861,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "x9-iP0L3xXA",
+      "slug": "how-to-buy-illegal-stuff-online",
+      "title": "How to buy illegal stuff online",
+      "speakers": [
+        "QR",
+        "Vic"
+      ],
+      "track": "community",
+      "topics": [
+        "illegal",
+        "stuff",
+        "online"
+      ],
+      "teaser": "Coverage of How to buy illegal stuff online from the conference program.",
+      "summary": "CarolinaCon talk on how to buy illegal stuff online.",
+      "durationSeconds": 3293,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5y5guh_dffs",
+      "slug": "testing-phone-systems-i-can-come-up-with-something-better-later",
+      "title": "Testing Phone Systems - \"I can come up with something better later\"",
+      "speakers": [
+        "Owen"
+      ],
+      "track": "community",
+      "topics": [
+        "phone",
+        "system",
+        "something"
+      ],
+      "teaser": "Testing Phone Systems - \"I can come up with something better later\".",
+      "summary": "CarolinaCon talk on testing phone systems.",
+      "durationSeconds": 2520,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "LQU6CpI_7MM",
+      "slug": "so-you-want-to-learn-machine-learning",
+      "title": "So you want to learn Machine Learning",
+      "speakers": [
+        "John F. Davis"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "machine-learning",
+        "learn",
+        "machine",
+        "learning"
+      ],
+      "teaser": "Coverage of So you want to learn Machine Learning from the conference program.",
+      "summary": "CarolinaCon talk on learning machine learning.",
+      "durationSeconds": 3621,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "HT5gpvbAVqU",
+      "slug": "ctfs-not-just-for-halo",
+      "title": "CTFs - Not Just for Halo",
+      "speakers": [
+        "Ray",
+        "Clayton"
+      ],
+      "track": "community",
+      "topics": [
+        "ctf",
+        "halo",
+        "just"
+      ],
+      "teaser": "Coverage of CTFs - Not Just for Halo from the conference program.",
+      "summary": "CarolinaCon talk on CTFs not just for Halo.",
+      "durationSeconds": 2403,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "LyzIrE6DpOM",
+      "slug": "a-pentesters-intro-to-attacking-ics-scada",
+      "title": "A Pentester's Intro to Attacking ICS/SCADA",
+      "speakers": [
+        "Tripp Roybal (@GMRoybal_III)"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "scada",
+        "ics",
+        "pentester",
+        "intro",
+        "attacking"
+      ],
+      "teaser": "A Pentester's Intro to Attacking ICS/SCADA.",
+      "summary": "CarolinaCon pentester intro to attacking ICS/SCADA.",
+      "durationSeconds": 2057,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "8txUoit3Lgo",
+      "slug": "smrk3r-rfid-is-dead-long-live-rfid",
+      "title": "smrk3r - RFID is dead; long live RFID!",
+      "speakers": [
+        "smrk3r"
+      ],
+      "track": "wireless",
+      "topics": [
+        "rfid",
+        "smrk3r",
+        "dead"
+      ],
+      "teaser": "Coverage of smrk3r - RFID is dead; long live RFID! from the conference program.",
+      "summary": "CarolinaCon talk on RFID is dead; long live RFID.",
+      "durationSeconds": 2672,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "_MLDaazNKBs",
+      "slug": "reporting-for-hackers",
+      "title": "Reporting for Hackers",
+      "speakers": [
+        "Jon Molesa @th3mojo"
+      ],
+      "track": "community",
+      "topics": [
+        "reporting",
+        "vulnerability-research",
+        "hacker"
+      ],
+      "teaser": "Coverage of Reporting for Hackers from the conference program.",
+      "summary": "CarolinaCon talk on reporting for hackers.",
+      "durationSeconds": 1922,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Pma1H36Rm-Y",
+      "slug": "john-the-ripper-sits-in-the-next-cubicle",
+      "title": "John the Ripper sits in the next cubicle",
+      "speakers": [
+        "Steve Passino"
+      ],
+      "track": "community",
+      "topics": [
+        "john",
+        "ripper",
+        "sit",
+        "cubicle"
+      ],
+      "teaser": "John the Ripper sits in the next cubicle.",
+      "summary": "CarolinaCon talk on John the Ripper in the next cubicle.",
+      "durationSeconds": 2052,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "OXtdQo6hhhk",
+      "slug": "reverse-engineer-ios-apps-because-reasons-twinlol",
+      "title": "Reverse Engineer iOS apps because reasons - twinlol",
+      "speakers": [
+        "twinlol"
+      ],
+      "track": "malware",
+      "topics": [
+        "ios",
+        "reverse",
+        "app",
+        "because",
+        "reason"
+      ],
+      "teaser": "Reverse Engineer iOS apps because reasons - twinlol.",
+      "summary": "CarolinaCon talk on reverse engineering iOS apps.",
+      "durationSeconds": 2990,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "qFoBvgHNtEA",
+      "slug": "never-go-full-spectrum-cyber",
+      "title": "Never Go Full Spectrum Cyber",
+      "speakers": [
+        "Randy"
+      ],
+      "track": "community",
+      "topics": [
+        "spectrum",
+        "never",
+        "vulnerability-research"
+      ],
+      "teaser": "Coverage of Never Go Full Spectrum Cyber from the conference program.",
+      "summary": null,
+      "durationSeconds": 2295,
+      "conference": "carolinacon"
+    },
+    {
+      "youtubeId": "1wns2eByE2U",
+      "slug": "gettin-vishy-with-it",
+      "title": "Gettin’ Vishy with it",
+      "speakers": [
+        "Owen",
+        "Snide- @LinuxBlog"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "gettin",
+        "vishy",
+        "vulnerability-research"
+      ],
+      "teaser": "Coverage of Gettin’ Vishy with it from the conference program.",
+      "summary": "CarolinaCon talk on gettin vishy with it.",
+      "durationSeconds": 2213,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "P7KRFJaGl5o",
+      "slug": "floss-every-day",
+      "title": "FLOSS every day",
+      "speakers": [
+        "Moritz Raabe",
+        "William Ballenthin"
+      ],
+      "track": "community",
+      "topics": [
+        "flos",
+        "vulnerability-research",
+        "every"
+      ],
+      "teaser": "Coverage of FLOSS every day from the conference program.",
+      "summary": "CarolinaCon talk on FLOSS every day.",
+      "durationSeconds": 2495,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Hroou10AskY",
+      "slug": "buffer-overflows-for-x86-x86-64-and-arm-john-f-davis-math-for-40",
+      "title": "Buffer Overflows for x86, x86_64 and ARM - John F. Davis (Math for 400)",
+      "speakers": [
+        "John F. Davis"
+      ],
+      "track": "community",
+      "topics": [
+        "x86",
+        "arm",
+        "buffer",
+        "overflow",
+        "john",
+        "davi"
+      ],
+      "teaser": "Buffer Overflows for x86, x86_64 and ARM - John F. Davis (Math for 400).",
+      "summary": "CarolinaCon talk on buffer overflows for x86, x86_64, and ARM.",
+      "durationSeconds": 3111,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "drLtGJ16hFU",
+      "slug": "i-am-the-liquor",
+      "title": "I Am The Liquor",
+      "speakers": [
+        "Jim Lahey"
+      ],
+      "track": "community",
+      "topics": [
+        "liquor",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Coverage of I Am The Liquor from the conference program.",
+      "summary": null,
+      "durationSeconds": 1882,
+      "conference": "carolinacon"
+    },
+    {
+      "youtubeId": "lFCtPdUPdHw",
+      "slug": "introducing-ps-attack-a-portable-powershell-attack-toolkit",
+      "title": "Introducing PS Attack, a portable PowerShell attack toolkit",
+      "speakers": [
+        "Jared Haight"
+      ],
+      "track": "red-team",
+      "topics": [
+        "powershell",
+        "introducing",
+        "attack",
+        "portable",
+        "toolkit"
+      ],
+      "teaser": "Introducing PS Attack, a portable PowerShell attack toolkit.",
+      "summary": "CarolinaCon talk introducing PS Attack portable PowerShell toolkit.",
+      "durationSeconds": 2996,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "cg7u2QjwEu0",
+      "slug": "deploying-a-shadow-threat-intel-capability-grecs",
+      "title": "Deploying a Shadow Threat Intel Capability: - grecs",
+      "speakers": [
+        "grecs"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "deploying",
+        "shadow",
+        "threat",
+        "intel",
+        "capability",
+        "grec"
+      ],
+      "teaser": "Deploying a Shadow Threat Intel Capability: - grecs.",
+      "summary": "CarolinaCon talk on deploying a shadow threat intel capability.",
+      "durationSeconds": 3241,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "MTCLJynj3b0",
+      "slug": "surprise-everything-can-kill-you-fort",
+      "title": "Surprise! Everything can kill you. - fort",
+      "speakers": [
+        "fort"
+      ],
+      "track": "community",
+      "topics": [
+        "surprise",
+        "everything",
+        "kill",
+        "fort"
+      ],
+      "teaser": "Surprise! Everything can kill you. - fort.",
+      "summary": "Speaker fort (Evan Booth) demonstrates how everyday technology can be dangerous, focusing on ruining a Keurig single-cup coffee maker. Related work includes DEF CON talks on building devices from coffee makers.",
+      "durationSeconds": 4435,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "729wmWJaOIo",
+      "slug": "dynamic-analysis-with-windows-performance-toolkit",
+      "title": "Dynamic Analysis with Windows Performance Toolkit",
+      "speakers": [
+        "DeBuG (John deGruyter)"
+      ],
+      "track": "community",
+      "topics": [
+        "windows",
+        "dynamic",
+        "analysi",
+        "window",
+        "performance",
+        "toolkit"
+      ],
+      "teaser": "Dynamic Analysis with Windows Performance Toolkit.",
+      "summary": "CarolinaCon talk on dynamic analysis with WPT.",
+      "durationSeconds": 1800,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "X8rT6-5JdRI",
+      "slug": "breaking-android-apps-for-fun-and-profit",
+      "title": "Breaking Android apps for fun and profit",
+      "speakers": [
+        "Bill Sempf"
+      ],
+      "track": "mobile",
+      "topics": [
+        "android",
+        "breaking",
+        "app",
+        "profit"
+      ],
+      "teaser": "Breaking Android apps for fun and profit.",
+      "summary": "CarolinaCon talk on breaking Android apps for fun and profit.",
+      "durationSeconds": 3097,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "X54Rwzi-L0w",
+      "slug": "mo-money-mo-problems-the-cashout",
+      "title": "Mo Money Mo Problems: The Cashout",
+      "speakers": [
+        "Benjamin Brown"
+      ],
+      "track": "community",
+      "topics": [
+        "money",
+        "problem",
+        "cashout"
+      ],
+      "teaser": "Coverage of Mo Money Mo Problems: The Cashout from the conference program.",
+      "summary": "Benjamin Brown covers cybercrime cashout: converting stolen payment data, retailer accounts, credit card data, and fullz into money. Examines tools, techniques, and procedures e-launderers use as fraud controls tighten.",
+      "durationSeconds": 3096,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "VwKqBgWIOpY",
+      "slug": "justin-warner-sixdub-and-will-schroeder-harmj0y-drilling-deeper",
+      "title": "Justin Warner (@sixdub) & Will Schroeder (@harmj0y): Drilling Deeper with Veils PowerTools",
+      "speakers": [
+        "Veils PowerTools"
+      ],
+      "track": "community",
+      "topics": [
+        "justin",
+        "warner",
+        "sixdub",
+        "schroeder",
+        "harmj0y"
+      ],
+      "teaser": "Justin Warner (@sixdub) & Will Schroeder (@harmj0y): Drilling Deeper with Veils PowerTools.",
+      "summary": "CarolinaCon talk on drilling deeper with Veil PowerTools.",
+      "durationSeconds": 2810,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "I727Yf2E2X8",
+      "slug": "joshua-schroeder-joshingeneral-spam-phish-and-other-things-good",
+      "title": "Joshua Schroeder (JoshInGeneral): SPAM, Phish and Other Things Good to Eat",
+      "speakers": [
+        "Joshua Schroeder (JoshInGeneral)"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "joshua",
+        "schroeder",
+        "joshingeneral",
+        "spam",
+        "phish"
+      ],
+      "teaser": "Joshua Schroeder (JoshInGeneral): SPAM, Phish and Other Things Good to Eat.",
+      "summary": "CarolinaCon talk on spam, phish, and other things.",
+      "durationSeconds": 3181,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "TZ9j57bbpjM",
+      "slug": "digital-shokunin-how-to-design-your-you-got-hacked-page",
+      "title": "digital shokunin: How to design your 'You got hacked' page",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "shokunin",
+        "design",
+        "hacked",
+        "page"
+      ],
+      "teaser": "digital shokunin: How to design your 'You got hacked' page.",
+      "summary": "CarolinaCon talk on designing your you got hacked page.",
+      "durationSeconds": 1562,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "K6UNueJV504",
+      "slug": "surpherdave-social-engineering-is-bullsh-t-call-it-what-it-is",
+      "title": "surpherdave: Social engineering is bullsh*t, call it what it is",
+      "speakers": [
+        "surpherdave"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "social",
+        "surpherdave",
+        "engineering",
+        "bullsh",
+        "call"
+      ],
+      "teaser": "surpherdave: Social engineering is bullsh*t, call it what it is.",
+      "summary": "CarolinaCon talk arguing social engineering is misnamed.",
+      "durationSeconds": 2749,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "k8qP05gsupI",
+      "slug": "myddrn-cryptocurrency-laundering-theory-for-fun-and-retirement",
+      "title": "myddrn: Cryptocurrency Laundering Theory for Fun and Retirement",
+      "speakers": [
+        "myddrn"
+      ],
+      "track": "privacy",
+      "topics": [
+        "cryptocurrency",
+        "myddrn",
+        "laundering",
+        "theory",
+        "retirement"
+      ],
+      "teaser": "myddrn: Cryptocurrency Laundering Theory for Fun and Retirement.",
+      "summary": "CarolinaCon talk on cryptocurrency laundering theory.",
+      "durationSeconds": 1816,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "XvM-MnIYuxc",
+      "slug": "rob-weiss-and-john-eberhardt-machine-learning-and-augmented-real",
+      "title": "Rob Weiss & John Eberhardt: Machine Learning and Augmented Reality in Networking",
+      "speakers": [
+        "Rob Weiss",
+        "John Eberhardt"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "machine-learning",
+        "networking",
+        "weis",
+        "john",
+        "eberhardt",
+        "machine"
+      ],
+      "teaser": "Rob Weiss & John Eberhardt: Machine Learning and Augmented Reality in Networking.",
+      "summary": "CarolinaCon talk on machine learning and augmented reality in networking.",
+      "durationSeconds": 2205,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "zLJg1aOtcqk",
+      "slug": "jason-gillam-anatomy-of-web-client-attacks",
+      "title": "Jason Gillam: Anatomy of Web Client Attacks",
+      "speakers": [
+        "Jason Gillam"
+      ],
+      "track": "red-team",
+      "topics": [
+        "web",
+        "jason",
+        "gillam",
+        "client",
+        "attack"
+      ],
+      "teaser": "Jason Gillam: Anatomy of Web Client Attacks.",
+      "summary": "CarolinaCon talk on anatomy of web client attacks.",
+      "durationSeconds": 2667,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "idiz-ELrHsQ",
+      "slug": "smrk3r-have-you-ever-drunk-baileys-from-a-shoe-aka-pen-testing-a",
+      "title": "smrk3r: Have you ever drunk Bailey's from a shoe? (aka Pen-Testing & Social Engineering Convergence)",
+      "speakers": [
+        "smrk3r"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "social",
+        "smrk3r",
+        "drunk",
+        "bailey"
+      ],
+      "teaser": "smrk3r: Have you ever drunk Bailey's from a shoe? (aka Pen-Testing & Social Engineering Convergence).",
+      "summary": "CarolinaCon talk on pen-testing and social engineering convergence.",
+      "durationSeconds": 2952,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "n8mvxAmpWuk",
+      "slug": "unregistered-and-snide-phony-business-what-goes-around-comes-bac",
+      "title": "Unregistered & Snide: Phony Business - What Goes Around Comes Back Around",
+      "speakers": [
+        "Unregistered",
+        "Snide"
+      ],
+      "track": "community",
+      "topics": [
+        "unregistered",
+        "snide",
+        "phony",
+        "goe"
+      ],
+      "teaser": "Unregistered & Snide: Phony Business - What Goes Around Comes Back Around.",
+      "summary": "Unregistered and Snide trace telephone-system security from early phone phreaking through today's VoIP systems. Covers how voice systems are targeted and attacked, with demonstrations and defensive tips noting many basic attacks remain exploitable.",
+      "durationSeconds": 3118,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "wgP5rwTzpZ8",
+      "slug": "th3mojo-rednecksec",
+      "title": "@th3mojo: RedneckSec",
+      "speakers": [
+        "@th3mojo"
+      ],
+      "track": "community",
+      "topics": [
+        "th3mojo",
+        "rednecksec",
+        "vulnerability-research"
+      ],
+      "teaser": "Coverage of @th3mojo: RedneckSec from the conference program.",
+      "summary": null,
+      "durationSeconds": 1148,
+      "conference": "carolinacon"
+    },
+    {
+      "youtubeId": "EqttQ3U-w-s",
+      "slug": "howard-payne-and-deviant-ollam-elevator-obscura-industry-hacks",
+      "title": "Howard Payne & Deviant Ollam: Elevator Obscura: Industry Hacks",
+      "speakers": [
+        "Howard Payne",
+        "Deviant Ollam"
+      ],
+      "track": "community",
+      "topics": [
+        "howard",
+        "payne",
+        "deviant",
+        "ollam",
+        "elevator",
+        "obscura"
+      ],
+      "teaser": "Howard Payne & Deviant Ollam: Elevator Obscura: Industry Hacks.",
+      "summary": "CarolinaCon talk on elevator obscura industry hacks.",
+      "durationSeconds": 5120,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "lzvs2TsZwhs",
+      "slug": "lokesh-pidawekar-hackers-practice-ground",
+      "title": "Lokesh Pidawekar: Hacker's Practice Ground",
+      "speakers": [
+        "Lokesh Pidawekar"
+      ],
+      "track": "community",
+      "topics": [
+        "lokesh",
+        "pidawekar",
+        "practice",
+        "ground"
+      ],
+      "teaser": "Lokesh Pidawekar: Hacker's Practice Ground.",
+      "summary": "CarolinaCon talk on hacker practice ground.",
+      "durationSeconds": 2833,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "3pXEfkTitmc",
+      "slug": "andrew-shumate-cyber-war-stories",
+      "title": "Andrew Shumate: Cyber War Stories",
+      "speakers": [
+        "Andrew Shumate"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "andrew",
+        "shumate",
+        "storie"
+      ],
+      "teaser": "Coverage of Andrew Shumate: Cyber War Stories from the conference program.",
+      "summary": "CarolinaCon talk on cyber war stories.",
+      "durationSeconds": 1281,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "yqUV0VxBzCo",
+      "slug": "chill-art-of-post-infection-response-and-mitigation",
+      "title": "chill: Art of Post-infection Response and Mitigation",
+      "speakers": [
+        "chill"
+      ],
+      "track": "community",
+      "topics": [
+        "chill",
+        "post-infection",
+        "response",
+        "mitigation"
+      ],
+      "teaser": "chill: Art of Post-infection Response and Mitigation.",
+      "summary": "CarolinaCon talk on art of post-infection response.",
+      "durationSeconds": 3330,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "lMh-KDe8bH4",
+      "slug": "schuyler-towne-rethinking-the-origins-of-the-lock",
+      "title": "Schuyler Towne: Rethinking the Origins of the Lock",
+      "speakers": [
+        "Schuyler Towne"
+      ],
+      "track": "community",
+      "topics": [
+        "schuyler",
+        "towne",
+        "rethinking",
+        "origin",
+        "lock"
+      ],
+      "teaser": "Schuyler Towne: Rethinking the Origins of the Lock.",
+      "summary": "CarolinaCon talk rethinking origins of the lock.",
+      "durationSeconds": 3097,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "kg-mJrDtSaE",
+      "slug": "bypassing-emet-4-1",
+      "title": "Bypassing EMET 4.1",
+      "speakers": [
+        "Jared DeMott"
+      ],
+      "track": "community",
+      "topics": [
+        "bypassing",
+        "emet",
+        "vulnerability-research"
+      ],
+      "teaser": "Coverage of Bypassing EMET 4.1 from the conference program.",
+      "summary": "CarolinaCon talk on bypassing EMET 4.1.",
+      "durationSeconds": 3153,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "fYmFg8Jl3JY",
+      "slug": "how-to-get-money-fast-using-a-pwned-pbx-patrick-mcneil-unregiste",
+      "title": "How To Get Money Fast Using A Pwned PBX - Patrick McNeil / unregistered436",
+      "speakers": [
+        "Patrick McNeil"
+      ],
+      "track": "community",
+      "topics": [
+        "money",
+        "fast",
+        "pwned",
+        "patrick",
+        "mcneil",
+        "unregistered436"
+      ],
+      "teaser": "How To Get Money Fast Using A Pwned PBX - Patrick McNeil / unregistered436.",
+      "summary": "CarolinaCon talk on getting money fast using a pwned PBX.",
+      "durationSeconds": 2934,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "JkAmNk1dXoM",
+      "slug": "f-ck-these-guys-practical-counter-surveillance",
+      "title": "F*ck These Guys: Practical Counter-Surveillance",
+      "speakers": [
+        "Lisa Lorenzin"
+      ],
+      "track": "privacy",
+      "topics": [
+        "counter-surveillance",
+        "guy",
+        "practical"
+      ],
+      "teaser": "F*ck These Guys: Practical Counter-Surveillance.",
+      "summary": "CarolinaCon talk on practical counter-surveillance.",
+      "durationSeconds": 3169,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "yHAVWVUy8VE",
+      "slug": "hacking-the-hackerspace",
+      "title": "Hacking the Hackerspace",
+      "speakers": [
+        "Steven Sutton",
+        "Alan Fay"
+      ],
+      "track": "community",
+      "topics": [
+        "hackerspace",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Coverage of Hacking the Hackerspace from the conference program.",
+      "summary": "CarolinaCon talk on hacking the hackerspace.",
+      "durationSeconds": 1797,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "hFwPxACoHRM",
+      "slug": "hack-android-using-normal-permissions-and-broadcast-receivers",
+      "title": "Hack Android using Normal Permissions & Broadcast Receivers",
+      "speakers": [
+        "Fadi Mohsen"
+      ],
+      "track": "mobile",
+      "topics": [
+        "android",
+        "hack",
+        "normal",
+        "permission",
+        "broadcast",
+        "receiver"
+      ],
+      "teaser": "Hack Android using Normal Permissions & Broadcast Receivers.",
+      "summary": "CarolinaCon talk on hacking Android with normal permissions.",
+      "durationSeconds": 1210,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "v4gcZTQpRtU",
+      "slug": "av-evasion-with-the-veil-framework",
+      "title": "AV Evasion with the Veil Framework",
+      "speakers": [
+        "HarmJ0y",
+        "Christopher Truncer",
+        "Michael Wright"
+      ],
+      "track": "community",
+      "topics": [
+        "evasion",
+        "framework",
+        "veil"
+      ],
+      "teaser": "Coverage of AV Evasion with the Veil Framework from the conference program.",
+      "summary": "CarolinaCon talk on AV evasion with the Veil Framework.",
+      "durationSeconds": 3059,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "OakrNqtHSjs",
+      "slug": "simple-network-management-pwnd",
+      "title": "Simple Network Management Pwnd",
+      "speakers": [
+        "Deral Heiland (Percent_x)",
+        "Matthew Kienow"
+      ],
+      "track": "community",
+      "topics": [
+        "network",
+        "simple",
+        "management",
+        "pwnd"
+      ],
+      "teaser": "Coverage of Simple Network Management Pwnd from the conference program.",
+      "summary": "CarolinaCon talk on simple network management pwnd.",
+      "durationSeconds": 3203,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "SUNzMoSohm8",
+      "slug": "building-botnets-101",
+      "title": "Building Botnets 101",
+      "speakers": [
+        "Terrence O' Connor"
+      ],
+      "track": "community",
+      "topics": [
+        "building",
+        "botnet",
+        "vulnerability-research"
+      ],
+      "teaser": "Coverage of Building Botnets 101 from the conference program.",
+      "summary": "CarolinaCon Building Botnets 101 talk.",
+      "durationSeconds": 2907,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "tOVftragF2E",
+      "slug": "password-cracking-for-noobs-all-your-hashes-are-belong-to-us-smr",
+      "title": "Password Cracking for noobs: All your hashes are belong to us - smrk3r",
+      "speakers": [
+        "smrk3r"
+      ],
+      "track": "appsec",
+      "topics": [
+        "password-cracking",
+        "password",
+        "cracking",
+        "noob",
+        "hashe"
+      ],
+      "teaser": "Password Cracking for noobs: All your hashes are belong to us - smrk3r.",
+      "summary": "CarolinaCon password cracking for noobs talk.",
+      "durationSeconds": 2996,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "yilk2mpp5HI",
+      "slug": "real-world-social-engineering-for-the-geek-introvert",
+      "title": "Real World Social Engineering for the Geek/Introvert",
+      "speakers": [
+        "Luke (MindNinja) Stephens"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "social",
+        "engineering",
+        "geek",
+        "introvert"
+      ],
+      "teaser": "Real World Social Engineering for the Geek/Introvert.",
+      "summary": "CarolinaCon talk on real world social engineering for geeks.",
+      "durationSeconds": 5832,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "_xETQERVA6c",
+      "slug": "attacker-ghost-stories-mostly-free-defenses-that-gives-attackers",
+      "title": "Attacker Ghost Stories: Mostly Free Defenses That Gives Attackers Nightmares - mubix",
+      "speakers": [
+        "Attacker Ghost Stories"
+      ],
+      "track": "red-team",
+      "topics": [
+        "attacker",
+        "ghost",
+        "storie",
+        "mostly",
+        "free"
+      ],
+      "teaser": "Attacker Ghost Stories: Mostly Free Defenses That Gives Attackers Nightmares - mubix.",
+      "summary": "CarolinaCon talk on attacker ghost stories and free defenses.",
+      "durationSeconds": 2526,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "RK64bHtIDrQ",
+      "slug": "the-insider-threat-from-snowden-to-the-unspoken",
+      "title": "The Insider Threat: From Snowden to the Unspoken",
+      "speakers": [
+        "Omar Santos"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "insider-threat",
+        "insider",
+        "threat",
+        "snowden",
+        "unspoken"
+      ],
+      "teaser": "The Insider Threat: From Snowden to the Unspoken.",
+      "summary": "CarolinaCon talk on insider threat from Snowden to the unspoken.",
+      "durationSeconds": 2851,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ZdsqEmXOu34",
+      "slug": "carding-markets-comparing-apples-and-lemons",
+      "title": "Carding Markets: Comparing Apples and Lemons",
+      "speakers": [
+        "Tom Holt",
+        "Professor Farnsworth"
+      ],
+      "track": "community",
+      "topics": [
+        "carding",
+        "market",
+        "comparing",
+        "apple",
+        "lemon"
+      ],
+      "teaser": "Carding Markets: Comparing Apples and Lemons.",
+      "summary": "CarolinaCon talk comparing carding markets.",
+      "durationSeconds": 3171,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "W4ViN8-Vlq4",
+      "slug": "the-evolution-of-network-security-how-networks-are-still-getting",
+      "title": "The Evolution of Network Security How Networks Are Still Getting Hacked - Omar Santos",
+      "speakers": [
+        "CarolinaCon9"
+      ],
+      "track": "community",
+      "topics": [
+        "network-security",
+        "network",
+        "networks"
+      ],
+      "teaser": "The Evolution of Network Security How Networks Are Still Getting Hacked - Omar Santos.",
+      "summary": "CarolinaCon talk on evolution of network security.",
+      "durationSeconds": 2733,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "74PXTarCVKE",
+      "slug": "dancin-with-dalvik-thomas-richards",
+      "title": "Dancin' With Dalvik - Thomas Richards",
+      "speakers": [
+        "CarolinaCon9"
+      ],
+      "track": "community",
+      "topics": [
+        "dancin",
+        "dalvik",
+        "thoma",
+        "richard"
+      ],
+      "teaser": "Coverage of Dancin' With Dalvik - Thomas Richards from the conference program.",
+      "summary": "CarolinaCon talk dancin with Dalvik.",
+      "durationSeconds": 2089,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "CyOvIK6zft8",
+      "slug": "getting-shells-when-metasploit-fails-ryan-linn",
+      "title": "Getting Shells When Metasploit Fails - Ryan Linn",
+      "speakers": [
+        "CarolinaCon9"
+      ],
+      "track": "community",
+      "topics": [
+        "metasploit",
+        "getting",
+        "shell",
+        "fail",
+        "ryan"
+      ],
+      "teaser": "Getting Shells When Metasploit Fails - Ryan Linn.",
+      "summary": "CarolinaCon talk on getting shells when Metasploit fails.",
+      "durationSeconds": 2627,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "vvhVABer4O4",
+      "slug": "9-capture-the-flag-results",
+      "title": "9 - Capture The Flag Results",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "capture-the-flag",
+        "capture",
+        "flag",
+        "result"
+      ],
+      "teaser": "Coverage of 9 - Capture The Flag Results from the conference program.",
+      "summary": "CarolinaCon Capture The Flag results.",
+      "durationSeconds": 445,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "QI4u-zaaonM",
+      "slug": "michaelsmith",
+      "title": "MichaelSmith",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "michaelsmith",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Coverage of MichaelSmith from the conference program.",
+      "summary": null,
+      "durationSeconds": 3354,
+      "conference": "carolinacon"
+    },
+    {
+      "youtubeId": "4F4P4JspWLY",
+      "slug": "how-the-west-was-pwned-g-mark-hardy",
+      "title": "How the West was Pwned - G. Mark Hardy",
+      "speakers": [
+        "CarolinaCon9"
+      ],
+      "track": "community",
+      "topics": [
+        "pwned",
+        "mark",
+        "hardy"
+      ],
+      "teaser": "Coverage of How the West was Pwned - G. Mark Hardy from the conference program.",
+      "summary": "CarolinaCon talk on how the west was pwned.",
+      "durationSeconds": 3409,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "pBkzvp7xuCI",
+      "slug": "burp-suite-a-comprehensive-web-pen-testing-joshingeneral",
+      "title": "Burp Suite: A Comprehensive Web Pen Testing - JoshinGeneral",
+      "speakers": [
+        "CarolinaCon9"
+      ],
+      "track": "community",
+      "topics": [
+        "web",
+        "burp-suite",
+        "burp",
+        "suite",
+        "comprehensive"
+      ],
+      "teaser": "Burp Suite: A Comprehensive Web Pen Testing - JoshinGeneral.",
+      "summary": "CarolinaCon talk on Burp Suite comprehensive web pen testing.",
+      "durationSeconds": 2578,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "CnLcvY2wmFI",
+      "slug": "pwning-the-pedophile-joe-seanor",
+      "title": "Pwning the Pedophile - Joe Seanor",
+      "speakers": [
+        "CarolinaCon9"
+      ],
+      "track": "community",
+      "topics": [
+        "pwning",
+        "pedophile",
+        "seanor"
+      ],
+      "teaser": "Coverage of Pwning the Pedophile - Joe Seanor from the conference program.",
+      "summary": "CarolinaCon talk on pwning the pedophile.",
+      "durationSeconds": 3890,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "YuQXUCWmkxA",
+      "slug": "rawr-rapid-assessment-of-web-resources-adam-byers-and-tom-moore",
+      "title": "RAWR - Rapid Assessment of Web Resources - Adam Byers and Tom Moore",
+      "speakers": [
+        "CarolinaCon9"
+      ],
+      "track": "community",
+      "topics": [
+        "web",
+        "rawr",
+        "rapid",
+        "assessment",
+        "resource",
+        "adam"
+      ],
+      "teaser": "RAWR - Rapid Assessment of Web Resources - Adam Byers and Tom Moore.",
+      "summary": "CarolinaCon talk on RAWR rapid assessment of web resources.",
+      "durationSeconds": 3004,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "IY3qM7XpBv0",
+      "slug": "digital-energy-bpt-paul-coggin",
+      "title": "Digital Energy -- BPT - Paul Coggin",
+      "speakers": [
+        "CarolinaCon9"
+      ],
+      "track": "community",
+      "topics": [
+        "energy",
+        "paul",
+        "coggin"
+      ],
+      "teaser": "Coverage of Digital Energy -- BPT - Paul Coggin from the conference program.",
+      "summary": "CarolinaCon talk on digital energy BPT.",
+      "durationSeconds": 3062,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "tiXacjAU0ps",
+      "slug": "msfpayload-isnt-dead-yet-av-avoidance-in-payload-delivery-melvin",
+      "title": "msfpayload isn't dead yet: AV avoidance in payload delivery - melvin2001",
+      "speakers": [
+        "CarolinaCon9"
+      ],
+      "track": "red-team",
+      "topics": [
+        "msfpayload",
+        "dead",
+        "avoidance",
+        "payload",
+        "delivery",
+        "melvin2001"
+      ],
+      "teaser": "msfpayload isn't dead yet: AV avoidance in payload delivery - melvin2001.",
+      "summary": "CarolinaCon talk on msfpayload AV avoidance in payload delivery.",
+      "durationSeconds": 2928,
+      "conference": "carolinacon",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "bS9hba5BdEc",
+      "slug": "exploit-development-for-mere-mortals-joe-mccray",
+      "title": "Exploit Development for Mere Mortals - Joe McCray",
+      "speakers": [
+        "CarolinaCon9"
+      ],
+      "track": "red-team",
+      "topics": [
+        "exploit-development",
+        "exploit",
+        "development",
+        "mere",
+        "mortal",
+        "mccray"
+      ],
+      "teaser": "Exploit Development for Mere Mortals - Joe McCray.",
+      "summary": "CarolinaCon exploit development for mere mortals talk.",
+      "durationSeconds": 3755,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "lWPthnTFtKw",
+      "slug": "stephenchapman",
+      "title": "StephenChapman",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "stephenchapman",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Coverage of StephenChapman from the conference program.",
+      "summary": null,
+      "durationSeconds": 2522,
+      "conference": "carolinacon"
+    },
+    {
+      "youtubeId": "xRQjf_HH5mQ",
+      "slug": "iphone-data-reconnaissance-without-physical-access-to-the-device",
+      "title": "iPhone data reconnaissance without physical access to the device. - Jarrick",
+      "speakers": [
+        "CarolinaCon9"
+      ],
+      "track": "recon",
+      "topics": [
+        "reconnaissance",
+        "physical-access",
+        "iphone",
+        "physical"
+      ],
+      "teaser": "iPhone data reconnaissance without physical access to the device. - Jarrick.",
+      "summary": "CarolinaCon talk on iPhone data reconnaissance without physical access.",
+      "durationSeconds": 2025,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Uo8xUsYo8IE",
+      "slug": "terminal-cornucopia-treefort",
+      "title": "Terminal Cornucopia - treefort",
+      "speakers": [
+        "CarolinaCon9"
+      ],
+      "track": "community",
+      "topics": [
+        "terminal",
+        "cornucopia",
+        "treefort"
+      ],
+      "teaser": "Coverage of Terminal Cornucopia - treefort from the conference program.",
+      "summary": "CarolinaCon Terminal Cornucopia talk.",
+      "durationSeconds": 2501,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Gv-QyfyrxHE",
+      "slug": "intro-to-lockpicking-smrk3r",
+      "title": "intro to lockpicking - smrk3r",
+      "speakers": [
+        "CarolinaCon9"
+      ],
+      "track": "community",
+      "topics": [
+        "lockpicking",
+        "intro",
+        "smrk3r"
+      ],
+      "teaser": "Coverage of intro to lockpicking - smrk3r from the conference program.",
+      "summary": "CarolinaCon intro to lockpicking talk.",
+      "durationSeconds": 2189,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "zp5SsKRMO9Y",
+      "slug": "pig-finding-truffles-without-leaving-a-trace-ryan-linn",
+      "title": "PIG: Finding Truffles Without Leaving A Trace - Ryan Linn",
+      "speakers": [
+        "7"
+      ],
+      "track": "community",
+      "topics": [
+        "finding",
+        "truffle",
+        "leaving",
+        "trace",
+        "ryan"
+      ],
+      "teaser": "PIG: Finding Truffles Without Leaving A Trace - Ryan Linn.",
+      "summary": "CarolinaCon talk on PIG finding truffles without a trace.",
+      "durationSeconds": 3059,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "2aQzm5Noy0k",
+      "slug": "tales-from-the-crypto-g-mark-hardy",
+      "title": "Tales from the Crypto - G. Mark Hardy",
+      "speakers": [
+        "7"
+      ],
+      "track": "community",
+      "topics": [
+        "tale",
+        "crypto",
+        "mark",
+        "hardy"
+      ],
+      "teaser": "Coverage of Tales from the Crypto - G. Mark Hardy from the conference program.",
+      "summary": "CarolinaCon Tales from the Crypto talk.",
+      "durationSeconds": 3259,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "fl0O-YnBN8g",
+      "slug": "hack-from-a-library-with-katana-jp-ronin-dunning",
+      "title": "Hack from a Library with Katana - JP \"ronin\" Dunning",
+      "speakers": [
+        "7"
+      ],
+      "track": "community",
+      "topics": [
+        "hack",
+        "library",
+        "katana",
+        "ronin",
+        "dunning"
+      ],
+      "teaser": "Hack from a Library with Katana - JP \"ronin\" Dunning.",
+      "summary": "CarolinaCon talk on hacking from a library with Katana.",
+      "durationSeconds": 3389,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "MT-RTMrn9cM",
+      "slug": "kippos-and-bits-and-bits-and-bits-fun-with-ssh-honeypotting-chri",
+      "title": "Kippos and bits and bits and bits: Fun with SSH honeypotting - Chris Teodorski",
+      "speakers": [
+        "7"
+      ],
+      "track": "community",
+      "topics": [
+        "ssh",
+        "kippo",
+        "bit",
+        "honeypotting",
+        "chri",
+        "teodorski"
+      ],
+      "teaser": "Kippos and bits and bits and bits: Fun with SSH honeypotting - Chris Teodorski.",
+      "summary": "CarolinaCon talk on fun with SSH honeypotting.",
+      "durationSeconds": 2438,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "2qaKWZdEkmg",
+      "slug": "mackerel-a-progressive-school-of-cryptographic-thought-justin-tr",
+      "title": "Mackerel: A Progressive School of Cryptographic Thought - Justin Troutman",
+      "speakers": [
+        "7"
+      ],
+      "track": "community",
+      "topics": [
+        "mackerel",
+        "progressive",
+        "school",
+        "cryptographic",
+        "justin"
+      ],
+      "teaser": "Mackerel: A Progressive School of Cryptographic Thought - Justin Troutman.",
+      "summary": "CarolinaCon talk on Mackerel progressive school of cryptographic thought.",
+      "durationSeconds": 3651,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "7oZ4ixMrqKQ",
+      "slug": "theres-an-app-for-that-pentesting-moble-joe-mccray",
+      "title": "There's An App For That: Pentesting Moble - Joe McCray",
+      "speakers": [
+        "7"
+      ],
+      "track": "red-team",
+      "topics": [
+        "pentesting",
+        "moble",
+        "mccray"
+      ],
+      "teaser": "There's An App For That: Pentesting Moble - Joe McCray.",
+      "summary": "CarolinaCon talk on pentesting mobile apps.",
+      "durationSeconds": 2576,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "AEec3KN84kw",
+      "slug": "shawn-merdinger-we-dont-need-no-stinking-badges",
+      "title": "Shawn Merdinger - We Don't Need No Stinking Badges",
+      "speakers": [
+        "6"
+      ],
+      "track": "community",
+      "topics": [
+        "shawn",
+        "merdinger",
+        "stinking",
+        "badge"
+      ],
+      "teaser": "Shawn Merdinger - We Don't Need No Stinking Badges.",
+      "summary": "CarolinaCon talk we do not need no stinking badges.",
+      "durationSeconds": 3413,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "LjfGwRE_DF8",
+      "slug": "the-search-for-the-ultimate-handcuff-key-toool",
+      "title": "The Search for the Ultimate Handcuff Key - TOOOL",
+      "speakers": [
+        "6"
+      ],
+      "track": "community",
+      "topics": [
+        "search",
+        "ultimate",
+        "handcuff",
+        "toool"
+      ],
+      "teaser": "The Search for the Ultimate Handcuff Key - TOOOL.",
+      "summary": "CarolinaCon talk on search for ultimate handcuff key.",
+      "durationSeconds": 2192,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "6TsnUSvaOWk",
+      "slug": "cybercrime-and-the-law-enforcement-response-professor-farnsworth",
+      "title": "Cybercrime and the Law Enforcement Response - Professor Farnsworth/Thomas Holt",
+      "speakers": [
+        "6"
+      ],
+      "track": "policy",
+      "topics": [
+        "law-enforcement",
+        "law",
+        "cybercrime",
+        "enforcement",
+        "response",
+        "professor"
+      ],
+      "teaser": "Cybercrime and the Law Enforcement Response - Professor Farnsworth/Thomas Holt.",
+      "summary": "CarolinaCon talk on cybercrime and law enforcement response.",
+      "durationSeconds": 2884,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Fz_WBGNIgdc",
+      "slug": "yara-and-python-the-malware-detection-dynamic-duo-mjg-michael-go",
+      "title": "Yara and Python: The Malware Detection Dynamic Duo - mjg (Michael Goffin)",
+      "speakers": [
+        "7"
+      ],
+      "track": "malware",
+      "topics": [
+        "detection",
+        "python",
+        "malware-detection",
+        "yara"
+      ],
+      "teaser": "Yara and Python: The Malware Detection Dynamic Duo - mjg (Michael Goffin).",
+      "summary": "CarolinaCon talk on Yara and Python malware detection duo.",
+      "durationSeconds": 2201,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "PqwkZvKQYtg",
+      "slug": "if-you-own-a-multi-function-printer-mfp-then-i-own-you-deral-hei",
+      "title": "If you own a Multi Function Printer (MFP), then I own you - Deral Heiland",
+      "speakers": [
+        "7"
+      ],
+      "track": "community",
+      "topics": [
+        "multi",
+        "function",
+        "printer",
+        "deral",
+        "heiland"
+      ],
+      "teaser": "If you own a Multi Function Printer (MFP), then I own you - Deral Heiland.",
+      "summary": "CarolinaCon talk on owning multi-function printers.",
+      "durationSeconds": 3188,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "yCRiy5fwN2g",
+      "slug": "how-to-own-and-protect-your-office-space-dr-tran",
+      "title": "How to Own and Protect Your Office Space - Dr. Tran",
+      "speakers": [
+        "7"
+      ],
+      "track": "community",
+      "topics": [
+        "space",
+        "protect",
+        "tran"
+      ],
+      "teaser": "How to Own and Protect Your Office Space - Dr. Tran.",
+      "summary": "CarolinaCon talk on owning and protecting your office space.",
+      "durationSeconds": 2438,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "tMjek2LxKEw",
+      "slug": "logstash-open-source-log-and-event-management-jordan-sissel",
+      "title": "logstash - open source log and event management - Jordan Sissel",
+      "speakers": [
+        "7"
+      ],
+      "track": "community",
+      "topics": [
+        "open-source",
+        "logstash",
+        "event",
+        "management"
+      ],
+      "teaser": "logstash - open source log and event management - Jordan Sissel.",
+      "summary": "CarolinaCon talk on logstash log and event management.",
+      "durationSeconds": 2644,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "fo6upeKhBqg",
+      "slug": "how-to-0wn-capture-the-flag",
+      "title": "How to 0wn Capture the Flag",
+      "speakers": [
+        "3"
+      ],
+      "track": "community",
+      "topics": [
+        "capture-the-flag",
+        "capture",
+        "flag"
+      ],
+      "teaser": "Coverage of How to 0wn Capture the Flag from the conference program.",
+      "summary": "CarolinaCon talk on how to own Capture the Flag.",
+      "durationSeconds": 3715,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "_Wr8aWA2hS4",
+      "slug": "creating-and-maintaining-a-non-profit-hacker-lab",
+      "title": "Creating and Maintaining a Non-Profit Hacker Lab",
+      "speakers": [
+        "3"
+      ],
+      "track": "community",
+      "topics": [
+        "creating",
+        "maintaining",
+        "non-profit"
+      ],
+      "teaser": "Creating and Maintaining a Non-Profit Hacker Lab.",
+      "summary": "CarolinaCon talk on creating and maintaining a nonprofit hacker lab.",
+      "durationSeconds": 3602,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "KtYREFKttyY",
+      "slug": "intro-to-electronic-circuits-and-circuit-elements",
+      "title": "Intro to Electronic Circuits and Circuit Elements",
+      "speakers": [
+        "3"
+      ],
+      "track": "community",
+      "topics": [
+        "intro",
+        "electronic",
+        "circuit",
+        "element"
+      ],
+      "teaser": "Intro to Electronic Circuits and Circuit Elements.",
+      "summary": "CarolinaCon intro to electronic circuits and elements.",
+      "durationSeconds": 2102,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "hIFPvHhGgd0",
+      "slug": "filesystem-forensics-your-drive-has-been-siezed-as-evidence",
+      "title": "Filesystem Forensics: Your drive has been siezed as evidence!",
+      "speakers": [
+        "QuietRiot"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "forensics",
+        "filesystem",
+        "forensic",
+        "drive"
+      ],
+      "teaser": "Filesystem Forensics: Your drive has been siezed as evidence!.",
+      "summary": "CarolinaCon talk on filesystem forensics when your drive is seized.",
+      "durationSeconds": 3000,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "v4wVmVh1FBE",
+      "slug": "college-of-hacking-successful-network-penetration-for-dummies",
+      "title": "College of Hacking: Successful Network Penetration for Dummies",
+      "speakers": [
+        "2"
+      ],
+      "track": "community",
+      "topics": [
+        "network",
+        "college",
+        "successful",
+        "penetration",
+        "dummie"
+      ],
+      "teaser": "College of Hacking: Successful Network Penetration for Dummies.",
+      "summary": "CarolinaCon College of Hacking network penetration for dummies.",
+      "durationSeconds": 6830,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Dk3ReYTkoRI",
+      "slug": "gender-in-hacking-and-hacker-culture",
+      "title": "Gender In Hacking and Hacker Culture",
+      "speakers": [
+        "2"
+      ],
+      "track": "community",
+      "topics": [
+        "culture",
+        "hacker-culture",
+        "gender"
+      ],
+      "teaser": "Coverage of Gender In Hacking and Hacker Culture from the conference program.",
+      "summary": "CarolinaCon talk on gender in hacking and hacker culture.",
+      "durationSeconds": 3751,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "GBV1gmDFLUE",
+      "slug": "reverse-engineering",
+      "title": "Reverse Engineering",
+      "speakers": [
+        "2"
+      ],
+      "track": "malware",
+      "topics": [
+        "reverse-engineering",
+        "reverse",
+        "engineering"
+      ],
+      "teaser": "Coverage of Reverse Engineering from the conference program.",
+      "summary": "CarolinaCon reverse engineering talk.",
+      "durationSeconds": 3632,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "rwFSXNDzO88",
+      "slug": "building-a-competitive-robot",
+      "title": "Building a Competitive Robot",
+      "speakers": [
+        "2"
+      ],
+      "track": "community",
+      "topics": [
+        "building",
+        "competitive",
+        "robot"
+      ],
+      "teaser": "Coverage of Building a Competitive Robot from the conference program.",
+      "summary": "CarolinaCon talk on building a competitive robot.",
+      "durationSeconds": 3649,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Y4HwYw93Apw",
+      "slug": "layer-7-attacks",
+      "title": "Layer 7 Attacks",
+      "speakers": [
+        "4"
+      ],
+      "track": "red-team",
+      "topics": [
+        "layer",
+        "attack",
+        "vulnerability-research"
+      ],
+      "teaser": "Coverage of Layer 7 Attacks from the conference program.",
+      "summary": "CarolinaCon talk on layer 7 attacks.",
+      "durationSeconds": 2069,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "jv0adeL4x1U",
+      "slug": "format-string-vulnerabilities-101",
+      "title": "Format String Vulnerabilities 101",
+      "speakers": [
+        "4"
+      ],
+      "track": "appsec",
+      "topics": [
+        "vulnerabilities",
+        "format",
+        "string",
+        "vulnerabilitie"
+      ],
+      "teaser": "Coverage of Format String Vulnerabilities 101 from the conference program.",
+      "summary": "CarolinaCon Format String Vulnerabilities 101 talk.",
+      "durationSeconds": 3584,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "wD093HuFvnI",
+      "slug": "console-modding-101",
+      "title": "Console Modding 101",
+      "speakers": [
+        "4"
+      ],
+      "track": "community",
+      "topics": [
+        "console",
+        "modding",
+        "vulnerability-research"
+      ],
+      "teaser": "Coverage of Console Modding 101 from the conference program.",
+      "summary": "CarolinaCon Console Modding 101 talk.",
+      "durationSeconds": 3220,
+      "conference": "carolinacon",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "zDnuwkmSoqE",
+      "slug": "firefox-application-penetration-testing-suite",
+      "title": "Firefox Application Penetration Testing Suite",
+      "speakers": [
+        "4"
+      ],
+      "track": "red-team",
+      "topics": [
+        "penetration-testing",
+        "firefox",
+        "application",
+        "penetration",
+        "suite"
+      ],
+      "teaser": "Firefox Application Penetration Testing Suite.",
+      "summary": "CarolinaCon talk on Firefox application penetration testing suite.",
+      "durationSeconds": 3115,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "N85XpyYIzYE",
+      "slug": "local-link-networking",
+      "title": "Local Link Networking",
+      "speakers": [
+        "4"
+      ],
+      "track": "community",
+      "topics": [
+        "networking",
+        "local",
+        "link"
+      ],
+      "teaser": "Coverage of Local Link Networking from the conference program.",
+      "summary": "CarolinaCon talk on local link networking.",
+      "durationSeconds": 1335,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "j0W6Xmm9a90",
+      "slug": "rootkits101948",
+      "title": "RootKits101948",
+      "speakers": [],
+      "track": "malware",
+      "topics": [
+        "rootkits101948",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Coverage of RootKits101948 from the conference program.",
+      "summary": "CarolinaCon RootKits 101 talk.",
+      "durationSeconds": 3913,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "guvLghR4EtM",
+      "slug": "san343",
+      "title": "SAN343",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "san343",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Coverage of SAN343 from the conference program.",
+      "summary": null,
+      "durationSeconds": 3178,
+      "conference": "carolinacon"
+    },
+    {
+      "youtubeId": "44mWh-5D8DI",
+      "slug": "wxs669",
+      "title": "wxs669",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "wxs669",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Coverage of wxs669 from the conference program.",
+      "summary": null,
+      "durationSeconds": 2856,
+      "conference": "carolinacon"
+    },
+    {
+      "youtubeId": "FIeQN6SDvBQ",
+      "slug": "al-new397",
+      "title": "Al_NEW397",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "new397",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Coverage of Al_NEW397 from the conference program.",
+      "summary": null,
+      "durationSeconds": 3070,
+      "conference": "carolinacon"
+    },
+    {
+      "youtubeId": "C2WdK9uO3W8",
+      "slug": "cyberspy-talk116",
+      "title": "Cyberspy_talk116",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "cyberspy",
+        "talk116",
+        "vulnerability-research"
+      ],
+      "teaser": "Coverage of Cyberspy_talk116 from the conference program.",
+      "summary": null,
+      "durationSeconds": 3677,
+      "conference": "carolinacon"
+    },
+    {
+      "youtubeId": "DM8myjlm1tQ",
+      "slug": "arpspoofing854",
+      "title": "ArpSpoofing854",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "arpspoofing854",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Coverage of ArpSpoofing854 from the conference program.",
+      "summary": "CarolinaCon ArpSpoofing talk.",
+      "durationSeconds": 1796,
+      "conference": "carolinacon",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "CCwsl_L2CNA",
+      "slug": "hacknano",
+      "title": "HackNano",
+      "speakers": [
+        "2006"
+      ],
+      "track": "community",
+      "topics": [
+        "hacknano",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Coverage of HackNano from the conference program.",
+      "summary": null,
+      "durationSeconds": 332,
+      "conference": "carolinacon"
+    }
+  ]
+}

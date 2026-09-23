@@ -1,0 +1,248 @@
+{
+  "villageSlug": "layerone-2025",
+  "villageName": "LayerOne 2025",
+  "eventSlug": "layerone-2025",
+  "conference": "layerone",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLa-neBkALhDR3Mw6AmCu9m3k-f0llamEf",
+  "description": "LayerOne 2025 talks from LayerOne 2025.",
+  "talks": [
+    {
+      "youtubeId": "0QpGPSgR7Ao",
+      "slug": "introduction-to-fault-injection-joe-rozner",
+      "title": "Introduction to Fault Injection (Joe Rozner)",
+      "speakers": [
+        "Joe Rozner"
+      ],
+      "track": "hardware",
+      "topics": [
+        "fault-injection",
+        "injection",
+        "introduction",
+        "fault",
+        "rozner"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Introduction to Fault Injection (Joe Rozner).",
+      "summary": "# Overview\nIn this talk, Joe Rozner introduces the fundamentals of fault injection (hardware glitching) against microcontrollers. Fault injection involves intentionally driving a silicon chip outside its specified operating conditions (such as voltage, temperature, or clock margins) just enough to alter its behavior without crashing it completely. From a security standpoint, the primary motivations are recovering firmware, extracting cryptographic keys or secrets stored in one-time programmable (OTP) memory, and bypassing hardware-enforced security controls to achieve arbitrary code execution.\n\n# Key Topics\nRozner breaks down the core hardware security controls targeted by fault injection:\n- Secure Boot: Uses cryptographic signatures verified by a root of trust (typically etched into mask ROM) to ensure only trusted code executes.\n- Code Readout Protection & Flash Encryption: Mechanisms that prevent firmware theft. Internal flash typically relies on readout protection flags, while external flash uses encryption (either via a memory management unit or bootloader decryption into RAM).\n- Debug Interfaces: Protocols like JTAG or SWD that allow direct reading/writing of memory and registers, which are typically disabled in production.\n- Boot ROM Targeting: Rather than targeting application code—which is complex, large, and timing-inconsistent—attackers focus on the early bootloader stages (e.g., stage 0/1 mask ROM). Boot ROMs are small, etch-fixed in silicon across all identical chips, and control critical security logic during the processor's fetch-decode-execute loop.\n\n# Technical Details\nTo successfully inject a fault, attackers perform characterization to determine precise timing windows, typically down to the nanosecond level:\n- Characterization Techniques: Attackers measure execution time by toggling GPIO pins on non-locked development boards or monitoring power consumption traces using a shunt resistor and Ohm's law to observe loops and power dips.\n- Triggering: Glitches are triggered based on high-speed events like reset pin transitions, falling/rising edges, or protocol events (UART, USB) using digital signal decoding or sum of all differences (SAD).\n- Fault Injection Methods:\n  - Voltage Glitching (Crowbar): The most common method. A fast-switching MOSFET temporarily shorts a power rail (core voltage, IO, or regulator lines) to ground, causing signals or instructions to latch incorrectly (e.g., flipping ones to zeros or skipping branch instructions). This usually requires removing board bypass capacitors.\n  - Clock Glitching: Involves injecting extra clock edges into external clock lines, causing instructions to execute before signals fully propagate across the chip bus. This is less common today due to internal oscillators and clock dividers.\n  - Electromagnetic Fault Injection (EMFI): Uses a high-voltage pulse dumped through a magnetic coil placed over the chip package. EMFI avoids modifying the PCB or removing bypass capacitors, though it often requires spatial X/Y/Z positioning (sometimes automated using repurposed 3D printers like the Ender 3).\n\n# Takeaways\nFault injection combines nanosecond-level physical precision with probabilistic brute-force sweeps across target timeframes. Rozner concludes by emphasizing that low-cost hardware and open learning resources have made the field highly accessible. Relevant tools and learning materials mentioned include the ChipWhisperer series (Husky, Nano), the RP2040-based Faultier, training from Thomas Roth (Stack Smashing) on Hex.io, courses by Cristofaro Mune and Niek Timmers (covering ESP32 research), and books such as *The Hardware Hacking Handbook* (Colin O'Flynn, Jasper van Woudenberg) and *Microcontroller Exploits* (Travis Goodspeed).",
+      "durationSeconds": 2388,
+      "conference": "layerone"
+    },
+    {
+      "youtubeId": "x2N6yGrcoMo",
+      "slug": "keeping-things-local-making-your-own-private-llm-bronwen-corvus",
+      "title": "Keeping Things Local - Making Your Own Private LLM (Bronwen “Corvus” Aker)",
+      "speakers": [
+        "Keeping Things Local"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "llm",
+        "local",
+        "keeping",
+        "thing",
+        "making"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Keeping Things Local - Making Your Own Private LLM (Bronwen “Corvus” Aker).",
+      "summary": null,
+      "durationSeconds": 3227,
+      "conference": "layerone"
+    },
+    {
+      "youtubeId": "9JcIHbmwV6w",
+      "slug": "wine-for-video-game-hackers-jack-baker",
+      "title": "WINE for Video Game Hackers (Jack Baker)",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "wine",
+        "jack",
+        "baker"
+      ],
+      "teaser": "Security researchers examine technical aspects of WINE for Video Game Hackers (Jack Baker).",
+      "summary": null,
+      "durationSeconds": 2063,
+      "conference": "layerone"
+    },
+    {
+      "youtubeId": "0u5XNCXhaKw",
+      "slug": "quantum-conundrums-conquering-quomputing-challenges-vincent-benz",
+      "title": "Quantum Conundrums: Conquering Quomputing Challenges (Vincent Benzoni)",
+      "speakers": [
+        "Quantum Conundrums"
+      ],
+      "track": "community",
+      "topics": [
+        "quantum",
+        "conundrum",
+        "conquering",
+        "quomputing",
+        "challenge",
+        "vincent"
+      ],
+      "teaser": "Security researchers examine technical aspects of Quantum Conundrums: Conquering Quomputing Challenges (Vincent Benzoni).",
+      "summary": null,
+      "durationSeconds": 3566,
+      "conference": "layerone"
+    },
+    {
+      "youtubeId": "s1_FgEXsoU4",
+      "slug": "covert-regional-communication-with-meshtastic-daryll-strauss",
+      "title": "Covert Regional Communication with Meshtastic (Daryll Strauss)",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "meshtastic",
+        "communication",
+        "covert",
+        "regional",
+        "daryll",
+        "straus"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Covert Regional Communication with Meshtastic (Daryll Strauss).",
+      "summary": null,
+      "durationSeconds": 1979,
+      "conference": "layerone"
+    },
+    {
+      "youtubeId": "PvwhKqiAzew",
+      "slug": "reverse-engineering-toys-into-robots-josh-savant-brashars",
+      "title": "Reverse Engineering Toys into Robots (Josh \"savant\" Brashars)",
+      "speakers": [],
+      "track": "malware",
+      "topics": [
+        "reverse-engineering",
+        "reverse",
+        "engineering",
+        "toy",
+        "robot",
+        "josh"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Reverse Engineering Toys into Robots (Josh \"savant\" Brashars).",
+      "summary": null,
+      "durationSeconds": 2415,
+      "conference": "layerone"
+    },
+    {
+      "youtubeId": "L3fLrQWzg7E",
+      "slug": "amped-up-for-learning-radio-wasabi",
+      "title": "Amped up for (Learning) Radio (wasabi)",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "amped",
+        "learning",
+        "wasabi"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Amped up for (Learning) Radio (wasabi).",
+      "summary": null,
+      "durationSeconds": 2726,
+      "conference": "layerone"
+    },
+    {
+      "youtubeId": "jg47jULoW64",
+      "slug": "layeerone-2025-securing-ai-systems-sam-bowne",
+      "title": "LayeerOne 2025",
+      "speakers": [
+        "Securing AI Systems (Sam Bowne)"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "layeerone",
+        "system",
+        "bowne",
+        "systems"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for LayeerOne 2025 - Securing AI Systems (Sam Bowne).",
+      "summary": null,
+      "durationSeconds": 3425,
+      "conference": "layerone"
+    },
+    {
+      "youtubeId": "dxyJaahkcCE",
+      "slug": "well-do-it-live-experiments-in-self-modifying-code-b0t",
+      "title": "We’ll Do It Live: Experiments in Self-Modifying Code (b0t)",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "experiment",
+        "self-modifying",
+        "code",
+        "experiments"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for We’ll Do It Live: Experiments in Self-Modifying Code (b0t).",
+      "summary": null,
+      "durationSeconds": 2817,
+      "conference": "layerone"
+    },
+    {
+      "youtubeId": "422s5Z-xbh8",
+      "slug": "revenge-of-the-sol-stealers-cesi0",
+      "title": "Revenge of the Sol Stealers (cesi0)",
+      "speakers": [],
+      "track": "malware",
+      "topics": [
+        "revenge",
+        "stealer",
+        "cesi0",
+        "stealers"
+      ],
+      "teaser": "Security researchers examine technical aspects of Revenge of the Sol Stealers (cesi0).",
+      "summary": null,
+      "durationSeconds": 1972,
+      "conference": "layerone"
+    },
+    {
+      "youtubeId": "NMfqGgNpHhg",
+      "slug": "boo-boo-runs-wild-guerilla-open-source-manufacturing-machinist",
+      "title": "Boo Boo Runs Wild: Guerilla Open-Source Manufacturing (machinist)",
+      "speakers": [
+        "Boo Boo Runs Wild"
+      ],
+      "track": "red-team",
+      "topics": [
+        "open-source",
+        "manufacturing",
+        "run",
+        "wild",
+        "guerilla",
+        "machinist"
+      ],
+      "teaser": "Security researchers examine technical aspects of Boo Boo Runs Wild: Guerilla Open-Source Manufacturing (machinist).",
+      "summary": null,
+      "durationSeconds": 2591,
+      "conference": "layerone"
+    },
+    {
+      "youtubeId": "S8oMrQJvCUU",
+      "slug": "hebocon-robot-battles",
+      "title": "HeboCon Robot Battles",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "hebocon",
+        "robot",
+        "battle",
+        "battles"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding HeboCon Robot Battles.",
+      "summary": null,
+      "durationSeconds": 759,
+      "conference": "layerone"
+    },
+    {
+      "youtubeId": "9CiBHtliPMc",
+      "slug": "ansi-art-competition-and-demo-party",
+      "title": "ANSI Art Competition and Demo Party",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "competition",
+        "party",
+        "ansi"
+      ],
+      "teaser": "Security researchers examine technical aspects of ANSI Art Competition and Demo Party.",
+      "summary": null,
+      "durationSeconds": 1589,
+      "conference": "layerone"
+    }
+  ]
+}

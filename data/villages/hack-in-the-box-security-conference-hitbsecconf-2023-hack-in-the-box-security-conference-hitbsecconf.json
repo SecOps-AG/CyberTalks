@@ -1,0 +1,500 @@
+{
+  "villageSlug": "hack-in-the-box-security-conference-hitbsecconf",
+  "villageName": "Hack In The Box Security Conference (HITBSecConf)",
+  "eventSlug": "hack-in-the-box-security-conference-hitbsecconf-2023",
+  "conference": "hitb",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLmv8T5-GONwQPfMX6Jowygqje9QEDA3Mx",
+  "description": "Hack In The Box Security Conference (HITBSecConf) talks from Hack In The Box Security Conference (HITBSecConf) 2023.",
+  "talks": [
+    {
+      "youtubeId": "a9e6NFGwHvk",
+      "slug": "hitb2023ams-keynote-the-myths-of-software-security",
+      "title": "#HITB2023AMS KEYNOTE: The Myths Of Software Security",
+      "speakers": [
+        "Mark Curphey"
+      ],
+      "track": "hardware",
+      "topics": [
+        "software-security",
+        "hitb2023am",
+        "myth",
+        "hitb2023ams"
+      ],
+      "teaser": "Mark Curphey investigates #HITB2023AMS KEYNOTE: The Myths Of Software Security.",
+      "summary": null,
+      "durationSeconds": 2439,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "3gnGPfKu7FE",
+      "slug": "hitb2023ams-d1t1-current-state-of-ios-malware-detection",
+      "title": "#HITB2023AMS D1T1 - Current State Of IOS Malware Detection",
+      "speakers": [
+        "Matthias Frielingsdorf"
+      ],
+      "track": "mobile",
+      "topics": [
+        "detection",
+        "ios",
+        "malware-detection"
+      ],
+      "teaser": "Matthias Frielingsdorf explores #HITB2023AMS D1T1 - Current State Of IOS Malware Detection.",
+      "summary": null,
+      "durationSeconds": 3404,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "c9zZ3aMAyDs",
+      "slug": "hitb2023ams-d1t2-xrp-raid-protector-killing-a-critical-bug-worth",
+      "title": "#HITB2023AMS D1T2 - XRP Raid Protector: Killing A Critical Bug Worth 40 Billion Dollars",
+      "speakers": [
+        "Haoyu Yang"
+      ],
+      "track": "community",
+      "topics": [
+        "hitb2023am",
+        "d1t2",
+        "raid",
+        "protector",
+        "killing",
+        "critical"
+      ],
+      "teaser": "Haoyu Yang investigates #HITB2023AMS D1T2 - XRP Raid Protector: Killing A Critical Bug Worth 40 Billion Dollars.",
+      "summary": null,
+      "durationSeconds": 1932,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "0b87g3tY6bY",
+      "slug": "hitb2023ams-d1t1-nakatomi-space-lateral-movement-as-l1-post-expl",
+      "title": "#HITB2023AMS D1T1 - Nakatomi Space: Lateral Movement As L1 Post-Exploitation In OT",
+      "speakers": [
+        "Jos Wetzels"
+      ],
+      "track": "red-team",
+      "topics": [
+        "post-exploitation",
+        "lateral-movement",
+        "space"
+      ],
+      "teaser": "Jos Wetzels investigates #HITB2023AMS D1T1 - Nakatomi Space: Lateral Movement As L1 Post-Exploitation In OT.",
+      "summary": "### Overview\nIn this talk, Jos Wetzels from Forescout explores lateral movement across Level 1 (L1) embedded devices in operational technology (OT) networks. Traditional OT security focuses on perimeters at higher Purdue Model tiers (e.g., Level 3.5 and 2.5 DMZs) or on upstream attacks targeting SCADA/HMI systems. However, control devices at Level 1—such as PLCs, RTUs, and fieldbus couplers—frequently sit on unacknowledged, multi-homed \"network crawl spaces\" consisting of nested fieldbuses, serial links, RF connections, and point-to-point lines. Drawing an analogy to the \"Nakatomi space\" concept (traversing latent, overlooked architectural paths), Wetzels demonstrates how an attacker can move laterally downwards through nested L1 control devices to cross hardened security boundaries and manipulate critical physical processes.\n\n### Key Topics\n- **The OT \"Network Crawl Space\":** Deep L1 architectures host nested networks (Profibus, CANopen, industrial wireless) and black-box third-party packaged units (HVAC, chemical injection, turbines) integrated via couplers that lack monitoring, visibility, and detection capabilities.\n- **Motivation for Deep Lateral Movement:** Attackers navigate deep into OT to bypass hardened perimeters (e.g., crossing from Basic Process Control Systems [BPCS] to Safety Instrumented Systems [SIS]), manipulate SIS bypass functions, or achieve granular control over field devices that are not exposed via SCADA interfaces.\n- **Level 1 Lateral Movement Techniques:** Attackers exploit OT protocol routing and encapsulation (Modbus, EtherCAT, CIP), in-band code downloads, memory manipulation, and protocol stack vulnerabilities in embedded real-time operating systems (RTOS).\n\n### Technical Details\nTo demonstrate an end-to-end multi-hop attack chain, the speaker modeled a real-world movable bascule bridge architecture managed across three tiers of embedded hardware:\n1. **Initial Compromise of Fieldbus Gateway:** The attacker targets a WAGO 750-852 Modbus coupler running Nucleus RTOS. Exploiting a Nucleus 13 vulnerability (a stack buffer overflow in the FTP server's USER command handling), the attacker overrides linked list pointers during an FTP disconnect to achieve a write-4 primitive. By hooking the unused `span_process_packet` function and sending LLC frames, the attacker achieves code execution in ARM supervisor mode, installs an RTOS task, and proxies Modbus function code 0x5A.\n2. **Engineering Protocol Exploitation on the Object PLC:** Behind the coupler sits a Schneider Electric Modicon M340 PLC running VxWorks 6.4. The attacker sniffs and replays legitimate nonces or forges authenticated requests in the proprietary UMAS protocol (Modbus function 0x5A) because the authentication signature relies only on nonces and public hardware IDs without a secret. Rather than downloading new control logic—which forces a disruptive restart and alarms—the attacker abuses the undocumented UMAS CSA request (service code 0x50). By writing payload shellcode into a data block and executing a permitted block-copy to an executable block, the attacker hot-patches running memory live, escapes the scan cycle watchdog, spawns an RTOS task, and erases memory changes for anti-forensics.\n3. **Fieldbus & Safety PLC Pivot:** From the M340 PLC, the attacker uses CANopen APIs/SDOs to override motor safety limits and initiates an attack across a non-routable, point-to-point Ethernet link into an Allen-Bradley GuardLogix safety PLC (1756-EN2D module running VxWorks 6.9 on an Ice 2 chip). Exploiting an Urgent 11 vulnerability (Interpeak IPnet stack buffer overflow in IP record route options), the attacker constructs a ROP chain to bypass executable space protection (NX), secures a write-4 primitive, deploys an implant, and talks directly to the backplane device driver to manipulate SIS bypasses and trigger false emergency stops.\n\n### Takeaways & Defenses\n- **Redefining Perimeters:** Any L1 device bridging separate networks or media is a perimeter device and must be secured and evaluated for multi-order connectivity risks.\n- **Detection Strategies:** Defenders should alert on abnormal protocol usage, such as UMAS traffic routed to non-Modicon devices or UMAS CSA traffic (service code 0x50), monitor for watchdog resets and IP header error statistics, and inspect project memory blocks for carved ARM shellcode when anti-forensics are incomplete. Network flows carrying UMAS should be strictly restricted to engineering workstations.",
+      "durationSeconds": 3428,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "179l_gnPp2U",
+      "slug": "hitb2023ams-d1t2-syscalls-in-shellcode-techniques-for-malicious",
+      "title": "#HITB2023AMS D1T2 - Syscalls In Shellcode: Techniques For Malicious Functionality",
+      "speakers": [
+        "B. Brizendine"
+      ],
+      "track": "malware",
+      "topics": [
+        "shellcode",
+        "syscalls",
+        "hitb2023am",
+        "d1t2",
+        "syscall",
+        "technique"
+      ],
+      "teaser": "B. Brizendine examines #HITB2023AMS D1T2 - Syscalls In Shellcode: Techniques For Malicious Functionality.",
+      "summary": null,
+      "durationSeconds": 3710,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "vvUrSHLsNxI",
+      "slug": "hitb2023ams-d1t1-soho-hacking-at-pwn2own",
+      "title": "#HITB2023AMS D1T1 - SOHO Hacking At Pwn2Own",
+      "speakers": [
+        "Alex Plaskett",
+        "McCaulay Hudson"
+      ],
+      "track": "red-team",
+      "topics": [
+        "pwn2own",
+        "hitb2023am",
+        "d1t1",
+        "soho",
+        "hitb2023ams"
+      ],
+      "teaser": "Alex Plaskett explores #HITB2023AMS D1T1 - SOHO Hacking At Pwn2Own.",
+      "summary": null,
+      "durationSeconds": 3492,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "DRH0oRFwFiM",
+      "slug": "hitb2023ams-d1t2-next-generation-virtualization-based-obfuscator",
+      "title": "#HITB2023AMS D1T2 - Next Generation Virtualization-Based Obfuscators",
+      "speakers": [
+        "T. Blazytko",
+        "M. Schloegel"
+      ],
+      "track": "malware",
+      "topics": [
+        "hitb2023am",
+        "d1t2",
+        "generation",
+        "virtualization-based",
+        "obfuscator"
+      ],
+      "teaser": "T. Blazytko explores #HITB2023AMS D1T2 - Next Generation Virtualization-Based Obfuscators.",
+      "summary": null,
+      "durationSeconds": 3531,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "4_ExouTXe10",
+      "slug": "hitb2023ams-d1t1-hunting-windows-desktop-window-manager-bugs",
+      "title": "#HITB2023AMS D1T1 - Hunting Windows Desktop Window Manager Bugs",
+      "speakers": [
+        "Z. WangJunjie",
+        "Y. He",
+        "W. Li"
+      ],
+      "track": "community",
+      "topics": [
+        "windows",
+        "hitb2023am",
+        "d1t1",
+        "hunting",
+        "window",
+        "desktop"
+      ],
+      "teaser": "Z. WangJunjie explores #HITB2023AMS D1T1 - Hunting Windows Desktop Window Manager Bugs.",
+      "summary": null,
+      "durationSeconds": 2782,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "NY7kBh3XVzE",
+      "slug": "hitb2023ams-d1t2-a-tale-of-building-a-real-full-speed-anti-censo",
+      "title": "#HITB2023AMS D1T2 - A Tale Of Building A REAL Full Speed Anti-Censorship Router",
+      "speakers": [
+        "KaiJern Lau"
+      ],
+      "track": "community",
+      "topics": [
+        "anti-censorship",
+        "hitb2023am",
+        "d1t2",
+        "tale",
+        "building"
+      ],
+      "teaser": "KaiJern Lau details #HITB2023AMS D1T2 - A Tale Of Building A REAL Full Speed Anti-Censorship Router.",
+      "summary": null,
+      "durationSeconds": 3228,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "km6QTMDb8Yw",
+      "slug": "hitb2023ams-d1t1-advanced-dma-reentrancy-techniques-to-escape-qe",
+      "title": "#HITB2023AMS D1T1 - Advanced DMA Reentrancy Techniques To Escape QEMU",
+      "speakers": [
+        "A. Wang",
+        "Q. Jin"
+      ],
+      "track": "community",
+      "topics": [
+        "qemu",
+        "hitb2023am",
+        "d1t1",
+        "reentrancy",
+        "technique"
+      ],
+      "teaser": "A. Wang details #HITB2023AMS D1T1 - Advanced DMA Reentrancy Techniques To Escape QEMU.",
+      "summary": null,
+      "durationSeconds": 2949,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "vwnjqmAruEw",
+      "slug": "hitb2023ams-d1t2-bypassing-anti-cheats-and-hacking-competitive-g",
+      "title": "#HITB2023AMS D1T2 - Bypassing Anti-Cheats And Hacking Competitive Games",
+      "speakers": [
+        "Rohan Aggarwal"
+      ],
+      "track": "red-team",
+      "topics": [
+        "hitb2023am",
+        "d1t2",
+        "bypassing",
+        "anti-cheat",
+        "competitive"
+      ],
+      "teaser": "Rohan Aggarwal examines #HITB2023AMS D1T2 - Bypassing Anti-Cheats And Hacking Competitive Games.",
+      "summary": null,
+      "durationSeconds": 3263,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "tnV3q78CyBQ",
+      "slug": "hitb2023ams-d2-panel-discussion-ios-os-x-security-moderated-by-d",
+      "title": "#HITB2023AMS D2 PANEL DISCUSSION: iOS / OS X Security (moderated by Dhillon 'L33tdawg' Kannabhiran)",
+      "speakers": [],
+      "track": "mobile",
+      "topics": [
+        "ios",
+        "hitb2023am",
+        "panel",
+        "discussion",
+        "moderated",
+        "dhillon"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning #HITB2023AMS D2 PANEL DISCUSSION: iOS / OS X Security (moderated by Dhillon 'L33tdawg' Kannabhiran).",
+      "summary": null,
+      "durationSeconds": 2646,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "Qz92QTo9yr8",
+      "slug": "hitb2023ams-d2t1-how-mysql-servers-can-attack-you",
+      "title": "#HITB2023AMS D2T1 - How MySQL Servers Can Attack YOU",
+      "speakers": [
+        "Alexander Rubin",
+        "Martin Rakhmanov"
+      ],
+      "track": "red-team",
+      "topics": [
+        "hitb2023am",
+        "d2t1",
+        "mysql",
+        "server",
+        "attack",
+        "hitb2023ams"
+      ],
+      "teaser": "Alexander Rubin investigates #HITB2023AMS D2T1 - How MySQL Servers Can Attack YOU.",
+      "summary": null,
+      "durationSeconds": 3151,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "F2TV7SsPxTQ",
+      "slug": "hitb2023ams-d2t2-automated-black-box-security-testing-of-smart-e",
+      "title": "#HITB2023AMS D2T2 - Automated Black-box Security Testing Of “Smart” Embedded Devices",
+      "speakers": [
+        "A. Continella"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hitb2023ams",
+        "d2t2",
+        "automated"
+      ],
+      "teaser": "A. Continella details #HITB2023AMS D2T2 - Automated Black-box Security Testing Of “Smart” Embedded Devices.",
+      "summary": null,
+      "durationSeconds": 3007,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "kRF3CoQ9jfk",
+      "slug": "hitb2023ams-d2t1-chatgpt-please-write-me-a-piece-of-polymorphic",
+      "title": "#HITB2023AMS D2T1 - ChatGPT Please Write Me A Piece Of Polymorphic Malware",
+      "speakers": [
+        "E Shimony",
+        "O. Tsarfati"
+      ],
+      "track": "malware",
+      "topics": [
+        "hitb2023am",
+        "d2t1",
+        "chatgpt",
+        "please",
+        "write",
+        "piece"
+      ],
+      "teaser": "E Shimony details #HITB2023AMS D2T1 - ChatGPT Please Write Me A Piece Of Polymorphic Malware.",
+      "summary": null,
+      "durationSeconds": 2586,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "CTil1laLf98",
+      "slug": "hitb2023ams-d2t2-exploiting-ipc-with-new-desynchronization-primi",
+      "title": "#HITB2023AMS D2T2 - Exploiting IPC With New Desynchronization Primitives",
+      "speakers": [
+        "Martin Doyhenard"
+      ],
+      "track": "red-team",
+      "topics": [
+        "ipc",
+        "hitb2023am",
+        "d2t2",
+        "exploiting",
+        "desynchronization",
+        "primitive"
+      ],
+      "teaser": "Martin Doyhenard investigates #HITB2023AMS D2T2 - Exploiting IPC With New Desynchronization Primitives.",
+      "summary": null,
+      "durationSeconds": 2954,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "Wqcbp9wFO7o",
+      "slug": "hitb2023ams-d2t1-smart-speaker-shenanigans-making-the-sonos-one",
+      "title": "#HITB2023AMS D2T1 - Smart Speaker Shenanigans: Making The SONOS One Sing",
+      "speakers": [
+        "Peter Geissler"
+      ],
+      "track": "community",
+      "topics": [
+        "hitb2023am",
+        "d2t1",
+        "smart",
+        "shenanigan",
+        "making"
+      ],
+      "teaser": "Peter Geissler investigates #HITB2023AMS D2T1 - Smart Speaker Shenanigans: Making The SONOS One Sing.",
+      "summary": null,
+      "durationSeconds": 3090,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "CIkSiECswYw",
+      "slug": "hitb2023ams-d2t2-active-directory-abuse-primitives-and-operation",
+      "title": "#HITB2023AMS D2T2 - Active Directory Abuse Primitives And Operation Security",
+      "speakers": [
+        "M. Cheng",
+        "D. Chen"
+      ],
+      "track": "hardware",
+      "topics": [
+        "active-directory",
+        "hitb2023am",
+        "d2t2",
+        "active",
+        "directory",
+        "abuse"
+      ],
+      "teaser": "M. Cheng examines #HITB2023AMS D2T2 - Active Directory Abuse Primitives And Operation Security.",
+      "summary": null,
+      "durationSeconds": 3568,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "KsqLb-l-TjA",
+      "slug": "hitb2023ams-d2t1-a-deep-dive-into-garminos-and-its-monkeyc-virtu",
+      "title": "#HITB2023AMS D2T1 - A Deep Dive Into GarminOS And Its MonkeyC Virtual Machine",
+      "speakers": [
+        "Tao Sauvage"
+      ],
+      "track": "community",
+      "topics": [
+        "hitb2023am",
+        "d2t1",
+        "deep",
+        "dive",
+        "garmino",
+        "monkeyc"
+      ],
+      "teaser": "Tao Sauvage investigates #HITB2023AMS D2T1 - A Deep Dive Into GarminOS And Its MonkeyC Virtual Machine.",
+      "summary": null,
+      "durationSeconds": 2901,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "C4HiS_2accs",
+      "slug": "hitb2023ams-d2t2-privilege-escalation-using-dop-in-macos",
+      "title": "#HITB2023AMS D2T2 - Privilege Escalation Using DOP In MacOS",
+      "speakers": [
+        "Y. Lee",
+        "J. Choi",
+        "J. Lee",
+        "S. Song"
+      ],
+      "track": "red-team",
+      "topics": [
+        "privilege-escalation",
+        "macos",
+        "hitb2023am",
+        "d2t2",
+        "privilege",
+        "escalation"
+      ],
+      "teaser": "Y. Lee details #HITB2023AMS D2T2 - Privilege Escalation Using DOP In MacOS.",
+      "summary": null,
+      "durationSeconds": 1653,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "b3k7R8FUdIE",
+      "slug": "hitb2023ams-d2t1-an-analysis-of-computer-numerical-control-machi",
+      "title": "#HITB2023AMS D2T1 - An Analysis Of Computer Numerical Control Machines In Industry 4.0",
+      "speakers": [
+        "M. Balduzzi"
+      ],
+      "track": "community",
+      "topics": [
+        "hitb2023am",
+        "d2t1",
+        "analysi",
+        "computer",
+        "numerical",
+        "control"
+      ],
+      "teaser": "M. Balduzzi examines #HITB2023AMS D2T1 - An Analysis Of Computer Numerical Control Machines In Industry 4.0.",
+      "summary": null,
+      "durationSeconds": 2835,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "vOqa-CxINDM",
+      "slug": "hitb2023ams-d2t2-investigating-web3-with-osint",
+      "title": "#HITB2023AMS D2T2 - Investigating Web3 With OSINT",
+      "speakers": [
+        "Dhia Mahjoub"
+      ],
+      "track": "osint",
+      "topics": [
+        "web3",
+        "hitb2023am",
+        "d2t2",
+        "investigating",
+        "osint",
+        "hitb2023ams"
+      ],
+      "teaser": "Dhia Mahjoub details #HITB2023AMS D2T2 - Investigating Web3 With OSINT.",
+      "summary": null,
+      "durationSeconds": 2899,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "T2qZM3JbMnM",
+      "slug": "hitb2023ams-closing-keynote-the-hand-that-strikes-also-blocks",
+      "title": "#HITB2023AMS CLOSING KEYNOTE - The Hand That Strikes, Also Blocks",
+      "speakers": [
+        "Saumil Shah"
+      ],
+      "track": "community",
+      "topics": [
+        "hitb2023am",
+        "hand",
+        "strike"
+      ],
+      "teaser": "Saumil Shah analyzes #HITB2023AMS CLOSING KEYNOTE - The Hand That Strikes, Also Blocks.",
+      "summary": null,
+      "durationSeconds": 2275,
+      "conference": "hitb"
+    },
+    {
+      "youtubeId": "gfIn_NjlB_s",
+      "slug": "hitb2023ams-ctf-prize-giving-and-closing-note-by-dhillon-l33tdaw",
+      "title": "#HITB2023AMS CTF Prize Giving & Closing Note by Dhillon 'L33tdawg' Kannabhiran",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "ctf",
+        "hitb2023am",
+        "prize",
+        "giving",
+        "note"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for #HITB2023AMS CTF Prize Giving & Closing Note by Dhillon 'L33tdawg' Kannabhiran.",
+      "summary": null,
+      "durationSeconds": 1289,
+      "conference": "hitb"
+    }
+  ]
+}

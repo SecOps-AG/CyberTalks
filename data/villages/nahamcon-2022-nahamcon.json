@@ -1,0 +1,211 @@
+{
+  "villageSlug": "nahamcon",
+  "villageName": "NahamCon",
+  "eventSlug": "nahamcon-2022",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLKAaMVNxvLmAcY4n3an_SPwpfseHzZ6Yo",
+  "description": "NahamCon talks from NahamCon 2022.",
+  "talks": [
+    {
+      "youtubeId": "WdPbBCroY6g",
+      "slug": "seanyeoh-and-devec0-continuous-intrusion-hacking-ci-systems",
+      "title": "seanyeoh & devec0: Continuous Intrusion: Hacking CI Systems",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "seanyeoh-devec0",
+        "devec0-continuous",
+        "continuous-intrusion",
+        "intrusion-systems",
+        "seanyeoh"
+      ],
+      "teaser": "Examines seanyeoh & devec0: Continuous Intrusion: Hacking CI Systems and evaluates key implications for security practitioners.",
+      "summary": "Overview: Sean Yeoh and devec0 present at NahamCon on hacking CI/CD systems, covering attack vectors, sandbox escapes, and secret exposure in continuous integration pipelines.\n\nKey Topics: CI/CD system architecture and trust boundaries; sandbox escape techniques from build containers; scoping circumvention to access additional secrets; privilege escalation in pipeline environments; and financial impact of CI/CD compromise.\n\nTechnical Details: Presenters demonstrate escaping CI/CD sandboxes, escalating privileges, and accessing secrets beyond intended scope. They outline a methodology for assessing CI/CD systems across container escape, privilege escalation, and secret harvesting vectors.\n\nTakeaways: CI/CD systems aggregate secrets and privileged access, making them high-value targets. Security teams must treat pipeline infrastructure as critical assets with dedicated assessment and monitoring.",
+      "durationSeconds": 1521,
+      "conference": "bsides"
+    },
+    {
+      "youtubeId": "1UWtIgDA3HA",
+      "slug": "nahamcon2022-infosec-au-finding-0days-in-enterprise-web-applicat",
+      "title": "#NahamCon2022 - @infosec_au: Finding 0days in Enterprise Web Applications",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "nahamcon2022-finding",
+        "finding-0days",
+        "0days-enterprise",
+        "enterprise-applications",
+        "nahamcon2022"
+      ],
+      "teaser": "Evaluates #NahamCon2022 - @infosec_au: Finding 0days in Enterprise Web Applications and evaluates key implications for security practitioners.",
+      "summary": "Researcher and Target\n\nAssetnote co-founder Shubham Shah explains finding zero-days in enterprise software, starting with HCL Digital Experience (IBM WebSphere Portal)—a widely deployed Java CMS often reachable via Docker Hub images for local auditing.\n\nMapping Attack Surface\n\nAfter decompiling JARs, he maps WebSphere servlet routes before deep code review. A proxy.config.xml whitelist of IBM domains suggests an outbound proxy feature worth testing for SSRF.\n\nLotus Domino Redirect Chain\n\nAlthough only IBM hosts are allowed, redbooks.ibm.com runs Lotus Domino with a documented logout redirect parameter. Chaining /wps/proxy/ requests through that redirect turns a restricted proxy into full-read SSRF to arbitrary internal URLs.\n\nVariant Hunting\n\nSearching for other proxy.config files reveals additional policies, including one permitting any HTTP method, body, and destination—effectively a \"super SSRF.\" Multiple alternate proxy endpoints and document-picker proxies bypass naive WAF path rules, multiplying pre-auth impact across the codebase.",
+      "durationSeconds": 2105,
+      "conference": "bsides",
+      "aiSummary": "Overview:\nShubham Shah (@infosec_au), Co-founder and CTO of Assetnote, delivers a technical masterclass at NahamCon 2022 on discovering zero-day vulnerabilities in enterprise software through source code auditing. Shah discusses the methodology of acquiring proprietary enterprise software, decompiling binaries, mapping complex attack surfaces, and tracing sources to dangerous sinks. Through three in-depth case studies involving HCL Digital Experience (IBM WebSphere Portal), SolarWinds Web Help Desk, and Sitecore Experience Platform, Shah illustrates how chained flaws lead to pre-authentication Server-Side Request Forgery (SSRF), arbitrary database access, and remote code execution (RCE).\n\nKey Topics:\n- Enterprise software acquisition and reverse engineering (Docker, decompilers)\n- Source-to-sink code auditing and routing architecture analysis\n- Chaining restricted open proxies with Lotus Domino redirect gadgets for SSRF\n- Hardcoded Spring credentials, raw HQL execution, and .NET deserialization RCE\n\nTechnical Details:\nShah details the auditing workflow for large-scale enterprise targets. Researchers can obtain enterprise codebases via public registries like Docker Hub or public GitHub repositories containing webroots, followed by decompilation using tools like Procyon, JD-CLI, or ILSpy. The first case study analyzes HCL Digital Experience / IBM WebSphere Portal. By inspecting proxy.config.xml, Shah identified an outbound proxy feature restricted to whitelisted domains (www.ibm.com, redbooks.ibm.com). By researching the legacy software powering redbooks.ibm.com (Lotus Domino), he located a documented sign-out redirect feature (?logout&redirectto=...). Chaining the WebSphere proxy endpoint with the Lotus Domino redirect gadget bypassed the domain whitelist, resulting in full-read SSRF. Variant hunting revealed wildcard proxy configurations permitting arbitrary HTTP methods and internal IP routing (\"super SSRF\"). Additionally, Shah identified a post-auth RCE vulnerability via zip file traversal using evilarc that wrote malicious scripts to /etc/sysconfig/network-scripts/ifcfg-*, executing commands as root upon system reboot.\n\nThe second case study examines SolarWinds Web Help Desk, an enterprise ticketing system combining Spring and WebObjects. Auditing the decompiled Java codebase revealed hardcoded production credentials embedded as static constants in client JavaScript and internal controllers. These credentials authenticated access to an unpublicized Spring controller endpoint (/raw-hql). By reverse-engineering the controller's requirements—including CSRF tokens in both headers and cookies, HTTP Basic Auth, Content-Type: text/plain, and a raw Hibernate Query Language string—Shah demonstrated how unauthenticated attackers could execute arbitrary HQL queries against the backend database, extracting password hashes or inserting administrator accounts.\n\nThe third case study focuses on Sitecore Experience Platform, a widely deployed .NET enterprise CMS. Shah decompiled core DLLs and audited routes defined in App_Config and web.config. In the /sitecore/shell/.../Report/report.ashx endpoint, he traced user input passed to ReportDataSerializer.cs. The serializer invoked the dangerous .NET sink NetDataContractSerializer.ReadObject() without type filtering. Using ysoserial.net, Shah generated a serialized gadget payload passed via the querySource parameter, achieving pre-authentication remote code execution across thousands of exposed instances.\n\nKey Takeaways:\nEnterprise software security teams must eliminate hardcoded credentials, deprecate unsafe object serializers, and validate all dynamic query endpoints. Developers should replace vulnerable deserialization mechanisms like NetDataContractSerializer with secure serializers or strict type binders. Defense teams must actively monitor external enterprise attack surfaces, sanitize internal proxy configurations, and restrict administrative web routes behind multi-factor authentication and network-level access controls.\n\n(AI summary — Gemini Flash)"
+    },
+    {
+      "youtubeId": "WU1sg9aih5k",
+      "slug": "nahamcon2022-codingo-recon-fundamentals-by-example",
+      "title": "#NahamCon2022 - @codingo: Recon Fundamentals by Example",
+      "speakers": [],
+      "track": "recon",
+      "topics": [
+        "nahamcon2022-codingo",
+        "codingo-recon",
+        "recon-fundamentals",
+        "fundamentals-example",
+        "nahamcon2022"
+      ],
+      "teaser": "Reviews #NahamCon2022 - @codingo: Recon Fundamentals by Example and evaluates key implications for security practitioners.",
+      "summary": "Recon taxonomy\n\nMichael Bazzell expands his recon-fundamentals framework: wide recon maps organizational attack surface (domains, assets); narrow recon drills into one target (directory brute force, parameter tampering). Active testing sends requests that create logs; passive testing uses third-party caches without touching the target.\n\nTool classification\n\nTools are not binary—Subfinder and Amass support both passive OSINT and active modes, with design intent differing. Proxies like Kaido, Burp, and ZAP are typically narrow-active; ffuf spans narrow and wide active testing. Understanding intent helps manage scope, rate limits, and operational noise.\n\nEmerging tooling\n\nHe highlights TruffleHog's safe active verification of passively found secrets, the Kaido proxy, SecurityTrails SQL explorer, and related tools as worth adopting. Bugcrowd's triage lead stresses cataloging behavior over labels when choosing recon stacks for bug bounty or red team work.",
+      "durationSeconds": 1433,
+      "conference": "bsides"
+    },
+    {
+      "youtubeId": "fcAklNSta-U",
+      "slug": "nahamcon2022-zseano-finding-xss-on-apple-com-and-building-a-proo",
+      "title": "#NahamCon2022 - @zseano Finding XSS on .apple.com and building a proof of concept to leak your PII",
+      "speakers": [],
+      "track": "privacy",
+      "topics": [
+        "nahamcon2022-zseano",
+        "zseano-finding",
+        "finding-apple",
+        "apple-building",
+        "building-proof"
+      ],
+      "teaser": "Outlines #NahamCon2022 - @zseano Finding XSS on .apple.com and building a proof of concept to leak your PII and evaluates key implications for security practitioners.",
+      "summary": "## Collaborative Apple Bug Bounty\n\nzseano recounts a BugBountyHunter community event targeting apple.com, inspired by Sam Curry's earlier research. The group prioritized finding any valid vulnerability over a preset bug class, learning the attack surface organically.\n\n## Recon and Enumeration\n\nRecon combined public write-ups with custom PHP scripts run through Burp Intruder to probe hosts and endpoints. Many Apple properties respond only to mobile User-Agent strings, so desktop browsers miss vulnerable surfaces iPhone clients expose.\n\n## Finding and Weaponizing XSS\n\nThe team landed cross-site scripting and debated impact paths: session cookie theft, sensitive actions on behalf of users, or PII disclosure. Most session cookies were well locked down, limiting classic account takeover.\n\n## Proof of Concept: PII Leak\n\nThey chose to demonstrate personal information disclosure—a high-impact, report-friendly outcome for bounty training. zseano emphasizes teaching collaborators not just to find bugs but to build convincing proofs that show real user harm.",
+      "durationSeconds": 1314,
+      "conference": "bsides"
+    },
+    {
+      "youtubeId": "sJAdFGRZ8uU",
+      "slug": "nahamcon2022-samwcyo-breaking-into-cloud-wallets-3-years-spent-h",
+      "title": "#NahamCon2022 - @samwcyo: Breaking Into Cloud Wallets: 3 years spent Hacking Crypto Web Apps",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "nahamcon2022-samwcyo",
+        "samwcyo-breaking",
+        "breaking-into",
+        "into-cloud",
+        "cloud-wallets"
+      ],
+      "teaser": "Discusses #NahamCon2022 - @samwcyo: Breaking Into Cloud Wallets: 3 years spent Hacking Crypto Web Apps and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2086,
+      "conference": "bsides"
+    },
+    {
+      "youtubeId": "jXIQYt672bE",
+      "slug": "nahamcon2022-gregxsunday-effectively-finding-vulnerabilities-by",
+      "title": "#NahamCon2022 - @gregxsunday: Effectively finding vulnerabilities by debugging the source code",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "nahamcon2022-gregxsunday",
+        "gregxsunday-effectively",
+        "effectively-finding",
+        "finding-vulnerabilities",
+        "vulnerabilities-debugging"
+      ],
+      "teaser": "Analyzes #NahamCon2022 - @gregxsunday: Effectively finding vulnerabilities by debugging the source code and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2232,
+      "conference": "bsides"
+    },
+    {
+      "youtubeId": "zMJGDOqxS2o",
+      "slug": "nahamcon2022-farah-hawaa-what-i-learnt-from-a-year-of-triaging-b",
+      "title": "#NahamCon2022 - @Farah_Hawaa: What I learnt from a year of triaging bug bounty reports",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "nahamcon2022-farah",
+        "farah-hawaa",
+        "hawaa-what",
+        "what-learnt",
+        "learnt-from"
+      ],
+      "teaser": "Discusses #NahamCon2022 - @Farah_Hawaa: What practitioners learnt from a year of triaging bug bounty reports and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1094,
+      "conference": "bsides"
+    },
+    {
+      "youtubeId": "HmDY7w8AbR4",
+      "slug": "nahamcon2022-jason-haddix-jhaddix-the-bug-hunters-methodology-ap",
+      "title": "#NahamCon2022 - Jason Haddix (@jhaddix): The Bug Hunter’s Methodology: Application Analysis v1",
+      "speakers": [
+        "Jason Haddix (@jhaddix)"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "nahamcon2022-jason",
+        "jason-haddix",
+        "haddix-jhaddix",
+        "jhaddix-hunter",
+        "hunter-methodology"
+      ],
+      "teaser": "Investigates #NahamCon2022 - Jason Haddix (@jhaddix): The Bug Hunters Methodology: Application Analysis v1 and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 5215,
+      "conference": "bsides"
+    },
+    {
+      "youtubeId": "LHmMraJKVzU",
+      "slug": "nahamcon2022-areyou1or0-reversing-web-assembly-wasm",
+      "title": "#Nahamcon2022 - @areyou1or0: Reversing Web Assembly (wasm)",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "nahamcon2022-areyou1or0",
+        "areyou1or0-reversing",
+        "reversing-assembly",
+        "assembly-wasm",
+        "nahamcon2022"
+      ],
+      "teaser": "Examines #Nahamcon2022 - @areyou1or0: Reversing Web Assembly (wasm) and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1693,
+      "conference": "bsides"
+    },
+    {
+      "youtubeId": "LvtCHRIZ0Ac",
+      "slug": "nahamcon2022-hakluke-blackbox-monitoring-for-timely-bug-detectio",
+      "title": "#Nahamcon2022 - @hakluke: Blackbox Monitoring for Timely Bug Detection",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "nahamcon2022-hakluke",
+        "hakluke-blackbox",
+        "blackbox-monitoring",
+        "monitoring-timely",
+        "timely-detection"
+      ],
+      "teaser": "Evaluates #Nahamcon2022 - @hakluke: Blackbox Monitoring for Timely Bug Detection and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 1393,
+      "conference": "bsides"
+    },
+    {
+      "youtubeId": "tFc5Kbjf1ec",
+      "slug": "nahamcom2022-adrianhetman-are-smart-contracts-haunted",
+      "title": "#NahamCom2022 - @adrianhetman: Are smart contracts haunted?",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "nahamcom2022-adrianhetman",
+        "adrianhetman-smart",
+        "smart-contracts",
+        "contracts-haunted",
+        "nahamcom2022"
+      ],
+      "teaser": "Demonstrates #NahamCom2022 - @adrianhetman: Are smart contracts haunted and evaluates key implications for security practitioners.",
+      "summary": null,
+      "durationSeconds": 2786,
+      "conference": "bsides"
+    }
+  ]
+}

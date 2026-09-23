@@ -1,0 +1,498 @@
+{
+  "villageSlug": "confidence",
+  "villageName": "CONFidence",
+  "eventSlug": "confidence-2024",
+  "conference": "confidence",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLnKL6-WWWE_VfcqBRC3axs2eddKdNptSx",
+  "description": "CONFidence talks from CONFidence 2024.",
+  "talks": [
+    {
+      "youtubeId": "q1LOiKCM02k",
+      "slug": "ignat-korchagin-what-is-linux-kernel-keystore-and-why-you-should",
+      "title": "Ignat Korchagin: What is Linux kernel keystore and why you should use it in your next application",
+      "speakers": [
+        "Ignat Korchagin"
+      ],
+      "track": "community",
+      "topics": [
+        "linux",
+        "kernel",
+        "linux-kernel"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Ignat Korchagin: What is Linux kernel keystore and why you should use it in your next application.",
+      "summary": null,
+      "durationSeconds": 2100,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "aCNM_ub7XR8",
+      "slug": "dominik-czarnota-linux-privesc-via-arbitrary-x86-msrs-read-write",
+      "title": "Dominik Czarnota: Linux privesc via arbitrary x86 MSRs read/write bug: case study from CTF challenge",
+      "speakers": [
+        "Dominik Czarnota"
+      ],
+      "track": "red-team",
+      "topics": [
+        "ctf",
+        "linux",
+        "x86",
+        "case-study"
+      ],
+      "teaser": "Security researchers examine technical aspects of Dominik Czarnota: Linux privesc via arbitrary x86 MSRs read/write bug: case study from CTF challenge.",
+      "summary": null,
+      "durationSeconds": 2214,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "vnraNoqYEoY",
+      "slug": "mateusz-jurczyk-windows-registry-deja-vu-the-return-of-confused",
+      "title": "Mateusz Jurczyk: Windows Registry Deja Vu: The Return of Confused Deputies | CONFidence",
+      "speakers": [
+        "Mateusz Jurczyk"
+      ],
+      "track": "community",
+      "topics": [
+        "windows",
+        "mateusz",
+        "jurczyk",
+        "window",
+        "registry",
+        "deja"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Mateusz Jurczyk: Windows Registry Deja Vu: The Return of Confused Deputies | CONFidence.",
+      "summary": null,
+      "durationSeconds": 2656,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "5vqt7sTVQ4U",
+      "slug": "kamil-frankowicz-automatyzacja-automatyzacji-czyli-o-fuzzingu-w",
+      "title": "Kamil Frankowicz: Automatyzacja automatyzacji czyli o fuzzingu w dobie GPT-5 & Gemini i innych",
+      "speakers": [
+        "Kamil Frankowicz"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "kamil",
+        "frankowicz",
+        "automatyzacja",
+        "automatyzacji",
+        "czyli",
+        "fuzzingu"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Kamil Frankowicz: Automatyzacja automatyzacji czyli o fuzzingu w dobie GPT-5 & Gemini i innych.",
+      "summary": null,
+      "durationSeconds": 2466,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "2FexmaBbQx8",
+      "slug": "leo-valentic-hide-and-seek-in-windows-closet-unmasking-the-winsx",
+      "title": "Leo Valentic: Hide and Seek in Windows' Closet: Unmasking the WinSxS Hijacking Hideout | CONFidence",
+      "speakers": [
+        "Leo Valentic"
+      ],
+      "track": "community",
+      "topics": [
+        "windows",
+        "valentic",
+        "hide",
+        "seek",
+        "window",
+        "closet"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Leo Valentic: Hide and Seek in Windows' Closet: Unmasking the WinSxS Hijacking Hideout | CONFidence.",
+      "summary": "### Overview\nIn this presentation at CONFidence, thread researcher Leo Valentic introduces research on abusing Windows side-by-side (WinSxS) binaries via DLL search order hijacking, a technique termed \"win SOS.\" The presentation highlights how attackers and red teamers can execute payloads with stealth without requiring administrative privileges, specialized vulnerabilities, or external third-party software. It also details the search order mechanics, past threat actor usage, a demonstration of gaining a reverse shell, and recommendations for blue teams and SOC analysts to detect this activity.\n\n### Key Topics\n- **Windows Side-by-Side (WinSxS):** Located at `C:\\Windows\\WinSxS`, this critical system folder stores necessary files and libraries to support multiple software versions concurrently. Because it preserves various versions over time, it grows very large and contains numerous native binaries.\n- **DLL Search Order Hijacking:** A well-known technique where an executable searches sequentially for dependencies (application launch directory, `System32`, `System`, `Windows`, current working directory, and path environment variables). By manipulating the current working directory, attackers can force a legitimate system binary to load an arbitrary DLL.\n- **Threat Actor Precedent:** Multiple advanced persistent threat (APT) groups have historically abused search order hijacking. Notable examples cited include APT41 (Double Dragon) deploying payloads like Wintrm, Aquatic Panda loading libraries and DOT files, the RTM group abusing TeamViewer versions prior to 5.0 to load malicious DLLs, and Whitefly leveraging it to run their loader.\n- **The \"win SOS\" Method:** Enhancing classic DLL hijacking by calling legitimate WinSxS executables directly from a user-controlled working directory, completely bypassing the need for elevated permissions or application flaws. The issue was reported to Microsoft, who did not classify it as a security vulnerability.\n\n### Technical Details\n- **Discovery & Tooling:** The researchers developed an automated helper called \"bin finder\" to run executables within the WinSxS directory while capturing events using Process Monitor (filtering on operations like `CreateFile`, results `PATH NOT FOUND` / `NAME NOT FOUND`, and paths pointing to the target folder). This surfaced multiple binaries that check the current working directory for missing dependencies.\n- **Target Binaries & Hijack Examples:**\n  - `ngentask.exe`: Searches for `mscoreesvc.dll` in the current working directory.\n  - `forfiles.exe`: Searches for `cmd.exe` in the current working directory (demonstrated by renaming the inspection tool Hollows Hunter to `cmd.exe`).\n  - `conhost.exe`: Searches for `clipup.exe`.\n- **Attack Workflow:**\n  1. An attacker operating as a standard local user creates an arbitrary working directory (e.g., a desktop folder named `not a system folder MS`).\n  2. The attacker places a custom malicious DLL (such as a crafted `mscoreesvc.dll`) into that directory.\n  3. Using PowerShell or Command Prompt from inside that working directory, the attacker invokes the legitimate binary path within WinSxS (e.g., `ngentask.exe`).\n  4. When inspected in tools like Process Explorer, the process appears as a legitimate, signed Microsoft binary with a valid hash, obscuring the malicious DLL loaded from the custom folder.\n  5. A pre-recorded demo shows this execution successfully establishing a Netcat reverse shell on port 4444 while evading standard antivirus and EDR detections.\n\n### Takeaways\n- **For Red Teams:** \"win SOS\" provides an effective, low-privilege execution and stealth technique that avoids signature-based detection by masquerading under legitimate, signed Microsoft executables.\n- **For Blue Teams & SOC Analysts:**\n  - Do not rely solely on process names, digital signatures, or file hashes, as legitimate WinSxS binaries will appear benign at first glance.\n  - Inspect parent-child process relationships and flag unusual processes launching WinSxS binaries or unexpected child processes spawned by them.\n  - Monitor behavioral telemetry: inspect loaded modules for binaries loading DLLs from atypical or user-writable paths, watch for unexpected network connections initiated by utilities like `ngentask.exe`, and log anomalous file operations using tools like Sysmon.",
+      "durationSeconds": 1558,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "yH7sbHnVtoA",
+      "slug": "shmuel-cohen-the-dark-side-of-edr-repurpose-edr-as-an-offensive",
+      "title": "Shmuel Cohen: The Dark Side of EDR: Repurpose EDR as an Offensive Tool | CONFidence",
+      "speakers": [
+        "Shmuel Cohen"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "edr",
+        "shmuel",
+        "cohen",
+        "dark",
+        "side",
+        "repurpose"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Shmuel Cohen: The Dark Side of EDR: Repurpose EDR as an Offensive Tool | CONFidence.",
+      "summary": null,
+      "durationSeconds": 2176,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "GxsXNQrXX8c",
+      "slug": "raunak-parmar-hackers-story-from-reader-to-global-admin-in-azure",
+      "title": "Raunak Parmar: Hacker's Story from Reader to Global Admin in Azure | CONFidence",
+      "speakers": [
+        "Raunak Parmar"
+      ],
+      "track": "cloud",
+      "topics": [
+        "azure",
+        "raunak",
+        "parmar",
+        "story",
+        "reader"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Raunak Parmar: Hacker's Story from Reader to Global Admin in Azure | CONFidence.",
+      "summary": null,
+      "durationSeconds": 1582,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "wETH37q7PA4",
+      "slug": "geri-revay-dont-flatten-yourself-deobfuscating-malware-with-cont",
+      "title": "Geri Revay: Don’t flatten yourself: deobfuscating malware with Control-Flow Flattening | CONFidence",
+      "speakers": [
+        "Geri Revay"
+      ],
+      "track": "malware",
+      "topics": [
+        "control-flow",
+        "geri",
+        "revay",
+        "flatten",
+        "yourself",
+        "deobfuscating"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Geri Revay: Don’t flatten yourself: deobfuscating malware with Control-Flow Flattening | CONFidence.",
+      "summary": null,
+      "durationSeconds": 2516,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "0luqgSPxV-M",
+      "slug": "szymon-chadam-elektroniczny-ale-czy-bezpieczny-hackowanie-nowego",
+      "title": "Szymon Chadam: Elektroniczny, ale czy bezpieczny? Hackowanie nowego mObywatela 2.0 | CONFidence",
+      "speakers": [
+        "Szymon Chadam"
+      ],
+      "track": "community",
+      "topics": [
+        "szymon",
+        "chadam",
+        "elektroniczny",
+        "bezpieczny",
+        "hackowanie",
+        "nowego"
+      ],
+      "teaser": "Security researchers examine technical aspects of Szymon Chadam: Elektroniczny, ale czy bezpieczny? Hackowanie nowego mObywatela 2.0 | CONFidence.",
+      "summary": "### Overview\nSzymon Chadam, an IT security consultant at Securing, presents a technical analysis and practical security assessment of Poland's government digital ID application, mObywatel 2.0. Conducted pro bono in August 2023, the research evaluated both the real-world operational security of mObywatel verification across various high-risk organizations and the underlying technical architecture handling onboarding and cryptographic verification. All vulnerabilities identified during the audit were responsibly reported and promptly patched by the Centralny Ośrodek Informatyki (COI).\n\n### Key Topics\n- **Verification Methods vs. Practical Realities**: The speaker highlights three tiers of identity verification defined for mObywatel: visual verification (checking dynamic UI elements like moving flags, clocks, or gyroscope-responsive eagles), functional verification (requesting user interactions within the app to counter screen recordings), and cryptographic verification (scanning a dynamic QR code between two devices). Field tests across four high-risk sectors (a medical clinic, airport gate, telecom provider, and bank) revealed that only the bank enforced cryptographic verification, while the others accepted basic visual checks, enabling potential identity impersonation, medical record theft, or SIM swap fraud.\n- **Visual Impersonation via Tools (mHacker)**: Using an app called mHacker alongside the official mObywatel application, the speaker demonstrated real-time tampering of displayed credentials (name, PESEL, photo) without restarting the app. This technique is actively leveraged in red team scenarios to bypass lobby security and obtain temporary employee badges.\n- **Technical Architecture & Data Flows**: The onboarding process ties into a trusted third party (such as a bank) that securely communicates with COI servers. The user receives a digitally signed \"personal container\" (a JSON payload with personal data and a COI digital signature) and a user-specific certificate used for signing authentication transactions.\n\n### Technical Details\n- **QR Code Phishing & Missing Integrity**: Analysis of the QR code exchange revealed no cryptographic signature over the QR code metadata. An attacker could craft custom QR codes to spoof the verifier's identity (e.g., claiming to be the police) and pad newline characters to conceal requested credential scopes from victims, mimicking benign prompts.\n- **Excessive Data Exposure & Cryptographic Replay/Bypass**: During standard cryptographic verification, COI servers returned an excessive payload to the verifier—specifically, 50% of the victim's onboarding data, including their full personal container with COI's signature. Crucially, the server-side business logic failed to bind the personal container to the user certificate signing the session. This allowed an attacker (User B) to take a victim's intercepted personal container (User A), sign it with User B's own certificate, and successfully pass cryptographic verification as User A. \n- **Persistence and Revocation Weaknesses**: The extracted personal container was valid for five years. Furthermore, revoking the document within the app merely removed the certificate from the local device, leaving the container itself signed and accepted on the backend during the test period.\n\n### Takeaways\n- **Responsible Disclosure**: Disclosed in August 2023 initially via CERT/NASK and then directly to COI, the logic flaw was mitigated within two to three days by COI's engineering team ahead of the statutory September 1, 2023 mandate for banking adoption.\n- **Defense-in-Depth for Organizations & Users**: Relying on visual or functional inspection of mobile ID screens is fundamentally insecure. Organizations must mandate cryptographic QR verification and train staff never to accept screen presentations. Institutions integrating digital identity systems should thoroughly assess and test verification logic against replay and spoofing vectors.",
+      "durationSeconds": 2388,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "05gRXlLWGjE",
+      "slug": "piotr-jab-onski-istios-security-policy-breach-confidence",
+      "title": "Piotr Jabłoński: Istio's security policy breach | CONFidence",
+      "speakers": [
+        "Piotr Jabłoński"
+      ],
+      "track": "policy",
+      "topics": [
+        "security-policy",
+        "piotr",
+        "istio",
+        "policy",
+        "breach",
+        "confidence"
+      ],
+      "teaser": "Security researchers examine technical aspects of Piotr Jabłoński: Istio's security policy breach | CONFidence.",
+      "summary": "### Overview\nIn this presentation, Piotr Jabłoński, a Solutions Architect at Isovalent (Cisco), explores cross-level isolation challenges in cloud-native environments, focusing on a vulnerability demonstrated in Istio Ambient Mesh. While service meshes provide L4 mutual TLS (mTLS) and access control policies, Jabłoński shows how architectural decisions—specifically placing shared proxies on nodes and exposing the control plane—can lead to severe security policy breaches. The talk also broadens its scope to cover serverless security pitfalls (particularly AWS Lambda defaults) and highlights the necessity of multi-layered, lateral isolation across organizations, networks, runtimes, and identities.\n\n### Key Topics\n- **Istio Ambient Mesh vs. Traditional Sidecars**: Ambient mesh replaces individual sidecar containers with a shared per-node proxy called `ztunnel` alongside `istiod` and the Istio CNI node agent. While this avoids sidecar resource overhead and shared container secret exposure, it exposes the node proxy directly to tenant pods.\n- **Control Plane Exposure and Policy Breach**: Standard unprivileged pods can reach `ztunnel` and `istiod` IP addresses. By executing a basic denial-of-service (DoS) flood during scheduled RBAC policy updates, the proxy enforcement fails open, granting cluster-wide access to unauthorized pods.\n- **Serverless Isolation Realities**: Contrary to common assumptions regarding AWS Lambda's shared responsibility model, Lambda functions by default do not run within a customer VPC, can initiate outbound internet connections, can trigger reverse shells, and can expose code or runtime files if compromised.\n- **Defense-in-Depth & Distributed Security**: True isolation requires addressing foundations: identity management (RBAC/labels), anti-spoofing, CNI-level filtering, sandbox testing, VPC attachment for serverless workloads, and placing distributed security controls close to applications.\n\n### Technical Details\n- **Ambient Mesh Attack Mechanism**: In Istio version 1.20, `ztunnel` synchronizes and updates RBAC authorization policies every 30 minutes. Jabłoński configured an authorization policy restricting access to specific service accounts (e.g., `sleep` accessing `bookinfo`/`productpage`). From an unprivileged pod with no elevated permissions or host PID access, he ran flood commands using `hping` (`hping --flood`) combining TCP SYN packets, UDP traffic, and ICMP floods against the `ztunnel` control-plane IP. Stressed by the flood during the 30-minute policy update window, the proxy suffered an enforcement bypass, allowing previously rejected `curl` connections across the entire cluster to succeed.\n- **Observed Istio Behaviors**: Jabłoński noted that older versions failed to enforce updated policies on pre-existing TCP connections, and highlighted that Ambient Mesh does not inspect or filter UDP/ICMP traffic by design. In extreme failures where communication to `istiod` or `ztunnel` completely terminates, Istio Ambient behaves as \"fail-closed\" (denying all communication), contrasting with some other systems that \"fail-continue\" using cached kernel policies.\n- **Remediation**: The TCP SYN flood bypass during updates was reported to Google/the Istio project and patched in Istio version 1.22. However, the speaker emphasized that network reachability to the control plane and uninspected UDP/ICMP traffic remain architectural surfaces that must be mitigated with CNI policies and OS hardening.\n\n### Takeaways\n- **Protect the Control Plane**: Do not rely exclusively on L7 or L4 service mesh abstractions. Isolate control plane components (`istiod`, `ztunnel`) from standard application workloads using network policies, Kubernetes CNIs with anti-spoofing, and protocol filtering.\n- **Re-evaluate Serverless Defaults**: Serverless functions require intentional network configuration. Always place sensitive cloud functions inside a VPC or VNet to enforce firewall rules, monitor outbound flows, and manage DNS traffic.\n- **Establish Job Zero Hygiene**: Consistent labeling, separation of duties, and robust identity planning are prerequisites for effective automated enforcement in CI/CD and infrastructure-as-code pipelines.",
+      "durationSeconds": 2619,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "22Qll-q94fY",
+      "slug": "hiroshi-takeuchi-beyond-attack-surface-management-asm-confidence",
+      "title": "Hiroshi Takeuchi: Beyond Attack Surface Management (ASM) | CONFidence",
+      "speakers": [
+        "Hiroshi Takeuchi"
+      ],
+      "track": "recon",
+      "topics": [
+        "hiroshi",
+        "takeuchi",
+        "attack",
+        "surface"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Hiroshi Takeuchi: Beyond Attack Surface Management (ASM) | CONFidence.",
+      "summary": "### Overview\nIn this presentation at CONFidence, Hiroshi Takeuchi, a security researcher at Macnica, analyzes how cyber espionage threat actors exploit various attack surfaces beyond traditional perimeter boundaries. While internet-facing edge devices account for roughly 50% of observed cyber espionage attack surfaces, adversaries continue to leverage vectors such as email, USB drives, and physical Wi-Fi access points. Takeuchi examines detailed threat campaigns across each vector, shares findings from external attack surface management (EASM) assessments of major enterprises, analyzes zero-day edge exploitations, and outlines architectural and detection counter-measures.\n\n### Key Topics\n- **Email Vector (MirrorFace / APT10):** Examination of MirrorFace (also tracked as Earth Krahang / Asnarök), an actor targeting Japanese, Taiwanese, and Indian entities. The group relies on spear-phishing emails delivering the RoarInfo backdoor, a tool maintained for over four years across more than 20 versions that features file manipulation, screenshotting, and an unexecuted AES-256/RSA-2048 ransomware command.\n- **USB Vector (TA410 and Mustang Panda):** Case studies illustrating USB tradecraft. TA410 subgroup FlowingFrog delivered FlowCloud via USB (dubbed Operation USB Flowing) using multi-stage loaders, alternate data streams, and an expired 2014 rootkit installed by rolling back system time to 2013. Mustang Panda propagated a PlugX variant (PlugDisk) via USBs that hides files in hidden directories, auto-infects newly connected removable media, and infects environments through opportunistic vectors such as print shops and hotels.\n- **Wi-Fi Access Point Exploitation (Tropic Trooper):** Discussion of physical-proximity intrusions, including Tropic Trooper deploying rogue access points mimicking legitimate SSIDs to steal wireless credentials and deploy Cobalt Strike on an unmanaged host.\n- **Internet-Facing Edge Devices & EASM:** Statistical findings from EASM research assessing randomly selected Tokyo Stock Exchange Prime-listed enterprises, showing that 40% of headquarters (and up to ~90% when including overseas branches) exposed severe risks such as end-of-support software and exposed RDP ports.\n\n### Technical Details\n- **Fortinet FortiOS Exploitation:** Investigation of an intrusion likely tied to Volt Typhoon leveraging CVE-2023-27997 (XORtigate), a heap-based buffer overflow in `sslvpnd`. The actor bypassed client certificate authentication, uploaded webshells, and moved internally via RDP without deploying malware. SSL VPN certificate success logs were absent, and `sslvpnd` crash logs provided evidence of exploitation.\n- **Ivanti Connect Secure Zero-Day Implants:** Analysis of compromised appliances involving WireFire, ZipLine, Sliver C2, and DS-Backdoor. Takeuchi highlights an implant named **ProstDoor** (`libnrs.so.1`), a passive back door that hooks `accept` and `accept4` in the `web` process by hijacking `libnspr4.so`. ProstDoor validates incoming C2 commands via 4-byte XOR checks, decrypts traffic using RC4, and supports arbitrary command execution and library loading.\n\n### Takeaways\n- **Account for Physical Attack Surfaces:** Physical-adjacent vectors like USB auto-infection and rogue Wi-Fi access points remain effective tools for espionage groups and require explicit security controls.\n- **Proactive EASM:** Organizations must find and prioritize exposed assets (via commercial products, managed services, or internal tooling) before threat actors identify them.\n- **Defense Against Zero-Days:** Organizations should isolate edge appliances (sandwiching edge devices between dual firewalls to restrict inbound/outbound traffic), centralize and retain appliance logs (including process crash logs such as `sslvpnd`), implement internal microsegmentation, enforce multi-factor authentication, and deploy EDR broadly.",
+      "durationSeconds": 2750,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "HFRZ3VFujiM",
+      "slug": "rohit-sehgal-beyond-the-kernel-ebpfs-trailblazing-role-in-reinve",
+      "title": "Rohit Sehgal: Beyond the Kernel: eBPF's Trailblazing Role in Reinventing Cloud Security Dynamics",
+      "speakers": [
+        "Rohit Sehgal"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud-security",
+        "kernel",
+        "ebpf"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Rohit Sehgal: Beyond the Kernel: eBPF's Trailblazing Role in Reinventing Cloud Security Dynamics.",
+      "summary": null,
+      "durationSeconds": 2010,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "Je1r8kNb0qs",
+      "slug": "jakub-strykowski-reinforcement-learning-moze-zarowno-grac-w-doom",
+      "title": "Jakub Strykowski: Reinforcement Learning może zarówno grać w DOOMa, jak i atakować sieci",
+      "speakers": [
+        "Jakub Strykowski"
+      ],
+      "track": "red-team",
+      "topics": [
+        "reinforcement-learning",
+        "jakub",
+        "strykowski",
+        "reinforcement",
+        "learning",
+        "dooma"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Jakub Strykowski: Reinforcement Learning może zarówno grać w DOOMa, jak i atakować sieci.",
+      "summary": null,
+      "durationSeconds": 2097,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "B91deSSPVCs",
+      "slug": "krystian-matusiewicz-daria-danieluk-how-many-bits-of-security-do",
+      "title": "Krystian Matusiewicz, Daria Danieluk: How many bits of security do you have? | CONFidence",
+      "speakers": [
+        "Krystian Matusiewicz",
+        "Daria Danieluk"
+      ],
+      "track": "hardware",
+      "topics": [
+        "krystian",
+        "matusiewicz",
+        "daria",
+        "danieluk",
+        "bit"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Krystian Matusiewicz, Daria Danieluk: How many bits of security do you have? | CONFidence.",
+      "summary": null,
+      "durationSeconds": 2112,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "NfhulXTaE2c",
+      "slug": "alon-leviev-the-pool-party-you-will-never-forget-confidence",
+      "title": "Alon Leviev: The Pool Party You Will Never Forget | CONFidence",
+      "speakers": [
+        "Alon Leviev"
+      ],
+      "track": "community",
+      "topics": [
+        "party",
+        "alon",
+        "leviev",
+        "pool"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Alon Leviev: The Pool Party You Will Never Forget | CONFidence.",
+      "summary": null,
+      "durationSeconds": 2077,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "_cmXf2vNVhQ",
+      "slug": "piotr-zabrowski-threat-modeling-at-scale-of-allegro-from-stride",
+      "title": "Piotr Żabrowski: Threat modeling at scale of Allegro. From STRIDE to success | CONFidence",
+      "speakers": [
+        "Piotr Żabrowski"
+      ],
+      "track": "community",
+      "topics": [
+        "threat-modeling",
+        "piotr",
+        "abrowski",
+        "threat",
+        "modeling",
+        "scale"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Piotr Żabrowski: Threat modeling at scale of Allegro. From STRIDE to success | CONFidence.",
+      "summary": null,
+      "durationSeconds": 2065,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "DdDswcN2eyE",
+      "slug": "iwona-polak-co-tam-s-ychac-w-pamieci-podrecznej-confidence",
+      "title": "Iwona Polak: Co tam słychać w pamięci podręcznej? | CONFidence",
+      "speakers": [
+        "Iwona Polak"
+      ],
+      "track": "community",
+      "topics": [
+        "iwona",
+        "polak",
+        "ycha",
+        "pami",
+        "podr",
+        "cznej"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Iwona Polak: Co tam słychać w pamięci podręcznej? | CONFidence.",
+      "summary": null,
+      "durationSeconds": 2650,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "GqnFNNcycxQ",
+      "slug": "zbyszek-tenerowicz-watch-me-run-malware-from-npm-confidence",
+      "title": "Zbyszek Tenerowicz: Watch me run malware from NPM | CONFidence",
+      "speakers": [
+        "Zbyszek Tenerowicz"
+      ],
+      "track": "malware",
+      "topics": [
+        "zbyszek",
+        "tenerowicz",
+        "malware-analysis",
+        "confidence"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Zbyszek Tenerowicz: Watch me run malware from NPM | CONFidence.",
+      "summary": null,
+      "durationSeconds": 2156,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "5lXGw4scUh8",
+      "slug": "filip-ceglik-practical-hardware-fault-injection-confidence",
+      "title": "Filip Ceglik: Practical Hardware Fault Injection | CONFidence",
+      "speakers": [
+        "Filip Ceglik"
+      ],
+      "track": "hardware",
+      "topics": [
+        "fault-injection",
+        "injection",
+        "filip",
+        "ceglik",
+        "practical",
+        "hardware"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Filip Ceglik: Practical Hardware Fault Injection | CONFidence.",
+      "summary": null,
+      "durationSeconds": 1480,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "4B9-TRFSMbM",
+      "slug": "tomasz-bukowski-moj-python-vs-twoja-java-exploitacja-de-serializ",
+      "title": "Tomasz Bukowski: Mój python VS twoja Java - exploitacja (de)serializacji Javy z Pythona | CONFidence",
+      "speakers": [
+        "Tomasz Bukowski"
+      ],
+      "track": "red-team",
+      "topics": [
+        "python",
+        "tomasz",
+        "bukowski",
+        "twoja",
+        "java",
+        "exploitacja"
+      ],
+      "teaser": "Security researchers examine technical aspects of Tomasz Bukowski: Mój python VS twoja Java - exploitacja (de)serializacji Javy z Pythona | CONFidence.",
+      "summary": null,
+      "durationSeconds": 2754,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "nJQrrRKqSpc",
+      "slug": "tomer-bar-shmuel-cohen-edr-reloaded-erase-data-remotely-confiden",
+      "title": "Tomer Bar, Shmuel Cohen: EDR Reloaded: Erase Data Remotely | CONFidence",
+      "speakers": [
+        "Tomer Bar",
+        "Shmuel Cohen"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "edr",
+        "tomer",
+        "shmuel",
+        "cohen",
+        "reloaded",
+        "erase"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Tomer Bar, Shmuel Cohen: EDR Reloaded: Erase Data Remotely | CONFidence.",
+      "summary": null,
+      "durationSeconds": 2570,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "007YlKcNhpY",
+      "slug": "pawe-maziarz-gynvael-coldwind-tcp-ip-over-whatever-confidence",
+      "title": "Paweł Maziarz, Gynvael Coldwind: TCP/IP over whatever | CONFidence",
+      "speakers": [
+        "Paweł Maziarz",
+        "Gynvael Coldwind"
+      ],
+      "track": "community",
+      "topics": [
+        "tcp-ip",
+        "pawe",
+        "maziarz",
+        "gynvael",
+        "coldwind"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Paweł Maziarz, Gynvael Coldwind: TCP/IP over whatever | CONFidence.",
+      "summary": "### Overview\nIn this talk presented at CONFidence, Paweł Maziarz explores creative mechanisms for tunneling network traffic and exfiltrating data across unconventional media and protocols. While co-presenter Gynvael Coldwind could not attend in person, the presentation draws on their joint concepts, tools, and slides. The overarching premise is that whenever two endpoints can transmit and receive arbitrary data—whether using standard network protocols or physical channels like light and sound—they can establish full bidirectional TCP/IP communication.\n\n### Key Topics\n- **Pyramid of Data Transfer:** Maziarz outlines an adversary-focused hierarchy of network egress techniques. At the lower levels are mundane activities and simple exfiltration/infiltration to bypass DLP and antivirus systems. Higher levels involve command-and-control (C2), application protocol tunneling (e.g., HTTP proxies, SSH `-D` dynamic SOCKS tunneling, `sslh`, and `socat`), culminating at the very top with full TCP/IP tunneling.\n- **TUN/TAP Interfaces:** Explanation of how virtual network interfaces operate at Layer 3 (TUN) and Layer 2 (TAP). Any program reading from or writing to the file descriptor of a TUN device can encapsulate raw IP packets into custom transmission mediums.\n- **DNS as a Tunneling and Exfiltration Vector:** Techniques for exfiltrating arbitrary payloads using DNS TXT records, encoding commands in subdomains (respecting 63-character subdomain and 255-character domain limits via hex encoding and regex splitting), and setting up lightweight DNS listener servers in Python.\n- **ICMP Tunneling:** Using ICMP echo request and echo reply payloads (up to MTU constraints, ~1472 bytes) to bypass restrictive firewalls, complete with an architecture where a custom daemon responds asynchronously with reversed payloads.\n- **Acoustic and Out-of-Band Channels:** Transmitting digital data as audio via amplitude modulation (ASK/OOK) or frequency shift keying (FSK)—similar to acoustic couplers and modems—or via camera/flashlight Morse code, VGA/HDMI, Firewire, PS/2, RS-232, and LPT ports.\n\n### Technical Details\n- **Tun/Tap Virtual Adapters:** By assigning an IP address (e.g., 10.0.0.1) to a TUN device, traffic routed through that adapter is exposed to user-space software as raw packets, which can then be serialized and forwarded over any arbitrary channel.\n- **IP Over Whatever (IPOWD):** Maziarz describes a modular daemon architecture designed to handle TUN packets asynchronously. The daemon reads from the TUN interface and forwards data across interchangeable transports (such as ICMP, DNS, or named pipes/FIFOs/datagram sockets) written as microservices in languages like Go, Python, or Bash. In one demonstration, traffic between two hosts (Flower and OVH) is routed over an ICMP transport to serve HTTP requests.\n- **DNS One-Liners:** Demonstrations of Bash one-liners utilizing DNS queries (`dig`/`nslookup`) to retrieve base64-encoded payloads from TXT records and pipe them directly into an interpreter (`sh`).\n- **Modulation & Sound Cards:** Demonstration of audio-based exfiltration using phone voice recorders and PC sound cards, converting data to audio tones via ASK and FSK modulation to evade enterprise DLP monitoring.\n\n### Takeaways\nAs long as an attacker or penetration tester can find any bidirectional or asynchronous channel to exchange signals, establishing a fully functional TCP/IP connection is feasible. Security teams and DLP systems often monitor standard protocols but fail to account for out-of-band or low-level channels like ICMP payloads, DNS subdomain structuring, serial ports, or acoustic modulation.",
+      "durationSeconds": 2807,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "g3-pK6g1DaY",
+      "slug": "or-yair-doubledrive-double-agents-hide-behind-the-clouds-confide",
+      "title": "Or Yair: DoubleDrive: Double Agents Hide Behind The Clouds | CONFidence",
+      "speakers": [
+        "Or Yair"
+      ],
+      "track": "cloud",
+      "topics": [
+        "yair",
+        "doubledrive",
+        "double",
+        "hide"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Or Yair: DoubleDrive: Double Agents Hide Behind The Clouds | CONFidence.",
+      "summary": null,
+      "durationSeconds": 2438,
+      "conference": "confidence"
+    },
+    {
+      "youtubeId": "NHETVGi9igw",
+      "slug": "eilon-bendet-nir-swartz-the-future-of-cloud-malware-threats-conf",
+      "title": "Eilon Bendet, Nir Swartz: The Future of Cloud Malware Threats | CONFidence",
+      "speakers": [
+        "Eilon Bendet",
+        "Nir Swartz"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "eilon",
+        "bendet",
+        "swartz",
+        "malware-analysis"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Eilon Bendet, Nir Swartz: The Future of Cloud Malware Threats | CONFidence.",
+      "summary": null,
+      "durationSeconds": 2862,
+      "conference": "confidence"
+    }
+  ]
+}

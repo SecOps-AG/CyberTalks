@@ -1,0 +1,689 @@
+{
+  "villageSlug": "fwd-cloudsec",
+  "villageName": "fwd:cloudsec",
+  "eventSlug": "fwd-cloudsec-2023",
+  "conference": "fwd-cloudsec",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLCPCP1pNWD7MR1SwekwbZls9TGzqo_LHx",
+  "description": "fwd:cloudsec talks from fwd:cloudsec 2023.",
+  "talks": [
+    {
+      "youtubeId": "KnYssH8xspI",
+      "slug": "welcome",
+      "title": "Welcome",
+      "speakers": [
+        "Aaron Zollman"
+      ],
+      "track": "cloud",
+      "topics": [
+        "welcome",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Security researchers investigate Welcome and analyze defensive countermeasures.",
+      "summary": "Overview: Erin, organizer of fwd:cloudsec, delivers the welcome address emphasizing the conference's role as an independent cloud security practitioner community now in its fourth year.\n\nKey Topics: The need for vendor-independent cloud security dialogue; growth of the cloud security Forum Slack community; record submission numbers; and responding to claims that cloud security tools are oversaturated.\n\nTechnical Details: Erin notes the cloud security Forum Slack grew 25% year-over-year and fwd:cloudsec received record talk submissions. She pushes back against RSA commentary suggesting only three CSPM vendors matter, arguing significant cloud security work remains.\n\nTakeaways: Independent practitioner communities provide essential spaces for honest cloud security dialogue free from vendor marketing. fwd:cloudsec fills a gap that vendor-sponsored events cannot address.",
+      "durationSeconds": 735,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "61C_lEQ5qNM",
+      "slug": "evading-logging-in-the-cloud-disrupting-and-bypassing-aws-cloudt",
+      "title": "Evading Logging in the Cloud Disrupting and Bypassing AWS CloudTrail",
+      "speakers": [
+        "Nick Frichette"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "evading",
+        "logging",
+        "cloud",
+        "disrupting",
+        "bypassing"
+      ],
+      "teaser": "Nick Frichette explores Evading Logging in the Cloud Disrupting and Bypassing AWS CloudTrail.",
+      "summary": "Why Attackers Target CloudTrail\n\nNick Rhoades explains CloudTrail as AWS’s fundamental API audit log answering who did what when—valuable for detection, threat hunting, and automation. From an adversary view, disabling or evading CloudTrail hides cloud actions after foothold.\n\nDisrupting CloudTrail Logging\n\nRhoades covers post-compromise options to disable or impede logging at account-level trail configurations, including real incidents where attackers attempted to blind defenders. Default CloudTrail runs without custom setup, but misconfigured or centralized logging gaps leave organizations exposed if supporting infrastructure fails.\n\nBypassing CloudTrail Internals\n\nThe core research maps AWS API internals to vulnerabilities that allowed actions without CloudTrail records—from permission enumeration flaws to direct service interactions. AWS has since fixed disclosed issues; Rhoades argues defenders should study bypass patterns to harden multi-account organization trails, integrity validation, and encryption rather than assuming SIEM ingestion alone suffices.",
+      "durationSeconds": 2416,
+      "conference": "fwd-cloudsec",
+      "aiSummary": "Overview:\nAt fwd:cloudsec, cloud security researcher Nick Frichette examines advanced techniques for disrupting, manipulating, and completely bypassing AWS CloudTrail logging. The presentation explores how attackers operate within AWS environments while remaining undetected by traditional CloudTrail monitoring, security information and event management (SIEM) systems, and automated threat detections. Frichette uncovers blind spots stemming from internal console APIs, protocol mutations, and undocumented non-production endpoints that execute actions without logging events.\n\nKey Topics:\n- Core AWS CloudTrail logging architecture, trail configurations, and 90-day Event History.\n- Adversary disruption tactics: trail deletion, bucket policy alterations, and SCP defenses.\n- Undocumented internal APIs and AWS Management Console backend traffic reverse engineering.\n- Silent IAM privilege enumeration via non-production and gamma service endpoints.\n\nTechnical Details:\nAWS CloudTrail serves as the foundational auditing service across AWS environments, recording API calls to S3 storage buckets and retaining events within a 90-day regional Event History. Adversaries who compromise cloud credentials often attempt direct disruption by issuing `StopLogging` or `DeleteTrail` calls, modifying S3 bucket permissions, or disabling KMS encryption keys. However, modern enterprise defense structures routinely thwart these crude approaches using Organizations Service Control Policies (SCPs) and immutable centralized logging accounts. Furthermore, 90-day Event History persists out-of-the-box regardless of whether an active trail exists, forcing sophisticated adversaries to seek subtle evasion and bypass mechanisms.\n\nFrichette demonstrates that adversaries can uncover severe logging blind spots by reverse engineering traffic between the AWS Management Console and backend services. The AWS console frequently relies on internal, undocumented APIs—such as `iam-admin`—designed for batch operations like `ListAccessKeysForUsers`. When these internal endpoints are invoked, CloudTrail often fails to record the action entirely or records it under mutated, unexpected event names, blinding detection logic that expects standard public API operations like `iam:ListAccessKeys`. Additionally, service models define communication protocols (such as JSON RPC, REST-XML, or Query protocols). By mutating the request protocol or HTTP headers, an attacker can elicit successful responses while evading logging parsers.\n\nThe presentation introduces a potent stealth technique utilizing undocumented non-production endpoints (such as `kms-a` or `sns-gamma`). Frichette shows that certain pre-production endpoints possess access to production backends and validate IAM permissions. Crucially, endpoints like `sns-gamma` execute permission checks without generating any CloudTrail log entries. An attacker possessing compromised credentials can issue unauthorized requests (such as `sns:ListTopics`) against these gamma endpoints; receiving an authorized empty response confirms the existence of the permission completely silently. Furthermore, directing API requests to alternate endpoints causes EventSource obfuscation, modifying the logged domain and defeating SIEM rules that filter strictly on standard regional service names.\n\nKey Takeaways:\nSecurity operations and cloud defense teams must recognize that AWS CloudTrail does not provide absolute visibility over all API activity and internal AWS endpoints. Detection rules reliant solely on standard API event names or default endpoint domains can be bypassed via protocol mutation and non-production endpoint targeting. Organizations must implement behavioral and data-plane monitoring, restrict network egress to unauthorized AWS hostnames, and audit IAM roles for anomalies beyond standard CloudTrail alert pipelines.\n\n(AI summary — Gemini Flash)"
+    },
+    {
+      "youtubeId": "kbguZ8IpKoI",
+      "slug": "the-unholy-marriage-of-aws-iam-roles-and-instance-profiles",
+      "title": "The Unholy Marriage of AWS IAM Roles and Instance Profiles",
+      "speakers": [
+        "Andre Rall"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "iam",
+        "unholy",
+        "marriage",
+        "role",
+        "instance"
+      ],
+      "teaser": "Andre Rall explores The Unholy Marriage of AWS IAM Roles and Instance Profiles.",
+      "summary": "Baseline EC2 Credential Behavior\n\nOptiv offensive cloud researcher Andre Rawls demos surprising IAM instance metadata behavior using color-coded roles/profiles on a test EC2 instance serving credentials ending in k5QD. Removing a role from its instance profile does not immediately revoke active keys—the instance keeps caching them up to six hours.\n\nRole Swaps and Policy Mismatch\n\nRe-adding the original role or attaching a different role (green role with explicit deny vs blue admin) does not refresh credentials promptly. After swapping green onto the blue profile, k5QD persisted ~54 minutes while still exercising blue admin powers—creating a window where displayed profile roles misrepresent effective access.\n\nDeleted Profiles Still Serve Credentials\n\nDetaching roles, deleting the instance profile, and even AWS console/API contradictions (profile shown attached but API 404) leave stale credentials active. Green-role denies fail while blue credentials remain usable—risky for incident responders assuming IAM changes instantly propagate.\n\nRemediation Guidance\n\nDisassociate deleted profiles explicitly to flush metadata credentials. Rawls stresses eventual consistency can last nearly an hour, warns burned demo accounts, and maps required IAM permissions for defenders automating cleanup.",
+      "durationSeconds": 1438,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "XhciZ6TgJRM",
+      "slug": "the-ins-and-outs-of-building-an-aws-data-perimeter",
+      "title": "The Ins and Outs of Building an AWS Data Perimeter",
+      "speakers": [
+        "John Burgess"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "building",
+        "perimeter",
+        "outs"
+      ],
+      "teaser": "John Burgess analyzes The Ins and Outs of Building an AWS Data Perimeter.",
+      "summary": "Data perimeter concept\n\nStripe cloud security engineer John Bridges introduces an AWS data perimeter: organization-wide guardrails that deny cross-boundary access by default and require high approval to trust external principals, vendors, or exfiltrated credentials. The goal is a zone of distrust outside the org when incidents involve data crossing organizational edges.\n\nSix control types\n\nThe perimeter addresses six cross-organizational access patterns. Bridges ranks risk: same-account requests are safest, intra-org cross-account moderate, and leaving the AWS organization most dangerous—yet IAM policy evaluation only distinguishes in-account versus cross-account, not org membership.\n\nCredential exfiltration SCP\n\nA service control policy can bind EC2 instance role credentials to trusted VPC endpoints or IP ranges using aws:SourceVpc, aws:SourceIp, and principal ARN conditions, while allowing AWS service use. Real deployments need exceptions for peered VPCs, pre-signed S3 URLs, and permission-only actions like RDS IAM authentication.\n\nImplementation reality\n\nCombining base deny logic with exceptions produces complex SCPs. The talk covers theory, building blocks, and rollout without breaking production—acknowledging the topic exceeds a short session.",
+      "durationSeconds": 1193,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "Je4wle5LHSY",
+      "slug": "how-do-you-set-boundaries-aws-permissions-boundaries-in-large-cl",
+      "title": "How do you set boundaries? AWS Permissions boundaries in large cloud environments",
+      "speakers": [
+        "Kushagra Sharma"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "boundarie",
+        "permission",
+        "large",
+        "cloud",
+        "environment"
+      ],
+      "teaser": "Kushagra Sharma examines How do you set boundaries? AWS Permissions boundaries in large cloud environments.",
+      "summary": null,
+      "durationSeconds": 975,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "e7t8XxKVs84",
+      "slug": "patterns-in-s3-data-access-protecting-and-enhancing-access-to-da",
+      "title": "Patterns in S3 Data Access: Protecting and enhancing access to data banks, lakes,...",
+      "speakers": [
+        "Josh Snyder"
+      ],
+      "track": "cloud",
+      "topics": [
+        "pattern",
+        "acces",
+        "protecting",
+        "enhancing",
+        "patterns"
+      ],
+      "teaser": "Josh Snyder details Patterns in S3 Data Access: Protecting and enhancing access to data banks, lakes,....",
+      "summary": null,
+      "durationSeconds": 2623,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "tR06WBbqnL0",
+      "slug": "i-trusted-you-a-demonstrated-abuse-of-cloud-kerberos-trust",
+      "title": "I Trusted You A Demonstrated Abuse of Cloud Kerberos Trust",
+      "speakers": [
+        "Daniel Heinsen",
+        "Elad Shamir"
+      ],
+      "track": "cloud",
+      "topics": [
+        "kerberos",
+        "trusted",
+        "demonstrated",
+        "abuse",
+        "cloud",
+        "kerbero"
+      ],
+      "teaser": "Daniel Heinsen explores I Trusted You A Demonstrated Abuse of Cloud Kerberos Trust.",
+      "summary": null,
+      "durationSeconds": 2643,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "WveNo4pwz3c",
+      "slug": "tales-from-the-sewer-a-plumbers-view-of-building-a-data-security",
+      "title": "Tales From the Sewer A plumber’s view of building a data security platform",
+      "speakers": [
+        "Christopher Webber"
+      ],
+      "track": "cloud",
+      "topics": [
+        "tale",
+        "sewer",
+        "plumber",
+        "view",
+        "building"
+      ],
+      "teaser": "Christopher Webber details Tales From the Sewer A plumber’s view of building a data security platform.",
+      "summary": null,
+      "durationSeconds": 984,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "RdQiIvCrSzk",
+      "slug": "cloudfox-cloudfoxable-a-powerful-duo-for-mastering-the-art-of-id",
+      "title": "CloudFox + CloudFoxable A Powerful Duo for Mastering the Art of Identifying and...",
+      "speakers": [
+        "Seth Art"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloudfox",
+        "cloudfoxable",
+        "powerful",
+        "mastering",
+        "identifying"
+      ],
+      "teaser": "Seth Art investigates CloudFox + CloudFoxable A Powerful Duo for Mastering the Art of Identifying and....",
+      "summary": null,
+      "durationSeconds": 1260,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "x2l-GCFGOcs",
+      "slug": "billions-served-processing-security-event-logs-with-the-aws-serv",
+      "title": "Billions Served Processing Security Event Logs with the AWS Serverless Stack",
+      "speakers": [
+        "Josh Liburdi"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "serverless",
+        "billion",
+        "served",
+        "processing",
+        "event"
+      ],
+      "teaser": "Josh Liburdi examines Billions Served Processing Security Event Logs with the AWS Serverless Stack.",
+      "summary": null,
+      "durationSeconds": 2262,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "5hyLfhTjtmE",
+      "slug": "rolling-out-aws-infrastructure-everywhere-with-space-ships",
+      "title": "Rolling out AWS Infrastructure Everywhere with Space Ships",
+      "speakers": [
+        "Mike Grima"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "infrastructure",
+        "space"
+      ],
+      "teaser": "Mike Grima explores Rolling out AWS Infrastructure Everywhere with Space Ships.",
+      "summary": null,
+      "durationSeconds": 2280,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "RyZRS4vmZgE",
+      "slug": "the-good-the-bad-and-the-vulnerable-a-comprehensive-overview-of",
+      "title": "The Good, the Bad, and the Vulnerable: A comprehensive overview of...",
+      "speakers": [
+        "Merav Bar",
+        "Amitai Cohen"
+      ],
+      "track": "cloud",
+      "topics": [
+        "vulnerable",
+        "comprehensive",
+        "overview"
+      ],
+      "teaser": "Merav Bar details The Good, the Bad, and the Vulnerable: A comprehensive overview of....",
+      "summary": null,
+      "durationSeconds": 1614,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "_8y5LUR2GQM",
+      "slug": "imds-the-gatekeeper-to-your-cloud-castles-and-how-to-keep-the-dr",
+      "title": "IMDS The Gatekeeper to Your Cloud Castles And How to Keep the Dragons Out",
+      "speakers": [
+        "Liv Matan",
+        "Lior Zatlavi"
+      ],
+      "track": "cloud",
+      "topics": [
+        "gatekeeper",
+        "imd",
+        "cloud",
+        "castle"
+      ],
+      "teaser": "Liv Matan explores IMDS The Gatekeeper to Your Cloud Castles And How to Keep the Dragons Out.",
+      "summary": null,
+      "durationSeconds": 1815,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "oomorH6etRE",
+      "slug": "a-year-of-no-building-organizational-iam-guardrail-policies-that",
+      "title": "A Year of NO building organizational IAM guardrail policies that work",
+      "speakers": [
+        "Noam Dahan"
+      ],
+      "track": "cloud",
+      "topics": [
+        "iam",
+        "building",
+        "organizational",
+        "guardrail",
+        "policie"
+      ],
+      "teaser": "Noam Dahan details A Year of NO building organizational IAM guardrail policies that work.",
+      "summary": null,
+      "durationSeconds": 1372,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "ey3dwohF6BY",
+      "slug": "from-huh-to-privilege-escalation-finding-vulnerabilities-from-a",
+      "title": "From ‘huh ’ to privilege escalation finding vulnerabilities from a bug in the AWS...",
+      "speakers": [
+        "Ben Bridts"
+      ],
+      "track": "cloud",
+      "topics": [
+        "privilege-escalation",
+        "vulnerabilities",
+        "aws"
+      ],
+      "teaser": "Ben Bridts details From ‘huh ’ to privilege escalation finding vulnerabilities from a bug in the AWS....",
+      "summary": null,
+      "durationSeconds": 1463,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "EcUs8Y0w0fQ",
+      "slug": "gvisor-the-future-of-container-security",
+      "title": "gVisor The Future of Container Security",
+      "speakers": [
+        "Andy Nguyen"
+      ],
+      "track": "cloud",
+      "topics": [
+        "container-security",
+        "gvisor",
+        "container"
+      ],
+      "teaser": "Andy Nguyen details gVisor The Future of Container Security.",
+      "summary": null,
+      "durationSeconds": 1280,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "tzZRocfCzOY",
+      "slug": "passing-the-security-burden-how-to-see-the-unforeseen",
+      "title": "Passing The Security Burden - How To See The Unforeseen",
+      "speakers": [
+        "Matthew Keogh"
+      ],
+      "track": "cloud",
+      "topics": [
+        "passing",
+        "burden",
+        "unforeseen"
+      ],
+      "teaser": "Matthew Keogh analyzes Passing The Security Burden - How To See The Unforeseen.",
+      "summary": null,
+      "durationSeconds": 1401,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "rbHALyrxj0Y",
+      "slug": "scanning-the-internet-for-external-cloud-exposures",
+      "title": "Scanning the internet for external cloud exposures",
+      "speakers": [
+        "Nir Ohfeld",
+        "Hillai Ben-Sasson"
+      ],
+      "track": "cloud",
+      "topics": [
+        "scanning",
+        "internet",
+        "external",
+        "cloud",
+        "exposure",
+        "exposures"
+      ],
+      "teaser": "Nir Ohfeld analyzes Scanning the internet for external cloud exposures.",
+      "summary": null,
+      "durationSeconds": 1584,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "5IflHpDPua8",
+      "slug": "operationalizing-gcps-asset-inventory-for-cloud-enlightenment",
+      "title": "Operationalizing GCP’s Asset Inventory for Cloud Enlightenment",
+      "speakers": [
+        "Randy Heins",
+        "Jeffrey Zhang"
+      ],
+      "track": "cloud",
+      "topics": [
+        "gcp",
+        "operationalizing",
+        "asset",
+        "inventory",
+        "cloud",
+        "enlightenment"
+      ],
+      "teaser": "Randy Heins investigates Operationalizing GCP’s Asset Inventory for Cloud Enlightenment.",
+      "summary": null,
+      "durationSeconds": 2170,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "c_x4hM2fT6g",
+      "slug": "pivoting-clouds-in-aws-organizations",
+      "title": "Pivoting Clouds in AWS Organizations",
+      "speakers": [
+        "Scott Weston"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "pivoting",
+        "cloud",
+        "organization",
+        "clouds"
+      ],
+      "teaser": "Scott Weston examines Pivoting Clouds in AWS Organizations.",
+      "summary": null,
+      "durationSeconds": 2324,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "zdNAr9C2seA",
+      "slug": "aws-identity-center-extending-cloudsplaining-to-score-users-and",
+      "title": "AWS Identity Center: Extending Cloudsplaining to score Users & Permission set...",
+      "speakers": [
+        "Rodrigo Montoro"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "identity",
+        "extending",
+        "cloudsplaining",
+        "score"
+      ],
+      "teaser": "Rodrigo Montoro analyzes AWS Identity Center: Extending Cloudsplaining to score Users & Permission set....",
+      "summary": null,
+      "durationSeconds": 1363,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "dVDY0QzH6P8",
+      "slug": "helping-developers-drink-from-a-champagne-flute-and-not-a-fireho",
+      "title": "Helping developers drink from a champagne flute and not a firehose ...",
+      "speakers": [
+        "Tyson Garrett",
+        "Jason Nelson"
+      ],
+      "track": "cloud",
+      "topics": [
+        "helping",
+        "developer",
+        "drink",
+        "champagne",
+        "flute",
+        "firehose"
+      ],
+      "teaser": "Tyson Garrett analyzes Helping developers drink from a champagne flute and not a firehose ....",
+      "summary": null,
+      "durationSeconds": 1715,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "ZUUS_7pdSyo",
+      "slug": "iykyk-negotiating-the-scope-of-security-audits-even-if-you-dread",
+      "title": "IYKYK Negotiating the Scope of Security Audits Even if You DREAD...",
+      "speakers": [
+        "Jasmine Henry",
+        "George Tang"
+      ],
+      "track": "cloud",
+      "topics": [
+        "iykyk",
+        "negotiating",
+        "scope",
+        "audit",
+        "dread"
+      ],
+      "teaser": "Jasmine Henry investigates IYKYK Negotiating the Scope of Security Audits Even if You DREAD....",
+      "summary": null,
+      "durationSeconds": 1318,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "5wAAXAAGqiM",
+      "slug": "stop-the-bulldozers-hardening-the-aws-cdk-deployment-process",
+      "title": "Stop the Bulldozers Hardening the AWS CDK deployment process",
+      "speakers": [
+        "Dawn Cooper"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "hardening",
+        "bulldozer",
+        "deployment",
+        "proces"
+      ],
+      "teaser": "Dawn Cooper analyzes Stop the Bulldozers Hardening the AWS CDK deployment process.",
+      "summary": null,
+      "durationSeconds": 1251,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "H089cvgupIk",
+      "slug": "unmasking-the-subnet-lookalike-ip-ranges-in-cloud-environments",
+      "title": "Unmasking the Subnet Lookalike IP Ranges in Cloud Environments",
+      "speakers": [
+        "Asaf Aprozper"
+      ],
+      "track": "cloud",
+      "topics": [
+        "unmasking",
+        "subnet",
+        "lookalike",
+        "range",
+        "cloud",
+        "environment"
+      ],
+      "teaser": "Asaf Aprozper investigates Unmasking the Subnet Lookalike IP Ranges in Cloud Environments.",
+      "summary": null,
+      "durationSeconds": 2111,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "7BYMSqj2jKI",
+      "slug": "swimming-with-the-sharks-ir-kubed",
+      "title": "Swimming with the Sharks. IR Kubed.",
+      "speakers": [
+        "Nathan Case",
+        "Alon Girmonsky"
+      ],
+      "track": "cloud",
+      "topics": [
+        "swimming",
+        "shark",
+        "kubed",
+        "sharks"
+      ],
+      "teaser": "Nathan Case analyzes Swimming with the Sharks. IR Kubed..",
+      "summary": null,
+      "durationSeconds": 2417,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "V4TIcBSR1w8",
+      "slug": "beyond-the-aws-security-maturity-roadmap",
+      "title": "Beyond the AWS Security Maturity Roadmap",
+      "speakers": [
+        "Rami McCarthy"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "maturity",
+        "roadmap"
+      ],
+      "teaser": "Rami McCarthy analyzes Beyond the AWS Security Maturity Roadmap.",
+      "summary": null,
+      "durationSeconds": 1632,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "gyzDM2EXJtI",
+      "slug": "success-criteria-for-your-cspm",
+      "title": "Success Criteria for your CSPM",
+      "speakers": [
+        "David White"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cspm",
+        "succes",
+        "criteria",
+        "success"
+      ],
+      "teaser": "David White analyzes Success Criteria for your CSPM.",
+      "summary": null,
+      "durationSeconds": 1359,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "6eckv1tMzt0",
+      "slug": "aws-presigned-urls-the-good-the-bad-and-the-ugly",
+      "title": "AWS Presigned URLs The Good, The Bad, and The Ugly",
+      "speakers": [
+        "Jarom Brown"
+      ],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "presigned",
+        "url",
+        "ugly",
+        "urls"
+      ],
+      "teaser": "Jarom Brown analyzes AWS Presigned URLs The Good, The Bad, and The Ugly.",
+      "summary": null,
+      "durationSeconds": 1365,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "gYQG6SCzLo8",
+      "slug": "its-just-a-name-right",
+      "title": "It's Just a Name, Right",
+      "speakers": [
+        "Nathan Eades"
+      ],
+      "track": "cloud",
+      "topics": [
+        "name",
+        "just",
+        "right"
+      ],
+      "teaser": "Nathan Eades explores It's Just a Name, Right.",
+      "summary": null,
+      "durationSeconds": 1402,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "pTKS99Nfaxw",
+      "slug": "vulnerabilities-and-misconfigurations-in-github-actions",
+      "title": "Vulnerabilities and Misconfigurations in GitHub Actions",
+      "speakers": [
+        "Rojan Rijal"
+      ],
+      "track": "cloud",
+      "topics": [
+        "vulnerabilities",
+        "github-actions",
+        "vulnerabilitie",
+        "misconfiguration",
+        "github",
+        "action"
+      ],
+      "teaser": "Rojan Rijal analyzes Vulnerabilities and Misconfigurations in GitHub Actions.",
+      "summary": null,
+      "durationSeconds": 1244,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "orNBBHKayiY",
+      "slug": "google-cloud-threat-detection-a-study-in-google-cloud",
+      "title": "Google Cloud Threat Detection: A Study in Google Cloud",
+      "speakers": [
+        "Day Johnson"
+      ],
+      "track": "cloud",
+      "topics": [
+        "threat-detection",
+        "detection",
+        "google",
+        "cloud",
+        "threat",
+        "study"
+      ],
+      "teaser": "Day Johnson details Google Cloud Threat Detection: A Study in Google Cloud.",
+      "summary": null,
+      "durationSeconds": 1723,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "DygEQUVZBjc",
+      "slug": "how-citi-advanced-their-containment-capabilities-through-automat",
+      "title": "How Citi Advanced Their Containment Capabilities Through Automation",
+      "speakers": [
+        "Damien Burks",
+        "Elvis Veliz"
+      ],
+      "track": "cloud",
+      "topics": [
+        "automation",
+        "citi",
+        "their",
+        "containment",
+        "capabilitie"
+      ],
+      "teaser": "Damien Burks investigates How Citi Advanced Their Containment Capabilities Through Automation.",
+      "summary": null,
+      "durationSeconds": 2816,
+      "conference": "fwd-cloudsec"
+    },
+    {
+      "youtubeId": "_v8OlLaAAR0",
+      "slug": "state-of-the-union",
+      "title": "State of the Union",
+      "speakers": [
+        "Scott Piper"
+      ],
+      "track": "cloud",
+      "topics": [
+        "state",
+        "union",
+        "vulnerability-research"
+      ],
+      "teaser": "Scott Piper explores State of the Union.",
+      "summary": null,
+      "durationSeconds": 1898,
+      "conference": "fwd-cloudsec"
+    }
+  ]
+}

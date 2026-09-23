@@ -1,0 +1,937 @@
+{
+  "villageSlug": "36th-annual-first-conference",
+  "villageName": "36th Annual FIRST Conference",
+  "eventSlug": "36th-annual-first-conference-2024",
+  "conference": "first",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLBAUUhONOrO_yBBGmJTFlr3ekKRE8SSLQ",
+  "description": "36th Annual FIRST Conference talks from 36th Annual FIRST Conference 2024.",
+  "talks": [
+    {
+      "youtubeId": "ZAD_Ukrdh2k",
+      "slug": "monday-keynote-address-challenges-of-digital-agency",
+      "title": "Monday Keynote Address: Challenges of Digital Agency ...",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "monday",
+        "addres",
+        "challenge",
+        "agency"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Monday Keynote Address: Challenges of Digital Agency ....",
+      "summary": null,
+      "durationSeconds": 3634,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "1eSUwCsyO-4",
+      "slug": "demystifying-cloud-infrastructure-attacks",
+      "title": "Demystifying Cloud Infrastructure Attacks",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "infrastructure",
+        "demystifying",
+        "cloud",
+        "attack"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Demystifying Cloud Infrastructure Attacks.",
+      "summary": "Overview: A Trustwave principal forensic investigator presents at FIRST Conference on cloud infrastructure attacks, walking through a composite incident based on real-world investigations.\n\nKey Topics: How cloud attacks differ from traditional kill chains; shared platform APIs as attack surfaces; Azure AD Connect and pass-through authentication abuse; and password reset versus authentication bypass techniques.\n\nTechnical Details: The speaker reconstructs an attack chain where adversaries abuse hybrid identity configurations, leveraging AD Connect servers to authenticate against on-premises Active Directory while bypassing expected password reset triggers.\n\nTakeaways: Cloud attacks exploit identity bridges between on-prem and cloud environments. Defenders must understand hybrid authentication flows and monitor AD Connect infrastructure as a critical attack path.",
+      "durationSeconds": 1696,
+      "conference": "first",
+      "aiSummary": "Overview:\nAlexander, a Principal Forensic Investigator at Truesec, deconstructs a complex, multi-stage hybrid cloud attack drawn from real-world incident response investigations. Tracing the intrusion backwards from an Azure/Entra ID tenant takeover to its initial root cause, he illustrates how threat actors chain developer machine compromises, Git repository supply-chain tampering, CI/CD container breakouts, and cloud credential harvesting. The presentation highlights the critical risks of hybrid identity infrastructure, demonstrating how on-premises Active Directory Connect servers can be weaponized to dominate enterprise cloud resources.\n\nKey Topics:\n- Hybrid identity architecture risks: ADFS Golden SAML, Pass-Through Authentication (PTA) skeleton keys, and Azure AD Connect Password Hash Sync (PHS) credential dumping\n- CI/CD supply chain exploitation: Jenkins script console abuse, Docker default network container breakout, and malicious dependency tampering\n- Covert Command and Control: living-off-the-cloud C2 tunneling via Gmail API drafts and attachments\n- Cloud credential harvesting: GCP default service account storage bucket exposure, CLI SQLite database credential dumping, and DPAPI-based infostealers\n\nTechnical Details:\nThe incident investigation originated with an alert for single-factor authentication in Microsoft Entra ID (Azure AD), preceded by an unexpected password reset triggered by an on-premises Azure AD Connect service account (sync_*). In hybrid identity deployments utilizing Password Hash Sync (PHS), this internal service account possesses broad directory permissions, including the ability to reset user passwords to synchronize them between on-premises Active Directory and the cloud. By dumping these synced credentials from the on-premises AD Connect server (an activity typically detected by EDR as an AD Sync attack), the threat actor reset administrative passwords, assumed ownership of an Enterprise Application with delegated Microsoft Graph permissions (accessing mailboxes and SharePoint), promoted an account to Global Administrator, and enrolled a rogue device.\n\nLateral movement to the AD Connect server stemmed from a compromised Jenkins build automation server. The attacker accessed Jenkins' administrative Script Console to dump build secrets and execute arbitrary server commands. The server maintained persistent Command and Control (C2) through a custom RAT that communicated via the Gmail API: the malware polled a compromised Gmail account for new message drafts containing commands, executed them locally, and uploaded output as email attachments—effectively blending into legitimate outbound HTTPS traffic. This Jenkins host access was enabled by a network breakout from a Docker build container that had been placed on Docker's default bridge network, allowing it to route directly to the host's internal Jenkins web interface.\n\nThe initial breach began with a RedLine infostealer infection purchased on Russian Market, delivered via a spoofed GitHub issue attachment URL. The infostealer decrypted browser session cookies and Primary Refresh Tokens (PRTs) using Windows DPAPI on a developer's workstation. Stolen credentials allowed the attacker to access GitLab and modify a repository's requirements.txt, injecting a dependency that executed a reverse shell via setup.py during automated builds. Concurrently, the attacker compromised a Google Cloud Platform (GCP) development VM, querying the instance metadata service to hijack the default compute service account (which had read permissions over backup storage buckets containing administrative credentials) and dumping saved authentication tokens from local SQLite databases used by gcloud and Azure CLI tools.\n\nKey Takeaways:\nHybrid identity infrastructure like Azure AD Connect represents a critical Tier-0 asset; compromising on-premises synchronization servers immediately grants complete administrative dominance over cloud tenants. Organizations must strictly segment CI/CD build environments, ensuring Docker containers cannot route to management consoles or internal networks, and audit pipelines against dependency tampering. Furthermore, enterprises should protect developer session tokens with hardware-backed TPM storage (such as Windows 11 PRT protection) and enforce Conditional Access policies requiring compliant, managed hardware for administrative logins.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Ic2S9voZERw",
+      "slug": "sboms-for-the-win-how-psirt-teams-could-use-sbom",
+      "title": "SBOMs for the Win! How PSIRT Teams Could Use SBOM",
+      "speakers": [],
+      "track": "supply-chain",
+      "topics": [
+        "sbom",
+        "psirt",
+        "team",
+        "sboms"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning SBOMs for the Win! How PSIRT Teams Could Use SBOM.",
+      "summary": "Schneider Electric Context\n\nHarish Shankar and Fabrissa present Schneider Electric's product security program. The global energy and automation company operates across 100 countries with thousands of suppliers, integrators, and service partners, making supply-chain security critical.\n\nEnd-to-End Security Program\n\nThirteen initiatives cover R&D through customer operations, adopting IEC 62443 standards, global security lab pen testing, source-code governance, secure manufacturing, tamper-proof staging, and field-engineer practices like banning unscanned USBs at customer sites.\n\nSBOM Initiative\n\nFabrissa describes Schneider's SBOM program for firmware and embedded products with transitive dependencies. The journey began atop an existing product vulnerability management program where R&D teams already tracked component inventories.\n\nPSIRT Integration\n\nSoftware bill of materials is positioned as a key supply-chain security component enabling PSIRT teams to respond to vulnerabilities across complex products that blend operating systems, embedded software, and cloud components.",
+      "durationSeconds": 1876,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "pd18DlBk2qk",
+      "slug": "tales-from-a-cloud-csirt-lets-deep-dive-into-a-kubernetes-k8s-in",
+      "title": "Tales From a Cloud CSIRT- Let’s Deep Dive into a Kubernetes (k8s) Infection",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "kubernetes",
+        "k8s",
+        "tale",
+        "cloud",
+        "csirt",
+        "deep"
+      ],
+      "teaser": "Security researchers examine technical aspects of Tales From a Cloud CSIRT- Let’s Deep Dive into a Kubernetes (k8s) Infection.",
+      "summary": "Incident Trigger\n\nAn Argentina-based responder describes a client whose public S3 static website suddenly showed access denied because objects were encrypted with a KMS key the tenant could no longer use. The case illustrates how fast-moving startups often skip logging and security prep.\n\nCloudTrail Forensics\n\nWith no exported logs available, the team retrieved CloudTrail event history programmatically and built tooling to grep and analyze API activity. They traced suspicious get-authorization-token calls to ECR from an internal AWS address—unexpected for a user who should not touch the container registry.\n\nKubernetes and IAM Risk\n\nThe talk explains how Kubernetes service accounts mapped to IAM roles can give containers cluster-level cloud permissions without segmentation. Attackers who reach that trust boundary may push images, encrypt data, and abuse infrastructure-as-code patterns that provision users automatically.\n\nLogging Gaps\n\nAWS logs API calls via CloudTrail, but object-level S3 events are costly and usually off. Kubernetes adds API server, audit, authenticator, and controller logs that rarely get correlated with CloudTrail—leaving blind spots during cloud-native incidents.",
+      "durationSeconds": 2032,
+      "conference": "first",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "Dc5Pqv7lxHA",
+      "slug": "cloud-console-cartographer-tapping-into-mapping",
+      "title": "Cloud Console Cartographer: Tapping Into Mapping",
+      "speakers": [
+        "Slogging Thru Logging"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "console",
+        "cartographer",
+        "tapping"
+      ],
+      "teaser": "Slogging Thru Logging explores Cloud Console Cartographer: Tapping Into Mapping.",
+      "summary": "Speakers and goal\n\nPermiso researchers Cam and Daniel introduce Cloud Console Cartographer, an open-source tool to map noisy AWS console-session logs into understandable attacker or user activity.\n\nCloud logging realities\n\nCloud logs differ from endpoint telemetry: less control, API-call abstraction, control-plane vs data-plane split, retention limits (e.g., 30/90 days), delays, and query throttling. Forwarding to S3/blob storage helps scale and retention but can drop fields such as CloudTrail's resources section.\n\nConsole focus\n\nConsole means browser-based AWS/Azure portal use, not CLI. They say attackers do use consoles, sometimes with click-through playbooks or technical limitations.\n\nDefender guidance\n\nEnable non-default logs, forward them to durable storage, monitor ingestion, and test tools before incidents. The talk promises a solution walkthrough and demo of Cartographer for reconstructing what happened inside verbose console sessions.",
+      "durationSeconds": 2004,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "DNdUyYtqFwk",
+      "slug": "one-chain-to-shackle-them-all",
+      "title": "One Chain to Shackle Them All",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "chain",
+        "shackle",
+        "them"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning One Chain to Shackle Them All.",
+      "summary": "## Supply Chain as Permanent Risk\n\nA Siemens product-security veteran presents \"One Chain to Shackle Them All\" at FIRST, arguing software supply chains create a never-ending vulnerability chain shackling vendors and consumers alike. Managing over 10,000 products, his team disclosed roughly a thousand vulnerabilities last year—manual scale impossible to sustain through automation alone.\n\n## Two-Party Models Fail\n\nCVSS environmental scores, legal vendor-customer contracts, and SSVC decision frameworks assume binary relationships. Real supply chains contain many hops: component authors, integrators, OEMs, distributors, and end operators. Vulnerabilities propagate instantly downstream while patches travel slowly upstream.\n\n## Patch Propagation Asymmetry\n\nIllustrative timelines show fixes taking months per hop—potentially over two years from initial disclosure to final deployer. Meanwhile exploit knowledge spreads immediately. Organizations still patching 2022 flaws while attackers chain current CVEs exemplify systemic lag no single vendor can solve.\n\n## Toward Collective Accountability\n\nThe speaker urges industry-wide coordination: transparent dependency graphs, synchronized disclosure windows, and realistic expectations that \"just automate patching\" ignores integration testing, safety certification, and OT downtime constraints. Supply-chain security requires multi-stakeholder mechanisms, not bilateral SLAs.",
+      "durationSeconds": 2246,
+      "conference": "first"
+    },
+    {
+      "youtubeId": "1L5rzvlRjdU",
+      "slug": "intelowl-making-the-life-of-security-analysts-easier",
+      "title": "IntelOwl: Making the Life of Security Analysts Easier",
+      "speakers": [
+        "Matteo",
+        "Simone"
+      ],
+      "track": "hardware",
+      "topics": [
+        "intelowl",
+        "making",
+        "life",
+        "analyst",
+        "easier",
+        "analysts"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for IntelOwl: Making the Life of Security Analysts Easier.",
+      "summary": "### Overview\nIn this talk, Matteo and Simone from Certego and The Honeynet Project introduce IntelOwl, an open-source threat intelligence and data enrichment platform designed to alleviate burnout and repetitive toil for cybersecurity analysts. Motivated by personal experiences with alert fatigue, extreme stress, and manual copy-pasting across disparate threat intelligence tools in 2017, the creators started building IntelOwl in early 2020. The platform automates the acquisition and aggregation of threat intelligence context for artifacts such as URLs, domains, IP addresses, hashes, and files via a graphical web interface or an API.\n\n### Key Topics\n- **Analyst Burnout and Bottlenecks**: High alert volumes, skill shortages, on-call burdens, and manual multi-source threat intelligence gathering contribute significantly to analyst fatigue. Automating data enrichment directly reduces investigation and alert triage times.\n- **Architecture and Component Ecosystem**: IntelOwl is structured as both a platform and an extensible framework. Its modular plugin architecture consists of analyzers (which query internal and external intelligence sources), connectors (which push generated intelligence into external tools such as MISP), visualizers (which render raw JSON output into human-readable visual summaries), and playbooks (reusable collections or aliases of analyzers and plugins grouped for specific workflows like static file analysis or phishing).\n- **Pivot Investigations**: Introduced around release 6.0, IntelOwl transitioned from individual, single-shot job analysis to multi-step investigation workflows. Analysts can pivot directly from one artifact's results (e.g., resolving a domain to an IP address) into subsequent scans, linking findings into cohesive investigations or automated sequences such as automated abuse-takedown requests.\n\n### Technical Details\n- **Backend & Frontend**: The backend is built using Python, Django, Celery for asynchronous background task execution, and uses Nginx as a reverse proxy alongside WSGI and ASGI (Daphne) containers to handle standard web traffic and WebSockets. The user interface is developed in ReactJS.\n- **Data Stores and Brokers**: IntelOwl relies on PostgreSQL as its primary database, with optional secondary integration with Elasticsearch for business and analytic data. Supported Celery message brokers include Redis (the default), RabbitMQ, and AWS SQS.\n- **Deployment and Interfaces**: The infrastructure is containerized using Docker and Docker Compose. Interactions can be conducted through the React web UI, a dedicated Python SDK, or standard REST APIs.\n- **Community and Extensibility**: The project has grown through programs like Google Summer of Code (GSoC) and community-authored analyzers. In addition to manual pivots, workflows can chain analyzer findings to connectors, as demonstrated in an automated abuse takedown playbook that queries domain DNS, extracts abuse contact emails, and dispatches a takedown notice.\n\n### Takeaways\nIntelOwl enables security teams to automate the routine ingestion of threat data across commercial, internal, and open-source intelligence sources with a single click or API call. The project continues to evolve from an artifact enrichment engine into a collaborative investigation workbench, with planned enhancements including deeper open-source tool integrations, shared analyst workspaces, and LLM-powered chatbot assistants.",
+      "durationSeconds": 1931,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ZPYvEXKZbKM",
+      "slug": "breaking-the-holy-trinity-of-open-source-ecosystem-malicious-cod",
+      "title": "Breaking the Holy Trinity of Open-Source Ecosystem",
+      "speakers": [
+        "Malicious Code in Open-Source Packages"
+      ],
+      "track": "red-team",
+      "topics": [
+        "open-source",
+        "breaking",
+        "holy",
+        "trinity",
+        "maliciou"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Breaking the Holy Trinity of Open-Source Ecosystem - Malicious Code in Open-Source Packages.",
+      "summary": null,
+      "durationSeconds": 2023,
+      "conference": "first",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "j46vdIZgLFA",
+      "slug": "version-fingerprinting-tricks-automating-software-identification",
+      "title": "Version Fingerprinting Tricks: Automating Software Identification for Vulnerability Scanners",
+      "speakers": [
+        "Version Fingerprinting Tricks"
+      ],
+      "track": "recon",
+      "topics": [
+        "fingerprinting",
+        "version",
+        "trick",
+        "automating",
+        "identification"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Version Fingerprinting Tricks: Automating Software Identification for Vulnerability Scanners.",
+      "summary": null,
+      "durationSeconds": 1939,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "j6KJGWk9Xt8",
+      "slug": "dissecting-tradecraft-building-robust-detections-through-tradecr",
+      "title": "Dissecting Tradecraft: Building Robust Detections Through Tradecraft Decomposition",
+      "speakers": [
+        "Dissecting Tradecraft"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "tradecraft",
+        "dissecting",
+        "building",
+        "robust",
+        "detection"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Dissecting Tradecraft: Building Robust Detections Through Tradecraft Decomposition.",
+      "summary": null,
+      "durationSeconds": 2055,
+      "conference": "first",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "bIBCDtFATLM",
+      "slug": "ai-governance-with-multistakeholder-for-safer-ai-society",
+      "title": "AI Governance with Multistakeholder for Safer AI Society",
+      "speakers": [],
+      "track": "ai-security",
+      "topics": [
+        "governance",
+        "multistakeholder",
+        "safer",
+        "society"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding AI Governance with Multistakeholder for Safer AI Society.",
+      "summary": null,
+      "durationSeconds": 1757,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "ibVqnbzgc9c",
+      "slug": "attack-path-based-detection-engineering-leveraging-bloodhound-fo",
+      "title": "Attack Path Based Detection Engineering - Leveraging BloodHound for Robust Defense",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "detection-engineering",
+        "detection",
+        "bloodhound"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Attack Path Based Detection Engineering - Leveraging BloodHound for Robust Defense.",
+      "summary": null,
+      "durationSeconds": 1908,
+      "conference": "first",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "vzIv1fiH90s",
+      "slug": "experiences-of-btcirt-making-impact-for-bhutan-cyber-resilience",
+      "title": "Experiences of BtCIRT Making Impact for Bhutan Cyber Resilience: Challenges and Successes",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "experience",
+        "btcirt",
+        "making",
+        "impact",
+        "bhutan"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Experiences of BtCIRT Making Impact for Bhutan Cyber Resilience: Challenges and Successes.",
+      "summary": null,
+      "durationSeconds": 2102,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "RMjGiTgVbWY",
+      "slug": "turn-the-tables-how-we-use-gpt-to-detect-phishing-websites",
+      "title": "Turn the Tables: How We Use GPT to Detect Phishing Websites",
+      "speakers": [],
+      "track": "ai-security",
+      "topics": [
+        "phishing",
+        "turn",
+        "table",
+        "detect",
+        "website",
+        "tables"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Turn the Tables: How We Use GPT to Detect Phishing Websites.",
+      "summary": null,
+      "durationSeconds": 1540,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "dugBsWoBrJQ",
+      "slug": "tearing-down-the-silos-cyber-defense-needs-an-integrated-approac",
+      "title": "Tearing Down the Silos - Cyber Defense Needs an Integrated Approach",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "cyber-defense",
+        "tearing",
+        "silo"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Tearing Down the Silos - Cyber Defense Needs an Integrated Approach.",
+      "summary": null,
+      "durationSeconds": 2232,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "ETP3s-fwUyU",
+      "slug": "so-far-and-yet-so-close-a-story-of-collaboration-between-japan-a",
+      "title": "So Far and Yet so Close. A Story of Collaboration Between Japan and Spain While Analyzing ...",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "collaboration",
+        "story",
+        "japan",
+        "spain"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for So Far and Yet so Close. A Story of Collaboration Between Japan and Spain While Analyzing ....",
+      "summary": null,
+      "durationSeconds": 1952,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "-bcwZonCqTk",
+      "slug": "sharing-communities-the-good-the-bad-and-the-ugly",
+      "title": "Sharing Communities: The Good, the Bad, and the Ugly",
+      "speakers": [
+        "Sharing Communities"
+      ],
+      "track": "community",
+      "topics": [
+        "sharing",
+        "communitie",
+        "ugly",
+        "communities"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Sharing Communities: The Good, the Bad, and the Ugly.",
+      "summary": "## Overview\nThomas Gass presents research on cybersecurity information-sharing communities conducted through 25 video interviews with experts worldwide. The study investigates organizational structures, member motivations, and challenges in communities like FIRST and FS-ISAC, applying the Social-Technical Systems framework to understand how social and technical elements interact.\n\n## Key Topics\n\n**Organizational Structures**\nSharing communities vary widely in formality and access. The research identifies open communities (no entry barriers), closed communities (strict entry rules), and topic/incident-related temporary task forces. Formal communities operate under legal frameworks with dedicated employees and hierarchies, while informal \"hidden clubs\" function on invitation and trust-based voting. Member structures are often undefined, creating challenges for collaboration and trust.\n\n**Member Roles and Motivations**\nSix key roles emerged: producers (generate and share cyber threat intelligence), consumers (use intelligence and provide feedback), sharing enablers (grant permissions and allocate resources), brokers/proxies (collect and forward intelligence), hosts (administrators/organizers), and lurkers/free riders (non-contributing consumers). Members have altruistic goals including supporting peer defense, contributing to society, providing early warnings, and improving collective threat understanding, though goals sometimes differ between individuals and communities.\n\n**Benefits and Challenges**\nActive participants receive threat intelligence, access knowledge repositories (reports, scripts, best practices), build relationships with diverse expertise, gain resource savings, and receive early threat warnings. However, the research identified significant interconnected challenges: low-quality intelligence, missing context, work overload, undefined member structures, subgroup formation, lack of trust, visa restrictions preventing participation, and lack of standardization in tools (Slack, Signal, MISP, Mailing lists, etc.) and taxonomies. Notably, most challenges are social rather than technical.\n\n**Social-Technical Systems Framework**\nThe framework represents sharing communities as complex work environments with three social elements—goals, people, and culture—and three technical elements—processes/procedures, infrastructure, and technology. All six elements interact and influence each other within an external context of regulations (GDPR, sanctions) and stakeholder pressures. High-quality, contextualized intelligence flows in trust-based hidden clubs, while open communities share lower-quality automated data.\n\n## Key Insights\n- Trust is fundamental; informal communities with vouching/voting systems create safer sharing environments\n- Most challenges are social (fear of sharing, unclear membership) rather than technical\n- Standardization across communities would reduce member burden of learning multiple tools and taxonomies\n- Stable member composition and clear shared goals promote effectiveness\n- Infrastructure accessibility (visa policies, event locations) directly impacts culture and collaboration\n- Holistic approaches addressing social and technical elements simultaneously are necessary for improvement\n\n## Takeaways\nSharing communities critically support cyber defense but require thoughtful organizational design. Building clear goals, stable member structures with defined roles, trust-building activities (meetups, vouching systems), and standardized processes will improve both individual benefits and collective defensive capabilities. Communities should consider social and technical factors equally when addressing challenges.",
+      "durationSeconds": 1623,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "HUbiX1tnCK0",
+      "slug": "help-my-ciso-is-visibly-bored-when-i-present-ir-metrics",
+      "title": "Help! My CISO is Visibly Bored When I Present IR Metrics!",
+      "speakers": [],
+      "track": "policy",
+      "topics": [
+        "help",
+        "ciso",
+        "visibly",
+        "bored",
+        "present"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Help! My CISO is Visibly Bored When I Present IR Metrics!.",
+      "summary": null,
+      "durationSeconds": 2001,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "DnTlNo9JMkg",
+      "slug": "defending-forward-how-national-organizations-can-identify-advers",
+      "title": "Defending Forward: How National Organizations Can Identify Adversary Infrastructure and Attacks ...",
+      "speakers": [
+        "Defending Forward"
+      ],
+      "track": "red-team",
+      "topics": [
+        "infrastructure",
+        "adversary-infrastructure",
+        "defending",
+        "forward",
+        "national",
+        "organization"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Defending Forward: How National Organizations Can Identify Adversary Infrastructure and Attacks ....",
+      "summary": null,
+      "durationSeconds": 1536,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "fMuGvzEYx30",
+      "slug": "organizing-security-issues-discovered-during-product-testing-for",
+      "title": "Organizing Security Issues Discovered During Product Testing for Easier Consumption by Product ...",
+      "speakers": [],
+      "track": "hardware",
+      "topics": [
+        "organizing",
+        "issue",
+        "discovered",
+        "product"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Organizing Security Issues Discovered During Product Testing for Easier Consumption by Product ....",
+      "summary": null,
+      "durationSeconds": 1718,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Nff6OpJdTmk",
+      "slug": "metamorphosis-in-vulnerability-analysis-navigating-vex-challenge",
+      "title": "Metamorphosis in Vulnerability Analysis: Navigating VeX Challenges and Soaring Towards Solutions",
+      "speakers": [],
+      "track": "appsec",
+      "topics": [
+        "vulnerability-analysis",
+        "metamorphosi",
+        "vulnerability",
+        "analysi",
+        "navigating",
+        "challenge"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Metamorphosis in Vulnerability Analysis: Navigating VeX Challenges and Soaring Towards Solutions.",
+      "summary": null,
+      "durationSeconds": 2061,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "KbND5XQ_HP4",
+      "slug": "lightning-talks-i",
+      "title": "Lightning Talks I",
+      "speakers": [],
+      "track": "red-team",
+      "topics": [
+        "lightning",
+        "vulnerability-research",
+        "talks"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Lightning Talks I.",
+      "summary": null,
+      "durationSeconds": 3338,
+      "conference": "first"
+    },
+    {
+      "youtubeId": "_CJ9Zm1_6e4",
+      "slug": "lightning-talks-ii",
+      "title": "Lightning Talks II",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "lightning",
+        "vulnerability-research",
+        "talks"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Lightning Talks II.",
+      "summary": null,
+      "durationSeconds": 4050,
+      "conference": "first"
+    },
+    {
+      "youtubeId": "10MLiX26MPg",
+      "slug": "wednesday-keynote-address-incident-command-system-4-industrial-c",
+      "title": "Wednesday Keynote Address: Incident Command System 4 Industrial Control Systems (ICS4ICS)",
+      "speakers": [],
+      "track": "ics-ot",
+      "topics": [
+        "wednesday",
+        "address",
+        "incident",
+        "command",
+        "system"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Wednesday Keynote Address: Incident Command System 4 Industrial Control Systems (ICS4ICS).",
+      "summary": null,
+      "durationSeconds": 3595,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "B5TqKOTt2ck",
+      "slug": "improving-ics-ot-threat-hunt-and-incident-response-capabilities",
+      "title": "Improving ICS/OT Threat Hunt & Incident Response Capabilities Through Adversary Emulation",
+      "speakers": [],
+      "track": "ics-ot",
+      "topics": [
+        "ics-ot",
+        "incident-response",
+        "adversary-emulation",
+        "ics",
+        "emulation"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Improving ICS/OT Threat Hunt & Incident Response Capabilities Through Adversary Emulation.",
+      "summary": null,
+      "durationSeconds": 1814,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "lmOyD3ylkBE",
+      "slug": "from-laboratory-to-grid-advancing-iacs-incident-response-and-cyb",
+      "title": "From Laboratory to Grid: Advancing IACS Incident Response and Cyber Resilience",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "laboratory",
+        "grid",
+        "advancing",
+        "iac"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for From Laboratory to Grid: Advancing IACS Incident Response and Cyber Resilience.",
+      "summary": null,
+      "durationSeconds": 2117,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "D0HewZ8z3NA",
+      "slug": "developing-a-new-cyber-security-brand-for-consumers-and-small-bu",
+      "title": "Developing a New Cyber Security Brand for Consumers and Small Businesses",
+      "speakers": [],
+      "track": "hardware",
+      "topics": [
+        "developing",
+        "brand",
+        "consumer",
+        "small",
+        "businesse",
+        "consumers"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Developing a New Cyber Security Brand for Consumers and Small Businesses.",
+      "summary": null,
+      "durationSeconds": 2079,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "VnjS8_VZizk",
+      "slug": "vulnerability-response-for-heterogenous-ot-products-principles-t",
+      "title": "Vulnerability Response for Heterogenous OT Products - Principles to Build Your Own Framework",
+      "speakers": [],
+      "track": "ics-ot",
+      "topics": [
+        "framework",
+        "vulnerability",
+        "response",
+        "heterogenou",
+        "product",
+        "principle"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Vulnerability Response for Heterogenous OT Products - Principles to Build Your Own Framework.",
+      "summary": null,
+      "durationSeconds": 2148,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "sg4ovkEqtMk",
+      "slug": "empowering-cybersecurity-outreach-and-learning-through-collabora",
+      "title": "Empowering Cybersecurity Outreach And Learning Through Collaborative Challenge Building, Sharing ...",
+      "speakers": [],
+      "track": "hardware",
+      "topics": [
+        "empowering",
+        "outreach",
+        "learning",
+        "collaborative"
+      ],
+      "teaser": "Security researchers examine technical aspects of Empowering Cybersecurity Outreach And Learning Through Collaborative Challenge Building, Sharing ....",
+      "summary": null,
+      "durationSeconds": 2076,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "sEHBVoh2p8Y",
+      "slug": "lessons-learned-from-a-countrywide-scanning-program",
+      "title": "Lessons Learned from a Countrywide Scanning Program",
+      "speakers": [],
+      "track": "recon",
+      "topics": [
+        "scanning",
+        "lessons-learned",
+        "lesson",
+        "countrywide"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Lessons Learned from a Countrywide Scanning Program.",
+      "summary": null,
+      "durationSeconds": 2248,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "lcSO6O-9YRk",
+      "slug": "jtan-building-a-data-sharing-network-using-open-source-tools",
+      "title": "JTAN - Building a Data Sharing Network Using Open Source Tools",
+      "speakers": [
+        "JTAN"
+      ],
+      "track": "red-team",
+      "topics": [
+        "open-source",
+        "network",
+        "jtan",
+        "building",
+        "sharing"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in JTAN - Building a Data Sharing Network Using Open Source Tools.",
+      "summary": null,
+      "durationSeconds": 2040,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "_OlpkkoE1qM",
+      "slug": "14-questions-are-all-you-need",
+      "title": "14 Questions Are All You Need",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "question",
+        "vulnerability-research",
+        "questions"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning 14 Questions Are All You Need.",
+      "summary": null,
+      "durationSeconds": 1953,
+      "conference": "first"
+    },
+    {
+      "youtubeId": "6fBFGF3FqUY",
+      "slug": "cybersecurity-performance-goals-for-critical-infrastructure-a-pr",
+      "title": "Cybersecurity Performance Goals for Critical Infrastructure: A Primer and A Progress Report",
+      "speakers": [],
+      "track": "ics-ot",
+      "topics": [
+        "critical-infrastructure",
+        "infrastructure",
+        "performance",
+        "goal",
+        "critical"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Cybersecurity Performance Goals for Critical Infrastructure: A Primer and A Progress Report.",
+      "summary": null,
+      "durationSeconds": 2021,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "aRDVwWatMYs",
+      "slug": "building-a-national-csirt-on-a-nano-scale",
+      "title": "Building a National CSIRT on a Nano Scale",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "building",
+        "national",
+        "csirt",
+        "nano",
+        "scale"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Building a National CSIRT on a Nano Scale.",
+      "summary": null,
+      "durationSeconds": 1876,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "k9ti16DIp-A",
+      "slug": "zero-trust-and-jurassic-park",
+      "title": "Zero Trust and Jurassic Park",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "zero-trust",
+        "zero",
+        "trust",
+        "jurassic",
+        "park"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Zero Trust and Jurassic Park.",
+      "summary": null,
+      "durationSeconds": 1191,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "UEPt3KRBHFQ",
+      "slug": "dissecting-the-arsenal-of-lockbit",
+      "title": "Dissecting the Arsenal of LockBit",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "dissecting",
+        "arsenal",
+        "lockbit"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Dissecting the Arsenal of LockBit.",
+      "summary": null,
+      "durationSeconds": 1817,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "B2chIznF3jE",
+      "slug": "sigma-unleashed-a-realistic-implementation",
+      "title": "Sigma Unleashed: A Realistic Implementation",
+      "speakers": [
+        "Sigma Unleashed"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "sigma",
+        "unleashed",
+        "realistic",
+        "implementation"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Sigma Unleashed: A Realistic Implementation.",
+      "summary": null,
+      "durationSeconds": 1500,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "YhQMjAZbc-c",
+      "slug": "are-you-lazarus",
+      "title": "Are You Lazarus?",
+      "speakers": [
+        "Cryptocurrency Hackers Targeting Japanese Organizations"
+      ],
+      "track": "privacy",
+      "topics": [
+        "lazaru",
+        "vulnerability-research",
+        "lazarus"
+      ],
+      "teaser": "Cryptocurrency Hackers Targeting Japanese Organizations examines Are You Lazarus?.",
+      "summary": null,
+      "durationSeconds": 1967,
+      "conference": "first"
+    },
+    {
+      "youtubeId": "4ZWF93aT-k4",
+      "slug": "gearing-towards-the-next-level-in-playbook-driven-security-autom",
+      "title": "Gearing Towards the Next Level in Playbook-Driven Security Automation",
+      "speakers": [
+        "Leveraging CACAO V2"
+      ],
+      "track": "hardware",
+      "topics": [
+        "automation",
+        "gearing",
+        "level",
+        "playbook-driven"
+      ],
+      "teaser": "Leveraging CACAO V2 details Gearing Towards the Next Level in Playbook-Driven Security Automation.",
+      "summary": null,
+      "durationSeconds": 1928,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "7WKcsMJXvZQ",
+      "slug": "a-recipe-for-improving-secops-detections",
+      "title": "A Recipe for Improving SecOps Detections",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "recipe",
+        "improving",
+        "secop",
+        "detection",
+        "secops"
+      ],
+      "teaser": "Security researchers examine technical aspects of A Recipe for Improving SecOps Detections.",
+      "summary": null,
+      "durationSeconds": 2091,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "jvXh3HQgOP8",
+      "slug": "enhancing-leadership-readiness-for-cyber-incidents-a-strategic-p",
+      "title": "Enhancing Leadership Readiness for Cyber Incidents: A Strategic Pre-Briefing Approach",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "leadership",
+        "enhancing",
+        "readines",
+        "incident",
+        "strategic",
+        "pre-briefing"
+      ],
+      "teaser": "Security researchers examine technical aspects of Enhancing Leadership Readiness for Cyber Incidents: A Strategic Pre-Briefing Approach.",
+      "summary": null,
+      "durationSeconds": 1721,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "krW-_mm4cO4",
+      "slug": "pushing-coordinated-vulnerability-disclosure-forward-in-asia-pac",
+      "title": "Pushing Coordinated Vulnerability Disclosure Forward in Asia Pacific",
+      "speakers": [],
+      "track": "appsec",
+      "topics": [
+        "vulnerability-disclosure",
+        "disclosure",
+        "pushing",
+        "coordinated",
+        "vulnerability",
+        "forward"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Pushing Coordinated Vulnerability Disclosure Forward in Asia Pacific.",
+      "summary": null,
+      "durationSeconds": 1833,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "CW0W6656QLI",
+      "slug": "building-up-a-psirt-team-for-an-open-source-project-lessons-lear",
+      "title": "Building up a PSIRT Team for an Open Source Project: Lessons Learned from Zephyr",
+      "speakers": [],
+      "track": "appsec",
+      "topics": [
+        "open-source",
+        "lessons-learned",
+        "building",
+        "psirt",
+        "team"
+      ],
+      "teaser": "Security researchers examine technical aspects of Building up a PSIRT Team for an Open Source Project: Lessons Learned from Zephyr.",
+      "summary": null,
+      "durationSeconds": 2061,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "xIRdbsq2Zgo",
+      "slug": "collaboratively-caring-and-securely-sharing-of-information-that",
+      "title": "Collaboratively Caring and Securely Sharing of Information that Matters",
+      "speakers": [],
+      "track": "hardware",
+      "topics": [
+        "collaboratively",
+        "caring",
+        "securely",
+        "sharing",
+        "information"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Collaboratively Caring and Securely Sharing of Information that Matters.",
+      "summary": null,
+      "durationSeconds": 1608,
+      "conference": "first",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "pkqErkd8ov8",
+      "slug": "how-ai-is-changing-the-way-we-analyze-malware",
+      "title": "How AI is Changing the Way We Analyze Malware",
+      "speakers": [],
+      "track": "ai-security",
+      "topics": [
+        "changing",
+        "analyze",
+        "malware-analysis"
+      ],
+      "teaser": "Security researchers examine technical aspects of How AI is Changing the Way We Analyze Malware.",
+      "summary": null,
+      "durationSeconds": 1828,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "UE7c8IvUYoI",
+      "slug": "unveiling-active-directory-secrets-uncommon-tricks-for-enhanced",
+      "title": "Unveiling Active Directory Secrets: Uncommon Tricks for Enhanced Security",
+      "speakers": [
+        "Unveiling Active Directory Secrets"
+      ],
+      "track": "hardware",
+      "topics": [
+        "active-directory",
+        "unveiling",
+        "active",
+        "directory",
+        "uncommon"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Unveiling Active Directory Secrets: Uncommon Tricks for Enhanced Security.",
+      "summary": null,
+      "durationSeconds": 1551,
+      "conference": "first",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "JZ0hJqXtPhw",
+      "slug": "from-code-to-crime-exploring-threats-in-github-codespaces-2",
+      "title": "From Code to Crime: Exploring Threats in GitHub Codespaces",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "code",
+        "crime",
+        "exploring",
+        "threat",
+        "github",
+        "codespace"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for From Code to Crime: Exploring Threats in GitHub Codespaces.",
+      "summary": null,
+      "durationSeconds": 1973,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "jL235NwqhG8",
+      "slug": "a-deep-dive-into-kev",
+      "title": "A Deep Dive into KEV",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "deep",
+        "dive",
+        "vulnerability-research"
+      ],
+      "teaser": "Security researchers examine technical aspects of A Deep Dive into KEV.",
+      "summary": null,
+      "durationSeconds": 2186,
+      "conference": "first",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "G7HJz7a-Co4",
+      "slug": "sig-updates",
+      "title": "SIG Updates",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "update",
+        "vulnerability-research",
+        "updates"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding SIG Updates.",
+      "summary": null,
+      "durationSeconds": 3437,
+      "conference": "first"
+    }
+  ]
+}

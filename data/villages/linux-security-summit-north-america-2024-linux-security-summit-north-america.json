@@ -1,0 +1,277 @@
+{
+  "villageSlug": "linux-security-summit-north-america",
+  "villageName": "Linux Security Summit North America",
+  "eventSlug": "linux-security-summit-north-america-2024",
+  "conference": "community",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLbzoR-pLrL6rbN7fu5TId8VWAC5A8v5O7",
+  "description": "Linux Security Summit North America talks from Linux Security Summit North America 2024.",
+  "talks": [
+    {
+      "youtubeId": "R0jRDCc7Cgw",
+      "slug": "protecting-the-linux-kernel-from-confidential-computing-threats",
+      "title": "Protecting the Linux Kernel from Confidential Computing Threats...",
+      "speakers": [
+        "Carlos Bilbao",
+        "Elena Reshetova"
+      ],
+      "track": "hardware",
+      "topics": [
+        "linux",
+        "kernel",
+        "linux-kernel"
+      ],
+      "teaser": "Carlos Bilbao examines Protecting the Linux Kernel from Confidential Computing Threats....",
+      "summary": "Overview: Elena and Carlos present at Linux Security Summit North America on protecting the Linux kernel in confidential computing environments, sharing their experience submitting backports.\n\nKey Topics: Confidential computing threat models for cloud workloads; protection in transit and at rest versus gaps during processing; kernel community pushback on confidential computing patches; and aligning security fixes with upstream philosophy.\n\nTechnical Details: Presenters describe submitting PCI subsystem buffer overflow fixes for confidential computing threat models, receiving pushback that Linux wasn't designed for these threat models. They discuss navigating kernel community expectations while addressing TEE-specific vulnerabilities.\n\nTakeaways: Confidential computing introduces threat models the Linux kernel wasn't originally designed for. Security researchers must engage constructively with kernel maintainers to build appropriate protections.",
+      "durationSeconds": 2530
+    },
+    {
+      "youtubeId": "nZeRM0hqqPE",
+      "slug": "securing-confidential-vms-with-coconut-svsm",
+      "title": "Securing Confidential VMs with COCONUT-SVSM",
+      "speakers": [
+        "Jörg Rödel",
+        "SUSE"
+      ],
+      "track": "hardware",
+      "topics": [
+        "confidential",
+        "coconut-svsm",
+        "coconut",
+        "svsm"
+      ],
+      "teaser": "Jörg Rödel explores Securing Confidential VMs with COCONUT-SVSM.",
+      "summary": "COCONUT-SVSM Overview\n\nSUSE maintainer Joerg Roedel introduces the open-source COCONUT Secure VM Service Module, a platform for secure hypervisor services in confidential VMs. Started as a 2022 prototype, it booted Linux guests in CVMs by early 2023, gained filesystem support, multitasking, TPM emulation, CI testing, 23 contributors, and Confidential Computing Consortium onboarding.\n\nConfidential VM Threat Model\n\nUntrusted hypervisors normally manage guest memory, intercepts, interrupts, and device emulation— exposing data and register-state attacks. Hardware extensions (AMD SEV-SNP, Intel TDX, Arm CCA, RISC-V CVME) encrypt memory and detect remap/replay tampering; some intercepts trap into guest kernels instead of the host.\n\nSVSM’s Role\n\nWhere hardware cannot fully mitigate hypervisor functionality, guest-side code can absorb tasks. COCONUT-SVSM implements services that complement hardware protections on x86 and analogous architectures, extending confidential computing beyond raw memory encryption toward practical guest-controlled security modules.",
+      "durationSeconds": 2692
+    },
+    {
+      "youtubeId": "PLcZkgHCk90",
+      "slug": "mitigating-integer-overflow-in-c",
+      "title": "Mitigating Integer Overflow in C",
+      "speakers": [
+        "Kees Cook",
+        "Google"
+      ],
+      "track": "community",
+      "topics": [
+        "mitigating",
+        "integer",
+        "overflow"
+      ],
+      "teaser": "Kees Cook investigates Mitigating Integer Overflow in C.",
+      "summary": "Why Integer Overflows Persist\n\nKees Cook of the Linux kernel self-protection project argues integer overflows remain a root cause of vulnerabilities despite mitigations like control-flow integrity that only catch downstream effects. CVE analysis shows hundreds of medium-and-higher kernel overflow issues over the past decade with little meaningful reduction.\n\nC Semantics and Compiler Traps\n\nUnsigned overflow must wrap per the C standard, while signed overflow is undefined behavior that modern optimizers exploit, eliminating checks like \"if (value + offset < value)\". The kernel adopted -fno-strict-overflow to force predictable wraparound, but that disables signed-integer-overflow sanitizers that only fire on undefined cases.\n\nSanitizer Paradox\n\nClang and GCC offer signed and unsigned overflow sanitizers with warn or trap modes. Cook highlights the absurdity: -fno-strict-overflow makes signed overflow defined, silencing UBSan, while the unsigned sanitizer reports wraps that are legal behavior. Kernel developers need instrumentation regardless of standard semantics.\n\nPath Forward\n\nThe talk surveys saturation strategies such as refcount_t, trapping on unexpected overflow, and ongoing efforts to make overflow detection workable alongside kernel build flags. Cook calls for treating arithmetic bounds as a first-class hardening problem rather than relying solely on memory-safe languages elsewhere.",
+      "durationSeconds": 2313
+    },
+    {
+      "youtubeId": "H0Er5gDl9AU",
+      "slug": "control-flow-integrity-on-risc-v-linux",
+      "title": "Control Flow Integrity on RISC-V Linux",
+      "speakers": [
+        "Deepak Gupta",
+        "Rivos Inc"
+      ],
+      "track": "community",
+      "topics": [
+        "linux",
+        "control-flow",
+        "control",
+        "flow",
+        "integrity",
+        "risc-v"
+      ],
+      "teaser": "Deepak Gupta explores Control Flow Integrity on RISC-V Linux.",
+      "summary": "CFI motivation on RISC-V\n\nSecurity engineer \"debug\" from Revos describes bringing control-flow integrity to RISC-V Linux for data-center workloads. Drawing on prior work at AWS, Intel (including CET-related ISA work), and McAfee, he explains how memory corruption enables attackers to hijack indirect control-flow transfers.\n\nSoftware and hardware precedents\n\nExisting mitigations include LLVM CFI, SafeStack, Microsoft Control Flow Guard, and x86 CET shadow stacks that validate return addresses. RISC-V lacks identical hardware features, so the Linux community must adapt CFI concepts to RISC-V instruction formats and calling conventions.\n\nRISC-V-specific challenges\n\nRISC-V's variable-length encodings and 20-bit immediate limits in J-type branches constrain how jump targets are encoded. Features like AUIPC enable PC-relative addressing across roughly ±2 GB, affecting how forward-edge and backward-edge protections can be implemented in kernel and userspace code.",
+      "durationSeconds": 2113
+    },
+    {
+      "youtubeId": "IKUJTTZ7Vv0",
+      "slug": "linux-virtualization-based-security",
+      "title": "Linux Virtualization Based Security",
+      "speakers": [
+        "Anna Trikalinou",
+        "Microsoft Corporation",
+        "Thara Gopinath"
+      ],
+      "track": "hardware",
+      "topics": [
+        "linux",
+        "virtualization",
+        "vulnerability-research"
+      ],
+      "teaser": "Anna Trikalinou analyzes Linux Virtualization Based Security.",
+      "summary": null,
+      "durationSeconds": 2832
+    },
+    {
+      "youtubeId": "s0e5iicv37I",
+      "slug": "provenance-aware-integrity-monitoring-with-linux-security-identi",
+      "title": "Provenance-Aware Integrity Monitoring with Linux Security Identifiers",
+      "speakers": [
+        "Fred Araujo",
+        "Teryl Taylor"
+      ],
+      "track": "hardware",
+      "topics": [
+        "linux",
+        "monitoring",
+        "linux-security"
+      ],
+      "teaser": "Fred Araujo details Provenance-Aware Integrity Monitoring with Linux Security Identifiers.",
+      "summary": null,
+      "durationSeconds": 2859
+    },
+    {
+      "youtubeId": "aNwlKYSksg8",
+      "slug": "the-digest-cache-lsm",
+      "title": "The Digest_cache LSM",
+      "speakers": [
+        "Roberto Sassu",
+        "Huawei Technologies Duesseldorf GmbH"
+      ],
+      "track": "community",
+      "topics": [
+        "digest",
+        "cache",
+        "vulnerability-research"
+      ],
+      "teaser": "Roberto Sassu analyzes The Digest_cache LSM.",
+      "summary": null,
+      "durationSeconds": 1874
+    },
+    {
+      "youtubeId": "HJ5BMX52dhI",
+      "slug": "unprivileged-access-control-in-apparmor",
+      "title": "Unprivileged Access Control in AppArmor",
+      "speakers": [
+        "John Johansen",
+        "Georgia Garcia",
+        "Canonical"
+      ],
+      "track": "community",
+      "topics": [
+        "access-control",
+        "unprivileged",
+        "acces",
+        "control",
+        "apparmor",
+        "access"
+      ],
+      "teaser": "John Johansen details Unprivileged Access Control in AppArmor.",
+      "summary": null,
+      "durationSeconds": 2890
+    },
+    {
+      "youtubeId": "C0u_3Rok--s",
+      "slug": "stacked-lsms-and-user-space-casey-schaufler-the-smack-project",
+      "title": "Stacked LSMs and User Space - Casey Schaufler, The Smack Project",
+      "speakers": [
+        "Stacked LSMs",
+        "User Space"
+      ],
+      "track": "community",
+      "topics": [
+        "space",
+        "stacked",
+        "lsm",
+        "user",
+        "casey",
+        "schaufler"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Stacked LSMs and User Space - Casey Schaufler, The Smack Project.",
+      "summary": null,
+      "durationSeconds": 1406
+    },
+    {
+      "youtubeId": "5cXDrIx8Qgo",
+      "slug": "snapshotting-ima-log",
+      "title": "Snapshotting IMA Log",
+      "speakers": [
+        "Tushar Sugandhi",
+        "Microsoft"
+      ],
+      "track": "community",
+      "topics": [
+        "snapshotting",
+        "vulnerability-research",
+        "threat-detection"
+      ],
+      "teaser": "Tushar Sugandhi analyzes Snapshotting IMA Log.",
+      "summary": null,
+      "durationSeconds": 2500
+    },
+    {
+      "youtubeId": "ewv3kX-p7-o",
+      "slug": "enhancing-kernel-bug-discovery-with-large-language-models",
+      "title": "Enhancing Kernel Bug Discovery with Large Language Models",
+      "speakers": [
+        "Zahra Tarkhani",
+        "Microsoft"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "kernel",
+        "enhancing",
+        "discovery",
+        "large",
+        "language",
+        "model"
+      ],
+      "teaser": "Zahra Tarkhani investigates Enhancing Kernel Bug Discovery with Large Language Models.",
+      "summary": null,
+      "durationSeconds": 1668
+    },
+    {
+      "youtubeId": "F4L2mBqnh30",
+      "slug": "a-hybrid-alias-analysis-framework-and-its-application-to-protect",
+      "title": "A Hybrid Alias Analysis Framework and Its Application to Protecting the Linux Kernel",
+      "speakers": [
+        "Guoren Li"
+      ],
+      "track": "community",
+      "topics": [
+        "linux",
+        "kernel",
+        "linux-kernel",
+        "framework"
+      ],
+      "teaser": "Guoren Li details A Hybrid Alias Analysis Framework and Its Application to Protecting the Linux Kernel.",
+      "summary": null,
+      "durationSeconds": 2141
+    },
+    {
+      "youtubeId": "CsXBovJwUgw",
+      "slug": "sandbox-mode-sbm-new-execution-mode-between-kernel-and-user-spac",
+      "title": "SandBox Mode (SBM) - New Execution Mode Between Kernel and User Space",
+      "speakers": [
+        "Petr Tesarik",
+        "Self-employed"
+      ],
+      "track": "malware",
+      "topics": [
+        "kernel",
+        "space",
+        "sandbox"
+      ],
+      "teaser": "Petr Tesarik details SandBox Mode (SBM) - New Execution Mode Between Kernel and User Space.",
+      "summary": null,
+      "durationSeconds": 1812
+    },
+    {
+      "youtubeId": "FotdLSoucXc",
+      "slug": "enhancing-systemd-security-using-tpm-2-0",
+      "title": "Enhancing Systemd Security Using TPM 2.0",
+      "speakers": [
+        "Bill Roberts",
+        "ARM"
+      ],
+      "track": "hardware",
+      "topics": [
+        "tpm",
+        "enhancing",
+        "systemd"
+      ],
+      "teaser": "Bill Roberts analyzes Enhancing Systemd Security Using TPM 2.0.",
+      "summary": null,
+      "durationSeconds": 1980
+    }
+  ]
+}

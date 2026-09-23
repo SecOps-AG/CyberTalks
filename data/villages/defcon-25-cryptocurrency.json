@@ -21,10 +21,7 @@
       ],
       "teaser": "Porosity  A Decompiler For Blockchain Based Smart Contracts Bytecode",
       "summary": "### Decompiling the Ethereum Virtual Machine\nAt 00:00, Matt Suiche introduces Porosity, the first open-source decompiler designed specifically for Ethereum Virtual Machine (EVM) smart contract bytecode. He explains that while the Ethereum ecosystem was experiencing exponential growth with decentralized applications (DApps) and initial coin offerings (ICOs), auditing deployed smart contracts remained severely hindered: source code on the blockchain is optional, leaving the majority of deployed contracts available only as raw, unverified bytecode.\n\n### EVM Architecture and Bytecode Challenges\nAt 06:15 and 11:30, Suiche breaks down the operational constraints of the EVM. As a 256-bit stack-based execution environment without traditional CPU registers, analyzing EVM bytecode presents unique reverse-engineering hurdles. Operands must be pushed and popped sequentially, and control flow transitions (via `JUMP` and `JUMPI` opcodes) rely on dynamically computed destination addresses on the stack. Porosity solves this by parsing raw opcodes, mapping jump destinations, and reconstructing complete Control Flow Graphs (CFGs).\n\n### SSA Intermediate Representation and AST Generation\nAt 18:13, the presentation details how Porosity lifts EVM stack instructions into an intermediate Static Single Assignment (SSA) representation. By tracking stack depth and variable propagation, the tool identifies basic blocks, recovers loop structures, and synthesizes an Abstract Syntax Tree (AST). Suiche explains how the decompiler reconstructs high-level Solidity constructs, including function selectors, function dispatch tables, fallback functions, and public storage variables.\n\n### Automated Vulnerability Scanning and Bytecode Auditing\nAt 24:45 and 30:10, Suiche showcases Porosity's integrated static analysis capabilities. Beyond generating human-readable Solidity-like code, Porosity performs automated vulnerability scanning directly on raw bytecode. The engine detects dangerous programming patterns—such as the infamous reentrancy vulnerability that drained The DAO, unhandled send exceptions, timestamp dependencies, and arbitrary `DELEGATECALL` operations that permit malicious storage overwrite.\n\n### Integrating Decompilation into Blockchain Security\nConcluding at 34:58, Suiche demonstrates live decompilation of production smart contracts deployed on the Ethereum mainnet. He emphasizes that as billions of dollars flow into autonomous smart contracts, relying solely on voluntarily published source code is insufficient for enterprise security. By integrating automated bytecode decompilation into security auditing pipelines, researchers can independently analyze, monitor, and defend decentralized financial infrastructure.\n\n(AI summary — Gemini 3.8 Flash)",
-      "durationSeconds": 2182,
-      "viewCount": 4300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "difficulty": "expert"
+      "durationSeconds": 2182
     },
     {
       "youtubeId": "hAtoRrxFBWs",
@@ -42,10 +39,7 @@
       ],
       "teaser": "Breaking Bitcoin Hardware Wallets",
       "summary": "Cryptocurrency: Breaking Bitcoin Hardware Wallets. Bitcoin and blockchain security analysis.\n\n(AI summary — Claude Haiku)",
-      "durationSeconds": 1132,
-      "viewCount": 7200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "difficulty": "advanced"
+      "durationSeconds": 1132
     },
     {
       "youtubeId": "WIEessi3ntk",
@@ -62,10 +56,7 @@
       ],
       "teaser": "Hacking Smart Contracts",
       "summary": "### The Post-DAO Smart Contract Security Paradigm\nAt 00:00, Konstantinos Karagiannis opens by examining the watershed moment for blockchain security: the June 2016 exploit of The DAO, which resulted in the theft of 3.6 million Ether and forced a contentious hard fork of Ethereum. Karagiannis explains that while blockchain enthusiasts heralded immutable smart contracts as \"code is law,\" InfoSec professionals immediately recognized that immutable code means that security vulnerabilities are also permanently immutable once deployed to the ledger.\n\n### Common Solidity Vulnerabilities and Reentrancy Exploits\nAt 08:20 and 14:15, Karagiannis deconstructs the mechanics of common smart contract flaws. He provides an in-depth breakdown of reentrancy attacks, showing how invoking an external fallback function before updating internal state balances allows an attacking contract to recursively drain funds. He also reviews integer overflows and underflows (prior to the widespread adoption of OpenZeppelin's SafeMath), uninitialized storage pointers that inadvertently overwrite critical contract owner variables, and miner-manipulated timestamp dependencies.\n\n### The Parity Multi-Sig Wallet Hack\nAt 19:39, the discussion focuses on the infamous Parity multi-signature wallet hack. Karagiannis details how developers extracted wallet functionality into a shared library contract to save deployment gas. However, because the library's initialization function (`initWallet`) was left uninitialized and unprotected by access controls, an attacker executed the function, claimed ownership of the shared library contract, and subsequently triggered `kill()` (suicide opcode), permanently freezing hundreds of millions of dollars across hundreds of dependent multi-sig wallets.\n\n### Front-Running and Transaction-Ordering Dependence\nAt 26:30 and 32:10, Karagiannis explores economic vulnerabilities unique to decentralized blockchains, particularly Transaction-Ordering Dependence (TOD) and front-running. Because transactions wait in the public mempool before miners assemble them into blocks, opportunistic actors and automated arbitrage bots can monitor pending transactions, pay higher gas prices to get mined first, and exploit decentralized exchanges or oracle updates before the victim's transaction confirms.\n\n### Methodologies for Auditing and Formal Verification\nConcluding from 35:00 to 37:46, Karagiannis provides security guidance for smart contract developers and auditors. He emphasizes that traditional penetration testing methodologies must be augmented with threat modeling specific to token economics, comprehensive unit testing suites, automated bytecode scanners (such as Oyente and Mythril), and rigorous formal mathematical verification before deploying irreversible logic to the mainnet.\n\n(AI summary — Gemini 3.8 Flash)",
-      "durationSeconds": 2315,
-      "viewCount": 16000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "difficulty": "advanced"
+      "durationSeconds": 2315
     }
   ]
 }

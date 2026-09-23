@@ -1,0 +1,258 @@
+{
+  "villageSlug": "bluehat-il",
+  "villageName": "BlueHat IL",
+  "eventSlug": "bluehat-il-2024",
+  "conference": "community",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLnWGkkkDVeqilYrIUJpQBKbdnW8v_8bId",
+  "description": "BlueHat IL talks from BlueHat IL 2024.",
+  "talks": [
+    {
+      "youtubeId": "psOgltLXRho",
+      "slug": "or-chechik-assaf-dahan-daniel-frank-from-recon-to-ruin",
+      "title": "Or Chechik, Assaf Dahan, Daniel Frank - From Recon to Ruin:...",
+      "speakers": [
+        "Or Chechik",
+        "Assaf Dahan",
+        "Daniel Frank"
+      ],
+      "track": "recon",
+      "topics": [
+        "chechik",
+        "assaf",
+        "dahan",
+        "daniel",
+        "frank",
+        "recon"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Or Chechik, Assaf Dahan, Daniel Frank - From Recon to Ruin:....",
+      "summary": "Deep dive into an aggressive Iranian APT operating in Israeli cyberspace, linked to October 7 events.",
+      "durationSeconds": 2246,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "oxrkorFExbE",
+      "slug": "vera-mens-how-we-hacked-a-100k-gas-chromatograph-without-having",
+      "title": "Vera Mens - How we hacked a $100K Gas Chromatograph without having it, and ...",
+      "speakers": [
+        "Vera Mens"
+      ],
+      "track": "community",
+      "topics": [
+        "vera",
+        "men",
+        "hacked",
+        "100k",
+        "chromatograph"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Vera Mens - How we hacked a $100K Gas Chromatograph without having it, and ....",
+      "summary": "How Team82 hacked a $100K gas chromatograph without possessing the device.",
+      "durationSeconds": 1596,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "1LvOFU1u-eo",
+      "slug": "gabriel-landau-smoke-and-mirrors-driver-signatures-are-optional",
+      "title": "Gabriel Landau - Smoke and Mirrors: Driver Signatures Are Optional",
+      "speakers": [
+        "Gabriel Landau"
+      ],
+      "track": "community",
+      "topics": [
+        "driver",
+        "gabriel",
+        "landau",
+        "smoke",
+        "mirror",
+        "signature"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Gabriel Landau - Smoke and Mirrors: Driver Signatures Are Optional.",
+      "summary": "Smoke and Mirrors: driver signatures are optional; low-level Windows kernel research.",
+      "durationSeconds": 2429,
+      "aiSummary": "Overview:\nGabriel Landau, low-level Windows engineer and reverse engineer at Elastic Security, presents a novel kernel exploitation technique at BlueHat 2024 demonstrating that Windows Driver Signature Enforcement (DSE) can be bypassed without bringing a vulnerable signed driver (BYOVD). Landau explores the mechanics of Windows file sharing, opportunistic locks (oplocks), and Code Integrity verification (`ci.dll`). By weaponizing a double-read Time-of-Check to Time-of-Use (TOCTOU) race condition within the kernel's catalog signature parser, he successfully loads arbitrary unsigned drivers to terminate protected anti-malware processes.\n\nKey Topics:\n- Windows file sharing semantics, access rights, sharing modes, and file immutability guarantees\n- Limitations of Protected Process Light (PPL) and previous user-mode code integrity bypasses (PPLfault)\n- Architecture of Windows Driver Signature Enforcement (DSE) and security catalog (`.cat`) verification in `ci.dll`\n- Weaponizing a double-read TOCTOU race condition via SMB storage manipulation and working set flushing\n\nTechnical Details:\nLandau examines the core assumptions underpinning Windows file locking. While NTFS enforces file immutability for running executables via `MmFlushImageSection`, moving file storage across an SMB network share breaks these local guarantees. Because remote SMB servers (such as an Impacket-based Python server) control raw file reads, an attacker can serve different file contents across successive read operations, creating a vulnerability Landau terms \"false file immutability.\" In his prior research (\"PPLfault\"), Landau exploited this against Protected Process Light (PPL) using opportunistic locks (oplocks) to pause execution and swap DLL contents after signature verification, because PPL generally does not enforce per-page hashes.\n\nTo extend this concept to the Windows kernel and bypass 64-bit Driver Signature Enforcement, Landau targeted Code Integrity (`ci.dll`). When loading an unsigned driver, Windows attempts to validate the driver's Authenticode hash against system security catalog files (`.cat`) located in `C:\\Windows\\System32\\CatRoot`. Landau deployed an exploit titled \"Not a Security Boundary\" using a multi-step workflow: first, he created a symlink in the catalog directory pointing to a remote SMB server. When the kernel attempts to validate the unsigned driver, `ci.dll` performs a two-stage evaluation: first, it reads the entire catalog to verify Microsoft's digital signature; second, it parses the catalog entries to search for the driver's Authenticode hash. By having the SMB server return a legitimate, signed 4 MB Microsoft catalog during the initial signature verification, immediately flushing the system working set to discard cached pages, and rapidly toggling the remote catalog to serve the hash of an unsigned driver during the parsing phase, Landau won the double-read race condition. The kernel accepted the test-signed driver, granting arbitrary ring-0 code execution and enabling the termination of protected `MsMpEng.exe` (Defender) processes.\n\nKey Takeaways:\nWindows defenders and driver developers must recognize that sharing memory pages or relying on remote storage boundaries introduces severe double-read race conditions. Kernel security mechanisms must strictly enforce that validated data buffers are copied into immutable kernel pools or re-verified via hardware page hashing before parsing. Relying on user-mode to kernel boundaries without architectural immutability allows administrative attackers to bypass Driver Signature Enforcement and neutralize endpoint detection and response (EDR) agents without relying on known vulnerable third-party drivers.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "5ly6Tdh5a9s",
+      "slug": "ori-david-hi-my-name-is-what-abusing-microsoft-dhcp-to",
+      "title": "Ori David - Hi! My Name Is [What?]: Abusing Microsoft DHCP to...",
+      "speakers": [
+        "Ori David"
+      ],
+      "track": "community",
+      "topics": [
+        "david",
+        "name",
+        "abusing",
+        "microsoft",
+        "dhcp"
+      ],
+      "teaser": "Analysts investigate attack surfaces and defenses concerning Ori David - Hi! My Name Is [What?]: Abusing Microsoft DHCP to....",
+      "summary": "Abusing Microsoft DHCP for attacks involving DNS and Active Directory.",
+      "durationSeconds": 2238,
+      "aiSummary": "Overview:\nOri David, security researcher at Akamai, presents an offensive analysis of Microsoft DHCP Server at BlueHat 2024, exposing how Dynamic DNS updates can be weaponized in Active Directory environments. Investigating the interplay between DHCP, DNS, and Active Directory-integrated DNS (ADIDNS), David uncovers critical architectural flaws that enable unauthenticated network attackers to overwrite DNS records across the domain. The presentation demonstrates how an attacker can hijack machine identities, intercept sensitive network traffic, and escalate privileges from an unauthenticated LAN user to Domain Administrator.\n\nKey Topics:\n- Architecture of Microsoft DHCP Server Dynamic DNS Updates (Option 81 - Client FQDN) in Active Directory\n- The DHCP Server Self-Override primitive: spoofing the DHCP server's own hostname to hijack network traffic\n- Domain Controller co-location abuse: exploiting Enterprise Domain Controller ACL privileges for arbitrary DNS overwrite\n- Weaponizing DNS poisoning via NTLM/Kerberos relaying and Active Directory Certificate Services (ADCS)\n\nTechnical Details:\nDavid examines the default functionality of Microsoft DHCP Server, which performs dynamic DNS updates on behalf of clients using Option 81 (Client FQDN). When registering a client's DNS record in ADIDNS, the DHCP server authenticates to Active Directory using its own machine account (`COMPUTER$`). This interaction introduces the first vulnerability: the DHCP Server Self-Override. When the DHCP server initializes, it creates its own forward and reverse DNS records, which are naturally owned by its machine account. If an unauthenticated attacker on the local network sends a DHCP request claiming the DHCP server's own FQDN (\"Hi! My name is your name\"), the DHCP server accepts the update request and uses its authenticated machine credentials to overwrite its own DNS record with the attacker's IP address, diverting all incoming traffic destined for the DHCP server.\n\nThe impact escalates dramatically when Microsoft DHCP is installed directly on a Domain Controller—a common enterprise architectural practice. In Active Directory DNS zones, the `Enterprise Domain Controllers` security principal possesses universal write permissions over every DNS record in the zone. Consequently, if a DHCP server operates under a DC machine account, an unauthenticated attacker can submit DHCP lease requests specifying any arbitrary FQDN (e.g., file servers, Exchange servers, or WPAD). The DC machine account blindly overwrites the target DNS record with the attacker's IP. David demonstrates how this enables high-impact credential coercion: by redirecting client authentications to an attacker host, the operator relays NTLM credentials to Active Directory Certificate Services (ADCS) web enrollment endpoints, obtaining computer certificates that escalate access to full Domain Administrator compromise. Furthermore, members of the local `DHCP Administrators` group can abuse these mechanisms to achieve domain escalation.\n\nKey Takeaways:\nOrganizations must never co-locate the Microsoft DHCP Server role on Active Directory Domain Controllers, as the DC's elevated machine account grants unauthenticated dynamic DNS write access across the entire domain. System administrators should configure dedicated, low-privilege service accounts using the DHCP \"DNS Credentials\" setting, which effectively neutralizes both server self-override and arbitrary DC record overwrite attacks. Finally, organizations should disable dynamic DNS updates in DHCP if unneeded, as the built-in \"Name Protection\" feature fails to mitigate these attacks.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "kJvSWlxQJZo",
+      "slug": "ben-hania-yair-netzer-compromising-confidential-compute-and-then",
+      "title": "Ben Hania, Yair Netzer - Compromising Confidential Compute and then fixing it",
+      "speakers": [
+        "Ben Hania",
+        "Yair Netzer"
+      ],
+      "track": "red-team",
+      "topics": [
+        "hania",
+        "yair",
+        "netzer",
+        "compromising",
+        "confidential",
+        "compute"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Ben Hania, Yair Netzer - Compromising Confidential Compute and then fixing it.",
+      "summary": "Compromising confidential compute and then fixing it.",
+      "durationSeconds": 1849,
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "Ka735NJI_s8",
+      "slug": "gal-weizman-dom-jungle-can-we-trust-the-ui",
+      "title": "Gal Weizman - DOM Jungle - Can We Trust The UI?",
+      "speakers": [
+        "DOM Jungle"
+      ],
+      "track": "community",
+      "topics": [
+        "weizman",
+        "jungle",
+        "trust"
+      ],
+      "teaser": "Presenters detail vulnerability discovery and exploitation in Gal Weizman - DOM Jungle - Can We Trust The UI?.",
+      "summary": "DOM Jungle: can we trust the UI?",
+      "durationSeconds": 2200,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "gTXfnbFhIrY",
+      "slug": "lidor-ben-shitrit-climbing-azures-peaks-from-80-to-top-10-one-bu",
+      "title": "Lidor Ben Shitrit - Climbing Azure's Peaks: From 80+ to Top 10, One Bug at a Time",
+      "speakers": [
+        "Lidor Ben Shitrit"
+      ],
+      "track": "cloud",
+      "topics": [
+        "azure",
+        "lidor",
+        "shitrit",
+        "climbing",
+        "peak"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Lidor Ben Shitrit - Climbing Azure's Peaks: From 80+ to Top 10, One Bug at a Time.",
+      "summary": "Climbing Azure's peaks: from 80+ bugs to top 10, one at a time.",
+      "durationSeconds": 2314,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "i6ZUZq2rI84",
+      "slug": "asaf-shochet-avida-lets-create-a-chrome-extension-that-steals-ev",
+      "title": "Asaf Shochet Avida - Let's create a Chrome Extension that Steals Everything!",
+      "speakers": [
+        "Asaf Shochet Avida"
+      ],
+      "track": "community",
+      "topics": [
+        "chrome",
+        "asaf",
+        "shochet",
+        "avida",
+        "create",
+        "extension"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Asaf Shochet Avida - Let's create a Chrome Extension that Steals Everything!.",
+      "summary": "Demonstrates creating a Chrome extension that steals everything.",
+      "durationSeconds": 2043,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "05-zL4f9V-Y",
+      "slug": "yoni-rozenshein-can-llms-find-0day-adventures-in-cybersecurity-e",
+      "title": "Yoni Rozenshein - Can LLMs find 0day? Adventures in cybersecurity evals",
+      "speakers": [
+        "Yoni Rozenshein"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "yoni",
+        "rozenshein",
+        "llm",
+        "0day"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Yoni Rozenshein - Can LLMs find 0day? Adventures in cybersecurity evals.",
+      "summary": "Can LLMs find 0-day? Adventures in cybersecurity evals.",
+      "durationSeconds": 2209,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "3UHbUNHcBYI",
+      "slug": "dor-amit-bluehawk-the-bluetooth-motion-detector",
+      "title": "Dor Amit - BlueHawk - The Bluetooth Motion Detector",
+      "speakers": [
+        "Dor Amit"
+      ],
+      "track": "wireless",
+      "topics": [
+        "bluetooth",
+        "amit",
+        "bluehawk",
+        "motion",
+        "detector"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Dor Amit - BlueHawk - The Bluetooth Motion Detector.",
+      "summary": "BlueHawk: the Bluetooth motion detector.",
+      "durationSeconds": 1589,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "3N6NaPFWz4M",
+      "slug": "din-serussi-and-igal-lytzki-trapped-in-the-net-advanced-phishing",
+      "title": "Din Serussi & Igal Lytzki - Trapped in the Net: Advanced Phishing...",
+      "speakers": [
+        "Din Serussi",
+        "Igal Lytzki"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "phishing",
+        "serussi",
+        "igal",
+        "lytzki",
+        "trapped"
+      ],
+      "teaser": "Engineers explore architecture and security mechanisms for Din Serussi & Igal Lytzki - Trapped in the Net: Advanced Phishing....",
+      "summary": "Trapped in the Net: advanced phishing attack patterns.",
+      "durationSeconds": 2064,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "YF0XXLWC3XQ",
+      "slug": "or-yair-aikido-turning-edrs-to-malicious-wipers-using-0-day-expl",
+      "title": "Or Yair - Aikido: Turning EDRs to malicious wipers using 0-day exploits",
+      "speakers": [
+        "Or Yair - Aikido"
+      ],
+      "track": "red-team",
+      "topics": [
+        "yair",
+        "aikido",
+        "turning",
+        "edr",
+        "maliciou",
+        "wiper"
+      ],
+      "teaser": "Industry experts analyze emerging threats surrounding Or Yair - Aikido: Turning EDRs to malicious wipers using 0-day exploits.",
+      "summary": "Aikido: turning EDRs into malicious wipers using zero-day exploits.",
+      "durationSeconds": 2102,
+      "difficulty": "expert"
+    }
+  ]
+}
