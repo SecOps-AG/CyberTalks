@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { FacetOption } from "@/lib/search";
+import { isLikelyPersonSpeaker } from "@/lib/speakerHeuristics";
 
 const RESULTS = 10;
 const REGULARS = 6;
@@ -26,23 +27,28 @@ export function SpeakerFacet({
 
   const query = needle.trim().toLowerCase();
 
+  const personOptions = useMemo(
+    () => options.filter((option) => isLikelyPersonSpeaker(option.label)),
+    [options],
+  );
+
   const matches = useMemo(() => {
     if (!query) return [];
-    return options
+    return personOptions
       .filter(
         (option) => option.label.toLowerCase().includes(query) && !selected.includes(option.value),
       )
       .slice(0, RESULTS);
-  }, [options, query, selected]);
+  }, [personOptions, query, selected]);
 
   // Options arrive count-first, so the head is the people with the most talks.
   // Single-talk speakers are left to the search box.
   const regulars = useMemo(
     () =>
-      options
+      personOptions
         .filter((option) => option.count > 1 && !selected.includes(option.value))
         .slice(0, REGULARS),
-    [options, selected],
+    [personOptions, selected],
   );
 
   const labelFor = (slug: string) =>
@@ -53,7 +59,7 @@ export function SpeakerFacet({
       <div className="mb-1.5 flex items-baseline justify-between gap-2">
         <p className="label">Speakers</p>
         <Link href="/speakers" className="text-[10px] text-cyan hover:text-acid">
-          all {options.length}
+          browse
         </Link>
       </div>
 
