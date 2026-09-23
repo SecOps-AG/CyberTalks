@@ -2,17 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { CommandPalette } from "@/components/CommandPalette";
+import { fetchTalkIndexShards } from "@/lib/fetch-talk-index";
 import type { TalkIndexEntry } from "@/lib/types";
 
 /**
- * Fetches the talk index from /api/talk-index on demand (after hydration)
- * so the palette doesn't block initial render.
+ * Loads the talk index from year shards on demand (after hydration / first
+ * palette keypress) so the palette doesn't block initial render or hit the
+ * old /api/talk-index body-size limit.
  */
 export function CommandPaletteProvider() {
   const [talks, setTalks] = useState<TalkIndexEntry[] | null>(null);
 
   useEffect(() => {
-    // Load on first key press that would open the palette
     function onKey(e: KeyboardEvent) {
       const wouldOpen =
         ((e.metaKey || e.ctrlKey) && e.key === "k") ||
@@ -20,8 +21,7 @@ export function CommandPaletteProvider() {
           !(e.target instanceof HTMLInputElement) &&
           !(e.target instanceof HTMLTextAreaElement));
       if (wouldOpen && talks === null) {
-        fetch("/api/talk-index")
-          .then((r) => r.json())
+        fetchTalkIndexShards()
           .then((data) => setTalks(data))
           .catch(() => setTalks([]));
       }

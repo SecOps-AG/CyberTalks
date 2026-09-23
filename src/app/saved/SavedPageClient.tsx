@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { TalkCard } from "@/components/TalkCard";
 import { SectionHeading } from "@/components/SectionHeading";
+import { fetchTalkIndexShards } from "@/lib/fetch-talk-index";
 import {
   getSavedState,
   exportJson,
@@ -11,8 +12,9 @@ import {
 } from "@/lib/saved";
 import type { TalkIndexEntry } from "@/lib/types";
 
-export function SavedPageClient({ allTalks }: { allTalks: TalkIndexEntry[] }) {
+export function SavedPageClient() {
   const [state, setState] = useState<SavedState | null>(null);
+  const [allTalks, setAllTalks] = useState<TalkIndexEntry[] | null>(null);
   const [importError, setImportError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -23,7 +25,21 @@ export function SavedPageClient({ allTalks }: { allTalks: TalkIndexEntry[] }) {
     return () => window.removeEventListener("saved-changed", handler);
   }, []);
 
-  if (state === null) {
+  useEffect(() => {
+    let cancelled = false;
+    fetchTalkIndexShards()
+      .then((talks) => {
+        if (!cancelled) setAllTalks(talks);
+      })
+      .catch(() => {
+        if (!cancelled) setAllTalks([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (state === null || allTalks === null) {
     return <p className="text-sm text-mint/40 py-12 text-center">Loading…</p>;
   }
 

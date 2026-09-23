@@ -6,7 +6,6 @@ import {
   getConferenceCounts,
   getMostWatched,
   getStats,
-  getTalkIndex,
   getTaxonomy,
   getTrackCounts,
 } from "@/lib/data";
@@ -18,6 +17,9 @@ const EXAMPLES = ["ransomware", "osint", "supply chain", "purple team"];
  * is a hero holding the masthead and the search field, then the filters and
  * talk grid, with the Most Watched rail and track chart below (hidden while
  * searching or filtering).
+ *
+ * The full talk catalog is loaded client-side from year shards (remoteIndex)
+ * so the static HTML stays under Vercel's body-size limit.
  */
 export default function HomePage() {
   const stats = getStats();
@@ -41,7 +43,8 @@ export default function HomePage() {
 
   return (
     <TalkBrowser
-      talks={getTalkIndex()}
+      talks={[]}
+      remoteIndex
       hide={["villages"]}
       alwaysShowDifficulties
       topicLabels={getTaxonomy().topicLabels}

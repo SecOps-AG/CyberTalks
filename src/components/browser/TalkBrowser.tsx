@@ -24,6 +24,7 @@ import {
   type SortKey,
 } from "@/lib/search";
 import { inDefconVillage } from "@/lib/hubs";
+import { fetchTalkIndexShards } from "@/lib/fetch-talk-index";
 import type { TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
 
 type Dimension =
@@ -62,6 +63,12 @@ export type TalkBrowserProps = {
    * (homepage). Other pages still hide an empty list.
    */
   alwaysShowDifficulties?: boolean;
+  /**
+   * When true, ignore the initial `talks` prop for data and load the full
+   * catalog from /data/talk-index/ year shards on the client (newest first).
+   * Keeps SSR HTML thin for homepage/saved.
+   */
+  remoteIndex?: boolean;
 };
 
 const SORTS: { value: SortKey; label: string }[] = [
@@ -74,7 +81,7 @@ const SORTS: { value: SortKey; label: string }[] = [
 ];
 
 export function TalkBrowser({
-  talks,
+  talks: talksProp,
   hide = [],
   topicLabels = {},
   syncUrl = true,
@@ -86,6 +93,7 @@ export function TalkBrowser({
   examples = [],
   searchPlaceholder = "Search titles, speakers, villages, topics…",
   alwaysShowDifficulties = false,
+  remoteIndex = false,
 }: TalkBrowserProps) {
   // `q` deliberately lives outside `filters`. If a keystroke updated `filters`,
   // every downstream memo would recompute on the urgent render *and* again on
@@ -96,6 +104,40 @@ export function TalkBrowser({
   const [ready, setReady] = useState(false);
   const [summaries, setSummaries] = useState<Map<string, string>>(new Map());
   const resultsRef = useRef<HTMLDivElement>(null);
+  const [remoteTalks, setRemoteTalks] = useState<TalkIndexEntry[]>([]);
+  const [catalogReady, setCatalogReady] = useState(!remoteIndex);
+  const [catalogLoading, setCatalogLoading] = useState(remoteIndex);
+
+  useEffect(() => {
+    if (!remoteIndex) return;
+    let cancelled = false;
+    setCatalogReady(false);
+    setCatalogLoading(true);
+    fetchTalkIndexShards((talks, meta) => {
+      if (cancelled) return;
+      setRemoteTalks(talks);
+      // Usable as soon as the newest year lands.
+      setCatalogReady(true);
+      setCatalogLoading(meta.loaded < meta.total);
+    })
+      .then((talks) => {
+        if (cancelled) return;
+        setRemoteTalks(talks);
+        setCatalogReady(true);
+        setCatalogLoading(false);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setRemoteTalks([]);
+        setCatalogReady(true);
+        setCatalogLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [remoteIndex]);
+
+  const talks = remoteIndex ? remoteTalks : talksProp;
 
   const hasExtras = useMemo(() => talks.some((t) => t.kind !== "talk"), [talks]);
   const allExtras = useMemo(() => talks.length > 0 && talks.every((t) => t.kind !== "talk"), [talks]);
@@ -216,6 +258,16 @@ export function TalkBrowser({
   );
 
   const activeCount = countActive({ ...filters, q: draftQuery });
+
+  if (remoteIndex && !catalogReady) {
+    return (
+      <div className="space-y-6">
+        {masthead ? <div className={hero ? "" : "mb-2"}>{masthead}</div> : null}
+        <p className="py-12 text-center text-sm text-mint/40">Loading catalog…</p>
+      </div>
+    );
+  }
+
 
   const clearAll = () => {
     setDraftQuery("");
@@ -411,6 +463,9 @@ export function TalkBrowser({
                 : `${paged.from}–${paged.to} of ${paged.total} talk${paged.total === 1 ? "" : "s"}`}
               {paged.total !== talks.length ? (
                 <span className="text-mint/30"> / {talks.length}</span>
+              ) : null}
+              {catalogLoading ? (
+                <span className="text-mint/30"> · loading years…</span>
               ) : null}
             </p>
             <div className="flex flex-wrap items-center gap-3">
