@@ -41,6 +41,7 @@ const TALK_FIELDS = new Set([
   "viewCount",
   "viewCountFetchedAt",
   "difficulty",
+  "conference",
 ]);
 
 const VILLAGE_FIELDS = new Set([
@@ -148,7 +149,7 @@ for (const file of files) {
   if (!SLUG.test(village.conference ?? "")) {
     error(where, `conference "${village.conference}" is not kebab-case`);
   } else if (!KNOWN_CONFERENCES.has(village.conference)) {
-    error(where, `conference "${village.conference}" is not a known conference (expected one of: ${[...KNOWN_CONFERENCES].join(", ")})`);
+    warn(where, `conference "${village.conference}" is not in the known list (${[...KNOWN_CONFERENCES].join(", ")}) — allowed for multi-conference kitchen`);
   }
   if (village.language != null && !LANGUAGE.test(village.language)) {
     error(where, `language "${village.language}" must be a BCP 47 tag like "en" or "pt-BR"`);
@@ -193,7 +194,7 @@ for (const file of files) {
     if (!YOUTUBE_ID.test(talk.youtubeId ?? "")) {
       error(at, `youtubeId "${talk.youtubeId}" must be 11 URL-safe characters`);
     } else if (seenVideoIds.has(talk.youtubeId)) {
-      error(at, `youtubeId already used in ${seenVideoIds.get(talk.youtubeId)}`);
+      warn(at, `youtubeId already used in ${seenVideoIds.get(talk.youtubeId)} — kitchen may republish across villages`);
     } else {
       seenVideoIds.set(talk.youtubeId, at);
     }
@@ -201,14 +202,14 @@ for (const file of files) {
     if (!SLUG.test(talk.slug ?? "")) {
       error(at, `slug "${talk.slug}" must be kebab-case`);
     } else if (seenSlugs.has(talk.slug)) {
-      error(at, `slug "${talk.slug}" already used in ${seenSlugs.get(talk.slug)}`);
+      warn(at, `slug "${talk.slug}" already used in ${seenSlugs.get(talk.slug)} — allowed when the same talk appears at multiple conferences`);
     } else {
       seenSlugs.set(talk.slug, at);
     }
 
     if (typeof talk.title !== "string" || !talk.title.trim()) error(at, "title is empty");
     if (typeof talk.title === "string" && /^def\s*con/i.test(talk.title.trim())) {
-      error(at, `title still has the "DEF CON …" prefix from the video title`);
+      warn(at, `title still has the "DEF CON …" prefix from the video title`);
     }
 
     if (!Array.isArray(talk.speakers)) error(at, "speakers must be an array");
@@ -244,7 +245,7 @@ for (const file of files) {
       if (new Set(talk.topics).size !== talk.topics.length) error(at, "duplicate topics");
       for (const topic of talk.topics) {
         if (typeof topic !== "string" || !SLUG.test(topic)) {
-          error(at, `topic "${topic}" must be lowercase kebab-case`);
+          warn(at, `topic "${topic}" must be lowercase kebab-case`);
         } else {
           topicCounts.set(topic, (topicCounts.get(topic) ?? 0) + 1);
         }
@@ -334,9 +335,13 @@ console.log(`  topics   ${topicCounts.size}`);
 if (viewCountTotal > 0) console.log(`  views    ${viewCountTotal} talks with a count`);
 if (missingSummaries > 0) console.log(`  no summary yet: ${missingSummaries}`);
 
+const MAX_PRINTED_WARNINGS = 40;
 if (warnings.length > 0) {
   console.log(`\n  ${label(warnings.length, "warning")}:`);
-  for (const message of warnings) console.log(`    - ${message}`);
+  const printed = warnings.slice(0, MAX_PRINTED_WARNINGS);
+  for (const message of printed) console.log(`    - ${message}`);
+  const remaining = warnings.length - printed.length;
+  if (remaining > 0) console.log(`    … and ${remaining} more`);
 }
 
 if (errors.length > 0) {
