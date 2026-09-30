@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { GitHubStarButton } from "@/components/GitHubStarButton";
 import { HUBS } from "@/lib/hubs";
 
 const NAV = [
@@ -48,7 +47,6 @@ export function SiteHeader() {
           >
             <span>⌘K</span>
           </button>
-          <GitHubStarButton />
         </div>
       </div>
     </header>
