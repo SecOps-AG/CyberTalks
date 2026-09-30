@@ -16,8 +16,8 @@ const csp = [
   // Fonts are self-hosted at build time, so no font CDN belongs here.
   "font-src 'self'",
   "img-src 'self' data: https://i.ytimg.com https://c.statcounter.com",
-  // api.github.com is the header's star count; the rest are analytics beacons.
-  "connect-src 'self' https://api.github.com https://c.statcounter.com https://va.vercel-scripts.com",
+  // Analytics beacons.
+  "connect-src 'self' https://c.statcounter.com https://va.vercel-scripts.com",
   "frame-src https://www.youtube.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
