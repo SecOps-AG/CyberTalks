@@ -22,7 +22,9 @@
       "summary": null,
       "durationSeconds": 3634,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 658,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "1eSUwCsyO-4",
@@ -41,7 +43,9 @@
       "durationSeconds": 1696,
       "conference": "first",
       "aiSummary": "Overview:\nAlexander, a Principal Forensic Investigator at Truesec, deconstructs a complex, multi-stage hybrid cloud attack drawn from real-world incident response investigations. Tracing the intrusion backwards from an Azure/Entra ID tenant takeover to its initial root cause, he illustrates how threat actors chain developer machine compromises, Git repository supply-chain tampering, CI/CD container breakouts, and cloud credential harvesting. The presentation highlights the critical risks of hybrid identity infrastructure, demonstrating how on-premises Active Directory Connect servers can be weaponized to dominate enterprise cloud resources.\n\nKey Topics:\n- Hybrid identity architecture risks: ADFS Golden SAML, Pass-Through Authentication (PTA) skeleton keys, and Azure AD Connect Password Hash Sync (PHS) credential dumping\n- CI/CD supply chain exploitation: Jenkins script console abuse, Docker default network container breakout, and malicious dependency tampering\n- Covert Command and Control: living-off-the-cloud C2 tunneling via Gmail API drafts and attachments\n- Cloud credential harvesting: GCP default service account storage bucket exposure, CLI SQLite database credential dumping, and DPAPI-based infostealers\n\nTechnical Details:\nThe incident investigation originated with an alert for single-factor authentication in Microsoft Entra ID (Azure AD), preceded by an unexpected password reset triggered by an on-premises Azure AD Connect service account (sync_*). In hybrid identity deployments utilizing Password Hash Sync (PHS), this internal service account possesses broad directory permissions, including the ability to reset user passwords to synchronize them between on-premises Active Directory and the cloud. By dumping these synced credentials from the on-premises AD Connect server (an activity typically detected by EDR as an AD Sync attack), the threat actor reset administrative passwords, assumed ownership of an Enterprise Application with delegated Microsoft Graph permissions (accessing mailboxes and SharePoint), promoted an account to Global Administrator, and enrolled a rogue device.\n\nLateral movement to the AD Connect server stemmed from a compromised Jenkins build automation server. The attacker accessed Jenkins' administrative Script Console to dump build secrets and execute arbitrary server commands. The server maintained persistent Command and Control (C2) through a custom RAT that communicated via the Gmail API: the malware polled a compromised Gmail account for new message drafts containing commands, executed them locally, and uploaded output as email attachments—effectively blending into legitimate outbound HTTPS traffic. This Jenkins host access was enabled by a network breakout from a Docker build container that had been placed on Docker's default bridge network, allowing it to route directly to the host's internal Jenkins web interface.\n\nThe initial breach began with a RedLine infostealer infection purchased on Russian Market, delivered via a spoofed GitHub issue attachment URL. The infostealer decrypted browser session cookies and Primary Refresh Tokens (PRTs) using Windows DPAPI on a developer's workstation. Stolen credentials allowed the attacker to access GitLab and modify a repository's requirements.txt, injecting a dependency that executed a reverse shell via setup.py during automated builds. Concurrently, the attacker compromised a Google Cloud Platform (GCP) development VM, querying the instance metadata service to hijack the default compute service account (which had read permissions over backup storage buckets containing administrative credentials) and dumping saved authentication tokens from local SQLite databases used by gcloud and Azure CLI tools.\n\nKey Takeaways:\nHybrid identity infrastructure like Azure AD Connect represents a critical Tier-0 asset; compromising on-premises synchronization servers immediately grants complete administrative dominance over cloud tenants. Organizations must strictly segment CI/CD build environments, ensuring Docker containers cannot route to management consoles or internal networks, and audit pipelines against dependency tampering. Furthermore, enterprises should protect developer session tokens with hardware-backed TPM storage (such as Windows 11 PRT protection) and enforce Conditional Access policies requiring compliant, managed hardware for administrative logins.\n\n(AI summary — Gemini Flash)",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 658,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Ic2S9voZERw",
@@ -59,7 +63,9 @@
       "summary": "Schneider Electric Context\n\nHarish Shankar and Fabrissa present Schneider Electric's product security program. The global energy and automation company operates across 100 countries with thousands of suppliers, integrators, and service partners, making supply-chain security critical.\n\nEnd-to-End Security Program\n\nThirteen initiatives cover R&D through customer operations, adopting IEC 62443 standards, global security lab pen testing, source-code governance, secure manufacturing, tamper-proof staging, and field-engineer practices like banning unscanned USBs at customer sites.\n\nSBOM Initiative\n\nFabrissa describes Schneider's SBOM program for firmware and embedded products with transitive dependencies. The journey began atop an existing product vulnerability management program where R&D teams already tracked component inventories.\n\nPSIRT Integration\n\nSoftware bill of materials is positioned as a key supply-chain security component enabling PSIRT teams to respond to vulnerabilities across complex products that blend operating systems, embedded software, and cloud components.",
       "durationSeconds": 1876,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 499,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "pd18DlBk2qk",
@@ -79,7 +85,9 @@
       "summary": "Incident Trigger\n\nAn Argentina-based responder describes a client whose public S3 static website suddenly showed access denied because objects were encrypted with a KMS key the tenant could no longer use. The case illustrates how fast-moving startups often skip logging and security prep.\n\nCloudTrail Forensics\n\nWith no exported logs available, the team retrieved CloudTrail event history programmatically and built tooling to grep and analyze API activity. They traced suspicious get-authorization-token calls to ECR from an internal AWS address—unexpected for a user who should not touch the container registry.\n\nKubernetes and IAM Risk\n\nThe talk explains how Kubernetes service accounts mapped to IAM roles can give containers cluster-level cloud permissions without segmentation. Attackers who reach that trust boundary may push images, encrypt data, and abuse infrastructure-as-code patterns that provision users automatically.\n\nLogging Gaps\n\nAWS logs API calls via CloudTrail, but object-level S3 events are costly and usually off. Kubernetes adds API server, audit, authenticator, and controller logs that rarely get correlated with CloudTrail—leaving blind spots during cloud-native incidents.",
       "durationSeconds": 2032,
       "conference": "first",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 234,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Dc5Pqv7lxHA",
@@ -99,7 +107,9 @@
       "summary": "Speakers and goal\n\nPermiso researchers Cam and Daniel introduce Cloud Console Cartographer, an open-source tool to map noisy AWS console-session logs into understandable attacker or user activity.\n\nCloud logging realities\n\nCloud logs differ from endpoint telemetry: less control, API-call abstraction, control-plane vs data-plane split, retention limits (e.g., 30/90 days), delays, and query throttling. Forwarding to S3/blob storage helps scale and retention but can drop fields such as CloudTrail's resources section.\n\nConsole focus\n\nConsole means browser-based AWS/Azure portal use, not CLI. They say attackers do use consoles, sometimes with click-through playbooks or technical limitations.\n\nDefender guidance\n\nEnable non-default logs, forward them to durable storage, monitor ingestion, and test tools before incidents. The talk promises a solution walkthrough and demo of Cartographer for reconstructing what happened inside verbose console sessions.",
       "durationSeconds": 2004,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 141,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "DNdUyYtqFwk",
@@ -115,7 +125,10 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning One Chain to Shackle Them All.",
       "summary": "## Supply Chain as Permanent Risk\n\nA Siemens product-security veteran presents \"One Chain to Shackle Them All\" at FIRST, arguing software supply chains create a never-ending vulnerability chain shackling vendors and consumers alike. Managing over 10,000 products, his team disclosed roughly a thousand vulnerabilities last year—manual scale impossible to sustain through automation alone.\n\n## Two-Party Models Fail\n\nCVSS environmental scores, legal vendor-customer contracts, and SSVC decision frameworks assume binary relationships. Real supply chains contain many hops: component authors, integrators, OEMs, distributors, and end operators. Vulnerabilities propagate instantly downstream while patches travel slowly upstream.\n\n## Patch Propagation Asymmetry\n\nIllustrative timelines show fixes taking months per hop—potentially over two years from initial disclosure to final deployer. Meanwhile exploit knowledge spreads immediately. Organizations still patching 2022 flaws while attackers chain current CVEs exemplify systemic lag no single vendor can solve.\n\n## Toward Collective Accountability\n\nThe speaker urges industry-wide coordination: transparent dependency graphs, synchronized disclosure windows, and realistic expectations that \"just automate patching\" ignores integration testing, safety certification, and OT downtime constraints. Supply-chain security requires multi-stakeholder mechanisms, not bilateral SLAs.",
       "durationSeconds": 2246,
-      "conference": "first"
+      "conference": "first",
+      "difficulty": "intermediate",
+      "viewCount": 256,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "1L5rzvlRjdU",
@@ -138,7 +151,9 @@
       "summary": "### Overview\nIn this talk, Matteo and Simone from Certego and The Honeynet Project introduce IntelOwl, an open-source threat intelligence and data enrichment platform designed to alleviate burnout and repetitive toil for cybersecurity analysts. Motivated by personal experiences with alert fatigue, extreme stress, and manual copy-pasting across disparate threat intelligence tools in 2017, the creators started building IntelOwl in early 2020. The platform automates the acquisition and aggregation of threat intelligence context for artifacts such as URLs, domains, IP addresses, hashes, and files via a graphical web interface or an API.\n\n### Key Topics\n- **Analyst Burnout and Bottlenecks**: High alert volumes, skill shortages, on-call burdens, and manual multi-source threat intelligence gathering contribute significantly to analyst fatigue. Automating data enrichment directly reduces investigation and alert triage times.\n- **Architecture and Component Ecosystem**: IntelOwl is structured as both a platform and an extensible framework. Its modular plugin architecture consists of analyzers (which query internal and external intelligence sources), connectors (which push generated intelligence into external tools such as MISP), visualizers (which render raw JSON output into human-readable visual summaries), and playbooks (reusable collections or aliases of analyzers and plugins grouped for specific workflows like static file analysis or phishing).\n- **Pivot Investigations**: Introduced around release 6.0, IntelOwl transitioned from individual, single-shot job analysis to multi-step investigation workflows. Analysts can pivot directly from one artifact's results (e.g., resolving a domain to an IP address) into subsequent scans, linking findings into cohesive investigations or automated sequences such as automated abuse-takedown requests.\n\n### Technical Details\n- **Backend & Frontend**: The backend is built using Python, Django, Celery for asynchronous background task execution, and uses Nginx as a reverse proxy alongside WSGI and ASGI (Daphne) containers to handle standard web traffic and WebSockets. The user interface is developed in ReactJS.\n- **Data Stores and Brokers**: IntelOwl relies on PostgreSQL as its primary database, with optional secondary integration with Elasticsearch for business and analytic data. Supported Celery message brokers include Redis (the default), RabbitMQ, and AWS SQS.\n- **Deployment and Interfaces**: The infrastructure is containerized using Docker and Docker Compose. Interactions can be conducted through the React web UI, a dedicated Python SDK, or standard REST APIs.\n- **Community and Extensibility**: The project has grown through programs like Google Summer of Code (GSoC) and community-authored analyzers. In addition to manual pivots, workflows can chain analyzer findings to connectors, as demonstrated in an automated abuse takedown playbook that queries domain DNS, extracts abuse contact emails, and dispatches a takedown notice.\n\n### Takeaways\nIntelOwl enables security teams to automate the routine ingestion of threat data across commercial, internal, and open-source intelligence sources with a single click or API call. The project continues to evolve from an artifact enrichment engine into a collaborative investigation workbench, with planned enhancements including deeper open-source tool integrations, shared analyst workspaces, and LLM-powered chatbot assistants.",
       "durationSeconds": 1931,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 1900,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ZPYvEXKZbKM",
@@ -159,15 +174,15 @@
       "summary": null,
       "durationSeconds": 2023,
       "conference": "first",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 228,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "j46vdIZgLFA",
       "slug": "version-fingerprinting-tricks-automating-software-identification",
       "title": "Version Fingerprinting Tricks: Automating Software Identification for Vulnerability Scanners",
-      "speakers": [
-        "Version Fingerprinting Tricks"
-      ],
+      "speakers": [],
       "track": "recon",
       "topics": [
         "fingerprinting",
@@ -180,15 +195,15 @@
       "summary": null,
       "durationSeconds": 1939,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 177,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "j6KJGWk9Xt8",
       "slug": "dissecting-tradecraft-building-robust-detections-through-tradecr",
       "title": "Dissecting Tradecraft: Building Robust Detections Through Tradecraft Decomposition",
-      "speakers": [
-        "Dissecting Tradecraft"
-      ],
+      "speakers": [],
       "track": "blue-team",
       "topics": [
         "tradecraft",
@@ -201,7 +216,9 @@
       "summary": null,
       "durationSeconds": 2055,
       "conference": "first",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 329,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "bIBCDtFATLM",
@@ -219,7 +236,9 @@
       "summary": null,
       "durationSeconds": 1757,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 141,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ibVqnbzgc9c",
@@ -236,7 +255,9 @@
       "summary": null,
       "durationSeconds": 1908,
       "conference": "first",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 264,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "vzIv1fiH90s",
@@ -255,7 +276,9 @@
       "summary": null,
       "durationSeconds": 2102,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 147,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "RMjGiTgVbWY",
@@ -275,7 +298,9 @@
       "summary": null,
       "durationSeconds": 1540,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 199,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "dugBsWoBrJQ",
@@ -289,10 +314,12 @@
         "silo"
       ],
       "teaser": "Presenters detail vulnerability discovery and exploitation in Tearing Down the Silos - Cyber Defense Needs an Integrated Approach.",
-      "summary": null,
+      "summary": "Overview: Tearing Down the Silos - Cyber Defense Needs an Integrated Approach Program Agenda / 36th Annual FIRST Conference 36th Annual FIRST Conference - Bridging Security Response Gaps: Fukuoka ... InfoCon Hacking and Security Conference Archives",
       "durationSeconds": 2232,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 223,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ETP3s-fwUyU",
@@ -310,15 +337,15 @@
       "summary": null,
       "durationSeconds": 1952,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 61,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "-bcwZonCqTk",
       "slug": "sharing-communities-the-good-the-bad-and-the-ugly",
       "title": "Sharing Communities: The Good, the Bad, and the Ugly",
-      "speakers": [
-        "Sharing Communities"
-      ],
+      "speakers": [],
       "track": "community",
       "topics": [
         "sharing",
@@ -330,7 +357,9 @@
       "summary": "## Overview\nThomas Gass presents research on cybersecurity information-sharing communities conducted through 25 video interviews with experts worldwide. The study investigates organizational structures, member motivations, and challenges in communities like FIRST and FS-ISAC, applying the Social-Technical Systems framework to understand how social and technical elements interact.\n\n## Key Topics\n\n**Organizational Structures**\nSharing communities vary widely in formality and access. The research identifies open communities (no entry barriers), closed communities (strict entry rules), and topic/incident-related temporary task forces. Formal communities operate under legal frameworks with dedicated employees and hierarchies, while informal \"hidden clubs\" function on invitation and trust-based voting. Member structures are often undefined, creating challenges for collaboration and trust.\n\n**Member Roles and Motivations**\nSix key roles emerged: producers (generate and share cyber threat intelligence), consumers (use intelligence and provide feedback), sharing enablers (grant permissions and allocate resources), brokers/proxies (collect and forward intelligence), hosts (administrators/organizers), and lurkers/free riders (non-contributing consumers). Members have altruistic goals including supporting peer defense, contributing to society, providing early warnings, and improving collective threat understanding, though goals sometimes differ between individuals and communities.\n\n**Benefits and Challenges**\nActive participants receive threat intelligence, access knowledge repositories (reports, scripts, best practices), build relationships with diverse expertise, gain resource savings, and receive early threat warnings. However, the research identified significant interconnected challenges: low-quality intelligence, missing context, work overload, undefined member structures, subgroup formation, lack of trust, visa restrictions preventing participation, and lack of standardization in tools (Slack, Signal, MISP, Mailing lists, etc.) and taxonomies. Notably, most challenges are social rather than technical.\n\n**Social-Technical Systems Framework**\nThe framework represents sharing communities as complex work environments with three social elements—goals, people, and culture—and three technical elements—processes/procedures, infrastructure, and technology. All six elements interact and influence each other within an external context of regulations (GDPR, sanctions) and stakeholder pressures. High-quality, contextualized intelligence flows in trust-based hidden clubs, while open communities share lower-quality automated data.\n\n## Key Insights\n- Trust is fundamental; informal communities with vouching/voting systems create safer sharing environments\n- Most challenges are social (fear of sharing, unclear membership) rather than technical\n- Standardization across communities would reduce member burden of learning multiple tools and taxonomies\n- Stable member composition and clear shared goals promote effectiveness\n- Infrastructure accessibility (visa policies, event locations) directly impacts culture and collaboration\n- Holistic approaches addressing social and technical elements simultaneously are necessary for improvement\n\n## Takeaways\nSharing communities critically support cyber defense but require thoughtful organizational design. Building clear goals, stable member structures with defined roles, trust-building activities (meetups, vouching systems), and standardized processes will improve both individual benefits and collective defensive capabilities. Communities should consider social and technical factors equally when addressing challenges.",
       "durationSeconds": 1623,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 123,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "HUbiX1tnCK0",
@@ -349,15 +378,15 @@
       "summary": null,
       "durationSeconds": 2001,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 318,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "DnTlNo9JMkg",
       "slug": "defending-forward-how-national-organizations-can-identify-advers",
       "title": "Defending Forward: How National Organizations Can Identify Adversary Infrastructure and Attacks ...",
-      "speakers": [
-        "Defending Forward"
-      ],
+      "speakers": [],
       "track": "red-team",
       "topics": [
         "infrastructure",
@@ -371,7 +400,9 @@
       "summary": null,
       "durationSeconds": 1536,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 244,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "fMuGvzEYx30",
@@ -389,7 +420,9 @@
       "summary": null,
       "durationSeconds": 1718,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 93,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Nff6OpJdTmk",
@@ -409,7 +442,9 @@
       "summary": null,
       "durationSeconds": 2061,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 134,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "KbND5XQ_HP4",
@@ -423,9 +458,11 @@
         "talks"
       ],
       "teaser": "Presenters detail vulnerability discovery and exploitation in Lightning Talks I.",
-      "summary": null,
+      "summary": "Overview: <ul>\n<li>Routenplanung durch Flächen\n<strong>(Jakob Miksch)</strong></li>\n<li>Interaktive Visualisierung von Geodaten in Jupyter Notebooks <strong>(Johannes Kröger)</strong></li>\n<li>Summer of Code <strong>(Tobias Knerr)</strong>\n</li>\n<li>osm_address_db – Stand der Dinge <strong>(Christopher Lorenz)</strong></li>\n</ul>\n\n<b>Routenplanung durch Flächen - ein kurzer Überblick</b> \nRoutenplaner wie OSRM, GraphHopper oder pgRouting sind mittlerweile schon sehr ausgereift und können Routen für verschiedenen Profile (Auto, Fußgänger, Fahrrad ...) berechnen. Die Navigation über Flächen wie zum Beispi\nDetails: el Plätzen bereitet jedoch nach wie vor Probleme. Bis jetzt wird nur der Rand der Fläche in den Routinggraphen integriert. Eine Route die über einen Platz führt kann deswegen eine sehr unrealisitische Form bekommen. In manchen Fällen wir auch eine viel zu lange Route berechnet.\n\nUm dieses Problem zu lösen gibt es bereits mehrere Ansätze. Der Vortrag wird einen Überblick über die bestehenden Entwicklungen geben. Der naheliegendste Ansatz ist virtuelle Wege zu generieren die über den Platz führen und diese in den Routinggraphen zu integrieren. Dabei stehen einige Algorithmen zur Auswahl (Sichtverbindungen, Grid, Delaunay, Voronoi, Skeleton ... ). Zwei dieser Algorithmen werden genauer beschrieben und kurz vorgeführt.\n\n<b>Interaktive Visualisierung von Geodaten in Jupyter Notebooks</b>\n<i>Sha",
       "durationSeconds": 3338,
-      "conference": "first"
+      "conference": "first",
+      "viewCount": 218,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "_CJ9Zm1_6e4",
@@ -439,9 +476,11 @@
         "talks"
       ],
       "teaser": "Engineers explore architecture and security mechanisms for Lightning Talks II.",
-      "summary": null,
+      "summary": "Overview: <ul>\n<li> DeepVGI <strong>(Martin Raifer)</strong></li>\n<li>Einsatz von Lowcost-Lidarsystemen für die OSM-Landvermessung <strong>(Kolossos)</strong>\n</li>\n<li>Unkonventionelle Karten mit g2jascii <strong>(Hans Jörg Stark)</strong></li>\n</ul>\n\n<b>DeepVGI – Ein Deep Learning Framework zur Detektion von Gebäuden und Strassen auf Basis von Fernerkundungsbildern, OpenStreetMap und MapSwipe Daten.</b>\nIn jüngster Zeit werden zunehmend maschinelle Lernmethoden - insbesondere Deep Artifical Neural Networks (ANNs) zur automatischen Objektdetektion mit Fernerkundungsbildern untersucht und u.a. angewende\nDetails: t, um Gebäude, Straßennetze usw. zu finden. Um ein genaues Vorhersagemodell für eine Zieldomäne, d.h. ein konkretes Gebiet, zu erlernen beruhen diese Verfahren gewöhnlich auf einer großen Menge markierter Bilder. Gerade in ländlichen oder unentwickelten Orte gibt es normalerweise keine existierenden markierten Bildsätze. In aktuellen Arbeiten am HeiGIT (Heidelberg Institut for Geoinformation Technology) extrahieren wir Trainingsmarken (d. H. Supervisionswissen) aus OSM und  integrieren zusätzlich VGI von der humanitären Anwendung MapSwipe, sowie einige manuell gelabelte Trainingsdaten, um so die gesamte Zieldomäne mit einer höheren Vorhersagegenauigkeit abzudecken. Zu diesem Zweck wird ein Deep Learning Framework namens AT-CNN vorgeschlagen, bei dem die von Deep Convolutional Neural Networ",
       "durationSeconds": 4050,
-      "conference": "first"
+      "conference": "first",
+      "viewCount": 175,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "10MLiX26MPg",
@@ -457,10 +496,12 @@
         "system"
       ],
       "teaser": "Analysts investigate attack surfaces and defenses concerning Wednesday Keynote Address: Incident Command System 4 Industrial Control Systems (ICS4ICS).",
-      "summary": null,
+      "summary": "Overview: This 4-hour session is designed to arm incident response teams and security researchers with vital skills needed to monitor, analyze and respond to attacks against the unique networks that make up the backbone of the world's critical infrastructure. With recent attacks on critical infrastructure demonstrating the real and present danger to ICS networks, it is more important than ever to hone these skills and reduce the blind spots that exist for security teams. Understanding the inner workings o\n\nKey Topics: f these networks, their unique protocols and the methods adversaries will employ to disrupt (including using legitimate commands to ICS network components) is of paramount importance as we witness an increasingly active threat landscape unfolding. The workshop is composed of two, 2-hour sessions of ICS Fundamentals 101 and ICS Advanced 201. The two sessions step both the novice and intermediate skilled participant through the risks and mitigations of critical infrastructure and control system security. The participant will use open source and trial editions of RexDraw, PeakHMI, NRL Core, Kali Linux, Python and Raspberry PIs. The instructors w\n\nTakeaways: ial devices. Participants will learn the ICS fundamentals and the value of technical, operational and physical security controls within ICS environments. ICS 101 will guide the participants through the elements of ICS technical components (hardware, software, logic and protocols) through reversing engineering a bottling facility and a traffic light. The participants will learn about physical I/O, functional logic, industrial protocols and user interface design using the philosophy of build, brea",
       "durationSeconds": 3595,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 128,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "B5TqKOTt2ck",
@@ -479,7 +520,9 @@
       "summary": null,
       "durationSeconds": 1814,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 153,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "lmOyD3ylkBE",
@@ -498,7 +541,9 @@
       "summary": null,
       "durationSeconds": 2117,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 55,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "D0HewZ8z3NA",
@@ -518,7 +563,9 @@
       "summary": null,
       "durationSeconds": 2079,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 58,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "VnjS8_VZizk",
@@ -535,10 +582,12 @@
         "principle"
       ],
       "teaser": "Presenters detail vulnerability discovery and exploitation in Vulnerability Response for Heterogenous OT Products - Principles to Build Your Own Framework.",
-      "summary": null,
+      "summary": "Overview: VULNERABILITY definition: 1. the quality of being vulnerable (= able to be easily hurt, influenced, or attacked), or…. Learn more.",
       "durationSeconds": 2148,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 65,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "sg4ovkEqtMk",
@@ -556,7 +605,9 @@
       "summary": null,
       "durationSeconds": 2076,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 190,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "sEHBVoh2p8Y",
@@ -574,7 +625,9 @@
       "summary": null,
       "durationSeconds": 2248,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 143,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "lcSO6O-9YRk",
@@ -595,7 +648,9 @@
       "summary": null,
       "durationSeconds": 2040,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 145,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "_OlpkkoE1qM",
@@ -611,7 +666,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 14 Questions Are All You Need.",
       "summary": null,
       "durationSeconds": 1953,
-      "conference": "first"
+      "conference": "first",
+      "viewCount": 283,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "6fBFGF3FqUY",
@@ -627,10 +684,12 @@
         "critical"
       ],
       "teaser": "Industry experts analyze emerging threats surrounding Cybersecurity Performance Goals for Critical Infrastructure: A Primer and A Progress Report.",
-      "summary": null,
+      "summary": "Overview: Jun 12, 2026 &#0183;&#32;Cybersecurity is the process of protecting networks, systems, applications and digital assets from unauthorized …",
       "durationSeconds": 2021,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 92,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "aRDVwWatMYs",
@@ -649,7 +708,9 @@
       "summary": null,
       "durationSeconds": 1876,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 380,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "k9ti16DIp-A",
@@ -668,7 +729,9 @@
       "summary": null,
       "durationSeconds": 1191,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 148,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "UEPt3KRBHFQ",
@@ -685,15 +748,15 @@
       "summary": null,
       "durationSeconds": 1817,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 135,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "B2chIznF3jE",
       "slug": "sigma-unleashed-a-realistic-implementation",
       "title": "Sigma Unleashed: A Realistic Implementation",
-      "speakers": [
-        "Sigma Unleashed"
-      ],
+      "speakers": [],
       "track": "blue-team",
       "topics": [
         "sigma",
@@ -705,7 +768,9 @@
       "summary": null,
       "durationSeconds": 1500,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 221,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "YhQMjAZbc-c",
@@ -723,7 +788,9 @@
       "teaser": "Cryptocurrency Hackers Targeting Japanese Organizations examines Are You Lazarus?.",
       "summary": null,
       "durationSeconds": 1967,
-      "conference": "first"
+      "conference": "first",
+      "viewCount": 113,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "4ZWF93aT-k4",
@@ -743,7 +810,9 @@
       "summary": null,
       "durationSeconds": 1928,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 471,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "7WKcsMJXvZQ",
@@ -762,7 +831,9 @@
       "summary": null,
       "durationSeconds": 2091,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 259,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "jvXh3HQgOP8",
@@ -782,7 +853,9 @@
       "summary": null,
       "durationSeconds": 1721,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 142,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "krW-_mm4cO4",
@@ -802,7 +875,9 @@
       "summary": null,
       "durationSeconds": 1833,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 72,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "CW0W6656QLI",
@@ -821,7 +896,9 @@
       "summary": null,
       "durationSeconds": 2061,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 98,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "xIRdbsq2Zgo",
@@ -837,10 +914,12 @@
         "information"
       ],
       "teaser": "Industry experts analyze emerging threats surrounding Collaboratively Caring and Securely Sharing of Information that Matters.",
-      "summary": null,
+      "summary": "Overview: Financial institutions are therefore balancing realising new efficiencies with facing the growing challenge of AI-enabled cyber threats, …",
       "durationSeconds": 1608,
       "conference": "first",
-      "difficulty": "beginner"
+      "difficulty": "beginner",
+      "viewCount": 229,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "pkqErkd8ov8",
@@ -857,15 +936,15 @@
       "summary": null,
       "durationSeconds": 1828,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 482,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "UE7c8IvUYoI",
       "slug": "unveiling-active-directory-secrets-uncommon-tricks-for-enhanced",
       "title": "Unveiling Active Directory Secrets: Uncommon Tricks for Enhanced Security",
-      "speakers": [
-        "Unveiling Active Directory Secrets"
-      ],
+      "speakers": [],
       "track": "hardware",
       "topics": [
         "active-directory",
@@ -878,7 +957,9 @@
       "summary": null,
       "durationSeconds": 1551,
       "conference": "first",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 854,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "JZ0hJqXtPhw",
@@ -898,7 +979,9 @@
       "summary": null,
       "durationSeconds": 1973,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 232,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "jL235NwqhG8",
@@ -915,7 +998,9 @@
       "summary": null,
       "durationSeconds": 2186,
       "conference": "first",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 490,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "G7HJz7a-Co4",
@@ -931,7 +1016,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding SIG Updates.",
       "summary": null,
       "durationSeconds": 3437,
-      "conference": "first"
+      "conference": "first",
+      "viewCount": 89,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     }
   ]
 }

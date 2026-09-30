@@ -20,7 +20,10 @@
       ],
       "teaser": "Analyzes welcome! | Secure enterprise Streets Conference 2022 and evaluates key implications for security practitioners.",
       "summary": "Overview: John Heldreth welcomes attendees to the first Secure Our Streets conference, organized by the Automotive Security Research Group (ASRG) nonprofit focused on vehicle cybersecurity throughout the automotive lifecycle.\n\nKey Topics: ASRG's volunteer-driven mission for automotive security awareness; improving security quality through design and operation across the vehicle lifecycle; 147 attendees at the inaugural event; and realistic expectations for a first-time community-driven conference.\n\nTechnical Details: Heldreth introduces ASRG as a nonprofit volunteer organization dedicated to automotive cybersecurity awareness and security-in-design across the vehicle lifecycle, supporting components, and connected infrastructure.\n\nTakeaways: Automotive security requires dedicated community spaces like Secure Our Streets. Volunteer-driven conferences advance industry awareness and collaboration even when first-year execution isn't perfect.",
-      "durationSeconds": 1791
+      "durationSeconds": 1791,
+      "difficulty": "beginner",
+      "viewCount": 232,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ZbeLEGWMZRg",
@@ -37,7 +40,10 @@
       ],
       "teaser": "Analyzes session 1 | Manual Sandler | Implementing CySec in automotive development projects right 7 Manageme and evaluates key implications for security practitioners.",
       "summary": "Automotive Cybersecurity Challenge\n\nManuel Sandler of CyRAS Consulting presents seven management and engineering prerequisites for implementing cybersecurity in automotive development. Despite clearer regulations—UN R155 and ISO 21434—many OEM and supplier projects still struggle with practical execution.\n\nIT Security vs. Cybersecurity\n\nThe first prerequisite defines distinctions and synergies between traditional IT security and automotive cyber security. Connected vehicles span telematics, infotainment, and safety-critical components; organizations must locate competence centers and clarify interfaces rather than merging or separating teams blindly.\n\nShared Processes and Talent Gaps\n\nSandler argues automotive security should reuse established IT disciplines where possible—incident management, software update processes, and quality gates—while recognizing vehicle-specific attack surfaces. A critical industry shortage of experienced automotive security engineers compounds the problem.\n\nWeakest-Link Quality\n\nCybersecurity cannot be a standalone bolt-on; development quality issues become security issues. Sandler warns the chain is only as strong as its weakest link, citing frequent project findings where inadequate software analysis undermines security requirements across multidisciplinary automotive programs.",
-      "durationSeconds": 2673
+      "durationSeconds": 2673,
+      "difficulty": "intermediate",
+      "viewCount": 180,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "N9Z8GG4mE0E",
@@ -54,7 +60,10 @@
       ],
       "teaser": "Details session 2 | Stage 1 | Kamel Ghali | Automotive Exploitation Demo Exploiting a Buffer Overflow Over and evaluates key implications for security practitioners.",
       "summary": "Talk setup\n\nKamel Gali of WhiteMotion (Marelli automotive security) presents a pre-recorded demo because Raspberry Pi lab gear was needed at work. The Secure Our Streets/ASRG session covers hands-on automotive exploitation, not novel research.\n\nBluetooth in vehicles\n\nBluetooth is a short-range 2.4 GHz cable-replacement used heavily in infotainment for audio, phonebooks, hands-free calling, and increasingly sensitive functions like key-fob firmware updates cited in prior Tesla research.\n\nBuffer overflow demo\n\nAfter a concise Bluetooth technical primer, he demonstrates a basic buffer overflow against a Bluetooth interface—the classic memory-safety attack adapted to an automotive attack surface relevant to connected cars.",
-      "durationSeconds": 1607
+      "durationSeconds": 1607,
+      "difficulty": "advanced",
+      "viewCount": 197,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "3PtbOKRNM3c",
@@ -72,7 +81,10 @@
       "teaser": "Examines session 2 | Stage 2 | Dr Ken Tindell | CryptoCAN Encrypted messaging on CAN bus and evaluates key implications for security practitioners.",
       "summary": "## Why Encrypt CAN?\n\nDr. Ken Tindell (CTO, Kynetix) argues that Controller Area Network was never designed for confidentiality, yet vehicles increasingly need authenticated, encrypted in-vehicle messaging. Mainstream IT crypto stacks rarely fit CAN's tight timing and bandwidth limits.\n\n## CryptoCAN Design\n\nCryptoCAN adapts automotive SHE (Security Hardware Extension) concepts, including separate authentication and encryption keys, secure key loading, and software HSM emulation. On a Cortex-M0, AES operations run in roughly 13 microseconds with only a few kilobytes of code and ROM tables.\n\n## Message Authentication\n\nAuthentication uses CMAC via SHE generate/verify APIs. Verify-only key permissions prevent endpoints that only check messages from forging MACs. Tindell details bit-truncation checks and why sender and verifier roles must remain distinct on constrained ECUs.\n\n## Practical Impact\n\nThe talk shows that meaningful CAN security is achievable without bolting on enterprise TLS. Done correctly, embedded crypto can meet real-time automotive requirements while raising the bar against bus injection and tampering.",
       "durationSeconds": 1551,
-      "aiSummary": "Overview:\nDr. Ken Tindell, CTO of Canis Automotive Labs and a specialist in real-time embedded systems, presents CryptoCAN—an architecture providing authenticated and encrypted communication over standard Controller Area Network (CAN) bus networks. Tindell reviews the fundamental vulnerabilities of classic CAN 2.0B broadcast buses, where arbitrary frame spoofing and eavesdropping are trivial. He details how CryptoCAN fits 128-bit AES encryption, CMAC message authentication, and replay protection into legacy 8-byte CAN frames without altering hardware controllers or consuming excessive bus bandwidth.\n\nKey Topics:\n- Controller Area Network (CAN 2.0B) architectural security weaknesses\n- CryptoCAN payload encryption via AES-128 Cipher Feedback (CFB) mode\n- Message authentication and truncated CMAC under the Secure Hardware Extension (SHE)\n- Out-of-band freshness transmission and SHE+ verify-only permissions\n\nTechnical Details:\nClassic automotive CAN networks operate as broadcast buses lacking native encryption or source authentication. While frameworks like AUTOSAR SecOC add cryptographic message authentication codes (MACs), they typically consume substantial bandwidth and do not provide payload confidentiality. CryptoCAN resolves these constraints by providing both authentication and confidentiality within standard 8-byte CAN 2.0B frames. The system packages a 128-bit payload by encrypting plaintext using AES-128 in Cipher Feedback (CFB) mode, which feeds the previous ciphertext block into the subsequent encryption cycle. This mode requires only AES encryption blocks at both sender and receiver, eliminating the need to implement distinct AES decryption logic.\n\nFor authentication, CryptoCAN utilizes AES-128 CMAC, conforming to the automotive Secure Hardware Extension (SHE) standard. The algorithm generates a 128-bit MAC across a cryptographic construct comprising the CAN arbitration ID, Data Length Code (DLC), encrypted payload, and an internal freshness counter. The resulting 128-bit MAC is truncated to its top 60 bits. To transmit 128 bits of encrypted data alongside the 60-bit MAC over 8-byte frames, CryptoCAN splits the transmission into two sequential frames: Frame A and Frame B. Frame A is assigned higher arbitration priority than Frame B by toggling a single bit in the CAN ID, guaranteeing that Frame A is transmitted and received first across the bus.\n\nTo prevent replay attacks without transmitting full counter values, CryptoCAN leverages an undocumented quirk in the CAN specification: DLC values from 8 through 15 all specify an 8-byte payload. CryptoCAN utilizes the three unused least significant bits of the DLC field in both Frame A and Frame B (yielding six out-of-band bits total) to transmit the least significant bits of the sender's freshness counter. Receiving ECUs reconstruct the full counter by correlating the 6-bit value with their local timer, validating freshness and discarding stale or retransmitted frames. At the hardware layer, CryptoCAN leverages SHE Hardware Security Modules (HSMs) and adopts SHE+ \"verify-only\" key permissions, ensuring that subscribing ECUs can verify received messages but cannot forge valid MACs if compromised.\n\nKey Takeaways:\nAutomotive engineers can achieve strong cryptographic security on legacy CAN buses by pairing AES-128 CFB encryption with truncated CMAC authentication across prioritized dual-frame pairs. Utilizing the spare bits of the CAN DLC field provides out-of-band counter transmission, preventing replay attacks without consuming payload capacity. Implementing asymmetric \"verify-only\" permissions in hardware security modules prevents an adversary with a compromised ECU from spoofing messages from other ECUs on the bus.\n\n(AI summary — Gemini Flash)"
+      "aiSummary": "Overview:\nDr. Ken Tindell, CTO of Canis Automotive Labs and a specialist in real-time embedded systems, presents CryptoCAN—an architecture providing authenticated and encrypted communication over standard Controller Area Network (CAN) bus networks. Tindell reviews the fundamental vulnerabilities of classic CAN 2.0B broadcast buses, where arbitrary frame spoofing and eavesdropping are trivial. He details how CryptoCAN fits 128-bit AES encryption, CMAC message authentication, and replay protection into legacy 8-byte CAN frames without altering hardware controllers or consuming excessive bus bandwidth.\n\nKey Topics:\n- Controller Area Network (CAN 2.0B) architectural security weaknesses\n- CryptoCAN payload encryption via AES-128 Cipher Feedback (CFB) mode\n- Message authentication and truncated CMAC under the Secure Hardware Extension (SHE)\n- Out-of-band freshness transmission and SHE+ verify-only permissions\n\nTechnical Details:\nClassic automotive CAN networks operate as broadcast buses lacking native encryption or source authentication. While frameworks like AUTOSAR SecOC add cryptographic message authentication codes (MACs), they typically consume substantial bandwidth and do not provide payload confidentiality. CryptoCAN resolves these constraints by providing both authentication and confidentiality within standard 8-byte CAN 2.0B frames. The system packages a 128-bit payload by encrypting plaintext using AES-128 in Cipher Feedback (CFB) mode, which feeds the previous ciphertext block into the subsequent encryption cycle. This mode requires only AES encryption blocks at both sender and receiver, eliminating the need to implement distinct AES decryption logic.\n\nFor authentication, CryptoCAN utilizes AES-128 CMAC, conforming to the automotive Secure Hardware Extension (SHE) standard. The algorithm generates a 128-bit MAC across a cryptographic construct comprising the CAN arbitration ID, Data Length Code (DLC), encrypted payload, and an internal freshness counter. The resulting 128-bit MAC is truncated to its top 60 bits. To transmit 128 bits of encrypted data alongside the 60-bit MAC over 8-byte frames, CryptoCAN splits the transmission into two sequential frames: Frame A and Frame B. Frame A is assigned higher arbitration priority than Frame B by toggling a single bit in the CAN ID, guaranteeing that Frame A is transmitted and received first across the bus.\n\nTo prevent replay attacks without transmitting full counter values, CryptoCAN leverages an undocumented quirk in the CAN specification: DLC values from 8 through 15 all specify an 8-byte payload. CryptoCAN utilizes the three unused least significant bits of the DLC field in both Frame A and Frame B (yielding six out-of-band bits total) to transmit the least significant bits of the sender's freshness counter. Receiving ECUs reconstruct the full counter by correlating the 6-bit value with their local timer, validating freshness and discarding stale or retransmitted frames. At the hardware layer, CryptoCAN leverages SHE Hardware Security Modules (HSMs) and adopts SHE+ \"verify-only\" key permissions, ensuring that subscribing ECUs can verify received messages but cannot forge valid MACs if compromised.\n\nKey Takeaways:\nAutomotive engineers can achieve strong cryptographic security on legacy CAN buses by pairing AES-128 CFB encryption with truncated CMAC authentication across prioritized dual-frame pairs. Utilizing the spare bits of the CAN DLC field provides out-of-band counter transmission, preventing replay attacks without consuming payload capacity. Implementing asymmetric \"verify-only\" permissions in hardware security modules prevents an adversary with a compromised ECU from spoofing messages from other ECUs on the bus.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "advanced",
+      "viewCount": 690,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "QiOJ-BwQzVE",
@@ -89,7 +101,9 @@
       ],
       "teaser": "Investigates session 3 | Stage 1 | Mohammed Shine | Hacking a Connected Car via APIs and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 1804
+      "durationSeconds": 1804,
+      "viewCount": 203,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "cABBfwZ-oAw",
@@ -106,7 +120,9 @@
       ],
       "teaser": "Evaluates session 3 | Stage 2 | Stefania Chaplin | Securing Software Delivery in Automotive and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 1715
+      "durationSeconds": 1715,
+      "viewCount": 58,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "J-mpJzl-60s",
@@ -123,7 +139,9 @@
       ],
       "teaser": "Explores session 4 | Stage 1 Noel Lowdon| | Vehicle Systems Forensics Back to the Future and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 1657
+      "durationSeconds": 1657,
+      "viewCount": 171,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "YSJqKOZ9qHg",
@@ -140,7 +158,9 @@
       ],
       "teaser": "Details session 4 | Stage 2 | Benny Meisels | 99% complete, dont turn off your car Automotive OTA Securit and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 1903
+      "durationSeconds": 1903,
+      "viewCount": 197,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "lUfmlmFwC1A",
@@ -159,7 +179,9 @@
       ],
       "teaser": "Evaluates session 5 | Stage 1 | Nils Weiss | Automotive Network Scans with Scapy and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 1829
+      "durationSeconds": 1829,
+      "viewCount": 337,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ci4SmzFsx7E",
@@ -176,7 +198,9 @@
       ],
       "teaser": "Analyzes session 5 | Stage 2 | Mike Curnow | Cell Games Cell Network Subversion in Transportation and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 2037
+      "durationSeconds": 2037,
+      "viewCount": 57,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "7R4sYzSWals",
@@ -193,7 +217,9 @@
       ],
       "teaser": "Provides session 6 | Stage 2 | Gilad Bandel | Is cybersecurity protection of commercial vehicles harder and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 1895
+      "durationSeconds": 1895,
+      "viewCount": 52,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "6W0vXgECD9M",
@@ -210,7 +236,9 @@
       ],
       "teaser": "Explores session 7 | Tao Zhang | Edge Computing and Automotive Security and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 3170
+      "durationSeconds": 3170,
+      "viewCount": 44,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "NUXrEv1ka2w",
@@ -227,7 +255,9 @@
       ],
       "teaser": "Presents session 8 | Stage 1 | Matthew Moser | R155 Informed Authoring of Cybersecurity Test Plans and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 1961
+      "durationSeconds": 1961,
+      "viewCount": 46,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "FebnDnb_1Ps",
@@ -244,7 +274,9 @@
       ],
       "teaser": "Details session 8 | Stage 2 | Cristian Ion | Security Challenges in Autonomous Vehicle Market Entry and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 1757
+      "durationSeconds": 1757,
+      "viewCount": 57,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "nOj6Kn2Qgg0",
@@ -261,7 +293,9 @@
       ],
       "teaser": "Analyzes session 9 | Rump Session and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 891
+      "durationSeconds": 891,
+      "viewCount": 33,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "peHXJZFMyYE",
@@ -278,7 +312,9 @@
       ],
       "teaser": "Explores session 10 | Janahan Skandaraniyam | AI Applications in Automotive Security and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 2707
+      "durationSeconds": 2707,
+      "viewCount": 109,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "b8501YyGV8I",
@@ -295,7 +331,9 @@
       ],
       "teaser": "Discusses session 11 | Ranwa Al Mallah | AI vs AI arms race on critical infrastructure and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 2398
+      "durationSeconds": 2398,
+      "viewCount": 104,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "3p0WT0IMxpo",
@@ -314,7 +352,9 @@
       ],
       "teaser": "Discusses session 12 | Stage 1 | Guy Molho | Mastering the Continuous Automotive Security with a Feedback Loop and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 1733
+      "durationSeconds": 1733,
+      "viewCount": 39,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "AUMwYo7y1dQ",
@@ -331,7 +371,9 @@
       ],
       "teaser": "Provides session 12 | Stage 2 | Fabian Weber and Florian Schmid | PROBoter Automating PCB analysis tasks to and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 1578
+      "durationSeconds": 1578,
+      "viewCount": 59,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "6SFfYK5WU-U",
@@ -348,7 +390,9 @@
       ],
       "teaser": "Provides session 13 | Stage 1 | Carla Trevino | Secure EV Charging Plug and Charge and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 1830
+      "durationSeconds": 1830,
+      "viewCount": 86,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "asmvTF-rUKE",
@@ -365,7 +409,9 @@
       ],
       "teaser": "Investigates session 13 | Stage 2 | Matthew Carpenter | Emulation driven Reversing For Firmware Vulnerability Res and evaluates key implications for security practitioners.",
       "summary": null,
-      "durationSeconds": 2448
+      "durationSeconds": 2448,
+      "viewCount": 74,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     }
   ]
 }

@@ -21,7 +21,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat 2026: DPRK npm Factory Analaysis Factory at Scale.",
       "summary": null,
       "durationSeconds": 2068,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 155,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "rGO2VsUqJKY",
@@ -38,7 +40,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat 2026: Day 2 keynote: Mark Russinovich.",
       "summary": null,
       "durationSeconds": 3932,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 737,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "yX8CrPXn6tA",
@@ -55,7 +59,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat 2026: Gotta catch 'em all: Hunting Azure anonymous functions in the wild.",
       "summary": null,
       "durationSeconds": 1721,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 185,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "JhwCG2GBQOU",
@@ -71,7 +77,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat 2026: Deserialization gone wrong: Lessons from pentests and variant hunts.",
       "summary": null,
       "durationSeconds": 1673,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 97,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "R_cb4YMn7uw",
@@ -88,15 +96,16 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat 2026: 0click enterprise compromise.",
       "summary": null,
       "durationSeconds": 1891,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 340,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "-sZ0kfoe9HU",
       "slug": "bluehat-2026-from-trusted-agents-to-adversaries-securing-agentic",
       "title": "BlueHat 2026: From trusted agents to adversaries: Securing agentic AI in the age of prompt injection",
       "speakers": [
-        "Jason Martin",
-        "Abash"
+        "Jason Martin"
       ],
       "track": "ai-security",
       "topics": [
@@ -108,7 +117,9 @@
       "summary": "## Overview\nJason Martin (Director of Adversarial Research, Hidden Layer) and Abash present research on securing AI agents against prompt injection attacks. The talk combines offensive demonstrations with defensive strategies, explaining why agentic AI systems are fundamentally difficult to secure and proposing a multi-layered defense approach centered on treating agents as managed insider threats.\n\n## Key Topics\n\n**OpenClaw Attack Case Study**\nThe speakers demonstrate a real indirect prompt injection attack against OpenClaw, a highly capable open-source AI agent. By crafting a malicious website with hidden instructions and control sequences, they compromised the agent, injected code into its heartbeat.mmd file (a recurring task mechanism), and established persistent command-and-control with 30-minute polling intervals. The agent faithfully checked for new instructions even after the researcher forgot to tear down the attack.\n\n**Why AI Security is Fundamentally Hard**\nLarge language models are inherently probabilistic systems with exponential choice spaces (e.g., 128K vocabulary to the power of 200K context window). Unlike deterministic systems with well-defined protocols, AI models learn spurious correlations from training data and lack structural boundaries between instruction types. Role separation relies on probabilistic primitives—role markers, positional encoding, and attention mechanisms—which are designed to guide behavior, not prevent mixing. This makes instruction hierarchy enforcement inherently fragile.\n\n**Prompt Injection & Instruction Hierarchy**\nCurrent LLM implementations concatenate system instructions, user input, and tool responses into a single token stream using control tokens for textual separation. These separations are purely probabilistic hints, not structural barriers. The core vulnerability: text from any source (especially untrusted tool responses or web content) can be interpreted as system-level instructions, enabling injection attacks. Techniques include control sequence manipulation to trigger reasoning modes and cognitive manipulation through multi-step reasoning injection.\n\n**Agent as Insider Threat**\nOnce compromised, an agent resembles a trusted insider: it can execute code, access data, call APIs, persist across sessions, and write its own code payloads. The Klein CI/CD example showed how a triage agent with bash access could be pivoted into supply-chain compromise—stealing credentials, publishing unauthorized packages, and deploying OpenClaw for further attack orchestration.\n\n**Defense Architecture**\nThe speakers outline defense across four pillars:\n- **Identity**: Deterministic, least-privilege enforcement; no LLM-inferred permissions; continuous behavior verification\n- **Data**: Treat all external data as untrusted; evaluate trustworthiness continuously; track provenance\n- **Access & Monitoring**: Sandboxing; anomaly detection; C2 pattern recognition in tool invocation pipelines\n- **Human Accountability**: Subject matter experts (not rubber-stamp approvers) responsible for consequential actions; non-repudiation and traceability required\n\nBlast radius scales with agent tool capabilities; the mitigation is both constraining tools and monitoring behavior across layered defense.\n\n## Technical Details\n\n**Attack Mechanism**: The OpenClaw attack used control sequences (reserved token sequences) to split a tool response and break out of the fetch tool call into a reasoning/thinking mode. Injected text claiming \"no dry run\" argument was present created a false reasoning trace, convincing the model to execute a downloaded script. That script inserted a heartbeat instruction pointing to the attacker's C2 server.\n\n**Instruction Hierarchy Reality vs. Theory**: Theory posits alignment > system/developer instructions > user instructions > tool responses. Practice squishes all into one token stream with only control tokens as visual markers. Role markers, positional encoding, and attention are probabilistic separators, not structural enforcement.\n\n**Model Probabilistic Nature**: With exponential choice spaces and no structural role boundaries, prediction of model behavior is fundamentally intractable. Temperature tuning and context manipulation are weak defenses against determined attackers exploiting the many probability paths.\n\n## Takeaways\n\n1. **Threat Model**: Treat compromised agents like compromised insiders, not malware. Apply identity/access/monitoring practices proven for human user management.\n2. **Blast Radius**: Prompt injection impact scales with agent tool access. Minimize tool inventory and enforce deterministic (not inferred) permissions.\n3. **Defense Layers**: Data trustworthiness, identity/access control, runtime behavior monitoring, and human accountability are all required; no single layer suffices.\n4. **Instruction Hierarchy**: Cannot be relied upon as a structural defense. Require deterministic permission enforcement independent of prompts.\n5. **Human in the Loop**: Must be competent domain experts with accountability, not ceremonial approval. Non-repudiation and traceability essential for consequential actions.\n6. **Observability**: Monitor agent behavior (tool invocations, data flows, C2 patterns), not just inputs. Trace entire attack chains across persistence mechanisms.\n7. **Persistence Matters**: Agents maintaining state (heartbeats, memory, logs) are more dangerous when compromised; state machine design and cleanup critical.",
       "durationSeconds": 1990,
       "conference": "microsoft",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 172,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "QoF9X9gt7e0",
@@ -124,7 +135,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat 2026: Certificates in 2026: Alive, well, and shorter than ever.",
       "summary": null,
       "durationSeconds": 1808,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 94,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "WHifJsoD9zc",
@@ -140,7 +153,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat 2026: AI agents are the new microservices: Mapping the blast radius.",
       "summary": null,
       "durationSeconds": 1757,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 375,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "92E7Xitl5aw",
@@ -157,7 +172,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat 2026: Agentic AI failure modes: A year in the field.",
       "summary": null,
       "durationSeconds": 1882,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 316,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "npv9qGWisa8",
@@ -174,7 +191,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat 2026: From hype to hardening: Using LLMs to improve application security in practice.",
       "summary": null,
       "durationSeconds": 1869,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 197,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "EJ-r9X7HHa0",
@@ -190,7 +209,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat 2026: Double-edged AI: Securing the software supply chain in the autonomous era.",
       "summary": null,
       "durationSeconds": 1531,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 116,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "oqq37nAt8Ic",
@@ -206,7 +227,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat 2026: Pulling strings: From user to global admin via appIdUris.",
       "summary": null,
       "durationSeconds": 1827,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "N_KdaVif7jk",
@@ -223,7 +246,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat 2026: When browsers become agents: The emerging security risks of AI-powered browsers.",
       "summary": null,
       "durationSeconds": 1049,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 284,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ZBqhHefmZrY",
@@ -241,7 +266,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat 2026: Depending without trusting: Protecting customer data without going it alone.",
       "summary": null,
       "durationSeconds": 1330,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 191,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "cVWB58kEt-Y",
@@ -259,7 +286,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat 2026: Securing the future of AI: Securing MCP with defense in depth patterns.",
       "summary": null,
       "durationSeconds": 1537,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 703,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "4yeYM5K6_aM",
@@ -278,7 +307,9 @@
       "teaser": "Security researchers examine technical aspects of From access patterns to attack paths: Uncovering hidden cloud attack paths for end-to-end protection.",
       "summary": null,
       "durationSeconds": 1575,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 423,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Zn3L8L4i5ss",
@@ -295,7 +326,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding Communicating with MSRC: Tips from security researchers & case managers.",
       "summary": null,
       "durationSeconds": 210,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 136,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "LykXwP4kL4o",
@@ -314,7 +347,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding INTERN(al) MSRC variant hunting: From multi-tenant authorization to MCP.",
       "summary": null,
       "durationSeconds": 2349,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 535,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "iMivu3ZdNO8",
@@ -331,15 +366,15 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning Microsoft Zero Day Quest 2026.",
       "summary": null,
       "durationSeconds": 172,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 560,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "eZhkR2mOvo0",
       "slug": "bluehat-asia-exploiting-the-pipeline-real-world-ci-cd-vulnerabil",
       "title": "BlueHat Asia: Exploiting the pipeline: Real-world CI/CD vulnerabilities and how to secure them",
-      "speakers": [
-        "BlueHat Asia"
-      ],
+      "speakers": [],
       "track": "red-team",
       "topics": [
         "vulnerabilities",
@@ -351,15 +386,15 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat Asia: Exploiting the pipeline: Real-world CI/CD vulnerabilities and how to secure them.",
       "summary": null,
       "durationSeconds": 1796,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 839,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "PW5ZC1tuo3E",
       "slug": "bluehat-asia-augmented-disruption-using-graph-based-scoring",
       "title": "BlueHat Asia: Augmented disruption using graph-based scoring",
-      "speakers": [
-        "BlueHat Asia"
-      ],
+      "speakers": [],
       "track": "community",
       "topics": [
         "scoring",
@@ -371,7 +406,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Asia: Augmented disruption using graph-based scoring.",
       "summary": null,
       "durationSeconds": 1882,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 193,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "2Ggre2bnsFM",
@@ -388,15 +425,15 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat Asia keynote: Inside the underground: A deep dive into new initial access techniques.",
       "summary": null,
       "durationSeconds": 1926,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 167,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "jeLGTrE6UWE",
       "slug": "bluehat-asia-when-servers-get-phished-oauth-token-misbinding-and",
       "title": "BlueHat Asia: When servers get phished: OAuth token misbinding and server-side CSRF in social logins",
-      "speakers": [
-        "BlueHat Asia"
-      ],
+      "speakers": [],
       "track": "appsec",
       "topics": [
         "oauth",
@@ -406,15 +443,15 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Asia: When servers get phished: OAuth token misbinding and server-side CSRF in social logins.",
       "summary": null,
       "durationSeconds": 1789,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 677,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "2mR_8fqGeCw",
       "slug": "bluehat-asia-hack-the-context-mcp-vulnfest",
       "title": "BlueHat Asia: Hack the context: MCP VULNfest",
-      "speakers": [
-        "BlueHat Asia"
-      ],
+      "speakers": [],
       "track": "ai-security",
       "topics": [
         "asia",
@@ -426,7 +463,9 @@
       "summary": "### Overview\nIn this BlueHat Asia presentation, security researcher Vishal Chan (IIT Bombay) and Nikhil (head of PE Security) explore the attack surface of the Model Context Protocol (MCP) and AI assistant integrations. The speakers explain the architecture of MCP—connecting AI models, context, and external tools/servers—and demonstrate how adversaries can bend context rather than traditional application code. They disclose an attack chain weaponizing a popular AI assistant's code interpreter into an unauthorized Command and Control (C2) agent, and outline security frameworks and mitigations across enterprise, developer, and end-user layers.\n\n### Key Topics\n- **MCP Architecture & Adoption**: MCP acts as a standardized two-way protocol connecting MCP hosts (AI applications), clients (interfaces/connectors), and servers (tools or data sources such as databases, file systems, Slack, and GitHub). Backed by major players like Anthropic, Microsoft, and OpenAI, it supersedes one-way plugins and static RAG implementations.\n- **MCP Attack Matrix & Attack Vectors**: Key threats include prompt injection, tool poisoning (embedding hidden malicious instructions or metadata in tool descriptions visible to the LLM but hidden in the UI), data exfiltration (API keys, credentials, conversation histories), rugpull attacks (trusted tools silently updating server-side capabilities without reapproval), and authentication/supply chain risks.\n- **Real-World Vulnerability Classes**: The talk notes real-world examples such as MCP remote RCE, an Anthropic MCP Inspector debug tool meant for local troubleshooting that was reachable from the public internet, file system server escapes, and preference manipulation.\n- **Universal Attack Chain (AI Assistant to C2)**: Nikhil details an exploit chain turning a top commercial AI assistant into an adversary C2 agent by exploiting its code interpreter through extensive prompt engineering, sandbox privilege escalation, and network egress bypass.\n\n### Technical Details\n- **The Red Towel Problem (Willpower Depletion)**: Vishal describes an incident building an MCP server for memory forensics on 25 samples. Repeated authorization prompts (depletion of willpower) caused him to blindly approve requests after eight popups, resulting in the model dumping and executing a malicious process on the host machine.\n- **C2 Exploitation Walkthrough**:\n  - *Phase 1 (Code Execution)*: After 8–10 hours of prompt engineering to understand and bypass guardrails, the researchers achieved execution of `/bin/bash` and verified write capability by creating a file in `/tmp`.\n  - *Phase 2 (Privilege Escalation)*: The sandbox execution user was present in the Linux `sudo` list, allowing privilege escalation to `root` and reading protected files like `/etc/passwd` and `/etc/hosts`.\n  - *Phase 3 (Egress & C2 Establishment)*: To ensure results were not AI hallucinations, the team tested outbound callbacks. While port 443 and other standard ports were heavily monitored and blocked, outbound traffic on port 80 was permitted. HTTP `POST`, `HEAD`, and `OPTIONS` verbs were blocked by firewall filtering, but HTTP `GET` requests were allowed. The team spun up a VPS and polled commands via HTTP GET, executing them on the AI provider's infrastructure as root and returning command outputs.\n\n### Takeaways\n- **MCP Gateways & Registries**: Deploying an MCP gateway (such as IBM's MCP Context Forge or Docker's sandboxed gateway) provides essential governance, access policies (e.g., allowing read/comment on GitHub while denying push/merge/branch operations), and audit logging. MCP registries act as vetted app stores.\n- **Layered Defense Framework**:\n  - *Enterprise*: Runtime isolation via lightweight VMs, strict network egress controls, and continuous AI red teaming.\n  - *Developer*: Strict input/output sanitization, static/dynamic analysis (SAST/DAST), dependency checking, secret management, and assuming all tool descriptions are untrusted input.\n  - *Process Isolation*: Utilizing Linux kernel isolation primitives such as `seccomp` and AppArmor to enforce per-process execution boundaries.\n  - *User*: Limiting tool connections to verified registries, rate limiting, and awareness against notification fatigue.",
       "durationSeconds": 1694,
       "conference": "microsoft",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 343,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "IVN-zk5Xjmc",
@@ -444,15 +483,15 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat Asia keynote: Where the mind is without fear: Building a secure, AI-powered world.",
       "summary": null,
       "durationSeconds": 3119,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 262,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "zIHtDac-TjY",
       "slug": "bluehat-asia-lies-darned-lies-and-dashboards",
       "title": "BlueHat Asia: Lies, darned lies, and dashboards",
-      "speakers": [
-        "BlueHat Asia"
-      ],
+      "speakers": [],
       "track": "community",
       "topics": [
         "asia",
@@ -464,15 +503,15 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat Asia: Lies, darned lies, and dashboards.",
       "summary": null,
       "durationSeconds": 1639,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 91,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "9abUpQGS4CA",
       "slug": "bluehat-asia-from-anti-patterns-to-assurance-unleashing-the-powe",
       "title": "BlueHat Asia: From anti-patterns to assurance: Unleashing the power of variant hunting",
-      "speakers": [
-        "BlueHat Asia"
-      ],
+      "speakers": [],
       "track": "community",
       "topics": [
         "asia",
@@ -482,15 +521,15 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat Asia: From anti-patterns to assurance: Unleashing the power of variant hunting.",
       "summary": null,
       "durationSeconds": 2227,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 462,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "cYCjFw5nm2I",
       "slug": "bluehat-asia-cross-tenant-rces-at-scale-breaking-azure-and-getti",
       "title": "BlueHat Asia: Cross-tenant RCEs at scale: Breaking Azure and getting caught",
-      "speakers": [
-        "BlueHat Asia"
-      ],
+      "speakers": [],
       "track": "cloud",
       "topics": [
         "azure",
@@ -502,15 +541,15 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Asia: Cross-tenant RCEs at scale: Breaking Azure and getting caught.",
       "summary": null,
       "durationSeconds": 2054,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 792,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "C6Lzm2-Kgj0",
       "slug": "bluehat-asia-from-alert-to-disruption-evidence-driven-risk-asses",
       "title": "BlueHat Asia: From alert to disruption: Evidence-driven risk assessment for OAuth cloud applications",
-      "speakers": [
-        "BlueHat Asia"
-      ],
+      "speakers": [],
       "track": "cloud",
       "topics": [
         "oauth",
@@ -522,15 +561,15 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Asia: From alert to disruption: Evidence-driven risk assessment for OAuth cloud applications.",
       "summary": null,
       "durationSeconds": 1771,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 113,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "hs9FUEX05sw",
       "slug": "bluehat-asia-enhancing-linux-memory-forensics-with-retrieval-aug",
       "title": "BlueHat Asia: Enhancing Linux memory forensics with retrieval-augmented generation",
-      "speakers": [
-        "BlueHat Asia"
-      ],
+      "speakers": [],
       "track": "blue-team",
       "topics": [
         "forensics",
@@ -540,7 +579,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat Asia: Enhancing Linux memory forensics with retrieval-augmented generation.",
       "summary": null,
       "durationSeconds": 1900,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 194,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "4ECBpR3Pvdg",
@@ -556,7 +597,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat Asia 2025: Hotfix without the fix: Runtime security with \"Shimit\".",
       "summary": null,
       "durationSeconds": 1177,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 214,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "-KcxSDwvT4A",
@@ -578,7 +621,9 @@
       "summary": "### Overview\nIn this installment of Microsoft Security Response Center's *Security Chats*, host Joe Miller speaks with Santiago Zanella, a principal researcher in AI security and privacy at Azure Research. The discussion centers on the security challenges emerging from increasingly autonomous and agentic AI systems, the inherent limitations of probabilistic defenses (such as secondary classifier models), and ongoing research into deterministic guardrails, specifically using information flow control and the Dual LLM architecture.\n\n### Key Topics\n- **Transition to Agentic Autonomy:** As LLMs gain agency, tool execution capabilities, and browser or computer-use interfaces, they are entrusted with confidential data and credentials. Operating without robust controls risks severe prompt injection and data exfiltration issues.\n- **Offense vs. Defense Balance:** Santiago highlights that utility currently outpaces security across the industry, giving attackers an advantage. However, AI may eventually provide defenders with a net security gain in the long term through proactive attack surface exploration.\n- **Failure of Probabilistic Mitigations:** Relying solely on probabilistic AI classifiers or layered model prompts provides only a first-line filter against unsophisticated attacks. Motivated attackers consistently bypass these soft layers, necessitating deterministic, traditional software engineering boundaries.\n\n### Technical Details\n- **Dual LLM Architecture & Information Flow Control:** Because transformer architectures inherently blend instructions and untrusted data into a single channel, full separation inside the model is fundamentally impossible without severely crippling utility. Building upon Simon Willison’s Dual LLM design pattern—which separates a privileged planning LLM from a quarantined LLM handling untrusted data—Santiago's team incorporates information flow control. Data ingested from outside tools is tainted with labels (such as 'untrusted') that propagate across contexts. High-stakes actions (e.g., banking transactions, external emails) are governed by deterministic security policies that prohibit execution when context contains untrusted or tainted data.\n- **Variable Passing & Performance:** Rather than injecting raw tool outputs into the planner context, variable passing stores tool results in orchestrator memory and passes references. While current multi-LLM architectures see an approximate 3x token usage expansion, Santiago projects optimizations can bring overhead down toward 10%.\n- **Key Vulnerabilities and Research Tools:** \n  - *Embedding Inversion:* Techniques like 'vec2text' demonstrate that high-dimensional semantic embeddings can be inverted to reconstruct original text verbatim, requiring embeddings to receive the same confidentiality safeguards as raw data.\n  - *Optimization-Based Attacks:* Tools like GCG (greedy coordinate gradient) allow prompt optimization on open-weights models to transfer successfully against proprietary models.\n  - *Security Platforms & Frameworks:* Mentioned testing tools and benchmarks include PyRIT, the UK AI Security Institute's Inspect AI, Gray Swan Arena, Lakera's Gandalf challenges, and MSRC's LLMail Inject competition.\n\n### Takeaways\n- **Deterministic Harnesses over More AI:** The belief that prompt injection can be cured by 'throwing more AI at the problem' is a critical misconception. Reliable protection requires treating LLMs as stochastic black boxes encapsulated within deterministic harnesses.\n- **Ecosystem Advice:** Security researchers of all skill levels are encouraged to explore AI security through hands-on CTFs, bug programs (such as Zero Day Quest), and community resources, analyzing the fragile assumptions built into emerging autonomous systems.",
       "durationSeconds": 2246,
       "conference": "microsoft",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 159,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "C1ZRZgfnLI8",
@@ -596,7 +641,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for Security Chats: AI Security in Practice: Copilot, AEBA, and the Next Big Risks.",
       "summary": null,
       "durationSeconds": 1595,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 141,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "TrZQEkBRsw0",
@@ -613,7 +660,9 @@
       "teaser": "Security researchers examine technical aspects of From GitHub to gatherings: Roberto's journey through tech & friendship.",
       "summary": null,
       "durationSeconds": 642,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 61,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ofb-q-QpuCA",
@@ -629,15 +678,15 @@
       "teaser": "Engineers explore architecture and security mechanisms for Security Chats: High-Impact AI & Office Research.",
       "summary": null,
       "durationSeconds": 2784,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 248,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "kbp48dQBfpM",
       "slug": "safe-harbor-researching-responsibly-with-msrc",
       "title": "Safe harbor: Researching responsibly with MSRC",
-      "speakers": [
-        "MSRC"
-      ],
+      "speakers": [],
       "track": "community",
       "topics": [
         "safe-harbor",
@@ -649,7 +698,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding Safe harbor: Researching responsibly with MSRC.",
       "summary": null,
       "durationSeconds": 441,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 114,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "qy9B61iYsMA",
@@ -665,7 +716,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning MSRC bug bounty tips: Scope, communication, and recognition.",
       "summary": null,
       "durationSeconds": 425,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 471,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "YoQFLjUkrnI",
@@ -682,7 +735,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in Getting started in security research: Practical tips from MSRC.",
       "summary": null,
       "durationSeconds": 444,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 368,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "v4I6zNN3EZk",
@@ -699,15 +754,15 @@
       "teaser": "Security researchers examine technical aspects of Collaboration in security research: Why it matters.",
       "summary": null,
       "durationSeconds": 309,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 67,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "QEmWV_yN72g",
       "slug": "how-to-research-responsibly-with-msrc",
       "title": "How to research responsibly with MSRC",
-      "speakers": [
-        "MSRC"
-      ],
+      "speakers": [],
       "track": "community",
       "topics": [
         "responsibly",
@@ -718,7 +773,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in How to research responsibly with MSRC.",
       "summary": null,
       "durationSeconds": 276,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 114,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "3divaTqhvgo",
@@ -736,7 +793,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding Beyond bug bounties: How MSRC recognizes security researchers.",
       "summary": null,
       "durationSeconds": 484,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 241,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "bSQe2W6rc_A",
@@ -754,7 +813,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding Tips and advice from MSRC security researchers.",
       "summary": null,
       "durationSeconds": 529,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 203,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "S-aGKOat5lY",
@@ -775,7 +836,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in Security Chats: Defending AI Systems with Santiago Zanella-Béguelin.",
       "summary": null,
       "durationSeconds": 2246,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 252,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "aAuHjzEy4zc",
@@ -791,7 +854,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding Zero Day Quest training: Access denied? Exploiting common access control pitfalls.",
       "summary": null,
       "durationSeconds": 1851,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 503,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "kRz_A3tkX5s",
@@ -807,7 +872,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for Zero Day Quest training: Cloudy with a chance of SSRF.",
       "summary": null,
       "durationSeconds": 2365,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 183,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "tMv_TPo8dJw",
@@ -823,7 +890,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning Zero Day Quest training: Optimizing MSRC AI vulnerability submissions.",
       "summary": null,
       "durationSeconds": 1347,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 256,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "0Bw2YCDypUY",
@@ -843,7 +912,9 @@
       "summary": "### Overview\nIn this Microsoft Security Response Center (MSRC) virtual session, Security Program Manager Alyssa Str introduces Scott Gorick, Principal Security Architect for Power Platform and Dynamics. Gorick outlines the architecture of Microsoft Copilot Studio, details how it fits within the broader Power Platform and Microsoft Entra ecosystems, and provides guidance for external security researchers conducting vulnerability research and submitting high-efficacy bug reports to MSRC bounty programs.\n\n### Key Topics\n- **Trust Boundaries and Identity Plane**: Gorick explains that Microsoft Entra ID forms the identity plane and the primary trust boundary. The highest-tier bounty targets involve cross-tenant information disclosure, followed by environment-level boundary escapes, resource permissions, and data loss prevention (DLP) bypasses. Dataverse also implements its own distinct authorization model.\n- **Copilot Studio and Power Platform Composition**: The platform enables low-code/no-code, pro-code, and agentic workflows. Copilot Studio integrates tightly with over 1,000 pre-built connectors, Power Automate flows, Power Apps, Power Pages, Azure OpenAI, Azure AI Builder, and Azure Bot Service. Gorick demonstrates dynamic chaining, generative answers over public or uploaded data, and tracing mode for inspecting model decision-making.\n- **Platform Vulnerability vs. Developer Misconfiguration**: A core message is distinguishing between developer misconfigurations (e.g., publishing an unauthenticated bot with SharePoint access or testing as a tenant Global Admin who has default break-glass access) and legitimate platform vulnerabilities (e.g., bypassing configured DLP policies, security feature bypasses, IDOR, or SSRF).\n\n### Technical Details\n- **Vulnerability Surfaces**: Key areas for security testing include Server-Side Request Forgery (SSRF) when copilot fetches URLs for grounding, Insecure Direct Object References (IDOR) on admin/API endpoints, indirect prompt injection via conversational state stores or Dataverse, and file parsing/abuse from document uploads.\n- **Connector and Identity Abuse**: Referring to external research by Samsung regarding OAuth application consent abuse for zero-click phishing, Gorick highlights how connectors can be abused for identity risks, aligning with OWASP low-code/no-code top risks.\n- **Power Fx and Extensibility**: Power Fx acts as an expression language executing on nodes within agent flows or within Dataverse to concatenate strings and compose context. Pro-developer extensibility through Dataverse plugins and custom connectors provides critical attack surface often leveraged by top bug bounty researchers.\n- **Governance and Administration**: Central administration is performed via the Power Platform Admin Center (PPAC) and managed environments. Gorick notes that tools like the Center of Excellence (CoE) Starter Kit highlight the governance controls and milestones researchers should investigate when looking for bypasses.\n\n### Takeaways\nResearchers should understand how Copilot Studio composes underlying infrastructure (Azure OpenAI, Azure Bot Service, Dataverse) and focus on platform-level boundary violations rather than standard configuration choices. Staying within the Bounty Rules of Engagement, testing with low-privilege accounts rather than Global Admins, and understanding what assumptions the application makes are crucial steps for identifying significant zero-day vulnerabilities.",
       "durationSeconds": 3206,
       "conference": "microsoft",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 1600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "cvH9M_C7BR4",
@@ -859,7 +930,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in Zero Day Quest: Microsoft's Bug Bounty Program and AI Research.",
       "summary": null,
       "durationSeconds": 3672,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "jq9DcEL3cHE",
@@ -878,15 +951,15 @@
       "teaser": "Security researchers examine technical aspects of Zero Day Quest - Learn to Red Team AI Systems Using PyRIT. Recorded December 2nd 2024.",
       "summary": null,
       "durationSeconds": 2977,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 4300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "OBgMgRT9wbE",
       "slug": "submitting-to-msrc-an-introduction-to-submitting-security-resear",
       "title": "Submitting to MSRC: An Introduction to Submitting Security Research Findings",
-      "speakers": [
-        "Submitting to MSRC"
-      ],
+      "speakers": [],
       "track": "hardware",
       "topics": [
         "submitting",
@@ -897,15 +970,15 @@
       "teaser": "Industry experts analyze emerging threats surrounding Submitting to MSRC: An Introduction to Submitting Security Research Findings.",
       "summary": null,
       "durationSeconds": 1479,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 525,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "j6FsVwdP4CA",
       "slug": "breaking-bias-tera-joyce-and-tina-zhang-powell-on-celebrating-wo",
       "title": "Breaking Bias: Tera Joyce and Tina Zhang-Powell on Celebrating Women in Cybersecurity",
-      "speakers": [
-        "Breaking Bias"
-      ],
+      "speakers": [],
       "track": "hardware",
       "topics": [
         "bias",
@@ -917,7 +990,9 @@
       "teaser": "Security researchers examine technical aspects of Breaking Bias: Tera Joyce and Tina Zhang-Powell on Celebrating Women in Cybersecurity.",
       "summary": null,
       "durationSeconds": 3036,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 231,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "r374AOT1a84",
@@ -936,7 +1011,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in Black Voices Matter: The Role of Allyship in Cybersecurity with Devin Price and Derrick Love.",
       "summary": null,
       "durationSeconds": 3995,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 355,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "VGkfDBdlwjg",
@@ -952,7 +1029,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat Oct 23. S08: \"It's By Design!\".",
       "summary": null,
       "durationSeconds": 2364,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 937,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "zlhoAYsSd4c",
@@ -969,7 +1048,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat Oct 23. S18: Deprecating NTLM is Easy and Other Lies we Tell Ourselves.",
       "summary": null,
       "durationSeconds": 2472,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 7000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "w7wy9QX_pJ4",
@@ -987,7 +1068,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat Oct 23. S16: All Killer, No Filler: Exploring the Current State of EDR Killers.",
       "summary": null,
       "durationSeconds": 2688,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 818,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "sK49WuBUffQ",
@@ -1005,7 +1088,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Oct 23. S06: Uncovering the Hidden Dangers of 3D Models in Microsoft 365.",
       "summary": null,
       "durationSeconds": 2774,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 360,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "pyhhRbWh--E",
@@ -1021,7 +1106,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat Oct 23. S05: Octo Tempest: A Year of Response.",
       "summary": null,
       "durationSeconds": 1998,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "psb7rLSWWmo",
@@ -1037,7 +1124,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat Oct 23. S22: Security Content: Stop Flexing and Start Helping.",
       "summary": null,
       "durationSeconds": 1821,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 560,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "pdDzUTFVIZc",
@@ -1054,7 +1143,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Oct 23. S12: The New SaaS Cyber Kill Chain.",
       "summary": null,
       "durationSeconds": 2769,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 2800,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "iWV6r2YjmTY",
@@ -1072,7 +1163,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Oct 23. S21: Building a Canarytoken to Monitor Windows Process Execution.",
       "summary": null,
       "durationSeconds": 2042,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 556,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "pTf_y2budBc",
@@ -1089,7 +1182,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat Oct 23. S14: Hey Yara, Let's Hunt For Some Vulnerabilities!.",
       "summary": null,
       "durationSeconds": 2414,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 428,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "mCtdYQhMBcg",
@@ -1107,7 +1202,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat Oct 23. S03: The Yandex Leak: How a Russian Search Giant Uses Consumer Data.",
       "summary": null,
       "durationSeconds": 2623,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 787,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "kjrpk4ewnhM",
@@ -1125,7 +1222,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Oct 23. S04: From RTFM to RCE: An Unexpected Dive into the Remote Desktop Protocol.",
       "summary": null,
       "durationSeconds": 2314,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 890,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "itAiwLnF3cM",
@@ -1141,7 +1240,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat Oct 23. S09: Thinking Outside The (Dead)Box.",
       "summary": null,
       "durationSeconds": 2571,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 334,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "gjvu-l6vKFE",
@@ -1159,7 +1260,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat Oct 23. S02: A Touch of Pwn: Attacking Windows Hello Fingerprint Authentication.",
       "summary": null,
       "durationSeconds": 2906,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 14000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "fqHqPOcpvZw",
@@ -1176,7 +1279,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat Oct 23. Day 2 Keynote: Jason Haddix.",
       "summary": null,
       "durationSeconds": 2108,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "bJlqRrMdgjQ",
@@ -1192,7 +1297,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat Oct 23. S20: Unmasking Azure Based Adversaries.",
       "summary": null,
       "durationSeconds": 2286,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 554,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "b6-nSwEqKdo",
@@ -1208,7 +1315,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat Oct 23. S13: AI Security: Like Hacking in the 90s.",
       "summary": null,
       "durationSeconds": 2263,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 607,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ZXpTDJHNuKQ",
@@ -1225,7 +1334,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat Oct 23. Day 1 Keynote: John Lambert.",
       "summary": null,
       "durationSeconds": 3271,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 3300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Jp2jovEW4Kc",
@@ -1242,7 +1353,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat Oct 23. Lighting Talks Day 1.",
       "summary": null,
       "durationSeconds": 3616,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 349,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "WVSWqCgf-GU",
@@ -1260,7 +1373,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat Oct 23. S17: RatGPT: Turning Online LLMs into Proxies for Malware Attacks.",
       "summary": null,
       "durationSeconds": 2278,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 469,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "WLBuv3JnVnk",
@@ -1278,7 +1393,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat Oct 23. S19: A Few Useful Lessons About AI Red Teaming.",
       "summary": null,
       "durationSeconds": 1983,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 472,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "QBK_B1b-xRQ",
@@ -1295,7 +1412,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat Oct 23. S01: When Spidey Senses Tingle: Understanding the Modern Threat Landscape.",
       "summary": null,
       "durationSeconds": 2294,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 569,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "J621cAsKzZk",
@@ -1313,7 +1432,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Oct 23. S15: Breach Path Busters: Using Graphs and AI to Decode Cyber Threats.",
       "summary": null,
       "durationSeconds": 2443,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 479,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "FNpndxA5hCw",
@@ -1329,7 +1450,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat Oct 23. S11: How to Make AI Comply.",
       "summary": null,
       "durationSeconds": 2476,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 203,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Aa2ck6RC5kQ",
@@ -1346,7 +1469,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat Oct 23. Lighting Talks Day 2.",
       "summary": null,
       "durationSeconds": 3086,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 324,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "9fFpQ0GZzdE",
@@ -1364,7 +1489,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat Oct 23. S23: Inside MSRC Cloud Vulnerability Management.",
       "summary": null,
       "durationSeconds": 1512,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 454,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "8mJLe8sZki8",
@@ -1382,7 +1509,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat Oct 23. S10: Exploring the Windows Registry as a Powerful LPE Attack Surface.",
       "summary": null,
       "durationSeconds": 2791,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "1l45-Y48Zf0",
@@ -1404,7 +1533,9 @@
       "summary": "### Overview\nIn this BlueHat talk, Andrew Brandt (Principal Researcher at Sophos X-Ops) and Andreas Kluch (Senior Threat Researcher at Sophos) detail their investigation into malicious Windows kernel drivers abused in ransomware and malware campaigns. The presentation examines how threat actors transitioned from abusing legitimate, vulnerable drivers to successfully submitting malicious drivers through Microsoft's official Hardware Developer program to obtain legitimate Microsoft digital signatures.\n\n### Key Topics\n- **Evolution of Kernel Abuse**: Attackers require kernel execution to disable modern endpoint detection and response (EDR) agents before ransomware deployment. Attack vectors include abusing known vulnerable legitimate drivers or obtaining valid code-signing certificates.\n- **Vulnerable Driver Abuse**: Threat actors leverage Bring Your Own Vulnerable Driver (BYOVD) tactics. Examples highlighted include Robinhood ransomware utilizing the vulnerable GIGABYTE driver (`gdrv.sys`) to disable Driver Signature Enforcement and execute an unsigned driver, and BlackByte ransomware abusing `RTCore64.sys` to perform arbitrary reads and writes in kernel memory to overwrite notify routine arrays (`PspCreateProcessNotifyRoutine`).\n- **Maliciously Signed Drivers**: Rather than relying solely on vulnerable third-party drivers or leaked certificates (such as leaked NVIDIA keys or fraudulent Chinese company certificates), attackers compromised the Microsoft Hardware Developer program pipeline to produce kernel drivers signed directly with Microsoft's Windows Hardware Compatibility certificate.\n\n### Technical Details\n- **Submission Pipeline Abuse**: Submitting drivers via the Windows Hardware Developer dashboard requires an Extended Validation (EV) or Organization Validation (OV) certificate, signing a `.cab` archive containing driver files, and passing Microsoft compatibility and security checks. Attackers successfully met these conditions to produce fully signed, trusted malicious drivers.\n- **The EDR Killer Toolkit**: An investigation stemming from a Cuba ransomware incident revealed an EDR-killing driver paired with a loader (`steel.exe` / `z-stop`). The driver registered a symbolic link (`\\??\\kapc_helper_link1`) matching earlier burnt cigar / POORTRY tooling. Driven via custom IOCTLs, the driver parsed targeted process lists (such as a list containing 29 Sophos-specific processes out of 186 targets) and repeatedly terminated matched processes every 250 milliseconds.\n- **Packing and Obfuscation**: In an anomaly for kernel-mode code, the malicious signed drivers were heavily obfuscated with runtime commercial packers, predominantly VMProtect and Themida, concealing malicious logic from standard inspection.\n- **Hunting and Threat Landscape**: Telemetry and VirusTotal hunting uncovered multiple distinct malware categories carrying valid Microsoft or suspicious certificates. Beyond the POORTRY/burnt cigar variants, researchers identified:\n  - **accpt rootkit**: An EDR killer specifically targeting Chinese anti-malware drivers.\n  - **AFK Undead & Fsys**: Modular rootkits capable of monitoring and modifying SSL traffic and injecting browser content.\n  - **NetFilter**: A network-monitoring sniffer rootkit that redirected traffic to external domains using domain generation algorithms (DGAs) under `.xyz` TLDs, with artifacts dating back to April 2021.\n\n### Takeaways\n- **Industry Collaboration & Disclosure**: Sophos coordinated through the Microsoft Active Protections Program (MAPP) and MSRC. When initial detection signatures generated hundreds of presumed false-positive notifications from Microsoft's signed catalog, deeper analysis proved that these flagged files were indeed malicious signed drivers.\n- **Revocation and Remediation**: Microsoft remediated the threats across multiple updates, including Patch Tuesday advisories in late 2022 and July 2023. The incident highlighted Microsoft's use and subsequent documentation of `drivers.stl` to revoke and invalidate compromised driver certificates at scale.",
       "durationSeconds": 2206,
       "conference": "microsoft",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 433,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "m5ap1VYUoJ8",
@@ -1421,7 +1552,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in The BlueHat Podcast Episode 007 - AAAAAAAAAAAAAAA! You Overflowed My Integer!.",
       "summary": null,
       "durationSeconds": 2709,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 282,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "aisAA5Kg9iw",
@@ -1438,7 +1571,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in The BlueHat Podcast Episode 006: Rachel Giacobozzi on the Art of Threat Intelligence Storytelling.",
       "summary": null,
       "durationSeconds": 2233,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 231,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "kWW2Hu__iTc",
@@ -1455,7 +1590,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding The BlueHat Podcast Episode 005: Raul Rojas on Navigating the AI-infused Security Landscape.",
       "summary": null,
       "durationSeconds": 3187,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 142,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "GoEq8CgZ-_U",
@@ -1472,7 +1609,9 @@
       "teaser": "Security researchers examine technical aspects of The BlueHat Podcast Episode 004: Dan Tentler (aka Viss).",
       "summary": null,
       "durationSeconds": 2807,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 210,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "gd0dTyz3yoU",
@@ -1489,7 +1628,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in The BlueHat Podcast Episode 002: James Forshaw on Writing Your Own Tools.",
       "summary": null,
       "durationSeconds": 2834,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 347,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "pB-CPLSERZQ",
@@ -1505,7 +1646,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning The BlueHat Podcast Episode 001: David Weston on the Importance of Security Research.",
       "summary": null,
       "durationSeconds": 2488,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 293,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Kln3MmpgFGw",
@@ -1521,7 +1664,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in The BlueHat Podcast Episode 003: Cameron Vincent on Both Sides of Bug Hunting.",
       "summary": null,
       "durationSeconds": 2458,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 293,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "-ZzOL0MhMPg",
@@ -1539,7 +1684,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning AI Security RFP: Security Knowledge Graph for Automated Threat Intelligence Gathering & Management..",
       "summary": null,
       "durationSeconds": 152,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 442,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "fpUZJxFK72k",
@@ -1555,7 +1702,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat Seattle 2019 || I'm in your cloud: A year of hacking Azure AD.",
       "summary": null,
       "durationSeconds": 2672,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 3900,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Q-FWpakkBFw",
@@ -1572,7 +1721,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Seattle 2019 || Modern Binary Analysis with ILs.",
       "summary": null,
       "durationSeconds": 2541,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 2100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "UktwgSxIGnc",
@@ -1591,7 +1742,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat Seattle 2019 || Autopsies of Recent DFIR Investigations.",
       "summary": null,
       "durationSeconds": 1480,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 651,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "GB7V9FbFA7g",
@@ -1607,7 +1760,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Seattle 2019 || Don't forget to SUBSCRIBE..",
       "summary": null,
       "durationSeconds": 2293,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "njfP1k52dbs",
@@ -1623,7 +1778,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat Seattle 2019 || Open Source Security, vulnerabilities never come alone.",
       "summary": null,
       "durationSeconds": 2775,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 548,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "XmP9Rcn5fZo",
@@ -1639,7 +1796,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat Seattle 2019 || Kubernetes Practical Attack and Defense.",
       "summary": null,
       "durationSeconds": 2760,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 2400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "M3OhEBVOeYY",
@@ -1655,7 +1814,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Seattle 2019 || Are We There Yet: Why Does Application Security Take So Long?.",
       "summary": null,
       "durationSeconds": 1534,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 441,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "K-air3GRBRI",
@@ -1672,7 +1833,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Seattle 2019 || Building Secure Machine Learning Pipelines: Security Patterns and Challenges.",
       "summary": null,
       "durationSeconds": 1944,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 462,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "quLa6kzzra0",
@@ -1688,7 +1851,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat Seattle 2019 || Guarding Against Physical Attacks: The Xbox One Story.",
       "summary": null,
       "durationSeconds": 2732,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 7100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "MuIsxE4rCYg",
@@ -1704,7 +1869,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Seattle 2019 || The cake is a lie! Secret world of malware | cheats in video games.",
       "summary": null,
       "durationSeconds": 1289,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 563,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "eYaRxrxAcas",
@@ -1720,7 +1887,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat Seattle 2019 || The good, the bad & the ugly of ML based approaches for ransomware detection.",
       "summary": null,
       "durationSeconds": 2095,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 493,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "uohyx7OIugY",
@@ -1736,7 +1905,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat Seattle 2019 || Keynote, Alex Stamos.",
       "summary": null,
       "durationSeconds": 2910,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 3400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "PyeY5SQbTNo",
@@ -1758,7 +1929,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for GRAPH FOR SECURITY WORKSHOP || Statistics Graphs Finding Bad Guys, Joshua Neil.",
       "summary": null,
       "durationSeconds": 2825,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 665,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "n3MBfbLOJS4",
@@ -1776,7 +1949,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding GRAPH FOR SECURITY WORKSHOP || Opinions were shared Mistakes were made, Jon Hawes.",
       "summary": null,
       "durationSeconds": 2370,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 292,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "5xh_HqHtp0Y",
@@ -1795,7 +1970,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding GRAPH FOR SECURITY WORKSHOP || Graphical Analysis for Security, Gabe Bassett.",
       "summary": null,
       "durationSeconds": 2375,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 468,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "aeeU2E8T5a8",
@@ -1813,7 +1990,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for GRAPH FOR SECURITY WORKSHOP || Scaling Graphical Analysis, Leo Meyerovich.",
       "summary": null,
       "durationSeconds": 2680,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "GermFKsD0UM",
@@ -1831,7 +2010,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in GRAPH FOR SECURITY WORKSHOP || Finding your blast radius your peers, Sridhar Periyasamy.",
       "summary": null,
       "durationSeconds": 1229,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 309,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "1qrjL2zPhrs",
@@ -1851,7 +2032,9 @@
       "summary": "### Overview\nIn this presentation at the Graph for Security Workshop, Ian Hellen, a principal security engineer at Microsoft, discusses how Python Jupyter notebooks and entity-centric graphing techniques can be applied to cybersecurity investigations and threat hunting. While referencing the classic John Lambert quote that \"attackers think in graphs, defenders think in lists,\" Hellen emphasizes that defenders are increasingly shifting toward graph-based thinking. Rather than relying on static tables or spreadsheets, analysts can use notebooks to orchestrate investigation workflows, extract suspicious subgraphs from massive telemetry sets, and avoid analyst fatigue.\n\n### Key Topics\n- **Extracting Attacker Graphs from Telemetry:** Modern security operations are inundated with granular logs from agents and cloud services. Hellen identifies three ways to isolate suspicious subgraphs: appending detections/inferences to label nodes and edges, identifying known-bad indicators (such as C2 IP addresses from threat intelligence), and detecting anomalous graph structures or chained behaviors directly.\n- **Graph Structure Anomaly Detection:** Hellen shares prior work analyzing corporate host-to-host lateral movement chains to identify attacks. He also highlights an approach by a former Google security team member using natural language processing (NLP) to model network syntax and identify anomalous graph paths as grammatical or vocabulary errors.\n- **Advantages of Jupyter Notebooks:** Notebooks address the limitations of traditional investigation tools like Excel or ephemeral cloud query consoles (e.g., Azure Sentinel Log Analytics). Notebooks make query workflows repeatable, persist queries and retrieved data in a single document, support interactive visualizations, and serve as presentation media for technical and non-technical stakeholders.\n- **MSTICPy Open-Source Toolkit:** Hellen showcases `msticpy`, a Python package designed to encapsulate complex security analysis tasks. Features include process command-line clustering, rarity index scoring to highlight uncommon logon sessions, layered network flow visualization, time-series anomaly detection, nested de-obfuscation (base64/gzip decoding), regex IoC extraction, and multi-provider threat intelligence enrichment (e.g., VirusTotal, X-Force, AlienVault OTX).\n\n### Technical Details\nHellen demonstrates two \"Entity Explorer\" notebooks powered by Azure Sentinel and MSTICPy:\n1. **Host Explorer:** Queries a Windows host to display interactive logon timelines and network flows categorized by Layer 7 protocols (such as inbound SSH and Terminal Services). Hellen demonstrates clustering 26,000 process execution events to compute a rarity index—the inverse of cluster size—allowing analysts to strip away repetitive administrative activity and surface rare events like user creation or group manipulation.\n2. **Account Explorer:** Starts with a user account (\"Ian\") to dynamically map host logons, associated source IP addresses, automated alert correlation, geolocation/ASN data, and host-level alerts. Even without complex graph layouts, progressively appending alerts and threat intelligence transforms ordinary telemetry into an intuitive, explainable attacker subgraph.\n\n### Takeaways\nJupyter notebooks combined with targeted, small-scale graphing provide a practical way to tame data overload in security operations. By automating repetitive queries, clustering noisy data, and layering threat intelligence directly into entity-centric graphs, analysts can build reproducible, explainable investigation artifacts that bridge the gap between low-level telemetry and actionable incident response.",
       "durationSeconds": 1835,
       "conference": "microsoft",
-      "difficulty": "intermediate"
+      "difficulty": "intermediate",
+      "viewCount": 572,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "NrMBT7yvv2A",
@@ -1867,14 +2050,15 @@
       "teaser": "Engineers explore architecture and security mechanisms for GRAPH FOR SECURITY WORKSHOP || Grapl - a Graph platform for detection response, Colin O'Brien.",
       "summary": null,
       "durationSeconds": 1924,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "tGWSnuyZ4GQ",
       "slug": "graph-for-security-workshop-intrusion-detection-with-graphs-matt",
       "title": "GRAPH FOR SECURITY WORKSHOP || Intrusion Detection with Graphs, Matt Swann",
       "speakers": [
-        "Graphs",
         "Matt Swann"
       ],
       "track": "red-team",
@@ -1887,7 +2071,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning GRAPH FOR SECURITY WORKSHOP || Intrusion Detection with Graphs, Matt Swann.",
       "summary": null,
       "durationSeconds": 1272,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "KS-YodfxLzo",
@@ -1903,7 +2089,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat Shanghai 2019.",
       "summary": null,
       "durationSeconds": 208,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 405,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "NooQCEz_OWM",
@@ -1921,7 +2109,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat v18 || Crafting synthetic attack examples from past cyber-attacks.",
       "summary": null,
       "durationSeconds": 1808,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 279,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "0ZzMiOMAb78",
@@ -1937,7 +2127,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat v18 || Linear time shellcode detection.",
       "summary": null,
       "durationSeconds": 2444,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 288,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "GZboqQRwYJY",
@@ -1953,7 +2145,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat v18 || Protecting the protector.",
       "summary": null,
       "durationSeconds": 3150,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 413,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "qVIxFfXpyNc",
@@ -1969,7 +2163,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || Return of the kernel rootkit malware (on windows 10).",
       "summary": null,
       "durationSeconds": 3055,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 6900,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "wvOlHbTU0Ew",
@@ -1986,7 +2182,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || Badly behaving scripts.",
       "summary": null,
       "durationSeconds": 2697,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "M94odZcutFs",
@@ -2004,7 +2202,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat v18 || Massive scale usb device driver fuzz without device.",
       "summary": null,
       "durationSeconds": 2841,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 343,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Ty5l9aslPlY",
@@ -2021,7 +2221,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat v18 || WSL reloaded - Let's try to do better fuzzing.",
       "summary": null,
       "durationSeconds": 3245,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 550,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "sMwKqSsML5E",
@@ -2038,7 +2240,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || software supply chain attacks in 2018 - predictions vs reality.",
       "summary": null,
       "durationSeconds": 1956,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 279,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "02fL2xpR7IM",
@@ -2055,7 +2259,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || Memory Resident Implants Code injection is alive and well.",
       "summary": null,
       "durationSeconds": 3161,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1200,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "tbxMdzsm3TM",
@@ -2072,7 +2278,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat v18 || Securely handling data in marginalized communities.",
       "summary": null,
       "durationSeconds": 2643,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 76,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "70kyr9GYmVY",
@@ -2089,7 +2297,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || Shoot first, ask later: strategies to defend the most phished country in the world.",
       "summary": null,
       "durationSeconds": 3386,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 329,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "BWwuTPa0Qfw",
@@ -2106,7 +2316,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat v18 || The law of unintended consequences.",
       "summary": null,
       "durationSeconds": 2854,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 114,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "1JJAob5fkWs",
@@ -2122,7 +2334,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat v18 || May I see your credentials, please.",
       "summary": null,
       "durationSeconds": 2054,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 929,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "TuaD_iwfwUs",
@@ -2140,7 +2354,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || MSRC Listens.",
       "summary": null,
       "durationSeconds": 2606,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 194,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "CS6QMEe8qpU",
@@ -2157,7 +2373,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || Improving Security Posture through Increased Agility.",
       "summary": null,
       "durationSeconds": 2682,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 206,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "XwHFiB2w5dw",
@@ -2175,7 +2393,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat v18 || Go Build A Tool.",
       "summary": null,
       "durationSeconds": 2576,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 218,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "AJcisi99wiE",
@@ -2191,7 +2411,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || Cybersecurity for the defense of democracy.",
       "summary": null,
       "durationSeconds": 3050,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 184,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "K2OQ8od7AHE",
@@ -2209,7 +2431,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat v18 || Evolving chromes secuirty indicators.",
       "summary": null,
       "durationSeconds": 1695,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 108,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "4TmxyMzcOBY",
@@ -2226,7 +2450,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat v18 || Modern day entomology - examining the inner workings of the bug bazaar.",
       "summary": null,
       "durationSeconds": 3324,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 147,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "HhzSRXLCC44",
@@ -2244,7 +2470,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat v18 || The hitchhiker's guide to north korean malware.",
       "summary": null,
       "durationSeconds": 3159,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 981,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "7LsNZXQlDpI",
@@ -2260,7 +2488,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat v18 || Tales from the SOC.",
       "summary": null,
       "durationSeconds": 2897,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 575,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "2O-KKLlsDgM",
@@ -2277,7 +2507,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || Overt Command & Control: The Art of Blending In.",
       "summary": null,
       "durationSeconds": 2500,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 2300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "HQJdE0E9EI4",
@@ -2294,7 +2526,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat v18 || Mstic threat intelligence year in review.",
       "summary": null,
       "durationSeconds": 1826,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 514,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "R5mgAsd2VBM",
@@ -2312,7 +2546,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || Killsuit the equation group's swiss army knife for persistence.",
       "summary": null,
       "durationSeconds": 2601,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 3100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "xZvwcQkRqSs",
@@ -2331,7 +2567,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat v18 || False Flag Foibles.",
       "summary": null,
       "durationSeconds": 2801,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 153,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "JozXSvAy-sw",
@@ -2349,7 +2587,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat v18 || A turla gift - popping calc.exe by sending an email.",
       "summary": null,
       "durationSeconds": 2784,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 630,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "vUOsN5m08KQ",
@@ -2365,7 +2605,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat v18|| Malicious User profiling using deep neural networks.",
       "summary": null,
       "durationSeconds": 1337,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 553,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "abamlxFHElw",
@@ -2382,7 +2624,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || The matrix has you: protecting linux using deception.",
       "summary": null,
       "durationSeconds": 2729,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 639,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "o36N5wi_ZFs",
@@ -2399,7 +2643,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat v18 || Straight outta VMware.",
       "summary": null,
       "durationSeconds": 2745,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 880,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "nXDf-ZMBYTs",
@@ -2415,7 +2661,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat v18 || Scaling Security Scanning.",
       "summary": null,
       "durationSeconds": 1829,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 101,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ZfxXjDQRpsU",
@@ -2433,15 +2681,15 @@
       "teaser": "Security researchers examine technical aspects of BlueHat v18 || Retpoline: The Anti sectre type 2 mitigation in windows.",
       "summary": null,
       "durationSeconds": 2962,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1700,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "VeoXT0nEcFU",
       "slug": "bluehat-v18-first-strontium-uefi-rootkit-unveiled",
       "title": "BlueHat v18 || First STRONTIUM UEFI Rootkit Unveiled",
-      "speakers": [
-        "First STRONTIUM UEFI Rootkit Unveiled"
-      ],
+      "speakers": [],
       "track": "malware",
       "topics": [
         "rootkit",
@@ -2452,7 +2700,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || First STRONTIUM UEFI Rootkit Unveiled.",
       "summary": null,
       "durationSeconds": 3137,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1800,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "oWDpP8ThGP8",
@@ -2469,7 +2719,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat v18 || An Ice Cold boot to break bitlocker.",
       "summary": null,
       "durationSeconds": 2862,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 21000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "YUwBja45fBQ",
@@ -2488,7 +2740,9 @@
       "teaser": "Surviving Cynicism examines BlueHat v18 || This is not fine.",
       "summary": null,
       "durationSeconds": 3086,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 702,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "8RCH0vFxWT4",
@@ -2505,7 +2759,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat v18 || Hardening hyper-v through offensive security research.",
       "summary": null,
       "durationSeconds": 3185,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 4700,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ifCeaYShRSU",
@@ -2521,7 +2777,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat v18 || \"If we win, we lose\".",
       "summary": null,
       "durationSeconds": 3218,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "WsoFmN3oDw8",
@@ -2539,7 +2797,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat v18 || Mitigation Bypass: The Past, Present, and Future.",
       "summary": null,
       "durationSeconds": 1761,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 710,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "YGkhK55jitE",
@@ -2557,7 +2817,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat v18 || A mitigation for kernel toctou vulnerabilities.",
       "summary": null,
       "durationSeconds": 1842,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 499,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "2xmgPC8XLgo",
@@ -2574,7 +2836,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat v18 || DEP for the app layer - Time for app sec to grow up.",
       "summary": null,
       "durationSeconds": 2273,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 485,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "KcJE49quJJ8",
@@ -2591,7 +2855,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat v18 || Record Now, Decrypt Later - Future Quantum Computers Are a Present Threat.",
       "summary": null,
       "durationSeconds": 3134,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 313,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "t4q6d0e1A9A",
@@ -2608,15 +2874,15 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning INSIDE MSRC || Microsoft Security Response Center.",
       "summary": null,
       "durationSeconds": 152,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 5600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "d9xVDYskqnw",
       "slug": "bluehat-exploitation-chronomancy-temporal-return-addresses-2005",
       "title": "BlueHat || Exploitation Chronomancy: Temporal Return Addresses (2005)",
-      "speakers": [
-        "BlueHat || Exploitation Chronomancy"
-      ],
+      "speakers": [],
       "track": "red-team",
       "topics": [
         "exploitation",
@@ -2628,7 +2894,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat || Exploitation Chronomancy: Temporal Return Addresses (2005).",
       "summary": null,
       "durationSeconds": 3962,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 277,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "4jsCiHQHgw0",
@@ -2646,7 +2914,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat v17 || KERNELFAULT: R00ting the Unexploitable using Hardware Fault Injection.",
       "summary": null,
       "durationSeconds": 3150,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 528,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "mCFPgPbjDQE",
@@ -2663,7 +2933,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat v17 || Extracting Secrets from Silicon - A New Generation of Bug Hunting.",
       "summary": null,
       "durationSeconds": 3802,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 634,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "PYe8W33lbAQ",
@@ -2679,7 +2951,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat v17 || Raising the Bar: New Hardware Primitives for Exploit Mitigations.",
       "summary": null,
       "durationSeconds": 2723,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "a2A-iuAGkSM",
@@ -2696,7 +2970,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat v17 || Betraying the BIOS: Where the Guardians of the BIOS are Failing.",
       "summary": null,
       "durationSeconds": 3268,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 519,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "oxlD8VWWHE8",
@@ -2715,7 +2991,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat v17 || Dangerous Contents - Securing .Net Deserialization.",
       "summary": null,
       "durationSeconds": 1381,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 2200,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "faBdhyZjAZ4",
@@ -2733,7 +3011,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat v17 || Born Secure. How to Design A Brand New Cloud Platform With A Strong Security Posture.",
       "summary": null,
       "durationSeconds": 3172,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 136,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "5dxdNkbPMmA",
@@ -2750,15 +3030,15 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat v17 || Don't Let Your Virtualization Fabric Become the Attack Vector.",
       "summary": null,
       "durationSeconds": 1491,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 218,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "X0QaP9xR7sc",
       "slug": "bluehat-v17-securing-windows-defender-application-guard",
       "title": "BlueHat v17 || Securing Windows Defender Application Guard",
-      "speakers": [
-        "Securing Windows Defender Application Guard"
-      ],
+      "speakers": [],
       "track": "hardware",
       "topics": [
         "windows",
@@ -2769,7 +3049,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for BlueHat v17 || Securing Windows Defender Application Guard.",
       "summary": null,
       "durationSeconds": 3206,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 3100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "YydsNQsLZo8",
@@ -2787,7 +3069,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat v17 || A Lustrum of Malware Network Communication: Evolution and Insights.",
       "summary": null,
       "durationSeconds": 2059,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 99,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "9lYRIp_Xysg",
@@ -2803,7 +3087,9 @@
       "teaser": "Security researchers examine technical aspects of BlueHat v17 || Scaling Incident Response - 5 Keys to Successful Defense at Scale.",
       "summary": null,
       "durationSeconds": 1380,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 2300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Ays8GShgTQY",
@@ -2820,7 +3106,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat v17 || Mitigations for the Masses: From EMET to Windows Defender Exploit Guard.",
       "summary": null,
       "durationSeconds": 3204,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 1700,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "PuQzpBlS2HY",
@@ -2836,7 +3124,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding BlueHat v17 || Keynote: Reinventing Trust in a World of Organized Chaos.",
       "summary": null,
       "durationSeconds": 3165,
-      "conference": "microsoft"
+      "conference": "microsoft",
+      "viewCount": 224,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     }
   ]
 }

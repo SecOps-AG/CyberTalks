@@ -23,7 +23,9 @@
       "teaser": "Explores 0x0E: Tal Lossos & Eran Shimony and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1581,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 1100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "NIxXprVTPm8",
@@ -41,7 +43,9 @@
       "teaser": "Analyzes 0x0E: Säkerhetspodcasten interview Tal Lossos & Eran Shimony and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 759,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 131,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "3W7tZg0xk3A",
@@ -61,7 +65,9 @@
       "teaser": "Demonstrates 0x0E: Romaric Duvignau - practitioners See What Youre Watching on SVT Play and evaluates key implications for security practitioners.",
       "summary": "### Overview\nIn this presentation, Romaric Duvignau, an assistant professor at Chalmers University in Gothenburg, demonstrates how eavesdroppers can identify the exact video titles and playback timestamps being streamed over encrypted HTTPS connections. Focusing primarily on the Swedish streaming service SVT Play (with confirmed applicability to Netflix), Duvignau explains research executed by a team of six students he supervised. Despite transport-layer encryption via TLS hiding URLs, HTTP headers, and payload contents, the attack exploits packet sizes and transmission patterns inherent to adaptive streaming protocols.\n\n### Key Topics\n- **HTTPS/TLS Limitations**: While HTTPS conceals URLs and video data, network-layer details such as destination IP addresses and individual packet/payload sizes remain observable to an adversary on the local network (such as public cafe Wi-Fi or cellular networks).\n- **Dynamic Adaptive Streaming over HTTP (DASH)**: SVT Play and Netflix divide video streams into discrete chunks (e.g., four-second segments) encoded across multiple quality levels. Manifest files dictate chunk locations across CDNs, allowing clients to adaptively request quality based on available bandwidth.\n- **Traffic Fingerprinting via KD-Trees vs. Machine Learning**: Rather than relying on complex machine learning models like SVMs, the researchers leveraged classical k-d tree data structures, which proved drastically faster, less resource-intensive, and more scalable.\n- **Threat Implications**: Video fingerprinting leaks sensitive personal preferences, enabling hyper-targeted spear-phishing attacks or profiling, while potentially allowing network observers to categorize or censor content.\n\n### Technical Details\nTo reconstruct playback activity without full packet decryption, the attack proceeds through several structured stages:\n1. **Metadata & Size Harvesting**: SVT Play hosts approximately 20,000 videos, accounting for roughly 39 million four-second segments (totaling ~33 TB of raw video data). Instead of downloading content, a web crawler parsed the service's program catalog, acquired manifest files, and sent HTTP HEAD requests to CDN servers to record the byte length of each segment across all quality levels. Crawling took 80 hours across four machines (20 wall-clock hours) and requires lightweight periodic updates to handle rolling catalog additions and removals.\n2. **Windowing & Synchronization**: Eavesdropping on network traffic using standard utilities like `tcpdump`, the attacker observes bursty transmission patterns. A burst followed by an idle period indicates a segment boundary. Bytes are summed over consecutive segments into fixed multi-segment \"windows\" (e.g., 3 segments totaling 12 seconds of video, up to 30 seconds).\n3. **KD-Tree Search & Pearson Correlation**: Window segment lengths are treated as points in a $k$-dimensional space (where $k$ equals window length). A k-d tree containing the precomputed segment profiles from the SVT Play database enables nearest-neighbor lookups in roughly one minute using around 2 GB of RAM. In contrast, training an SVM required hours and failed to fit the complete database into memory on commodity hardware. Candidate matches returned by the k-d tree are validated using Pearson correlation to confirm closeness and eliminate spurious matches, achieving roughly 98% accuracy on 12-second windows and approaching 100% on 30-second windows.\n\n### Takeaways\nTraffic analysis attacks are not prevented simply by encrypting the underlying transport with TLS or switching from public Wi-Fi to cellular data. The fundamental root cause lies in variable bitrate (VBR) video compression across adaptive chunked protocols like DASH and Apple's HLS: because scene complexity dictates segment byte counts, packet volume bursts create distinctive, identifiable signatures. Mitigating these side-channel leaks would require techniques like constant bitrate encoding or dummy traffic padding, which introduce bandwidth and performance overheads that major streaming services currently avoid.",
       "durationSeconds": 1551,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 616,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Z0CwV2y1KQU",
@@ -78,7 +84,9 @@
       "teaser": "Explores 0x0E: Säkerhetspodcasten interview Romaric Duvignau and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 881,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 121,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "SEg51BhMP04",
@@ -97,7 +105,9 @@
       "teaser": "Reviews 0x0E: Paul Coggin and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1974,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 335,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "VSZCyTsIX_0",
@@ -116,7 +126,9 @@
       "teaser": "Explores 0x0E: Christoffer Jerkeby & Anton Linné and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 3058,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 963,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "xN6wSGn6KmY",
@@ -134,7 +146,9 @@
       "teaser": "Analyzes 0x0E: Säkerhetspodcasten interview Christoffer Jerkeby & Anton Linné and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1145,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 180,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "rhbLgg8mWxs",
@@ -152,7 +166,9 @@
       "teaser": "Presents 0x0E: Trammell Hudson - Hacking your dishwasher, or cloudless Home Connect appliances and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2143,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 2300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "c-OG8AWhtKQ",
@@ -169,7 +185,9 @@
       "teaser": "Analyzes 0x0E: Säkerhetspodcasten interview Trammell Hudson and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1200,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 87,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "jtbYx-9rwgA",
@@ -188,7 +206,9 @@
       "teaser": "Analyzes 0x0E: Nicklas Keijser & Matias Wåhlén and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 3559,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 1300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "m6eYEKfzQII",
@@ -206,7 +226,9 @@
       "teaser": "Examines 0x0E: Säkerhetspodcasten interview Nicklas Keijser & Matias Wåhlén and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 957,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 99,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "WkdzWiNKzt8",
@@ -224,7 +246,9 @@
       "teaser": "Outlines 0x0E: Jonathan Leitschuh - Scaling the Security Researcher to Eliminate OSS Vulnerabilities and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 3458,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 911,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "XLUmyA4_o2Y",
@@ -241,7 +265,9 @@
       "teaser": "Explores 0x0E: Säkerhetspodcasten interview Jonathan Leitschuh and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1587,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 78,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "yMz_Gfxkkks",
@@ -261,7 +287,9 @@
       "teaser": "Details 0x0E: Eric Michaud & Tom Smith - Crypto Vuln Cornucopia - From the archives of Team Kairos and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1978,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 509,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "i7Y81L0NLY8",
@@ -278,7 +306,9 @@
       "teaser": "Reviews 0x0E: Säkerhetspodcasten interview Eric Michaud and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1613,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 99,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "gXZAyso_BGA",
@@ -296,7 +326,9 @@
       "teaser": "Provides 0x0E: Lucas Lundgren - Four Horsemen of Cyberwarfare: 4) Pestilence and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1705,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 604,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "NcFTMVxX8d4",
@@ -313,7 +345,9 @@
       "teaser": "Analyzes 0x0E: Säkerhetspodcasten interview Lucas Lundgren and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 569,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 106,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "h6Y1nOisBHA",
@@ -331,15 +365,15 @@
       "teaser": "Examines 0x0E: Olle Segerdahl - Why you dont need a Red Team test and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 613,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 411,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "eu7FQqjuFvA",
       "slug": "0x0e-alve-bjork",
       "title": "0x0E: Alve Björk",
-      "speakers": [
-        "Badge 2018"
-      ],
+      "speakers": [],
       "track": "blue-team",
       "topics": [
         "0x0e-alve",
@@ -350,7 +384,9 @@
       "teaser": "Evaluates 0x0E: Alve Björk and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 729,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 481,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "yQAM1xk7CU0",
@@ -368,7 +404,9 @@
       "teaser": "Analyzes 0x0E: Mikhail Shcherbakov - CodeQL in the hands of Bug Hunters and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1039,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 804,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "FF-DscSedNc",
@@ -385,7 +423,9 @@
       "teaser": "Reviews 0x0E: Tomas Rzepka - practitioners C(M) what you got there and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 763,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 273,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "5bs3mb7vuJQ",
@@ -403,7 +443,9 @@
       "teaser": "Outlines 0x0E: Francisco Izquierdo (Klondike) - Lets fix the missing step in the security academy and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 320,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 282,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "bosUIQKx0zM",
@@ -423,7 +465,9 @@
       "teaser": "Evaluates 0x0E: Martin Herfurt - Project TEMPA - Demystifying Teslas Bluetooth Passive Entry System and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 3425,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 980,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "kPPlxNkD53E",
@@ -440,7 +484,9 @@
       "teaser": "Provides 0x0E: Säkerhetspodcasten interview Martin Herfurt and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1285,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 46,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "3Vljo0YLymQ",
@@ -458,7 +504,9 @@
       "teaser": "Outlines 0x0E: Joseph Katsioloudes - Secure your code like NASA with Security as Code (SaC) and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2962,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 622,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "utnvuXOCXSI",
@@ -475,7 +523,9 @@
       "teaser": "Explores 0x0E: Säkerhetspodcasten interview Joseph Katsioloudes and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 536,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 51,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "4iAM76n1b5o",
@@ -493,7 +543,9 @@
       "teaser": "Reviews 0x0E: Yossi Sassi - When SysAdmin and Hacker unite: 21 One-Liners to make you convert from bas and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1862,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 1100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "AQXXPic8NpY",
@@ -510,7 +562,9 @@
       "teaser": "Reviews 0x0E: Säkerhetspodcasten interview Yossi Sassi and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 470,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 102,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "1qfcZF9SLms",
@@ -528,7 +582,9 @@
       "teaser": "Examines 0x0E: Anastasios Pingios - Nation-state actors... No, its not all about phishing and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 3640,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 451,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "rPVT-VArHKo",
@@ -545,7 +601,9 @@
       "teaser": "Provides 0x0E: Säkerhetspodcasten interview Anastasios Pingios and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 711,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 120,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "WQb2x-Nht0U",
@@ -563,7 +621,9 @@
       "teaser": "Analyzes 0x0E: Richard Johnson - eBPF ELFs JMPing Through the Windows and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 3116,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 217,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "BcevgqIxAq0",
@@ -580,7 +640,9 @@
       "teaser": "Details 0x0E: Säkerhetspodcasten interview Richard Johnson and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 531,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 134,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "uYLjdp7DZ9k",
@@ -598,7 +660,9 @@
       "teaser": "Outlines 0x0E: Mikko Hyppönen - Thinking About The Unthinkable and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 3291,
-      "conference": "sec-t"
+      "conference": "sec-t",
+      "viewCount": 2600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     }
   ]
 }

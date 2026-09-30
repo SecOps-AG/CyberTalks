@@ -21,7 +21,10 @@
       "teaser": "Engineers explore architecture and security mechanisms for #15 No Privacy Left Outside Ziqi Zhang.",
       "summary": "Overview: Ziqi Zhang presents at IEEE S&P on \"No Privacy Left Outside,\" research examining the insecurity of TEE-based model deployment for on-device LLM protection.\n\nKey Topics: LLMs as expensive sensitive assets requiring protection on edge devices; TEE deployment to prevent white-box model access; model stealing and membership inference attacks against TEE-protected models; and comparative evaluation of TEE partitioning schemes.\n\nTechnical Details: The research evaluates prior TEE-based defenses across model stealing and membership inference metrics, finding some schemes enable attacks 4.26x more effective than black-box baselines. Low-privileged database users can exploit partitioning weaknesses.\n\nTakeaways: TEE-based LLM deployment provides insufficient protection against model stealing and membership inference. Model owners must evaluate defense effectiveness against realistic attack scenarios before trusting edge deployment.",
       "durationSeconds": 819,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "difficulty": "advanced",
+      "viewCount": 1100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "nRHKrhxTX-0",
@@ -40,7 +43,10 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in #144 TCP Spoofing Reliable Payload Transmission Past the Spoofed TCP Handshake Eric Pan.",
       "summary": "TCP Spoofing Motivation\n\nEric Pan presents research on reliably transmitting payloads through spoofed TCP connections after handshake brute force. Attackers spoof victim IPs to bypass IP-based authentication in email SPF checks, database trust rules, and firewall allow lists.\n\nHandshake Brute Force\n\nModern OSes hardened ISN prediction, pushing attackers toward brute-forcing sequence numbers with spoofed SYN and ACK floods. The harder problem is using the connection without knowing when it establishes or which sequence numbers are valid.\n\nSend Window Brute Forcing\n\nRFC acknowledgment rules permit old ACK values on new connections that acknowledge data never sent. Attackers split the search space into window-sized chunks, injecting payloads by brute-forcing acceptable ACK numbers on spoofed sessions.\n\nFeedback Channels and Mitigation\n\nA second primitive uses side channels—such as Linux SYN cookie ISN generation differences when listen backlogs fill—to confirm successful spoofing. Testing showed Windows, BSD, and Linux were vulnerable; Linux patched upstream and IETF work aims to tighten ACK validation.",
       "durationSeconds": 1049,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "difficulty": "advanced",
+      "viewCount": 527,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Vhgdlp0Vtno",
@@ -57,7 +63,10 @@
       "teaser": "Engineers explore architecture and security mechanisms for #498 Learn What You Want to Unlearn Unlearning Inversion Attacks against Machine Unlearning Hongsh.",
       "summary": "Machine Unlearning Basics\n\nThe speaker contrasts standard machine learning with machine unlearning, where specific training samples must be removed for reasons such as the right to be forgotten. Unlearning produces two model versions—the original and the unlearned model—which creates a new privacy attack surface beyond traditional membership inference.\n\nUnlearning Inversion Attacks\n\nThe research asks whether confidential information within unlearned data can still be inferred. With white-box access to both models, attackers subtract parameters to recover gradient information and run optimization to invert features of removed samples. With black-box access, probing samples with balanced class confidence can reveal the unlearned label via the class whose confidence drops most.\n\nExperimental Findings\n\nApproximate unlearning leaks far more feature information than exact retraining-from-scratch unlearning, which benefits from training randomness. In multi-sample unlearning, full feature recovery is harder but partial inversion remains possible. Label inversion succeeds for both exact and approximate methods across single- and multi-class removal scenarios.\n\nDefenses and Limitations\n\nThe team evaluated obfuscation, model pruning, and fine-tuning on additional data to blur differences between model pairs, but each defense caused unacceptable privacy-utility tradeoffs. They call for stronger post-unlearning protections against inversion attacks.",
       "durationSeconds": 792,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "difficulty": "advanced",
+      "viewCount": 700,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "2CFf6eJVsyk",
@@ -77,7 +86,10 @@
       "summary": "Robustness problem\n\nPresenters from UNSW, Monash, and CSIRO at IEEE S&P introduce LACMUS (latent concept masking) to improve deep neural network robustness against adversarial pixel perturbations, semantic shifts such as lighting changes, and out-of-distribution samples where standard training fails.\n\nLimits of adversarial training\n\nClassic adversarial training mixes benign and adversarial examples but tends to be attack-specific, hurts clean accuracy, relies on low-level noise hard to interpret, and needs many adversarial samples. They identify four research gaps driving their method.\n\nLACMUS approach\n\nLACMUS encodes inputs through a VQ-VAE-style encoder into vectors matched against a pretrained concept codebook, masks or replaces concepts, decodes perturbed samples, and treats misclassified reconstructions as conceptual adversarial examples for training. Experiments using under one percent of training data report maintained clean accuracy and broader resilience to pixel, semantic, and distribution-shift attacks on MNIST and related sets.",
       "durationSeconds": 823,
       "conference": "ieee-sp",
-      "aiSummary": "Overview:\nHongsheng Hu presents LACMUS (Latent Concept Masking for Robustness Enhancement), a framework designed to overcome the fundamental generalization limitations of adversarial training in deep neural networks (DNNs). Standard adversarial defenses typically overfit to specific pixel-level mathematical perturbations, compromising clean sample accuracy and failing to protect against semantic or distribution shifts. By utilizing a Vector Quantized Variational Autoencoder (VQ-VAE) architecture to mask and perturb high-level concept vectors rather than individual pixels, LACMUS generates robust conceptual adversarial examples using less than 1% of standard training data.\n\nKey Topics:\n- The tri-fold vulnerability of deep neural networks: adversarial, semantic, and distribution robustness\n- Four core research gaps in traditional adversarial training (attack-specific, variation-specific, utility tradeoff, low abstraction)\n- Architecture of LACMUS: VQ-VAE encoders, pre-trained concept codebooks, and latent concept masking\n- Empirical evaluation against FGSM, PGD, One-Pixel, spatial/hue transformations, and distribution drift\n\nTechnical Details:\nHu examines the three primary failure modes of modern deep neural networks: adversarial vulnerability (misclassification caused by imperceptible pixel noise), semantic vulnerability (failure under lighting, spatial, or environmental shifts), and distribution vulnerability (inability to handle out-of-distribution or corrupted data). While adversarial training is the standard defense, Hu identifies four critical limitations: it is attack-specific (defending against attack A fails against attack B), variation-specific (pixel-level noise training does not generalize to semantic rotations or lighting changes), suffers from a severe robustness-utility tradeoff (drastically reducing classification accuracy on clean, benign inputs), and operates at a low abstraction level that requires vast quantities of adversarial training data.\n\nLACMUS addresses these deficiencies by operating within a latent conceptual space. The framework utilizes a Vector Quantized Variational Autoencoder (VQ-VAE) comprising an encoder, a pre-trained concept codebook, and a decoder. The encoder maps a high-dimensional input image X into a grid of D-dimensional latent vectors V. These vectors are quantized against a discrete codebook C, where each codebook vector captures a distinct structural or semantic attribute of the class. LACMUS introduces a concept masking mechanism that systematically substitutes selected concept vectors (for example, swapping concept C9 with a baseline concept C0). The modified concept representation is fed into the VQ-VAE decoder to reconstruct a synthetic sample X'. If the reconstructed image induces misclassification while preserving the core visual structure, it is designated as a \"conceptual adversarial example.\"\n\nBy augmenting model training with these conceptual adversarial examples, the DNN is compelled to base classification decisions on core invariant structures rather than superficial or non-essential features. In experimental evaluations, LACMUS utilized less than 1% of original training data samples while matching or improving clean baseline accuracy. Furthermore, models defended with LACMUS demonstrated broad generalization resilience, significantly outperforming standard adversarial training across gradient-based attacks (FGSM, PGD), pixel-budget attacks (One-Pixel), semantic transformations (spatial transformations, hue/lighting shifts), and challenging dataset corruptions (both hard in-distribution samples and out-of-distribution drift).\n\nKey Takeaways:\nDefenders training robust deep learning models should move away from brute-force pixel-level noise injection toward structured, concept-aware adversarial generation. Latent concept masking decouples defensive robustness from specific mathematical perturbation attacks, achieving generalized resistance across both adversarial noise and real-world semantic distortions. Furthermore, because concept masking operates on high-level representations, organizations can drastically reduce computational overhead and data requirements, training resilient models with minimal adversarial data budgets.\n\n(AI summary — Gemini Flash)"
+      "aiSummary": "Overview:\nHongsheng Hu presents LACMUS (Latent Concept Masking for Robustness Enhancement), a framework designed to overcome the fundamental generalization limitations of adversarial training in deep neural networks (DNNs). Standard adversarial defenses typically overfit to specific pixel-level mathematical perturbations, compromising clean sample accuracy and failing to protect against semantic or distribution shifts. By utilizing a Vector Quantized Variational Autoencoder (VQ-VAE) architecture to mask and perturb high-level concept vectors rather than individual pixels, LACMUS generates robust conceptual adversarial examples using less than 1% of standard training data.\n\nKey Topics:\n- The tri-fold vulnerability of deep neural networks: adversarial, semantic, and distribution robustness\n- Four core research gaps in traditional adversarial training (attack-specific, variation-specific, utility tradeoff, low abstraction)\n- Architecture of LACMUS: VQ-VAE encoders, pre-trained concept codebooks, and latent concept masking\n- Empirical evaluation against FGSM, PGD, One-Pixel, spatial/hue transformations, and distribution drift\n\nTechnical Details:\nHu examines the three primary failure modes of modern deep neural networks: adversarial vulnerability (misclassification caused by imperceptible pixel noise), semantic vulnerability (failure under lighting, spatial, or environmental shifts), and distribution vulnerability (inability to handle out-of-distribution or corrupted data). While adversarial training is the standard defense, Hu identifies four critical limitations: it is attack-specific (defending against attack A fails against attack B), variation-specific (pixel-level noise training does not generalize to semantic rotations or lighting changes), suffers from a severe robustness-utility tradeoff (drastically reducing classification accuracy on clean, benign inputs), and operates at a low abstraction level that requires vast quantities of adversarial training data.\n\nLACMUS addresses these deficiencies by operating within a latent conceptual space. The framework utilizes a Vector Quantized Variational Autoencoder (VQ-VAE) comprising an encoder, a pre-trained concept codebook, and a decoder. The encoder maps a high-dimensional input image X into a grid of D-dimensional latent vectors V. These vectors are quantized against a discrete codebook C, where each codebook vector captures a distinct structural or semantic attribute of the class. LACMUS introduces a concept masking mechanism that systematically substitutes selected concept vectors (for example, swapping concept C9 with a baseline concept C0). The modified concept representation is fed into the VQ-VAE decoder to reconstruct a synthetic sample X'. If the reconstructed image induces misclassification while preserving the core visual structure, it is designated as a \"conceptual adversarial example.\"\n\nBy augmenting model training with these conceptual adversarial examples, the DNN is compelled to base classification decisions on core invariant structures rather than superficial or non-essential features. In experimental evaluations, LACMUS utilized less than 1% of original training data samples while matching or improving clean baseline accuracy. Furthermore, models defended with LACMUS demonstrated broad generalization resilience, significantly outperforming standard adversarial training across gradient-based attacks (FGSM, PGD), pixel-budget attacks (One-Pixel), semantic transformations (spatial transformations, hue/lighting shifts), and challenging dataset corruptions (both hard in-distribution samples and out-of-distribution drift).\n\nKey Takeaways:\nDefenders training robust deep learning models should move away from brute-force pixel-level noise injection toward structured, concept-aware adversarial generation. Latent concept masking decouples defensive robustness from specific mathematical perturbation attacks, achieving generalized resistance across both adversarial noise and real-world semantic distortions. Furthermore, because concept masking operates on high-level representations, organizations can drastically reduce computational overhead and data requirements, training resilient models with minimal adversarial data budgets.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "advanced",
+      "viewCount": 233,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "AmiXTXoydXY",
@@ -96,7 +108,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 6 Efficient Zero knowledge Arguments for Paillier Cryptosystem Rae Gong.",
       "summary": null,
       "durationSeconds": 1147,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 403,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "sDZn_7l6p8w",
@@ -115,7 +129,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 6 Efficient Zero knowledge Arguments for Paillier Cryptosystem Rae Gong1.",
       "summary": null,
       "durationSeconds": 1093,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 294,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "m9_EyF39j6o",
@@ -131,7 +147,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 06 Zihao Li NURGLE zihao li.",
       "summary": null,
       "durationSeconds": 658,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 119,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "pCmWKOvjfBc",
@@ -150,7 +168,9 @@
       "teaser": "Security researchers examine technical aspects of 7B Ehsanul Kabir FLShield A Validation Based Federated Learning Framework to Defend Against Poisonin.",
       "summary": null,
       "durationSeconds": 726,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 164,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "9XqKYEt-arI",
@@ -169,7 +189,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 9 Prune+PlumTree Finding Eviction Sets at Scale Tom Kissos.",
       "summary": null,
       "durationSeconds": 1172,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 214,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "3vL2o8i5EvM",
@@ -188,7 +210,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 33 INVISILINE Invisible Plausibly Deniable Storage Sandeep Kiran Pinjala.",
       "summary": null,
       "durationSeconds": 1094,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 172,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "5Q4pIojkLy4",
@@ -207,7 +231,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 43 P4Control Line Rate Cross Host Attack Prevention via In Network Information Flow Control Enabled.",
       "summary": null,
       "durationSeconds": 1145,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 308,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "lb-FWx2W2YM",
@@ -224,7 +250,9 @@
       "teaser": "Security researchers examine technical aspects of 52 A Picture is Worth 500 Labels A Case Study of Demographic Disparities in Local Machine Learning M.",
       "summary": null,
       "durationSeconds": 621,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 129,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "KnNLuTITHi8",
@@ -243,7 +271,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 77 UnTrustZone Systematic Accelerated Aging to Expose On chip Jubayer Mahmod.",
       "summary": null,
       "durationSeconds": 903,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 125,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "DmzY_S5SZSg",
@@ -262,7 +292,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 91 PIRANA Faster Multi query PIR via Constant weight Codes Jingyu Li.",
       "summary": null,
       "durationSeconds": 666,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 183,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "GgA_yhG-exQ",
@@ -279,7 +311,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 95 Preserving Node level Privacy in Graph Neural Networks ZH X.",
       "summary": null,
       "durationSeconds": 557,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 143,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "iZ8F1h51zas",
@@ -296,7 +330,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 101 The Great Request Robbery Soheil Khodayari Soheil Khodayari.",
       "summary": null,
       "durationSeconds": 1188,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 189,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "hlUXYyZtLt0",
@@ -315,7 +351,9 @@
       "teaser": "Security researchers examine technical aspects of 109 BULKOR：Enabling Bulk Loading for Path ORAM Xiang Li.",
       "summary": null,
       "durationSeconds": 910,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 113,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "sHWj44C-ohA",
@@ -334,7 +372,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 111 Efficient and Generic Microarchitectural Hash Function Recovery Lukas Gerlach.",
       "summary": null,
       "durationSeconds": 1062,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 164,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "xiq1-LTdt7o",
@@ -351,7 +391,9 @@
       "teaser": "Security researchers examine technical aspects of 116 Security Privacy and Data Sharing Challenges When Moving to the US Insights from a Qualitative s.",
       "summary": null,
       "durationSeconds": 960,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 154,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ofkRgzs0rQA",
@@ -368,7 +410,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 154 Test time Poisoning Attacks Against Test time Adaptation Models Tianshuo Cong.",
       "summary": null,
       "durationSeconds": 559,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 97,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "xFafCzSFZOM",
@@ -386,7 +430,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 164 SoK Security and Privacy of Blockchain Interoperability André Augusto.",
       "summary": null,
       "durationSeconds": 864,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 261,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "8bJqImUjbtk",
@@ -407,7 +453,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 172 Don t Eject the Impostor Fast Three Party Computation With a Known Cheater Andreas Brüggeman.",
       "summary": null,
       "durationSeconds": 1189,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 108,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "wmcsIjO9Ux0",
@@ -426,7 +474,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 185 BadVFL backdoor attacks in vertical federated learning Mohammad Naseri.",
       "summary": null,
       "durationSeconds": 780,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 201,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ynXtvb8DCAI",
@@ -445,15 +495,15 @@
       "teaser": "Industry experts analyze emerging threats surrounding 211 Multi Instance Adversarial Attack on GNN Based Malicious Domain Detection Mahmoud Khaled Ahm.",
       "summary": null,
       "durationSeconds": 926,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 161,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "1EBY6VcCH0E",
       "slug": "220-piano-extremely-simple-single-server-pir-with-sublinear-serv",
       "title": "220 Piano Extremely Simple Single Server PIR with Sublinear Server Computation Mingxun Zhou",
-      "speakers": [
-        "Sublinear Server Computation Mingxun Zhou"
-      ],
+      "speakers": [],
       "track": "community",
       "topics": [
         "piano",
@@ -466,7 +516,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 220 Piano Extremely Simple Single Server PIR with Sublinear Server Computation Mingxun Zhou.",
       "summary": null,
       "durationSeconds": 1177,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 206,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "lLtlaYIDgI8",
@@ -487,7 +539,9 @@
       "teaser": "Security researchers examine technical aspects of 227 Sabre Cutting through Adversarial Noise with Adaptive Spectral Filtering and Input Reconstructio.",
       "summary": null,
       "durationSeconds": 494,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 173,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ptkhSxJhCCc",
@@ -503,7 +557,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 241 Backdooring Multimodal Learning 卡的不动弹.",
       "summary": null,
       "durationSeconds": 929,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 91,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "YS6SHXP9nDw",
@@ -519,7 +575,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 251 Text CRS A Generalized Certified Robustness Framework against Textual Adversarial Attacks Jane.",
       "summary": null,
       "durationSeconds": 816,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 77,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "WMJzS0RvQBQ",
@@ -537,7 +595,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 252 SrcMarker Dual channel Source Code Watermarking via Scalable Code Transformations 杨博睿.",
       "summary": null,
       "durationSeconds": 965,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 122,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "QikVRQSgayo",
@@ -556,7 +616,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 262 A Representative Study on Human Detection of Artificially Generated Media Across Countries Joe.",
       "summary": null,
       "durationSeconds": 1032,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 126,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "SosD02AN1fA",
@@ -574,7 +636,9 @@
       "teaser": "Security researchers examine technical aspects of 275 Don t Shoot the Messenger Localization Prevention of Satellite Internet Users Richard Mitev.",
       "summary": null,
       "durationSeconds": 899,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 110,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "YngzkB4rcEU",
@@ -593,7 +657,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 276 Everyone for Themselves A Qualitative Study about Individual Security Setups of Open Source Sof.",
       "summary": null,
       "durationSeconds": 948,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 53,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "fn9XNzqUxwA",
@@ -609,7 +675,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 591 Where URLs Become Weapons Automated Discovery of SSRF Vulnerabilities in Web Applications Sam.",
       "summary": null,
       "durationSeconds": 788,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 210,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "QvM7e8q38p0",
@@ -628,7 +696,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 280 NFCEraser A Security Threat of NFC Message Modification Caused by Quartz Crystal Oscillator Jo.",
       "summary": null,
       "durationSeconds": 687,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 102,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "a07JyLBsa2A",
@@ -647,7 +717,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 282 Transferable Multimodal Attack on Vision Language Pre training Models haodi wang.",
       "summary": null,
       "durationSeconds": 583,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 311,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "iq7ujQo1sTE",
@@ -666,7 +738,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 284 Group Oblivious Message Retrieval Thomas.",
       "summary": null,
       "durationSeconds": 1198,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "-HkUVZeoogc",
@@ -689,7 +763,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 301 Scalable Verification of Zero Knowledge Protocols MIGUEL ISABEL MÁRQUEZ.",
       "summary": "### Overview\nZero-knowledge (ZK) protocols allow a prover to convince a verifier that a statement is true without revealing any secret information beyond the statement's validity. These protocols rely on completeness, soundness, and zero knowledge. Typically, statements are represented as arithmetic circuit satisfiability problems composed of addition and multiplication gates and encoded as quadratic constraint systems over large finite fields. A major source of vulnerabilities in ZK protocols is underconstrained bugs, where required constraints are omitted, enabling a malicious prover to produce verifiable proofs for invalid statements. This presentation introduces Cyber, a formal verification tool designed to automatically detect underconstrained bugs and verify Circom circuits against pre- and post-condition specifications.\n\n### Key Topics\n- **Zero-Knowledge Circuit Constraints**: Circuit representations in ZK systems strictly require quadratic constraints. In domain languages like Circom, developers work across symbolic constraint systems and executable witness generation code using different operators (`===`, `<--`, and `<==`). Improper combination can lead to circuits compiling successfully while generating empty or incomplete constraint systems.\n- **Limitations of Existing Tools**: Existing verification techniques include syntactic checkers (Circom compiler inspect flag, Circomspect, Ecne) that only recognize standard surface patterns, and semantic tools (such as Picus) that suffer from scalability bottlenecks on large circuits and lack pre- and post-condition specification support.\n- **Circom Tags**: Circom's type tagging mechanisms (e.g., specifying a binary signal tag) only enforce syntactic propagation checks during compilation rather than proving semantic satisfaction via actual constraints.\n\n### Technical Details\nVerification of ZK constraint systems faces two core challenges: reasoning over large finite fields involving nonlinear arithmetic operations, and scaling to circuits containing thousands to millions of constraints. Cyber overcomes these via two primary mechanisms:\n\n1. **Transformation and Deduction Rules**: Standard SMT solvers (like Z3) frequently time out when handling nonlinear operations over finite fields. Cyber applies deduction and algebraic transformations to simplify operations before passing them to the solver. For example, quadratic equations like $a \\cdot b = 0$ are rewritten into disjunctions ($a = 0 \\lor b = 0$), and modulo operations are substituted with auxiliary variables ($k$) accompanied by computed tight bounds to constrain the search space.\n2. **Modular Hierarchical Verification**: Instead of evaluating an entire flattened circuit containing millions of constraints simultaneously, Cyber leverages the circuit's hierarchical template structure. It verifies child components individually against their specifications, abstracts those subcomponents by replacing their internal constraint systems with their specification summaries, and uses those abstractions during parent component verification.\n\nFormally, verification is cast as a satisfiability query: given circuit constraints $P$ and target specifications, the solver checks whether there exists an assignment that violates the specification (returning `sat` with a counterexample) or proves no violation is possible (`unsat`).\n\n### Takeaways\nCyber was evaluated against widely used, real-world benchmarks, including production libraries such as `circomlib`, `zk-email`, and the `Dark Forest` game circuit codebase, as well as `B-Stark` (under development). Some evaluated circuits scaled up to 11 million constraints. Cyber verified most circuits with very few timeouts (which primarily occurred on complex mathematical structures such as elliptic curves). The tool identified previously undetected critical bugs, such as an underconstrained integer division bug in Dark Forest where the remainder was missing a constraint forcing it to be positive, allowing negative remainder counterexamples. Future work aims to extend Cyber to other ZK frameworks (Noir, Halo 2), alternative proving systems (Plonk), circuits defined solely as flat constraint systems, and extension fields.",
       "durationSeconds": 1144,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 123,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "K7dhqrxLsYY",
@@ -708,7 +784,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 305 LLMs Cannot Reliably Identify and Reason About Security Vulnerabilities Yet A Comprehensive Eva.",
       "summary": null,
       "durationSeconds": 797,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 395,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "PIQNHq7eDM0",
@@ -727,7 +805,9 @@
       "teaser": "Security researchers examine technical aspects of 307 Springproofs Efficient Inner Product Arguments for Vectors of Arbitrary Length Ming Su.",
       "summary": null,
       "durationSeconds": 670,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 102,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "3XSHI5vezR8",
@@ -746,7 +826,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 335 Nightshade Prompt Specific Poisoning Attacks on Text to Image Generative Models Shawn Shan.",
       "summary": null,
       "durationSeconds": 958,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 383,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "F7KKMNm8k1Q",
@@ -762,7 +844,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 339 NodeAwareSmoothing Yuni Lai Lena.",
       "summary": null,
       "durationSeconds": 788,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 65,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "uRdmzkdfGwA",
@@ -781,7 +865,9 @@
       "teaser": "Security researchers examine technical aspects of 398 Pulling Off The Mask Forensic Analysis of the Deceptive Creator Wallets Behind Smart Contract Fr.",
       "summary": null,
       "durationSeconds": 621,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 118,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "R4bHcJGhUNs",
@@ -800,7 +886,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 415 SoK Efficient Design and Implementation of Polynomial Hash Functions over Prime Fields Jan G.",
       "summary": null,
       "durationSeconds": 983,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 82,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "srk7GXcKre4",
@@ -819,7 +907,9 @@
       "teaser": "Security researchers examine technical aspects of 435 Measure Observe Remeasure An Interactive Paradigm for Differentially Private Exploratory Analysi.",
       "summary": null,
       "durationSeconds": 738,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 66,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "cKcaeRi7Lrc",
@@ -836,7 +926,9 @@
       "teaser": "Security researchers examine technical aspects of 443 Targeted and Troublesome Zahra Moti Zahra Moti.",
       "summary": null,
       "durationSeconds": 956,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 49,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "RpsSAm4FJTs",
@@ -852,7 +944,9 @@
       "teaser": "Security researchers examine technical aspects of 446 Flash a comprehensive approach to intrusion detection via provenance graph representation learni.",
       "summary": null,
       "durationSeconds": 797,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 344,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "pdPBghjKBlc",
@@ -871,7 +965,9 @@
       "teaser": "Security researchers examine technical aspects of 483 Pandora Principled Symbolic Validation of Intel SGX Enclave Runtimes Jo Van Bulck.",
       "summary": null,
       "durationSeconds": 1183,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 139,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "r5u89WLayhM",
@@ -891,7 +987,9 @@
       "teaser": "Security researchers examine technical aspects of 520 BELT Old School Backdoor Attacks can Evade the State of the Art Defense with Backdoor Exclusivit.",
       "summary": null,
       "durationSeconds": 680,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 57,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "7JdKc_S2igo",
@@ -910,7 +1008,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 555 Patchy Performance Uncovering the Vulnerability Management Practices of IoT Centric Vendors S.",
       "summary": null,
       "durationSeconds": 596,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 57,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "fGzn5sFmT0E",
@@ -929,7 +1029,9 @@
       "teaser": "Security researchers examine technical aspects of 574 Cohere Managing Differential Privacy in Large Scale Systems Nicolas Küchler.",
       "summary": null,
       "durationSeconds": 929,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 42,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "k62qrYKL9VA",
@@ -945,7 +1047,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 584 Break the Wall from bottom Automated Discovery of Protocol Level Evasion Vulnerabilities in Web.",
       "summary": null,
       "durationSeconds": 999,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 85,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "LLgb7IwZ7Wg",
@@ -964,7 +1068,9 @@
       "teaser": "Security researchers examine technical aspects of 601 SHERPA Explainable Robust Algorithms for Privacy Preserved Federated Learning in Future Networks.",
       "summary": null,
       "durationSeconds": 927,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 152,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "qTHto97H2hc",
@@ -983,7 +1089,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 605 Larger scale Nakamoto style Blockchains Don’t Necessarily Offer Better Security Jannik Albrech.",
       "summary": null,
       "durationSeconds": 1015,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 96,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "_bSp1_9U0t0",
@@ -1002,7 +1110,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 617 PromptCARE Prompt Copyright Protection by Watermark Injection and Verification homeway yao.",
       "summary": null,
       "durationSeconds": 680,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 61,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "dCaUoYaAq5U",
@@ -1021,7 +1131,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 624 WeSee Using Malicious #VC Interrupts to Break AMD SEV SNP Supraja Sridhara.",
       "summary": null,
       "durationSeconds": 1002,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 205,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "f_4LveqFl5I",
@@ -1039,7 +1151,9 @@
       "teaser": "Security researchers examine technical aspects of 646 attackinng byzantine robustness in high dimensions kolluri aashish.",
       "summary": null,
       "durationSeconds": 1183,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 49,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Yaar_xKxr_Y",
@@ -1058,7 +1172,9 @@
       "teaser": "Security researchers examine technical aspects of 646 SoK Prudent Evaluation Practices for Fuzzing Moritz Schloegel.",
       "summary": null,
       "durationSeconds": 1068,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 142,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "4PhNFozCuNM",
@@ -1076,7 +1192,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 665 Obelix Mitigating Side Channels Through Dynamic Obfuscation Jan.",
       "summary": null,
       "durationSeconds": 818,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 94,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "u5Cit9sgQEc",
@@ -1092,7 +1210,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 2024 05 22 02 41 48 H 264 Rui Xi.",
       "summary": null,
       "durationSeconds": 1216,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 48,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "sRs87WeS9Pk",
@@ -1109,7 +1229,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 671 One for All and All for One GNN based Control Flow Attestation for Embedded Devices Richard M.",
       "summary": null,
       "durationSeconds": 904,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 76,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "I9IYVI73odM",
@@ -1125,7 +1247,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 699 CoreLocker Andrew Wang.",
       "summary": null,
       "durationSeconds": 485,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 101,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Ax__H_N0B1E",
@@ -1142,7 +1266,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2023 219 Formal Model Driven Analysis of Resilience of GossipSub to Attacks from Misbehaving Peers.",
       "summary": null,
       "durationSeconds": 665,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 43,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "DZN4R45FmCI",
@@ -1161,7 +1287,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 694 LLMIF Augmented Large Language Model for Fuzzing IoT Devices Jincheng Wang.",
       "summary": null,
       "durationSeconds": 853,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 317,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "VZ_Py0E8CSM",
@@ -1179,7 +1307,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2024 11 NetShuffle Circumventing Censorship with Shuffle Proxies at the Edge Patrick Kon.",
       "summary": null,
       "durationSeconds": 980,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 74,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "kiQKwxK6ZT0",
@@ -1197,7 +1327,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2024 13 Holistic Concolic Execution for Dynamic Web Applications via Symbolic Interpreter Analysis.",
       "summary": null,
       "durationSeconds": 986,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 42,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Y426LOXNowY",
@@ -1215,7 +1347,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 2024 18 A Practical Root Cause Analysis System with an Under Constrained State Mutation 박영기.",
       "summary": null,
       "durationSeconds": 1022,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 144,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "L6VVXC59k9o",
@@ -1233,7 +1367,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2024 22 BUSted Microarchitectural Side Channel Attacks on the MCU Bus Interconnect Cristiano Rodri.",
       "summary": null,
       "durationSeconds": 1155,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 105,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "kcQt5zcMCKQ",
@@ -1249,7 +1385,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 2024 37 SoK Safer Digital Safety Research Involving At Risk Users Rosanna “Rosie” Bellini.",
       "summary": null,
       "durationSeconds": 629,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 83,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "8wySorFEABs",
@@ -1265,7 +1403,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 2024 48 SwiftRange Vincent.",
       "summary": null,
       "durationSeconds": 869,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 59,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "LOYcymcFmrc",
@@ -1281,7 +1421,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 2024 50 BAFFLE Mr HE Junda.",
       "summary": null,
       "durationSeconds": 509,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 55,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "vvwJzb-JU2I",
@@ -1299,7 +1441,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2024 76 Formal Dolev Yao Models Meet Cryptographic Protocol Fuzz Testing Max Ammann.",
       "summary": null,
       "durationSeconds": 1085,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 578,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "xa7jF1gPIz0",
@@ -1316,7 +1460,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2024 100 The Dark Side of Scale Insecurity of Direct to Cell Satellite Mega Constellations 刘威.",
       "summary": null,
       "durationSeconds": 905,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 97,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "oF0b0A69byY",
@@ -1334,7 +1480,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 2024 102 BOUNCEATTACK A Query Efficient Decision based Adversarial Attack by Bouncing into the Wild.",
       "summary": null,
       "durationSeconds": 532,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 55,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "KHr7IjpUn8U",
@@ -1351,7 +1499,9 @@
       "teaser": "Security researchers examine technical aspects of 2024 124 LOKI Large scale Data Reconstruction Attack against Federated Learning through Model Manipu.",
       "summary": null,
       "durationSeconds": 1177,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 224,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "zwB3G5n_Uvk",
@@ -1369,7 +1519,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 2024 125 DeepTheft Stealing DNN Model Architectures through Power Side Channel Garrison Gao.",
       "summary": null,
       "durationSeconds": 906,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 182,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "4pKKJnCey6o",
@@ -1386,7 +1538,9 @@
       "teaser": "Security researchers examine technical aspects of 2024 144 Withdrawing is believing Detecting Inconsistencies between Withdrawal Choices and Third par.",
       "summary": null,
       "durationSeconds": 906,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 25,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "hj_7v534PHQ",
@@ -1404,7 +1558,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 2024 151 Shedding Light on CVSS Scoring Inconsistencies A User Centric Study on Evaluating Widespre.",
       "summary": null,
       "durationSeconds": 1098,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 69,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "6m7XLUDkA0E",
@@ -1422,7 +1578,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 2024 158 Jaehan Kim PassREfinder Credential Stuffing Risk Prediction by Representing Password Reuse.",
       "summary": null,
       "durationSeconds": 1128,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 131,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "l2A8leowLjo",
@@ -1440,7 +1598,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 2024 171 Private Analytics via Streaming, Sketching, and Silently Verifiable Proofs Mayank Rathee.",
       "summary": null,
       "durationSeconds": 950,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 130,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "iYzu-MziOF8",
@@ -1459,7 +1619,9 @@
       "teaser": "Security researchers examine technical aspects of 2024 176 PolySphinx Extending the Sphinx Mix Format with Better Multicast Support Daniel Schadt.",
       "summary": null,
       "durationSeconds": 839,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 61,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "wNIfgDDldf8",
@@ -1476,7 +1638,9 @@
       "teaser": "Security researchers examine technical aspects of 2024 196 The Times They Are A Changin Christos Tsoukaladelis.",
       "summary": null,
       "durationSeconds": 763,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 58,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "9fd7Kt8wAu0",
@@ -1496,7 +1660,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 2024 205 FlowMur A Stealthy and Practical Audio Backdoor Attack with Limited Knowledge Jiahe Lan.",
       "summary": null,
       "durationSeconds": 491,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 87,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Bx6MktYZ7bE",
@@ -1512,7 +1678,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2024 237 SoK Unintended Interactions among ML Defenses and Risks Vasisht Duddu.",
       "summary": null,
       "durationSeconds": 1100,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 71,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "NmvzWxuTv10",
@@ -1528,7 +1696,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2024 319 FCert yantiing wang.",
       "summary": null,
       "durationSeconds": 464,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 28,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "-I7aoP7GXKw",
@@ -1548,7 +1718,9 @@
       "teaser": "Security researchers examine technical aspects of 2024 305 Pianist Scalable zkRollups via Fully Distributed Zero Knowledge Proofs Tianyi Liu.",
       "summary": "### Overview\nIn this talk, the speaker presents Pianist, a scalable, fully distributed zero-knowledge proof (ZKP) protocol designed for arbitrary arithmetic circuits, with applications targeting zkRollups and zkEVM on blockchains. While general-purpose schemes like Plonk provide quasi-linear proving time and constant proof size and verification time, scaling them on a single machine encounters severe bottlenecks in proof generation time and memory cost. Pianist addresses this challenge by distributing proof generation across a cluster while maintaining the asymptotic complexity of Plonk and requiring only constant communication between the master node and each worker node.\n\n### Key Topics\n- **Zero-Knowledge Proofs & zkRollups**: Leveraging succinct zero-knowledge proofs (such as Plonk) so untrusted parties can verify execution correctness without re-executing transactions, scaling blockchain systems.\n- **Limitations of Prior Distributed ZKPs**: Earlier distributed systems such as DIZK (based on Groth16 and R1CS) and Z-Bridge (based on GKR and Virgo polynomial commitments) suffer from complex witness reductions or require linear communication.\n- **Plonk Bottlenecks in Distributed Settings**: Distributed execution of the Number Theoretic Transform (NTT) to compute witness polynomials normally requires inter-machine vector transpositions across butterfly networks, incurring linear communication overhead.\n- **Pianist Architecture**: Bypassing cross-machine NTTs by partitioning circuits and using bivariate polynomial identities and distributed polynomial commitment schemes (PCS) like KZG.\n\n### Technical Details\n- **Bypassing Distributed NTT**: Rather than executing global butterfly transforms across machines, Pianist partitions the circuit into $M$ parts across $M$ machines and establishes an independent argument for each. Each vector holding distributed polynomials across machines is interpolated over powers of a root of unity to form a bivariate polynomial identity, which is verified on random challenge points via the Schwartz-Zippel lemma.\n- **Interactive Protocol Execution**: Each worker node maintains its own polynomials and evaluates them at a challenge point $\\alpha$ received from the verifier. Evaluations are transmitted to the master node, which constructs a new polynomial identity and commits to a witness ($H_y(\\alpha, Y)$). The prover cluster then evaluates this on an additional random evaluation point from the verifier and produces a bivariate KZG opening proof.\n- **Arbitrary Circuit Generalization & Robustness**: Pianist extends beyond data-parallel circuits to arbitrary arithmetic circuits by implementing a distributed grand product argument. Additionally, the master node can identify faulty proof fragments from worker nodes in data-parallel setups and generate proofs for correct slices without rerunning the entire cluster.\n- **Implementation & Benchmarks**: Implemented on top of the Plonk codebase in the gnark library, Pianist demonstrates that proving time and memory usage scale down proportionally as cluster size grows, maintaining low overhead even with small numbers of worker nodes.\n\n### Takeaways\nPianist offers a fully distributed ZKP protocol for general arithmetic circuits that preserves the constant proof size, constant verification time, and quasi-linear proving computation of Plonk while requiring only $O(1)$ constant communication between the master and worker nodes, effectively removing distributed communication bottlenecks in zkRollup scaling.",
       "durationSeconds": 898,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 243,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "9lYeqYLIMq4",
@@ -1566,7 +1738,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 2024 265 eAudit A Fast, Scalable and Deployable Audit Data Collection System Hanke Kimm.",
       "summary": null,
       "durationSeconds": 798,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 36,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Oe8Uj-HWceo",
@@ -1582,7 +1756,9 @@
       "teaser": "Security researchers examine technical aspects of 2024 431 Routing Attacks on Cryptocurrency Mining Pools Muoi Tran.",
       "summary": null,
       "durationSeconds": 1166,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 165,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ENRNG6BeMzQ",
@@ -1600,7 +1776,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2024 467 ARMOR A Formally Verified Implementation of X 509 Certificate Chain Validation Joyanta De.",
       "summary": null,
       "durationSeconds": 1141,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 80,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "wjoXz6ubX7U",
@@ -1618,7 +1796,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 2024 517 Understanding and Benchmarking the Commonality of Adversarial Examples cheng yushi.",
       "summary": null,
       "durationSeconds": 555,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 79,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "s4dbOVZls0U",
@@ -1636,7 +1816,9 @@
       "teaser": "Security researchers examine technical aspects of 2024 519 From Individual Computation to Allied Optimization Remodeling Privacy Preserving Neural Inf.",
       "summary": null,
       "durationSeconds": 1160,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 27,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "eqeuzWHZi94",
@@ -1654,7 +1836,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 2024 471 Private Hierarchical Governance for Encrypted Messaging Armin Namavari.",
       "summary": null,
       "durationSeconds": 1036,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 54,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "49Yz1xo_44Q",
@@ -1672,7 +1856,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 2024 637 Poisoned ChatGPT Finds Work for Idle Hands Exploring Developers Coding Practices with Inse.",
       "summary": null,
       "durationSeconds": 1087,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 168,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "MV-C68TMyjI",
@@ -1688,7 +1874,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding Backdooring Multimodal Learning.",
       "summary": null,
       "durationSeconds": 929,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 63,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "f87B0gqJxdg",
@@ -1705,7 +1893,9 @@
       "teaser": "Security researchers examine technical aspects of Chronos presentation sard Chen.",
       "summary": null,
       "durationSeconds": 556,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 26,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Ofb2G07HKqQ",
@@ -1721,7 +1911,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for MEA Defender Lv Peizhuo.",
       "summary": null,
       "durationSeconds": 1031,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 37,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "If1s7We2gAI",
@@ -1739,7 +1931,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for GroVE 20mins S&P Asim Waheed.",
       "summary": null,
       "durationSeconds": 894,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 31,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ECxQDx8G_QY",
@@ -1755,7 +1949,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning LowerBoundsRDP Tim Kutta.",
       "summary": null,
       "durationSeconds": 1125,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 62,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "sTjepiDEuq4",
@@ -1771,7 +1967,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in SP24 HD Florian Hantke.",
       "summary": null,
       "durationSeconds": 1200,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 37,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "kDWaF1Nw4NM",
@@ -1789,7 +1987,9 @@
       "teaser": "Security researchers examine technical aspects of sp24 long recording Jannis Rautenstrauch.",
       "summary": null,
       "durationSeconds": 1160,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 34,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "_5sRjEeK5nM",
@@ -1805,7 +2005,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding video Zhen Xiang.",
       "summary": null,
       "durationSeconds": 976,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 78,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Y1PaWjxc6PM",
@@ -1821,7 +2023,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in sokvideo v1 Max N.",
       "summary": null,
       "durationSeconds": 478,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 25,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "8GfHGAnju3w",
@@ -1837,7 +2041,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in video1092237667 Hoang Nguyen Dai.",
       "summary": null,
       "durationSeconds": 659,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 137,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "s5iRhJsu4tw",
@@ -1856,7 +2062,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 211 Multi Instance Adversarial Attack on GNN Based Malicious Domain Detection Mahmoud Khaled Ahm.",
       "summary": null,
       "durationSeconds": 926,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 24,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "nxBhIxIRI9w",
@@ -1874,7 +2082,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 2024 265 eAudit A Fast, Scalable and Deployable Audit Data Collection System Hanke Kimm.",
       "summary": null,
       "durationSeconds": 798,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 57,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "jGtLyeAxJ88",
@@ -1891,7 +2101,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2024 100 The Dark Side of Scale Insecurity of Direct to Cell Satellite Mega Constellations 刘威.",
       "summary": null,
       "durationSeconds": 905,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 157,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "fZ2t5_ANLbc",
@@ -1907,7 +2119,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 251 Text CRS A Generalized Certified Robustness Framework against Textual Adversarial Attacks Jane.",
       "summary": null,
       "durationSeconds": 816,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 71,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "T_z_ucVTKKc",
@@ -1926,7 +2140,9 @@
       "teaser": "Security researchers examine technical aspects of 398 Pulling Off The Mask Forensic Analysis of the Deceptive Creator Wallets Behind Smart Contract Fr.",
       "summary": null,
       "durationSeconds": 621,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 60,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "TYtORjQu_Dg",
@@ -1944,7 +2160,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2024 13 Holistic Concolic Execution for Dynamic Web Applications via Symbolic Interpreter Analysis.",
       "summary": null,
       "durationSeconds": 986,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 38,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "J1VCBXET7D8",
@@ -1963,7 +2181,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in #144 TCP Spoofing Reliable Payload Transmission Past the Spoofed TCP Handshake Eric Pan.",
       "summary": null,
       "durationSeconds": 1049,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 66,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "BcKLv7Z9gu8",
@@ -1979,7 +2199,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 699 CoreLocker Andrew Wang.",
       "summary": null,
       "durationSeconds": 485,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 33,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "5Yeip-90bng",
@@ -1996,7 +2218,9 @@
       "teaser": "Security researchers examine technical aspects of 443 Targeted and Troublesome Zahra Moti Zahra Moti.",
       "summary": null,
       "durationSeconds": 956,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 12,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "QcA0eVRxssM",
@@ -2014,7 +2238,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 2024 637 Poisoned ChatGPT Finds Work for Idle Hands Exploring Developers Coding Practices with Inse.",
       "summary": null,
       "durationSeconds": 1087,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 27,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "z_anDXzSc0U",
@@ -2035,7 +2261,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 132 Certifying Zero Knowledge Circuits with Refinement Types Junrui Liu.",
       "summary": null,
       "durationSeconds": 501,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 42,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "w9NVVLBcDZU",
@@ -2054,7 +2282,9 @@
       "teaser": "Security researchers examine technical aspects of 75 Serberus Protecting Cryptographic Code frrom Spectres at Compile Time Nicholas Hunter Mosier.",
       "summary": null,
       "durationSeconds": 1022,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 55,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "vfeg9oojcbo",
@@ -2070,7 +2300,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 14 TuDoor new Xiang Li.",
       "summary": null,
       "durationSeconds": 1094,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 35,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "cpDtMQyry5o",
@@ -2088,7 +2320,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 2024 25 MQTTactic Security Analysis and Verification for Logic Flaws in MQTT Implementations szx.",
       "summary": null,
       "durationSeconds": 798,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 89,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "br7UE-5hg3o",
@@ -2105,7 +2339,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 183 Who Left the Door Open Investigating the Causes of Exposed IoT Devices in an Academic Network.",
       "summary": null,
       "durationSeconds": 328,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 74,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "aja-VC4hJ2g",
@@ -2122,7 +2358,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 320 Signing in Four Public Software Package Registries Quantity, Quality, and Influencing Factors.",
       "summary": null,
       "durationSeconds": 910,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 26,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "VycqeaOXkOs",
@@ -2138,15 +2376,15 @@
       "teaser": "Engineers explore architecture and security mechanisms for tor1 Zhongtang Luo.",
       "summary": null,
       "durationSeconds": 1008,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 56,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "UYv5bYSmSX8",
       "slug": "602-rethinking-ic-layout-vulnerability-simulation-based-hardware",
       "title": "602 Rethinking IC Layout Vulnerability Simulation Based Hardware Trojan Threat Assessment with High",
-      "speakers": [
-        "High"
-      ],
+      "speakers": [],
       "track": "hardware",
       "topics": [
         "rethinking",
@@ -2157,7 +2395,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 602 Rethinking IC Layout Vulnerability Simulation Based Hardware Trojan Threat Assessment with High.",
       "summary": null,
       "durationSeconds": 716,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 35,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "LnvewUHWM7U",
@@ -2173,7 +2413,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 114 GAuV Xingyu Xie.",
       "summary": null,
       "durationSeconds": 1135,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 62,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "HiEsD7pEglE",
@@ -2194,7 +2436,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 431 Asterisk Super fast MPC with a Friend Protik Paul.",
       "summary": null,
       "durationSeconds": 1184,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 97,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "FQrCpZsN8Cs",
@@ -2210,7 +2454,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for gpuzip 20 yingchen wang.",
       "summary": null,
       "durationSeconds": 1215,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 99,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "FOFzygHCzGk",
@@ -2227,7 +2473,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 239 Nebula A Privacy First Platform for Data Backhaul Jean Luc Watson.",
       "summary": null,
       "durationSeconds": 1137,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 54,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "F-EO29depM4",
@@ -2245,7 +2493,9 @@
       "teaser": "Security researchers examine technical aspects of 582 Janus Safe Biometric Deduplication for Humanitarian Aid Distribution kasra EdalatNejad.",
       "summary": null,
       "durationSeconds": 1120,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 96,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Eg8Qb3zXdD4",
@@ -2261,7 +2511,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 270 An Analysis of Recent Advances in Deepfake Image Detection in an Evolving Threat Landscape sif.",
       "summary": null,
       "durationSeconds": 1132,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 472,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "1mR-TFweLyA",
@@ -2277,7 +2529,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 2024 531 Please Tell Me More Liu Han.",
       "summary": null,
       "durationSeconds": 551,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 83,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "vxKenJuGQR4",
@@ -2294,7 +2548,9 @@
       "teaser": "Security researchers examine technical aspects of S&PFinal Louis Henri.",
       "summary": null,
       "durationSeconds": 1075,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 37,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "qOtW3lffueg",
@@ -2310,7 +2566,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding cut final presentation Sönke Huster.",
       "summary": null,
       "durationSeconds": 741,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 34,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ju1g2IaTLBg",
@@ -2326,7 +2584,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 545video Irina Ford.",
       "summary": null,
       "durationSeconds": 856,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 32,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "hGQTrkeSbbg",
@@ -2345,7 +2605,9 @@
       "teaser": "Security researchers examine technical aspects of Ati Priya Bajaj Len or index or count, anything but v1 Predicting Variable Names in Decompilation Ou.",
       "summary": null,
       "durationSeconds": 833,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 31,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "amWdp4-76Os",
@@ -2361,7 +2623,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in CanWeCastABallotAsIntendedAndBeReceiptFree Henri Devillez.",
       "summary": null,
       "durationSeconds": 1024,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 29,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "aeijjStjc7w",
@@ -2378,7 +2642,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 2024 108 DeepShuffle A Lightweight Defense Framework against Adversarial Fault Injection Attacks on.",
       "summary": null,
       "durationSeconds": 908,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 83,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "XinhCD-M8HY",
@@ -2396,7 +2662,9 @@
       "teaser": "Security researchers examine technical aspects of 311 Scalable Mixed Mode MPC Radhika Garg.",
       "summary": null,
       "durationSeconds": 940,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 59,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "WRVVnlzRrss",
@@ -2413,7 +2681,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2024 449 Undefined oriented Programming Detecting and Chaining Prototype Pollution Gadgets in Node.",
       "summary": null,
       "durationSeconds": 1195,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 69,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Jq_zLptqoMY",
@@ -2431,7 +2701,9 @@
       "teaser": "Security researchers examine technical aspects of 588 From Principle to Practice Vertical Data Minimization for Machine Learning Robin Staab.",
       "summary": null,
       "durationSeconds": 954,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 56,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "HqRstw_y1Qk",
@@ -2447,7 +2719,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 433 On SMS Phishing Tactics and Infrastructure Alex Nahapetyan.",
       "summary": null,
       "durationSeconds": 517,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 154,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "FiBUDhQrBFs",
@@ -2466,7 +2740,9 @@
       "teaser": "Security researchers examine technical aspects of 574 Cohere Managing Differential Privacy in Large Scale Systems Nicolas Küchler.",
       "summary": null,
       "durationSeconds": 929,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 68,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "F1M8LmtT5Bc",
@@ -2483,7 +2759,9 @@
       "teaser": "Security researchers examine technical aspects of 02 Saiid El Hajj Chehade SINBAD 20 min Saiid El Hajj Chehade.",
       "summary": null,
       "durationSeconds": 934,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 33,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "DJ5Nr7nobRk",
@@ -2502,7 +2780,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 272 SneakyPrompt Jailbreaking Text to image Generative Models Yuchen Yang.",
       "summary": null,
       "durationSeconds": 1097,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 1300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "3V0sQzVVE_c",
@@ -2520,7 +2800,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 59 Hyena Balancing Packing, Reuse, and Rotations for Encrypted Inference Sarabjeet Singh.",
       "summary": null,
       "durationSeconds": 763,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 99,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "3gYc9EHAVeo",
@@ -2537,7 +2819,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning sp 2024 holepunch final Zachary Ratliff.",
       "summary": null,
       "durationSeconds": 864,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 52,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "u-yhtQaKVEs",
@@ -2553,7 +2837,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding Eureka Presentation Yu Wei.",
       "summary": null,
       "durationSeconds": 1347,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 40,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "swlBRmYJCJ8",
@@ -2572,7 +2858,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 727 From Chatbots to Phishbots Phishing Scam Generation in Commercial Large Language Models Sayak.",
       "summary": null,
       "durationSeconds": 1198,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 320,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "otlQ40-SWu4",
@@ -2590,7 +2878,9 @@
       "teaser": "Security researchers examine technical aspects of 86 Understanding Parents' Perceptions and Practices Toward Children's Security and Privacy in Virtua.",
       "summary": null,
       "durationSeconds": 681,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 38,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "i7aVA8gmFPY",
@@ -2607,7 +2897,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2024 567 More is Merrier Relax the Non Collusion Assumption in Multi Server PIR esnierde.",
       "summary": null,
       "durationSeconds": 1196,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 36,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ewqJdAjuJvc",
@@ -2625,7 +2917,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for Practical Attacks Against DNS Reputation Systems.",
       "summary": null,
       "durationSeconds": 643,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 84,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "cCt5978yfuE",
@@ -2641,7 +2935,9 @@
       "teaser": "Security researchers examine technical aspects of 308 SoK CollusionResistantMPSI Jelle Vos.",
       "summary": null,
       "durationSeconds": 1014,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 27,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "TrmgaFyTA-0",
@@ -2659,7 +2955,9 @@
       "teaser": "Security researchers examine technical aspects of 2024 456 State aware Fuzzing on Trusted OS Designed for IoT Devices Qinying.",
       "summary": null,
       "durationSeconds": 860,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 49,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "QCoo0gOzfQM",
@@ -2677,7 +2975,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 2024 88 AFGEN Whole Function Fuzzing for Applications and Libraries Yuwei LIU 1.",
       "summary": null,
       "durationSeconds": 946,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 142,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "MYfENN_JH3c",
@@ -2696,7 +2996,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 79 Leaky Address Masking Mathé Hertogh 1.",
       "summary": null,
       "durationSeconds": 1123,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 42,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "K02bwaibbCE",
@@ -2715,7 +3017,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 243 MAWSEO Adversarial Wiki Search Poisoning for Illicit Online Promotion Zilong Lin.",
       "summary": null,
       "durationSeconds": 1293,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 32,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "EEUdslTwYZ8",
@@ -2734,7 +3038,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 556 Pudding Private User Discovery in Anonymity Networks Ceren Kocaogullar.",
       "summary": null,
       "durationSeconds": 1166,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 840,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "5_NGOKfUolg",
@@ -2753,7 +3059,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 526 From Virtual Touch to Tesla Command Unlocking Unauthenticated Control Chains From Smart Glasses.",
       "summary": null,
       "durationSeconds": 894,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 167,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "sid6BvOVTD4",
@@ -2773,7 +3081,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 2024 winter 448 Efficient Actively Secure DPF and RAM based 2PC with One Bit Leakage Wenhao Zhang.",
       "summary": null,
       "durationSeconds": 659,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 65,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "tEC_4u7-w5I",
@@ -2790,7 +3100,9 @@
       "teaser": "Security researchers examine technical aspects of 2024 62 Enforcing End to end Security for Remote Conferencing Triste L.",
       "summary": null,
       "durationSeconds": 1076,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 36,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "sZ7FdGiWx4w",
@@ -2808,7 +3120,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 258 ALIF Low Cost Adversarial Audio Attacks on Black Box Speech Platforms using Linguistic Features.",
       "summary": null,
       "durationSeconds": 818,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 56,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "r_a5zJg5jeE",
@@ -2826,7 +3140,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 2024 61 ERASAN Efficient Rust Address Sanitizer Jiun Min.",
       "summary": null,
       "durationSeconds": 1002,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 195,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "r1Te0e7oVGY",
@@ -2844,7 +3160,9 @@
       "teaser": "Security researchers examine technical aspects of 2024 57 Counterexample Guided Directed Fuzzing via Likely Invariant Inference Shadow HUANG.",
       "summary": null,
       "durationSeconds": 971,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 113,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "qr9ICw5KnSw",
@@ -2863,7 +3181,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 24 Architectural Mimicry Innovative Instructions to Efficiently Address Control Flow Leakage in Dat.",
       "summary": null,
       "durationSeconds": 1048,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 22,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "n74AG1SAtzM",
@@ -2881,7 +3201,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 322 SoK SGX Fail How Stuff Gets eXposed Stephan van Schaik.",
       "summary": null,
       "durationSeconds": 672,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 81,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "myteCasy8z0",
@@ -2899,7 +3221,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 2024 606 BOLT Privacy Preserving, Accurate and Efficient Inference for Transformers Qi Pang.",
       "summary": null,
       "durationSeconds": 1139,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 267,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "mSI5jewwoHw",
@@ -2918,7 +3242,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 706 A Security Analysis of Honey Vaults Fei Duan.",
       "summary": null,
       "durationSeconds": 652,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 45,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "jaZ2olvsFyY",
@@ -2936,7 +3262,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in #81 The Role of User Agent Interactions on Mobile Money Practices Karen Sowon.",
       "summary": null,
       "durationSeconds": 1017,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 23,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "jUSTHg1ZKms",
@@ -2957,7 +3285,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 366 CaFA Cost aware, Feasible Attacks With Database Constraints Matan BT.",
       "summary": null,
       "durationSeconds": 740,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 61,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "bWkTVJ2nYlo",
@@ -2975,7 +3305,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 2024 500 Exploring the Orthogonality and Linearity of Backdoor Attacks Kaiyuan Zhang.",
       "summary": null,
       "durationSeconds": 882,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 91,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "_yIlCzKRT4E",
@@ -2993,7 +3325,9 @@
       "teaser": "Security researchers examine technical aspects of 202 Ad Inventory Pooling in the Ad Tech Supply Chain Yash Vekaria.",
       "summary": null,
       "durationSeconds": 931,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 87,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "VgwHJqYBk28",
@@ -3011,7 +3345,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 434 Casual Users and Rational Choices within Differential Privacy Narges Ashena.",
       "summary": null,
       "durationSeconds": 581,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 37,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "VF_Y-CYKY-w",
@@ -3027,7 +3363,9 @@
       "teaser": "Security researchers examine technical aspects of Practical Obfuscation of BLE Physical Layer Fingerprints on Mobile Devices Hadi Givehchian.",
       "summary": null,
       "durationSeconds": 909,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 84,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "QBz6KfaLUx8",
@@ -3044,7 +3382,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 2024 614 Few shot Unlearning Youngsik Yoon.",
       "summary": null,
       "durationSeconds": 632,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 93,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "OnwCRHNl1Nc",
@@ -3063,7 +3403,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 117 Cheng Gongye Side Channel Assisted Reverse Engineering of Encrypted DNN Hardware Accelerator IP.",
       "summary": null,
       "durationSeconds": 696,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 92,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "LoxXBrBriQs",
@@ -3081,7 +3423,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in ItsSimplexIEEES+P 20min Andrew Cullen.",
       "summary": null,
       "durationSeconds": 1191,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 31,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "J3lJ6Esza3Q",
@@ -3100,7 +3444,9 @@
       "teaser": "Security researchers examine technical aspects of 428 Understanding the Privacy Practices of Political Campaigns A Perspective from the 2020 US Electi.",
       "summary": null,
       "durationSeconds": 1002,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 36,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "HJ9ucccHwxY",
@@ -3119,7 +3465,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 354 Tabbed Out Subverting the Android Custom Tab Security Model Philipp Beer.",
       "summary": null,
       "durationSeconds": 1196,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 119,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "FbJ9HtOpkxc",
@@ -3137,7 +3485,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 362 Thwarting Last Minute Voter Coercion Rosario Giustolisi.",
       "summary": null,
       "durationSeconds": 867,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 27,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "F4pOSYRphM0",
@@ -3156,7 +3506,9 @@
       "teaser": "Security researchers examine technical aspects of 174 Automated Synthesis of Effect Graph Policies for Microservice Aware Stateful System Call Special.",
       "summary": null,
       "durationSeconds": 1176,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 66,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "EtejU_pHbCI",
@@ -3174,7 +3526,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 155 Specular Towards Secure, Trust minimized Optimistic Blockchain Execution Zhe Ye.",
       "summary": null,
       "durationSeconds": 662,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 81,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "EWrEsDJ084c",
@@ -3191,7 +3545,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 2024 267 Wear's my Data Understanding the Cross Device Runtime Permission Model in Wearables Dogu.",
       "summary": null,
       "durationSeconds": 958,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 122,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "9OB0p_jjZ1c",
@@ -3208,7 +3564,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning MPCitH without reputation IEEE S^0P online qw gao.",
       "summary": null,
       "durationSeconds": 751,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 76,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "7YgqAM2LTbQ",
@@ -3227,7 +3585,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 153 APP Miner Detecting API Misuses via Automatically Mining API Path Patterns Jiasheng Jiang.",
       "summary": null,
       "durationSeconds": 640,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 59,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "3wcmETsUlOA",
@@ -3246,7 +3606,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 104 Pryde A Modular Generalizable Workflow for Uncovering Evasion Attacks Against Stateful Firewall.",
       "summary": null,
       "durationSeconds": 1201,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 138,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "0rn07vJx-jI",
@@ -3262,7 +3624,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding S&P 2024 hvc Nicholas Ngai.",
       "summary": null,
       "durationSeconds": 1155,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 97,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "TokDOhHvwQ8",
@@ -3278,7 +3642,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in MIMOCrypt Jun Luo John.",
       "summary": null,
       "durationSeconds": 1289,
-      "conference": "ieee-sp"
+      "conference": "ieee-sp",
+      "viewCount": 69,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     }
   ]
 }

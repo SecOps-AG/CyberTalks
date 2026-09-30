@@ -22,7 +22,10 @@
       "teaser": "Industry experts analyze emerging threats surrounding 2022 - Life and death of an iOS attacker by Luca Todesco.",
       "summary": "Overview: Luca Todesco presents at Hexacon on the life and death of an iOS attacker, surveying Apple's aggressive security hardening and its impact on jailbreak and exploit development.\n\nKey Topics: Pointer authentication codes (PAC) on A12+ devices; iOS CFI properties preventing pointer substitution; Apple's rapid security improvements; the shrinking window for public jailbreaks; and ideas for future research directions.\n\nTechnical Details: Todesco explains PAC tagging pointers with unpredictable signatures to block traditional exploitation, and how compile-time CFI instrumentation protects function pointers and return addresses. He discusses techniques that died and potential new approaches.\n\nTakeaways: Apple's security investment has dramatically raised exploitation costs. Researchers must adapt to PAC, CFI, and other mitigations while identifying remaining attack surfaces.",
       "durationSeconds": 2797,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "difficulty": "advanced",
+      "viewCount": 11000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "DFH06-iQUjw",
@@ -40,7 +43,10 @@
       "teaser": "Security researchers examine technical aspects of 2022 - The unavoidable pain of backups by Nicolas Devillers, Anaïs Gantet & Mouad Abouhali.",
       "summary": "Why Target Backup Software\n\nAirbus Security Lab researchers evaluate NetBackup because backups are resilience-critical, widely deployed (claimed 87% of Fortune Global 500), highly privileged, and move sensitive data at scale. Prior work includes Immunity’s remote execution and Google’s remote code execution disclosures.\n\nNetBackup Domain Architecture\n\nA domain includes clients on backed-up systems, a primary server orchestrating policies and catalogs, media servers storing to disk or tape libraries, and OpsCenter for monitoring. Trust flows from OpsCenter to primaries and from primaries to clients and media servers.\n\nResearch Methodology\n\nThe team guided analysis with security questions: attackers need internal knowledge and tooling; a NetBackup client can compromise higher-privilege components; clients may pivot laterally; and attackers may target metadata needed for restore. They iterated documentation review, operator interviews, lab setup, and binary analysis—planning to present four findings and an end-to-end attack scenario, though detailed vulnerabilities extend beyond introductory architecture coverage in the available recording.",
       "durationSeconds": 2633,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "difficulty": "advanced",
+      "viewCount": 900,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "3m77KZ5FIBo",
@@ -58,7 +64,10 @@
       "summary": "Why Zimbra Is a High-Value Target\n\nThomas Chauchefoin of Sonar describes Zimbra as a widely deployed all-in-one mail platform used by universities, governments, and enterprises. Exposed SMTP and web interfaces make compromise especially damaging because mail servers hold credentials, attachments, and password-reset links.\n\nRecent Attack Landscape\n\nThe talk references Volexity and other reports of XSS, webshells, and authentication bypasses during mailbox imports that enabled unauthenticated remote code execution on internet-facing instances, sometimes attributed to state actors seeking data rather than financial gain.\n\nFour Bugs in Three Months\n\nResearch across user-facing services, internal components, and inbound email processing uncovered four vulnerabilities: stored XSS via message display, authenticated SSRF chained to XSS, newline injection breaking caching to leak passwords, and archive-extractor abuse yielding RCE on any instance.\n\nSanitize-Send-Modify Pattern\n\nRather than bypassing Zimbra's Java HTML sanitizer directly, the team exploited post-sanitization transformations that reintroduced dangerous markup. Chauchefoin credits prior work by Simon Tse and promises live demos of the findings.",
       "durationSeconds": 2576,
       "conference": "hexacon",
-      "aiSummary": "Overview:\nThomas Chauchefoin, a vulnerability researcher at Sonar, presents a comprehensive security audit of Zimbra Collaboration Suite, an enterprise email and collaboration platform serving over 200,000 corporate, ISP, and government organizations. Chauchefoin examines the multi-tiered architecture of Zimbra, detailing attack surfaces across client-facing webmail interfaces, internal routing proxies, and message processing pipelines. The presentation documents the discovery and weaponization of four vulnerabilities: stored cross-site scripting via the \"sanitize then modify\" anti-pattern, post-authentication server-side request forgery (SSRF), Memcached protocol injection in custom Nginx proxies, and remote code execution via directory traversal in archive extraction.\n\nKey Topics:\n- Zimbra architecture and attack surfaces across webmail frontends, proxies, and SMTP pipelines\n- Stored cross-site scripting (XSS) via the \"sanitize then modify\" transformation flaw\n- Post-authentication Server-Side Request Forgery (SSRF) chained through ProxyServlet and open redirects\n- Unauthenticated Memcached injection in Zimbra's custom Nginx proxy enabling cleartext credential harvesting\n\nTechnical Details:\nZimbra's webmail frontend sanitizes incoming email bodies using a server-side Java HTML sanitizer to strip dangerous elements. However, Chauchefoin identifies a critical flaw known as the \"sanitize then modify\" anti-pattern in the frontend's truncateBodyContent routine. After server-side sanitization, the frontend normalizes HTML inside a temporary DOM element, converts it back into a string, and executes regular expressions designed to rewrite unsecured form tags lacking action attributes. Because regex parsing operates blindly on structured text, it introduced mismatched quotes when processing crafted form tags embedded inside safe attributes. This quote imbalance broke out of the attribute context, evaluating arbitrary JavaScript whenever a victim opened an email, allowing attackers to exfiltrate mailboxes, harvest address books, and propagate worms automatically.\n\nChauchefoin then analyzed Zimbra's ProxyServlet, an administrative endpoint configured to proxy requests to whitelisted integration services like WebEx. While direct host manipulation was restricted, the servlet honored an X-Host HTTP header that overrode the outbound Host header. By pointing this request at a WebEx subdomain (blog.webex.com) that reflected HTTP Host headers in an HTTP-to-HTTPS redirect, the internal HTTP client followed the redirect, yielding an SSRF primitive capable of querying internal cloud metadata services and backend APIs.\n\nTurning to infrastructure, Chauchefoin uncovered a severe unauthenticated protocol injection in Zimbra's custom Nginx reverse proxy. Nginx terminates incoming HTTP, IMAP, and POP3 traffic, querying a lookup service to map users to backend mailbox servers and caching routing results in Memcached using keys formatted as route:proto:user. In certain unauthenticated endpoints, user input was passed directly into Memcached commands without newline filtering. By injecting CRLF characters (\r\n), attackers executed arbitrary Memcached commands, including stats and set. While HTTP route destinations were strictly validated against known backends, IMAP and POP3 routes lacked validation. Attackers injected poison cache keys mapping victim accounts to attacker-controlled external IP addresses on port 1337. When desktop email clients (such as Thunderbird) connected over TLS, they transmitted cleartext usernames and passwords directly to the rogue server. Furthermore, because Nginx worker processes multiplexed requests over a single shared Memcached TCP connection, attackers used bulk get requests and cache desynchronization to poison response queues across the entire instance without prior knowledge of target usernames.\n\nKey Takeaways:\nApplications handling structured markup must never apply string-based transformations or regular expressions after sanitization has occurred, as post-processing routinely negates security sanitizers. Reverse proxies handling multi-protocol mail traffic must validate backend destinations across all supported protocols—including legacy IMAP and POP3—rather than restricting validations solely to HTTP traffic. Additionally, distributed text protocols like Memcached must enforce strict newline sanitization on cache keys and isolate connection pools between worker threads to prevent cache poisoning and state-machine desynchronization.\n\n(AI summary — Gemini Flash)"
+      "aiSummary": "Overview:\nThomas Chauchefoin, a vulnerability researcher at Sonar, presents a comprehensive security audit of Zimbra Collaboration Suite, an enterprise email and collaboration platform serving over 200,000 corporate, ISP, and government organizations. Chauchefoin examines the multi-tiered architecture of Zimbra, detailing attack surfaces across client-facing webmail interfaces, internal routing proxies, and message processing pipelines. The presentation documents the discovery and weaponization of four vulnerabilities: stored cross-site scripting via the \"sanitize then modify\" anti-pattern, post-authentication server-side request forgery (SSRF), Memcached protocol injection in custom Nginx proxies, and remote code execution via directory traversal in archive extraction.\n\nKey Topics:\n- Zimbra architecture and attack surfaces across webmail frontends, proxies, and SMTP pipelines\n- Stored cross-site scripting (XSS) via the \"sanitize then modify\" transformation flaw\n- Post-authentication Server-Side Request Forgery (SSRF) chained through ProxyServlet and open redirects\n- Unauthenticated Memcached injection in Zimbra's custom Nginx proxy enabling cleartext credential harvesting\n\nTechnical Details:\nZimbra's webmail frontend sanitizes incoming email bodies using a server-side Java HTML sanitizer to strip dangerous elements. However, Chauchefoin identifies a critical flaw known as the \"sanitize then modify\" anti-pattern in the frontend's truncateBodyContent routine. After server-side sanitization, the frontend normalizes HTML inside a temporary DOM element, converts it back into a string, and executes regular expressions designed to rewrite unsecured form tags lacking action attributes. Because regex parsing operates blindly on structured text, it introduced mismatched quotes when processing crafted form tags embedded inside safe attributes. This quote imbalance broke out of the attribute context, evaluating arbitrary JavaScript whenever a victim opened an email, allowing attackers to exfiltrate mailboxes, harvest address books, and propagate worms automatically.\n\nChauchefoin then analyzed Zimbra's ProxyServlet, an administrative endpoint configured to proxy requests to whitelisted integration services like WebEx. While direct host manipulation was restricted, the servlet honored an X-Host HTTP header that overrode the outbound Host header. By pointing this request at a WebEx subdomain (blog.webex.com) that reflected HTTP Host headers in an HTTP-to-HTTPS redirect, the internal HTTP client followed the redirect, yielding an SSRF primitive capable of querying internal cloud metadata services and backend APIs.\n\nTurning to infrastructure, Chauchefoin uncovered a severe unauthenticated protocol injection in Zimbra's custom Nginx reverse proxy. Nginx terminates incoming HTTP, IMAP, and POP3 traffic, querying a lookup service to map users to backend mailbox servers and caching routing results in Memcached using keys formatted as route:proto:user. In certain unauthenticated endpoints, user input was passed directly into Memcached commands without newline filtering. By injecting CRLF characters (\r\n), attackers executed arbitrary Memcached commands, including stats and set. While HTTP route destinations were strictly validated against known backends, IMAP and POP3 routes lacked validation. Attackers injected poison cache keys mapping victim accounts to attacker-controlled external IP addresses on port 1337. When desktop email clients (such as Thunderbird) connected over TLS, they transmitted cleartext usernames and passwords directly to the rogue server. Furthermore, because Nginx worker processes multiplexed requests over a single shared Memcached TCP connection, attackers used bulk get requests and cache desynchronization to poison response queues across the entire instance without prior knowledge of target usernames.\n\nKey Takeaways:\nApplications handling structured markup must never apply string-based transformations or regular expressions after sanitization has occurred, as post-processing routinely negates security sanitizers. Reverse proxies handling multi-protocol mail traffic must validate backend destinations across all supported protocols—including legacy IMAP and POP3—rather than restricting validations solely to HTTP traffic. Additionally, distributed text protocols like Memcached must enforce strict newline sanitization on cache keys and isolate connection pools between worker threads to prevent cache poisoning and state-machine desynchronization.\n\n(AI summary — Gemini Flash)",
+      "difficulty": "advanced",
+      "viewCount": 971,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "LxoHSrrGaNA",
@@ -76,7 +85,10 @@
       "teaser": "Security researchers examine technical aspects of 2022 - Hara-Kirin: Dissecting Huawei Mobile Devices by Maxime Peterlin & Alexandre Adamski.",
       "summary": "Why Huawei devices matter\n\nMaxime Peterlin and Alexandre Adamski of Impalabs walk through privileged components on Huawei mobile devices, motivated by the vendor's large market share and limited public research on high-end Kirin platforms. They cover boot chain, a security hypervisor, and TrustZone implementation.\n\nBoot chain exploitation\n\nStarting with a P30 Lite (Kirin 710), they recovered an signed but unencrypted X-loader from firmware updates. An X-modem USB recovery flaw allowed unverified payload addresses, yielding arbitrary write and code execution because boot-CPU memory was RWX. Emergency download mode via a test-point short enabled the attack path.\n\nHypervisor enforcement\n\nHuawei's hypervisor keeps a read-only copy of task credentials to detect privilege escalation on syscalls or file access, restricts executable pages to kernel and module code at EL1, and hides critical peripheral memory from EL0/EL1. It enforces policy through a second stage of address translation beyond the kernel's virtual-to-intermediate mapping.",
       "durationSeconds": 2346,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "difficulty": "advanced",
+      "viewCount": 1200,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "4uZVw_rt0co",
@@ -93,7 +105,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 2022 - Attacking Safari in 2022 by Quentin Meffre.",
       "summary": null,
       "durationSeconds": 1533,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "viewCount": 1100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "TUHcZptN6Jk",
@@ -110,7 +124,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 2022 - Toner deaf: Printing your next persistence by Cedric Halbronn & Alex Plaskett.",
       "summary": null,
       "durationSeconds": 2660,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "viewCount": 792,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "rrfI6dXMJQQ",
@@ -128,7 +144,9 @@
       "teaser": "Security researchers examine technical aspects of 2022 - Discovering a 0-Day in MS-RPC service by Ophir Harpaz & Stiv Kupchik.",
       "summary": null,
       "durationSeconds": 2347,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "viewCount": 1300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "k_F4wHc4h6k",
@@ -146,7 +164,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 2022 - 0-click RCE on the Tesla Model 3 by David Berard & Vincent Dehors.",
       "summary": null,
       "durationSeconds": 2194,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "viewCount": 1800,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "4pftjmKqeoM",
@@ -164,14 +184,16 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 2022 - Fuzzing RDPEGFX with WTF by Colas Le Guernic & Jérémy Rubert.",
       "summary": null,
       "durationSeconds": 1759,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "viewCount": 684,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "WHn-6xHL7mI",
       "slug": "2022-hacking-the-cloud-with-saml-by-felix-wilhelm",
       "title": "2022 - Hacking the Cloud with SAML by Felix Wilhelm",
       "speakers": [
-        "SAML by Felix Wilhelm"
+        "Felix Wilhelm"
       ],
       "track": "cloud",
       "topics": [
@@ -183,7 +205,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 2022 - Hacking the Cloud with SAML by Felix Wilhelm.",
       "summary": null,
       "durationSeconds": 2539,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "viewCount": 5500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ffBuY7ON57g",
@@ -199,7 +223,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for 2022 - A journey of fuzzing Nvidia graphic driver leading to LPE exploitation by Thierry Doré.",
       "summary": null,
       "durationSeconds": 1427,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "viewCount": 1300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "CD8HfjdDeuM",
@@ -216,7 +242,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 2022 - Emulate it until you make it! Pwning a DrayTek Router by Philippe Laulheret.",
       "summary": null,
       "durationSeconds": 2604,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "viewCount": 3300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "w8sEzhpHI1I",
@@ -233,7 +261,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning 2022 - Challenge results by the authors.",
       "summary": null,
       "durationSeconds": 781,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "viewCount": 365,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Q-N-LR_NoSY",
@@ -251,7 +281,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 2022 - Hunting for cloudy SSRFs by Nicolas Joly.",
       "summary": null,
       "durationSeconds": 1618,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "viewCount": 542,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "QkKJOEmnzsk",
@@ -269,7 +301,9 @@
       "teaser": "Industry experts analyze emerging threats surrounding 2022 - bd-jb: Blu-ray Disc Sandbox Escape by Andy Nguyen.",
       "summary": null,
       "durationSeconds": 1559,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "viewCount": 8800,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "XsltroB3Gtk",
@@ -285,7 +319,9 @@
       "teaser": "Presenters detail vulnerability discovery and exploitation in 2022 - Closing session by the organization team.",
       "summary": null,
       "durationSeconds": 574,
-      "conference": "hexacon"
+      "conference": "hexacon",
+      "viewCount": 155,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     }
   ]
 }

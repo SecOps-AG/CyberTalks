@@ -23,7 +23,9 @@
       "teaser": "Mark Curphey investigates #HITB2023AMS KEYNOTE: The Myths Of Software Security.",
       "summary": null,
       "durationSeconds": 2439,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 1000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "3gnGPfKu7FE",
@@ -41,7 +43,9 @@
       "teaser": "Matthias Frielingsdorf explores #HITB2023AMS D1T1 - Current State Of IOS Malware Detection.",
       "summary": null,
       "durationSeconds": 3404,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 2800,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "c9zZ3aMAyDs",
@@ -62,7 +66,9 @@
       "teaser": "Haoyu Yang investigates #HITB2023AMS D1T2 - XRP Raid Protector: Killing A Critical Bug Worth 40 Billion Dollars.",
       "summary": null,
       "durationSeconds": 1932,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 369,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "0b87g3tY6bY",
@@ -80,7 +86,9 @@
       "teaser": "Jos Wetzels investigates #HITB2023AMS D1T1 - Nakatomi Space: Lateral Movement As L1 Post-Exploitation In OT.",
       "summary": "### Overview\nIn this talk, Jos Wetzels from Forescout explores lateral movement across Level 1 (L1) embedded devices in operational technology (OT) networks. Traditional OT security focuses on perimeters at higher Purdue Model tiers (e.g., Level 3.5 and 2.5 DMZs) or on upstream attacks targeting SCADA/HMI systems. However, control devices at Level 1—such as PLCs, RTUs, and fieldbus couplers—frequently sit on unacknowledged, multi-homed \"network crawl spaces\" consisting of nested fieldbuses, serial links, RF connections, and point-to-point lines. Drawing an analogy to the \"Nakatomi space\" concept (traversing latent, overlooked architectural paths), Wetzels demonstrates how an attacker can move laterally downwards through nested L1 control devices to cross hardened security boundaries and manipulate critical physical processes.\n\n### Key Topics\n- **The OT \"Network Crawl Space\":** Deep L1 architectures host nested networks (Profibus, CANopen, industrial wireless) and black-box third-party packaged units (HVAC, chemical injection, turbines) integrated via couplers that lack monitoring, visibility, and detection capabilities.\n- **Motivation for Deep Lateral Movement:** Attackers navigate deep into OT to bypass hardened perimeters (e.g., crossing from Basic Process Control Systems [BPCS] to Safety Instrumented Systems [SIS]), manipulate SIS bypass functions, or achieve granular control over field devices that are not exposed via SCADA interfaces.\n- **Level 1 Lateral Movement Techniques:** Attackers exploit OT protocol routing and encapsulation (Modbus, EtherCAT, CIP), in-band code downloads, memory manipulation, and protocol stack vulnerabilities in embedded real-time operating systems (RTOS).\n\n### Technical Details\nTo demonstrate an end-to-end multi-hop attack chain, the speaker modeled a real-world movable bascule bridge architecture managed across three tiers of embedded hardware:\n1. **Initial Compromise of Fieldbus Gateway:** The attacker targets a WAGO 750-852 Modbus coupler running Nucleus RTOS. Exploiting a Nucleus 13 vulnerability (a stack buffer overflow in the FTP server's USER command handling), the attacker overrides linked list pointers during an FTP disconnect to achieve a write-4 primitive. By hooking the unused `span_process_packet` function and sending LLC frames, the attacker achieves code execution in ARM supervisor mode, installs an RTOS task, and proxies Modbus function code 0x5A.\n2. **Engineering Protocol Exploitation on the Object PLC:** Behind the coupler sits a Schneider Electric Modicon M340 PLC running VxWorks 6.4. The attacker sniffs and replays legitimate nonces or forges authenticated requests in the proprietary UMAS protocol (Modbus function 0x5A) because the authentication signature relies only on nonces and public hardware IDs without a secret. Rather than downloading new control logic—which forces a disruptive restart and alarms—the attacker abuses the undocumented UMAS CSA request (service code 0x50). By writing payload shellcode into a data block and executing a permitted block-copy to an executable block, the attacker hot-patches running memory live, escapes the scan cycle watchdog, spawns an RTOS task, and erases memory changes for anti-forensics.\n3. **Fieldbus & Safety PLC Pivot:** From the M340 PLC, the attacker uses CANopen APIs/SDOs to override motor safety limits and initiates an attack across a non-routable, point-to-point Ethernet link into an Allen-Bradley GuardLogix safety PLC (1756-EN2D module running VxWorks 6.9 on an Ice 2 chip). Exploiting an Urgent 11 vulnerability (Interpeak IPnet stack buffer overflow in IP record route options), the attacker constructs a ROP chain to bypass executable space protection (NX), secures a write-4 primitive, deploys an implant, and talks directly to the backplane device driver to manipulate SIS bypasses and trigger false emergency stops.\n\n### Takeaways & Defenses\n- **Redefining Perimeters:** Any L1 device bridging separate networks or media is a perimeter device and must be secured and evaluated for multi-order connectivity risks.\n- **Detection Strategies:** Defenders should alert on abnormal protocol usage, such as UMAS traffic routed to non-Modicon devices or UMAS CSA traffic (service code 0x50), monitor for watchdog resets and IP header error statistics, and inspect project memory blocks for carved ARM shellcode when anti-forensics are incomplete. Network flows carrying UMAS should be strictly restricted to engineering workstations.",
       "durationSeconds": 3428,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 649,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "179l_gnPp2U",
@@ -101,7 +109,9 @@
       "teaser": "B. Brizendine examines #HITB2023AMS D1T2 - Syscalls In Shellcode: Techniques For Malicious Functionality.",
       "summary": null,
       "durationSeconds": 3710,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 2400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "vvUrSHLsNxI",
@@ -122,7 +132,9 @@
       "teaser": "Alex Plaskett explores #HITB2023AMS D1T1 - SOHO Hacking At Pwn2Own.",
       "summary": null,
       "durationSeconds": 3492,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 1300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "DRH0oRFwFiM",
@@ -143,7 +155,9 @@
       "teaser": "T. Blazytko explores #HITB2023AMS D1T2 - Next Generation Virtualization-Based Obfuscators.",
       "summary": null,
       "durationSeconds": 3531,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 5800,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "4_ExouTXe10",
@@ -166,7 +180,9 @@
       "teaser": "Z. WangJunjie explores #HITB2023AMS D1T1 - Hunting Windows Desktop Window Manager Bugs.",
       "summary": null,
       "durationSeconds": 2782,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 1100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "NY7kBh3XVzE",
@@ -186,7 +202,9 @@
       "teaser": "KaiJern Lau details #HITB2023AMS D1T2 - A Tale Of Building A REAL Full Speed Anti-Censorship Router.",
       "summary": null,
       "durationSeconds": 3228,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 601,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "km6QTMDb8Yw",
@@ -207,7 +225,9 @@
       "teaser": "A. Wang details #HITB2023AMS D1T1 - Advanced DMA Reentrancy Techniques To Escape QEMU.",
       "summary": null,
       "durationSeconds": 2949,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 595,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "vwnjqmAruEw",
@@ -227,7 +247,9 @@
       "teaser": "Rohan Aggarwal examines #HITB2023AMS D1T2 - Bypassing Anti-Cheats And Hacking Competitive Games.",
       "summary": null,
       "durationSeconds": 3263,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 12000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "tnV3q78CyBQ",
@@ -246,7 +268,9 @@
       "teaser": "Analysts investigate attack surfaces and defenses concerning #HITB2023AMS D2 PANEL DISCUSSION: iOS / OS X Security (moderated by Dhillon 'L33tdawg' Kannabhiran).",
       "summary": null,
       "durationSeconds": 2646,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 444,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Qz92QTo9yr8",
@@ -268,7 +292,9 @@
       "teaser": "Alexander Rubin investigates #HITB2023AMS D2T1 - How MySQL Servers Can Attack YOU.",
       "summary": null,
       "durationSeconds": 3151,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 439,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "F2TV7SsPxTQ",
@@ -286,7 +312,9 @@
       "teaser": "A. Continella details #HITB2023AMS D2T2 - Automated Black-box Security Testing Of “Smart” Embedded Devices.",
       "summary": null,
       "durationSeconds": 3007,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 261,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "kRF3CoQ9jfk",
@@ -308,7 +336,9 @@
       "teaser": "E Shimony details #HITB2023AMS D2T1 - ChatGPT Please Write Me A Piece Of Polymorphic Malware.",
       "summary": null,
       "durationSeconds": 2586,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 856,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "CTil1laLf98",
@@ -329,7 +359,9 @@
       "teaser": "Martin Doyhenard investigates #HITB2023AMS D2T2 - Exploiting IPC With New Desynchronization Primitives.",
       "summary": null,
       "durationSeconds": 2954,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 282,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Wqcbp9wFO7o",
@@ -349,7 +381,9 @@
       "teaser": "Peter Geissler investigates #HITB2023AMS D2T1 - Smart Speaker Shenanigans: Making The SONOS One Sing.",
       "summary": null,
       "durationSeconds": 3090,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 930,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "CIkSiECswYw",
@@ -371,7 +405,9 @@
       "teaser": "M. Cheng examines #HITB2023AMS D2T2 - Active Directory Abuse Primitives And Operation Security.",
       "summary": null,
       "durationSeconds": 3568,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 755,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "KsqLb-l-TjA",
@@ -392,7 +428,9 @@
       "teaser": "Tao Sauvage investigates #HITB2023AMS D2T1 - A Deep Dive Into GarminOS And Its MonkeyC Virtual Machine.",
       "summary": null,
       "durationSeconds": 2901,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 3700,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "C4HiS_2accs",
@@ -416,7 +454,9 @@
       "teaser": "Y. Lee details #HITB2023AMS D2T2 - Privilege Escalation Using DOP In MacOS.",
       "summary": null,
       "durationSeconds": 1653,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 649,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "b3k7R8FUdIE",
@@ -437,7 +477,9 @@
       "teaser": "M. Balduzzi examines #HITB2023AMS D2T1 - An Analysis Of Computer Numerical Control Machines In Industry 4.0.",
       "summary": null,
       "durationSeconds": 2835,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 159,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "vOqa-CxINDM",
@@ -458,7 +500,9 @@
       "teaser": "Dhia Mahjoub details #HITB2023AMS D2T2 - Investigating Web3 With OSINT.",
       "summary": null,
       "durationSeconds": 2899,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 518,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "T2qZM3JbMnM",
@@ -476,7 +520,9 @@
       "teaser": "Saumil Shah analyzes #HITB2023AMS CLOSING KEYNOTE - The Hand That Strikes, Also Blocks.",
       "summary": null,
       "durationSeconds": 2275,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 324,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "gfIn_NjlB_s",
@@ -494,7 +540,9 @@
       "teaser": "Engineers explore architecture and security mechanisms for #HITB2023AMS CTF Prize Giving & Closing Note by Dhillon 'L33tdawg' Kannabhiran.",
       "summary": null,
       "durationSeconds": 1289,
-      "conference": "hitb"
+      "conference": "hitb",
+      "viewCount": 130,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     }
   ]
 }

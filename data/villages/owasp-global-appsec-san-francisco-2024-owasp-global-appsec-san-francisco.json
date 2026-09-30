@@ -23,7 +23,9 @@
       "teaser": "Outlines keynote: Thriving in the Age of AI and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2257,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 1000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "XHeTn7uWVQM",
@@ -42,7 +44,9 @@
       "teaser": "Provides keynote: Red, Blue, and Purple AI and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 3804,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 3600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "V8xvdyicO8U",
@@ -61,7 +65,9 @@
       "teaser": "Discusses keynote: Navigating the Intersection of Technology, Security, and Trust and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 3431,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 282,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "8WnbHn78LRM",
@@ -81,7 +87,9 @@
       "teaser": "Investigates keynote: Think Like a Hacker and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2099,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 793,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "80lcmA5SotA",
@@ -101,7 +109,9 @@
       "teaser": "Outlines living off Microsoft Copilot and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2950,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 420,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "1TdpDBZj7RA",
@@ -121,7 +131,9 @@
       "teaser": "Explores graphQL Exploitation: Secondary Context Attacks and Business Logic and evaluates key implications for security practitioners.",
       "summary": "### Overview\nIn this presentation, Will van dender, a senior staff security researcher at Sprocket Security, examines secondary context attacks within GraphQL architectures. Modern enterprise applications frequently employ the Backend-for-Frontend (BFF) design pattern, where an incoming client request to an external gateway or GraphQL server triggers a secondary internal request to underlying REST microservices. When user input from the primary GraphQL context is concatenated or embedded into backend requests without proper normalization or sanitization, attackers can leverage path traversal and other techniques to redirect requests to unauthorized internal endpoints. This talk covers the mechanics of secondary context vulnerabilities, real-world case studies demonstrating data exposure and SQL injection, discovery workflows, and strategies for both offensive testers and defensive teams.\n\n### Key Topics\n- **Secondary Context Attacks in BFF Patterns**: Understanding the distinction between external client requests and the secondary requests executed internally between a GraphQL proxy and internal microservices.\n- **Authentication & Authorization Decoupling**: How authorization headers (such as JWTs or API keys) hard-coded or automatically appended at the BFF can be inadvertently inherited by an attacker targeting secondary endpoints.\n- **GraphQL Scaler Weaknesses**: Analysis of default GraphQL scalar types, focusing on how `String` and `ID` scalers accept arbitrary string inputs (such as path traversal payloads or SQL injection strings) without strict validation.\n- **Testing Methodology & Tooling**: Techniques for fingerprinting GraphQL instances, brute-forcing schema objects when introspection and suggestions are disabled, using custom Burp Montoya filters/B-Checks, and reviewing proxy history.\n- **Defense and Remediation**: Using secure-by-default custom scalers (e.g., the `graphql-scalars` package), enforcing backend input validation, and avoiding trust boundaries that rely on hard-coded proxy authentication.\n\n### Technical Details\nVan dender illustrates secondary context attacks through two real-world enterprise assessments:\n\n1. **Blind SQL Injection via Secondary Endpoint Routing**:\n   On an external target with GraphQL introspection and field suggestions disabled, verbose error disclosures on validation failures revealed internal backend paths. By dictionary brute-forcing objects, an internal endpoint (`/api/v1/query`) accepting arbitrary SQL queries was uncovered, though it lacked direct external user input. Simultaneously, testing an input-accepting query (`contact`) demonstrated that user input was appended to backend URLs and accepted directory traversal (`../`). By supplying a crafted payload containing directory traversal sequences directed at `/api/v1/query` along with SQL injection syntax, van dender executed a blind timing-based SQL injection against the backend database.\n\n2. **SSO Account Access & IDOR Stitching**:\n   In a single sign-on enterprise application, queries retrieving account data (`getAccountByID`) appended user-supplied account IDs to an internal path like `/microservice/api/me/accounts/{id}`. Supplying traversal sequences confirmed that path normalization allowed breaking out of the `/me/` path scope. By chaining a separate GUID disclosure vulnerability with path traversal (`../../{target_user}/accounts/{id}`), the attacker accessed arbitrary private user data. The request inherited the BFF's internal authorization credentials, granting access that standard cross-user authorization controls should have denied.\n\nFrom an assessment perspective, van dender highlights that `ID` scalers in GraphQL serialize as strings intended merely to denote non-human-readable identifiers, meaning they accept path traversal payloads like `../` or encoded variations (`..%2f`). Discovery can be automated or streamlined using Burp Suite Montoya HTTP filters (BOMbata scripts) to parse operation names into proxy columns or flag queries using `ID` or `String` scalers, as well as offline tools like van dender's `burp-parser-plugin`.\n\n### Takeaways\n- **For Attackers / Pentesters**: Look for `ID` and `String` inputs in GraphQL queries and mutations. Test unexpected strings and path traversal sequences (`../`, URL-encoded variants) to identify 404, 400, or 503 error reflections indicating internal routing control. Secondary context traversal can often be chained with SSRF (via open redirects), IDORs, or SQL injection.\n- **For Developers & Defenders**: Do not assume GraphQL scalar types provide type safety against malicious formats; `ID` and `String` fields require rigorous input validation or URL encoding (`encodeURIComponent`) before passing into downstream HTTP requests. Organizations should adopt strict, secure-by-default libraries such as `graphql-scalars` to enforce dedicated types (e.g., `UUID`) at the GraphQL layer. Finally, avoid hard-coding blanket administrative authorization tokens at proxy layers, and monitor backend microservices for anomalous spikes in 404 and 400 status codes.",
       "durationSeconds": 1959,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 810,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "7bX1iLLC6yk",
@@ -140,7 +152,9 @@
       "teaser": "Demonstrates O enterprise Data: OData Injection attack in Microsoft Power Platform and UiPath and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2859,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 598,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "g-rtvp6CXeI",
@@ -160,7 +174,9 @@
       "teaser": "Reviews web Security Experts: Are you overlooking WebRTC vulnerabilities and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2765,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 301,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "nRIfq8NCY08",
@@ -181,7 +197,9 @@
       "teaser": "Discusses AI Goat: A Damn Vulnerable AI Infrastructure and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2206,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 512,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "2ncTor7LVkY",
@@ -201,7 +219,9 @@
       "teaser": "Reviews sanitize Client-Side: Why Server-Side HTML Sanitization is Doomed to Fail and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1591,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 368,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "RogzZPfLCkA",
@@ -222,7 +242,9 @@
       "teaser": "Analyzes hidden Chains: Revealing High-Impact Bugs from Bounty submissions and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2521,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 173,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "7NmzYv1GphY",
@@ -241,7 +263,9 @@
       "teaser": "Investigates hackuracy: Boosting AST accuracy through hacking and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2445,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 67,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "cO6TaaHMu7s",
@@ -261,7 +285,9 @@
       "teaser": "Provides kernel Alchemy: Crafting Mobile Kernel Code to Evade Modern RASP Protections and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2075,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 532,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "703D_kHbPMI",
@@ -281,7 +307,9 @@
       "teaser": "Outlines modernizing the Application Penetration Engagement and Reporting Lifecycle and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2443,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 170,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "6zBSlx_O0eE",
@@ -299,7 +327,9 @@
       "teaser": "Demonstrates navigating the complex and rapidly evolving world of product and application security regulations and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 769,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 62,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "m5Jhrgl02IU",
@@ -317,7 +347,9 @@
       "teaser": "Investigates OWASP Top 10 Risks for Open Source Software and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1489,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 185,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "E3fhiyQUj6w",
@@ -337,7 +369,9 @@
       "teaser": "Presents OWASP DevSecOps Maturity Model (DSOMM) and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1501,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 530,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "NE9DvPwgNZc",
@@ -357,7 +391,9 @@
       "teaser": "Investigates OWASP Coraza - Web Application Firewall and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1913,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 2300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "s09XWP4j1No",
@@ -377,7 +413,9 @@
       "teaser": "Demonstrates OWASP Software Assurance Maturity Model (SAMM) and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1570,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 516,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Zca_ymXKom8",
@@ -396,7 +434,9 @@
       "teaser": "Evaluates OWASP IoT Security Testing Guide (ISTG) and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1531,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 490,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "gdzKvkJdQgo",
@@ -417,7 +457,9 @@
       "teaser": "Investigates OWASP Nettacker and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2023,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 275,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "BcjvuwzpJrQ",
@@ -438,7 +480,9 @@
       "teaser": "Outlines OWASP Serverless Top 10 and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1659,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 103,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "zHT0lDlApcE",
@@ -458,7 +502,9 @@
       "teaser": "Demonstrates OWASP DefectDojo and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1631,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 823,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "BnP2vls88fw",
@@ -479,7 +525,9 @@
       "teaser": "Examines OWASP Application Security Verification Standard (ASVS) and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2118,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 1500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "1-2e-OpvV-Y",
@@ -499,7 +547,9 @@
       "teaser": "Examines OWASP JuiceShop and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2364,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 1000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "NA8DtSi94lY",
@@ -518,7 +568,9 @@
       "teaser": "Examines appSec Meets Project Management: Hacking the Frameworks for Secure Software and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1987,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 77,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "f6tQKIg_xzE",
@@ -536,7 +588,9 @@
       "teaser": "Reviews running Your Application Security Program Like a Marathon and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2114,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 89,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "h6dJzu9KRiQ",
@@ -556,7 +610,9 @@
       "teaser": "Explores who Hurt You? Earning the trust of developers and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2743,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 212,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "LBuGNojQguI",
@@ -575,7 +631,9 @@
       "teaser": "Evaluates bridging Security & Privacy Standards: Harnessing OpenCRE for Effective Mapping and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1897,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 174,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "zeKco8PDTjM",
@@ -595,7 +653,9 @@
       "teaser": "Analyzes businesses Run On Risk And Debt: Why Communicating Security Risk Is Hard and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2757,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 63,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "TA2sBdLAcWg",
@@ -616,7 +676,9 @@
       "teaser": "Presents how Three Threat Modelers Can Influence an Entire Organization and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2695,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 178,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "-UDxLsOK5wY",
@@ -635,7 +697,9 @@
       "teaser": "Explores how to get developers to want to adopt AppSec and evaluates key implications for security practitioners.",
       "summary": "## Overview\nThis talk addresses how to get developers to adopt AppSec (application security) practices by aligning incentives, automating security testing, and integrating security into existing workflows. The speaker, an engineering manager at an AppSec company, shares insights from transitioning from an engineer who disliked security to one helping teams adopt security tooling.\n\n## Why Engineers Resist AppSec\nThe speaker identifies four key barriers:\n\n1. **Perceived waste of time**: Engineers struggle to see the immediate impact of security practices (e.g., input sanitization) because computer science education focuses on algorithmic complexity rather than attack vectors.\n\n2. **Tool fatigue**: Engineers already use many tools (GitHub, Jira, Confluence, DataDog, Kibana). Adding another tool feels like extra friction.\n\n3. **Misaligned KPIs**: Engineers are measured on features delivered, bug count reduction, and predictability—not security. This creates natural resistance to tasks that slow feature development.\n\n4. **Knowledge gaps**: OWASP top 10 vulnerabilities and their real-world impacts aren't taught in typical CS degrees or bootcamps.\n\n## Why This Matters to Companies\nRecent major breaches exploited common vulnerabilities like XSS and broken access control. When vulnerabilities reach production, engineers must context-switch under intense pressure to fix them—a scenario they hate more than dealing with security proactively. Catching vulnerabilities early prevents this costly reactive cycle.\n\n## Solutions: Three Key Areas\n\n**1. Education with Concrete Examples**\nEngineers need to understand specific attack vectors through practical scenarios. Examples: preventing SSRF by accepting only enum service names rather than full URLs; sanitizing user inputs before rendering to prevent XSS. However, education alone is insufficient; mistakes will happen.\n\n**2. Automated Security Testing**\nTreat security vulnerabilities like functional bugs. Apply CI/CD automation to security checks, not just manual code review. This prevents one-line changes (like removing a `SameSite=Strict` cookie attribute) from reaching production. Runtime-based testing tools provide stronger proof of exploitation and educational value—engineers become motivated when they see a screenshot of their API being exploited.\n\n**3. Collaborative Prioritization**\nProduct, AppSec, and R&D must jointly prioritize vulnerabilities, combining business context with technical severity. Don't order by CVSS severity alone. Example: a \"high\" SSRF in customer-facing production code may take priority over a \"critical\" broken access control bug in internal employee tools.\n\n## Characteristics of Effective Security Tools\n\n**Coverage**: Must address OWASP top 10, API top 10, and LLM top 10 vulnerabilities.\n\n**Low false positives**: Maintain under 10% false positive rate. High false positive rates waste engineering time and erode trust in the tool, causing engineers to ignore legitimate findings.\n\n**Ease of use**: Integrate with existing tools (GitHub, Jenkins, Jira), offer SDK and CLI for local testing, and avoid requiring separate portals. Dissonance between tools kills adoption.\n\n**Proof of exploitation**: Runtime-based tools showing request/response pairs or screenshots help engineers see real impact and motivate fixes. This also has significant educational value.\n\n**Tool evaluation**: Test candidate tools on known-vulnerable open-source projects (OWASP Juice Shop, Broken Crystals, DVWA, BWApp) to assess real-world performance before adoption.\n\n## Implementation and KPIs\n\nSecurity bugs should count toward the \"lower bug count\" KPI alongside functional bugs, since both are bugs. Security testing must fit agile development cycles—tools should complete CI checks within 10–20 minutes for typical use cases. For entry points with many parameters, use tiered approaches: fast static checks during development, runtime checks in CI for core functionality, and extended testing in pre-production if needed.\n\n## Key Takeaways\n- Development is agile; security testing must be agile too\n- Don't sacrifice coverage for false positives\n- Integrate security into existing tools and workflows, not as a separate process\n- Automate security checks like functional tests\n- Engineers adopt AppSec when they understand impact and face minimal friction",
       "durationSeconds": 2201,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 96,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "TBQFx6bUNdw",
@@ -656,7 +720,9 @@
       "teaser": "Investigates the Broken State of DevSecOps and Its Maturity Model and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2398,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 251,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "zmInVmhIOgk",
@@ -677,7 +743,9 @@
       "teaser": "Discusses learning to build an effective security design review program and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2391,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 417,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "gUS4u5MLsC4",
@@ -698,7 +766,9 @@
       "teaser": "Reviews practitioners Know What You Did Last Summer: Lessons Learned from Privacy Breaches and Scandals and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 3147,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 89,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "P1mpVL1lXlM",
@@ -718,7 +788,9 @@
       "teaser": "Presents striding Your Way to LINDDUN: Threat Modeling for Privacy and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2881,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 562,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "SN32hRQ_Ylk",
@@ -736,7 +808,9 @@
       "teaser": "Reviews under the Radar: how teams found 0-days in the Build Pipeline of OSS Packages and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2799,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 149,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "UUjTBv_sHm0",
@@ -755,7 +829,9 @@
       "teaser": "Presents dont Make This Mistake: Painful Learnings of Applying AI in Security and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2474,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 153,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "krcPkaS6PXA",
@@ -775,7 +851,9 @@
       "teaser": "Presents threat Modeling in the Age of AI and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2699,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 424,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "1xUTxLhV07g",
@@ -796,14 +874,16 @@
       "teaser": "Reviews OWASP Top 10 for Large Language Models: Project Update and evaluates key implications for security practitioners.",
       "summary": "### Overview\nSteve Wilson (project lead and Exabeam employee) and Scott Clinton (co-lead) present a project update on the OWASP Top 10 for Large Language Models. Founded just over a year prior from a LinkedIn post that rapidly drew hundreds of participants, the initiative has grown into a widely adopted, foundational community standard. The speakers review the project's traction, discuss major threat trends such as indirect prompt injection and supply chain risks, detail related sub-projects and initiatives, and preview the forthcoming Version 2.0 (targeted for late 2024).\n\n### Key Topics\n- **Project Adoption & Industry Impact**: The OWASP LLM Top 10 has achieved significant reach, with thousands of community members, over 100,000 estimated readers, and roughly 58% share of voice in articles discussing LLM security. It is actively referenced across commercial security tools, and the project team collaborates with standards groups including NIST (joining the NIST AI Safety group) and MITRE (influencing MITRE ATLAS).\n- **Evolution of AI Risks**: AI adoption has rapidly expanded from basic chatbots to co-pilots and autonomous AI agents. Major tech organizations have experienced vulnerabilities, particularly indirect prompt injection. Software supply chain security in AI is an escalating concern, exemplified by thousands of poisoned models on hubs like Hugging Face. Multi-modal models and deepfakes also present overlapping security challenges.\n- **Initiatives Beyond the Top 10 List**: The project has expanded beyond the initial list into specialized initiatives, including:\n  - A CISO Checklist (initiated by Sandy Dunn).\n  - An LLM Security Solutions Guide establishing an LLM Ops / SEC Ops framework to categorize commercial and open-source tooling (e.g., AI guardrails, WAF/RASP analogs).\n  - First-party research led by Rachel James in collaboration with the University of Illinois.\n  - An AI Security Center of Excellence initiative.\n  - A recently launched red teaming initiative focused on AI systems.\n  - A data verification and controls mapping initiative mapping the Top 10 to industry standards and CVEs.\n- **Version 2.0 Roadmap**: Expected around November 2024 (as the 2024 release), V2 incorporates voting from the expert community. Early ranking signals show supply chain issues moving up right behind prompt injection, with excessive agency also rising due to the industry surge in autonomous AI agents.\n\n### Technical Details\n- **Indirect Prompt Injection**: The speakers emphasize indirect prompt injection as particularly insidious when systems parse untrusted external data without sufficient boundaries.\n- **AI Tooling Analogs**: Existing application security paradigms (SAST, DAST, WAF, RASP) are mapping into new AI-specific tooling, such as AI guardrails functioning similarly to next-generation WAFs or in-app RASP defenses.\n- **Secure AI Development**: The discussion touches upon responsible AI software engineering processes, AI secure development lifecycles (incorporating frameworks from Steve Wilson's book), and deepfake threats in enterprise settings, including live deepfakes detected during technical job interviews.\n\n### Takeaways\nApplication security professionals hold the foundational skills needed for AI red teaming and defense, but security teams are currently playing catchup with rapid AI deployment. Security practitioners and organizations are encouraged to engage with the OWASP LLM community via their website (genai.owasp.org), bi-weekly open meetings, dedicated Slack channels, and a newly launched corporate sponsorship program.",
       "durationSeconds": 2736,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 387,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "oDbewNYsAOY",
       "slug": "owasp-ai-exchange-experts-on-the-future-of-security-for-ai-panel",
       "title": "OWASP AI Exchange experts on the future of security for AI",
       "speakers": [
-        "Panel hosted by Chloé Messdaghi"
+        "Chloé Messdaghi"
       ],
       "track": "appsec",
       "topics": [
@@ -816,7 +896,9 @@
       "teaser": "Outlines OWASP AI Exchange experts on the future of security for AI - Panel hosted by Chloé Messdaghi and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 3047,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 168,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "gyytL_RmihE",
@@ -837,7 +919,9 @@
       "teaser": "Outlines millions Of Public Certificates Are Reusing Old Private Keys and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2677,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 143,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "0eXk3y7Gt48",
@@ -858,7 +942,9 @@
       "teaser": "Examines slacks Vulnerability Aggregator: manage vulnerabilities at scale and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2567,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 252,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Pwogm9DHeig",
@@ -876,7 +962,9 @@
       "teaser": "Explores escaping Vulnerability Hell: Bridging the Gap Between Developers and Security Teams and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 3935,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 387,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "QvJaam-N-Po",
@@ -894,7 +982,9 @@
       "teaser": "Discusses maturing Your Application Security Program with ASVS-Driven Development and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2701,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 781,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "pIZWMxxw02A",
@@ -914,7 +1004,9 @@
       "teaser": "Details 5 Steps to VEX Success: Managing the End-to-End Workflow and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2884,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 203,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "RYLyXu9eMH4",
@@ -933,7 +1025,9 @@
       "teaser": "Details AI Code Generation - Benefits, Risks and Mitigation Controls and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2630,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 235,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ZXkm36XIrjI",
@@ -954,7 +1048,9 @@
       "teaser": "Analyzes self-Discovering API Key Permissions and Resources and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2576,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 125,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "LpvagarUt5g",
@@ -974,7 +1070,9 @@
       "teaser": "Explores the Missing Link - how teams collect and leverage SBOMs and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2843,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 105,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "2jBCYFFRH78",
@@ -994,7 +1092,9 @@
       "teaser": "Reviews the Container Escape Room: An Exploration of Container Escapes and evaluates key implications for security practitioners.",
       "summary": "### Overview\nIn this talk, Amit, a security researcher at ARMO (the makers of Kubescape), explores the mechanics of container escapes, common attack vectors, and effective defense strategies. Containers are fundamentally isolated Linux processes that share the underlying host kernel rather than full virtual machines. Because containers rely on kernel configurations rather than hypervisor hardware isolation, misconfigurations, kernel vulnerabilities, or runtime flaws can break isolation boundaries and permit container escapes.\n\n### Key Topics\n- **Container Anatomy & Building Blocks**: Containers rely on core Linux kernel primitives: namespaces (defining visibility, such as PID, mount, and user namespaces), seccomp (system call filtering via restrict mode or BPF filters), Linux Security Modules (LSMs such as AppArmor and SELinux for access control checks), Linux capabilities (splitting root privileges, such as CAP_BPF), and cgroups (resource limits for CPU and memory).\n- **Container Runtimes**: Low-level container runtimes such as runc, crun, or youki follow the OCI specification to create, start, and manage processes using a root filesystem and a configuration bundle. Higher-level tools like Docker and containerd wrap these runtimes.\n- **Primary Escape Vectors**: Container escapes typically stem from three main categories: kernel vulnerabilities, container misconfigurations (the most common vector), and vulnerabilities within the container runtimes themselves.\n\n### Technical Details\n- **Kernel Exploits (Dirty Pipe - CVE-2022-0847)**: Discovered by Max Kellerman, Dirty Pipe allows overwriting read-only files in the page cache via an uninitialized `PIPE_BUF_FLAG_CAN_MERGE` flag in pipe buffers interacting with the `splice` system call. In a container escape scenario, an attacker in an unprivileged container can monitor `/proc` for runc execution (e.g., triggered by `kubectl exec`), exploit Dirty Pipe to overwrite the host runc binary cached in memory, and hijack execution on the host as root.\n- **Container Misconfigurations**: Common pitfalls include running containers with the `--privileged` flag combined with `hostPID` (enabling tools like `nsenter` to spawn a shell in the host's root namespace), mounting sensitive host paths or runtime sockets (e.g., exposing Docker sockets to run Docker-inside-Docker), and assigning dangerous capabilities. Amit demonstrates how granting `CAP_BPF` allows an attacker inside a container to use the `bpf` syscall to alter global kernel BPF maps utilized by security agents like Tetragon (Cilium), selectively deleting process tracking entries and evading detection.\n- **Data from Kubescape Scans**: Analysis of over 10,000 clusters revealed that 37% of clusters had credentials inside configuration files, 23% ran containers with dangerous capabilities, and privileged containers ranked among the top five misconfigurations.\n- **Runtime Vulnerabilities (Leaky Vessels - CVE-2024-21626)**: Discovered by Snyk, this runc vulnerability involved an internal file descriptor leak (cgroup fd) to the container. Attackers can exploit this by setting `WORKDIR` to `/proc/self/fd/7` in a malicious Dockerfile, granting file access back to the host filesystem.\n- **MicroVMs**: Technologies like AWS Firecracker and Kata Containers address shared-kernel risks by creating lightweight virtual machines with separate kernels under the OCI specification, though historical research shows nested isolation boundaries can still occasionally have escapes.\n\n### Takeaways\n- **Patching**: Rapidly patching host kernels mitigates severe zero-day exploitation like Dirty Pipe.\n- **Address Misconfigurations**: Misconfigurations account for the majority of practical escapes; use continuous scanning and admission policies (such as CEL policies in Kubernetes 1.30 or Kyverno) to block privileged pods and dangerous capabilities.\n- **Least Privilege & Isolation**: Avoid granting root within containers, enforce Kubernetes Network Policies to limit lateral movement, and use seccomp profiles to restrict system calls (e.g., blocking `splice` prevents Dirty Pipe exploitation even on vulnerable kernels).",
       "durationSeconds": 2696,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 391,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "aSDLQ7j_cq4",
@@ -1014,7 +1114,9 @@
       "teaser": "Provides automatic application hardening by leveraging container runtime behavior analysis and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1869,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 172,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "GHJWTLJmf6I",
@@ -1033,7 +1135,9 @@
       "teaser": "Explores practical Software Supply Chain Security Solutions and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2716,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 165,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "gdM9hdtj2oc",
@@ -1052,7 +1156,9 @@
       "teaser": "Provides AI Under the Hood: Unmasking Hidden Threats and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1696,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 230,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "08pDBStr1yU",
@@ -1070,7 +1176,9 @@
       "teaser": "Discusses OWASP: The Next 25 years and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 2610,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 173,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "MUnuPCVqQLI",
@@ -1090,7 +1198,9 @@
       "teaser": "Discusses learning from Past Security Breaches: Strengthening AppSec Efforts and Focus and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1964,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 307,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Vgj5VqQaRho",
@@ -1111,7 +1221,9 @@
       "teaser": "Reviews OWASP Mobile Application Security (MAS) and evaluates key implications for security practitioners.",
       "summary": null,
       "durationSeconds": 1708,
-      "conference": "owasp"
+      "conference": "owasp",
+      "viewCount": 864,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     }
   ]
 }

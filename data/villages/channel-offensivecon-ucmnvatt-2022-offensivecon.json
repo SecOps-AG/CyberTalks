@@ -24,14 +24,15 @@
       "summary": "Overview: Paul (PSPaul) of Sonar and Moritz of Edgeless Systems present at OffensiveCon on exploiting a 20-year-old PostgreSQL bug discovered through the zeroday.cloud event.\n\nKey Topics: The zeroday.cloud vulnerability research event; PostgreSQL architecture background; virtual function pointer exploitation primitives; low-privileged user to RCE escalation paths; and responsible disclosure processes.\n\nTechnical Details: Researchers demonstrate building exploitation primitives on a long-standing PostgreSQL bug, showing how default non-superuser permissions can be leveraged. Superuser access provides trivial RCE via COPY FROM PROGRAM, but the talk focuses on elevation from limited privileges.\n\nTakeaways: Even mature open-source databases harbor decades-old vulnerabilities. Coordinated disclosure events like zeroday.cloud accelerate discovery of overlooked security flaws.",
       "durationSeconds": 2901,
       "conference": "offensivecon",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 2500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "iMZJE2d7ZMU",
       "slug": "26-2",
       "title": "26",
       "speakers": [
-        "NiNi",
         "Xiaobye"
       ],
       "track": "community",
@@ -44,7 +45,9 @@
       "summary": "VirtualBox SVGA Attack Surface\n\nDevcore researchers Nini Chen and Xiaobai present \"Pedal to the Metal,\" motivated by Pwn2Own VirtualBox research after that category was dropped. They focus on VMware SVGA-compatible graphics virtualization in VirtualBox, where guest MOBs (memory objects) pass through PMIO/MMIO to a shared DirectX backend on Windows, Linux, and macOS.\n\nMOB Binding Mechanics\n\nGuests bind MOBs to DirectX components via commands like set COT table and DX bind shader. VirtualBox tracks bindings in a VMSVGA 3D DX context array of cot mobs. Shader binding validates bytecode before recording MOB IDs in shader entries.\n\nLifetime Bugs and Impact\n\nThe speakers show MOBs can be shared across components without enforcement. Failed shader validation frees GPU buffers but leaves dangling cot pointers—a use-after-free. Destroying a MOB while components still reference it creates one-directional binding bugs. Graphic flaws may affect many guest/host combinations.",
       "durationSeconds": 2866,
       "conference": "offensivecon",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 1000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ssmNEPS3s1U",
@@ -66,7 +69,9 @@
       "summary": "Design-Based macOS Vulnerabilities\n\nIndependent researcher Zhongquan Li presents design flaws discovered between 2024 and 2025, noting Apple can take years to patch such issues. He contrasts memory-corruption bugs with design weaknesses where finding the attack surface is often harder than exploitation.\n\nTCC, SIP, and Root Limitations\n\nOn macOS, userland root is not equivalent to full control: sandboxed app data requires Transparency, Consent, and Control (TCC) permissions. System Integrity Protection (SIP) blocks persistence and unsigned kernel extensions. Li explains why Pwn2Own rarely accepts standalone userland root.\n\nPackage Installer Attack Chain\n\nMalicious .pkg installers run attacker-controlled pre-install and post-install scripts via package_script_service, which holds powerful entitlements including data-vault access. A demo drops a persistent SUID binary under /Library/InstallerSandboxes that even root with Full Disk Access cannot delete.\n\nAbusing Extended Attributes for TCC Bypass\n\nChaining package-script privileges with Estero extended-attribute manipulation lets an attacker modify TCC-protected content in installer sandbox paths, enabling remote TCC bypass and persistence without trivial one-shot fixes.",
       "durationSeconds": 3015,
       "conference": "offensivecon",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 624,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "jpB_b6KGCoA",
@@ -89,7 +94,9 @@
       "summary": "Zero-click goal\n\nGoogle Project Zero researchers Natalie Silvanovich and Seth Jenkins describe a Pixel 10 chain beginning from an RCS or text message with no user interaction. Android's local audio transcription for message attachments makes codecs zero-click because attachments are decoded on-device before speech recognition.\n\nDolby UDC / EMDF bug\n\nIvan Fratric found a bug quickly in Dolby Digital Plus's Extensible Metadata Delivery Format—a nested bitstream processed via a skip buffer inside sync frames. read_variable_bits supplies attacker-controlled sizes to evil_malloc, where integer overflow can allocate zero bytes yet write attacker-controlled contents, including out-of-bounds reads past the skip buffer.\n\nHeap and exploitation\n\nThe decoder uses a simple slab allocator without free; each sync frame gets a fresh heap wiped after playback. Overflow can corrupt the skip-buffer pointer for arbitrary or partial overwrites. Natalie explored targeting writable pointers in the library after the overflow primitive.\n\nChain overview\n\nThe full exploit chain combines this audio codec issue with privilege escalation via Pixel driver bugs (Bigwave and VPU depending on device). Seth was slated to cover the kernel/driver stages after the codec explanation.",
       "durationSeconds": 3227,
       "conference": "offensivecon",
-      "difficulty": "expert"
+      "difficulty": "expert",
+      "viewCount": 2600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "d3nfJL86jrc",
@@ -109,7 +116,9 @@
       "teaser": "26 - Ivan Fratric - Beyond the Limits of Site Isolation.",
       "summary": null,
       "durationSeconds": 1651,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 756,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "bYwE8NA5hqY",
@@ -125,7 +134,9 @@
       "teaser": "Coverage of 26 - sakura and R1nd0 from the conference program.",
       "summary": null,
       "durationSeconds": 1711,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 740,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "UcAcCsEg7PA",
@@ -143,7 +154,9 @@
       "teaser": "Coverage of 26 from the conference program.",
       "summary": null,
       "durationSeconds": 3256,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 869,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "KbKzze2MhgM",
@@ -164,7 +177,9 @@
       "teaser": "26 - Kaufi - From Samsung Account to RCE: A Journey to a Remote 0-Click Capability.",
       "summary": null,
       "durationSeconds": 2563,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1200,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "TogmH2HEIKM",
@@ -183,7 +198,9 @@
       "teaser": "26 - Xiling Gong - From Zero To Root: Attacking Qualcomm DSP Driver.",
       "summary": null,
       "durationSeconds": 2847,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 874,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "QgybUtLXS9U",
@@ -204,15 +221,15 @@
       "teaser": "26 - Hrvoje Misetic - 4-Byte Heap Overflow To RCE In Minecraft.",
       "summary": null,
       "durationSeconds": 2213,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1800,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Pbdt5DQ6hAQ",
       "slug": "26-ollie-whitehouse",
       "title": "26 - Ollie Whitehouse",
-      "speakers": [
-        "Keynote"
-      ],
+      "speakers": [],
       "track": "community",
       "topics": [
         "ollie",
@@ -222,7 +239,9 @@
       "teaser": "Coverage of 26 - Ollie Whitehouse from the conference program.",
       "summary": null,
       "durationSeconds": 2636,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "KGbGU_MK9hY",
@@ -241,7 +260,9 @@
       "teaser": "Coverage of 26 from the conference program.",
       "summary": null,
       "durationSeconds": 3427,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 676,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "I1-D_sck6to",
@@ -262,7 +283,9 @@
       "teaser": "26 - Cristofaro Mune - Exploiting QSEE Vulnerabilities In Google's Wifi Pro.",
       "summary": null,
       "durationSeconds": 3017,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 392,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "FikuvF6Ot_E",
@@ -283,7 +306,9 @@
       "teaser": "26 - Philipp Mao and Rokhaya Fall - Exploiting Android Apps with Counterfeit Art.",
       "summary": null,
       "durationSeconds": 2266,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 781,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "E8l4FE4B6bU",
@@ -304,7 +329,9 @@
       "teaser": "26 - Atlan Pinabel - Navigating the MTE Landscape: iOS Memory Protection Deep Dive.",
       "summary": null,
       "durationSeconds": 1675,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 779,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "60_tbA4K0I8",
@@ -323,7 +350,9 @@
       "teaser": "Coverage of 26 from the conference program.",
       "summary": null,
       "durationSeconds": 3032,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 398,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "2ytQDhLSDMg",
@@ -343,7 +372,9 @@
       "teaser": "26 - Erik Egsgard - IRON GIANT: When The Vault Becomes The Victim.",
       "summary": null,
       "durationSeconds": 1646,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 338,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "kF31SYIVob8",
@@ -361,7 +392,9 @@
       "teaser": "Coverage of 25 from the conference program.",
       "summary": null,
       "durationSeconds": 602,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "goEb7eKj660",
@@ -380,7 +413,9 @@
       "teaser": "Coverage of 25 from the conference program.",
       "summary": null,
       "durationSeconds": 3093,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 3000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "PgnRkL0sd0w",
@@ -400,7 +435,9 @@
       "teaser": "Coverage of 25 from the conference program.",
       "summary": null,
       "durationSeconds": 3231,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "LAIr2laU-So",
@@ -417,7 +454,9 @@
       "teaser": "25 - Ken Gannon- Chainspotting 2: The Unofficial Sequel to the 2018 Talk “Chainspotting”.",
       "summary": null,
       "durationSeconds": 2095,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 4600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "rHyFnkrJ3Ws",
@@ -437,7 +476,9 @@
       "teaser": "25 - Angelboy - Frame by Frame, Kernel Streaming Keeps Giving Vulnerabilities.",
       "summary": null,
       "durationSeconds": 2831,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "U1kc7fcF5Ao",
@@ -458,7 +499,9 @@
       "teaser": "25 - Ivan Fratric - Finding and Exploiting 20-Year-Old Bugs in Web Browsers.",
       "summary": null,
       "durationSeconds": 2862,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 3400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "sM2d0ciaeiI",
@@ -480,7 +523,9 @@
       "teaser": "25 - Richard Abou Chaaya and John Stephenson - Garbage Collection in V8.",
       "summary": null,
       "durationSeconds": 2107,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "60BcjiChncE",
@@ -500,7 +545,9 @@
       "teaser": "25 - Dino Dai Zovi - Keynote - How Offensive Security Made Me Better at Defense.",
       "summary": null,
       "durationSeconds": 2794,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1900,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "8Uv6KdATePc",
@@ -520,7 +567,9 @@
       "teaser": "25 - Lukas Bernhard - Attacking Browsers via WebGPU.",
       "summary": null,
       "durationSeconds": 1642,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "zoAITq7jUM8",
@@ -539,14 +588,15 @@
       "teaser": "Coverage of 25 from the conference program.",
       "summary": null,
       "durationSeconds": 1907,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "e4t_xYPOq9w",
       "slug": "25-fish-and-ling-hanqin-skin-in-the-game-survival-of-gpu-iommu-i",
       "title": "OffensiveCon25 - Skin in the Game: Survival of GPU IOMMU Irregular Damage",
       "speakers": [
-        "Fish",
         "Ling Hanqin"
       ],
       "track": "red-team",
@@ -560,7 +610,9 @@
       "teaser": "25 - Fish and Ling Hanqin - Skin in the Game: Survival of GPU IOMMU Irregular Damage.",
       "summary": null,
       "durationSeconds": 2821,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 882,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "sUFDKTaCQEk",
@@ -581,7 +633,9 @@
       "teaser": "Coverage of 25 from the conference program.",
       "summary": null,
       "durationSeconds": 3368,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Dq_KVLXzxH8",
@@ -601,7 +655,9 @@
       "teaser": "25 - Joernchen - Parser Differentials: When Interpretation Becomes a Vulnerability.",
       "summary": null,
       "durationSeconds": 1689,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 6100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "lnK1iACJ3-c",
@@ -622,7 +678,9 @@
       "teaser": "25 - Seth Jenkins - Android In-The-Wild: Unexpectedly Excavating a Kernel Exploit.",
       "summary": null,
       "durationSeconds": 3076,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "USQtPedx9Xg",
@@ -640,7 +698,9 @@
       "teaser": "Coverage of 25 from the conference program.",
       "summary": null,
       "durationSeconds": 2810,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Y1naY3gupRw",
@@ -659,7 +719,9 @@
       "teaser": "25 - Perri Adams -Keynote- Automating Your Job? The Future of AI and Exploit Development.",
       "summary": null,
       "durationSeconds": 4012,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 4400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "DJBGu2fSSZg",
@@ -680,7 +742,9 @@
       "teaser": "25 - Chariton Karamitas - KernelGP: Racing Against the Android Kernel.",
       "summary": null,
       "durationSeconds": 2833,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "i-3zUmdXpNI",
@@ -701,7 +765,9 @@
       "teaser": "25 - Corentin Bayet - Journey to Freedom: Escaping from VirtualBox.",
       "summary": null,
       "durationSeconds": 1637,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "5otAw81AHQ0",
@@ -719,15 +785,15 @@
       "teaser": "Coverage of 24 - Samuel Groß - The V8 Heap Sandbox from the conference program.",
       "summary": null,
       "durationSeconds": 1656,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 3400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ngRN19A98jQ",
       "slug": "24-bill-demirkapi-booting-with-caution",
       "title": "OffensiveCon24 -Bill Demirkapi - Booting",
-      "speakers": [
-        "Caution"
-      ],
+      "speakers": [],
       "track": "red-team",
       "topics": [
         "bill",
@@ -738,7 +804,9 @@
       "teaser": "24 -Bill Demirkapi - Booting with Caution.",
       "summary": null,
       "durationSeconds": 3380,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1700,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "2eHsnZ4BeDI",
@@ -759,7 +827,9 @@
       "teaser": "24 - Eric Egsgard - Almost Escaping the Sandbox: Attacking Windows Device Drivers.",
       "summary": null,
       "durationSeconds": 1815,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 3600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "AxNO2iA2fAg",
@@ -778,7 +848,9 @@
       "teaser": "Coverage of 24 - Piotr Bazydlo from the conference program.",
       "summary": null,
       "durationSeconds": 1863,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "BZWf9lYMIfc",
@@ -797,7 +869,9 @@
       "teaser": "Coverage of 24 from the conference program.",
       "summary": null,
       "durationSeconds": 1644,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "VDhHSCsaByk",
@@ -818,7 +892,9 @@
       "teaser": "Coverage of 24 from the conference program.",
       "summary": null,
       "durationSeconds": 2935,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "8raKMg8hcIQ",
@@ -837,7 +913,9 @@
       "teaser": "Coverage of 24 from the conference program.",
       "summary": null,
       "durationSeconds": 2407,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "t78x_vPuc7s",
@@ -856,7 +934,9 @@
       "teaser": "Coverage of 24 from the conference program.",
       "summary": null,
       "durationSeconds": 3582,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 828,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ZawX9I9MM6Y",
@@ -874,7 +954,9 @@
       "teaser": "Coverage of 24 - Ian Beer from the conference program.",
       "summary": null,
       "durationSeconds": 2575,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 4100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "WJ7wkJn7l7w",
@@ -895,7 +977,9 @@
       "teaser": "Coverage of 24 from the conference program.",
       "summary": null,
       "durationSeconds": 2645,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1900,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "U-xSM159YLI",
@@ -915,7 +999,9 @@
       "teaser": "Coverage of 24 from the conference program.",
       "summary": null,
       "durationSeconds": 3086,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 3100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "UPPdi3HHI5w",
@@ -936,7 +1022,9 @@
       "teaser": "24 - Nika Korchok Wakulich - UEFI and the Task of the Translator.",
       "summary": null,
       "durationSeconds": 3646,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "QlaJQEa3_zQ",
@@ -957,7 +1045,9 @@
       "teaser": "24 - Thomas Roth - ACE up the Sleeve: Hacking into Apple’s New USB-C Controller.",
       "summary": null,
       "durationSeconds": 1647,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "oBHdSGHvoKE",
@@ -976,7 +1066,9 @@
       "teaser": "Coverage of 24 from the conference program.",
       "summary": null,
       "durationSeconds": 1769,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 940,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "sFsllHllXss",
@@ -997,7 +1089,9 @@
       "teaser": "24 - Quentin Meffre - Escaping the Safari Sandbox: A Tour of Webkit IPC.",
       "summary": null,
       "durationSeconds": 1744,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "qllMa2UUPvY",
@@ -1018,7 +1112,9 @@
       "teaser": "24 - Mateusz Jurczyk - Practical Exploitation of Registry Vulnerabilities.",
       "summary": null,
       "durationSeconds": 3220,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "cNrMnveW9SA",
@@ -1039,7 +1135,9 @@
       "teaser": "24 - Solar Designer - Keynote - Password Cracking: Past, Present, Future.",
       "summary": null,
       "durationSeconds": 4327,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "quw8SnmMWg4",
@@ -1060,14 +1158,16 @@
       "teaser": "23 - Natalie Silvanovich - How to Hack Shannon Baseband (from a Phone).",
       "summary": null,
       "durationSeconds": 2410,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 5500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "5Pq1FmxS6H8",
       "slug": "23-pietro-borrello",
       "title": "23 - Pietro Borrello",
       "speakers": [
-        "CustomProcessingUnit"
+        "Pietro Borrello"
       ],
       "track": "community",
       "topics": [
@@ -1078,7 +1178,9 @@
       "teaser": "Coverage of 23 - Pietro Borrello from the conference program.",
       "summary": null,
       "durationSeconds": 2940,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "-nFWcKHIUN4",
@@ -1100,7 +1202,9 @@
       "summary": "**Overview**\nThomas Roth (known as Stacksmashing) presents research on Apple's Lightning connector and hardware-level debugging of iPhones. The talk focuses on the development of Tamarind, an open-source JTAG adapter built using a Raspberry Pi Pico, and tools enabling automated fuzzing and kernel debugging.\n\n**Key Topics**\nThe Lightning connector is a proprietary 8-pin (sometimes 16-pin) interface that handles charging, data transfer, audio, video, and more. Communication occurs via the SDQ/ID bus, a simple one-wire protocol using short/long pulse encoding. The iPhone's Tristar (or Hydra) chip multiplexes different functions based on authentication handshakes initiated when accessories are connected.\n\n**Technical Details**\nTamarind implements SDQ protocol on a Raspberry Pi Pico running at 3.3V using the PIO (Programmable I/O) feature. The cable costs roughly $10 to build and can be soldered to cut lightning extension cables. Key capabilities include automatic DFU mode entry (eliminating manual 8-second button holding), automated jailbreaking via Checkmate exploit, and live JTAG debugging of the iPhone boot ROM. Integration with the GRA debugger (version 10.3) enables time-travel debugging and emulation—stepping backward through execution history and testing hypothetical memory changes without rebooting hardware.\n\nFor Lightning accessory analysis, the Tear Sniffer tool captures SDQ traffic in real time and auto-converts recordings to C code for replay attacks. Most simple accessories (headphone adapters, charging cables) are replayable. A custom DFU fuzzer rediscovered the Checkmate vulnerability by mutating lightning commands; fuzzing identified a kernel crash in older iOS builds (not current devices), demonstrating the attack surface.\n\nAn accidental discovery occurred when testing the Apple Pencil: its 3.8 kilobyte charging sequence includes Bluetooth pairing data and complex bulk data transfers—undocumented in public sources. Unlike simple accessories, the Pencil's protocol is not replayable. Tamarind MTIM (Monkey In The Middle) was developed to intercept and mutate bulk data mid-transfer, enabling fuzzing of this previously unexplored protocol also used by smart keyboards and battery backpacks.\n\n**Takeaways**\nHardware interfaces represent rich attack surfaces often overlooked compared to software. Open-source tools like Tamarind democratize hardware security research. Automation via JTAG and custom tools is essential for effective fuzzing campaigns. Lesser-documented protocols—especially bulk data transfers—warrant investigation for undiscovered vulnerabilities.",
       "durationSeconds": 1599,
       "conference": "offensivecon",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 2500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Yd9m7e9-pG0",
@@ -1122,7 +1226,9 @@
       "teaser": "23 - Samuel Groß & Carl Smith - Advancements in JavaScript Engine Fuzzing.",
       "summary": null,
       "durationSeconds": 1374,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "rX8kfeksdi4",
@@ -1140,7 +1246,9 @@
       "teaser": "Coverage of 23 - Mark Brand - What’s in a Name? from the conference program.",
       "summary": null,
       "durationSeconds": 1632,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "oML1h3ic__0",
@@ -1160,7 +1268,9 @@
       "teaser": "23 - Pan Zhenpeng - Unearthing Vulnerabilities in the Apple Ecosystem.",
       "summary": null,
       "durationSeconds": 1712,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "5oecn43xsDg",
@@ -1178,7 +1288,9 @@
       "teaser": "Coverage of 23 - Markus Vervier from the conference program.",
       "summary": null,
       "durationSeconds": 3221,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1900,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "YnxGW8Fvqvk",
@@ -1198,7 +1310,9 @@
       "teaser": "23 - Yarden Shafir - Your Mitigations Are My Opportunities.",
       "summary": null,
       "durationSeconds": 2986,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 5700,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "hz9HiM2eKFY",
@@ -1218,7 +1332,9 @@
       "teaser": "23 - Hao Xu - Keynote - Changing and Unchanged Things in Vulnerability Research.",
       "summary": null,
       "durationSeconds": 3474,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 3000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Blytiwrf9bY",
@@ -1239,7 +1355,9 @@
       "teaser": "23 - Amat Cama - ASN.1 and Done: A Journey of Exploiting ASN.1 Parsers in the Baseband.",
       "summary": null,
       "durationSeconds": 2064,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 3300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "9dfISRD6hwk",
@@ -1261,7 +1379,9 @@
       "teaser": "23 - Alex Matrosov & Alex Ermolov - A Dark Side of UEFI: Cross-Silicon Exploitation.",
       "summary": null,
       "durationSeconds": 3295,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "9wgHENj_YNk",
@@ -1280,7 +1400,9 @@
       "teaser": "23 - Alex Plaskett & Cedric Halbronn - Exploit Engineering - Attacking the Linux Kernel.",
       "summary": null,
       "durationSeconds": 3514,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 4700,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "jrxOhGGxDZ8",
@@ -1298,7 +1420,9 @@
       "teaser": "Coverage of 23 - Ian Beer - MacDirtyCow from the conference program.",
       "summary": null,
       "durationSeconds": 1994,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 4100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "E3CVDOlcHC4",
@@ -1318,7 +1442,9 @@
       "teaser": "23 - Moshe Kol - Racing Against the Lock: Exploiting Spinlock UAF in the Android Kernel.",
       "summary": null,
       "durationSeconds": 2581,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "KAyfJt0CRVs",
@@ -1338,7 +1464,9 @@
       "teaser": "23 - Martijn Bogaard - New Phones, Software & Chips = New Bugs?.",
       "summary": null,
       "durationSeconds": 3600,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "H03b0UaogVs",
@@ -1357,7 +1485,9 @@
       "teaser": "23- Maddie Stone & James Forshaw- The Print Spooler Bug that Wasn’t in the Print Spooler.",
       "summary": null,
       "durationSeconds": 2548,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 3500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "XT6jLBbzwFM",
@@ -1376,7 +1506,9 @@
       "teaser": "Coverage of 23 from the conference program.",
       "summary": null,
       "durationSeconds": 2553,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1900,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "BarJCn4yChA",
@@ -1397,7 +1529,9 @@
       "teaser": "23 - Dave Aitel - Information Security Is an Ecology of Horrors and You Are the Solution.",
       "summary": null,
       "durationSeconds": 2408,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 6300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "fTNzylTMYks",
@@ -1418,7 +1552,9 @@
       "teaser": "20 - Ki Chan Ahn - Adventures on Hunting for Safari Sandbox Escapes.",
       "summary": null,
       "durationSeconds": 3396,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 4600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ugZzQvXUTIk",
@@ -1439,7 +1575,9 @@
       "teaser": "20 - Stephen Roettger - Popping Calc with Hardware Vulnerabilities.",
       "summary": null,
       "durationSeconds": 1837,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 3300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "SxezUdv1whQ",
@@ -1460,7 +1598,9 @@
       "teaser": "20 - Aristeidis Thallas - Emulating Hypervisors: A Samsung RKP Case Study.",
       "summary": null,
       "durationSeconds": 3132,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "tS0eMrhCISM",
@@ -1480,7 +1620,9 @@
       "teaser": "20 - oct0xor - Hacking Sony PlayStation Blu-ray Drives.",
       "summary": null,
       "durationSeconds": 2712,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "8QRnOpjmneo",
@@ -1498,7 +1640,9 @@
       "teaser": "20 - Halvar Flake - Keynote - Why I Love Offensive Work, Why I don't Love Offensive Work.",
       "summary": null,
       "durationSeconds": 2220,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 11000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "J6xIohyARSU",
@@ -1516,7 +1660,9 @@
       "teaser": "20 - Alexander Popov - Exploiting a Linux Kernel Vulnerability in the V4L2 Subsystem.",
       "summary": null,
       "durationSeconds": 2400,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 3000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "YVnsIBlsM4s",
@@ -1535,7 +1681,9 @@
       "teaser": "20- Cedric Halbronn- How CVE-2018-8611 Can be Exploited to Achieve Privilege Escalation.",
       "summary": null,
       "durationSeconds": 3573,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "YH8gPs8ZGHc",
@@ -1556,7 +1704,9 @@
       "teaser": "20 - Alexander Ermolov - Untrusted Roots: exploiting vulnerabilities in Intel ACMs.",
       "summary": null,
       "durationSeconds": 1892,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 996,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "kJmuvjPDOOo",
@@ -1576,14 +1726,15 @@
       "teaser": "20 - Netanel Ben-Simon, Yoav Alon - Bugs on the Windshield: Fuzzing the Windows Kernel.",
       "summary": null,
       "durationSeconds": 2863,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 3900,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "fgp0KQNjrMQ",
       "slug": "20-fx-and-hadez-look-what-you-could-be-up-against-soon",
       "title": "OffensiveCon20 - Look What You Could be Up Against Soon",
       "speakers": [
-        "FX",
         "Hadez"
       ],
       "track": "red-team",
@@ -1595,7 +1746,9 @@
       "teaser": "20 - FX and Hadez - Look What You Could be Up Against Soon.",
       "summary": null,
       "durationSeconds": 1911,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2200,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "WOdRkZwGYDQ",
@@ -1614,7 +1767,9 @@
       "teaser": "20 - Eloi Sanfelix - A Bug Collision Tale.",
       "summary": null,
       "durationSeconds": 3129,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 793,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "TAwQ4ezgEIo",
@@ -1635,7 +1790,9 @@
       "teaser": "20 - Maddie Stone - Bad Binder: Finding an Android In The Wild 0day.",
       "summary": null,
       "durationSeconds": 1837,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 5400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "OSJdAGtn8Qw",
@@ -1657,7 +1814,9 @@
       "teaser": "20 - Marco Grassi and Kira - Exploring the MediaTek Baseband.",
       "summary": null,
       "durationSeconds": 2785,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "6SGB5hqtpCg",
@@ -1676,7 +1835,9 @@
       "teaser": "20 - Jonathan Afek - Simplifying iOS Research:.",
       "summary": null,
       "durationSeconds": 3226,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2700,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "4XP5D5tTaJU",
@@ -1694,7 +1855,9 @@
       "teaser": "20 - b1ack0wl - Don't forget to SUBSCRIBE.",
       "summary": null,
       "durationSeconds": 2797,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "1xqAfvEJm9g",
@@ -1713,7 +1876,9 @@
       "teaser": "20 -Natalie Silvanovich - No Clicks Required: Finding Remote Vulns in Messaging Apps.",
       "summary": null,
       "durationSeconds": 1499,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1900,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "-KkRZNb6kwI",
@@ -1737,7 +1902,9 @@
       "summary": "**Overview**\nSamuel Gross presents a no-click exploitation technique for memory corruption vulnerabilities in iOS messenger apps (iMessage) that defeats ASLR and achieves code execution through a multi-stage attack chain.\n\n**The Vulnerability**\nThe core vulnerability is a memory corruption issue in NSKeyedArchiver's handling of shared key dictionaries. A shared key dictionary contains linked shared key sets, each with a rank table and keys array. The critical invariant is that num_keys must equal the length of the keys array. By creating cyclic references during decoding—making a child key set point back to a parent—this invariant can be violated. When the application looks up keys in the malformed structure, the rank table can index out of bounds, enabling arbitrary address dereference.\n\n**ASLR Bypass: Crash Oracle Side Channel**\nThe speaker constructs a crash oracle function: given an address, it succeeds only if the address is mapped and contains a valid Objective-C pointer. iOS's automatic delivery receipts provide the communication channel—if processing crashes, no receipt is sent; if successful, a receipt arrives. This creates a one-bit information leak. The exploit profiles the dyld shared cache (a ~1 GB prelinked binary of system libraries) offline to create an address validity bitmap. During exploitation, a linear memory scan within the fixed shared cache range (0x180000000–0x287000000) finds a candidate base address. Binary search then narrows from approximately 30,000–40,000 candidates to a single answer in roughly 20 queries, each query potentially eliminating half the remaining candidates.\n\n**Exploitation Stages**\n1. **Heap Spraying**: Allocate 256 MB of data over iMessage to place fake Objective-C objects at predictable addresses.\n2. **ASLR Bypass**: Use crash oracle queries and binary search to determine the shared cache base address, requiring ~10-second delays between crashes to avoid respawn penalties.\n3. **Object Construction**: Build fake Objective-C objects pointing to real, legitimately-signed classes.\n4. **Code Execution**: Call Objective-C methods to launch arbitrary applications.\n\nOn iOS 12.4, direct code execution is possible. On iPhone 10s and newer with pointer authentication codes (PAC), function pointers are signed and verified before use, preventing direct code pointer forgery. The bypass reuses existing classes with valid signed method pointers to achieve arbitrary Objective-C method invocation.\n\n**Live Demonstration**\nThe speaker demonstrates the attack on an iPhone running iOS 12.4, showing the linear scanning phase probing addresses in 256 MB increments, candidate reduction from 32,000 to roughly half with each query, heap spray setup, and eventual launch of the Calculator application.\n\n**Limitations and Improvements**\nThe current implementation requires approximately 25 messages to complete exploitation. The speaker notes better engineering could combine heap spray and exploit trigger into a single message, and identifies potential failure modes including incorrect handling of writable pages and allocation activity between messages disrupting heap layout.",
       "durationSeconds": 1624,
       "conference": "offensivecon",
-      "difficulty": "expert"
+      "difficulty": "expert",
+      "viewCount": 1700,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "8Clacdmg6gw",
@@ -1757,7 +1924,9 @@
       "teaser": "20 - Martijn Bogaard - Grab those keyz and learn somebodies darkest secrets!.",
       "summary": null,
       "durationSeconds": 3041,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 912,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "MMxtKq8UgwE",
@@ -1775,15 +1944,15 @@
       "teaser": "19 - Niklas Baumstark - IPC You Outside the Sandbox: One bug to Rule the Chrome Broker.",
       "summary": null,
       "durationSeconds": 1410,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 4800,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Qms328deZ68",
       "slug": "19-daniel-king-shawn-denbow-growing-hypervisor-0day-with-hyperse",
       "title": "OffensiveCon19 - Daniel King, Shawn Denbow - Growing Hypervisor 0day",
-      "speakers": [
-        "Hyperseed"
-      ],
+      "speakers": [],
       "track": "red-team",
       "topics": [
         "hypervisor",
@@ -1796,7 +1965,9 @@
       "teaser": "19 - Daniel King, Shawn Denbow - Growing Hypervisor 0day with Hyperseed.",
       "summary": null,
       "durationSeconds": 2833,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "YMHsuu3qldE",
@@ -1814,7 +1985,9 @@
       "teaser": "Coverage of 19 - Emeric Nasi from the conference program.",
       "summary": null,
       "durationSeconds": 1495,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2200,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "dWQRetMjS6Q",
@@ -1833,7 +2006,9 @@
       "teaser": "19-Eloi Benoist-Vanderbeken -macOS: How to Gain Root with CVE-2018-4193 in less than 10s.",
       "summary": null,
       "durationSeconds": 3301,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "OHjq9Y66yfc",
@@ -1854,7 +2029,9 @@
       "teaser": "19 - Samuel Groß - FuzzIL: Guided Fuzzing for JavaScript Engines.",
       "summary": null,
       "durationSeconds": 1662,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 6000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "R2aPo_wwmZw",
@@ -1875,7 +2052,9 @@
       "teaser": "19 - Lucian Cojocar - Reverse Engineering of Error-Correcting Codes.",
       "summary": null,
       "durationSeconds": 2760,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 844,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ifWdeFHXj7s",
@@ -1896,7 +2075,9 @@
       "teaser": "19 - Luc Reginato - Updated Analysis of PatchGuard on Windows RS4.",
       "summary": null,
       "durationSeconds": 2857,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2200,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "ZCUrm4STreU",
@@ -1917,7 +2098,9 @@
       "teaser": "19 - Sergei Volokitin - Glitch in the Matrix: Exploiting Bitcoin Hardware Wallets.",
       "summary": null,
       "durationSeconds": 2247,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1200,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "_14Bx4arqic",
@@ -1935,7 +2118,9 @@
       "teaser": "Coverage of 19 - Jason Matthyser from the conference program.",
       "summary": null,
       "durationSeconds": 1544,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "IXKlMYeVVe4",
@@ -1958,15 +2143,15 @@
       "teaser": "19 - Spelman, Gorenc, Hariri - Bugs so Nice they Patched them Twice!.",
       "summary": null,
       "durationSeconds": 2784,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "1MD5JV6LfxA",
       "slug": "19-andrey-konovalov-coverage-guided-usb-fuzzing-with-syzkaller",
       "title": "OffensiveCon19 - Andrey Konovalov - Coverage-Guided USB Fuzzing",
-      "speakers": [
-        "Syzkaller"
-      ],
+      "speakers": [],
       "track": "appsec",
       "topics": [
         "fuzzing",
@@ -1979,7 +2164,9 @@
       "teaser": "19 - Andrey Konovalov - Coverage-Guided USB Fuzzing with Syzkaller.",
       "summary": null,
       "durationSeconds": 3527,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 5000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "2D9ExVc0G10",
@@ -1998,7 +2185,9 @@
       "summary": "### Overview\nIn this keynote address, Alex Ionescu addresses the misconception that his extensive knowledge of Windows internals and rapid vulnerability research stems from illicit access to proprietary Microsoft source code. Presenting the concept of \"reversing without reversing,\" Ionescu explains how reverse engineering extends far beyond staring at assembly code in tools like IDA Pro or Ghidra. Instead, researchers can dramatically accelerate their work and gain deep architectural insights by gathering context, utilizing publicly released artifacts, tracking incremental updates, and studying foundational materials.\n\n### Key Topics\n- **Beyond Disassembly:** Moving past standard decompilation to understand the architectural \"why\" behind operating system design choices rather than just the \"how.\"\n- **Public and Overlooked Artifacts:** Exploiting debugging symbols, assertion strings in checked builds, header files, and debugger extensions to discover undocumented structures and function prototypes.\n- **Accidental Disclosures and Official Releases:** Leveraging beta kits, SDK/WDK samples, driver source code, and symbols inadvertently bundled in public tools.\n- **Binary Diffing and Incremental Research:** Using frequent release cadences, such as the Windows Insider Preview program, to diff small weekly changes rather than tackling monolithic multi-year OS updates.\n- **Research Ethics and Personal Cost:** Maintaining professional boundaries, avoiding reliance on leaked code, honoring non-disclosure agreements, and acknowledging the severe personal trade-offs and burnout associated with intense research.\n\n### Technical Details\n- **Assertions in Checked Builds:** Historically (prior to Windows Vista), Windows checked builds included assert statements containing complete source file paths, line numbers, variable names, and comparison macros directly embedded as plaintext strings.\n- **Debugger Extensions and Support Tools:** Utilities such as WinDbg extensions (e.g., KTX files) often contain explicit `printf` statements formatting kernel structures, revealing offsets, field names, and data types not included in public symbol packages.\n- **Header Leaks and Cross-Component Symbols:** Internal definitions occasionally leak through build anomalies, such as internal MinWin headers bundled in early Windows 10 WDK releases or kernel structures exposed in private PDBs for COM and UI binaries due to shared precompiled headers.\n- **Official Sample Code:** Substantial reference implementations exist legally in the public domain, including Microsoft Research projects (e.g., Singularity's hypervisor headers and kernel debugger protocol KD), driver development kits, and sample networking/storage stacks on GitHub.\n- **Rapid Diffing:** Tools like NT Diff allow researchers to isolate granular modifications between Windows Insider builds, identifying newly introduced system calls or altered behaviors within days.\n\n### Takeaways\nReverse engineering efficiency is driven by building a cumulative body of knowledge, consulting foundational literature (such as classic PC architecture and BIOS references), and systematically analyzing peripheral resources. Ionescu emphasizes that high output does not rely on leaked code or unethical behavior, but requires significant time investment, curiosity, and ethical adherence to legal boundaries, while cautioning about the reality of industry burnout.",
       "durationSeconds": 2021,
       "conference": "offensivecon",
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "viewCount": 19000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "KPzhTqwf0bA",
@@ -2016,7 +2205,9 @@
       "teaser": "Coverage of 19 - Tyler Bohan - OSX XPC Revisited from the conference program.",
       "summary": null,
       "durationSeconds": 2795,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "xzG0pLM4Q64",
@@ -2034,7 +2225,9 @@
       "teaser": "Coverage of 19 - Ned Williamson from the conference program.",
       "summary": null,
       "durationSeconds": 2862,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 12000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Ap-2CnoyBek",
@@ -2055,7 +2248,9 @@
       "teaser": "19 - Alex Matrosov - Attacking Hardware Root of Trust from UEFI Firmware.",
       "summary": null,
       "durationSeconds": 3205,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 2100,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "r4J7Zu1RV40",
@@ -2075,7 +2270,9 @@
       "teaser": "19 - Bruno Keith - Attacking Edge Through the JavaScript Just-In-Time compiler.",
       "summary": null,
       "durationSeconds": 2899,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1200,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "pUa6nWWTO4o",
@@ -2096,15 +2293,15 @@
       "teaser": "18 - Markus Vervier and Michele Orru - Oh No, Where's FIDO?.",
       "summary": null,
       "durationSeconds": 2648,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 3000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "UzMpw3-VZl8",
       "slug": "18-brian-gorenc-abdul-aziz-hariri-and-jasiel-spelman",
       "title": "18 - Brian Gorenc, Abdul-Aziz Hariri and Jasiel Spelman",
-      "speakers": [
-        "L'art de l'évasion"
-      ],
+      "speakers": [],
       "track": "community",
       "topics": [
         "brian",
@@ -2117,7 +2314,9 @@
       "teaser": "18 - Brian Gorenc, Abdul-Aziz Hariri and Jasiel Spelman.",
       "summary": null,
       "durationSeconds": 3358,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1700,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "dpG97TBR3Ys",
@@ -2138,7 +2337,9 @@
       "teaser": "18 - Alex Ionescu - Advancing the State of UEFI Bootkits.",
       "summary": null,
       "durationSeconds": 3514,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 4500,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "eDyxBgIUaR8",
@@ -2159,7 +2360,9 @@
       "teaser": "18 - Cedric Halbronn - Robin Hood vs Cisco ASA AnyConnect.",
       "summary": null,
       "durationSeconds": 3621,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1400,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "VTIdiJO1r20",
@@ -2181,7 +2384,9 @@
       "teaser": "18 - Niko Schmidt, Marco Bartoli, Fabian Yamaguchi - Field Report on a Zero-Day Machine.",
       "summary": null,
       "durationSeconds": 3234,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1700,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "D4Q_ad-ORq4",
@@ -2200,7 +2405,9 @@
       "teaser": "Coverage of 18 - Ilya Smith from the conference program.",
       "summary": null,
       "durationSeconds": 2855,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1800,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "Rh5lDM8O4MA",
@@ -2219,7 +2426,9 @@
       "teaser": "18 - Rodrigo Branco - Inside the Machine.",
       "summary": null,
       "durationSeconds": 1955,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1300,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "yU1BrY1ZB2o",
@@ -2239,7 +2448,9 @@
       "teaser": "18 - Maddie Stone - The Smarts Behind Hacking Dumb Devices.",
       "summary": null,
       "durationSeconds": 1528,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1800,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "02QMna-Jp1I",
@@ -2259,7 +2470,9 @@
       "teaser": "18 - James Forshaw - New and Improved UMCI, Same Old Bugs.",
       "summary": null,
       "durationSeconds": 1640,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1800,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "kSQVGFbTfqE",
@@ -2279,7 +2492,9 @@
       "teaser": "18 - Alex Matrosov - Betraying the BIOS: Going Deeper into BIOS Guard Implementations.",
       "summary": null,
       "durationSeconds": 3043,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "SmHBsUMRYvg",
@@ -2298,7 +2513,9 @@
       "teaser": "Coverage of 18 from the conference program.",
       "summary": null,
       "durationSeconds": 2926,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 987,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "oOqpl-2rMTw",
@@ -2316,7 +2533,9 @@
       "teaser": "18 - Joe Bialek - The Evolution of CFI Attacks and Defenses.",
       "summary": null,
       "durationSeconds": 3337,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1800,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "oStklD6wP-4",
@@ -2334,7 +2553,9 @@
       "teaser": "Coverage of 18 - Jos Wetzels and Ali Abbasi from the conference program.",
       "summary": null,
       "durationSeconds": 2980,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1800,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "VTic5d13u2E",
@@ -2352,7 +2573,9 @@
       "teaser": "Coverage of 18 - Jörn Schneeweisz from the conference program.",
       "summary": null,
       "durationSeconds": 1833,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 1000,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     },
     {
       "youtubeId": "mpfKN1URqdQ",
@@ -2370,7 +2593,9 @@
       "teaser": "18 - Vitaly Nikolenko - Concolic Testing for Kernel Fuzzing and Vulnerability Discovery.",
       "summary": null,
       "durationSeconds": 3203,
-      "conference": "offensivecon"
+      "conference": "offensivecon",
+      "viewCount": 3600,
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
     }
   ]
 }
