@@ -3,8 +3,8 @@
 /**
  * Generate per-year summary shards for client-side fetching.
  *
- * Creates JSON files in public/data/summaries/ with structure:
- * { id: string; summary?: string }[]
+ * Writes JSON files to public/data/summaries/ (gitignored; rebuilt by
+ * `npm run build`). Shape: { id: string; summary?: string }[]
  */
 
 import fs from "node:fs";
