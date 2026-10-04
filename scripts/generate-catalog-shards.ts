@@ -143,9 +143,12 @@ function main() {
   const speakerBySlug = new Map(speakers.map((speaker) => [speaker.slug, speaker]));
   const talksBySpeaker = new Map<string, TalkIndexEntry[]>();
   for (let index = 0; index < talks.length; index++) {
+    const seenOnTalk = new Set<string>();
     for (const name of talks[index].speakers) {
       const slug = slugifySpeaker(name);
-      if (!slug || !speakerBySlug.has(slug)) continue;
+      // getTalksForSpeaker returns each talk once, even if the name repeats.
+      if (!slug || !speakerBySlug.has(slug) || seenOnTalk.has(slug)) continue;
+      seenOnTalk.add(slug);
       const list = talksBySpeaker.get(slug);
       if (list) list.push(entries[index]);
       else talksBySpeaker.set(slug, [entries[index]]);

@@ -7,5 +7,10 @@
 const DEFAULT_SITE_URL = "https://cyber-talks.vercel.app";
 
 export function siteUrl(): string {
-  return (process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_SITE_URL).replace(/\/+$/, "");
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (configured) return configured.replace(/\/+$/, "");
+  // Local dev keeps localhost. Production builds (Vercel or Workers) that
+  // forget the env var must not advertise localhost to crawlers.
+  if (process.env.NODE_ENV === "development") return "http://localhost:3000";
+  return DEFAULT_SITE_URL;
 }

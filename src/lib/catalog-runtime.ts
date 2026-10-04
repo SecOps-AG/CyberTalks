@@ -49,7 +49,12 @@ function assetsBinding(): AssetsBinding | null {
 }
 
 function inWorkerRuntime(): boolean {
-  return typeof navigator !== "undefined" && navigator.userAgent === "Cloudflare-Workers";
+  const nav = globalThis.navigator as { userAgent?: string } | undefined;
+  if (nav?.userAgent === "Cloudflare-Workers") return true;
+  // workerd-only. `next dev` can install an ASSETS binding via
+  // initOpenNextCloudflareForDev, but that process is still Node and should
+  // keep reading the in-memory archive.
+  return typeof (globalThis as { WebSocketPair?: unknown }).WebSocketPair === "function";
 }
 
 async function readShard<T>(assets: AssetsBinding, pathname: string): Promise<T | null> {
@@ -108,12 +113,12 @@ async function loadTopicFromDisk(topic: string): Promise<TalkIndexEntry[] | null
 }
 
 function requireAssets(): AssetsBinding | null {
+  if (!inWorkerRuntime()) return null;
   const assets = assetsBinding();
-  if (assets) return assets;
-  if (inWorkerRuntime()) {
+  if (!assets) {
     throw new Error("Catalog shards need the ASSETS binding.");
   }
-  return null;
+  return assets;
 }
 
 export const loadTalk = cache(async (slug: string): Promise<CatalogTalk | null> => {
