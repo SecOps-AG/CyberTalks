@@ -3,26 +3,22 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SectionHeading } from "@/components/SectionHeading";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
-import {
-  getEditionsForEvent,
-  getEvent,
-  getEvents,
-  getTalkIndex,
-  getTalks,
-  getTaxonomy,
-} from "@/lib/data";
+import routes from "@/generated/page-routes.json";
 import { inDefconVillage, villageEditionPath } from "@/lib/hubs";
+import { loadEventPage } from "@/lib/page-runtime";
+import { topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ event: string }> };
 
 export function generateStaticParams() {
-  return getEvents().map((event) => ({ event: event.slug }));
+  return routes.events.map((event) => ({ event }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { event: eventSlug } = await params;
-  const event = getEvent(eventSlug);
-  if (!event) return { title: "Event not found" };
+  const page = await loadEventPage(eventSlug);
+  if (!page) return { title: "Event not found" };
+  const { event } = page;
   return {
     title: event.name,
     description: `${event.name} village talks — ${event.dates}, ${event.location}.`,
@@ -31,12 +27,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function EventPage({ params }: Props) {
   const { event: eventSlug } = await params;
-  const event = getEvent(eventSlug);
-  if (!event) notFound();
-
-  const editions = getEditionsForEvent(event.slug);
+  const page = await loadEventPage(eventSlug);
+  if (!page) notFound();
+  const { event, editions, talks } = page;
   const defconEditions = editions.filter(inDefconVillage);
-  const talks = getTalkIndex(getTalks().filter((talk) => talk.eventSlug === event.slug));
   const isDefconEvent = defconEditions.length > 0;
 
   return (
@@ -107,7 +101,7 @@ export default async function EventPage({ params }: Props) {
         <TalkBrowser
           talks={talks}
           hide={isDefconEvent ? ["years"] : ["years", "villages"]}
-          topicLabels={getTaxonomy().topicLabels}
+          topicLabels={topicLabels()}
           emptyHint={`No ${event.name} talks match these filters.`}
         />
       </section>

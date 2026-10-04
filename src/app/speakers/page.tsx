@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { SpeakerIndex } from "@/components/SpeakerIndex";
-import { getSpeakers } from "@/lib/data";
+import { loadSpeakers } from "@/lib/page-runtime";
 
 export const metadata: Metadata = {
   title: "Speakers",
   description: "Every speaker in the archive, with the talks they gave.",
 };
 
-export default function SpeakersPage() {
-  const speakers = getSpeakers();
+export default async function SpeakersPage() {
+  const speakers = await loadSpeakers();
 
   return (
     <div className="space-y-6">

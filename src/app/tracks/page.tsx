@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getTrackCounts } from "@/lib/data";
+import { loadTrackCounts } from "@/lib/page-runtime";
 
 export const metadata: Metadata = {
   title: "Tracks",
@@ -16,8 +16,8 @@ const STANCE_LABEL: Record<string, string> = {
   domain: "Domain",
 };
 
-export default function TracksPage() {
-  const tracks = getTrackCounts();
+export default async function TracksPage() {
+  const tracks = await loadTrackCounts();
 
   return (
     <div className="space-y-8">

@@ -23,6 +23,7 @@ import {
 } from "../src/lib/catalog-layout";
 import { getSpeakers, getStats, getTalks } from "../src/lib/data";
 import { relatedForAll, relatedTalks } from "../src/lib/related";
+import { writePageShards } from "./generate-page-shards";
 import { buildIndexEntry, slugifySpeaker } from "../src/lib/search";
 import type { Speaker, Talk, TalkIndexEntry } from "../src/lib/types";
 
@@ -219,6 +220,7 @@ function main() {
   const stats = getStats();
   writePretty(path.join(generatedDir, "stats.json"), stats);
   writePretty(path.join(generatedDir, "catalog-meta.json"), { largeTopics });
+  const pageSummary = writePageShards();
 
   const fileCount =
     TALK_BUCKETS + SPEAKER_BUCKETS + TOPIC_BUCKETS + largeTopics.length;
@@ -232,6 +234,7 @@ function main() {
       `Duplicate talk slugs skipped: ${duplicateSlugs}.`,
       unsafeLarge.length ? `Large topics kept in buckets (unsafe names): ${unsafeLarge.join(", ")}` : "",
       `Stats: ${stats.talks} talks, ${stats.speakers} speakers, ${stats.topics} topics.`,
+      pageSummary,
       `Done in ${((Date.now() - started) / 1000).toFixed(1)}s.`,
     ]
       .filter(Boolean)

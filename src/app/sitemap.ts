@@ -1,15 +1,11 @@
 import type { MetadataRoute } from "next";
-import {
-  getDefconVillages,
-  getEditions,
-  getEvents,
-  getTracks,
-} from "@/lib/data";
 import { HUBS } from "@/lib/hubs";
+import { loadSitemapData } from "@/lib/page-runtime";
 import { siteUrl } from "@/lib/site-url";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = siteUrl();
+  const { events, editions, villages, tracks } = await loadSitemapData();
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${baseUrl}`, changeFrequency: "daily", priority: 1.0 },
@@ -25,25 +21,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  const eventPages: MetadataRoute.Sitemap = getEvents().map((event) => ({
+  const eventPages: MetadataRoute.Sitemap = events.map((event) => ({
     url: `${baseUrl}/${event.slug}`,
     changeFrequency: "weekly",
     priority: 0.8,
   }));
 
-  const editionPages: MetadataRoute.Sitemap = getEditions().map((edition) => ({
+  const editionPages: MetadataRoute.Sitemap = editions.map((edition) => ({
     url: `${baseUrl}/${edition.eventSlug}/${edition.villageSlug}`,
     changeFrequency: "weekly",
     priority: 0.8,
   }));
 
-  const villagePages: MetadataRoute.Sitemap = getDefconVillages().map((village) => ({
+  const villagePages: MetadataRoute.Sitemap = villages.map((village) => ({
     url: `${baseUrl}/defcon/villages/${village.slug}`,
     changeFrequency: "weekly",
     priority: 0.8,
   }));
 
-  const trackPages: MetadataRoute.Sitemap = getTracks().map((track) => ({
+  const trackPages: MetadataRoute.Sitemap = tracks.map((track) => ({
     url: `${baseUrl}/tracks/${track.slug}`,
     changeFrequency: "weekly",
     priority: 0.7,

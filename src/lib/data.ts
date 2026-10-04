@@ -7,8 +7,10 @@
  * merge conflict in a single giant talks.json. Results are memoised for the
  * lifetime of the process (build, dev server, or `next start`).
  *
- * Talk, speaker, and topic pages render on request. They go through
- * catalog-runtime instead of this module so a Worker does not load the archive.
+ * Talk, speaker, and topic pages, and every prerendered route, go through
+ * catalog-runtime / page-runtime on Workers. This module reads the village
+ * files and must not run there: the archive is not on disk and will not fit
+ * in the isolate.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -122,7 +124,18 @@ type Archive = {
   talks: Talk[];
 };
 
+function assertNodeArchive(): void {
+  const nav = globalThis.navigator as { userAgent?: string } | undefined;
+  const onWorker =
+    nav?.userAgent === "Cloudflare-Workers" ||
+    typeof (globalThis as { WebSocketPair?: unknown }).WebSocketPair === "function";
+  if (onWorker) {
+    throw new Error("The full talk archive cannot be read on Cloudflare Workers.");
+  }
+}
+
 const getArchive = memo((): Archive => {
+  assertNodeArchive();
   const taxonomy = getTaxonomy();
   const eventBySlug = new Map(getEvents().map((event) => [event.slug, event]));
   const trackBySlug = new Map(getTracks().map((track) => [track.slug, track]));

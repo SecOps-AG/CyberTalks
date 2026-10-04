@@ -48,7 +48,7 @@ function assetsBinding(): AssetsBinding | null {
   return assets && typeof assets.fetch === "function" ? assets : null;
 }
 
-function inWorkerRuntime(): boolean {
+export function onWorker(): boolean {
   const nav = globalThis.navigator as { userAgent?: string } | undefined;
   if (nav?.userAgent === "Cloudflare-Workers") return true;
   // workerd-only. `next dev` can install an ASSETS binding via
@@ -112,8 +112,22 @@ async function loadTopicFromDisk(topic: string): Promise<TalkIndexEntry[] | null
   return talks.length > 0 ? talks : null;
 }
 
+export async function readPublicJson<T>(pathname: string): Promise<T | null> {
+  const assets = requireAssets();
+  if (assets) return readShard<T>(assets, pathname);
+  const { readFile } = await import("node:fs/promises");
+  const { join } = await import("node:path");
+  try {
+    const text = await readFile(join(process.cwd(), "public", pathname), "utf8");
+    return JSON.parse(text) as T;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw error;
+  }
+}
+
 function requireAssets(): AssetsBinding | null {
-  if (!inWorkerRuntime()) return null;
+  if (!onWorker()) return null;
   const assets = assetsBinding();
   if (!assets) {
     throw new Error("Catalog shards need the ASSETS binding.");
