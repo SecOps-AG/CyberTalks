@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CommandPaletteProvider } from "@/components/CommandPaletteProvider";
+import { siteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const orbitron = Orbitron({
@@ -19,10 +20,7 @@ const ibm = IBM_Plex_Mono({
   weight: ["400", "500", "600"],
 });
 
-const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(
-  /\/+$/,
-  "",
-);
+const baseUrl = siteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -59,7 +57,7 @@ export default function RootLayout({
           <SiteFooter />
         </div>
         <CommandPaletteProvider />
-        <Analytics />
+        {process.env.VERCEL ? <Analytics /> : null}
         <Script id="sc-vars" strategy="afterInteractive">
           {`var sc_project=13354311; var sc_invisible=1; var sc_security="479323c8";`}
         </Script>

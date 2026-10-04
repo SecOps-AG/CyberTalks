@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Placeholder names. Create the R2 bucket and set these to the real worker
+  // and bucket before deploying. Do not deploy from this config as-is.
+  "name": "cybertalks",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-04",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "cybertalks"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "cybertalks-next-cache"
+    }
+  ],
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://cyber-talks.vercel.app"
+  }
+}

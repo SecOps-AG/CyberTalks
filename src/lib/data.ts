@@ -1,11 +1,14 @@
 /**
- * Server-only data layer.
+ * Server-only data layer for pages rendered at build time.
  *
  * Every village edition is its own file under data/villages/. They are read
  * from disk at first access rather than imported statically, so adding a
  * village to the archive means dropping in one JSON file — no code edit, no
  * merge conflict in a single giant talks.json. Results are memoised for the
  * lifetime of the process (build, dev server, or `next start`).
+ *
+ * Talk, speaker, and topic pages render on request. They go through
+ * catalog-runtime instead of this module so a Worker does not load the archive.
  */
 import fs from "node:fs";
 import path from "node:path";

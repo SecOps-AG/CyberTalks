@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { getStats } from "@/lib/data";
+import stats from "@/generated/stats.json";
 
 export function SiteFooter() {
-  const stats = getStats();
 
   return (
     <footer className="border-t border-acid/15 px-4 py-6">

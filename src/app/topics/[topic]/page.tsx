@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
-import { getTalkIndex, getTalksForTopic, getTaxonomy } from "@/lib/data";
+import { loadTopic } from "@/lib/catalog-runtime";
+import { topicLabel, topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ topic: string }> };
 
@@ -12,22 +13,19 @@ export function generateStaticParams() {
 
 export const dynamicParams = true;
 
-function labelFor(topic: string): string {
-  return getTaxonomy().topicLabels[topic] ?? topic;
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { topic } = await params;
+  const label = topicLabel(topic);
   return {
-    title: `Topic: ${labelFor(topic)}`,
-    description: `Conference talks tagged ${labelFor(topic)}.`,
+    title: `Topic: ${label}`,
+    description: `Conference talks tagged ${label}.`,
   };
 }
 
 export default async function TopicPage({ params }: Props) {
   const { topic } = await params;
-  const talks = getTalkIndex(getTalksForTopic(topic));
-  if (talks.length === 0) notFound();
+  const talks = await loadTopic(topic);
+  if (!talks) notFound();
 
   return (
     <div className="space-y-8">
@@ -38,7 +36,7 @@ export default async function TopicPage({ params }: Props) {
           </Link>
         </p>
         <h1 className="font-display text-3xl font-bold tracking-[0.05em] text-acid">
-          {labelFor(topic)}
+          {topicLabel(topic)}
         </h1>
         <p className="text-sm text-mint/60">
           {talks.length} talk{talks.length === 1 ? "" : "s"} tagged with this topic.
@@ -47,7 +45,7 @@ export default async function TopicPage({ params }: Props) {
 
       <TalkBrowser
         talks={talks}
-        topicLabels={getTaxonomy().topicLabels}
+        topicLabels={topicLabels()}
         emptyHint="No talks match these filters."
       />
     </div>

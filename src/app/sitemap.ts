@@ -6,12 +6,10 @@ import {
   getTracks,
 } from "@/lib/data";
 import { HUBS } from "@/lib/hubs";
+import { siteUrl } from "@/lib/site-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(
-    /\/+$/,
-    "",
-  );
+  const baseUrl = siteUrl();
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${baseUrl}`, changeFrequency: "daily", priority: 1.0 },
