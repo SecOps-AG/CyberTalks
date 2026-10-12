@@ -1,20 +1,13 @@
-import { getEvents, getEditions, getCoverageByVillage, getCoverageForEvent } from "@/lib/data";
 import Link from "next/link";
+import { loadCoverage } from "@/lib/page-runtime";
 
 export const metadata = {
   title: "Coverage Report",
   description: "Summary coverage across Cyber Talks events and villages",
 };
 
-export default function CoveragePage() {
-  const events = getEvents();
-  const editions = getEditions();
-  const villageCoverage = getCoverageByVillage();
-
-  const eventStats = events.map((event) => ({
-    event,
-    stats: getCoverageForEvent(event.slug),
-  }));
+export default async function CoveragePage() {
+  const { editions, villageCoverage, eventStats } = await loadCoverage();
 
   const totalStats = {
     totalTalks: editions.reduce((sum, e) => sum + e.talkCount, 0),

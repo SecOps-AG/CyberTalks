@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { TopicIndex } from "@/components/TopicIndex";
-import { getTopicCounts } from "@/lib/data";
+import { loadTopicCounts } from "@/lib/page-runtime";
 
 export const metadata: Metadata = {
   title: "Topics",
   description: "Every topic tagged across the archive, with talk counts.",
 };
 
-export default function TopicsPage() {
-  const topics = getTopicCounts();
+export default async function TopicsPage() {
+  const topics = await loadTopicCounts();
 
   return (
     <div className="space-y-6">
