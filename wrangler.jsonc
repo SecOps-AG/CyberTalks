@@ -1,14 +1,21 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  // Workers Paid. The incremental-cache bucket already exists in this account.
+  // Live worker. npm run deploy reads this file and refuses any other worker name.
+  // The previous worker config is wrangler.legacy.jsonc and is not used by deploy.
   "account_id": "46d1c096a70866c4b05e8842743afd6e",
-  "name": "cybertalks",
+  "name": "cybertalks-d1",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-10-04",
   "compatibility_flags": [
     "nodejs_compat",
     "global_fetch_strictly_public"
   ],
+  "observability": {
+    "enabled": true,
+    "traces": {
+      "enabled": true
+    }
+  },
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
@@ -16,13 +23,22 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "cybertalks"
+      "service": "cybertalks-d1"
     }
   ],
   "r2_buckets": [
     {
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
       "bucket_name": "cybertalks-opennext-cache"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "TALKS_DB",
+      "database_name": "cybertalks-d1-prod",
+      // Replaced after cybertalks-d1-prod is created. Deploy refuses this placeholder.
+      "database_id": "00000000-0000-0000-0000-0000000000d1",
+      "migrations_dir": "migrations/d1"
     }
   ],
   "routes": [

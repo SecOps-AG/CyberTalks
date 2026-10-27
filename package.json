@@ -13,12 +13,12 @@
     "preview:d1": "opennextjs-cloudflare build --config wrangler.d1-preview.jsonc && opennextjs-cloudflare preview --config wrangler.d1-preview.jsonc",
     "d1:sync": "tsx scripts/d1/sync.ts",
     "d1:rebuild": "tsx scripts/d1/sync.ts --full",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "deploy": "tsx scripts/check-deploy-target.ts && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "tsx scripts/check-deploy-target.ts && opennextjs-cloudflare build && opennextjs-cloudflare upload",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "topics": "node scripts/list-topics.mjs",
     "generate-search-index": "tsx scripts/generate-search-index.ts",
-    "test": "tsx --test src/lib/search-index/*.test.ts src/lib/d1/*.test.ts"
+    "test": "tsx --test src/lib/search-index/*.test.ts src/lib/d1/*.test.ts scripts/check-deploy-target.test.ts scripts/d1/*.test.ts"
   },
   "engines": {
     "node": ">=18.18.0"

@@ -1,0 +1,33 @@
+name: Copy D1 production database
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/d1/copy-to-prod.ts"
+      - ".github/workflows/copy-d1-prod.yml"
+
+concurrency:
+  group: copy-d1-prod
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Copy preview database to cybertalks-d1-prod
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          D1_DATABASE_ID: ${{ secrets.D1_DATABASE_ID }}
+        run: npx tsx scripts/d1/copy-to-prod.ts

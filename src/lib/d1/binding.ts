@@ -2,8 +2,8 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { asSql, type D1Like, type SqlClient } from "./sql";
 
 /**
- * TALKS_DB from wrangler.d1-preview.jsonc.
- * Missing on the main worker config, which keeps reading the built catalog.
+ * TALKS_DB from the worker config.
+ * Missing when that binding is absent, which keeps reads on the built catalog.
  */
 export async function talksSql(): Promise<SqlClient | null> {
   try {
