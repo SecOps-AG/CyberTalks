@@ -142,5 +142,9 @@ export default function nextConfigForPhase(phase: string): NextConfig {
 }
 
 if (process.env.NODE_ENV === "development") {
-  void initOpenNextCloudflareForDev();
+  void initOpenNextCloudflareForDev(
+    process.env.CYBERTALKS_D1 === "1"
+      ? { configPath: "./wrangler.d1-preview.jsonc", remoteBindings: false }
+      : undefined,
+  );
 }

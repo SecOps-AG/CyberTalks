@@ -7,6 +7,8 @@
  * read the in-memory archive, which is how those pages have always worked.
  */
 import { cache } from "react";
+import { talksSql } from "./d1/binding";
+import { readSpeakerRecord, readTalkBySlug, readTopicTalks } from "./d1/read";
 import {
   largeTopicPath,
   speakerShardPath,
@@ -154,16 +156,25 @@ function requireAssets(): AssetsBinding | null {
 }
 
 export const loadTalk = cache(async (slug: string): Promise<CatalogTalk | null> => {
+  const db = await talksSql();
+  if (db) return readTalkBySlug(db, slug);
   const assets = requireAssets();
   return assets ? loadTalkFromAssets(assets, slug) : loadTalkFromDisk(slug);
 });
 
 export const loadSpeaker = cache(async (slug: string): Promise<CatalogSpeaker | null> => {
+  const db = await talksSql();
+  if (db) return readSpeakerRecord(db, slug);
   const assets = requireAssets();
   return assets ? loadSpeakerFromAssets(assets, slug) : loadSpeakerFromDisk(slug);
 });
 
 export const loadTopic = cache(async (topic: string): Promise<TalkIndexEntry[] | null> => {
+  const db = await talksSql();
+  if (db) {
+    const talks = await readTopicTalks(db, topic);
+    return talks.length > 0 ? talks : null;
+  }
   const assets = requireAssets();
   return assets ? loadTopicFromAssets(assets, topic) : loadTopicFromDisk(topic);
 });

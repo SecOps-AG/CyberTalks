@@ -67,23 +67,24 @@ export async function fetchListingTalks(
   key: string,
   signal?: AbortSignal,
 ): Promise<TalkIndexEntry[]> {
+  // The API reads D1 when that binding is present, so an upsert shows up
+  // without a new build. Shards remain the fallback.
   try {
-    const direct = await readDirect(kind, key, signal);
-    if (direct) return direct;
+    const response = await fetch(
+      `/api/listings/${encodeURIComponent(kind)}/${encodeURIComponent(key)}`,
+      { signal, cache: "no-store" },
+    );
+    if (response.ok) {
+      const body = (await response.json()) as { talks?: TalkIndexEntry[] };
+      return body.talks ?? [];
+    }
+    if (response.status === 404) return [];
   } catch (error) {
     if (signal?.aborted || (error instanceof Error && error.name === "AbortError")) {
       throw error;
     }
   }
 
-  const response = await fetch(
-    `/api/listings/${encodeURIComponent(kind)}/${encodeURIComponent(key)}`,
-    { signal },
-  );
-  if (response.status === 404) return [];
-  if (!response.ok) {
-    throw new Error(`Listing API returned ${response.status}`);
-  }
-  const body = (await response.json()) as { talks?: TalkIndexEntry[] };
-  return body.talks ?? [];
+  const direct = await readDirect(kind, key, signal);
+  return direct ?? [];
 }

@@ -272,7 +272,7 @@ export function TalkBrowser({
 
     const loadYearShard = async (year: number) => {
       try {
-        const res = await fetch(`/data/summaries/summaries-${year}.json`);
+        const res = await fetch(`/api/summaries/${year}`, { cache: "no-store" });
         if (!res.ok) return;
         const entries: TalkSummaryEntry[] = await res.json();
         for (const entry of entries) {
