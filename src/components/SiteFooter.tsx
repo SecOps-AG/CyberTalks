@@ -28,6 +28,9 @@ export function SiteFooter() {
             <Link href="/speakers" className="hover:text-cyan">
               Speakers
             </Link>
+            <Link href="/api" className="hover:text-cyan">
+              API
+            </Link>
           </div>
         </div>
       </div>

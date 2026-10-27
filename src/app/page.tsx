@@ -52,6 +52,7 @@ export default async function HomePage() {
       }
       size="lg"
       examples={EXAMPLES}
+      linkArchiveSearch
       emptyHint="No talks match these filters."
     />
   );

@@ -1,4 +1,8 @@
+import { execFileSync } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
 import type { NextConfig } from "next";
+import { PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_BUILD } from "next/constants";
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 const isDev = process.env.NODE_ENV === "development";
@@ -50,7 +54,12 @@ const nextConfig: NextConfig = {
   outputFileTracingExcludes:
     process.env.NEXT_PRIVATE_STANDALONE === "true"
       ? {
-          "*": ["./data/villages/**/*", "./data/view-counts.json", "./public/catalog/**/*"],
+          "*": [
+            "./data/villages/**/*",
+            "./data/view-counts.json",
+            "./public/catalog/**/*",
+            "./public/search-index/**/*",
+          ],
         }
       : undefined,
   // The browser lives at "/" now. Keep the old address working — Next carries
@@ -67,7 +76,70 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+function searchIndexFresh(): boolean {
+  const bin = path.join(process.cwd(), "public", "search-index", "index.bin");
+  const meta = path.join(process.cwd(), "public", "search-index", "meta.json");
+  const manifest = path.join(process.cwd(), "public", "data", "talk-index", "manifest.json");
+  if (!fs.existsSync(bin) || !fs.existsSync(meta) || !fs.existsSync(manifest)) return false;
+  return fs.statSync(bin).mtimeMs >= fs.statSync(manifest).mtimeMs;
+}
+
+function waitForLock(lock: string): void {
+  const started = Date.now();
+  while (fs.existsSync(lock)) {
+    if (Date.now() - started > 180_000) {
+      throw new Error("Timed out waiting for the search index build.");
+    }
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 250);
+  }
+}
+
+/** Production builds always refresh the index. Dev refreshes it when talk shards are newer. */
+function ensureSearchIndex(phase: string): void {
+  const production = phase === PHASE_PRODUCTION_BUILD;
+  const dev = phase === PHASE_DEVELOPMENT_SERVER;
+  if (!production && !dev) return;
+  if (dev && searchIndexFresh()) return;
+
+  const dir = path.join(process.cwd(), "public", "search-index");
+  fs.mkdirSync(dir, { recursive: true });
+  const lock = path.join(dir, ".lock");
+  try {
+    if (fs.existsSync(lock) && Date.now() - fs.statSync(lock).mtimeMs > 5 * 60 * 1000) {
+      fs.unlinkSync(lock);
+    }
+  } catch {
+    // Another process removed it.
+  }
+
+  try {
+    const fd = fs.openSync(lock, "wx");
+    fs.closeSync(fd);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error;
+    waitForLock(lock);
+    return;
+  }
+
+  try {
+    execFileSync(
+      process.execPath,
+      ["--import", "tsx", path.join(process.cwd(), "scripts", "generate-search-index.ts")],
+      { stdio: "inherit", cwd: process.cwd() },
+    );
+  } finally {
+    try {
+      fs.unlinkSync(lock);
+    } catch {
+      // Already cleared.
+    }
+  }
+}
+
+export default function nextConfigForPhase(phase: string): NextConfig {
+  ensureSearchIndex(phase);
+  return nextConfig;
+}
 
 if (process.env.NODE_ENV === "development") {
   void initOpenNextCloudflareForDev();
