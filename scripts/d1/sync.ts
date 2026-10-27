@@ -286,7 +286,12 @@ async function main() {
   const remote = process.argv.includes("--remote");
   const check = process.argv.includes("--check");
   const since = argValue("--since");
-  const set = fullFlag ? { full: true, files: [] } : changes(since);
+  const filesArg = argValue("--files");
+  const set = fullFlag
+    ? { full: true, files: [] }
+    : filesArg
+      ? { full: false, files: filesArg.split(",").map((file) => file.trim()).filter(Boolean) }
+      : changes(since);
   if (!set.full && set.files.length === 0) {
     console.log("nothing to sync");
     return;
