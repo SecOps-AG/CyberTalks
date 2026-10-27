@@ -4,6 +4,7 @@
  * Reads the preview database. Writes only a database named cybertalks-d1-prod.
  * Does not deploy, delete, or modify the cybertalks worker.
  * Does not run SQL that changes the preview database.
+ * A matching production database is left in place.
  */
 import { spawn } from "node:child_process";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
