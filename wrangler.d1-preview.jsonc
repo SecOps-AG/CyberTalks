@@ -1,0 +1,44 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Preview worker only. No custom domains, so this cannot serve cybertalks.org.
+  // Do not point this file at the cybertalks worker.
+  "account_id": "46d1c096a70866c4b05e8842743afd6e",
+  "name": "cybertalks-d1-preview",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-04",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "observability": {
+    "enabled": true,
+    "traces": {
+      "enabled": true
+    }
+  },
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "cybertalks-d1-preview"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "cybertalks-d1-preview-cache"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "TALKS_DB",
+      "database_name": "cybertalks-d1-preview",
+      // Local placeholder. Replace with the id from `wrangler d1 create cybertalks-d1-preview`
+      // before any remote deploy. Remote sync reads D1_DATABASE_ID instead of this value.
+      "database_id": "00000000-0000-0000-0000-0000000000d1",
+      "migrations_dir": "migrations/d1",
+      "remote": false
+    }
+  ],
+  "workers_dev": true
+}

@@ -68,12 +68,11 @@ const getViewCounts = memo((): ViewCounts => {
   return readJson<{ counts?: ViewCounts }>(file).counts ?? {};
 });
 
-const getStoredEditions = memo((): StoredVillageEdition[] =>
+const getVillageFiles = memo((): string[] =>
   fs
     .readdirSync(VILLAGE_DIR)
     .filter((file) => file.endsWith(".json"))
-    .sort()
-    .map((file) => readJson<StoredVillageEdition>(path.join(VILLAGE_DIR, file))),
+    .sort(),
 );
 
 export function deriveKind(
@@ -122,6 +121,8 @@ export function deriveKind(
 type Archive = {
   editions: VillageEdition[];
   talks: Talk[];
+  /** Parallel to `talks`: repo path of the village file each talk came from. */
+  sources: string[];
 };
 
 function assertNodeArchive(): void {
@@ -143,9 +144,12 @@ const getArchive = memo((): Archive => {
 
   const editions: VillageEdition[] = [];
   const talks: Talk[] = [];
+  const sources: string[] = [];
   const aliasedTopics = new Set<{ topic: string; canonical: string }>();
 
-  for (const stored of getStoredEditions()) {
+  for (const file of getVillageFiles()) {
+    const stored = readJson<StoredVillageEdition>(path.join(VILLAGE_DIR, file));
+    const sourceFile = `data/villages/${file}`;
     const event = eventBySlug.get(stored.eventSlug);
     if (!event) {
       throw new Error(
@@ -201,6 +205,7 @@ const getArchive = memo((): Archive => {
         dateLabel: dateLabel(event.dates, event.year),
         locationLabel: locationLabel(event.location),
       });
+      sources.push(sourceFile);
     }
   }
 
@@ -213,11 +218,21 @@ const getArchive = memo((): Archive => {
   editions.sort(
     (a, b) => b.year - a.year || a.villageName.localeCompare(b.villageName),
   );
-  return { editions, talks };
+  return { editions, talks, sources };
 });
 
 export function getTalks(): Talk[] {
   return getArchive().talks;
+}
+
+/** Archive order. `sourceFile` is the village JSON path inside the repo. */
+export function getTalkRows(): { talk: Talk; sourceFile: string; seq: number }[] {
+  const archive = getArchive();
+  return archive.talks.map((talk, seq) => ({
+    talk,
+    sourceFile: archive.sources[seq],
+    seq,
+  }));
 }
 
 export function getEditions(): VillageEdition[] {

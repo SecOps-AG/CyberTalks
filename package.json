@@ -10,12 +10,15 @@
     "validate": "node scripts/validate-data.mjs && node scripts/check-defcon-villages.mjs",
     "generate-shards": "node scripts/generate-summary-shards.mjs && node scripts/generate-talk-index-shards.mjs && tsx scripts/generate-catalog-shards.ts",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "preview:d1": "opennextjs-cloudflare build --config wrangler.d1-preview.jsonc && opennextjs-cloudflare preview --config wrangler.d1-preview.jsonc",
+    "d1:sync": "tsx scripts/d1/sync.ts",
+    "d1:rebuild": "tsx scripts/d1/sync.ts --full",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "topics": "node scripts/list-topics.mjs",
     "generate-search-index": "tsx scripts/generate-search-index.ts",
-    "test": "tsx --test src/lib/search-index/*.test.ts"
+    "test": "tsx --test src/lib/search-index/*.test.ts src/lib/d1/*.test.ts"
   },
   "engines": {
     "node": ">=18.18.0"

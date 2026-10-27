@@ -1,0 +1,45 @@
+name: Sync talks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/villages/**"
+      - "data/events.json"
+      - "data/taxonomy.json"
+      - "data/view-counts.json"
+      - "migrations/d1/**"
+      - "scripts/d1/**"
+      - "src/lib/d1/**"
+
+concurrency:
+  group: sync-talks
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Upsert changed talks
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          D1_DATABASE_ID: ${{ secrets.D1_DATABASE_ID }}
+          D1_DATABASE_NAME: ${{ vars.D1_DATABASE_NAME }}
+        run: |
+          if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            npx tsx scripts/d1/sync.ts --remote --full
+          else
+            npx tsx scripts/d1/sync.ts --remote --since "${{ github.event.before }}"
+          fi
