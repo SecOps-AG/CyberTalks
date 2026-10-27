@@ -498,6 +498,30 @@ export function paginate<T>(items: T[], page: number, pageSize = PAGE_SIZE) {
   };
 }
 
+function stripSearchFields(entry: SearchEntry): TalkIndexEntry {
+  const { haystack, speakerSlugs, matchedInSummary, ...talk } = entry;
+  void haystack;
+  void speakerSlugs;
+  void matchedInSummary;
+  return talk;
+}
+
+/**
+ * First page of the default browse (relevance, extras hidden). Listing pages
+ * SSR this slice and fetch the rest, so the document does not carry every talk.
+ */
+export function initialBrowsePage(talks: TalkIndexEntry[]): {
+  talks: TalkIndexEntry[];
+  total: number;
+} {
+  const filtered = filterTalks(withHaystack(talks), EMPTY_FILTERS);
+  const sorted = sortTalks(filtered, "relevance", "");
+  return {
+    talks: paginate(sorted, 1).items.map(stripSearchFields),
+    total: filtered.length,
+  };
+}
+
 /* ---------- URL <-> filter state ---------- */
 
 /** URL key -> filter field. `speakers` is plural to match /speakers/<slug>. */

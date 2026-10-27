@@ -2,12 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
-import {
-  getSpeaker,
-  getTalkIndex,
-  getTalksForSpeaker,
-  getTaxonomy,
-} from "@/lib/data";
+import { loadSpeaker } from "@/lib/catalog-runtime";
+import { initialBrowsePage } from "@/lib/search";
+import { topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -19,7 +16,8 @@ export const dynamicParams = true;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const speaker = getSpeaker(slug);
+  const record = await loadSpeaker(slug);
+  const speaker = record?.speaker;
   if (!speaker) return { title: "Speaker not found" };
   return {
     title: speaker.name,
@@ -29,10 +27,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function SpeakerPage({ params }: Props) {
   const { slug } = await params;
-  const speaker = getSpeaker(slug);
-  if (!speaker) notFound();
-
-  const talks = getTalkIndex(getTalksForSpeaker(speaker.slug));
+  const record = await loadSpeaker(slug);
+  if (!record) notFound();
+  const { speaker, talks } = record;
+  const initial = initialBrowsePage(talks);
 
   return (
     <div className="space-y-8">
@@ -53,9 +51,12 @@ export default async function SpeakerPage({ params }: Props) {
       {/* The speaker facet is pinned by the page itself — offering it again would
           only ever narrow to co-presenters. */}
       <TalkBrowser
-        talks={talks}
+        talks={initial.talks}
+        listing={{ kind: "speaker", key: speaker.slug }}
+        catalogSize={talks.length}
+        resultSize={initial.total}
         hide={["speakers"]}
-        topicLabels={getTaxonomy().topicLabels}
+        topicLabels={topicLabels()}
         emptyHint={`No ${speaker.name} talks match these filters.`}
       />
     </div>

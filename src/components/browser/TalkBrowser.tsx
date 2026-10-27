@@ -25,6 +25,7 @@ import {
   type Filters,
   type SortKey,
 } from "@/lib/search";
+import { fetchListingTalks, type ListingKind } from "@/lib/fetch-listing";
 import { inDefconVillage } from "@/lib/hubs";
 import { fetchAdditionalTalkIndexChunks } from "@/lib/fetch-talk-index";
 import type { TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
@@ -76,6 +77,15 @@ export type TalkBrowserProps = {
    * panel (staged picks, applied on "Show N talks"). Homepage only.
    */
   pushFilters?: boolean;
+  /**
+   * Fetch the full list after first paint. `talks` is only the first page, so
+   * topic, track, and speaker documents stay small.
+   */
+  listing?: { kind: ListingKind; key: string };
+  /** Unfiltered talk count, shown before `listing` finishes loading. */
+  catalogSize?: number;
+  /** Default-filter result count, shown before `listing` finishes loading. */
+  resultSize?: number;
 };
 
 const SORTS: { value: SortKey; label: string }[] = [
@@ -102,6 +112,9 @@ export function TalkBrowser({
   alwaysShowDifficulties = false,
   remoteIndex = false,
   pushFilters = false,
+  listing,
+  catalogSize,
+  resultSize,
 }: TalkBrowserProps) {
   // `q` deliberately lives outside `filters`. If a keystroke updated `filters`,
   // every downstream memo would recompute on the urgent render *and* again on
@@ -115,6 +128,8 @@ export function TalkBrowser({
   const [remoteTalks, setRemoteTalks] = useState<TalkIndexEntry[]>([]);
   const [catalogReady, setCatalogReady] = useState(!remoteIndex);
   const [catalogLoading, setCatalogLoading] = useState(remoteIndex);
+  const [listedTalks, setListedTalks] = useState<TalkIndexEntry[] | null>(null);
+  const [listReady, setListReady] = useState(!listing);
   const loadedChunkFilesRef = useRef<Set<string>>(new Set());
   const remoteTalksRef = useRef<TalkIndexEntry[]>([]);
   remoteTalksRef.current = remoteTalks;
@@ -180,7 +195,35 @@ export function TalkBrowser({
     };
   }, [remoteIndex, ready, yearFilterKey, conferenceFilterKey]);
 
-  const talks = remoteIndex ? remoteTalks : talksProp;
+  const listingKind = listing?.kind;
+  const listingKey = listing?.key;
+
+  useEffect(() => {
+    if (!listingKind || !listingKey) return;
+    let cancelled = false;
+    const controller = new AbortController();
+    setListReady(false);
+
+    fetchListingTalks(listingKind, listingKey, controller.signal)
+      .then((next) => {
+        if (cancelled) return;
+        if (next.length > 0) setListedTalks(next);
+        setListReady(true);
+      })
+      .catch((error: unknown) => {
+        if (cancelled) return;
+        if (error instanceof Error && error.name === "AbortError") return;
+        setListReady(true);
+      });
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [listingKind, listingKey]);
+
+  const talks = remoteIndex ? remoteTalks : (listedTalks ?? talksProp);
+  const listingPending = Boolean(listing) && !listReady;
 
   const hasExtras = useMemo(() => talks.some((t) => t.kind !== "talk"), [talks]);
   const allExtras = useMemo(() => talks.length > 0 && talks.every((t) => t.kind !== "talk"), [talks]);
@@ -301,6 +344,11 @@ export function TalkBrowser({
   );
 
   const activeCount = countActive({ ...filters, q: draftQuery });
+  const pendingUnfiltered = listingPending && activeCount === 0 && resultSize != null;
+  const shownTotal = pendingUnfiltered ? resultSize : paged.total;
+  const shownFrom = pendingUnfiltered ? (resultSize === 0 ? 0 : 1) : paged.from;
+  const shownTo = pendingUnfiltered ? Math.min(paged.items.length, resultSize ?? 0) : paged.to;
+  const universe = listingPending && catalogSize != null ? catalogSize : talks.length;
 
   const stagedEffective = useMemo<Filters | null>(
     () => (staged ? { ...staged, q: deferredQuery } : null),
@@ -373,6 +421,10 @@ export function TalkBrowser({
 
   const renderPanel = () => (
     <div className="space-y-5">
+      {listingPending ? (
+        <p className="text-[12px] text-mint/40">Loading filters…</p>
+      ) : (
+      <>
       {hasExtras ? (
         <div className="border-b border-acid/15 pb-4">
           <label className="flex cursor-pointer select-none items-center gap-2 text-[12px] text-mint/80 transition hover:text-acid">
@@ -450,6 +502,8 @@ export function TalkBrowser({
           onToggle={(value) => update({ speakers: toggleValue(filters.speakers, value) })}
         />
       ) : null}
+      </>
+      )}
     </div>
   );
 
@@ -721,14 +775,14 @@ export function TalkBrowser({
             className="flex flex-wrap items-center justify-between gap-3 scroll-mt-24"
           >
             <p className="text-[11px] uppercase tracking-[0.16em] text-mint/60">
-              {paged.total === 0
+              {shownTotal === 0
                 ? "0 talks"
-                : `${paged.from}–${paged.to} of ${paged.total} talk${paged.total === 1 ? "" : "s"}`}
-              {paged.total !== talks.length ? (
-                <span className="text-mint/30"> / {talks.length}</span>
+                : `${shownFrom}–${shownTo} of ${shownTotal} talk${shownTotal === 1 ? "" : "s"}`}
+              {shownTotal !== universe ? (
+                <span className="text-mint/30"> / {universe}</span>
               ) : null}
-              {catalogLoading ? (
-                <span className="text-mint/30"> · loading catalog…</span>
+              {catalogLoading || listingPending ? (
+                <span className="text-mint/30"> · loading…</span>
               ) : null}
             </p>
             <div className="flex flex-wrap items-center gap-3">

@@ -2,13 +2,8 @@ import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import { HeroConferences } from "@/components/HeroConferences";
 import { MostWatched } from "@/components/MostWatched";
 import { TrackChart } from "@/components/TrackChart";
-import {
-  getConferenceCounts,
-  getMostWatched,
-  getStats,
-  getTaxonomy,
-  getTrackCounts,
-} from "@/lib/data";
+import { loadHome } from "@/lib/page-runtime";
+import { topicLabels } from "@/lib/topic-labels";
 
 const EXAMPLES = ["ransomware", "osint", "supply chain", "purple team"];
 
@@ -19,11 +14,10 @@ const EXAMPLES = ["ransomware", "osint", "supply chain", "purple team"];
  * searching or filtering).
  *
  * The full talk catalog is loaded client-side from year shards (remoteIndex)
- * so the static HTML stays under Vercel's body-size limit.
+ * so the static HTML stays small enough to serve from the Worker.
  */
-export default function HomePage() {
-  const stats = getStats();
-  const conferences = getConferenceCounts();
+export default async function HomePage() {
+  const { stats, conferences, mostWatched, trackCounts } = await loadHome();
   const masthead = (
     <header key="masthead" className="relative flex flex-col items-start text-left">
       <p className="eyebrow max-[599px]:hidden">Conference talk archive</p>
@@ -48,13 +42,13 @@ export default function HomePage() {
       pushFilters
       hide={["villages"]}
       alwaysShowDifficulties
-      topicLabels={getTaxonomy().topicLabels}
+      topicLabels={topicLabels()}
       masthead={masthead}
       hero
       footer={
         <>
-          <MostWatched talks={getMostWatched(12)} />
-          <TrackChart counts={getTrackCounts()} />
+          <MostWatched talks={mostWatched} />
+          <TrackChart counts={trackCounts} />
         </>
       }
       size="lg"

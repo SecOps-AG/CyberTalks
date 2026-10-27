@@ -2,29 +2,25 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
-import {
-  getEdition,
-  getEditions,
-  getSeries,
-  getTalkIndex,
-  getTalksForEdition,
-  getTaxonomy,
-} from "@/lib/data";
+import routes from "@/generated/page-routes.json";
 import { inDefconVillage, villageEditionPath, villageSeriesPath } from "@/lib/hubs";
+import { loadEditionPage } from "@/lib/page-runtime";
+import { topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ event: string; village: string }> };
 
 export function generateStaticParams() {
-  return getEditions().map((edition) => ({
-    event: edition.eventSlug,
-    village: edition.villageSlug,
+  return routes.editions.map((edition) => ({
+    event: edition.event,
+    village: edition.village,
   }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { event, village } = await params;
-  const edition = getEdition(event, village);
-  if (!edition) return { title: "Village not found" };
+  const page = await loadEditionPage(event, village);
+  if (!page) return { title: "Village not found" };
+  const { edition } = page;
   return {
     title: `${edition.villageName} — ${edition.eventName}`,
     description: edition.description,
@@ -33,13 +29,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function VillageEditionPage({ params }: Props) {
   const { event, village } = await params;
-  const edition = getEdition(event, village);
-  if (!edition) notFound();
+  const page = await loadEditionPage(event, village);
+  if (!page) notFound();
+  const { edition, series, talks } = page;
 
   const isVillage = inDefconVillage(edition);
-  const series = isVillage ? getSeries(edition.villageSlug) : undefined;
   const otherEditions = series?.editions.filter((item) => item.id !== edition.id) ?? [];
-  const talks = getTalkIndex(getTalksForEdition(edition.id));
 
   return (
     <div className="space-y-8">
@@ -88,7 +83,7 @@ export default async function VillageEditionPage({ params }: Props) {
       <TalkBrowser
         talks={talks}
         hide={isVillage ? ["years", "villages", "conferences"] : ["years", "villages", "conferences"]}
-        topicLabels={getTaxonomy().topicLabels}
+        topicLabels={topicLabels()}
         emptyHint="No talks in this village match these filters."
       />
     </div>

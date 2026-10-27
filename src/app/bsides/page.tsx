@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
-import { getTalkIndex, getTalks, getTaxonomy } from "@/lib/data";
+import { loadHubPage } from "@/lib/page-runtime";
+import { topicLabels } from "@/lib/topic-labels";
 
 export const metadata: Metadata = {
   title: "BSides",
   description: "Browse BSides talks in the archive.",
 };
 
-export default function BsidesHubPage() {
-  const talks = getTalkIndex(getTalks().filter((talk) => talk.conference === "bsides"));
+export default async function BsidesHubPage() {
+  const { talks } = await loadHubPage("bsides");
 
   const masthead = (
     <header className="space-y-3">
@@ -26,7 +27,7 @@ export default function BsidesHubPage() {
     <TalkBrowser
       talks={talks}
       hide={["conferences", "villages"]}
-      topicLabels={getTaxonomy().topicLabels}
+      topicLabels={topicLabels()}
       masthead={masthead}
       emptyHint="No BSides talks match these filters."
     />

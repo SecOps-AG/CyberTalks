@@ -2,37 +2,32 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
-import {
-  getDefconVillages,
-  getSeries,
-  getTalkIndex,
-  getTalksForSeries,
-  getTaxonomy,
-} from "@/lib/data";
+import routes from "@/generated/page-routes.json";
 import { villageEditionPath } from "@/lib/hubs";
+import { loadSeriesPage } from "@/lib/page-runtime";
+import { topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ village: string }> };
 
 export function generateStaticParams() {
-  return getDefconVillages().map((series) => ({ village: series.slug }));
+  return routes.series.map((village) => ({ village }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { village } = await params;
-  const series = getSeries(village);
-  if (!series) return { title: "Village not found" };
+  const page = await loadSeriesPage(village);
+  if (!page) return { title: "Village not found" };
   return {
-    title: `${series.name} — DEF CON`,
-    description: series.description,
+    title: `${page.series.name} — DEF CON`,
+    description: page.series.description,
   };
 }
 
 export default async function DefconVillageSeriesPage({ params }: Props) {
   const { village } = await params;
-  const series = getSeries(village);
-  if (!series) notFound();
-
-  const talks = getTalkIndex(getTalksForSeries(series.slug));
+  const page = await loadSeriesPage(village);
+  if (!page) notFound();
+  const { series, talks } = page;
 
   return (
     <div className="space-y-8">
@@ -63,7 +58,7 @@ export default async function DefconVillageSeriesPage({ params }: Props) {
       <TalkBrowser
         talks={talks}
         hide={["villages", "conferences"]}
-        topicLabels={getTaxonomy().topicLabels}
+        topicLabels={topicLabels()}
         emptyHint={`No ${series.name} talks match these filters.`}
       />
     </div>

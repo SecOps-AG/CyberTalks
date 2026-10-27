@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -11,13 +12,13 @@ const csp = [
   // Inline script is unavoidable: Next inlines hydration data on every page and
   // the counter's config is an inline snippet, and a static site has no request
   // to mint a nonce from. `unsafe-eval` is the dev-only refresh runtime.
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://www.statcounter.com https://c.statcounter.com https://va.vercel-scripts.com`,
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://www.statcounter.com https://c.statcounter.com`,
   "style-src 'self' 'unsafe-inline'",
   // Fonts are self-hosted at build time, so no font CDN belongs here.
   "font-src 'self'",
   "img-src 'self' data: https://i.ytimg.com https://c.statcounter.com",
   // Analytics beacons.
-  "connect-src 'self' https://c.statcounter.com https://va.vercel-scripts.com",
+  `connect-src 'self' https://c.statcounter.com`,
   "frame-src https://www.youtube.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
@@ -43,6 +44,15 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // OpenNext sets this before its Next build. Keep the village archive out of
+  // the Worker bundle; on-demand pages read public/catalog instead.
+  // A plain `next build` leaves the variable unset and still traces data/.
+  outputFileTracingExcludes:
+    process.env.NEXT_PRIVATE_STANDALONE === "true"
+      ? {
+          "*": ["./data/villages/**/*", "./data/view-counts.json", "./public/catalog/**/*"],
+        }
+      : undefined,
   // The browser lives at "/" now. Keep the old address working — Next carries
   // the query string over, so shared /talks?q=… links still land filtered.
   async redirects() {
@@ -58,3 +68,7 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+if (process.env.NODE_ENV === "development") {
+  void initOpenNextCloudflareForDev();
+}

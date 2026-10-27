@@ -2,34 +2,30 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
-import {
-  getTalkIndex,
-  getTalksForTrack,
-  getTaxonomy,
-  getTrack,
-  getTrackCounts,
-} from "@/lib/data";
+import routes from "@/generated/page-routes.json";
+import { loadTrackPage } from "@/lib/page-runtime";
+import { initialBrowsePage } from "@/lib/search";
+import { topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ track: string }> };
 
 export function generateStaticParams() {
-  return getTrackCounts().map(({ track }) => ({ track: track.slug }));
+  return routes.tracks.map((track) => ({ track }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { track: slug } = await params;
-  const track = getTrack(slug);
-  if (!track) return { title: "Track not found" };
-  return { title: track.name, description: track.blurb };
+  const page = await loadTrackPage(slug);
+  if (!page) return { title: "Track not found" };
+  return { title: page.track.name, description: page.track.blurb };
 }
 
 export default async function TrackPage({ params }: Props) {
   const { track: slug } = await params;
-  const track = getTrack(slug);
-  if (!track) notFound();
-
-  const talks = getTalkIndex(getTalksForTrack(track.slug));
-  if (talks.length === 0) notFound();
+  const page = await loadTrackPage(slug);
+  if (!page) notFound();
+  const { track, talks } = page;
+  const initial = initialBrowsePage(talks);
 
   return (
     <div className="space-y-8">
@@ -46,9 +42,12 @@ export default async function TrackPage({ params }: Props) {
       </header>
 
       <TalkBrowser
-        talks={talks}
+        talks={initial.talks}
+        listing={{ kind: "track", key: track.slug }}
+        catalogSize={talks.length}
+        resultSize={initial.total}
         hide={["tracks"]}
-        topicLabels={getTaxonomy().topicLabels}
+        topicLabels={topicLabels()}
         emptyHint={`No ${track.name} talks match these filters.`}
       />
     </div>

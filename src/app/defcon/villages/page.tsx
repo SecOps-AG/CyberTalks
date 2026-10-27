@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getDefconVillages } from "@/lib/data";
 import { villageEditionPath } from "@/lib/hubs";
+import { loadDefconVillages } from "@/lib/page-runtime";
 
 export const metadata: Metadata = {
   title: "DEF CON Villages",
   description: "Every DEF CON village in the archive, across all years.",
 };
 
-export default function DefconVillagesPage() {
-  const series = getDefconVillages();
+export default async function DefconVillagesPage() {
+  const series = await loadDefconVillages();
 
   return (
     <div className="space-y-6">

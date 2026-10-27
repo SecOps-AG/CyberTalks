@@ -7,15 +7,13 @@ import { TalkSummaryPanel } from "@/components/TalkSummary";
 import { YouTubeEmbed } from "@/components/YouTubeEmbed";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import { WatchedMarker } from "@/components/WatchedMarker";
-import { getTalkBySlug, getTalkIndex, getTalks, getTaxonomy } from "@/lib/data";
+import { loadTalk } from "@/lib/catalog-runtime";
 import { isDefconVillageTalk, villageEditionPath, villageSeriesPath } from "@/lib/hubs";
 import { difficultyLabel, normalizeDifficulty } from "@/lib/labels";
 import { formatDuration, slugifySpeaker } from "@/lib/search";
-import type { Talk } from "@/lib/types";
+import { topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ slug: string }> };
-
-const RELATED = 3;
 
 export function generateStaticParams() {
   return [];
@@ -25,7 +23,8 @@ export const dynamicParams = true;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const talk = getTalkBySlug(slug);
+  const record = await loadTalk(slug);
+  const talk = record?.talk;
   if (!talk) return { title: "Talk not found" };
 
   const title = talk.title;
@@ -59,31 +58,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-/** Shared topics first, then same track, then same village. */
-function relatedTalks(talk: Talk) {
-  const topics = new Set(talk.topics);
-  return getTalks()
-    .filter((other) => other.id !== talk.id)
-    .map((other) => ({
-      talk: other,
-      score:
-        other.topics.filter((topic) => topics.has(topic)).length * 3 +
-        (other.track === talk.track ? 2 : 0) +
-        (other.villageSlug === talk.villageSlug ? 1 : 0),
-    }))
-    .filter((entry) => entry.score > 0)
-    .sort((a, b) => b.score - a.score || b.talk.year - a.talk.year)
-    .slice(0, RELATED)
-    .map((entry) => entry.talk);
-}
-
 export default async function TalkPage({ params }: Props) {
   const { slug } = await params;
-  const talk = getTalkBySlug(slug);
-  if (!talk) notFound();
+  const record = await loadTalk(slug);
+  if (!record) notFound();
+  const { talk, related } = record;
 
-  const labels = getTaxonomy().topicLabels;
-  const related = getTalkIndex(relatedTalks(talk));
+  const labels = topicLabels();
   const duration = formatDuration(talk.durationSeconds);
   const difficulty = normalizeDifficulty(talk.difficulty);
 
