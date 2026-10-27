@@ -14,7 +14,7 @@ const EXAMPLES = ["ransomware", "osint", "supply chain", "purple team"];
  * searching or filtering).
  *
  * The full talk catalog is loaded client-side from year shards (remoteIndex)
- * so the static HTML stays under Vercel's body-size limit.
+ * so the static HTML stays small enough to serve from the Worker.
  */
 export default async function HomePage() {
   const { stats, conferences, mostWatched, trackCounts } = await loadHome();

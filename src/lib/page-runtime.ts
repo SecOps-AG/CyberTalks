@@ -3,7 +3,7 @@
  *
  * On Workers each call reads one precomputed JSON file. A cache miss must not
  * fall through to data.ts, which opens every village file. On Node (next dev,
- * next build, Vercel) the same functions still call data.ts, so local edits
+ * next build) the same functions still call data.ts, so local edits
  * show up without a shard rebuild.
  */
 import { cache } from "react";

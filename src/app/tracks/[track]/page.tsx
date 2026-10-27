@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import routes from "@/generated/page-routes.json";
 import { loadTrackPage } from "@/lib/page-runtime";
+import { initialBrowsePage } from "@/lib/search";
 import { topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ track: string }> };
@@ -24,6 +25,7 @@ export default async function TrackPage({ params }: Props) {
   const page = await loadTrackPage(slug);
   if (!page) notFound();
   const { track, talks } = page;
+  const initial = initialBrowsePage(talks);
 
   return (
     <div className="space-y-8">
@@ -40,7 +42,10 @@ export default async function TrackPage({ params }: Props) {
       </header>
 
       <TalkBrowser
-        talks={talks}
+        talks={initial.talks}
+        listing={{ kind: "track", key: track.slug }}
+        catalogSize={talks.length}
+        resultSize={initial.total}
         hide={["tracks"]}
         topicLabels={topicLabels()}
         emptyHint={`No ${track.name} talks match these filters.`}

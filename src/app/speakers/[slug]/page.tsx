@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import { loadSpeaker } from "@/lib/catalog-runtime";
+import { initialBrowsePage } from "@/lib/search";
 import { topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -29,6 +30,7 @@ export default async function SpeakerPage({ params }: Props) {
   const record = await loadSpeaker(slug);
   if (!record) notFound();
   const { speaker, talks } = record;
+  const initial = initialBrowsePage(talks);
 
   return (
     <div className="space-y-8">
@@ -49,7 +51,10 @@ export default async function SpeakerPage({ params }: Props) {
       {/* The speaker facet is pinned by the page itself — offering it again would
           only ever narrow to co-presenters. */}
       <TalkBrowser
-        talks={talks}
+        talks={initial.talks}
+        listing={{ kind: "speaker", key: speaker.slug }}
+        catalogSize={talks.length}
+        resultSize={initial.total}
         hide={["speakers"]}
         topicLabels={topicLabels()}
         emptyHint={`No ${speaker.name} talks match these filters.`}

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { IBM_Plex_Mono, Orbitron } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CommandPaletteProvider } from "@/components/CommandPaletteProvider";
@@ -57,7 +56,6 @@ export default function RootLayout({
           <SiteFooter />
         </div>
         <CommandPaletteProvider />
-        {process.env.VERCEL ? <Analytics /> : null}
         <Script id="sc-vars" strategy="afterInteractive">
           {`var sc_project=13354311; var sc_invisible=1; var sc_security="479323c8";`}
         </Script>

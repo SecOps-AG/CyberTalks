@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import { loadTopic } from "@/lib/catalog-runtime";
+import { initialBrowsePage } from "@/lib/search";
 import { topicLabel, topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ topic: string }> };
@@ -26,6 +27,7 @@ export default async function TopicPage({ params }: Props) {
   const { topic } = await params;
   const talks = await loadTopic(topic);
   if (!talks) notFound();
+  const initial = initialBrowsePage(talks);
 
   return (
     <div className="space-y-8">
@@ -44,7 +46,10 @@ export default async function TopicPage({ params }: Props) {
       </header>
 
       <TalkBrowser
-        talks={talks}
+        talks={initial.talks}
+        listing={{ kind: "topic", key: topic }}
+        catalogSize={talks.length}
+        resultSize={initial.total}
         topicLabels={topicLabels()}
         emptyHint="No talks match these filters."
       />

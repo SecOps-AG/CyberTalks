@@ -3,7 +3,7 @@
  *
  * On Cloudflare Workers the full archive is not on disk and will not fit in
  * the isolate, so each request fetches one precomputed shard through the
- * ASSETS binding. On Node (next dev, next start, Vercel) the same functions
+ * ASSETS binding. On Node (next dev, next start) the same functions
  * read the in-memory archive, which is how those pages have always worked.
  */
 import { cache } from "react";

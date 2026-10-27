@@ -2,9 +2,6 @@ import type { NextConfig } from "next";
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 const isDev = process.env.NODE_ENV === "development";
-// Present on Vercel builds. The analytics tag is rendered only then, so the
-// Cloudflare build does not allow the Vercel beacon.
-const vercelOrigin = process.env.VERCEL === "1" ? " https://va.vercel-scripts.com" : "";
 
 /**
  * Every third-party origin the pages actually reach for. Anything not listed
@@ -15,13 +12,13 @@ const csp = [
   // Inline script is unavoidable: Next inlines hydration data on every page and
   // the counter's config is an inline snippet, and a static site has no request
   // to mint a nonce from. `unsafe-eval` is the dev-only refresh runtime.
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://www.statcounter.com https://c.statcounter.com${vercelOrigin}`,
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://www.statcounter.com https://c.statcounter.com`,
   "style-src 'self' 'unsafe-inline'",
   // Fonts are self-hosted at build time, so no font CDN belongs here.
   "font-src 'self'",
   "img-src 'self' data: https://i.ytimg.com https://c.statcounter.com",
   // Analytics beacons.
-  `connect-src 'self' https://c.statcounter.com${vercelOrigin}`,
+  `connect-src 'self' https://c.statcounter.com`,
   "frame-src https://www.youtube.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
@@ -47,9 +44,9 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  // OpenNext sets this before its Next build. Keep the 53 MB village archive
-  // out of the Worker bundle; on-demand pages read public/catalog instead.
-  // A normal Vercel/`npm run build` leaves the variable unset and still traces data/.
+  // OpenNext sets this before its Next build. Keep the village archive out of
+  // the Worker bundle; on-demand pages read public/catalog instead.
+  // A plain `next build` leaves the variable unset and still traces data/.
   outputFileTracingExcludes:
     process.env.NEXT_PRIVATE_STANDALONE === "true"
       ? {
