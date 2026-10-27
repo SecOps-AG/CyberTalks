@@ -2,6 +2,8 @@
 
 import type { ReactNode } from "react";
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { TalkCard } from "@/components/TalkCard";
 import { FacetList } from "@/components/browser/FacetList";
 import { Pagination } from "@/components/browser/Pagination";
@@ -28,6 +30,7 @@ import {
 import { fetchListingTalks, type ListingKind } from "@/lib/fetch-listing";
 import { inDefconVillage } from "@/lib/hubs";
 import { fetchAdditionalTalkIndexChunks } from "@/lib/fetch-talk-index";
+import { archiveSearchHref } from "@/lib/search-index/href";
 import type { TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
 
 type Dimension =
@@ -86,6 +89,8 @@ export type TalkBrowserProps = {
   catalogSize?: number;
   /** Default-filter result count, shown before `listing` finishes loading. */
   resultSize?: number;
+  /** Homepage: Enter and "see all results" open the shareable /search page. */
+  linkArchiveSearch?: boolean;
 };
 
 const SORTS: { value: SortKey; label: string }[] = [
@@ -115,7 +120,9 @@ export function TalkBrowser({
   listing,
   catalogSize,
   resultSize,
+  linkArchiveSearch = false,
 }: TalkBrowserProps) {
+  const router = useRouter();
   // `q` deliberately lives outside `filters`. If a keystroke updated `filters`,
   // every downstream memo would recompute on the urgent render *and* again on
   // the deferred one; keeping it separate means typing recomputes nothing until
@@ -660,7 +667,23 @@ export function TalkBrowser({
           type="search"
           value={draftQuery}
           onChange={(event) => setDraftQuery(event.target.value)}
+          onKeyDown={(event) => {
+            if (!linkArchiveSearch || event.key !== "Enter") return;
+            event.preventDefault();
+            router.push(
+              archiveSearchHref({
+                q: draftQuery,
+                years: filters.years,
+                conferences: filters.conferences,
+                tracks: filters.tracks,
+                topics: filters.topics,
+                difficulties: filters.difficulties,
+                sort: filters.sort,
+              }),
+            );
+          }}
           placeholder={searchPlaceholder}
+          enterKeyHint={linkArchiveSearch ? "search" : undefined}
           className={`w-full bg-transparent font-mono text-mint outline-none placeholder:text-mint/30 [&::-webkit-search-cancel-button]:hidden ${
             large ? "text-base sm:text-lg" : "text-sm"
           }`}
@@ -689,6 +712,30 @@ export function TalkBrowser({
               {example}
             </button>
           ))}
+        </p>
+      ) : null}
+      {linkArchiveSearch &&
+      (draftQuery.trim() ||
+        filters.years.length > 0 ||
+        filters.conferences.length > 0 ||
+        filters.tracks.length > 0 ||
+        filters.topics.length > 0 ||
+        filters.difficulties.length > 0) ? (
+        <p className="mt-2.5 px-1 text-[11px] uppercase tracking-[0.18em]">
+          <Link
+            href={archiveSearchHref({
+              q: draftQuery,
+              years: filters.years,
+              conferences: filters.conferences,
+              tracks: filters.tracks,
+              topics: filters.topics,
+              difficulties: filters.difficulties,
+              sort: filters.sort,
+            })}
+            className="link"
+          >
+            see all results
+          </Link>
         </p>
       ) : null}
     </div>

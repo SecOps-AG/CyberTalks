@@ -126,6 +126,24 @@ export async function readPublicJson<T>(pathname: string): Promise<T | null> {
   }
 }
 
+export async function readPublicBytes(pathname: string): Promise<Uint8Array | null> {
+  const assets = requireAssets();
+  if (assets) {
+    const response = await assets.fetch(new URL(pathname, "https://assets.local"));
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error(`Asset ${pathname} returned ${response.status}`);
+    return new Uint8Array(await response.arrayBuffer());
+  }
+  const { readFile } = await import("node:fs/promises");
+  const { join } = await import("node:path");
+  try {
+    return await readFile(join(process.cwd(), "public", pathname));
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw error;
+  }
+}
+
 function requireAssets(): AssetsBinding | null {
   if (!onWorker()) return null;
   const assets = assetsBinding();
