@@ -3372,7 +3372,7 @@
         "information",
         "interference"
       ],
-      "teaser": "Security researchers examine technical aspects of Foreign Information Manipulation and Interference (Disinformation 2.0).",
+      "teaser": "Learn how coordinated influence campaigns spread across platforms and how to check suspicious stories before sharing them.",
       "summary": "Black Hat session on Foreign Information Manipulation and Interference (Disinformation 2.0).",
       "durationSeconds": 1816,
       "conference": "black-hat",
@@ -5338,7 +5338,7 @@
         "cross-account",
         "vulnerabilitie"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Breaking the Isolation: Cross-Account AWS Vulnerabilities.",
+      "teaser": "A misconfigured service permission let one account read files from another account’s bucket.",
       "summary": "Black Hat session on Breaking the Isolation: Cross-Account AWS Vulnerabilities.",
       "durationSeconds": 1917,
       "conference": "black-hat",
@@ -7208,7 +7208,7 @@
         "enter",
         "vulnerability-research"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Enter Sandbox.",
+      "teaser": "Chestnut automates system call filtering for applications built from source or available only as binaries.",
       "summary": "Enter Sandbox — malware sandbox security research.",
       "durationSeconds": 2128,
       "aiSummary": "## Overview\n\nResearchers present Chestnut, an automated approach to sandboxing applications using seccomp filters without requiring developers to manually write complex security policies. Memory safety vulnerabilities in C/C++ code are ubiquitous—evidenced by persistent streams of CVEs affecting native applications—and sandboxing via seccomp provides a critical defense by restricting applications to only necessary system calls. However, manual seccomp policy creation is impractical for real-world applications: developers must write BPF bytecode or use low-level macros, identify all system calls their code requires (including those used internally by C library functions), and account for third-party libraries whose source code may be unavailable. The researchers demonstrate that even \"hello world\" requires multiple syscalls (write, exit_group, brk) beyond the developer's awareness. For production applications with thousands of lines of code and external dependencies, manual syscall enumeration is completely infeasible.\n\n## Chestnut's Two-Phase Automation Architecture\n\nPhase 1 leverages static analysis via SourceAnalyzer on source code (when available) or BinaryAnalyzer on compiled binaries. SourceAnalyzer extracts system call numbers using an extended compiler, builds a call graph showing which functions invoke which other functions, and propagates this information through the entire codebase including linked libraries. The compiler sees high-level function calls (e.g., `puts()` or `open()`) but not their implementations, so the system must resolve these calls through the entire linker-level call graph to determine actual syscalls. This generates an annotated executable listing every syscall the application actually uses.\n\nPhase 2 provides optional dynamic refinement via DynamicAnalyzer, which runs the application and uses runtime syscall tracing (ptrace) to observe actual syscall usage during execution. This catches syscalls that static analysis might miss—particularly those triggered only in specific code paths or at runtime through indirect function pointers. The refined analysis produces an annotated binary that Chestnut Patcher or Generator converts into a fully sandboxed executable with kernel-enforced seccomp filters allowing only the discovered syscalls. This eliminates manual policy authoring and makes sandboxing scalable across large codebases and third-party dependencies.\n\n## Limitations and Practical Considerations\n\nThe researchers acknowledge significant practical challenges: static analysis cannot perfectly track all code paths, indirect function calls, or runtime behavior; binary-only analysis loses semantic information available in source; and dynamic refinement requires representative test inputs to trigger all relevant syscalls. The approach is most effective for applications with deterministic syscall usage and complete test coverage. For complex applications with data-dependent control flow or lazy-loaded libraries, additional manual refinement may be necessary, though still vastly more tractable than policy authoring from scratch.",
@@ -9783,7 +9783,7 @@
         "conclusions",
         "takeaways"
       ],
-      "teaser": "Security researchers examine technical aspects of Locknote: Conclusions and Key Takeaways from Day 1.",
+      "teaser": "Panelists connect the day’s research highlights with security challenges in remote work and a changing threat landscape.",
       "summary": "Locknote conclusions and key takeaways from day 1.",
       "durationSeconds": 2448,
       "conference": "black-hat",
@@ -14772,8 +14772,8 @@
         "risk",
         "management"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Integration of Cyber Insurance Into A Risk Management Program.",
-      "summary": null,
+      "teaser": "Learn how policy terms and claims procedures can affect an organization’s response to a breach.",
+      "summary": "The speaker explains how cyber insurance can transfer some risk and fit alongside security controls in an organization’s risk management program. He discusses coverage differences, exclusions, policy limits and claims processes, including reporting deadlines, vendor selection and insurer response. Attendees learn what to review in a policy and how to involve security staff in purchasing and incident response.",
       "durationSeconds": 3249,
       "conference": "black-hat",
       "difficulty": "beginner",
@@ -15220,7 +15220,7 @@
         "industrial",
         "control"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Sensor and Process Fingerprinting in Industrial Control Systems.",
+      "teaser": "Sensor noise and process models offer another way to spot forged readings in industrial control systems.",
       "summary": "## Overview and Context\n\nIn this talk, Martina Ochoa presents research conducted jointly with Najib Chaudhary on sensor and process fingerprinting in Industrial Control Systems (ICS). The work stems from academic research at a Singapore university where Ochoa supervised Chaudhary's PhD thesis, combining Ochoa's background in mathematics and systems engineering with Chaudhary's background in electrical engineering.\n\nThe presentation highlights the critical nature of ICS and operational technology, emphasizing that water treatment and distribution infrastructure are vulnerable to catastrophic impact. A cited historical precedent is the Maroochy Shire incident in Australia, where a disgruntled insider compromised a water management system and discharged raw sewage into local waterways and hotel grounds. The primary premise of the research is counterintuitive: while engineering and IT disciplines typically aim to eliminate measurement noise, physical sensor noise can be leveraged as an inherent security mechanism to detect sensor spoofing and tampering.\n\n---\n\n## Experimental Testbed: The SWaT Facility\n\nThe empirical research and attack demonstrations were conducted on the **Secure Water Treatment (SWaT)** testbed located at the Singapore University of Technology and Design (SUTD). Built with support from the Singapore government and operational since 2015, SWaT is an open-data, production-grade testbed designed for cybersecurity research.\n\n* **Physical Architecture:** The testbed mirrors a full-scale industrial facility, featuring six sequential stages including chemical treatment, ultraviolet (UV) treatment, and filtration. It cleans raw water to produce potable drinking water and contains primary operational storage tanks (such as a 2,000-liter water tank).\n* **Network Segments:** SWaT implements defense-in-depth network layering behind firewalls:\n  * **Level 0 (L0) Network:** Connects physical field instrumentation (analog sensors and actuators) to Remote I/O modules and Programmable Logic Controllers (PLCs).\n  * **Level 1 (L1) Network:** Connects PLCs to one another to share plant process data.\n  * **Supervisory / SCADA Level:** Human-Machine Interfaces (HMIs) and operator control rooms.\n\nThe researchers focused experiments on a water storage tank, noting that tank overflow or drying out pumps causes severe physical damage while avoiding the safety hazards associated with tampering with chemical tanks.\n\n---\n\n## Attack Models and Sensor Spoofing\n\nThe authors define a dual physical and cyber threat model that exploits the historical absence of authentication across low-level industrial networks:\n\n* **Physical Attack Vectors:** Attackers may physically swap sensor wiring, plug in rogue replacement sensors, or inject false voltages/signals directly into the analog cables linking sensors to analog-to-digital converters (e.g., Remote I/O).\n* **Cyber / Man-in-the-Middle (MitM) Vectors:** Attackers compromised at the L0, L1, or SCADA network layers can intercept and forge industrial network packets.\n* **Attack Execution (\"Shameless\" Spoofing):** \n  * Because PLCs implicitly trust reported sensor values, an attacker can falsify water level readings to induce detrimental control actions. For example, falsely reporting high water levels forces the PLC to halt inflows and activate outflow pumps, running the pump dry and damaging equipment.\n  * In an active testbed demonstration, an attacker conducted an ongoing MitM spoofing attack while an inflow valve was opened. The attacker clamped the transmitted sensor reading at 628 mm, presenting a frozen \"virtual reality\" to both the PLC logic and the human operator. While the physical tank water rose by roughly 10 cm, the system registered no change until the attack ceased, causing the reading to instantly jump from 628 mm to 732 mm.\n\n---\n\n## Defense Approaches and Limitations\n\nThe talk analyzes existing countermeasures and their practical constraints in industrial settings:\n\n* **Cryptographic Authentication:** While standard in traditional IT, cryptography faces major hurdles in ICS:\n  * Legacy embedded devices frequently possess constrained computational resources, making heavy cryptographic verification difficult under high-frequency packet sampling requirements.\n  * Industrial protocols lack native authentication fields, requiring non-standard protocol encapsulation.\n  * Cryptography cannot protect the analog transmission segment between raw physical sensors and digital conversion nodes.\n  * Cryptographic approaches fail against insider threats, compromised supply chains, or firmware updates where keys are extracted and used to sign forged data.\n* **Physics- and Model-Based Anomaly Detection:** Researchers often employ physical process models to predict upcoming states based on past measurements and known actuator positions. While effective at flagging abrupt, physically impossible variations (such as the sudden jump in the \"shameless\" spoofing scenario), this technique requires creating and maintaining accurate mathematical models of the physical environment.",
       "durationSeconds": 3003,
       "conference": "black-hat",
@@ -20526,7 +20526,7 @@
         "s7commplu",
         "s7commplus"
       ],
-      "teaser": "Security researchers examine technical aspects of The Spear to Break the Security Wall of S7Commplus.",
+      "teaser": "A reverse-debugging walkthrough shows how the protocol’s encryption can be used to control an S7-1200 PLC.",
       "summary": "Attack breaking the security of S7Commplus industrial protocol.",
       "durationSeconds": 1750,
       "conference": "black-hat",
@@ -21634,7 +21634,7 @@
         "simulated",
         "attack"
       ],
-      "teaser": "Security researchers examine technical aspects of Real Humans Simulated Attacks: Usability Testing with Attack Scenarios.",
+      "teaser": "See how simulated attacks reveal what people do when security risks appear during everyday tasks.",
       "summary": "Uses simulated attacks in usability testing with real human participants.",
       "durationSeconds": 3022,
       "conference": "black-hat",
@@ -23797,7 +23797,7 @@
         "phil",
         "montgomery"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning The Emerging Threat Landscape with Phil Montgomery, FireEye.",
+      "teaser": "Learn how FireEye connects threat intelligence, security analytics, attack testing, and expert services.",
       "summary": "FireEye VP Phil Montgomery discusses emerging threat trends, analytics in the SOC, and measuring security programs for leadership and boards.",
       "durationSeconds": 561,
       "conference": "black-hat",
@@ -29428,7 +29428,7 @@
         "drone",
         "vulnerability-research"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Hacking a Professional Drone.",
+      "teaser": "A radio-link attack turns a low-cost chip into a way to reroute telemetry and inject commands into a professional UAV.",
       "summary": "Covers hacking a professional drone system.",
       "durationSeconds": 1677,
       "conference": "black-hat",
@@ -38913,7 +38913,7 @@
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Dissecting CSRF Attacks explores USA 2013.",
+      "teaser": "See how a proposed cookie policy could limit cross-origin session abuse while letting ordinary web content continue to load.",
       "summary": "Overview: Cross Site Request Forgery (CSRF) remains a significant threat to web apps and user data. Current countermeasures like request nonces can be cumbersome to deploy correctly and difficult to apply to a site retroactively. Detecting these vulns with automated tools can be equally difficult to do accurately. The presentation starts with a demonstration of how to model attacks to validate whether different kinds of countermeasures are implemented correctly. It includes a tool and code to show how to\n\nKey Topics: detect these vulns with few false positives. Then we explore how CSRF could be prevented at the HTTP layer by proposing a new header-based policy, similar to the intent of Content Security Policy. This new policy introduces a concept called Storage Origin Security (SOS) for cookies and session objects that foils many kinds of CSRF attacks without burdening the site with HTML modifications. The solution focuses on simplicity to make it easier to retrofit on current apps, but requires browsers to support a new client-side security control. We show how this trade-off could be a quicker way to imp\n\nTechnical Details: roving security on the web.",
       "durationSeconds": 2792,
       "conference": "black-hat",
@@ -45487,8 +45487,8 @@
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Adversary Characterization explores USA 2003.",
-      "summary": null,
+      "teaser": "Learn how adversary characterization can shape risk assessments and security responses.",
+      "summary": "The panel discusses ways to characterize cyber adversaries by combining evidence about their tools, techniques, capabilities, intent, and behavior. Speakers present scoring and classification models and explain how threat assessments can inform security planning, incident response, and decisions about where to direct resources. The discussion also considers group behavior, social engineering, insider access, and the limits of drawing conclusions from network activity alone.",
       "durationSeconds": 4918,
       "conference": "black-hat",
       "viewCount": 17,
@@ -48164,7 +48164,7 @@
         "window",
         "ipsec"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Windows 2001 - IPSec in a Windows 2000 World pt2.",
+      "teaser": "Follow how Windows 2000 negotiates IPSec protection, from certificate enrollment to packet handling and IKE.",
       "summary": "IPSec in a Windows 2000 world part 2.",
       "durationSeconds": 5724,
       "conference": "black-hat",
