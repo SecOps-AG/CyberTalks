@@ -18,10 +18,13 @@ export function SpeakerFacet({
   options,
   selected,
   onToggle,
+  bare = false,
 }: {
   options: FacetOption<string>[];
   selected: string[];
   onToggle: (value: string) => void;
+  /** Drop the heading row when the host already titles the section. */
+  bare?: boolean;
 }) {
   const [needle, setNeedle] = useState("");
 
@@ -56,12 +59,14 @@ export function SpeakerFacet({
 
   return (
     <section>
-      <div className="mb-1.5 flex items-baseline justify-between gap-2">
-        <p className="label">Speakers</p>
-        <Link href="/speakers" className="text-[10px] text-cyan hover:text-acid">
-          browse
-        </Link>
-      </div>
+      {bare ? null : (
+        <div className="mb-1.5 flex items-baseline justify-between gap-2">
+          <p className="label">Speakers</p>
+          <Link href="/speakers" className="text-[10px] text-cyan hover:text-acid">
+            browse
+          </Link>
+        </div>
+      )}
 
       {selected.length > 0 ? (
         <div className="mb-2 flex flex-wrap gap-1.5">

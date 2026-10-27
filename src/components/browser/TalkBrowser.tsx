@@ -7,6 +7,8 @@ import { FacetList } from "@/components/browser/FacetList";
 import { Pagination } from "@/components/browser/Pagination";
 import { SpeakerFacet } from "@/components/browser/SpeakerFacet";
 import { TopicFacet } from "@/components/browser/TopicFacet";
+import { PushFilters, type PushSection } from "@/components/push/PushFilters";
+import { usePush } from "@/components/push/PushPage";
 import {
   computeFacets,
   countActive,
@@ -69,6 +71,11 @@ export type TalkBrowserProps = {
    * Keeps SSR HTML thin for homepage/saved.
    */
   remoteIndex?: boolean;
+  /**
+   * Below 600px, replace the inline filter drawer with the off-canvas push
+   * panel (staged picks, applied on "Show N talks"). Homepage only.
+   */
+  pushFilters?: boolean;
 };
 
 const SORTS: { value: SortKey; label: string }[] = [
@@ -94,6 +101,7 @@ export function TalkBrowser({
   searchPlaceholder = "Search titles, speakers, villages, topics…",
   alwaysShowDifficulties = false,
   remoteIndex = false,
+  pushFilters = false,
 }: TalkBrowserProps) {
   // `q` deliberately lives outside `filters`. If a keystroke updated `filters`,
   // every downstream memo would recompute on the urgent render *and* again on
@@ -111,8 +119,26 @@ export function TalkBrowser({
   const remoteTalksRef = useRef<TalkIndexEntry[]>([]);
   remoteTalksRef.current = remoteTalks;
 
-  const yearFilterKey = filters.years.join(",");
-  const conferenceFilterKey = filters.conferences.join(",");
+  // Phone push panel: picks land in `staged` and only reach `filters` on Apply.
+  const pushContext = usePush();
+  const push = pushFilters ? pushContext : null;
+  const pushOpen = push?.open ?? false;
+  const [staged, setStaged] = useState<Filters | null>(null);
+  const pushBarRef = useRef<HTMLButtonElement>(null);
+  const pushOpenerRef = useRef<HTMLElement | null>(null);
+  const scrollAfterPushRef = useRef(false);
+
+  // While staging, also fetch what the staged years/conferences need so the
+  // Apply count is honest. Hints only ever widen (empty = everything), so a
+  // staged pick never cuts short a full-catalog load already under way.
+  const widen = <T,>(applied: T[], next: T[]) =>
+    applied.length === 0 || next.length === 0 ? [] : [...new Set([...applied, ...next])];
+  const hintYears = staged ? widen(filters.years, staged.years) : filters.years;
+  const hintConferences = staged
+    ? widen(filters.conferences, staged.conferences)
+    : filters.conferences;
+  const yearFilterKey = hintYears.join(",");
+  const conferenceFilterKey = hintConferences.join(",");
 
   useEffect(() => {
     if (!remoteIndex || !ready) return;
@@ -122,8 +148,8 @@ export function TalkBrowser({
     setCatalogLoading(true);
 
     fetchAdditionalTalkIndexChunks({
-      years: filters.years.length > 0 ? filters.years : undefined,
-      conferences: filters.conferences.length > 0 ? filters.conferences : undefined,
+      years: hintYears.length > 0 ? hintYears : undefined,
+      conferences: hintConferences.length > 0 ? hintConferences : undefined,
       loadedFiles: loadedChunkFilesRef.current,
       existingTalks: remoteTalksRef.current,
       signal: controller.signal,
@@ -276,6 +302,60 @@ export function TalkBrowser({
 
   const activeCount = countActive({ ...filters, q: draftQuery });
 
+  const stagedEffective = useMemo<Filters | null>(
+    () => (staged ? { ...staged, q: deferredQuery } : null),
+    [staged, deferredQuery],
+  );
+  const stagedFacets = useMemo(
+    () =>
+      stagedEffective
+        ? computeFacets(searchable, stagedEffective, { alwaysShowDifficulties })
+        : null,
+    [searchable, stagedEffective, alwaysShowDifficulties],
+  );
+  const stagedCount = useMemo(
+    () => (stagedEffective ? filterTalks(searchable, stagedEffective).length : 0),
+    [searchable, stagedEffective],
+  );
+
+  const stage = useCallback((patch: Partial<Filters>) => {
+    setStaged((current) => (current ? { ...current, ...patch } : current));
+  }, []);
+
+  // Every opening starts from what is applied: closing without Apply discards.
+  // Focus goes back to whichever control opened the panel (bar or edge tab).
+  const preparePush = () => setStaged(filters);
+  const openPush = (opener: HTMLElement | null) => {
+    pushOpenerRef.current = opener;
+    setStaged(filters);
+    push?.setOpen(true);
+  };
+  const setPushOpen = push?.setOpen;
+  const closePush = useCallback(() => setPushOpen?.(false), [setPushOpen]);
+  // Leaving the page (e.g. browser back) must not strand the layout pushed aside.
+  useEffect(() => closePush, [closePush]);
+  const applyPush = () => {
+    if (staged) setFilters({ ...staged, sort: filters.sort, page: 1 });
+    scrollAfterPushRef.current = true;
+    push?.setOpen(false);
+  };
+  // Once the page has slid home, bring the new results up unless they already lead the screen.
+  const onPushClosed = () => {
+    setStaged(null);
+    if (!scrollAfterPushRef.current) return;
+    scrollAfterPushRef.current = false;
+    const results = resultsRef.current;
+    if (!results) return;
+    const top = results.getBoundingClientRect().top;
+    if (top >= 0 && top < window.innerHeight / 3) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    results.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+  };
+  const resetPush = () =>
+    setStaged((current) =>
+      current ? { ...EMPTY_FILTERS, includeExtras: allExtras, sort: current.sort } : current,
+    );
+
   if (remoteIndex && !catalogReady) {
     return (
       <div className="space-y-6">
@@ -373,6 +453,139 @@ export function TalkBrowser({
     </div>
   );
 
+  const pushSections = (): PushSection[] => {
+    if (!staged || !stagedFacets) return [];
+    const f = staged;
+    const fc = stagedFacets;
+    const sections: PushSection[] = [];
+    if (!hide.includes("conferences") && (fc.conferences.length > 1 || f.conferences.length > 0)) {
+      sections.push({
+        id: "conferences",
+        label: "Conference",
+        selected: f.conferences.length,
+        content: (
+          <FacetList
+            bare
+            label="Conference"
+            options={fc.conferences}
+            selected={f.conferences}
+            onToggle={(value) => stage({ conferences: toggleValue(f.conferences, value) })}
+          />
+        ),
+      });
+    }
+    if (!hide.includes("years")) {
+      sections.push({
+        id: "years",
+        label: "Year",
+        selected: f.years.length,
+        content: (
+          <FacetList
+            bare
+            label="Year"
+            options={fc.years}
+            selected={f.years}
+            onToggle={(value) => stage({ years: toggleValue(f.years, value) })}
+          />
+        ),
+      });
+    }
+    if (!hide.includes("lengths")) {
+      sections.push({
+        id: "lengths",
+        label: "Length",
+        selected: f.lengths.length,
+        content: (
+          <FacetList
+            bare
+            label="Length"
+            options={fc.lengths}
+            selected={f.lengths}
+            onToggle={(value) => stage({ lengths: toggleValue(f.lengths, value) })}
+          />
+        ),
+      });
+    }
+    if (!hide.includes("difficulties")) {
+      sections.push({
+        id: "difficulties",
+        label: "Difficulty",
+        selected: f.difficulties.length,
+        content: (
+          <FacetList
+            bare
+            label="Difficulty"
+            options={fc.difficulties}
+            selected={f.difficulties}
+            onToggle={(value) => stage({ difficulties: toggleValue(f.difficulties, value) })}
+          />
+        ),
+      });
+    }
+    if (!hide.includes("villages") && fc.villages.length > 0) {
+      sections.push({
+        id: "villages",
+        label: "Village",
+        selected: f.villages.length,
+        content: (
+          <FacetList
+            bare
+            label="Village"
+            options={fc.villages}
+            selected={f.villages}
+            onToggle={(value) => stage({ villages: toggleValue(f.villages, value) })}
+          />
+        ),
+      });
+    }
+    if (!hide.includes("tracks") && fc.tracks.length > 0) {
+      sections.push({
+        id: "tracks",
+        label: "Track",
+        selected: f.tracks.length,
+        content: (
+          <FacetList
+            bare
+            label="Track"
+            options={fc.tracks}
+            selected={f.tracks}
+            onToggle={(value) => stage({ tracks: toggleValue(f.tracks, value) })}
+          />
+        ),
+      });
+    }
+    sections.push({
+      id: "topics",
+      label: "Topics",
+      selected: f.topics.length,
+      content: (
+        <TopicFacet
+          bare
+          options={fc.topics}
+          selected={f.topics}
+          onToggle={(value) => stage({ topics: toggleValue(f.topics, value) })}
+          labelFor={labelFor}
+        />
+      ),
+    });
+    if (!hide.includes("speakers")) {
+      sections.push({
+        id: "speakers",
+        label: "Speakers",
+        selected: f.speakers.length,
+        content: (
+          <SpeakerFacet
+            bare
+            options={fc.speakers}
+            selected={f.speakers}
+            onToggle={(value) => stage({ speakers: toggleValue(f.speakers, value) })}
+          />
+        ),
+      });
+    }
+    return sections;
+  };
+
   const large = size === "lg";
 
   const search = (
@@ -461,7 +674,10 @@ export function TalkBrowser({
 
         <div className="min-w-0 space-y-5">
           {/* Mobile facets */}
-          <details open className="fold-drawer panel group lg:hidden">
+          <details
+            open
+            className={`fold-drawer panel group lg:hidden ${push ? "max-[599px]:hidden" : ""}`}
+          >
             <summary className="cursor-pointer list-none px-4 py-3 font-display text-xs uppercase tracking-[0.2em] text-acid">
               Filters{activeCount > 0 ? ` (${activeCount})` : ""}
               <span className="float-right text-mint/50 group-open:hidden">+</span>
@@ -469,6 +685,36 @@ export function TalkBrowser({
             </summary>
             <div className="border-t border-acid/15 p-4">{renderPanel()}</div>
           </details>
+
+          {/* Phone (<600px): opens the push panel. Hidden at every other width. */}
+          {push ? (
+            <button
+              ref={pushBarRef}
+              type="button"
+              data-testid="push-filters-open"
+              onClick={() => openPush(pushBarRef.current)}
+              aria-haspopup="dialog"
+              aria-expanded={pushOpen}
+              className="panel hidden min-h-11 w-full items-center gap-3 px-4 text-left max-[599px]:!mt-0 max-[599px]:flex"
+            >
+              <span aria-hidden className="text-acid">
+                ☰
+              </span>
+              <span className="flex-1 font-display text-xs uppercase tracking-[0.2em] text-acid">
+                Filters
+              </span>
+              {activeCount > 0 ? (
+                <span className="rounded-sm border border-acid/50 bg-acid/15 px-1.5 py-0.5 text-[10px] tabular-nums text-acid">
+                  {activeCount} on
+                </span>
+              ) : (
+                <span className="text-[10px] uppercase tracking-[0.16em] text-mint/40">none</span>
+              )}
+              <span aria-hidden className="text-mint/50">
+                ›
+              </span>
+            </button>
+          ) : null}
 
           <div
             ref={resultsRef}
@@ -549,6 +795,38 @@ export function TalkBrowser({
 
       {footer && activeCount === 0 ? (
         <div className="space-y-10 border-t border-acid/15 pt-8">{footer}</div>
+      ) : null}
+
+      {push ? (
+        <PushFilters
+          open={pushOpen}
+          pageRef={push.pageRef}
+          onPrepare={preparePush}
+          onOpen={openPush}
+          onClose={closePush}
+          onClosed={onPushClosed}
+          onApply={applyPush}
+          onReset={resetPush}
+          count={stagedCount}
+          activeCount={activeCount}
+          stagedActive={staged ? countActive({ ...staged, q: "" }) : 0}
+          loading={catalogLoading}
+          sections={pushSections()}
+          extras={
+            hasExtras && staged ? (
+              <label className="flex min-h-10 cursor-pointer select-none items-center gap-2 text-[13px] text-mint/80">
+                <input
+                  type="checkbox"
+                  checked={staged.includeExtras}
+                  onChange={(e) => stage({ includeExtras: e.target.checked })}
+                  className="rounded-sm border border-acid/40 bg-void accent-cyan"
+                />
+                <span>Include clips &amp; extras</span>
+              </label>
+            ) : undefined
+          }
+          openerRef={pushOpenerRef}
+        />
       ) : null}
     </div>
   );

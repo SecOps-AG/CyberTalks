@@ -240,3 +240,297 @@ body::before {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/*
+ * Phone push menu (below 600px). The page wrapper slides right by
+ * --push-shift and shrinks a touch into a rounded card while the filter panel
+ * slides in from the left at the same speed. The scrim rides on top of the
+ * card to dim it and cast its shadow. Only transform and opacity animate.
+ * Nothing here applies at 600px and up: the wrapper stays an unstyled block
+ * and the panel, scrim and edge tab are never displayed.
+ */
+.push-page,
+.push-panel,
+.push-scrim,
+.edge-tab {
+  --push-duration: 360ms;
+  --push-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --push-shift: 82vw;
+  --push-scale: 0.96;
+  --push-radius: 18px;
+}
+
+.push-panel,
+.push-scrim,
+.edge-tab {
+  display: none;
+}
+
+@media (max-width: 599px) {
+  html[data-push-lock] {
+    overflow: hidden;
+  }
+
+  /* Clip the pushed page at the body so its off-screen half never counts as
+     overflow; otherwise mobile browsers zoom out to fit it. */
+  html[data-push-lock] body {
+    overflow-x: clip;
+  }
+
+  .push-panel {
+    display: flex;
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 60;
+    width: var(--push-shift);
+    opacity: 0;
+    visibility: hidden;
+    touch-action: pan-y;
+    transition:
+      opacity var(--push-duration) ease,
+      visibility 0s linear var(--push-duration);
+  }
+
+  .push-panel[data-open="true"] {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--push-duration) ease;
+  }
+
+  .push-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 59;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    touch-action: none;
+    transition: opacity var(--push-duration) ease;
+  }
+
+  .push-scrim[data-open="true"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  html[data-push-drag] .push-panel {
+    visibility: visible;
+  }
+
+  html[data-push-drag] :is(.push-page, .push-panel, .push-scrim, .edge-tab) {
+    transition: none;
+  }
+
+  html[data-push-moving] :is(.push-page, .push-panel, .push-scrim) {
+    will-change: transform, opacity;
+  }
+
+  /* Thumb-sized facet rows inside the panel. */
+  .push-panel .facet {
+    min-height: 2.5rem;
+    font-size: 13px;
+  }
+
+  .push-nav {
+    scrollbar-width: none;
+  }
+
+  .push-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  /*
+   * Left-edge pull tab: a slim vertical "Filters" handle on the edge the
+   * panel comes from. While the panel opens it rides out on the panel's edge
+   * and fades.
+   */
+  .edge-tab {
+    display: flex;
+    position: fixed;
+    left: 0;
+    top: 58%;
+    z-index: 45;
+    width: 26px;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 0;
+    border: 1px solid rgba(57, 255, 20, 0.6);
+    border-left: 0;
+    border-radius: 0 6px 6px 0;
+    background: rgba(5, 8, 5, 0.94);
+    color: #39ff14;
+    box-shadow:
+      0 0 14px rgba(57, 255, 20, 0.2),
+      4px 0 14px rgba(0, 0, 0, 0.5);
+    transform: translate3d(0, -50%, 0);
+    touch-action: pan-y;
+    transition: opacity var(--push-duration) ease;
+  }
+
+  /* Bigger hit area than the visible tab, mostly toward the page. */
+  .edge-tab::before {
+    content: "";
+    position: absolute;
+    inset: -10px -16px -10px 0;
+  }
+
+  .edge-tab-label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: var(--font-orbitron), ui-sans-serif, system-ui;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .edge-tab-badge {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 9999px;
+    background: #ff2bd6;
+    color: #050805;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .edge-tab[data-hidden="true"] {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* The slide itself. Under reduced motion only the fades above remain. */
+@media (max-width: 599px) and (prefers-reduced-motion: no-preference) {
+  .push-page {
+    transition: transform var(--push-duration) var(--push-ease);
+  }
+
+  /* Scale around the middle of the visible window and clip the page to it,
+     so the pushed page reads as one rounded card. */
+  html[data-push-lock] .push-page {
+    transform-origin: 0 calc(var(--push-y) + var(--push-h) / 2);
+    clip-path: inset(
+      var(--push-y) 0 calc(100% - var(--push-y) - var(--push-h)) 0 round var(--push-radius) 0 0
+        var(--push-radius)
+    );
+  }
+
+  .push-page[data-open="true"],
+  .push-scrim[data-open="true"] {
+    transform: translate3d(var(--push-shift), 0, 0) scale(var(--push-scale));
+  }
+
+  .push-panel {
+    opacity: 1;
+    transform: translate3d(-100%, 0, 0);
+    transition:
+      transform var(--push-duration) var(--push-ease),
+      visibility 0s linear var(--push-duration);
+  }
+
+  .push-panel[data-open="true"] {
+    transform: none;
+    transition: transform var(--push-duration) var(--push-ease);
+  }
+
+  .push-scrim {
+    z-index: 61;
+    border-radius: var(--push-radius) 0 0 var(--push-radius);
+    box-shadow: -16px 0 40px rgba(0, 0, 0, 0.55);
+    transform-origin: 0 50%;
+    transition:
+      transform var(--push-duration) var(--push-ease),
+      opacity var(--push-duration) ease;
+  }
+
+  /* Sections drift in from the left, one after another, as the panel lands.
+     Closing keeps them in place until the panel is out of sight. */
+  .push-stagger {
+    opacity: 0;
+    transform: translate3d(-12px, 0, 0);
+    transition:
+      opacity 0s linear var(--push-duration),
+      transform 0s linear var(--push-duration);
+  }
+
+  .push-panel[data-open="true"] .push-stagger {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 260ms ease calc(70ms + var(--i, 0) * 35ms),
+      transform var(--push-duration) var(--push-ease) calc(70ms + var(--i, 0) * 35ms);
+  }
+
+  /* A finger is revealing the panel: show its content as it comes. */
+  html[data-push-drag] .push-stagger {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .push-chevron {
+    transition: transform var(--push-duration) var(--push-ease);
+  }
+
+  .push-chevron[data-open="true"] {
+    transform: rotate(180deg);
+  }
+
+  .edge-tab {
+    transition:
+      transform var(--push-duration) var(--push-ease),
+      opacity calc(var(--push-duration) * 0.6) ease;
+  }
+
+  /* Above the panel and scrim while it rides out on the panel's edge. */
+  html[data-push-lock] .edge-tab {
+    z-index: 62;
+  }
+
+  .edge-tab[data-hidden="true"] {
+    transform: translate3d(var(--push-shift), -50%, 0);
+  }
+
+  .edge-tab[data-nudge] {
+    animation: edge-tab-nudge 900ms var(--push-ease);
+  }
+}
+
+@keyframes edge-tab-nudge {
+  0%,
+  100% {
+    transform: translate3d(0, -50%, 0);
+  }
+  30% {
+    transform: translate3d(9px, -50%, 0);
+  }
+  55% {
+    transform: translate3d(0, -50%, 0);
+  }
+  75% {
+    transform: translate3d(4px, -50%, 0);
+  }
+}
+
+/* The site-wide reduced-motion rule flattens every transition; keep the
+   panel's fades, which carry no movement. */
+@media (max-width: 599px) and (prefers-reduced-motion: reduce) {
+  .push-page,
+  .push-panel,
+  .push-scrim,
+  .edge-tab {
+    --push-duration: 200ms;
+  }
+
+  .push-panel,
+  .push-scrim,
+  .edge-tab {
+    transition-duration: var(--push-duration), 0s !important;
+  }
+}
