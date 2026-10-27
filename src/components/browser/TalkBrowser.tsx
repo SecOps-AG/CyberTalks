@@ -443,9 +443,9 @@ export function TalkBrowser({
         </>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start lg:gap-8">
+      <div className="fold-layout grid gap-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start lg:gap-8">
         {/* Desktop rail grows with the page; only compact facets scroll internally. */}
-        <aside className="hidden lg:block">
+        <aside className="fold-rail hidden lg:block">
           <div className="space-y-5">
             <div className="flex items-center justify-between">
               <p className="font-display text-xs uppercase tracking-[0.2em] text-acid">Filters</p>
@@ -461,7 +461,7 @@ export function TalkBrowser({
 
         <div className="min-w-0 space-y-5">
           {/* Mobile facets */}
-          <details open className="panel group lg:hidden">
+          <details open className="fold-drawer panel group lg:hidden">
             <summary className="cursor-pointer list-none px-4 py-3 font-display text-xs uppercase tracking-[0.2em] text-acid">
               Filters{activeCount > 0 ? ` (${activeCount})` : ""}
               <span className="float-right text-mint/50 group-open:hidden">+</span>
@@ -501,7 +501,7 @@ export function TalkBrowser({
                 <button
                   type="button"
                   onClick={clearAll}
-                  className="text-[11px] uppercase tracking-[0.14em] text-mag hover:text-acid lg:hidden"
+                  className="fold-clear text-[11px] uppercase tracking-[0.14em] text-mag hover:text-acid lg:hidden"
                 >
                   Clear
                 </button>
@@ -536,7 +536,7 @@ export function TalkBrowser({
               ) : null}
             </div>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="fold-cards grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {paged.items.map((talk) => (
                 <TalkCard key={talk.id} talk={talk} />
               ))}
