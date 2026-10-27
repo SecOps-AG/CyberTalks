@@ -26,9 +26,9 @@ export default function HomePage() {
   const conferences = getConferenceCounts();
   const masthead = (
     <header key="masthead" className="relative flex flex-col items-start text-left">
-      <p className="eyebrow">Conference talk archive</p>
+      <p className="eyebrow max-[599px]:hidden">Conference talk archive</p>
       <h1
-        className="mt-2 font-display text-4xl font-bold tracking-[0.05em] sm:text-[3.25rem] sm:leading-tight pb-1 glitch"
+        className="mt-2 font-display text-4xl font-bold tracking-[0.05em] max-[599px]:mt-0 max-[599px]:text-2xl sm:text-[3.25rem] sm:leading-tight pb-1 glitch"
         data-text="Cyber Talks"
       >
         Cyber Talks
@@ -45,6 +45,7 @@ export default function HomePage() {
     <TalkBrowser
       talks={[]}
       remoteIndex
+      pushFilters
       hide={["villages"]}
       alwaysShowDifficulties
       topicLabels={getTaxonomy().topicLabels}

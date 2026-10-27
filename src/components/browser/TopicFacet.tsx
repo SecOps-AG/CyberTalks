@@ -18,11 +18,14 @@ export function TopicFacet({
   selected,
   onToggle,
   labelFor,
+  bare = false,
 }: {
   options: FacetOption<string>[];
   selected: string[];
   onToggle: (value: string) => void;
   labelFor: (topic: string) => string;
+  /** Drop the heading row when the host already titles the section. */
+  bare?: boolean;
 }) {
   const [needle, setNeedle] = useState("");
 
@@ -45,12 +48,14 @@ export function TopicFacet({
 
   return (
     <section>
-      <div className="mb-1.5 flex items-baseline justify-between gap-2">
-        <p className="label">Topics</p>
-        <Link href="/topics" className="text-[10px] text-cyan hover:text-acid">
-          all {options.length}
-        </Link>
-      </div>
+      {bare ? null : (
+        <div className="mb-1.5 flex items-baseline justify-between gap-2">
+          <p className="label">Topics</p>
+          <Link href="/topics" className="text-[10px] text-cyan hover:text-acid">
+            all {options.length}
+          </Link>
+        </div>
+      )}
 
       {selected.length > 0 ? (
         <div className="mb-2 flex flex-wrap gap-1.5">

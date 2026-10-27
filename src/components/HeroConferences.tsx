@@ -33,7 +33,7 @@ export function HeroConferences({
   const moreText = rest.length === 1 ? "and 1 more" : `and ${moreCount} more`;
 
   return (
-    <div className="mt-7 max-w-2xl text-sm leading-relaxed text-mint/70">
+    <div className="mt-7 max-w-2xl text-sm leading-relaxed text-mint/70 max-[599px]:mt-1.5 max-[599px]:text-xs">
       <p>
         {talks.toLocaleString("en-US")} talks
         {featured.length > 0 ? ` from ${featured.join(", ")}` : null}

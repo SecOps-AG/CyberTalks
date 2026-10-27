@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CommandPaletteProvider } from "@/components/CommandPaletteProvider";
+import { PushPage } from "@/components/push/PushPage";
 import "./globals.css";
 
 const orbitron = Orbitron({
@@ -48,16 +49,18 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <div className="relative z-10 flex min-h-screen flex-col">
-          <SiteHeader />
-          <main
-            id="content"
-            className="mx-auto w-full max-w-7xl flex-1 px-4 pb-16 pt-8 sm:px-6"
-          >
-            {children}
-          </main>
-          <SiteFooter />
-        </div>
+        <PushPage>
+          <div className="relative z-10 flex min-h-screen flex-col">
+            <SiteHeader />
+            <main
+              id="content"
+              className="mx-auto w-full max-w-7xl flex-1 px-4 pb-16 pt-8 max-[599px]:pt-3 sm:px-6"
+            >
+              {children}
+            </main>
+            <SiteFooter />
+          </div>
+        </PushPage>
         <CommandPaletteProvider />
         <Analytics />
         <Script id="sc-vars" strategy="afterInteractive">

@@ -12,6 +12,9 @@ const SEARCHABLE_AT = 12;
  *
  * `compact` keeps the full count-sorted list in a ~5-row box with its own
  * scrollbar so a long conference list cannot stretch the filter rail.
+ *
+ * `bare` drops the heading for hosts that title the section themselves
+ * (the phone push panel).
  */
 export function FacetList<T extends string | number>({
   label,
@@ -20,6 +23,7 @@ export function FacetList<T extends string | number>({
   onToggle,
   collapsedCount = COLLAPSED,
   compact = false,
+  bare = false,
 }: {
   label: string;
   options: FacetOption<T>[];
@@ -27,6 +31,7 @@ export function FacetList<T extends string | number>({
   onToggle: (value: T) => void;
   collapsedCount?: number;
   compact?: boolean;
+  bare?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [needle, setNeedle] = useState("");
@@ -56,7 +61,7 @@ export function FacetList<T extends string | number>({
 
   return (
     <section>
-      <p className="label mb-1.5">{label}</p>
+      {bare ? null : <p className="label mb-1.5">{label}</p>}
 
       {searchable ? (
         <input
