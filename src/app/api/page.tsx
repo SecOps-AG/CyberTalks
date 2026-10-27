@@ -37,12 +37,16 @@ curl '${origin}/api/v1/search?q=osint&pageSize=10'`}</pre>
       </section>
 
       <section className="space-y-3">
-        <h2 className="font-display text-sm uppercase tracking-[0.16em] text-acid">GET /api/v1/talks/{"{id}"}</h2>
+        <h2 className="font-display text-sm uppercase tracking-[0.16em] text-acid">
+          GET /api/v1/talks/{"{id or slug}"}
+        </h2>
         <p className="max-w-2xl text-sm text-mint/70">
-          One talk. The id is the <code>id</code> field from a search result, for example{" "}
-          <code>defcon-5-hacker-history-ohXjTIAmo1U</code>.
+          One talk. The path accepts the <code>id</code> field from a search result, or the slug
+          used on the talk page.
         </p>
-        <pre className="panel overflow-x-auto p-4 text-xs leading-relaxed text-mint/80">{`curl '${origin}/api/v1/talks/defcon-5-hacker-history-ohXjTIAmo1U'`}</pre>
+        <pre className="panel overflow-x-auto p-4 text-xs leading-relaxed text-mint/80">{`curl '${origin}/api/v1/talks/lockpicking-forensics'
+
+curl '${origin}/api/v1/talks/defcon-17-main-stage-PHE9NnPOH4M'`}</pre>
       </section>
 
       <section className="space-y-3">

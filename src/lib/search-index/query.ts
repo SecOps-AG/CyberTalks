@@ -603,9 +603,7 @@ export function searchTalks(
   };
 }
 
-export function getTalkById(index: RuntimeIndex, id: string, origin: string): TalkDetail | null {
-  const docId = findDocId(index, id);
-  if (docId == null) return null;
+function detailFromDoc(index: RuntimeIndex, docId: number, origin: string): TalkDetail {
   const hit = materialize(index, docId, origin);
   const youtubeId = readString(index, index.youtubeSid[docId]);
   return {
@@ -615,4 +613,44 @@ export function getTalkById(index: RuntimeIndex, id: string, origin: string): Ta
     youtubeId,
     youtubeUrl: `https://www.youtube.com/watch?v=${youtubeId}`,
   };
+}
+
+export function getTalkById(index: RuntimeIndex, id: string, origin: string): TalkDetail | null {
+  const docId = findDocId(index, id);
+  if (docId == null) return null;
+  return detailFromDoc(index, docId, origin);
+}
+
+const slugToDoc = new WeakMap<RuntimeIndex, Map<string, number>>();
+
+/** First document wins when two talks share a slug. Build order matches archive order. */
+function docIdForSlug(index: RuntimeIndex, slug: string): number | null {
+  let map = slugToDoc.get(index);
+  if (!map) {
+    map = new Map();
+    for (let docId = 0; docId < index.docCount; docId++) {
+      const value = readString(index, index.slugSid[docId]);
+      if (!map.has(value)) map.set(value, docId);
+    }
+    slugToDoc.set(index, map);
+  }
+  return map.get(slug) ?? null;
+}
+
+export function getTalkBySlug(index: RuntimeIndex, slug: string, origin: string): TalkDetail | null {
+  const docId = docIdForSlug(index, slug);
+  if (docId == null) return null;
+  return detailFromDoc(index, docId, origin);
+}
+
+/**
+ * Composite ids (event, village, youtube id) stay the primary key.
+ * A public talk slug is not that id, so the slug map is the fallback.
+ */
+export function getTalkByIdOrSlug(
+  index: RuntimeIndex,
+  key: string,
+  origin: string,
+): TalkDetail | null {
+  return getTalkById(index, key, origin) ?? getTalkBySlug(index, key, origin);
 }

@@ -2,7 +2,7 @@ import { siteUrl } from "@/lib/site-url";
 import { apiJson, apiOptions, limitRequest, rateLimited } from "@/lib/search-index/http";
 import { loadSearchBundle } from "@/lib/search-index/load";
 import { parseTalkId } from "@/lib/search-index/params";
-import { getTalkById } from "@/lib/search-index/query";
+import { getTalkByIdOrSlug } from "@/lib/search-index/query";
 
 export const dynamic = "force-dynamic";
 
@@ -29,10 +29,10 @@ export async function GET(request: Request, context: Context) {
 
   try {
     const { index } = await loadSearchBundle();
-    const talk = getTalkById(index, parsed.id, siteUrl());
+    const talk = getTalkByIdOrSlug(index, parsed.id, siteUrl());
     if (!talk) {
       return apiJson(
-        { error: "not_found", message: "No talk with that id." },
+        { error: "not_found", message: "No talk with that id or slug." },
         404,
         decision,
         "short",

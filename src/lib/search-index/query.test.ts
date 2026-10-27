@@ -4,7 +4,7 @@ import { buildSearchIndex, type IndexSource } from "./build";
 import { decodeSearchIndex } from "./decode";
 import { archiveSearchHref, canonicalPath, hrefFromQuery, isIndexableQuery } from "./href";
 import { parseSearchParams, parseTalkId, searchParamsFromRecord } from "./params";
-import { getTalkById, searchTalks } from "./query";
+import { getTalkById, getTalkByIdOrSlug, getTalkBySlug, searchTalks } from "./query";
 
 const ORIGIN = "https://cybertalks.org";
 
@@ -299,5 +299,33 @@ describe("search index", () => {
     assert.equal(found?.url, `${ORIGIN}/talks/slug-aaaaaaaaaaa`);
     assert.equal(getTalkById(index, "defcon-30-main-fffffffffff", ORIGIN), null);
     assert.equal(getTalkById(index, "missing-id-00000000000", ORIGIN), null);
+  });
+
+  it("looks up a talk by public slug and still prefers a composite id", () => {
+    const built = buildSearchIndex(entries);
+    const index = decodeSearchIndex(built.bytes);
+    const bySlug = getTalkBySlug(index, "slug-aaaaaaaaaaa", ORIGIN);
+    assert.equal(bySlug?.id, "defcon-30-main-aaaaaaaaaaa");
+    assert.equal(bySlug?.title, "Ransomware payments");
+    assert.equal(bySlug?.url, `${ORIGIN}/talks/slug-aaaaaaaaaaa`);
+    assert.equal(getTalkById(index, "slug-aaaaaaaaaaa", ORIGIN), null);
+    assert.equal(getTalkByIdOrSlug(index, "slug-aaaaaaaaaaa", ORIGIN)?.title, "Ransomware payments");
+    assert.equal(getTalkBySlug(index, "missing-slug", ORIGIN), null);
+    assert.equal(getTalkBySlug(index, "slug-fffffffffff", ORIGIN), null);
+
+    const colliding = buildSearchIndex([
+      talk({
+        youtubeId: "bbbbbbbbbbb",
+        slug: "defcon-30-main-aaaaaaaaaaa",
+        title: "Slug matches another id",
+      }),
+      talk({ youtubeId: "aaaaaaaaaaa", title: "Real id" }),
+    ]);
+    const collision = decodeSearchIndex(colliding.bytes);
+    assert.equal(
+      getTalkByIdOrSlug(collision, "defcon-30-main-aaaaaaaaaaa", ORIGIN)?.title,
+      "Real id",
+    );
+    assert.equal(getTalkBySlug(collision, "defcon-30-main-aaaaaaaaaaa", ORIGIN)?.title, "Slug matches another id");
   });
 });
