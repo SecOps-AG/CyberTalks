@@ -41,11 +41,19 @@ WHERE talks.content_hash != excluded.content_hash
 `.trim();
 
 export function loadSchemaSql(): string {
-  return readFileSync(schemaPath, "utf8");
+  return readFileSync(schemaPath, "utf8")
+    .split("\n")
+    .filter((line) => !line.trim().startsWith("--"))
+    .join("\n");
 }
 
 export async function ensureSchema(db: SqlClient): Promise<void> {
-  await db.exec(loadSchemaSql());
+  const statements = loadSchemaSql()
+    .split(";")
+    .map((sql) => sql.trim())
+    .filter(Boolean)
+    .map((sql) => ({ sql, params: [] as unknown[] }));
+  await db.batch(statements);
 }
 
 function talkParams(row: TalkRow): unknown[] {

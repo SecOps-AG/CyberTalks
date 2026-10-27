@@ -1,4 +1,3 @@
--- Talk rows rebuilt from data/villages. Safe to run more than once.
 CREATE TABLE IF NOT EXISTS talks (
   id TEXT PRIMARY KEY,
   slug TEXT NOT NULL,
