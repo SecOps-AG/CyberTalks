@@ -209,3 +209,34 @@ body::before {
 .hero .glitch::after {
   background: #0b120c;
 }
+
+/*
+ * Wide phones and foldable inner screens (about 600–1023px).
+ * The desktop rail is the lg: layout at 1024px and up. These rules stop
+ * at 1023px so that breakpoint is left alone.
+ */
+@media (min-width: 600px) and (max-width: 1023px) {
+  .fold-layout {
+    grid-template-columns: 12rem minmax(0, 1fr);
+    align-items: start;
+    gap: 1rem;
+  }
+
+  .fold-rail {
+    display: block;
+    min-width: 0;
+  }
+
+  .fold-drawer,
+  .fold-clear {
+    display: none;
+  }
+}
+
+/* Two card columns beside a 12rem rail get cramped below 840px.
+   Specificity beats the later sm:grid-cols-2 utility. */
+@media (min-width: 600px) and (max-width: 839px) {
+  .fold-layout .fold-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
