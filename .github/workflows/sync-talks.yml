@@ -1,6 +1,12 @@
 name: Sync talks
 
 on:
+  workflow_dispatch:
+    inputs:
+      files:
+        description: "Comma-separated data files to sync (blank = full)"
+        required: false
+        default: ""
   push:
     branches: [main]
     paths:
@@ -37,8 +43,15 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           D1_DATABASE_ID: ${{ secrets.D1_DATABASE_ID }}
           D1_DATABASE_NAME: ${{ vars.D1_DATABASE_NAME }}
+          FILES_INPUT: ${{ inputs.files }}
         run: |
-          if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            if [ -n "$FILES_INPUT" ]; then
+              npx tsx scripts/d1/sync.ts --remote --files "$FILES_INPUT"
+            else
+              npx tsx scripts/d1/sync.ts --remote --full
+            fi
+          elif [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
             npx tsx scripts/d1/sync.ts --remote --full
           else
             npx tsx scripts/d1/sync.ts --remote --since "${{ github.event.before }}"
