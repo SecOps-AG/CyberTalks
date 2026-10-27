@@ -1,17 +1,20 @@
 /**
  * Load talk JSON into D1.
  *
- * The village files stay the master copy. This writes a copy that the preview
- * worker can read. Running it again with the same JSON does not duplicate rows.
+ * The village files stay the master copy. Remote sync writes cybertalks-d1-prod
+ * from wrangler.jsonc. Pass --preview to write cybertalks-d1-preview instead.
+ * Running it again with the same JSON does not duplicate rows.
  *
  *   npx tsx scripts/d1/sync.ts --full
  *   npx tsx scripts/d1/sync.ts
  *   npx tsx scripts/d1/sync.ts --remote --since <git-sha>
  */
 import { execFileSync, spawn } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { parseJsonc } from "./jsonc";
 import { getPlatformProxy } from "wrangler";
 import { getSpeaker, getTalkBySlug, getTalkRows } from "../../src/lib/data";
 import { ensureSchema, syncRows } from "../../src/lib/d1/apply";
@@ -23,8 +26,10 @@ import { slugifySpeaker } from "../../src/lib/search";
 import type { Talk } from "../../src/lib/types";
 
 const PREVIEW_CONFIG = "wrangler.d1-preview.jsonc";
+const PROD_CONFIG = "wrangler.jsonc";
 const PLACEHOLDER_ID = "00000000-0000-0000-0000-0000000000d1";
 const PREVIEW_DATABASE = "cybertalks-d1-preview";
+const PROD_DATABASE = "cybertalks-d1-prod";
 const DATA_PATHS = ["data/villages", "data/events.json", "data/taxonomy.json", "data/view-counts.json"];
 const FULL_REBUILD_FILES = new Set(["data/events.json", "data/taxonomy.json", "data/view-counts.json"]);
 
@@ -131,25 +136,42 @@ async function openLocal(): Promise<{ sql: SqlClient; close: () => Promise<void>
   return { sql: asSql(db), close: () => proxy.dispose() };
 }
 
+type D1Binding = { binding?: string; database_name?: string; database_id?: string };
+
+export function d1TargetFromConfig(text: string): { databaseId: string; databaseName: string } {
+  const config = parseJsonc(text) as { name?: string; d1_databases?: D1Binding[] };
+  if (config.name === "cybertalks") {
+    throw new Error("Refusing to write through the legacy worker config.");
+  }
+  const db = (config.d1_databases ?? []).find((item) => item.binding === "TALKS_DB");
+  const databaseName = db?.database_name?.trim() ?? "";
+  const databaseId = db?.database_id?.trim() ?? "";
+  if (!databaseName || !databaseId) {
+    throw new Error("Worker config is missing the TALKS_DB database name or id.");
+  }
+  if (databaseId === PLACEHOLDER_ID) {
+    throw new Error("TALKS_DB database_id is still the local placeholder.");
+  }
+  if (databaseName === "cybertalks" || databaseName.includes("cybertalks.org")) {
+    throw new Error(`Refusing to write database "${databaseName}".`);
+  }
+  return { databaseId, databaseName };
+}
+
 function requireRemoteTarget(): { accountId: string; token: string; databaseId: string; databaseName: string } {
   const accountId = process.env.CLOUDFLARE_ACCOUNT_ID?.trim() ?? "";
   const token = process.env.CLOUDFLARE_API_TOKEN?.trim() ?? "";
-  const databaseId = process.env.D1_DATABASE_ID?.trim() ?? "";
-  const databaseName = process.env.D1_DATABASE_NAME?.trim() || PREVIEW_DATABASE;
-  if (!accountId || !token || !databaseId) {
-    throw new Error(
-      "Remote sync needs CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_API_TOKEN, and D1_DATABASE_ID.",
-    );
+  const preview = process.argv.includes("--preview");
+  if (!accountId || !token) {
+    throw new Error("Remote sync needs CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN.");
   }
-  if (databaseId === PLACEHOLDER_ID) {
-    throw new Error(
-      "D1_DATABASE_ID is still the local placeholder. Create the preview database and set the real id.",
-    );
+  const configPath = preview ? PREVIEW_CONFIG : PROD_CONFIG;
+  const target = d1TargetFromConfig(readFileSync(configPath, "utf8"));
+  const expected = preview ? PREVIEW_DATABASE : PROD_DATABASE;
+  if (target.databaseName !== expected) {
+    throw new Error(`Refusing to write "${target.databaseName}". Expected ${expected}.`);
   }
-  if (databaseName === "cybertalks" || databaseName.includes("cybertalks.org")) {
-    throw new Error(`Refusing to write database "${databaseName}". Use ${PREVIEW_DATABASE}.`);
-  }
-  return { accountId, token, databaseId, databaseName };
+  return { accountId, token, databaseId: target.databaseId, databaseName: target.databaseName };
 }
 
 async function queryRemote(
@@ -192,6 +214,9 @@ async function importRemoteSql(
     const preview = await readFile(PREVIEW_CONFIG, "utf8");
     const config = preview
       .replaceAll(PLACEHOLDER_ID, target.databaseId)
+      .replace(/"name":\s*"cybertalks-d1-preview"/, '"name": "cybertalks-d1-sync"')
+      .replace(/"service":\s*"cybertalks-d1-preview"/, '"service": "cybertalks-d1-sync"')
+      .replace(/"workers_dev":\s*true/, '"workers_dev": false')
       .replace(
         /"database_name":\s*"cybertalks-d1-preview"/,
         `"database_name": ${JSON.stringify(target.databaseName)}`,
@@ -326,7 +351,9 @@ async function main() {
   }
 }
 
-main().catch((error: unknown) => {
-  console.error(error instanceof Error ? error.message : error);
-  process.exit(1);
-});
+if (process.argv[1]?.endsWith("sync.ts")) {
+  main().catch((error: unknown) => {
+    console.error(error instanceof Error ? error.message : error);
+    process.exit(1);
+  });
+}
