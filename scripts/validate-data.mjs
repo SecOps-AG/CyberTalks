@@ -16,7 +16,6 @@ import {
   readTaxonomy,
   SLUG,
   villageFiles,
-  YOUTUBE_ID,
 } from "./lib/util.mjs";
 
 const { args } = parseArgs();
@@ -42,6 +41,10 @@ const TALK_FIELDS = new Set([
   "viewCountFetchedAt",
   "difficulty",
   "conference",
+  "kind",
+  "mediaUrl",
+  "thumbnail",
+  "enrichmentGaps",
 ]);
 
 const VILLAGE_FIELDS = new Set([
@@ -62,6 +65,20 @@ const MAX_TOPICS = 6;
 const DIFFICULTIES = new Set(["beginner", "intermediate", "advanced", "expert"]);
 const LANGUAGE = /^[a-z]{2,3}(?:-[A-Z]{2})?$/;
 const MAX_TEASER = 220;
+
+const TALK_ID = /^(?:[A-Za-z0-9_-]{11}|dc33-[a-f0-9]{8})$/;
+const MATERIAL_TYPES = new Set([
+  "slides",
+  "repo",
+  "paper",
+  "whitepaper",
+  "demo",
+  "recording",
+  "tool",
+  "speaker-link",
+  "reference",
+  "link",
+]);
 
 const YOUTUBE_HOSTS = new Set([
   "youtube.com",
@@ -191,8 +208,18 @@ for (const file of files) {
       if (!TALK_FIELDS.has(key)) warn(at, `unknown field "${key}"`);
     }
 
-    if (!YOUTUBE_ID.test(talk.youtubeId ?? "")) {
-      error(at, `youtubeId "${talk.youtubeId}" must be 11 URL-safe characters`);
+    const gaps = talk.enrichmentGaps;
+    const gapOk =
+      gaps != null &&
+      typeof gaps === "object" &&
+      !Array.isArray(gaps) &&
+      Object.values(gaps).every((value) => typeof value === "string" && value.trim());
+    if (talk.enrichmentGaps != null && !gapOk) {
+      error(at, "enrichmentGaps must be an object of non-empty strings");
+    }
+
+    if (!TALK_ID.test(talk.youtubeId ?? "")) {
+      error(at, `youtubeId "${talk.youtubeId}" must be a YouTube id or a dc33- media id`);
     } else if (seenVideoIds.has(talk.youtubeId)) {
       warn(at, `youtubeId already used in ${seenVideoIds.get(talk.youtubeId)} — kitchen may republish across villages`);
     } else {
@@ -230,15 +257,16 @@ for (const file of files) {
       }
     }
 
-    if (!talk.track) error(at, "track is empty — pick one from data/taxonomy.json");
-    else if (!trackSlugs.has(talk.track)) {
+    if (!talk.track) {
+      if (!gapOk) error(at, "track is empty — pick one from data/taxonomy.json");
+    } else if (!trackSlugs.has(talk.track)) {
       error(at, `track "${talk.track}" is not in data/taxonomy.json`);
     }
 
     if (!Array.isArray(talk.topics)) {
       error(at, "topics must be an array");
     } else {
-      if (talk.topics.length === 0) error(at, "topics is empty — add 3 to 6");
+      if (talk.topics.length === 0 && !gapOk) error(at, "topics is empty — add 3 to 6");
       if (talk.topics.length > MAX_TOPICS) {
         error(at, `${talk.topics.length} topics, max ${MAX_TOPICS}`);
       }
@@ -253,7 +281,7 @@ for (const file of files) {
     }
 
     if (typeof talk.teaser !== "string" || !talk.teaser.trim()) {
-      error(at, "teaser is empty — one sentence, what the talk delivers");
+      if (!gapOk) error(at, "teaser is empty — one sentence, what the talk delivers");
     } else if (talk.teaser.length > MAX_TEASER) {
       error(at, `teaser is ${talk.teaser.length} chars, max ${MAX_TEASER}`);
     }
@@ -276,13 +304,71 @@ for (const file of files) {
       error(at, "viewCountFetchedAt must be an ISO timestamp");
     }
     // Unclassified talks omit the field; there is no "unknown" value.
-    if ("difficulty" in talk && !DIFFICULTIES.has(talk.difficulty)) {
+    if (talk.kind != null && !["talk", "clip", "interview", "announcement"].includes(talk.kind)) {
+      error(at, `kind "${talk.kind}" is not a known kind`);
+    }
+    const mediaId = typeof talk.youtubeId === "string" && talk.youtubeId.startsWith("dc33-");
+    if (mediaId) {
+      if (typeof talk.mediaUrl !== "string" || !talk.mediaUrl.startsWith("https://")) {
+        error(at, "mediaUrl must be an https URL");
+      }
+      const thumb = typeof talk.thumbnail === "string" ? talk.thumbnail : "";
+      if (thumb !== `/materials/thumbs/${talk.youtubeId}.jpg`) {
+        error(at, "thumbnail must be a /materials/thumbs/<id>.jpg path");
+      } else if (!fs.existsSync(path.join(process.cwd(), "public", thumb))) {
+        error(at, `thumbnail file public${thumb} is missing`);
+      }
+    } else if (talk.mediaUrl != null && talk.mediaUrl !== "") {
+      error(at, "mediaUrl is only for talks that are not on YouTube");
+    }
+    if ("difficulty" in talk && talk.difficulty != null && !DIFFICULTIES.has(talk.difficulty)) {
       error(
         at,
         `difficulty ${JSON.stringify(talk.difficulty)} must be one of ${[...DIFFICULTIES].join(", ")} — omit the field when unclassified`,
       );
     }
   });
+}
+
+/* ---------- materials ---------- */
+
+const materialsDir = path.join(DATA_DIR, "materials");
+if (fs.existsSync(materialsDir)) {
+  for (const file of fs.readdirSync(materialsDir).filter((name) => name.endsWith(".json"))) {
+    const where = `materials/${file}`;
+    if (file.startsWith("_")) {
+      warn(where, "underscore files are not joined onto talks");
+      continue;
+    }
+    const id = file.slice(0, -".json".length);
+    if (!seenVideoIds.has(id)) warn(where, `"${id}" is not a talk in data/villages`);
+    let links;
+    try {
+      links = readJson(path.join(materialsDir, file));
+    } catch (cause) {
+      error(where, `is not valid JSON (${cause.message})`);
+      continue;
+    }
+    if (!Array.isArray(links)) {
+      error(where, "must be an array of links");
+      continue;
+    }
+    links.forEach((link, index) => {
+      const at = `${where} [${index}]`;
+      if (!link || typeof link !== "object") {
+        error(at, "link must be an object");
+        return;
+      }
+      if (!MATERIAL_TYPES.has(link.type)) error(at, `type "${link.type}" is not a known material type`);
+      if (typeof link.url !== "string" || !/^https?:\/\//.test(link.url)) {
+        error(at, "url must be http or https");
+      }
+      if (link.confidence != null && typeof link.confidence !== "number") {
+        error(at, "confidence must be a number");
+      }
+      if (typeof link.source !== "string" || !link.source.trim()) error(at, "source is empty");
+    });
+  }
 }
 
 /* ---------- view counts ---------- */
