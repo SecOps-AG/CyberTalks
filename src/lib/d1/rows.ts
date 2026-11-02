@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { hasRepo, hasSlides, isDead, materialLabel } from "../materials";
 import { buildIndexEntry, slugifySpeaker } from "../search";
 import type { Talk } from "../types";
 
@@ -25,6 +26,18 @@ export type TalkRow = {
   relatedIds: string;
   topics: string[];
   speakers: SpeakerLink[];
+  hasSlides: number;
+  hasRepo: number;
+  mediaUrl: string | null;
+  materials: {
+    type: string;
+    url: string;
+    title: string | null;
+    source: string;
+    confidence: number;
+    dead: number;
+    label: string;
+  }[];
   contentHash: string;
 };
 
@@ -99,6 +112,18 @@ export function rowFromTalk(
     relatedIds: related,
     topics: topicList(talk),
     speakers: speakerLinks(talk),
+    hasSlides: hasSlides(talk.materials) ? 1 : 0,
+    hasRepo: hasRepo(talk.materials) ? 1 : 0,
+    mediaUrl: talk.mediaUrl ?? null,
+    materials: (talk.materials ?? []).map((link) => ({
+      type: link.type,
+      url: link.url,
+      title: link.title ?? null,
+      source: link.source,
+      confidence: link.confidence,
+      dead: isDead(link) ? 1 : 0,
+      label: materialLabel(link),
+    })),
     contentHash: contentHash(sourceFile, seq, body, related),
   };
 }

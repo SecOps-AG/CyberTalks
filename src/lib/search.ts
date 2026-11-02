@@ -4,6 +4,7 @@
  */
 import { inDefconVillage } from "./hubs";
 import { conferenceLabel, DIFFICULTIES, difficultyLabel, normalizeDifficulty } from "./labels";
+import { hasRepo, hasSlides } from "./materials";
 import type { Difficulty, SearchEntry, Talk, TalkIndexEntry, TalkSummaryEntry } from "./types";
 
 export const PAGE_SIZE = 24;
@@ -69,6 +70,10 @@ export type Filters = {
   lengths: string[];
   difficulties: Difficulty[];
   includeExtras: boolean;
+  /** Auto-band slides only. */
+  hasSlides: boolean;
+  /** Auto-band repository only. */
+  hasRepo: boolean;
   sort: SortKey;
   page: number;
 };
@@ -84,6 +89,8 @@ export const EMPTY_FILTERS: Filters = {
   lengths: [],
   difficulties: [],
   includeExtras: false,
+  hasSlides: false,
+  hasRepo: false,
   sort: "relevance",
   page: 1,
 };
@@ -102,7 +109,7 @@ export function buildIndexEntry(talk: Talk): TalkIndexEntry {
     eventShortName: talk.eventShortName,
     villageSlug: talk.villageSlug,
     villageName: talk.villageName,
-    track: talk.track,
+    track: talk.track ?? "",
     trackName: talk.trackName,
     topics: talk.topics,
     durationSeconds: talk.durationSeconds,
@@ -112,6 +119,9 @@ export function buildIndexEntry(talk: Talk): TalkIndexEntry {
     language: talk.language,
     viewCount: talk.viewCount,
     difficulty: normalizeDifficulty(talk.difficulty) ?? undefined,
+    ...(hasSlides(talk.materials) ? { hasSlides: true as const } : {}),
+    ...(hasRepo(talk.materials) ? { hasRepo: true as const } : {}),
+    ...(talk.mediaUrl ? { mediaUrl: talk.mediaUrl } : {}),
   };
 }
 
@@ -222,6 +232,8 @@ function matchesDimension(
     return false;
   if (skip !== "tracks" && filters.tracks.length > 0 && !filters.tracks.includes(entry.track))
     return false;
+  if (filters.hasSlides && !entry.hasSlides) return false;
+  if (filters.hasRepo && !entry.hasRepo) return false;
   // Topics are ANDed: each selected topic narrows further.
   if (
     skip !== "topics" &&
@@ -402,7 +414,9 @@ export function computeFacets(
   ].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 
   const tracks = [
-    ...tally(subset("tracks"), (e) => [{ value: e.track, label: e.trackName }]).values(),
+    ...tally(subset("tracks"), (e) =>
+      e.track ? [{ value: e.track, label: e.trackName || e.track }] : [],
+    ).values(),
   ].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 
   const topicSubset = subset("topics");
@@ -480,7 +494,9 @@ export function countActive(filters: Filters): number {
     filters.speakers.length +
     filters.lengths.length +
     filters.difficulties.length +
-    (filters.includeExtras ? 1 : 0)
+    (filters.includeExtras ? 1 : 0) +
+    (filters.hasSlides ? 1 : 0) +
+    (filters.hasRepo ? 1 : 0)
   );
 }
 
@@ -561,6 +577,8 @@ export function filtersFromParams(params: URLSearchParams): Filters {
       DIFFICULTIES.includes(v as Difficulty),
     ),
     includeExtras: params.get("extras") === "1" || params.get("extras") === "true",
+    hasSlides: params.get("slides") === "1",
+    hasRepo: params.get("repo") === "1",
     sort: SORT_KEYS.includes(sort as SortKey) ? (sort as SortKey) : "relevance",
     page: Number.isFinite(page) && page > 0 ? page : 1,
   };
@@ -577,6 +595,8 @@ export function filtersToQuery(filters: Filters): string {
     if (values.length > 0) params.set(key, values.join(","));
   }
   if (filters.includeExtras) params.set("extras", "1");
+  if (filters.hasSlides) params.set("slides", "1");
+  if (filters.hasRepo) params.set("repo", "1");
   if (filters.sort !== "relevance") params.set("sort", filters.sort);
   if (filters.page > 1) params.set("page", String(filters.page));
   return params.toString();

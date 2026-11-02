@@ -1,12 +1,28 @@
+import { talksSql } from "@/lib/d1/binding";
+import { readTalkById, readTalkBySlug } from "@/lib/d1/read";
+import { isYouTubeId, publicMaterialBands } from "@/lib/materials";
 import { siteUrl } from "@/lib/site-url";
 import { apiJson, apiOptions, limitRequest, rateLimited } from "@/lib/search-index/http";
 import { loadSearchBundle } from "@/lib/search-index/load";
+import type { TalkDetail } from "@/lib/search-index/model";
 import { parseTalkId } from "@/lib/search-index/params";
-import { getTalkByIdOrSlug } from "@/lib/search-index/query";
+import { detailFromTalk, getTalkByIdOrSlug } from "@/lib/search-index/query";
+import type { Talk } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 type Context = { params: Promise<{ id: string }> };
+
+function withStoredMaterials(talk: TalkDetail, body: Talk): TalkDetail {
+  const bands = publicMaterialBands(body.materials);
+  return {
+    ...talk,
+    youtubeUrl: isYouTubeId(body.youtubeId) ? `https://www.youtube.com/watch?v=${body.youtubeId}` : "",
+    mediaUrl: body.mediaUrl || null,
+    materials: bands.materials,
+    moreMaterials: bands.moreMaterials,
+  };
+}
 
 export function OPTIONS() {
   return apiOptions();
@@ -28,8 +44,24 @@ export async function GET(request: Request, context: Context) {
   }
 
   try {
-    const { index } = await loadSearchBundle();
-    const talk = getTalkByIdOrSlug(index, parsed.id, siteUrl());
+    const origin = siteUrl();
+    const db = await talksSql().catch(() => null);
+    let talk: TalkDetail | null = null;
+    try {
+      const { index } = await loadSearchBundle();
+      talk = getTalkByIdOrSlug(index, parsed.id, origin);
+    } catch (error) {
+      if (!db) throw error;
+      console.error(error);
+    }
+    if (db) {
+      const record = talk
+        ? await readTalkBySlug(db, talk.slug)
+        : await readTalkBySlug(db, parsed.id);
+      const body = record?.talk ?? (await readTalkById(db, parsed.id));
+      if (!talk && body) talk = detailFromTalk(body, origin);
+      else if (talk && body) talk = withStoredMaterials(talk, body);
+    }
     if (!talk) {
       return apiJson(
         { error: "not_found", message: "No talk with that id or slug." },

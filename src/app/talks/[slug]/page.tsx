@@ -4,13 +4,17 @@ import { notFound } from "next/navigation";
 import { SectionHeading } from "@/components/SectionHeading";
 import { TalkCard } from "@/components/TalkCard";
 import { TalkSummaryPanel } from "@/components/TalkSummary";
+import { LinkOutPlayer } from "@/components/LinkOutPlayer";
+import { MaterialsList } from "@/components/MaterialsList";
 import { YouTubeEmbed } from "@/components/YouTubeEmbed";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import { WatchedMarker } from "@/components/WatchedMarker";
 import { loadTalk } from "@/lib/catalog-runtime";
 import { isDefconVillageTalk, villageEditionPath, villageSeriesPath } from "@/lib/hubs";
 import { difficultyLabel, normalizeDifficulty } from "@/lib/labels";
+import { isYouTubeId, publicMaterialBands, thumbnailSrc } from "@/lib/materials";
 import { formatDuration, slugifySpeaker } from "@/lib/search";
+import { siteUrl } from "@/lib/site-url";
 import { topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -32,7 +36,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description =
     talk.teaser ||
     `${talk.speakers.join(", ")} — ${talk.villageName}, ${talk.eventName}.`;
-  const thumbnailUrl = `https://i.ytimg.com/vi/${talk.youtubeId}/hqdefault.jpg`;
+  const thumb = thumbnailSrc(talk.youtubeId);
+  const thumbnailUrl = thumb.startsWith("/") ? `${siteUrl()}${thumb}` : thumb;
 
   return {
     title,
@@ -68,6 +73,8 @@ export default async function TalkPage({ params }: Props) {
   const labels = topicLabels();
   const duration = formatDuration(talk.durationSeconds);
   const difficulty = normalizeDifficulty(talk.difficulty);
+  const youtube = isYouTubeId(talk.youtubeId);
+  const bands = publicMaterialBands(talk.materials);
 
   return (
     <article className="space-y-8">
@@ -125,9 +132,11 @@ export default async function TalkPage({ params }: Props) {
               {talk.kind}
             </span>
           ) : null}
-          <Link href={`/tracks/${talk.track}`} className="chip">
-            {talk.trackName}
-          </Link>
+          {talk.track ? (
+            <Link href={`/tracks/${talk.track}`} className="chip">
+              {talk.trackName}
+            </Link>
+          ) : null}
           {isDefconVillageTalk(talk) ? (
             <Link href={villageSeriesPath(talk.villageSlug)} className="chip">
               {talk.villageName}
@@ -145,20 +154,25 @@ export default async function TalkPage({ params }: Props) {
               {difficultyLabel(difficulty)}
             </Link>
           ) : null}
-          <WatchedMarker talkId={talk.id} youtubeUrl={talk.youtubeUrl} />
+          {youtube ? <WatchedMarker talkId={talk.id} youtubeUrl={talk.youtubeUrl} /> : null}
           <BookmarkButton talkId={talk.id} variant="full" />
         </div>
       </header>
 
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_16rem]">
         <div className="min-w-0 space-y-6">
-          <YouTubeEmbed videoId={talk.youtubeId} title={talk.title} />
+          {youtube ? (
+            <YouTubeEmbed videoId={talk.youtubeId} title={talk.title} />
+          ) : talk.mediaUrl ? (
+            <LinkOutPlayer thumbnailSrc={thumbnailSrc(talk.youtubeId)} mediaUrl={talk.mediaUrl} />
+          ) : null}
           {talk.teaser ? (
             <p className="border-l-2 border-acid/40 pl-4 text-base leading-relaxed text-mint">
               {talk.teaser}
             </p>
           ) : null}
           <TalkSummaryPanel talk={talk} />
+          <MaterialsList materials={bands.materials} moreMaterials={bands.moreMaterials} />
         </div>
 
         <aside className="space-y-6 lg:sticky lg:top-20 lg:self-start">

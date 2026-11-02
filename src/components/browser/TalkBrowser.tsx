@@ -445,6 +445,27 @@ export function TalkBrowser({
           </label>
         </div>
       ) : null}
+      <div className="space-y-2 border-b border-acid/15 pb-4">
+        <p className="label">Materials</p>
+        <label className="flex cursor-pointer select-none items-center gap-2 text-[12px] text-mint/80 transition hover:text-acid">
+          <input
+            type="checkbox"
+            checked={filters.hasSlides}
+            onChange={(e) => update({ hasSlides: e.target.checked })}
+            className="rounded-sm border border-acid/40 bg-void accent-cyan"
+          />
+          <span>Has slides</span>
+        </label>
+        <label className="flex cursor-pointer select-none items-center gap-2 text-[12px] text-mint/80 transition hover:text-acid">
+          <input
+            type="checkbox"
+            checked={filters.hasRepo}
+            onChange={(e) => update({ hasRepo: e.target.checked })}
+            className="rounded-sm border border-acid/40 bg-void accent-cyan"
+          />
+          <span>Has repo</span>
+        </label>
+      </div>
       {/* A page that is all one conference (an event, a village) has nothing to pick. */}
       {!hide.includes("conferences") &&
       (facets.conferences.length > 1 || filters.conferences.length > 0) ? (
@@ -518,7 +539,35 @@ export function TalkBrowser({
     if (!staged || !stagedFacets) return [];
     const f = staged;
     const fc = stagedFacets;
-    const sections: PushSection[] = [];
+    const sections: PushSection[] = [
+      {
+        id: "materials",
+        label: "Materials",
+        selected: (f.hasSlides ? 1 : 0) + (f.hasRepo ? 1 : 0),
+        content: (
+          <div className="space-y-1">
+            <label className="flex min-h-11 cursor-pointer select-none items-center gap-2 text-[13px] text-mint/80">
+              <input
+                type="checkbox"
+                checked={f.hasSlides}
+                onChange={(e) => stage({ hasSlides: e.target.checked })}
+                className="rounded-sm border border-acid/40 bg-void accent-cyan"
+              />
+              <span>Has slides</span>
+            </label>
+            <label className="flex min-h-11 cursor-pointer select-none items-center gap-2 text-[13px] text-mint/80">
+              <input
+                type="checkbox"
+                checked={f.hasRepo}
+                onChange={(e) => stage({ hasRepo: e.target.checked })}
+                className="rounded-sm border border-acid/40 bg-void accent-cyan"
+              />
+              <span>Has repo</span>
+            </label>
+          </div>
+        ),
+      },
+    ];
     if (!hide.includes("conferences") && (fc.conferences.length > 1 || f.conferences.length > 0)) {
       sections.push({
         id: "conferences",

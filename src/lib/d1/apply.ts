@@ -16,8 +16,8 @@ const UPSERT = `
 INSERT INTO talks (
   id, slug, seq, youtube_id, source_file, edition_id, event_slug, village_slug,
   conference, year, track, kind, has_summary, view_count, summary_text, body,
-  index_json, related_ids, content_hash
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  index_json, related_ids, content_hash, has_slides, has_repo, media_url
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ON CONFLICT(id) DO UPDATE SET
   slug = excluded.slug,
   seq = excluded.seq,
@@ -36,8 +36,31 @@ ON CONFLICT(id) DO UPDATE SET
   body = excluded.body,
   index_json = excluded.index_json,
   related_ids = excluded.related_ids,
-  content_hash = excluded.content_hash
+  content_hash = excluded.content_hash,
+  has_slides = excluded.has_slides,
+  has_repo = excluded.has_repo,
+  media_url = excluded.media_url
 WHERE talks.content_hash != excluded.content_hash
+`.trim();
+
+const MATERIALS_SQL = `
+CREATE TABLE IF NOT EXISTS talk_materials (
+  talk_id TEXT NOT NULL,
+  position INTEGER NOT NULL,
+  type TEXT NOT NULL,
+  url TEXT NOT NULL,
+  title TEXT,
+  source TEXT NOT NULL,
+  confidence REAL NOT NULL,
+  dead INTEGER NOT NULL DEFAULT 0,
+  label TEXT NOT NULL,
+  PRIMARY KEY (talk_id, position)
+);
+CREATE INDEX IF NOT EXISTS talk_materials_talk ON talk_materials (talk_id);
+CREATE TABLE IF NOT EXISTS search_index_chunk (
+  seq INTEGER PRIMARY KEY,
+  data TEXT NOT NULL
+);
 `.trim();
 
 export function loadSchemaSql(): string {
@@ -54,6 +77,17 @@ export async function ensureSchema(db: SqlClient): Promise<void> {
     .filter(Boolean)
     .map((sql) => ({ sql, params: [] as unknown[] }));
   await db.batch(statements);
+  const info = await db.all<{ name: string }>("PRAGMA table_info(talks)");
+  const names = new Set(info.map((row) => row.name));
+  const adds: [string, string][] = [
+    ["has_slides", "ALTER TABLE talks ADD COLUMN has_slides INTEGER NOT NULL DEFAULT 0"],
+    ["has_repo", "ALTER TABLE talks ADD COLUMN has_repo INTEGER NOT NULL DEFAULT 0"],
+    ["media_url", "ALTER TABLE talks ADD COLUMN media_url TEXT"],
+  ];
+  for (const [name, sql] of adds) {
+    if (!names.has(name)) await db.exec(sql);
+  }
+  await db.exec(MATERIALS_SQL);
 }
 
 function talkParams(row: TalkRow): unknown[] {
@@ -77,6 +111,9 @@ function talkParams(row: TalkRow): unknown[] {
     row.indexJson,
     row.relatedIds,
     row.contentHash,
+    row.hasSlides,
+    row.hasRepo,
+    row.mediaUrl,
   ];
 }
 
@@ -86,8 +123,27 @@ function junctionStatements(row: TalkRow, replace: boolean): Statement[] {
     statements.push(
       { sql: "DELETE FROM talk_topics WHERE talk_id = ?", params: [row.id] },
       { sql: "DELETE FROM talk_speakers WHERE talk_id = ?", params: [row.id] },
+      { sql: "DELETE FROM talk_materials WHERE talk_id = ?", params: [row.id] },
     );
   }
+  row.materials.forEach((link, position) => {
+    statements.push({
+      sql: `INSERT INTO talk_materials (
+        talk_id, position, type, url, title, source, confidence, dead, label
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      params: [
+        row.id,
+        position,
+        link.type,
+        link.url,
+        link.title,
+        link.source,
+        link.confidence,
+        link.dead,
+        link.label,
+      ],
+    });
+  });
   for (const topic of row.topics) {
     statements.push({
       sql: "INSERT OR IGNORE INTO talk_topics (talk_id, topic) VALUES (?, ?)",
@@ -127,6 +183,7 @@ function deleteStatements(id: string): Statement[] {
   return [
     { sql: "DELETE FROM talk_topics WHERE talk_id = ?", params: [id] },
     { sql: "DELETE FROM talk_speakers WHERE talk_id = ?", params: [id] },
+    { sql: "DELETE FROM talk_materials WHERE talk_id = ?", params: [id] },
     { sql: "DELETE FROM talks WHERE id = ?", params: [id] },
   ];
 }

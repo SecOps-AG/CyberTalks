@@ -1,5 +1,9 @@
 /** Shapes stored on disk under data/ and the richer shapes the app renders. */
 
+import type { MaterialLink } from "./materials";
+
+export type { MaterialLink };
+
 /** data/events.json — one DEF CON. */
 export type ConEvent = {
   slug: string;
@@ -39,10 +43,18 @@ export type StoredTalk = {
   slug: string;
   title: string;
   speakers: string[];
-  track: string;
+  /** Omitted when the catalog has no track for this talk. */
+  track?: string;
   topics: string[];
   teaser?: string;
   summary?: string | TalkSummary | null;
+  /** mp4 on the DEF CON media server when the talk has no YouTube player. */
+  mediaUrl?: string | null;
+  /** Site path of a stored poster, for talks that are not on YouTube. */
+  thumbnail?: string | null;
+  materials?: MaterialLink[];
+  /** Why track, topics, or teaser were left empty. */
+  enrichmentGaps?: Record<string, string>;
   durationSeconds?: number;
   publishedAt?: string;
   kind?: TalkKind;
@@ -106,6 +118,8 @@ export type VillageSeries = {
 /** A talk with everything the UI needs, denormalised at load time. */
 export type Talk = StoredTalk & {
   id: string;
+  /** Empty when the catalog has no track. */
+  track: string;
   villageId: string;
   villageSlug: string;
   villageName: string;
@@ -154,6 +168,12 @@ export type TalkIndexEntry = {
   viewCount?: number;
   /** Absent when the talk is unclassified. */
   difficulty?: Difficulty;
+  /** Auto-band slides link. Absent when there isn't one. */
+  hasSlides?: boolean;
+  /** Auto-band repository link. Absent when there isn't one. */
+  hasRepo?: boolean;
+  /** Present when the talk links out to a media file instead of YouTube. */
+  mediaUrl?: string;
 };
 
 /**

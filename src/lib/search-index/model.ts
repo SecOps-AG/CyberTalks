@@ -46,7 +46,11 @@ export type TalkDetail = TalkHit & {
   eventSlug: string;
   village: string;
   youtubeId: string;
+  /** Empty when the talk is not a YouTube video. */
   youtubeUrl: string;
+  mediaUrl?: string | null;
+  materials?: { type: string; url: string; label: string; source: string; confidence: number }[];
+  moreMaterials?: { type: string; url: string; label: string; source: string; confidence: number }[];
 };
 
 export type SearchFacets = {

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { isDefconVillageTalk, villageSeriesPath } from "@/lib/hubs";
 import { conferenceLabel, difficultyLabel, normalizeDifficulty } from "@/lib/labels";
+import { thumbnailSrc } from "@/lib/materials";
 import { formatDuration } from "@/lib/search";
 import type { Difficulty, SearchEntry, TalkIndexEntry } from "@/lib/types";
 import { BookmarkButton } from "@/components/BookmarkButton";
@@ -39,7 +40,7 @@ export function TalkCard({ talk }: { talk: TalkIndexEntry | Partial<SearchEntry>
         className="relative block overflow-hidden bg-black"
       >
         <img
-          src={`https://i.ytimg.com/vi/${talk.youtubeId}/hqdefault.jpg`}
+          src={talk.youtubeId ? thumbnailSrc(talk.youtubeId) : ""}
           alt=""
           loading="lazy"
           // A thumbnail request should not tell Google which talk page you are on.

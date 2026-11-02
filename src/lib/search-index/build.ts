@@ -455,11 +455,17 @@ export function buildSearchIndex(entries: readonly IndexSource[]): {
   }));
   conferences.sort(byCount);
 
-  const tracks: Facet[] = trackSlugs.map((slug, index) => ({
-    value: slug,
-    label: trackNames.get(slug) ?? trackNameSeen.get(slug) ?? slug,
-    count: trackDocs[index].length,
-  }));
+  const tracks: Facet[] = trackSlugs.flatMap((slug, index) =>
+    slug
+      ? [
+          {
+            value: slug,
+            label: trackNames.get(slug) ?? trackNameSeen.get(slug) ?? slug,
+            count: trackDocs[index].length,
+          },
+        ]
+      : [],
+  );
   tracks.sort(byCount);
 
   const yearFacets: YearFacet[] = yearsSorted

@@ -45,6 +45,13 @@ async function indexWhere(
   return talks;
 }
 
+export async function readTalkById(db: SqlClient, id: string): Promise<Talk | null> {
+  const rows = await db.all<{ body: string }>("SELECT body FROM talks WHERE id = ? LIMIT 1", [id]);
+  const row = rows[0];
+  if (!row) return null;
+  return JSON.parse(row.body) as Talk;
+}
+
 export async function readTalkBySlug(
   db: SqlClient,
   slug: string,

@@ -29,6 +29,11 @@ import type {
 } from "./types";
 import { inDefconVillage } from "./hubs";
 import { conferenceLabel, dateLabel, locationLabel } from "./labels";
+import {
+  isYouTubeId,
+  normalizeMaterials,
+  type MaterialLink,
+} from "./materials";
 import { buildIndexEntry, slugifySpeaker } from "./search";
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -66,6 +71,19 @@ const getViewCounts = memo((): ViewCounts => {
   const file = path.join(DATA_DIR, "view-counts.json");
   if (!fs.existsSync(file)) return {};
   return readJson<{ counts?: ViewCounts }>(file).counts ?? {};
+});
+
+/** data/materials/<talk id>.json. The file wins over any links on the talk row. */
+const getMaterials = memo((): Map<string, MaterialLink[]> => {
+  const dir = path.join(DATA_DIR, "materials");
+  const map = new Map<string, MaterialLink[]>();
+  if (!fs.existsSync(dir)) return map;
+  for (const file of fs.readdirSync(dir)) {
+    if (!file.endsWith(".json") || file.startsWith("_")) continue;
+    const links = normalizeMaterials(readJson<unknown>(path.join(dir, file)));
+    if (links.length > 0) map.set(file.slice(0, -".json".length), links);
+  }
+  return map;
 });
 
 const getVillageFiles = memo((): string[] =>
@@ -141,6 +159,7 @@ const getArchive = memo((): Archive => {
   const eventBySlug = new Map(getEvents().map((event) => [event.slug, event]));
   const trackBySlug = new Map(getTracks().map((track) => [track.slug, track]));
   const viewCounts = getViewCounts();
+  const materialsById = getMaterials();
 
   const editions: VillageEdition[] = [];
   const talks: Talk[] = [];
@@ -184,12 +203,20 @@ const getArchive = memo((): Archive => {
       });
 
       const views = viewCounts[talk.youtubeId];
+      const materials =
+        materialsById.get(talk.youtubeId) ?? normalizeMaterials(talk.materials);
+      const youtube = isYouTubeId(talk.youtubeId);
+      const track = typeof talk.track === "string" ? talk.track : "";
       talks.push({
         ...talk,
+        materials: materials.length > 0 ? materials : undefined,
+        mediaUrl: talk.mediaUrl || undefined,
+        thumbnail: youtube ? undefined : `/materials/thumbs/${talk.youtubeId}.jpg`,
         language: talk.language ?? stored.language,
         viewCount: talk.viewCount ?? views?.viewCount,
         viewCountFetchedAt: talk.viewCountFetchedAt ?? views?.fetchedAt,
         topics: canonicalTopics,
+        track,
         id: `${id}-${talk.youtubeId}`,
         villageId: id,
         villageSlug: stored.villageSlug,
@@ -199,8 +226,8 @@ const getArchive = memo((): Archive => {
         eventName: event.name,
         eventShortName: event.shortName,
         year: event.year,
-        youtubeUrl: `https://www.youtube.com/watch?v=${talk.youtubeId}`,
-        trackName: trackBySlug.get(talk.track)?.name ?? talk.track,
+        youtubeUrl: youtube ? `https://www.youtube.com/watch?v=${talk.youtubeId}` : "",
+        trackName: track ? (trackBySlug.get(track)?.name ?? track) : "",
         kind: deriveKind(talk, stored.villageSlug),
         dateLabel: dateLabel(event.dates, event.year),
         locationLabel: locationLabel(event.location),

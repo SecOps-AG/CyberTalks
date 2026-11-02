@@ -3,7 +3,9 @@
  * Posting lists stay sorted by document id and are never mutated.
  */
 
-import { difficultyLabel } from "../labels";
+import { conferenceLabel, difficultyLabel } from "../labels";
+import { isYouTubeId, publicMaterialBands } from "../materials";
+import type { Talk } from "../types";
 import { topicLabel } from "../topic-labels";
 import type { Difficulty } from "../types";
 import { readString, type RuntimeIndex } from "./decode";
@@ -611,7 +613,7 @@ function detailFromDoc(index: RuntimeIndex, docId: number, origin: string): Talk
     eventSlug: index.events[index.event[docId]].slug,
     village: index.villages[index.village[docId]].name,
     youtubeId,
-    youtubeUrl: `https://www.youtube.com/watch?v=${youtubeId}`,
+    youtubeUrl: isYouTubeId(youtubeId) ? `https://www.youtube.com/watch?v=${youtubeId}` : "",
   };
 }
 
@@ -647,6 +649,33 @@ export function getTalkBySlug(index: RuntimeIndex, slug: string, origin: string)
  * Composite ids (event, village, youtube id) stay the primary key.
  * A public talk slug is not that id, so the slug map is the fallback.
  */
+/** Talk page fields for a row that is in D1 but not yet in the compact index. */
+export function detailFromTalk(talk: Talk, origin: string): TalkDetail {
+  const bands = publicMaterialBands(talk.materials);
+  return {
+    id: talk.id,
+    slug: talk.slug,
+    title: talk.title,
+    speakers: talk.speakers,
+    year: talk.year,
+    conference: talk.conference,
+    conferenceLabel: conferenceLabel(talk.conference),
+    event: talk.eventShortName,
+    track: talk.track ?? "",
+    trackName: talk.trackName,
+    topics: talk.topics,
+    difficulty: talk.difficulty ?? null,
+    url: `${origin}/talks/${talk.slug}`,
+    eventSlug: talk.eventSlug,
+    village: talk.villageName,
+    youtubeId: talk.youtubeId,
+    youtubeUrl: isYouTubeId(talk.youtubeId) ? `https://www.youtube.com/watch?v=${talk.youtubeId}` : "",
+    mediaUrl: talk.mediaUrl || null,
+    materials: bands.materials,
+    moreMaterials: bands.moreMaterials,
+  };
+}
+
 export function getTalkByIdOrSlug(
   index: RuntimeIndex,
   key: string,

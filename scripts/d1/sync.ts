@@ -16,10 +16,16 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parseJsonc } from "./jsonc";
 import { getPlatformProxy } from "wrangler";
-import { getSpeaker, getTalkBySlug, getTalkRows } from "../../src/lib/data";
+import { getSpeaker, getTalkBySlug, getTalkIndex, getTalkRows } from "../../src/lib/data";
 import { ensureSchema, syncRows } from "../../src/lib/d1/apply";
 import { readSpeakerRecord, readTalkBySlug, readTalkCount } from "../../src/lib/d1/read";
 import { rowFromTalk, type TalkRow } from "../../src/lib/d1/rows";
+import {
+  encodeSearchChunks,
+  searchIndexStatements,
+  sha256Hex,
+} from "../../src/lib/d1/search-store";
+import { buildSearchIndex, type IndexSource } from "../../src/lib/search-index/build";
 import { asSql, statementToSql, type D1Like, type SqlClient, type Statement } from "../../src/lib/d1/sql";
 import { relatedForAll, relatedTalks } from "../../src/lib/related";
 import { slugifySpeaker } from "../../src/lib/search";
@@ -30,10 +36,16 @@ const PROD_CONFIG = "wrangler.jsonc";
 const PLACEHOLDER_ID = "00000000-0000-0000-0000-0000000000d1";
 const PREVIEW_DATABASE = "cybertalks-d1-preview";
 const PROD_DATABASE = "cybertalks-d1-prod";
-const DATA_PATHS = ["data/villages", "data/events.json", "data/taxonomy.json", "data/view-counts.json"];
+const DATA_PATHS = [
+  "data/villages",
+  "data/materials",
+  "data/events.json",
+  "data/taxonomy.json",
+  "data/view-counts.json",
+];
 const FULL_REBUILD_FILES = new Set(["data/events.json", "data/taxonomy.json", "data/view-counts.json"]);
 
-type ChangeSet = { full: boolean; files: string[] };
+type ChangeSet = { full: boolean; files: string[]; materials: boolean };
 
 function argValue(flag: string): string | null {
   const index = process.argv.indexOf(flag);
@@ -51,7 +63,7 @@ function git(args: string[]): string {
 
 function changes(since: string | null): ChangeSet {
   if (since === "0000000000000000000000000000000000000000") {
-    return { full: true, files: [] };
+    return { full: true, files: [], materials: true };
   }
   const args = ["diff", "--name-status"];
   if (since) args.push(since, "HEAD");
@@ -59,6 +71,7 @@ function changes(since: string | null): ChangeSet {
   args.push("--", ...DATA_PATHS);
   const files = new Set<string>();
   let full = false;
+  let materials = false;
   for (const line of git(args).split("\n")) {
     if (!line.trim()) continue;
     const parts = line.split("\t");
@@ -71,6 +84,7 @@ function changes(since: string | null): ChangeSet {
     }
     for (const path of paths) {
       if (FULL_REBUILD_FILES.has(path)) full = true;
+      if (path === "data/materials" || path.startsWith("data/materials/")) materials = true;
     }
   }
   if (!since) {
@@ -79,7 +93,7 @@ function changes(since: string | null): ChangeSet {
       if (path.trim()) files.add(path.trim());
     }
   }
-  return { full, files: [...files].sort() };
+  return { full, files: [...files].sort(), materials };
 }
 
 function relatedMap(talks: Talk[], indexes: number[]): Map<string, string[]> {
@@ -306,6 +320,24 @@ async function checkSample(db: SqlClient, talks: Talk[]): Promise<void> {
   console.log(`check ok (${picks.length} talks)`);
 }
 
+async function publishSearchIndex(db: SqlClient, talks: Talk[]): Promise<void> {
+  const built = buildSearchIndex(getTalkIndex(talks) as IndexSource[]);
+  const sha = await sha256Hex(built.bytes);
+  const existing = await db.all<{ value: string }>(
+    "SELECT value FROM meta WHERE key = 'search_index_sha'",
+  );
+  if (existing[0]?.value === sha) {
+    console.log(`search index unchanged (${built.meta.talks} talks)`);
+    return;
+  }
+  const parts = encodeSearchChunks(built.bytes);
+  const statements = searchIndexStatements(parts, sha, built.meta.talks, JSON.stringify(built.meta));
+  for (let index = 0; index < statements.length; index += 15) {
+    await db.batch(statements.slice(index, index + 15));
+  }
+  console.log(`search index stored ${built.meta.talks} talks in ${parts.length} chunks`);
+}
+
 async function main() {
   const fullFlag = process.argv.includes("--full");
   const remote = process.argv.includes("--remote");
@@ -313,9 +345,13 @@ async function main() {
   const since = argValue("--since");
   const filesArg = argValue("--files");
   const set = fullFlag
-    ? { full: true, files: [] }
+    ? { full: true, files: [], materials: true }
     : filesArg
-      ? { full: false, files: filesArg.split(",").map((file) => file.trim()).filter(Boolean) }
+      ? {
+          full: false,
+          files: filesArg.split(",").map((file) => file.trim()).filter(Boolean),
+          materials: false,
+        }
       : changes(since);
   if (!set.full && set.files.length === 0) {
     console.log("nothing to sync");
@@ -329,10 +365,22 @@ async function main() {
 
   const indexes = set.full
     ? items.map((item) => item.seq)
-    : items.filter((item) => set.files.includes(item.sourceFile)).map((item) => item.seq);
+    : items
+        .filter(
+          (item) =>
+            set.files.includes(item.sourceFile) ||
+            (set.materials && (item.talk.materials?.length ?? 0) > 0),
+        )
+        .map((item) => item.seq);
   console.log(set.full ? "full rebuild" : `files ${set.files.length}`);
   const relatedIds = relatedMap(talks, indexes);
-  const chosen = set.full ? items : items.filter((item) => set.files.includes(item.sourceFile));
+  const chosen = set.full
+    ? items
+    : items.filter(
+        (item) =>
+          set.files.includes(item.sourceFile) ||
+          (set.materials && (item.talk.materials?.length ?? 0) > 0),
+      );
   const { rows, duplicateIds } = buildRows(chosen, relatedIds);
   if (duplicateIds > 0) console.log(`duplicate ids skipped ${duplicateIds}`);
 
@@ -340,7 +388,9 @@ async function main() {
   const db = opened ? opened.sql : openRemote();
   try {
     await ensureSchema(db);
-    const stats = await syncRows(db, rows, set.full ? undefined : set.files);
+    const villageFiles = set.files.filter((file) => file.startsWith("data/villages/"));
+    const stats = await syncRows(db, rows, set.full ? undefined : villageFiles);
+    await publishSearchIndex(db, talks);
     const left = await readTalkCount(db);
     console.log(
       `talks written ${stats.written} / unchanged ${stats.unchanged} / deleted ${stats.deleted} / in database ${left}`,

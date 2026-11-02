@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SectionHeading } from "@/components/SectionHeading";
 import { conferenceLabel, formatViews } from "@/lib/labels";
+import { thumbnailSrc } from "@/lib/materials";
 import type { Talk } from "@/lib/types";
 
 /** Latest fetch time across the rail, as "17 Sep 2026". */
@@ -39,7 +40,7 @@ export function MostWatched({ talks }: { talks: Talk[] }) {
             >
               <div className="relative overflow-hidden bg-black">
                 <img
-                  src={`https://i.ytimg.com/vi/${talk.youtubeId}/mqdefault.jpg`}
+                  src={thumbnailSrc(talk.youtubeId, "mq")}
                   alt=""
                   loading="lazy"
                   referrerPolicy="no-referrer"
