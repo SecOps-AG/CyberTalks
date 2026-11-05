@@ -8,6 +8,10 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      // Facet and query combinations on /search are an open crawl graph.
+      // The clean /search URL, and every talk, speaker, track, topic, and
+      // conference page, stay allowed.
+      disallow: "/search?",
     },
     sitemap: `${baseUrl}/sitemap.xml`,
   };

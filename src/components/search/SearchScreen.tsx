@@ -1,5 +1,5 @@
 import type { Difficulty } from "@/lib/types";
-import { hrefFromQuery } from "@/lib/search-index/href";
+import { hrefFromQuery, searchVariantRel } from "@/lib/search-index/href";
 import type { SearchQuery } from "@/lib/search-index/params";
 import type { SearchResponse } from "@/lib/search-index/model";
 import { DEFAULT_PAGE_SIZE } from "@/lib/search-index/format";
@@ -66,10 +66,12 @@ function FacetLinks({
       <div className={`scroll-list space-y-0.5 pr-1 ${scroll ? "max-h-40 overflow-y-auto" : ""}`}>
         {options.map((option) => {
           const active = selected.includes(option.value);
+          const href = hrefFor(option.value);
           return (
             <a
               key={String(option.value)}
-              href={hrefFor(option.value)}
+              href={href}
+              rel={searchVariantRel(href)}
               className="facet"
               data-active={active ? "true" : undefined}
             >
@@ -176,21 +178,25 @@ export function SearchScreen({
             <p className="label mb-1.5">Topic</p>
             {query.topics.length > 0 ? (
               <div className="mb-2 flex flex-wrap gap-1.5">
-                {query.topics.map((topic) => (
-                  <a
-                    key={topic}
-                    href={hrefFromQuery({
-                      ...query,
-                      topics: query.topics.filter((item) => item !== topic),
-                      page: 1,
-                    })}
-                    className="chip"
-                    data-active="true"
-                  >
-                    {facets.topics.find((item) => item.value === topic)?.label ?? topic}
-                    <span aria-hidden>×</span>
-                  </a>
-                ))}
+                {query.topics.map((topic) => {
+                  const href = hrefFromQuery({
+                    ...query,
+                    topics: query.topics.filter((item) => item !== topic),
+                    page: 1,
+                  });
+                  return (
+                    <a
+                      key={topic}
+                      href={href}
+                      rel={searchVariantRel(href)}
+                      className="chip"
+                      data-active="true"
+                    >
+                      {facets.topics.find((item) => item.value === topic)?.label ?? topic}
+                      <span aria-hidden>×</span>
+                    </a>
+                  );
+                })}
               </div>
             ) : null}
             <form action="/search" method="get">
@@ -208,16 +214,24 @@ export function SearchScreen({
                 {facets.topics
                   .filter((topic) => !query.topics.includes(topic.value) && topic.count > 0)
                   .slice(0, 8)
-                  .map((topic) => (
-                    <a
-                      key={topic.value}
-                      href={hrefFromQuery({ ...query, topics: [...query.topics, topic.value], page: 1 })}
-                      className="chip"
-                    >
-                      {topic.label}
-                      <span className="text-mint/40">{topic.count}</span>
-                    </a>
-                  ))}
+                  .map((topic) => {
+                    const href = hrefFromQuery({
+                      ...query,
+                      topics: [...query.topics, topic.value],
+                      page: 1,
+                    });
+                    return (
+                      <a
+                        key={topic.value}
+                        href={href}
+                        rel={searchVariantRel(href)}
+                        className="chip"
+                      >
+                        {topic.label}
+                        <span className="text-mint/40">{topic.count}</span>
+                      </a>
+                    );
+                  })}
               </div>
             ) : null}
             {facets.topicsTruncated ? (
@@ -319,20 +333,25 @@ export function SearchScreen({
                 </p>
                 <div className="flex items-center gap-2">
                   <span className="label">Sort</span>
-                  <a
-                    href={hrefFromQuery({ ...query, sort: "relevance", page: 1 })}
-                    className="chip"
-                    data-active={query.sort === "relevance" ? "true" : undefined}
-                  >
-                    Relevance
-                  </a>
-                  <a
-                    href={hrefFromQuery({ ...query, sort: "newest", page: 1 })}
-                    className="chip"
-                    data-active={query.sort === "newest" ? "true" : undefined}
-                  >
-                    Newest
-                  </a>
+                  {(
+                    [
+                      ["relevance", "Relevance"],
+                      ["newest", "Newest"],
+                    ] as const
+                  ).map(([sort, label]) => {
+                    const href = hrefFromQuery({ ...query, sort, page: 1 });
+                    return (
+                      <a
+                        key={sort}
+                        href={href}
+                        rel={searchVariantRel(href)}
+                        className="chip"
+                        data-active={query.sort === sort ? "true" : undefined}
+                      >
+                        {label}
+                      </a>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -380,29 +399,42 @@ export function SearchScreen({
               {result.totalPages > 1 ? (
                 <nav className="flex flex-wrap items-center justify-center gap-1.5" aria-label="Pagination">
                   {result.page > 1 ? (
-                    <a href={hrefFromQuery({ ...query, page: result.page - 1 })} className="chip">
+                    <a
+                      href={hrefFromQuery({ ...query, page: result.page - 1 })}
+                      rel={searchVariantRel(hrefFromQuery({ ...query, page: result.page - 1 }))}
+                      className="chip"
+                    >
                       Prev
                     </a>
                   ) : null}
-                  {pageWindow(result.page, result.totalPages).map((entry, index) =>
-                    entry === "gap" ? (
-                      <span key={`gap-${index}`} className="px-1 text-mint/30">
-                        …
-                      </span>
-                    ) : (
+                  {pageWindow(result.page, result.totalPages).map((entry, index) => {
+                    if (entry === "gap") {
+                      return (
+                        <span key={`gap-${index}`} className="px-1 text-mint/30">
+                          …
+                        </span>
+                      );
+                    }
+                    const href = hrefFromQuery({ ...query, page: entry });
+                    return (
                       <a
                         key={entry}
-                        href={hrefFromQuery({ ...query, page: entry })}
+                        href={href}
+                        rel={searchVariantRel(href)}
                         className="chip tabular-nums"
                         data-active={entry === result.page ? "true" : undefined}
                         aria-current={entry === result.page ? "page" : undefined}
                       >
                         {entry}
                       </a>
-                    ),
-                  )}
+                    );
+                  })}
                   {result.page < result.totalPages ? (
-                    <a href={hrefFromQuery({ ...query, page: result.page + 1 })} className="chip">
+                    <a
+                      href={hrefFromQuery({ ...query, page: result.page + 1 })}
+                      rel={searchVariantRel(hrefFromQuery({ ...query, page: result.page + 1 }))}
+                      className="chip"
+                    >
                       Next
                     </a>
                   ) : null}

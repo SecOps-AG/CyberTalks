@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SearchScreen } from "@/components/search/SearchScreen";
 import { DEFAULT_PAGE_SIZE } from "@/lib/search-index/format";
-import { canonicalPath, isIndexableQuery } from "@/lib/search-index/href";
+import { canonicalPath, searchRobots } from "@/lib/search-index/href";
 import { loadSearchBundle } from "@/lib/search-index/load";
 import { parseSearchParams, searchParamsFromRecord, type SearchQuery } from "@/lib/search-index/params";
 import { searchTalks } from "@/lib/search-index/query";
@@ -48,9 +48,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
       ? `Talks matching “${parsed.query.q}” in the Cyber Talks archive.`
       : "Search cybersecurity conference talks by keyword, year, conference, track, topic, and difficulty.",
     alternates: { canonical: `${origin}${path}` },
-    robots: isIndexableQuery(parsed.query)
-      ? { index: true, follow: true }
-      : { index: false, follow: true },
+    robots: searchRobots(parsed.query),
   };
 }
 

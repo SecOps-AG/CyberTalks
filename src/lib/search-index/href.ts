@@ -51,9 +51,14 @@ export function archiveSearchHref(input: {
   });
 }
 
-/** Bare /search and a single first-page query are indexable. Filters and later pages are not. */
+/**
+ * Only the clean /search URL is indexable. Keyword results, facets, sorts,
+ * and later pages are variants of that page, not documents of their own.
+ */
 export function isIndexableQuery(query: SearchQuery): boolean {
   return (
+    query.q.trim().length === 0 &&
+    query.terms.length === 0 &&
     query.page === 1 &&
     query.pageSize === DEFAULT_PAGE_SIZE &&
     query.sort === "relevance" &&
@@ -65,17 +70,16 @@ export function isIndexableQuery(query: SearchQuery): boolean {
   );
 }
 
-export function canonicalPath(query: SearchQuery): string {
-  if (isIndexableQuery(query)) return hrefFromQuery(query);
-  return hrefFromQuery({
-    ...query,
-    years: [],
-    conferences: [],
-    tracks: [],
-    topics: [],
-    difficulties: [],
-    sort: "relevance",
-    page: 1,
-    pageSize: DEFAULT_PAGE_SIZE,
-  });
+export function searchRobots(query: SearchQuery): { index: boolean; follow: true } {
+  return { index: isIndexableQuery(query), follow: true };
+}
+
+/** Every search variant canonicalizes to the unparameterized search page. */
+export function canonicalPath(_query: SearchQuery): string {
+  return "/search";
+}
+
+/** Facet, filter, sort, and page links. The clean /search URL stays followable. */
+export function searchVariantRel(href: string): "nofollow" | undefined {
+  return href.startsWith("/search?") ? "nofollow" : undefined;
 }

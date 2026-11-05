@@ -30,7 +30,7 @@ import {
 import { fetchListingTalks, type ListingKind } from "@/lib/fetch-listing";
 import { inDefconVillage } from "@/lib/hubs";
 import { fetchAdditionalTalkIndexChunks } from "@/lib/fetch-talk-index";
-import { archiveSearchHref } from "@/lib/search-index/href";
+import { archiveSearchHref, searchVariantRel } from "@/lib/search-index/href";
 import type { TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
 
 type Dimension =
@@ -697,6 +697,15 @@ export function TalkBrowser({
   };
 
   const large = size === "lg";
+  const archiveHref = archiveSearchHref({
+    q: draftQuery,
+    years: filters.years,
+    conferences: filters.conferences,
+    tracks: filters.tracks,
+    topics: filters.topics,
+    difficulties: filters.difficulties,
+    sort: filters.sort,
+  });
 
   const search = (
     <div>
@@ -771,18 +780,7 @@ export function TalkBrowser({
         filters.topics.length > 0 ||
         filters.difficulties.length > 0) ? (
         <p className="mt-2.5 px-1 text-[11px] uppercase tracking-[0.18em]">
-          <Link
-            href={archiveSearchHref({
-              q: draftQuery,
-              years: filters.years,
-              conferences: filters.conferences,
-              tracks: filters.tracks,
-              topics: filters.topics,
-              difficulties: filters.difficulties,
-              sort: filters.sort,
-            })}
-            className="link"
-          >
+          <Link href={archiveHref} rel={searchVariantRel(archiveHref)} className="link">
             see all results
           </Link>
         </p>

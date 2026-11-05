@@ -2,7 +2,14 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { buildSearchIndex, type IndexSource } from "./build";
 import { decodeSearchIndex } from "./decode";
-import { archiveSearchHref, canonicalPath, hrefFromQuery, isIndexableQuery } from "./href";
+import {
+  archiveSearchHref,
+  canonicalPath,
+  hrefFromQuery,
+  isIndexableQuery,
+  searchRobots,
+  searchVariantRel,
+} from "./href";
 import { parseSearchParams, parseTalkId, searchParamsFromRecord } from "./params";
 import { getTalkById, getTalkByIdOrSlug, getTalkBySlug, searchTalks } from "./query";
 
@@ -148,19 +155,30 @@ describe("search urls", () => {
     assert.equal(parsed.ok, true);
   });
 
-  it("indexes a bare query and noindexes a filtered page", () => {
+  it("indexes only the clean search page", () => {
+    const clean = parseSearchParams(new URLSearchParams(""));
+    assert.equal(clean.ok, true);
+    if (!clean.ok) return;
+    assert.equal(isIndexableQuery(clean.query), true);
+    assert.deepEqual(searchRobots(clean.query), { index: true, follow: true });
+    assert.equal(canonicalPath(clean.query), "/search");
+
     const bare = parseSearchParams(new URLSearchParams("q=ransomware"));
     assert.equal(bare.ok, true);
     if (!bare.ok) return;
-    assert.equal(isIndexableQuery(bare.query), true);
-    assert.equal(canonicalPath(bare.query), "/search?q=ransomware");
+    assert.equal(isIndexableQuery(bare.query), false);
+    assert.deepEqual(searchRobots(bare.query), { index: false, follow: true });
+    assert.equal(canonicalPath(bare.query), "/search");
+    assert.equal(hrefFromQuery(bare.query), "/search?q=ransomware");
 
-    const deep = parseSearchParams(new URLSearchParams("q=ransomware&year=2024&page=2"));
+    const deep = parseSearchParams(new URLSearchParams("q=ransomware&year=2024&page=2&sort=newest"));
     assert.equal(deep.ok, true);
     if (!deep.ok) return;
     assert.equal(isIndexableQuery(deep.query), false);
-    assert.equal(canonicalPath(deep.query), "/search?q=ransomware");
-    assert.equal(hrefFromQuery({ ...bare.query, page: 1 }), "/search?q=ransomware");
+    assert.equal(canonicalPath(deep.query), "/search");
+    assert.equal(searchVariantRel(hrefFromQuery(deep.query)), "nofollow");
+    assert.equal(searchVariantRel("/search"), undefined);
+    assert.equal(searchVariantRel("/talks/example"), undefined);
   });
 });
 
