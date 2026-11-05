@@ -48,7 +48,7 @@ function asLoadedSet(
 }
 
 export async function fetchTalkIndexManifest(): Promise<TalkIndexManifest> {
-  const manifestRes = await fetch(`${INDEX_BASE}/manifest.json`, { cache: "no-store" });
+  const manifestRes = await fetch(`${INDEX_BASE}/manifest.json`);
   if (manifestRes.ok) {
     return (await manifestRes.json()) as TalkIndexManifest;
   }
@@ -80,7 +80,7 @@ export async function fetchTalkIndexYears(): Promise<number[]> {
 }
 
 export async function fetchTalkIndexChunk(file: string): Promise<TalkIndexEntry[]> {
-  const res = await fetch(`${INDEX_BASE}/${file}`, { cache: "no-store" });
+  const res = await fetch(`${INDEX_BASE}/${file}`);
   if (!res.ok) return [];
   return (await res.json()) as TalkIndexEntry[];
 }

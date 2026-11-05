@@ -32,6 +32,9 @@ import {
   getTopicCounts,
 } from "../src/lib/data";
 import { HUBS, inDefconVillage } from "../src/lib/hubs";
+import { initialBrowsePage } from "../src/lib/search";
+import { chunkList, sitemapPaths } from "../src/lib/sitemap-build";
+import { buildTitleIndex } from "../src/lib/talk-title";
 import {
   coveragePagePath,
   editionPagePath,
@@ -89,6 +92,7 @@ export function writePageShards(): string {
     conferences: getConferenceCounts(),
     mostWatched: getMostWatched(12),
     trackCounts,
+    initialTalks: initialBrowsePage(getTalkIndex(talks)).talks,
   });
   put(tracksIndexPath, trackCounts);
   put(topicsIndexPath, getTopicCounts());
@@ -179,9 +183,42 @@ export function writePageShards(): string {
   fs.mkdirSync(path.dirname(routesFile), { recursive: true });
   fs.writeFileSync(routesFile, `${JSON.stringify(routes, null, 2)}\n`);
 
+  const sitemap = chunkList(
+    sitemapPaths({
+      events,
+      editions,
+      villages: getDefconVillages(),
+      tracks: getTracks(),
+      talkSlugs: talks.map((talk) => talk.slug),
+      speakers: getSpeakers().map((speaker) => ({
+        slug: speaker.slug,
+        talkCount: speaker.talkCount,
+      })),
+      topics: getTopicCounts(),
+    }),
+  );
+  put("/catalog/sitemaps/manifest.json", { parts: sitemap.length });
+  sitemap.forEach((paths, id) => {
+    put(`/catalog/sitemaps/${id}.json`, { paths });
+  });
+
+  const titles = buildTitleIndex(
+    talks.map((talk) => ({
+      title: talk.title,
+      eventName: talk.eventName,
+      year: talk.year,
+      villageName: talk.villageName,
+      speakers: talk.speakers,
+      slug: talk.slug,
+    })),
+  );
+  const titlesFile = path.join(root, "src", "generated", "talk-titles.json");
+  fs.writeFileSync(titlesFile, `${JSON.stringify(titles)}\n`);
+
   return [
     `Pages ${files} files (${(bytes / 1024 / 1024).toFixed(1)} MB), largest ${(largest / 1024).toFixed(0)} KB (${largestName}).`,
     `Routes: ${routes.tracks.length} tracks, ${routes.events.length} events, ${routes.editions.length} editions, ${routes.series.length} villages.`,
+    `Sitemap: ${sitemap.length} parts, ${sitemap.reduce((sum, part) => sum + part.length, 0)} urls.`,
     `Page shards written in ${((Date.now() - started) / 1000).toFixed(1)}s.`,
   ].join("\n");
 }

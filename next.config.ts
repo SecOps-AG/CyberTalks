@@ -4,6 +4,15 @@ import path from "node:path";
 import type { NextConfig } from "next";
 import { PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_BUILD } from "next/constants";
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+import {
+  searchPageCacheHeaders,
+  sitemapCacheHeaders,
+  topicsPageCacheHeaders,
+} from "./src/lib/http-cache";
+
+function headerList(record: Record<string, string>) {
+  return Object.entries(record).map(([key, value]) => ({ key, value }));
+}
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -72,7 +81,14 @@ const nextConfig: NextConfig = {
     ];
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // Pathname match covers the query string. The CDN key stays the full URL.
+      { source: "/search", headers: headerList(searchPageCacheHeaders()) },
+      { source: "/topics", headers: headerList(topicsPageCacheHeaders()) },
+      { source: "/sitemap.xml", headers: headerList(sitemapCacheHeaders()) },
+      { source: "/sitemaps/:id", headers: headerList(sitemapCacheHeaders()) },
+    ];
   },
 };
 

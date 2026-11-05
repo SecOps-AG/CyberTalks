@@ -31,6 +31,7 @@ import { fetchListingTalks, type ListingKind } from "@/lib/fetch-listing";
 import { inDefconVillage } from "@/lib/hubs";
 import { fetchAdditionalTalkIndexChunks } from "@/lib/fetch-talk-index";
 import { archiveSearchHref, searchVariantRel } from "@/lib/search-index/href";
+import { summaryYearsToLoad } from "@/lib/summary-years";
 import type { TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
 
 type Dimension =
@@ -132,12 +133,13 @@ export function TalkBrowser({
   const [ready, setReady] = useState(false);
   const [summaries, setSummaries] = useState<Map<string, string>>(new Map());
   const resultsRef = useRef<HTMLDivElement>(null);
-  const [remoteTalks, setRemoteTalks] = useState<TalkIndexEntry[]>([]);
-  const [catalogReady, setCatalogReady] = useState(!remoteIndex);
+  const [remoteTalks, setRemoteTalks] = useState<TalkIndexEntry[]>(remoteIndex ? talksProp : []);
+  const [catalogReady, setCatalogReady] = useState(!remoteIndex || talksProp.length > 0);
   const [catalogLoading, setCatalogLoading] = useState(remoteIndex);
   const [listedTalks, setListedTalks] = useState<TalkIndexEntry[] | null>(null);
   const [listReady, setListReady] = useState(!listing);
   const loadedChunkFilesRef = useRef<Set<string>>(new Set());
+  const loadedSummaryYearsRef = useRef<Set<number>>(new Set());
   const remoteTalksRef = useRef<TalkIndexEntry[]>([]);
   remoteTalksRef.current = remoteTalks;
 
@@ -264,30 +266,37 @@ export function TalkBrowser({
     setReady(true);
   }, [syncUrl, allExtras]);
 
-  // Load per-year summary shards in the background. This enriches search without
-  // blocking initial render. Each year's shard is fetched independently.
+  // One fetch per year. Later list changes (chunks, filters) must not refetch
+  // a shard that already landed. The browser cache can reuse the response.
   useEffect(() => {
-    const years = new Set(talks.map((talk) => talk.year));
-    const allSummaries = new Map<string, string>();
-
-    const loadYearShard = async (year: number) => {
-      try {
-        const res = await fetch(`/api/summaries/${year}`, { cache: "no-store" });
-        if (!res.ok) return;
-        const entries: TalkSummaryEntry[] = await res.json();
-        for (const entry of entries) {
-          if (entry.summary) {
-            allSummaries.set(entry.id, entry.summary);
-          }
-        }
-        setSummaries((prev) => new Map([...prev, ...allSummaries]));
-      } catch {
-        // Silently fail if shards are not available
-      }
-    };
+    const years = summaryYearsToLoad(loadedSummaryYearsRef.current, talks);
+    if (years.length === 0) return;
+    for (const year of years) loadedSummaryYearsRef.current.add(year);
 
     for (const year of years) {
-      loadYearShard(year);
+      void (async () => {
+        try {
+          const res = await fetch(`/api/summaries/${year}`);
+          if (!res.ok) {
+            loadedSummaryYearsRef.current.delete(year);
+            return;
+          }
+          const entries: TalkSummaryEntry[] = await res.json();
+          setSummaries((prev) => {
+            let changed = false;
+            const next = new Map(prev);
+            for (const entry of entries) {
+              if (entry.summary && next.get(entry.id) !== entry.summary) {
+                next.set(entry.id, entry.summary);
+                changed = true;
+              }
+            }
+            return changed ? next : prev;
+          });
+        } catch {
+          loadedSummaryYearsRef.current.delete(year);
+        }
+      })();
     }
   }, [talks]);
 
@@ -411,15 +420,7 @@ export function TalkBrowser({
       current ? { ...EMPTY_FILTERS, includeExtras: allExtras, sort: current.sort } : current,
     );
 
-  if (remoteIndex && !catalogReady) {
-    return (
-      <div className="space-y-6">
-        {masthead ? <div className={hero ? "" : "mb-2"}>{masthead}</div> : null}
-        <p className="py-12 text-center text-sm text-mint/40">Loading catalog…</p>
-      </div>
-    );
-  }
-
+  const awaitingCatalog = remoteIndex && talks.length === 0 && (catalogLoading || !catalogReady);
 
   const clearAll = () => {
     setDraftQuery("");
@@ -428,10 +429,6 @@ export function TalkBrowser({
 
   const renderPanel = () => (
     <div className="space-y-5">
-      {listingPending ? (
-        <p className="text-[12px] text-mint/40">Loading filters…</p>
-      ) : (
-      <>
       {hasExtras ? (
         <div className="border-b border-acid/15 pb-4">
           <label className="flex cursor-pointer select-none items-center gap-2 text-[12px] text-mint/80 transition hover:text-acid">
@@ -530,8 +527,6 @@ export function TalkBrowser({
           onToggle={(value) => update({ speakers: toggleValue(filters.speakers, value) })}
         />
       ) : null}
-      </>
-      )}
     </div>
   );
 
@@ -920,8 +915,24 @@ export function TalkBrowser({
             </div>
           </div>
 
-          {paged.items.length === 0 ? (
-            <div className="panel px-4 py-12 text-center">
+          {awaitingCatalog ? (
+            <div
+              className="fold-cards grid min-h-[70vh] gap-4 sm:grid-cols-2 xl:grid-cols-3"
+              aria-hidden
+            >
+              {Array.from({ length: 6 }, (_, index) => (
+                <div key={index} className="panel overflow-hidden">
+                  <div className="aspect-video w-full bg-black/40" />
+                  <div className="space-y-2 p-4">
+                    <div className="h-3 w-24 bg-mint/10" />
+                    <div className="h-5 w-full bg-mint/10" />
+                    <div className="h-4 w-2/3 bg-mint/10" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : paged.items.length === 0 ? (
+            <div className="panel min-h-[18rem] px-4 py-12 text-center">
               <p className="text-sm uppercase tracking-[0.16em] text-warn">{emptyHint}</p>
               {activeCount > 0 ? (
                 <button type="button" onClick={clearAll} className="link mt-4 text-[11px] uppercase">
@@ -931,8 +942,8 @@ export function TalkBrowser({
             </div>
           ) : (
             <div className="fold-cards grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {paged.items.map((talk) => (
-                <TalkCard key={talk.id} talk={talk} />
+              {paged.items.map((talk, index) => (
+                <TalkCard key={talk.id} talk={talk} priority={paged.page === 1 && index === 0} />
               ))}
             </div>
           )}
@@ -942,7 +953,7 @@ export function TalkBrowser({
       </div>
 
       {footer && activeCount === 0 ? (
-        <div className="space-y-10 border-t border-acid/15 pt-8">{footer}</div>
+        <div className="min-h-[24rem] space-y-10 border-t border-acid/15 pt-8">{footer}</div>
       ) : null}
 
       {push ? (

@@ -7,8 +7,6 @@ import { parseSearchParams, searchParamsFromRecord, type SearchQuery } from "@/l
 import { searchTalks } from "@/lib/search-index/query";
 import { siteUrl } from "@/lib/site-url";
 
-export const dynamic = "force-dynamic";
-
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };

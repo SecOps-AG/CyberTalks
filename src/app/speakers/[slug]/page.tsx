@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import { loadSpeaker } from "@/lib/catalog-runtime";
+import { canonicalUrl } from "@/lib/canonical";
 import { initialBrowsePage } from "@/lib/search";
 import { topicLabels } from "@/lib/topic-labels";
 
@@ -19,10 +20,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const record = await loadSpeaker(slug);
   const speaker = record?.speaker;
-  if (!speaker) return { title: "Speaker not found" };
+  if (!speaker) return { title: "Speaker not found", robots: { index: false, follow: false } };
   return {
     title: speaker.name,
     description: `Every talk by ${speaker.name} on Cyber Talks.`,
+    alternates: { canonical: canonicalUrl(`/speakers/${encodeURIComponent(speaker.slug)}`) },
   };
 }
 

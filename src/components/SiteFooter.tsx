@@ -4,7 +4,7 @@ import stats from "@/generated/stats.json";
 export function SiteFooter() {
 
   return (
-    <footer className="border-t border-acid/15 px-4 py-6">
+    <footer className="min-h-[9rem] border-t border-acid/15 px-4 py-6">
       <div className="mx-auto max-w-7xl space-y-3">
         <p className="max-w-3xl text-[12px] leading-relaxed text-mint/55">
           This is an unofficial archive. Cyber Talks is not affiliated with or endorsed by DEF CON,

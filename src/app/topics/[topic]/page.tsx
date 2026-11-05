@@ -3,8 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import { loadTopic } from "@/lib/catalog-runtime";
+import { canonicalUrl } from "@/lib/canonical";
 import { initialBrowsePage } from "@/lib/search";
 import { topicLabel, topicLabels } from "@/lib/topic-labels";
+import { topicRobots } from "@/lib/topic-indexability";
 
 type Props = { params: Promise<{ topic: string }> };
 
@@ -18,9 +20,15 @@ export const dynamicParams = true;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { topic } = await params;
   const label = topicLabel(topic);
+  const talks = await loadTopic(topic);
+  if (!talks) {
+    return { title: "Topic not found", robots: { index: false, follow: false } };
+  }
   return {
     title: `Topic: ${label}`,
     description: `Conference talks tagged ${label}.`,
+    alternates: { canonical: canonicalUrl(`/topics/${encodeURIComponent(topic)}`) },
+    robots: topicRobots(talks.length),
   };
 }
 

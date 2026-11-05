@@ -9,6 +9,7 @@
 import { cache } from "react";
 import { onWorker, readPublicJson } from "./catalog-runtime";
 import { HUBS, inDefconVillage } from "./hubs";
+import { initialBrowsePage } from "./search";
 import {
   coveragePagePath,
   editionPagePath,
@@ -40,6 +41,8 @@ export type HomePageData = {
   conferences: { slug: string; label: string; count: number }[];
   mostWatched: Talk[];
   trackCounts: { track: Track; count: number }[];
+  /** First default-browse page, so the LCP card is in the HTML. */
+  initialTalks: TalkIndexEntry[];
 };
 
 export type TrackCount = { track: Track; count: number };
@@ -110,6 +113,7 @@ export const loadHome = cache((): Promise<HomePageData> =>
     conferences: data.getConferenceCounts(),
     mostWatched: data.getMostWatched(12),
     trackCounts: data.getTrackCounts(),
+    initialTalks: initialBrowsePage(data.getTalkIndex(data.getTalks())).talks,
   })),
 );
 

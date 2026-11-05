@@ -1,9 +1,15 @@
+import type { Metadata } from "next";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import { HeroConferences } from "@/components/HeroConferences";
 import { MostWatched } from "@/components/MostWatched";
 import { TrackChart } from "@/components/TrackChart";
+import { canonicalUrl } from "@/lib/canonical";
 import { loadHome } from "@/lib/page-runtime";
 import { topicLabels } from "@/lib/topic-labels";
+
+export const metadata: Metadata = {
+  alternates: { canonical: canonicalUrl("/") },
+};
 
 const EXAMPLES = ["ransomware", "osint", "supply chain", "purple team"];
 
@@ -13,11 +19,12 @@ const EXAMPLES = ["ransomware", "osint", "supply chain", "purple team"];
  * talk grid, with the Most Watched rail and track chart below (hidden while
  * searching or filtering).
  *
- * The full talk catalog is loaded client-side from year shards (remoteIndex)
- * so the static HTML stays small enough to serve from the Worker.
+ * The first page of cards is in the HTML so the leading image can paint
+ * without waiting on the catalog. The rest of the archive still loads from
+ * the year shards.
  */
 export default async function HomePage() {
-  const { stats, conferences, mostWatched, trackCounts } = await loadHome();
+  const { stats, conferences, mostWatched, trackCounts, initialTalks } = await loadHome();
   const masthead = (
     <header key="masthead" className="relative flex flex-col items-start text-left">
       <p className="eyebrow max-[599px]:hidden">Conference talk archive</p>
@@ -37,7 +44,7 @@ export default async function HomePage() {
 
   return (
     <TalkBrowser
-      talks={[]}
+      talks={initialTalks ?? []}
       remoteIndex
       pushFilters
       hide={["villages"]}

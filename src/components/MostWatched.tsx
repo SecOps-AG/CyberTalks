@@ -42,7 +42,10 @@ export function MostWatched({ talks }: { talks: Talk[] }) {
                 <img
                   src={thumbnailSrc(talk.youtubeId, "mq")}
                   alt=""
+                  width={320}
+                  height={180}
                   loading="lazy"
+                  decoding="async"
                   referrerPolicy="no-referrer"
                   className="aspect-video w-full object-cover opacity-75 transition group-hover:opacity-100"
                 />

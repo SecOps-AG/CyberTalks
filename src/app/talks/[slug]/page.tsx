@@ -9,12 +9,15 @@ import { MaterialsList } from "@/components/MaterialsList";
 import { YouTubeEmbed } from "@/components/YouTubeEmbed";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import { WatchedMarker } from "@/components/WatchedMarker";
+import titleIndex from "@/generated/talk-titles.json";
 import { loadTalk } from "@/lib/catalog-runtime";
+import { canonicalUrl } from "@/lib/canonical";
 import { isDefconVillageTalk, villageEditionPath, villageSeriesPath } from "@/lib/hubs";
 import { difficultyLabel, normalizeDifficulty } from "@/lib/labels";
 import { isYouTubeId, publicMaterialBands, thumbnailSrc } from "@/lib/materials";
 import { formatDuration, slugifySpeaker } from "@/lib/search";
 import { siteUrl } from "@/lib/site-url";
+import { talkDocumentTitle, type TitleIndex } from "@/lib/talk-title";
 import { topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -32,7 +35,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const talk = record?.talk;
   if (!talk) return { title: "Talk not found" };
 
-  const title = talk.title;
+  const title = talkDocumentTitle(
+    {
+      title: talk.title,
+      eventName: talk.eventName,
+      year: talk.year,
+      villageName: talk.villageName,
+      speakers: talk.speakers,
+      slug: talk.slug,
+    },
+    titleIndex as TitleIndex,
+  );
   const description =
     talk.teaser ||
     `${talk.speakers.join(", ")} — ${talk.villageName}, ${talk.eventName}.`;
@@ -42,6 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    alternates: { canonical: canonicalUrl(`/talks/${encodeURIComponent(slug)}`) },
     openGraph: {
       title,
       description,

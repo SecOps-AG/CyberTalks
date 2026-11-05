@@ -5,6 +5,7 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import routes from "@/generated/page-routes.json";
 import { inDefconVillage, villageEditionPath } from "@/lib/hubs";
+import { canonicalUrl } from "@/lib/canonical";
 import { loadEventPage } from "@/lib/page-runtime";
 import { topicLabels } from "@/lib/topic-labels";
 
@@ -17,11 +18,12 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { event: eventSlug } = await params;
   const page = await loadEventPage(eventSlug);
-  if (!page) return { title: "Event not found" };
+  if (!page) return { title: "Event not found", robots: { index: false, follow: false } };
   const { event } = page;
   return {
     title: event.name,
     description: `${event.name} village talks — ${event.dates}, ${event.location}.`,
+    alternates: { canonical: canonicalUrl(`/${encodeURIComponent(event.slug)}`) },
   };
 }
 

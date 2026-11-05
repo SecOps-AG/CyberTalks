@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { readPublicJson } from "@/lib/catalog-runtime";
 import { talksSql } from "@/lib/d1/binding";
 import { readManifest, readTalkIndexFile } from "@/lib/d1/read";
+import { catalogCacheHeaders } from "@/lib/http-cache";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +11,7 @@ type Params = { params: Promise<{ file: string }> };
 function json(body: unknown, status = 200) {
   return NextResponse.json(body, {
     status,
-    headers: { "Cache-Control": "no-store" },
+    headers: catalogCacheHeaders(status),
   });
 }
 

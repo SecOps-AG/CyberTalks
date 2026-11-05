@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import routes from "@/generated/page-routes.json";
+import { canonicalUrl } from "@/lib/canonical";
 import { loadTrackPage } from "@/lib/page-runtime";
 import { initialBrowsePage } from "@/lib/search";
 import { topicLabels } from "@/lib/topic-labels";
@@ -16,8 +17,12 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { track: slug } = await params;
   const page = await loadTrackPage(slug);
-  if (!page) return { title: "Track not found" };
-  return { title: page.track.name, description: page.track.blurb };
+  if (!page) return { title: "Track not found", robots: { index: false, follow: false } };
+  return {
+    title: page.track.name,
+    description: page.track.blurb,
+    alternates: { canonical: canonicalUrl(`/tracks/${encodeURIComponent(page.track.slug)}`) },
+  };
 }
 
 export default async function TrackPage({ params }: Props) {

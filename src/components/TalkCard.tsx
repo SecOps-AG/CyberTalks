@@ -19,7 +19,14 @@ const DIFFICULTY_STYLES: Record<Difficulty, string> = {
 /**
  * Cards take a TalkIndexEntry, or optionally a SearchEntry with matched summary info.
  */
-export function TalkCard({ talk }: { talk: TalkIndexEntry | Partial<SearchEntry> }) {
+export function TalkCard({
+  talk,
+  priority = false,
+}: {
+  talk: TalkIndexEntry | Partial<SearchEntry>;
+  /** First on-screen card. Eager so it can be the LCP image. */
+  priority?: boolean;
+}) {
   const shown = (talk.topics ?? []).slice(0, MAX_TOPICS);
   const overflow = (talk.topics ?? []).length - shown.length;
   const duration = formatDuration(talk.durationSeconds);
@@ -42,7 +49,13 @@ export function TalkCard({ talk }: { talk: TalkIndexEntry | Partial<SearchEntry>
         <img
           src={talk.youtubeId ? thumbnailSrc(talk.youtubeId) : ""}
           alt=""
-          loading="lazy"
+          width={480}
+          height={270}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+          decoding="async"
+          // 16:9 is set inline so the box exists before the stylesheet arrives.
+          style={{ aspectRatio: "16 / 9", width: "100%", height: "auto" }}
           // A thumbnail request should not tell Google which talk page you are on.
           referrerPolicy="no-referrer"
           className="aspect-video w-full object-cover opacity-80 transition group-hover:opacity-100"
