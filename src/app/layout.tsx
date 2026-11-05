@@ -59,25 +59,12 @@ export default function RootLayout({
           </div>
         </PushPage>
         <CommandPaletteProvider />
-        <Script id="sc-vars" strategy="afterInteractive">
-          {`var sc_project=13354311; var sc_invisible=1; var sc_security="479323c8";`}
-        </Script>
         <Script
-          src="https://www.statcounter.com/counter/counter.js"
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="39a1148d-77a4-4f95-926a-5693a5e388c4"
           strategy="afterInteractive"
         />
-        <noscript>
-          <div className="statcounter">
-            <a title="web stats" href="https://statcounter.com/" target="_blank" rel="noreferrer">
-              <img
-                className="statcounter"
-                src="https://c.statcounter.com/13354311/0/479323c8/1/"
-                alt="web stats"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </a>
-          </div>
-        </noscript>
       </body>
     </html>
   );

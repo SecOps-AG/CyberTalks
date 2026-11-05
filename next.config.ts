@@ -14,15 +14,15 @@ const isDev = process.env.NODE_ENV === "development";
 const csp = [
   "default-src 'self'",
   // Inline script is unavoidable: Next inlines hydration data on every page and
-  // the counter's config is an inline snippet, and a static site has no request
+  // inline config snippets are allowed, and a static site has no request
   // to mint a nonce from. `unsafe-eval` is the dev-only refresh runtime.
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://www.statcounter.com https://c.statcounter.com`,
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://cloud.umami.is`,
   "style-src 'self' 'unsafe-inline'",
   // Fonts are self-hosted at build time, so no font CDN belongs here.
   "font-src 'self'",
-  "img-src 'self' data: https://i.ytimg.com https://c.statcounter.com",
+  "img-src 'self' data: https://i.ytimg.com",
   // Analytics beacons.
-  `connect-src 'self' https://c.statcounter.com`,
+  `connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev https://gateway.umami.is`,
   "frame-src https://www.youtube.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
