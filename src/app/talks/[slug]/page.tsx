@@ -19,9 +19,8 @@ import { isDefconVillageTalk, villageEditionPath, villageSeriesPath } from "@/li
 import { difficultyLabel, normalizeDifficulty } from "@/lib/labels";
 import { isYouTubeId, publicMaterialBands, thumbnailSrc } from "@/lib/materials";
 import { talkRobots } from "@/lib/indexability";
-import { formatDuration, slugifySpeaker } from "@/lib/search";
-import { displaySpeakerName, speakerContext, speakerCredits } from "@/lib/speaker-credits";
-import { speakerPageVerdict } from "@/lib/speakerHeuristics";
+import { formatDuration } from "@/lib/search";
+import { displaySpeakerName, speakerContext, speakerCredits, speakerVerdict } from "@/lib/speaker-credits";
 import { siteUrl } from "@/lib/site-url";
 import { EMPTY_TITLE_INDEX, talkDocumentTitle, type TitleIndex } from "@/lib/talk-title";
 import { topicLabels } from "@/lib/topic-labels";
@@ -130,8 +129,8 @@ export default async function TalkPage({ params }: Props) {
             {talk.speakers.map((raw, index) => {
               const speaker = displaySpeakerName(raw);
               // Only credits that read like a person get a page to link to.
-              const verdict = speakerPageVerdict(raw, speakerContext(talk));
-              const slug = verdict.ok ? slugifySpeaker(verdict.name) : "";
+              const verdict = speakerVerdict(raw, speakerContext(talk));
+              const slug = verdict.ok ? verdict.slug : "";
               return (
                 <span key={`${speaker}-${index}`} className="flex items-center gap-2">
                   {index > 0 ? (

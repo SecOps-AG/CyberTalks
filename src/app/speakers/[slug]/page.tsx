@@ -8,7 +8,7 @@ import { speakerJsonLd } from "@/lib/json-ld";
 import { pageMetadata } from "@/lib/page-meta";
 import { speakerRobots } from "@/lib/indexability";
 import { initialBrowsePage } from "@/lib/search";
-import { isSpeakerPageName } from "@/lib/speakerHeuristics";
+import { speakerVerdict } from "@/lib/speaker-credits";
 import { topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const record = await loadSpeaker(slug);
   const speaker = record?.speaker;
-  if (!speaker || !isSpeakerPageName(speaker.name)) {
+  if (!speaker || !speakerVerdict(speaker.name).ok) {
     return { title: "Speaker not found", robots: { index: false, follow: false } };
   }
   return {
@@ -42,7 +42,7 @@ export default async function SpeakerPage({ params }: Props) {
   const { slug } = await params;
   const record = await loadSpeaker(slug);
   // A credit that reads like a title or label has no page, even if an old index still lists it.
-  if (!record || !isSpeakerPageName(record.speaker.name)) notFound();
+  if (!record || !speakerVerdict(record.speaker.name).ok) notFound();
   const { speaker, talks } = record;
   const initial = initialBrowsePage(talks);
   // When the server slice already holds every talk there is nothing left to fetch,

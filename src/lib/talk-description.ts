@@ -1,6 +1,5 @@
 import { inDefconVillage } from "./hubs";
-import { displaySpeakerName } from "./speaker-credits";
-import { speakerPageVerdict } from "./speakerHeuristics";
+import { displaySpeakerName, speakerVerdict } from "./speaker-credits";
 import { eventYearLabel } from "./talk-title";
 import type { Talk, TalkSummary } from "./types";
 
@@ -106,7 +105,7 @@ function summaryLead(summary: DescribedTalk["summary"]): string {
 function factualLine(talk: DescribedTalk, labels: Record<string, string>): string {
   const label = eventYearLabel(talk);
   const people = talk.speakers
-    .filter((name) => speakerPageVerdict(name, { title: talk.title }).ok)
+    .filter((name) => speakerVerdict(name, { title: talk.title }).ok)
     .map(displaySpeakerName)
     .slice(0, 2);
   const venue = inDefconVillage({ conference: talk.conference, eventSlug: talk.eventSlug })

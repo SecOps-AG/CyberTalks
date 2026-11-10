@@ -7,6 +7,8 @@
  * speaker page. Pure and stateless, so it runs on the server, in the build,
  * and in the browser.
  */
+import { SPEAKER_INDEX_MIN } from "./indexability";
+
 export type SpeakerNameLabel = "person" | "org" | "junk" | "unsure";
 
 const KNOWN_ORGS = new Set([
@@ -265,6 +267,32 @@ export type SpeakerPageContext = {
 
 export type SpeakerVerdict = { ok: boolean; name: string; reason: string };
 
+export type SpeakerVerdictOptions = {
+  /**
+   * How many talks credit this one-word name (see `speaker-credits.ts`). A
+   * single-word credit is a handle or a first name and only gets a page once
+   * it clearly recurs; every other rule still applies.
+   */
+  oneWordTalks?: number;
+};
+
+/** Heuristic reasons that mean "a single token that looks like a handle or a name". */
+const ONE_WORD_REASONS = new Set(["single_proper", "handle", "initials", "single_token"]);
+
+/**
+ * One-word credits that recur on several talks but name a label, a company,
+ * a product or an event series rather than a person. Found by reading every
+ * one-word credit with 2+ talks; extend it when a new one turns up.
+ */
+const ONE_WORD_DENY = new Set([
+  "unknown", "various", "tba", "tbd", "tbc", "staff", "hallway", "anonymous", "everyone",
+  "multiple", "panelists", "moderator", "organizers", "organisers", "attendees", "admin",
+  "host", "guest", "guests", "none", "other", "others", "misc", "volunteers", "sponsor",
+  "sponsors", "undisclosed", "friends", "phd", "wwhf", "rs", "inse", "pni",
+  "scapy", "linumiz", "citrinio", "kong", "edera", "komodor", "aiven", "kusari", "profian",
+  "ck", "fs", "nirmata", "zededa", "daynix", "aikidev", "caido", "fortimonitor", "sensepost", "biascilab",
+]);
+
 /** The reason a credited string reads like a title or label, or null when it reads like a name. */
 function titleLikeReason(name: string): string | null {
   if (NON_NAME_CHARS_RE.test(name)) return "punctuation_or_digits";
@@ -385,7 +413,11 @@ export function isLikelyPersonSpeaker(name: string): boolean {
  * is a mis-parsed field, not a person. The returned `name` is the cleaned
  * display name; it is only meaningful when `ok` is true.
  */
-export function speakerPageVerdict(raw: string, ctx: SpeakerPageContext = {}): SpeakerVerdict {
+export function speakerPageVerdict(
+  raw: string,
+  ctx: SpeakerPageContext = {},
+  options: SpeakerVerdictOptions = {},
+): SpeakerVerdict {
   const name = cleanSpeakerName(raw);
   if (!name) return { ok: false, name, reason: "empty" };
 
@@ -398,10 +430,18 @@ export function speakerPageVerdict(raw: string, ctx: SpeakerPageContext = {}): S
   }
 
   const { label, reason } = classifySpeakerNameHeuristic(name);
-  if (label !== "person") return { ok: false, name, reason };
-  return { ok: true, name, reason: "person" };
+  if (label === "person") return { ok: true, name, reason: "person" };
+  if (ONE_WORD_REASONS.has(reason) && !ONE_WORD_DENY.has(name.toLowerCase())) {
+    if ((options.oneWordTalks ?? 0) >= SPEAKER_INDEX_MIN) return { ok: true, name, reason: "one_word_repeat" };
+    return { ok: false, name, reason: "one_word_single_talk" };
+  }
+  return { ok: false, name, reason };
 }
 
-export function isSpeakerPageName(raw: string, ctx: SpeakerPageContext = {}): boolean {
-  return speakerPageVerdict(raw, ctx).ok;
+export function isSpeakerPageName(
+  raw: string,
+  ctx: SpeakerPageContext = {},
+  options: SpeakerVerdictOptions = {},
+): boolean {
+  return speakerPageVerdict(raw, ctx, options).ok;
 }
