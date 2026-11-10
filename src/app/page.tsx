@@ -24,7 +24,8 @@ const EXAMPLES = ["ransomware", "osint", "supply chain", "purple team"];
  * the year shards.
  */
 export default async function HomePage() {
-  const { stats, conferences, mostWatched, trackCounts, initialTalks } = await loadHome();
+  const { stats, conferences, mostWatched, trackCounts, initialTalks, initialFacets, catalogSize, resultSize } =
+    await loadHome();
   const masthead = (
     <header key="masthead" className="relative flex flex-col items-start text-left">
       <p className="eyebrow max-[599px]:hidden">Conference talk archive</p>
@@ -51,6 +52,9 @@ export default async function HomePage() {
         pushFilters
         hide={["villages"]}
         alwaysShowDifficulties
+        initialFacets={initialFacets}
+        catalogSize={catalogSize}
+        resultSize={resultSize}
         topicLabels={topicLabels()}
         masthead={masthead}
         hero
@@ -63,6 +67,7 @@ export default async function HomePage() {
         size="lg"
         examples={EXAMPLES}
         linkArchiveSearch
+        pinPopularDc34
         emptyHint="No talks match these filters."
       />
     </>

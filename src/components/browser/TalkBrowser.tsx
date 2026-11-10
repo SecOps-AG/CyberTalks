@@ -101,6 +101,11 @@ export type TalkBrowserProps = {
   resultSize?: number;
   /** Homepage: Enter and "see all results" open the shareable /search page. */
   linkArchiveSearch?: boolean;
+  /**
+   * Homepage only. The default browse (no query, no filters, relevance)
+   * puts the most popular DEF CON 34 talks on page 1.
+   */
+  pinPopularDc34?: boolean;
   /** Heading for the village facet. */
   villageLabel?: string;
   /** Offer the "Not on YouTube" materials filter (media-archive recordings). */
@@ -136,6 +141,7 @@ export function TalkBrowser({
   catalogSize,
   resultSize,
   linkArchiveSearch = false,
+  pinPopularDc34 = false,
   villageLabel = "Village",
   notYouTubeFilter = false,
 }: TalkBrowserProps) {
@@ -363,9 +369,12 @@ export function TalkBrowser({
   }, [talks, summaries, draftQuery]);
 
   const activeCount = countActive({ ...filters, q: draftQuery });
-  // Until the listing lands the rail shows the server's counts; the page's
-  // own talks are only the first 24 and would count wrong.
-  const serverFacets = initialFacets != null && listingPending && activeCount === 0;
+  // Until the listing or the remote catalog lands, the rail shows the server's
+  // counts. The page's own talks are only the first 24 and would hide
+  // Conference (one event) and count the rest wrong.
+  const catalogPending = Boolean(remoteIndex) && catalogLoading;
+  const serverFacets =
+    initialFacets != null && activeCount === 0 && (listingPending || catalogPending);
   const facets = useMemo(
     () =>
       serverFacets && initialFacets
@@ -374,10 +383,14 @@ export function TalkBrowser({
     [serverFacets, initialFacets, searchable, effective, alwaysShowDifficulties],
   );
   const filtered = useMemo(() => filterTalks(searchable, effective), [searchable, effective]);
-  const sorted = useMemo(
-    () => sortTalks(filtered, effective.sort, effective.q),
-    [filtered, effective.sort, effective.q],
-  );
+  const sorted = useMemo(() => {
+    const pin =
+      pinPopularDc34 &&
+      effective.sort === "relevance" &&
+      queryTerms(effective.q).length === 0 &&
+      countActive(effective) === 0;
+    return sortTalks(filtered, effective.sort, effective.q, { pinPopularDc34: pin });
+  }, [filtered, effective, pinPopularDc34]);
   const paged = useMemo(() => paginate(sorted, effective.page), [sorted, effective.page]);
 
   const update = useCallback((patch: Partial<Filters>) => {
@@ -415,13 +428,21 @@ export function TalkBrowser({
     () => (staged ? { ...staged, q: deferredQuery } : null),
     [staged, deferredQuery],
   );
-  const stagedFacets = useMemo(
-    () =>
-      stagedEffective
-        ? computeFacets(searchable, stagedEffective, { alwaysShowDifficulties })
-        : null,
-    [searchable, stagedEffective, alwaysShowDifficulties],
-  );
+  const stagedFacets = useMemo(() => {
+    if (!stagedEffective) return null;
+    const stagedActive = countActive(stagedEffective);
+    if (initialFacets != null && stagedActive === 0 && (listingPending || catalogPending)) {
+      return initialFacets;
+    }
+    return computeFacets(searchable, stagedEffective, { alwaysShowDifficulties });
+  }, [
+    searchable,
+    stagedEffective,
+    alwaysShowDifficulties,
+    initialFacets,
+    listingPending,
+    catalogPending,
+  ]);
   const stagedCount = useMemo(
     () => (stagedEffective ? filterTalks(searchable, stagedEffective).length : 0),
     [searchable, stagedEffective],

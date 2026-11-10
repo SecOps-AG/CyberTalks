@@ -23,7 +23,12 @@ export const INDEXNOW_BATCH_SIZE = 10_000;
 
 const VILLAGE_DIR = "data/villages";
 /** Counters that move on every refresh and say nothing about the page. */
-const VOLATILE_FIELDS = new Set(["viewCount", "viewCountFetchedAt"]);
+const VOLATILE_FIELDS = new Set([
+  "viewCount",
+  "likeCount",
+  "commentCount",
+  "viewCountFetchedAt",
+]);
 
 type FetchLike = (input: string, init?: RequestInit) => Promise<Response>;
 type Logger = (message: string) => void;

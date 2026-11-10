@@ -9,7 +9,7 @@
 import { cache } from "react";
 import { onWorker, readPublicJson } from "./catalog-runtime";
 import { HUBS, inDefconVillage } from "./hubs";
-import { initialBrowsePage } from "./search";
+import { initialBrowse, type Facets } from "./search";
 import {
   coveragePagePath,
   editionPagePath,
@@ -43,6 +43,10 @@ export type HomePageData = {
   trackCounts: { track: Track; count: number }[];
   /** First default-browse page, so the LCP card is in the HTML. */
   initialTalks: TalkIndexEntry[];
+  /** Full-catalog default facets, so the homepage rail is complete on first paint. */
+  initialFacets: Facets;
+  catalogSize: number;
+  resultSize: number;
 };
 
 export type TrackCount = { track: Track; count: number };
@@ -108,13 +112,20 @@ async function fromShardRequired<T>(pathname: string, build: (data: Disk) => T):
 }
 
 export const loadHome = cache((): Promise<HomePageData> =>
-  fromShardRequired(homePagePath, (data) => ({
-    stats: data.getStats(),
-    conferences: data.getConferenceCounts(),
-    mostWatched: data.getMostWatched(12),
-    trackCounts: data.getTrackCounts(),
-    initialTalks: initialBrowsePage(data.getTalkIndex(data.getTalks())).talks,
-  })),
+  fromShardRequired(homePagePath, (data) => {
+    const talks = data.getTalkIndex(data.getTalks());
+    const initial = initialBrowse(talks, { pinPopularDc34: true });
+    return {
+      stats: data.getStats(),
+      conferences: data.getConferenceCounts(),
+      mostWatched: data.getMostWatched(12),
+      trackCounts: data.getTrackCounts(),
+      initialTalks: initial.talks,
+      initialFacets: initial.facets,
+      catalogSize: talks.length,
+      resultSize: initial.total,
+    };
+  }),
 );
 
 export const loadTrackCounts = cache((): Promise<TrackCount[]> =>

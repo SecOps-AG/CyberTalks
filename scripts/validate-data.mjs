@@ -38,6 +38,8 @@ const TALK_FIELDS = new Set([
   "publishedAt",
   "language",
   "viewCount",
+  "likeCount",
+  "commentCount",
   "viewCountFetchedAt",
   "difficulty",
   "conference",
@@ -308,6 +310,12 @@ for (const file of files) {
     if (talk.viewCount != null && !(Number.isInteger(talk.viewCount) && talk.viewCount >= 0)) {
       error(at, "viewCount must be a non-negative integer");
     }
+    if (talk.likeCount != null && !(Number.isInteger(talk.likeCount) && talk.likeCount >= 0)) {
+      error(at, "likeCount must be a non-negative integer");
+    }
+    if (talk.commentCount != null && !(Number.isInteger(talk.commentCount) && talk.commentCount >= 0)) {
+      error(at, "commentCount must be a non-negative integer");
+    }
     if (talk.viewCountFetchedAt != null && Number.isNaN(Date.parse(talk.viewCountFetchedAt))) {
       error(at, "viewCountFetchedAt must be an ISO timestamp");
     }
@@ -396,6 +404,12 @@ if (fs.existsSync(viewCountsFile)) {
     if (!seenVideoIds.has(id)) warn(where, `"${id}" is not a talk in data/villages`);
     if (!Number.isInteger(entry?.viewCount) || entry.viewCount < 0) {
       error(where, `"${id}" viewCount must be a non-negative integer`);
+    }
+    if (entry?.likeCount != null && (!Number.isInteger(entry.likeCount) || entry.likeCount < 0)) {
+      error(where, `"${id}" likeCount must be a non-negative integer`);
+    }
+    if (entry?.commentCount != null && (!Number.isInteger(entry.commentCount) || entry.commentCount < 0)) {
+      error(where, `"${id}" commentCount must be a non-negative integer`);
     }
     if (Number.isNaN(Date.parse(entry?.fetchedAt))) {
       error(where, `"${id}" fetchedAt must be an ISO timestamp`);

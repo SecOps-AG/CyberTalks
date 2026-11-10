@@ -2,6 +2,7 @@
  * Pure filtering/faceting used by both the server (for counts and static pages)
  * and the client browser component. No fs, no React — safe to import anywhere.
  */
+import { DC34_EVENT_SLUG } from "./dc34";
 import { inDefconVillage } from "./hubs";
 import { conferenceLabel, DIFFICULTIES, difficultyLabel, normalizeDifficulty } from "./labels";
 import { hasRepo, hasSlides, isYouTubeId } from "./materials";
@@ -121,6 +122,7 @@ export function buildIndexEntry(talk: Talk): TalkIndexEntry {
     locationLabel: talk.locationLabel,
     language: talk.language,
     viewCount: talk.viewCount,
+    ...(typeof talk.likeCount === "number" ? { likeCount: talk.likeCount } : {}),
     difficulty: normalizeDifficulty(talk.difficulty) ?? undefined,
     ...(hasSlides(talk.materials) ? { hasSlides: true as const } : {}),
     ...(hasRepo(talk.materials) ? { hasRepo: true as const } : {}),
@@ -275,10 +277,61 @@ function relevanceScore(entry: SearchEntry, terms: string[]): number {
   return score;
 }
 
+/**
+ * Weight on likes per view in the homepage's default first page.
+ * A typical 3% like rate adds 0.06, while 10x more views adds 1.
+ */
+export const DC34_LIKE_WEIGHT = 2;
+
+/**
+ * Homepage default score for one DEF CON 34 talk.
+ * score = log10(viewCount + 1) + DC34_LIKE_WEIGHT * (likeCount / viewCount)
+ * A viewCount of 0 contributes no like ratio. No viewCount means unscored.
+ */
+export function dc34PopularScore(entry: {
+  viewCount?: number;
+  likeCount?: number;
+}): number | null {
+  const views = entry.viewCount;
+  if (typeof views !== "number" || !Number.isFinite(views) || views < 0) return null;
+  const likes =
+    typeof entry.likeCount === "number" && Number.isFinite(entry.likeCount) && entry.likeCount > 0
+      ? entry.likeCount
+      : 0;
+  const ratio = views > 0 ? likes / views : 0;
+  return Math.log10(views + 1) + DC34_LIKE_WEIGHT * ratio;
+}
+
+function compareDc34Popular(a: SearchEntry, b: SearchEntry): number {
+  const scoreA = dc34PopularScore(a);
+  const scoreB = dc34PopularScore(b);
+  if (scoreA == null && scoreB == null) return a.title.localeCompare(b.title) || a.id.localeCompare(b.id);
+  if (scoreA == null) return 1;
+  if (scoreB == null) return -1;
+  return scoreB - scoreA || a.title.localeCompare(b.title) || a.id.localeCompare(b.id);
+}
+
+/**
+ * First page of the default homepage: DEF CON 34 talks only, highest score
+ * first. Talks with no viewCount go last within that set, so they stay off
+ * the first page while any scored DEF CON 34 talk is still waiting.
+ * Everything after that page keeps `entries` order, with the page-one talks
+ * removed so they are not shown twice.
+ */
+function pinPopularDc34FirstPage(entries: SearchEntry[]): SearchEntry[] {
+  const ranked = entries.filter((entry) => entry.eventSlug === DC34_EVENT_SLUG).sort(compareDc34Popular);
+  const first = ranked.slice(0, PAGE_SIZE);
+  if (first.length === 0) return entries;
+  const pinned = new Set(first.map((entry) => entry.id));
+  const rest = entries.filter((entry) => !pinned.has(entry.id));
+  return first.concat(rest);
+}
+
 export function sortTalks(
   entries: SearchEntry[],
   sort: SortKey,
   q: string,
+  options?: { pinPopularDc34?: boolean },
 ): SearchEntry[] {
   const sorted = entries.slice();
   const terms = queryTerms(q);
@@ -320,7 +373,7 @@ export function sortTalks(
     case "relevance":
     default:
       if (terms.length === 0) {
-        return sorted.sort((a, b) => {
+        sorted.sort((a, b) => {
           const channelA = a.eventSlug === "defcon-channel" ? 1 : 0;
           const channelB = b.eventSlug === "defcon-channel" ? 1 : 0;
           if (channelA !== channelB) return channelA - channelB;
@@ -330,6 +383,7 @@ export function sortTalks(
             a.title.localeCompare(b.title)
           );
         });
+        return options?.pinPopularDc34 ? pinPopularDc34FirstPage(sorted) : sorted;
       }
       return sorted.sort(
         (a, b) =>
@@ -531,7 +585,10 @@ function stripSearchFields(entry: SearchEntry): TalkIndexEntry {
  * First page of the default browse (relevance, extras hidden). Listing pages
  * SSR this slice and fetch the rest, so the document does not carry every talk.
  */
-export function initialBrowsePage(talks: TalkIndexEntry[]): {
+export function initialBrowsePage(
+  talks: TalkIndexEntry[],
+  options?: { pinPopularDc34?: boolean },
+): {
   talks: TalkIndexEntry[];
   total: number;
 } {
@@ -542,7 +599,7 @@ export function initialBrowsePage(talks: TalkIndexEntry[]): {
   if (filtered.length === 0 && talks.length > 0) {
     filtered = filterTalks(searchable, { ...EMPTY_FILTERS, includeExtras: true });
   }
-  const sorted = sortTalks(filtered, "relevance", "");
+  const sorted = sortTalks(filtered, "relevance", "", options);
   return {
     talks: paginate(sorted, 1).items.map(stripSearchFields),
     total: filtered.length,
@@ -559,14 +616,17 @@ export const INITIAL_FACET_LIMIT = 40;
  * few: they are long tails, and the type-ahead only needs the whole set once
  * the listing has loaded.
  */
-export function initialBrowse(talks: TalkIndexEntry[]): {
+export function initialBrowse(
+  talks: TalkIndexEntry[],
+  options?: { pinPopularDc34?: boolean },
+): {
   talks: TalkIndexEntry[];
   total: number;
   facets: Facets;
 } {
   const entries = withHaystack(talks);
   const filtered = filterTalks(entries, EMPTY_FILTERS);
-  const sorted = sortTalks(filtered, "relevance", "");
+  const sorted = sortTalks(filtered, "relevance", "", options);
   const everyExtra = talks.length > 0 && talks.every((talk) => talk.kind !== "talk");
   const facets = computeFacets(entries, { ...EMPTY_FILTERS, includeExtras: everyExtra });
   return {

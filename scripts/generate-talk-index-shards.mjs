@@ -146,6 +146,7 @@ function buildIndexEntry({
   edition,
   trackName,
   viewCount,
+  likeCount,
   topics,
 }) {
   const difficulty = normalizeDifficulty(talk.difficulty) ?? undefined;
@@ -174,6 +175,7 @@ function buildIndexEntry({
     locationLabel: locationLabel(event.location),
     language: talk.language ?? edition.language,
     viewCount: talk.viewCount ?? viewCount,
+    likeCount: talk.likeCount ?? likeCount,
     difficulty,
   };
 
@@ -374,6 +376,7 @@ function generateShards() {
           edition,
           trackName: trackBySlug.get(talk.track)?.name ?? talk.track,
           viewCount: views?.viewCount,
+          likeCount: views?.likeCount,
           topics,
         }),
       );
