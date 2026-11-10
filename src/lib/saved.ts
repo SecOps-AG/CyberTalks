@@ -57,6 +57,13 @@ export function markWatched(id: string): SavedState {
   return next;
 }
 
+export function unmarkWatched(id: string): SavedState {
+  const state = read();
+  const next: SavedState = { ...state, watched: state.watched.filter((w) => w !== id) };
+  write(next);
+  return next;
+}
+
 export function isSaved(id: string, state: SavedState): boolean {
   return state.saved.includes(id);
 }

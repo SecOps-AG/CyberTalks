@@ -53,6 +53,7 @@ export function sitemapPaths(input: SitemapInput): string[] {
     "/speakers",
     "/defcon/villages",
     "/tracks",
+    "/skill-tree",
     "/topics",
     "/coverage",
     "/search",
