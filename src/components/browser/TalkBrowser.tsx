@@ -903,7 +903,8 @@ export function TalkBrowser({
               {shownTotal !== universe ? (
                 <span className="text-mint/30"> / {universe}</span>
               ) : null}
-              {catalogLoading || listingPending ? (
+              {/* Not in the server HTML: `ready` only flips after mount, so crawlers see a plain count. */}
+              {ready && (catalogLoading || listingPending) ? (
                 <span className="text-mint/30"> · loading…</span>
               ) : null}
             </p>
@@ -1002,7 +1003,7 @@ export function TalkBrowser({
           count={stagedCount}
           activeCount={activeCount}
           stagedActive={staged ? countActive({ ...staged, q: "" }) : 0}
-          loading={catalogLoading}
+          loading={ready && catalogLoading}
           sections={pushSections()}
           extras={
             hasExtras && staged ? (
