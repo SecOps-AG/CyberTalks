@@ -1,0 +1,659 @@
+{
+  "villageSlug": "talks",
+  "villageName": "Talks",
+  "eventSlug": "cactuscon-2026",
+  "conference": "cactuscon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLQYjRt4lnjNM",
+  "description": "Talks from CactusCon 14 (2026).",
+  "talks": [
+    {
+      "youtubeId": "ohJmikYKCVc",
+      "slug": "llms-gone-wild-ai-crafted-malware-infecting-our-supply-chain",
+      "title": "LLMs Gone Wild - AI-Crafted Malware Infecting Our Supply Chain",
+      "speakers": [
+        "Mackenzie"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply-chain",
+        "malware-analysis",
+        "ai",
+        "open-source",
+        "detection"
+      ],
+      "teaser": "Explains how AI is reshaping open-source malware, covering hallucinated package names, polymorphic payloads and developer tools.",
+      "summary": "The talk opens with how much of a modern application is built from open-source packages the team never chose directly. Transitive dependencies concentrate risk in widely used projects, and a single overworked maintainer can become a single point of failure. The speaker uses the Debug and Chalk package compromise, where a phished maintainer account pushed malicious code into libraries with billions of weekly downloads, to show how the usual CVE-based process falls behind malware that spreads and disappears within hours.\n\nThe middle section covers three ways attackers use AI: as a tool running on the victim's own machine, as a productivity boost for producing convincing lures and bloated packages, and as a generator of polymorphic payloads that defeat signature matching. Examples include the Nx s1ngularity malware, which relied on locally installed AI clients to hunt for credentials, and hallucinated package names that attackers can register once language models keep recommending them. Skill registries for an embedded AI agent are presented as another route for malicious code to reach users.\n\nThe closing part describes a detection approach that runs rule-based scans on every incoming package, passes the flagged indicators to a model, and then relies on a human to make the final call. Case studies such as the Ripple XRP SDK compromise and invisible Unicode payloads illustrate the range of concealment tricks seen in practice. The main takeaway is that deterministic rules alone no longer keep pace, and teams should expect malicious releases to arrive faster than manual advisories can track.",
+      "durationSeconds": 2761,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "_y1Y8MikMBc",
+      "slug": "pathways-to-pentesting",
+      "title": "Pathways to Pentesting",
+      "speakers": [
+        "Heisenberg"
+      ],
+      "track": "community",
+      "topics": [
+        "penetration-testing",
+        "learning",
+        "interview",
+        "team",
+        "practical"
+      ],
+      "teaser": "Outlines the mindset, ethics, and practical skills that help newcomers build a penetration testing career.",
+      "summary": "Heisenberg, a penetration tester with a background in gamma-ray spectroscopy, argues that becoming an effective pentester depends as much on mindset and conduct as on tool knowledge. The opening section looks at motivation and aptitude, stressing curiosity, persistence and a desire to make organisations safer, while treating revenge or a taste for disruption as disqualifying. Ethics take up a large share of the talk: testers should stop once they have proven a finding, keep strictly within agreed testing windows, and report sensitive material instead of browsing it.\n\nThe middle section covers teamwork, education and technical foundations. The speaker encourages sharing ideas during engagements and avoiding celebration on a client's site, since each compromise is a bad day for the defenders. Certifications are described as useful for passing HR filters but not as evidence of skill, with a warning that real-world testing differs from timed exam formats. Recommended basics include comfort with the command line on Windows, Linux and macOS, working networking knowledge, and one scripting language. Practice resources range from free platforms to home labs built from surplus hardware, alongside core tools such as Nmap, Metasploit, Burp Suite and password cracking.\n\nThe closing section addresses breaking in: building offensive experience inside an existing role, taking stepping-stone jobs, acting as a trusted agent during audits, and being candid about limited experience in interviews. The Q&A touched on Windows Subsystem for Linux, moving from help desk work, and using AI tools, with the advice to avoid sharing client details with AI services.",
+      "durationSeconds": 2739,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "i9GGnlD8eOI",
+      "slug": "stealing-from-thieves",
+      "title": "Stealing From Thieves",
+      "speakers": [
+        "Nicholas Anastasi",
+        "Juan Pablo Gomez Postigo"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "open-source",
+        "vulnerabilities",
+        "web",
+        "identity"
+      ],
+      "teaser": "Shows how a trusted proxy header bypassed authentication in popular self-hosted Servarr media applications.",
+      "summary": "The talk traces how automated media download setups grew from early peer-to-peer file sharing to Usenet and Docker-based Servarr stacks. It walks through how a media request moves from a request front end such as Overseerr to Radarr or Sonarr, then to indexers managed by Prowlarr, and finally to a download client that reassembles files for a media server like Plex or Jellyfin. The speakers explain that the Servarr applications descend from a shared codebase, so a flaw in one project tends to appear across its forks.\n\nThe central finding concerns the \"disable for local addresses\" authentication option. The initialize.json endpoint returned the administrator API key to anyone whose request appeared to come from a local or private address. The speakers showed that a spoofed X-Forwarded-For header achieved this, because the application trusted it without checking the source. With the key, a database backup could be exported, exposing stored download client credentials, indexer keys, and a media server token. They also scanned for internet-facing instances and gathered library statistics, reporting multi-petabyte collections, while describing their queries as limited to collecting statistics.\n\nThe disclosure process was slow, with the lead developer reached through Discord and a patch appearing in the codebase before an formal response. The fix restricts trusted proxy headers to specific IP ranges. The takeaways are to keep these apps off the public internet, require authentication, limit which proxies are trusted, and treat home lab and media infrastructure as part of the attack surface that defenders should inventory.",
+      "durationSeconds": 3128,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "23dZyYeSJ5k",
+      "slug": "cloud-foreverdays-cloud-vulnerabilities-that-refuse-to-die",
+      "title": "Cloud ForeverDays - Cloud Vulnerabilities That Refuse To Die",
+      "speakers": [
+        "strandjs"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "supply-chain",
+        "identity",
+        "vulnerabilities",
+        "ai",
+        "open-source"
+      ],
+      "teaser": "Explains how old cloud and supply-chain weaknesses keep resurfacing across Office 365, Entra ID and Azure.",
+      "summary": "The talk argues that cloud platforms keep carrying forward security weaknesses that were never really fixed, while adding opaque dependencies, concentrated infrastructure and AI-generated code. The speaker opens with how nation-state operators get malware onto devices, pointing to advertising-based zero-click delivery and to locked-down mobile and cloud platforms that limit what testers can examine.\n\nThe middle section covers supply-chain risk, from vendor backdoors and the XZ Utils incident to the danger of many services sharing the same underlying software and providers. He describes Office 365 password spraying that generates no logs, and argues that Active Directory flaws have been inherited by Entra ID. He also shows how blocklisted IP data grouped by ASN can reveal risky cloud neighborhoods, and walks through post-exploitation with GraphRunner, along with AzureHound data imported into BloodHound to expose paths to administrator rights.\n\nThe closing portion addresses AI-assisted development, which he links to a flattening of code quality and to business-logic flaws, and the frustration of reporting issues to large vendors. He recommends good-faith security research as a framework for working with providers, encourages practitioners to run these tools in their own environments, and points to lower-cost training as a way to widen access to the field.",
+      "durationSeconds": 3114,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "pWSD9qMxxpU",
+      "slug": "agents-under-siege-live-attacks-from-rag-to-tool-calls-to-protoc",
+      "title": "Agents Under Siege - Live Attacks from RAG to Tool Calls to Protocols",
+      "speakers": [
+        "Aviral Srivastava"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "attack",
+        "application",
+        "detection",
+        "trust"
+      ],
+      "teaser": "Demonstrates three attacks on the tool-call layer of AI agents and the controls that validate model-generated actions.",
+      "summary": "Agentic AI systems increasingly turn retrieved documents and model plans into tool calls that change real systems, yet many defenses still focus only on the user's prompt. The talk argues that the risky moment is the \"second prompt\": the machine-level instruction a model generates for a tool after planning. Aviral Srivastava frames this as the point where a read request can become a write, and where security teams need visibility and validation.\n\nThe talk walks through three scripted demonstrations against a local orchestrator and simulated finance, data and plugin services. In the first, a poisoned document retrieved for a read-only summary request is grafted into the plan as a vendor-term change, and a required ticket precondition plus an allowed-value list stop it. The second shows argument drift, where error text suggesting a different call during retries turns a read into an unregistered write, caught by schema linting, a drift comparison and write approval checks. The third covers a malicious MCP plugin that returns a correct summary while sending data to an external endpoint, addressed through plugin attestation, declared scopes and egress allow-listing.\n\nThe closing portion covers what to log for each model-generated action, such as tool names, arguments, retry counts, retrieval sources and plugin identity. It also covers pre- and postconditions, schema-aware linting, metrics such as the unsafe tool call ratio, AI-specific incident response evidence, and a 30- and 60-day hardening plan.",
+      "durationSeconds": 2609,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "vigIwMn2oMI",
+      "slug": "a-history-of-appsec-through-neopets-com",
+      "title": "A History of AppSec through Neopets.com",
+      "speakers": [
+        "Katie Paxton-Fear"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "web",
+        "identity",
+        "vulnerabilities",
+        "lessons-learned"
+      ],
+      "teaser": "Traces application security changes through the history of the Neopets virtual pet website, from plaintext passwords to bot defenses.",
+      "summary": "The talk opens with the speaker's own start in programming through Neopets, a browser-based virtual pet game popular in the early 2000s, and uses its long-running codebase as a lens on how web security has changed. It starts with the early login system, where passwords were stored without hashing and account recovery relied on weak controls, and notes that a 2020 source code leak exposed hardcoded database credentials.\n\nThe middle section covers account theft driven by a black market for rare pets, where older accounts with weak passwords were brute forced. A 2022 breach exposed usernames, emails and passwords, including unhashed passwords for accounts created before 2015. Neopets then adopted federated single sign-on, which also made it easier to monitor multiple accounts. The talk moves on to Flash, its security problems and end of life, and the Ruffle emulator, a Rust and WebAssembly rewrite that runs inside the browser sandbox. It then looks at user-editable HTML, which enabled HTML injection, clickjacking, phishing and cross-site scripting, and at bot defenses, where a simple image CAPTCHA is easy to bypass.\n\nThe closing section argues that legacy systems carry accumulated technical debt, and that the next major breach may come from an old, forgotten system rather than a new AI feature. The question and answer session covered the secondary market for items, brute forcing, and the site's ownership history.",
+      "durationSeconds": 2691,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "c-oNe6cMyE0",
+      "slug": "death-by-ransomware",
+      "title": "Death by Ransomware",
+      "speakers": [
+        "Christian Demers"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "ransomware",
+        "healthcare",
+        "incident-response",
+        "infrastructure",
+        "lessons-learned",
+        "risk"
+      ],
+      "teaser": "Shows how ransomware in hospitals harms patients, and how emergency medicine ideas could guide recovery of clinical systems.",
+      "summary": "The keynote opens with a question about how to measure the human cost of ransomware. Emergency physician and security researcher Christian Demers, known in the hacker community as quaddi, frames the problem through cardiac arrest care, where minutes decide whether a patient's brain survives. He explains how deeply clinical work now depends on connected devices, electronic health records and shared third-party networks, so one breach can stall treatment far beyond the data it touches.\n\nThe middle of the talk turns to evidence. Hospital ransomware data is scarce because organizations limit disclosure and lose audit logs during an incident, so the research team looked at neighboring hospitals instead. In a San Diego case where five hospitals were hit by the Conti group, diversion hours spiked, ambulances queued at nearby emergency departments, and cardiac arrest patients were far less likely to survive with intact brain function during the outage. He also described the Change Healthcare breach and a CrowdStrike-related outage, showing how consolidation and shared platforms spread failures across regions. Thin budgets, legacy medical devices and a shortage of security staff make these risks harder to reduce.\n\nThe closing section presents a prototype that can stand up a 20-bed emergency department on a private cellular network in about half an hour, aimed at restoring essential clinical workflows when normal infrastructure cannot be trusted. He argues for a resuscitation-style model of cyber resilience and urges developers in any sector to recognize that their code may end up supporting patient care.",
+      "durationSeconds": 3019,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "5tlNq2p9wlw",
+      "slug": "ai-has-changed-the-game-but-not-all-the-rules-old-threats-new-ri",
+      "title": "AI Has Changed the Game - But Not All the Rules - Old Threats, New Risks, Real Consequences",
+      "speakers": [
+        "Lester Godsey"
+      ],
+      "track": "policy",
+      "topics": [
+        "ai",
+        "risk",
+        "management",
+        "privacy",
+        "supply-chain"
+      ],
+      "teaser": "Separates genuinely new AI risks from familiar threats such as phishing, data leakage, and third-party exposure.",
+      "summary": "Lester Godsey, CISO at Arizona State University, opens by arguing that AI has not rewritten the basic rules of security. In his view it mainly makes attacks cheaper, quicker and larger in scope, and many enterprise concerns are familiar problems in new clothing. He frames the talk around separating real new problems from overblown fears, and notes that banning AI is unrealistic because shadow AI already exists inside most organizations.\n\nThe middle of the talk covers where AI does create new difficulty. Nondeterministic outputs are hard to audit against controls built for repeatable results, and vibe-coded software often skips the code review and lifecycle discipline that traditional development relies on. Prompt injection is compared with classic injection flaws, and existing threats are shown to be amplified, including polished phishing, deepfake impersonation during identity resets, and malware built in days. He also covers agentic systems that need monitoring and least privilege, unmanaged API dependencies, and the risk of third-party models trained on unknown data.\n\nFor practitioners, the takeaways are to adapt existing controls such as data classification, DLP, vendor risk reviews and identity management, and to assess how AI is built and governed rather than trying to validate every output. His governance steps are to inventory AI use, define allowed, restricted and prohibited uses, assign business owners to set risk thresholds, and fold AI risk into enterprise risk management. He closes by saying that governance failures matter more than model failures, and that documented, responsible decisions are more useful than perfect answers.",
+      "durationSeconds": 3086,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "3rMcdZkWq8I",
+      "slug": "exploiting-consumer-networking-hardware-start-to-finish",
+      "title": "Exploiting Consumer Networking Hardware Start To Finish",
+      "speakers": [
+        "Average Joe"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "embedded",
+        "device",
+        "vulnerability-research",
+        "networks"
+      ],
+      "teaser": "Shows how consumer router firmware is pulled from debug ports and flash chips, then tested for a buffer overflow.",
+      "summary": "The talk covers how cheap consumer networking gear can still be attacked after its firmware has vanished from the vendor's website. The speaker starts with the kit used for board-level work, including logic analyzers, a multi-function bus tool, a JTAG pin-finding device, chip clips and a digital microscope. The talk then explains how to spot UART and JTAG pins, use a continuity check to find ground, and connect to a serial console.\n\nFrom there the focus moves to getting the firmware. The methods shown include downloading images from vendor sites, reading flash chips directly with clips, and copying the filesystem from a live root shell over TFTP, netcat or a USB drive. Unpacking images with Binwalk leads to the common embedded filesystems, and NVRAM is presented as a useful place to find configuration data and credentials. A case study of a low-cost device with an open telnet root shell and a weak default password shows how one backdoor can repeat across a product line. Encrypted images are handled with a brute-force approach against simple keys.\n\nThe final section covers a remote buffer overflow in a CGI handler found through IDA. The speaker reproduces it by emulating MIPS userland under QEMU with an OpenWrt kernel and an ext4 root filesystem, then shows automated analysis with EMBA. The talk closes with defensive measures such as signed images, secure boot, closed debug ports and hardened configuration.",
+      "durationSeconds": 3005,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "rXy1WvPkXIM",
+      "slug": "yubiworm-turning-a-trusted-yubikey-into-a-propagating-worm",
+      "title": "YubiWorm - Turning a Trusted YubiKey into a Propagating Worm",
+      "speakers": [
+        "Jordan Lanham"
+      ],
+      "track": "hardware",
+      "topics": [
+        "device",
+        "attack",
+        "trust",
+        "identity",
+        "threat",
+        "usb"
+      ],
+      "teaser": "Shows how a YubiKey's keyboard mode can be reprogrammed to spread between machines through normal user behavior.",
+      "summary": "The talk examines how a hardware security token, specifically a YubiKey, can become an attack vector. Jordan Lanham presents YubiWorm, a controlled proof of concept built only on documented YubiKey behavior rather than a firmware flaw or vendor vulnerability. The starting point is the trust placed in these devices. They enumerate as USB keyboards, operating systems load generic HID drivers without prompts, and security tools rarely inspect keystrokes, so a stored static password slot can type arbitrary commands.\n\nThe middle of the talk walks through the lifecycle. A small monitor watches for USB insertion events and filters on Yubico's vendor ID. When a key appears, a helper uses the official YubiKey Manager tooling to overwrite the second slot with a short keystroke stager. That stager fetches the components and sets up user-level persistence through cron or scheduled tasks. The worm then spreads when the user carries the key to another machine and touches it to authenticate, which allows movement across air gaps without network scanning. The speaker also covers practical limits, such as OS-specific tooling, architecture-matched binaries, fragile keystroke timing and keyboard layout differences.\n\nThe closing section focuses on defense. Practical steps include auditing token configurations regularly, disabling unused modes, removing static OTP slots that are not needed, restricting HID device classes, enforcing USB port controls and monitoring for unexpected behavior. The talk argues that similar risks apply to other reprogrammable HID devices such as badge readers, and that hardware trust should be verified rather than assumed.",
+      "durationSeconds": 2991,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "leNlz1h-1jI",
+      "slug": "they-weaponised-your-ai-cli-unpacking-the-nx-s1ngularity-npm-com",
+      "title": "They Weaponised Your AI CLI - Unpacking the Nx ‘s1ngularity’ npm Compromise",
+      "speakers": [
+        "Kevin Murrietta"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "open-source",
+        "ai",
+        "incident-response",
+        "malware-analysis",
+        "detection"
+      ],
+      "teaser": "Traces how a trusted npm package update delivered malware that hijacked local AI coding assistants to steal developer secrets.",
+      "summary": "The talk examines the Nx 's1ngularity' incident, in which a compromised npm package was publicly available for several hours in August 2025. The speaker, a security operations manager, explains why package installs have long been trusted by default and how the malicious package used a post-install script to run on developer workstations as soon as it was installed.\n\nThe middle of the talk focuses on the payload. The script searched for Claude, Gemini and Amazon Q command-line tools and launched any it found with permission prompts disabled, feeding them a prompt that framed the task as an authorized penetration test. That prompt asked the assistant to inventory files in a temporary directory that could hold secrets. The collected material, including GitHub tokens, npm registry credentials and source code, was encoded several times and published to public GitHub repositories. The speaker also describes shell profile changes that forced a shutdown whenever a terminal was opened and wiped temporary files, which slowed responders. In the case shown, Claude declined the prompt.\n\nThe closing section explains how the activity was finally reconstructed. Command-line logging on macOS was the only source that revealed it, and few indicators of compromise were visible at the time. The takeaway for practitioners is to log process command lines, watch for AI assistants launched with permission-bypass flags, and treat dependency updates and locally installed tooling as possible attack paths.",
+      "durationSeconds": 940,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "B-DAByaWj10",
+      "slug": "evading-edr-with-the-wasm-blindspot",
+      "title": "Evading EDR with the Wasm Blindspot",
+      "speakers": [
+        "Dan Petro"
+      ],
+      "track": "red-team",
+      "topics": [
+        "red-team",
+        "edr-evasion",
+        "webassembly",
+        "command-and-control",
+        "detection"
+      ],
+      "teaser": "Shows how a WebAssembly stager connects to a Sliver C2 server while staying outside what many EDR products inspect.",
+      "summary": null,
+      "durationSeconds": 3157,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "lpIP5GdtDCU",
+      "slug": "sharpening-python-tools-with-rust",
+      "title": "Sharpening Python Tools with Rust",
+      "speakers": [
+        "TheTechromancer"
+      ],
+      "track": "recon",
+      "topics": [
+        "tool",
+        "development",
+        "code",
+        "network",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how selected Rust components can speed up a Python security tool through PyO3, with benchmarks and packaging steps.",
+      "summary": "The talk starts from a familiar tension: Python is quick to develop in but slow for high-volume DNS and web work. The presenter, lead developer at Black Lantern Security, uses BBOT, a recursive OSINT tool he created, as the case study. Large enterprise scans could run for a week, so throughput mattered in practice, not just in theory.\n\nBenchmarks came first. Simple programs in C, Go, Rust and Python each used twenty workers to resolve DNS queries and fetch web pages. Against a local DNS server, C handled roughly 83,000 lookups per second while pure Python managed about 4,500, and web requests showed a similar gap. Rust tracked close to Go and C. The core technique is PyO3, which talks to the Python C API directly instead of going through a C-based interface, so Rust functions and classes appear as ordinary Python modules. Maturin compiles the extension during installation, and GitHub Actions can produce precompiled wheels across Python versions and CPU architectures. A Rust-backed DNS prototype, BlastDNS, ran more than ten times faster than pure Python.\n\nPractical lessons followed. Crossing the Python boundary carries overhead because of the global interpreter lock, so batching queries reduced it substantially. Replacing BBOT's bottlenecks one component at a time kept the Python core intact and made outside contributions easier. An SSL build pitfall also came up, and tests and benchmarks were recommended, especially when AI helps write unfamiliar Rust.",
+      "durationSeconds": 1762,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "3ag5DziQqO0",
+      "slug": "breaking-model-context-protocol-back-to-security-basics",
+      "title": "Breaking Model Context Protocol - Back to Security Basics",
+      "speakers": [
+        "Brooks McMillin"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "attack",
+        "identity",
+        "application",
+        "defensive-security"
+      ],
+      "teaser": "Shows how a malicious MCP server can steer an AI agent into leaking data, and which classic controls reduce that risk.",
+      "summary": "The talk introduces the Model Context Protocol, an open standard that lets AI agents call external tools and read external data, and argues that its fast adoption is outpacing basic security. The speaker points to an open-source MCP library that passed input to a shell execution call, exposing a large developer base to command injection, and notes that many deployed servers lack proper authentication.\n\nUsing a task-manager system he built and tested, the speaker demonstrates how a malicious server can influence an agent. A weather tool with a crafted description pushes the model to copy recent conversation data into one of its parameters, and that data can then reach a legitimate email tool. Results varied between runs, so the attack did not always succeed. Prompt injection can arrive through tool descriptions, tool responses, and application data such as task titles.\n\nOn defense, the talk covers tool pinning, allowlists, narrow permissions, cross-tool data isolation, human approval, and LLM firewalls, which need careful tuning to avoid silently dropping legitimate requests. A ServiceNow case study shows how an agent with broad write access can magnify ordinary flaws. The main takeaway is that most findings are classic issues, such as OAuth mistakes, DNS rebinding, token storage, and non-constant-time comparisons, so auditing the whole workflow end to end matters.",
+      "durationSeconds": 1286,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "bs5XD8QEexM",
+      "slug": "oops-all-passwords-malware-coming-soon-near-you",
+      "title": "Oops All Passwords - Malware Coming Soon Near You!",
+      "speakers": [
+        "Robert Meylor"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "identity",
+        "lessons-learned",
+        "risk",
+        "defensive-security"
+      ],
+      "teaser": "Shows how a game mod that passed antivirus scans led to a PayPal account takeover and the personal recovery that followed.",
+      "summary": "Robert Meylor describes how a free game mod from a reputable-looking Nexus Mods page led to a compromise of his PayPal account. The mod had passed a Windows Defender scan twice, but the original uploader's account had been taken over shortly before he downloaded it, and a malicious version was posted through a newly invited contributor. Meylor explains that browser autofill supplied his login email, and that a passkey on a previously trusted device let the login skip the MFA prompt he expected, so money left his account before he noticed.\n\nHe then walks through his response in order: disconnecting the machine, telling his employer's security team, resetting about fifteen years of passwords, and moving to a different password manager. His initial fraud reports to PayPal stalled because the transfers came from his own IP address. The turning point came when his bank treated the overdraft as credit card fraud and pushed the claim through. The police report and a cybercrime hotline offered little direct help.\n\nIn closing, Meylor argues that traditional hygiene and reliance on built-in antivirus are no longer enough, and that individuals need a personal disaster-recovery plan. He recommends mapping which accounts are sensitive, understanding how passkeys and trusted devices affect MFA, and knowing in advance how to respond to a compromise.",
+      "durationSeconds": 1096,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "zeE3VbrrC-s",
+      "slug": "cross-site-scripting",
+      "title": "Cross-Site Scripting",
+      "speakers": [],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "appsec",
+        "vulnerabilities"
+      ],
+      "teaser": "Covers cross-site scripting, a long-standing web vulnerability class.",
+      "summary": null,
+      "durationSeconds": 2883,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "hVD29-NFlnc",
+      "slug": "the-badge-talk",
+      "title": "The Badge Talk!",
+      "speakers": [
+        "cybaix"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "embedded",
+        "building",
+        "village",
+        "learning"
+      ],
+      "teaser": "Badge Pirates walk through building the CC14 ESP32-S3 conference badge and show attendees how to modify it.",
+      "summary": "The Badge Pirates, a group that has built conference badges since 2016, explain how the CactusCon badge grew from a simple PCB carrying a development board into the CC14 ESP32-S3 design. The first part covers how to start small: begin with a single LED, expect failed board revisions, and use inexpensive tools before buying better equipment. They describe the design workflow in KiCad and Inkscape, and compare board manufacturers and parts sources, including why some components must be bought elsewhere and assembled overseas.\n\nThe middle of the talk walks through this year's board: the ESP32-S3 module with extra PSRAM, the touchscreen, the battery arrangement and why cells are oriented to avoid shorts, and the USB-C connector that is hard to hand-solder. A second speaker covers surface-mount challenges in the hardware village, the value of checking component footprints before ordering, and how a mismatch can force a costly respin. Earlier badges that depended on conference Wi-Fi and a central server are discussed, along with why this year's game leans on badge-to-badge communication instead.\n\nThe closing demo shows attendees how to connect to a badge with Thonny, inspect its MicroPython files, and change code to control the NeoPixel LEDs. The speakers close with plans to open-source the code and a contest for hacks that could earn a special badge next year.",
+      "durationSeconds": 3009,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "_QxWzoAA_Ds",
+      "slug": "ctrl-esc-host-a-look-at-evasive-compromise-paths-kicking-kiosks",
+      "title": "CTRL+ESC+HOST - A Look at Evasive Compromise Paths, Kicking Kiosks and Taking ADCs",
+      "speakers": [
+        "Ezra Woods"
+      ],
+      "track": "red-team",
+      "topics": [
+        "device",
+        "windows",
+        "attack",
+        "infrastructure",
+        "detection"
+      ],
+      "teaser": "Shows how kiosks and presented apps can be escaped to reach the host, with Windows, ChromeOS and Citrix examples.",
+      "summary": "The talk examines how kiosks and remotely presented applications can be escaped to reach the host behind a constrained interface. The presenters distinguish kiosks, which are public terminals, from presented apps served from a central server, and explain why a compromise matters most when either sits on a network with trusted systems. They introduce a framework for testing these escape-to-host flaws across physical, operating system, application and wireless attack surfaces.\n\nThe core of the session focuses on Windows 11 attended access, where restrictions are largely user-interface based. Demonstrated routes include reaching hidden USB storage, abusing Windows settings and file dialogs to launch a shell, and using Teams on certain Lenovo systems to move files. Further cases involve ChromeOS enterprise profile misconfigurations, an HP point-of-sale kiosk exposed by a keyboard shortcut, and Citrix and VMware Horizon apps whose scripting interpreters offered a shell. A live demo changed proxy settings to show how EDR telemetry could be reduced.\n\nThe talk closes with defensive guidance. Alerting on a kiosk account that runs anything besides its intended application is a strong starting point, and application control should verify file hashes rather than names. Custom indicators of attack and repeated purple-team testing can close more gaps. The presenters stress that all testing should be authorized.",
+      "durationSeconds": 3184,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5Z7R1Bdh2ow",
+      "slug": "all-systems-go-attention-satellite-space-nerds-and-hackers-amsat",
+      "title": "All Systems GO! Attention Satellite Space Nerds & Hackers, AMSAT build your own Cubesat!",
+      "speakers": [
+        "Adrian",
+        "Henry Danielson Hankashyyyk"
+      ],
+      "track": "community",
+      "topics": [
+        "village",
+        "learning",
+        "embedded",
+        "infrastructure"
+      ],
+      "teaser": "Shows how the AMSAT CubeSatSim lets learners build and test a satellite emulator and study space security without launch.",
+      "summary": "The talk starts from a practical problem: many small satellites fail after reaching orbit, and mistakes are costly to fix once hardware is in space. The AMSAT CubeSatSim is presented as a low-cost ground emulator that runs on solar power, transmits UHF telemetry that amateur radio equipment can receive, and sits in a 3D-printed frame. It can be expanded with GPS, cameras and other sensors, and it is sold either fully assembled or as a kit with a complete bill of materials. The speakers describe classroom use with high school and college students, who can track telemetry, adjust flight software, manage power budgets and rehearse mission scenarios.\n\nThe middle of the talk turns to security. The speakers point to F Prime, the open-source flight software framework from NASA's Jet Propulsion Laboratory, and to a 2024 adversarial assessment in which its developers tested their own code and published mitigations. They summarise past incidents, including a 2011 compromise of JPL systems and a 2022 attack on satellite communications that reached user terminals through a vendor's network management software and modems. They describe the main attack surfaces as the internet link, the ground station, the network and the modem, and they argue that ground stations often lack strong physical and network protections.\n\nThe closing section connects the material to skills people already have. Denial of service, network segmentation and wireless basics all apply to spacecraft and ground systems, so newcomers do not need deep orbital mechanics to begin. The speakers recommend reading the F Prime assessment, point to AMSAT's education kits and loan program, and describe Aerospace Village outreach, a satellite-tracking badge and the Hack-A-Sat live satellite challenge as ways to get involved.",
+      "durationSeconds": 1173,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "WBFsRLvsKxg",
+      "slug": "this-little-brite-of-mine-mobile-forensics-for-fun-and-sometimes",
+      "title": "This Little Brite of Mine - Mobile Forensics for Fun and (Sometimes) Profit",
+      "speakers": [
+        "w1nd_w4lk3r"
+      ],
+      "track": "mobile",
+      "topics": [
+        "mobile",
+        "device",
+        "tool",
+        "privacy",
+        "hardware"
+      ],
+      "teaser": "Shows how an older UFED Touch forensic unit can still recover phone data, and what to check before buying one.",
+      "summary": "This talk looks at Cellebrite's UFED platform and why an end-of-life UFED Touch unit can still be worth using. The speaker walks through the product family, from the PC software and the Touch tablet to the laptop, the analyzer that processes extraction files, and the digital collector for Windows and Mac systems. Capabilities depend heavily on the license attached to a unit, and the speaker explains how license expiry limits updates and support.\n\nMuch of the session covers where used units turn up and what to inspect before paying for one. Auction sites, online marketplaces and government surplus listings are the main sources, and buyers should watch for storage that has been wiped, firmware locks and missing adapters. The speaker also discusses resale of surplus lots and how an active license changes what a unit can do. Two real examples show the recovery side: returning a phone found at a shooting range to its owner, and pulling family photos from a deceased relative's old phones. One device was blocked by full-disk encryption, and the speaker asked the audience for help with it.\n\nThe talk closes with ethics and legal points, including consent, privacy, end-user license terms and local rules such as private investigator licensing. A live demonstration on an older unit runs into display and startup problems, so the extraction does not finish on stage. The questions that follow cover license scope, device generations and whether newer phones need physical access. The takeaway is that older forensic tools remain useful when sourcing, licensing and handling are checked first.",
+      "durationSeconds": 1052,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "-qQOnRSQdBk",
+      "slug": "cyber-defenders-turning-skills-into-lifesaving-action",
+      "title": "Cyber Defenders - Turning Skills Into Lifesaving Action",
+      "speakers": [
+        "Kristen Sanders"
+      ],
+      "track": "community",
+      "topics": [
+        "privacy",
+        "intelligence",
+        "social",
+        "learning",
+        "ai"
+      ],
+      "teaser": "Explains how security skills can help nonprofits, OSINT teams, and families protect children and older adults from online harm.",
+      "summary": "Kristen Sanders opens by placing the hacker community's history of pushing for positive change, from internet freedom and anti-censorship work to responsible disclosure, alongside today's threats. She focuses on harms to children and older adults, including sextortion, cyberstalking, AI-enabled impersonation, and extremist networks that pressure minors toward self-harm.\n\nThe middle section covers practical ways to help. Nonprofits that work with law enforcement often lack strong security for sensitive victim data, so donated security, development, cloud, and hosting skills matter. For OSINT practitioners, she describes Trace Labs as a more accessible route into missing-person work, contrasted with a more demanding, vetted group focused on victim identification. At home, she advises delaying phones and social media, limiting public sharing, watching for chats that move to other apps, and talking openly about deepfakes and cloned voices. For older relatives, she recommends empathy, open-ended questions, and admitting one's own worries instead of punishing a mistake, with negotiation and body-language material as useful training.\n\nShe closes with reporting resources: a child-focused reporting line, a service that removes images of minors online, age-appropriate education material for kids, and the FBI's IC3 for elder fraud, which she notes has little public content. She asks attendees to donate skills, teach elder-fraud classes at senior centers, and push schools for online safety curriculum.",
+      "durationSeconds": 1394,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "IdzBy1I6rn4",
+      "slug": "oopssec-the-day-i-made-the-dmv-even-slower",
+      "title": "OopsSec - The Day I Made the DMV Even Slower",
+      "speakers": [
+        "GingerHacker"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "phishing",
+        "incident-response",
+        "security-operations",
+        "lessons-learned",
+        "learning"
+      ],
+      "teaser": "Walks through a SOC analyst's blocked legitimate DocuSign mistake, the DMV outage it caused, and the process fixes that followed.",
+      "summary": "The talk opens with the speaker's move from police detective work into an entry-level security role at a state agency, with a fresh certification and little hands-on tool experience. It then covers email authentication basics: SPF checks whether a sending server is authorized for a domain, DKIM verifies a signature showing the message was not altered, and DMARC sets the policy for failures. Common social-engineering warning signs follow, including unfamiliar senders, odd send times, unexpected attachments, awkward wording and suspicious links.\n\nThe core story compares two DocuSign-style messages. One had a generic greeting, a mismatched domain and a shortened link, while the other named the recipient and came from a recognizable sender. Late on a Thursday, the analyst and an intern judged the message to be credential harvesting and blocked DocuSign organization-wide without checking past traffic or getting a second review. The next morning the state DMV could not reach DocuSign, a legitimate workflow, and the cause was traced back to the block.\n\nThe speaker took ownership instead of blaming the intern, and the SOC manager explained the cause and fix to the agency. Follow-up work included reviewing the escalation path, writing a standard procedure for phishing investigations and retraining staff on the analysis platform. The takeaways are to verify before blocking, check headers and sender history against normal business flow, and build skills through free labs and community resources.",
+      "durationSeconds": 1217,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "D3PaR2hCdIg",
+      "slug": "the-hardware-procurement-iceberg-a-framework-to-keep-embedded-re",
+      "title": "The Hardware Procurement Iceberg: A Framework To Keep Embedded Research Fun Cheap and Ethical",
+      "speakers": [
+        "yltsi"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "embedded",
+        "device",
+        "iot",
+        "vulnerability-research",
+        "lessons-learned"
+      ],
+      "teaser": "Ranks ways to source hardware for embedded security research by cost, effort, ownership and ethical risk.",
+      "summary": "The talk argues that embedded security research does not need an enterprise budget, but where hardware comes from shapes what it costs, how much effort it takes and the ethical risk involved. It introduces a ranked framework, the Hardware Procurement Iceberg, with common sources at the top and riskier, obscure ones lower down. Before sourcing, it outlines a firmware-first workflow: extract firmware from a vendor download or directly from a chip, then emulate it with QEMU to find boot entry points. Emulation misses hardware such as GPIO, so proof-of-concept testing still needs a real device at factory defaults.\n\nEach channel is weighed in turn. Retailers offer simple returns, borrowed devices need agreed rules and a fair thank-you, and thrift stores and recyclers are cheap but often untested. eBay suits known targets thanks to its search and buyer protection, while Facebook Marketplace is scam-prone. Government liquidation sites such as GovDeals sell lots with low reserves, and custom price trackers can catch clearance deals. Returns are discussed only with care, and the speaker warns against using Shodan to probe other people's internet-exposed devices.\n\nThe closing message is that cheap, ethical embedded research is achievable, and ownership should guide every choice. In the Q&A, steady effort of about an hour a day was suggested as more valuable than occasional bursts of work.",
+      "durationSeconds": 3205,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "jMSNfsZI60U",
+      "slug": "worst-of-cybersecurity-reporting-5",
+      "title": "Worst of Cybersecurity Reporting",
+      "speakers": [
+        "Yael Grauer",
+        "David Werza"
+      ],
+      "track": "policy",
+      "topics": [
+        "privacy",
+        "risk",
+        "discussion",
+        "lessons-learned"
+      ],
+      "teaser": "Annual roast of 2025 security headlines that exaggerate hypothetical attacks, recycle old leaks, and misread technology.",
+      "summary": "Yael Grauer and David Werza return with their yearly review of security and privacy journalism, this time covering news stories from 2025. They limit the review to news articles rather than marketing, PR, TV coverage or social posts, and they stress that disliking one story does not mean the author or outlet is bad. Many of the stories share a pattern: old or hypothetical threats presented as urgent.\n\nThe middle of the talk walks through specific examples. A dark web story treats Tor like a platform that can be policed, when it is a protocol and network. Juice-jacking research, which was a proof of concept, became broad advice against public charging, even though no such attacks have been documented in the wild. Signal coverage treated funding and cloud hosting as scandals, and a subpoena was reported as if it revealed something new, when the government already had the phone number. Other pieces include a \"16 billion passwords\" breach that was an old dump repackaged as new, undocumented ESP chip functions described as backdoors, a news outlet publishing the names of researchers targeted by a hacking group, burner phone guides that ignore location data and hardware identifiers, and warnings that unsubscribe links are dangerous. The talk also examines a New York-area SIM farm whose threat to cell service was overstated.\n\nThe closing advice is aimed at two audiences. Journalists should add context early, avoid daily publishing quotas that encourage shallow work, build sources who will challenge their premises, and verify official claims. Security researchers should separate real-world risk from hypothetical risk, use terms like backdoor precisely, and take part in public discussion.",
+      "durationSeconds": 1706,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "VIHoPyrW4nQ",
+      "slug": "the-importance-of-being-human",
+      "title": "The Importance of Being Human",
+      "speakers": [
+        "Selena Larson"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "ai",
+        "phishing",
+        "social",
+        "malware-analysis",
+        "detection"
+      ],
+      "teaser": "Examines where AI actually changes threat actor and defender work, and where human judgment and accountability still matter.",
+      "summary": "Selena Larson opens by arguing that public talk about generative AI is muddled, and that the useful question is what has actually changed for attackers and defenders. Her focus is cybercrime, especially email as an initial access route. She says the most visible shift is in social engineering: language models let threat actors produce more natural lures in many languages, build personas for business email compromise, and generate scripts at volume. Some scripts still contain leftover LLM comments in mixed languages, which can hint at origin.\n\nThe middle of the talk looks at limits and continuity. One China-aligned group abruptly changed its tooling and sent sloppy lures, then returned to its established tradecraft. She walks through a ClickFix chain that delivers Xworm or SundownBot, the EtherHiding technique that stores command and control on a blockchain, and device code phishing that abuses the Microsoft 365 OAuth flow. Her argument is that defenses such as restricting PowerShell, blocking device code flow, watching blockchain endpoints and training users still apply regardless of how the content was produced.\n\nShe then shares two productivity examples: human-reviewed AI descriptions added to over 50,000 Emerging Threats rules, and a colleague's coding-assistant tool that parses large files for campaign clustering. Both needed domain knowledge, careful prompting and validation. The closing section turns to autonomous agents with broad system access, exposed data and malicious skills, along with social harms, environmental costs and the value of human creativity.",
+      "durationSeconds": 3226,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "V1J80UhNSsk",
+      "slug": "sipping-from-the-cve-firehose-prioritizing-emerging-threats-for",
+      "title": "Sipping From the CVE Firehose - Prioritizing Emerging Threats for Real-World Impact",
+      "speakers": [
+        "Nate Robb"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "vulnerabilities",
+        "threat",
+        "risk",
+        "intelligence",
+        "exploitation"
+      ],
+      "teaser": "Explains how an emerging-threats team filters new CVEs into a prioritized investigation queue using exposure and exploitation signals.",
+      "summary": "Nate Robb presents the workflow used by an emerging-threats team at an attack surface management firm to triage newly published vulnerabilities. With tens of thousands of CVEs released each year, the team needs a way to discard the many that cannot scale across internet-facing systems and to move quickly on the few that can. He outlines how advisories are gathered, how CVE records are coordinated and enriched, and how CVSS, CISA's exploited-vulnerabilities catalog and EPSS fit into the picture.\n\nThe core argument is that CVSS measures technical severity but not real-world reach. Robb walks through curl reports where scores looked inflated given edge-case configuration or rarity, and an appliance flaw that scored highly yet had very few internet-facing instances. He then lists filters the team applies: authentication requirements, user interaction, denial-of-service-only impact and local-only access are generally dropped, while common enterprise software, remote code execution, public proof-of-concept code, in-the-wild exploitation and default configurations raise priority. Shodan, BinaryEdge and fingerprinting tools support the exposure checks.\n\nTwo case studies test the method. An Apache Tomcat flaw drew heavy coverage but needed several non-default settings, so it was rated low threat despite a public proof of concept and a KEV listing. The React Server Components remote code execution flaw met every criterion, with default configuration, pre-auth RCE, wide framework use and heavy exploitation, and was rated critical. The takeaway is to combine severity with exposure and exploitation evidence before deciding how fast to act.",
+      "durationSeconds": 2703,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "W2k_6QnbeEk",
+      "slug": "dungeons-and-dragons-the-security-tool-you-didnt-know-you-needed-3",
+      "title": "Dungeons & Dragons - The security tool you didn't know you needed",
+      "speakers": [
+        "Glen Sorensen"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "learning",
+        "team",
+        "social",
+        "risk"
+      ],
+      "teaser": "Shows how tabletop role-playing mechanics can make incident response training more engaging and realistic.",
+      "summary": "The talk opens with a critique of common security training. Computer-based modules are often clicked through, and tabletop exercises can become dull, one-sided discussions where a few people dominate, others stay quiet, and participants push back against the scenario. The speaker separates game-based learning, where the game itself teaches, from gamification, where points or rewards are layered onto existing work. Social learning, immersion, psychological safety and empathy are presented as the reasons role-playing can open people up.\n\nThe core of the session walks through Hackback, a framework for running scenarios led by an Incident Master. It has been used mainly for incident response, but the speaker also describes it applied to risk management, zero trust, threat hunting, and red, blue and purple team exercises. Players take roles outside their own job, which builds empathy and tends to draw out more candid feedback about process gaps. Dice rolls introduce realistic failure, such as discovering during a restore that backups were incomplete. Malware and Monsters, a creature-collection theme built around malware families, adds prepared material so less experienced facilitators can run games. A sample Azure incident shows how players weigh options under pressure.\n\nThe session closes with open-source materials, an Incident Master handbook, and an invitation to contribute scenarios and help grow the community Discord. The takeaway is that structured play can expose gaps that lectures and scripted tabletops tend to miss.",
+      "durationSeconds": 2562,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Z8aak8CTzUI",
+      "slug": "the-folly-of-rewarding-a-while-hoping-for-b",
+      "title": "The Folly of Rewarding A While Hoping for B",
+      "speakers": [
+        "Casey Beaumont"
+      ],
+      "track": "policy",
+      "topics": [
+        "management",
+        "risk",
+        "team",
+        "security-operations",
+        "lessons-learned"
+      ],
+      "teaser": "Explains how security metrics can reward noise and activity, and how to measure real risk reduction instead.",
+      "summary": "The talk opens with a common frustration: security teams often report numbers that are easy to count, such as blocked events, ticket volume, or vulnerability totals, without showing whether exposure actually went down. Casey Beaumont draws on a 1975 management paper about rewarding one behavior while hoping for another, using examples from politics and academia to show how measurement systems steer what people do.\n\nShe then walks through how this plays out across functions. Incident response can end up rewarding heroics and fear of being made redundant, vulnerability programs chase inflated counts and arbitrary deadlines, SOC teams are judged on throughput that fuels alert fatigue and burnout, and GRC reporting can favor paperwork over real risk decisions. For each area she suggests alternatives: severity breakdowns with tags, known-exploited prioritization, outcome-focused threat hunting and red team stories, and insider risk programs built on trust rather than surveillance.\n\nTo redesign metrics, she proposes asking whether a number would prompt celebration or worry, what behavior it encourages on a bad day, and whether it supports a decision. Her four pillars are risk outcomes, learning, operational sustainability, and trusted enablement. She recommends pairing numbers with before-and-after narratives, applying double-loop reflection, and auditing each metric against organizational goals. The core message is that metrics teach an organization what security means, so they should teach the lesson leaders intend.",
+      "durationSeconds": 3059,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "nAZGPxXycwE",
+      "slug": "the-serverless-mirage-navigating-risks-in-an-invisible-infrastru",
+      "title": "The Serverless Mirage - Navigating Risks in an Invisible Infrastructure",
+      "speakers": [
+        "Nimish",
+        "Shivam Dhar"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "appsec",
+        "identity",
+        "risk",
+        "monitoring",
+        "vulnerabilities"
+      ],
+      "teaser": "Walks through serverless attack surfaces, from event triggers and IAM to CI/CD, and tests them in an AWS lab.",
+      "summary": "The talk traces computing from bare metal through virtualization and containers to AWS Lambda, arguing that serverless shifts security responsibility rather than removing it. The provider secures the layers beneath the function, while customers still own identities, data, dependencies, and triggers. The speakers group the serverless attack surface into event sources, vulnerable function code and exposed secrets, platform and CI/CD misconfiguration, and monitoring gaps.\n\nRisks are then mapped to OWASP and CWE categories with practical mitigations: validating event payloads at the edge, centralizing logs and tracing, scanning dependencies and producing SBOMs, signing artifacts, and limiting egress and tokens. Business impact and cyber insurance trends are discussed briefly. The core case study is Links Lab, an open-source command-line tool that deploys a sentiment-analysis stack on AWS, including an API gateway, an authorizer function, a worker function, a secrets store, a logging bucket, and a hosted model, then tears it down.\n\nThe demonstration walks through deploying and verifying the stack, sending requests with a REST client, and running attack and defense scenarios: input injection, a misconfigured policy that can disable function logging, and a vulnerable third-party package that leaks secrets. The closing guidance is to trace requests across services, enforce least privilege and automated deployment checks, validate inputs at the edge, keep handlers small and idempotent, and design for failure.",
+      "durationSeconds": 2422,
+      "publishedAt": "2026-08-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "DHTvGkrcuRw",
+      "slug": "bootstrapping-payloads-one-game-at-a-time",
+      "title": "Bootstrapping Payloads One Game at a Time",
+      "speakers": [
+        "Royce"
+      ],
+      "track": "malware",
+      "topics": [
+        "linux",
+        "malware-analysis",
+        "detection",
+        "network",
+        "attack"
+      ],
+      "teaser": "Explores how random game outcomes can carry executable bits to reconstruct a payload through four proof-of-concept loader designs.",
+      "summary": null,
+      "durationSeconds": 2720,
+      "difficulty": "advanced",
+      "publishedAt": "2026-08-14"
+    },
+    {
+      "youtubeId": "NU6DOEcfrww",
+      "slug": "closing-ceremony-7",
+      "title": "Closing Ceremony",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "village",
+        "challenge",
+        "hardware",
+        "learning"
+      ],
+      "teaser": "Wraps up CactusCon 14 with thanks, event totals, badge source code plans, and CTF prize presentations.",
+      "summary": "The closing ceremony for CactusCon 14 opens with thanks to attendees, speakers, sponsors and volunteers. Organizers share participation figures: 136 technical track submissions, 42 accepted sessions from 68 speakers, 74 volunteers and nearly 1,900 checked-in attendees. Badges come next. The team plans to publish badge source code, tutorials and learning material on GitHub for both the main badge and the kids badge, and a Discord channel will field questions as people explore their badges. A bounty for the most creative badge project will reward two winners with special badges.\n\nA presenter who wrote the kids badge code described what they learned, including using non-volatile storage so settings such as LED states persist, and a special mode that unlocks after completing the stations. The CTF awards followed. The kids CTF was a first for the event and aimed to be approachable rather than overwhelming, with three prizes for the top finishers. In the main CTF, all three top teams cleared the scoreboard, and awards went to ASU Hacking Club in third, Stellar in second and Shellfish in first.\n\nThe ceremony closes with logistics: a lost-and-found table, badge recycling bins near the front and back doors, and a reminder that next year marks CactusCon's 15th anniversary, with special plans already in the works.",
+      "durationSeconds": 699,
+      "publishedAt": "2026-08-14",
+      "difficulty": "beginner"
+    }
+  ]
+}

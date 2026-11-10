@@ -1,0 +1,1456 @@
+{
+  "villageSlug": "talks",
+  "villageName": "Talks",
+  "eventSlug": "hack-lu-2023",
+  "conference": "hack-lu",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLwOU9wiTf8XTi27SqgIbgyZsMrOIZG3bB",
+  "description": "Talks from hack.lu 2023.",
+  "talks": [
+    {
+      "youtubeId": "EQuE4Qi0a_0",
+      "slug": "permissionless-universal-overlays",
+      "title": "Permissionless Universal Overlays",
+      "speakers": [],
+      "track": "red-team",
+      "topics": [
+        "attack",
+        "vulnerability-research",
+        "mobile",
+        "application"
+      ],
+      "teaser": "Examines permissionless universal overlays and what they mean for the apps and users they affect.",
+      "summary": null,
+      "durationSeconds": 2086,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "KVXo0TopmR8",
+      "slug": "operation-duck-hunt-a-peak-behind-the-curtain-of-ducktail",
+      "title": "Operation Duck Hunt: A Peak Behind The Curtain Of DuckTail",
+      "speakers": [
+        "Pol Thill"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "intelligence",
+        "malware-analysis",
+        "attack"
+      ],
+      "teaser": "Follows the DuckTail infostealer through its Telegram bot traffic and operator mistakes to map who was behind it.",
+      "summary": "The talk looks at DuckTail, an infostealer first seen in mid-2022 that targets Facebook advertising and business accounts and also takes browser cookies and account details. Stolen data is packed into zip archives and sent out through the Telegram Bot API, which the speaker walks through with a live demo. Because the bot's update feed only keeps about a day of messages, the investigation relies on forwarding messages to rebuild a fuller timeline of a chat.\n\nInvestigators found that the operator, shown as the creator of the chats, made several mistakes. The first version sent unencrypted archives, and test runs on a personal machine exposed an email address tied to a domain registration in Vietnam. A later variant added screenshots of infected machines. Chat logs showed how victims were lured with fake LinkedIn job ads carrying executables disguised as image and document files, after which the operators took over Facebook business accounts to run their own ads and sell products through a drop-shipping store.\n\nThe developer's own machine held further clues, including a code-signing certificate bought to evade antivirus and a name and birth date seen in other places. The speaker notes that the same exfiltration method is used by widely known commodity stealers and by state-linked groups in Southeast Asia and Central Asia, so defenders should consider blocking the bot's domain on their networks. Some questions, such as whether the same person wrote the later variant, were left open.",
+      "durationSeconds": 846,
+      "publishedAt": "2023-10-19",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "mmp4UKqccTM",
+      "slug": "using-apple-sysdiagnose-for-mobile-forensics-and-integrity-check",
+      "title": "Using Apple Sysdiagnose For Mobile Forensics & Integrity Checks",
+      "speakers": [
+        "D Durvaux",
+        "A Kaplan"
+      ],
+      "track": "mobile",
+      "topics": [
+        "mobile",
+        "incident-response",
+        "open-source",
+        "device",
+        "tool"
+      ],
+      "teaser": "Shows how Apple's built-in sysdiagnose archive yields forensic timelines for checking an iPhone without jailbreaking.",
+      "summary": "The talk asks how an iPhone can be checked for compromise without jailbreaking it, since a jailbreak may itself change the evidence. The presenters turn to sysdiagnose, a diagnostic archive that Apple builds into every iOS and iPadOS device for troubleshooting. It is triggered by a button combination and stored under analytics data as a compressed archive of command output, logs, preferences, network records and process information. Much of it is binary, and timestamps mix several epoch formats, which makes it hard to read directly.\n\nTo make the archive usable, the team built an open-source, modular framework in the style of Volatility. Parsers normalise individual artifacts, analyzers work on parser output, and a timeline exporter feeds Timesketch. Two demonstrations followed: a Wi-Fi network from a known location appeared in the device history at an implausible place, and an unexpected app was dated from its install record, with a process command line that looked like a reverse shell.\n\nThe speakers were candid about limits. The archive holds no private user data such as messages or SMS, so attacks delivered through those channels leave no trace there, and modified system binaries could distort the output. Apple does not document the format, which shifts between iOS versions, so parsers need constant upkeep. They position the tool as a low-impact first check before a full backup, and invited testing on images and contributions. The takeaway is useful triage rather than proof that a device is clean.",
+      "durationSeconds": 1729,
+      "publishedAt": "2023-10-19",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "mV5g_WyQTHo",
+      "slug": "the-rise-of-malicious-msix-file",
+      "title": "The Rise Of Malicious MSIX File",
+      "speakers": [
+        "Rintaro Koike",
+        "Shogo Hayashi"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "windows",
+        "threat-detection",
+        "attack",
+        "detection"
+      ],
+      "teaser": "Traces a malware campaign that abuses MSIX packages on Windows and proposes detection and prevention measures.",
+      "summary": "The talk looks at MSIX, the packaging format Microsoft introduced in 2018 as a successor to MSI, and at how criminals have started using it to deliver malware. An MSIX file is a ZIP archive holding XML manifests, application files, a block map and a signature. Its execution is driven by the Package Support Framework, which can run PowerShell scripts named in a start script. The presenters noted that almost all malicious MSIX samples they studied relied on this framework.\n\nThe main case is a financially motivated group the presenters call Steel Clover, which distributes banking trojans and information stealers through fake software download sites that appear as sponsored search results. The operators have impersonated popular tools, including ones tied to AI chatbots, and have used MSIX packages since early 2023. Their infrastructure is concentrated on a small set of IP addresses, and the same signatures were reused for a period of time.\n\nFor defenders, the presenters described file creation rules for extracted PowerShell scripts, which they said over-detect because legitimate applications also use MSIX. They preferred process-based rules keyed on the App Installer executables, which they found far more precise, along with network detections for the follow-on malware. Their advice covers checking download sources, restricting MSIX execution to trusted publishers, and sharing signatures and indicators with peers.",
+      "durationSeconds": 1733,
+      "publishedAt": "2023-10-19",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "vm0T7gx6ybM",
+      "slug": "using-bayesian-inference-to-detect-cyber-attacks",
+      "title": "Using Bayesian Inference To Detect Cyber Attacks",
+      "speakers": [
+        "Emanuel Seemann"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "threat-detection",
+        "open-source",
+        "machine-learning",
+        "web"
+      ],
+      "teaser": "Shows how Bayesian inference can combine weak behavioral signals to flag bots in CrowdSec's leaky bucket detection.",
+      "summary": "The talk opens with spam filtering as a familiar example of how one word is weak evidence, while several words together raise suspicion. The speaker explains Bayesian inference as a way to update the probability of a conclusion each time new evidence arrives, using a wet street as an everyday analogy for rain.\n\nThe main case is CrowdSec, an open-source security engine whose leaky bucket mechanism collects events, lets them drain over time, and raises an alert on overflow. The proposal replaces the internal counting with Bayesian updates, so each event shifts a running probability that a client is a bot, and an alert fires once that value crosses a threshold. An e-commerce case study shows how signals such as disabled JavaScript, the language path of product URLs, browsing patterns and early searches each look harmless alone but add up when combined.\n\nThe speaker stresses that this suits evasive scraping and fraud bots rather than clear exploit signatures, where a plain threshold rule remains the better choice. Priors and conditional probabilities can be estimated by counting labelled bot and non-bot IPs in logs. More complex models would be expensive per IP inside a security engine, so the speaker invites people with use cases and logs to get in touch for feedback on an upcoming automated training tool.",
+      "durationSeconds": 1234,
+      "publishedAt": "2023-10-19",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "tYpiGkV-1_o",
+      "slug": "slp-dos-amplification-someone-is-having-fun",
+      "title": "SLP DoS Amplification: Someone Is Having Fun",
+      "speakers": [
+        "Pedro Umbelino"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "network",
+        "vulnerabilities",
+        "attack",
+        "threat",
+        "intelligence"
+      ],
+      "teaser": "Explains how exposed SLP servers are being primed for reflective amplification attacks and what monitoring them revealed.",
+      "summary": "The talk looks at the Service Location Protocol (SLP), a UDP service on port 427 that was never designed to face the internet. Pedro Umbelino describes how tens of thousands of exposed SLP devices were found in early February, spanning hypervisors, printers, RAID controllers and management boards across many sectors and regions. A coordinated disclosure with vendors followed, and the number of exposed instances has since dropped, though many remain online.\n\nThe core concern is reflective amplification. A small spoofed request can trigger a much larger reply aimed at a victim, and SLP is currently the strongest amplifier of this kind among available options. The attack has two stages: an attacker first primes vulnerable servers by filling their caches, then spoofs the victim's address so the primed servers flood it. Without internet-scale traffic visibility, the researchers re-scanned known reflectors and read their memory to see whether any were being primed.\n\nThat monitoring surfaced steady activity. Around 300 servers were primed in May, activity continued through September, and by October more than 5,000 reflectors had been primed, apparently with a custom tool rather than the public open-source one. No large attacks had been reported at the time. The practical takeaway is that tracking reflector priming can act as an early-warning signal, and the speaker briefly noted other possible abuses of primed servers, such as transient data storage and command-and-control.",
+      "durationSeconds": 323,
+      "publishedAt": "2023-10-19",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "QfWj2KhIObs",
+      "slug": "wintermute-an-llm-pen-testing-buddy",
+      "title": "Wintermute: An LLM Pen-Testing Buddy",
+      "speakers": [
+        "Aaron Kaplan"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "exploiting",
+        "vulnerabilities",
+        "practical"
+      ],
+      "teaser": "Shows how GPT models and local Llama 2 variants attempt CTF-style privilege escalation on vulnerable virtual machines.",
+      "summary": "Aaron Kaplan presents Wintermute, a project that tests whether large language models can act as a penetration testing assistant. The motivation is that defenders will increasingly face AI-driven exploitation attempts, so the team wanted to measure how far existing models can get on their own when attacking a system.\n\nThe setup uses a controller that connects over SSH to a set of deliberately vulnerable virtual machines. The model proposes a Linux command, the controller runs it on the target, and the output is stored as history and fed back to the model in a loop. The challenges are drawn from typical CTF and training-platform weaknesses, such as SUID binaries, misconfigured sudoers entries and insecure configuration files. They are packaged as a standardized benchmark that anyone can rerun with different models or prompts.\n\nResults were compared across GPT-3.5, GPT-4 and several Llama 2 based local models, with the local models performing poorly. GPT-4 solved about 62 percent of the challenges overall. The speaker stressed that some tasks need human creativity that a model cannot be expected to supply, so raw percentages should be read with that in mind. The gap between GPT-4 and GPT-3.5 was large, and the models performed well on several of the more straightforward tasks. The talk closes by pointing to a paper released the day before with the full methodology.",
+      "durationSeconds": 260,
+      "publishedAt": "2023-10-19",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "VloSYwwjraI",
+      "slug": "introduction-to-cyberwarfare-theory-and-practice",
+      "title": "Introduction To Cyberwarfare: Theory And Practice",
+      "speakers": [],
+      "track": "threat-intel",
+      "topics": [
+        "introduction",
+        "state",
+        "attack",
+        "threat",
+        "intelligence"
+      ],
+      "teaser": "Introduces cyberwarfare, covering both its theoretical foundations and how it is practised.",
+      "summary": null,
+      "durationSeconds": 2557,
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "nvE9hqnrIq8",
+      "slug": "open-wounds-the-last-5-years-have-left-bluetooth-to-bleed",
+      "title": "Open Wounds: The Last 5 Years Have Left Bluetooth To Bleed",
+      "speakers": [
+        "Xeno Kovah"
+      ],
+      "track": "wireless",
+      "topics": [
+        "vulnerability-research",
+        "bluetooth",
+        "supply",
+        "embedded",
+        "iot"
+      ],
+      "teaser": "Traces five years of Bluetooth research and argues that chip and pairing flaws will persist in deployed devices.",
+      "summary": "Xeno Kovah surveys five years of Bluetooth security research, arguing that the field has moved through distinct waves of researchers and tooling. He starts by describing how a large body of published papers was catalogued and tagged, which made it possible to see who kept working on the topic and which tools they built. Early classic Bluetooth work gave way to a second wave centred on sniffers and the first machine-in-the-middle frameworks, followed by a third wave where firmware hooking and custom chip firmware made arbitrary packet injection practical.\n\nThe middle of the talk covers the recent findings. Several chip-level bugs let crafted link-layer packets reach code execution on controllers from multiple silicon vendors, before any pairing takes place. Kovah then explains how the chain of silicon vendors, module makers and product makers spreads each flaw across many devices. He walks through pairing weaknesses, including a key-entropy downgrade, unidirectional authentication that allows role-switch impersonation, reflection attacks, packet injection into connections, and a proximity-based unlock relay against a car.\n\nHe closes by arguing that many of these issues will stay unpatched in the field. Updates depend on phones or computers that many Bluetooth devices never connect to, and embedded operating systems and end-of-life products widen the gap. The practical takeaway is that enterprises can do little to assess Bluetooth exposure today, and that the field needs more researchers.",
+      "durationSeconds": 1887,
+      "publishedAt": "2023-10-19",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "Kg9ROjDQfVI",
+      "slug": "supply-chain-resilience-challenges-and-solutions",
+      "title": "Supply Chain Resilience: Challenges & Solutions",
+      "speakers": [
+        "Saâd Kadhi"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply-chain",
+        "risk",
+        "intelligence",
+        "management",
+        "trust"
+      ],
+      "teaser": "Explores how organizations can map and monitor suppliers, contractors and providers to close blind spots in their supply chain.",
+      "summary": "The talk starts from the observation that supply chain attacks are increasing, and that the risk goes beyond software and hardware to include suppliers, service providers and contractors. The core problem presented is building an inventory of these third parties and keeping it current over time, which the speaker compares to asset management viewed from a different angle.\n\nFor software and hardware, the speaker suggests extending external attack surface management to internal systems that vendors can reach through VPNs, data exchanges and other links. Detection ideas include spotting unexpected update or phone-home traffic and outbound connections to SaaS and cloud services. Services are harder to watch. Useful signals include vendor remote access, connections to cloud tenants, and directory groups or change-management records created for contractors. Procurement is presented as an early warning source, since purchases and framework contracts could generate alerts about new suppliers. The talk also covers cascading dependencies through subcontractors, consortium members in public tenders, and mergers and acquisitions, including a hedge fund buying a provider and shifting its product direction.\n\nThe closing section raises geopolitical exposure, citing a 2021 Chinese law that requires technology firms to pass newly found vulnerabilities to the government first. The speaker points to a think-tank report for further reading. The practical takeaway is to combine procurement data, threat intelligence and asset inventory into one continuous process rather than treating third-party risk as a one-time review.",
+      "durationSeconds": 402,
+      "publishedAt": "2023-10-19",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "fqci2E8r7LM",
+      "slug": "der-editing-easy-peasy-with-asn1template",
+      "title": "DER Editing, Easy-Peasy With asn1template",
+      "speakers": [
+        "William Robinet"
+      ],
+      "track": "appsec",
+      "topics": [
+        "tool",
+        "open-source",
+        "vulnerability-research",
+        "practical",
+        "linux"
+      ],
+      "teaser": "Shows how to turn DER-encoded certificates into editable text and regenerate valid binary files with OpenSSL.",
+      "summary": "DER is the binary encoding of ASN.1 structures, and it is the format that carries X.509 certificates in TLS and similar protocols. Editing it directly is awkward because every length and offset depends on the content, so changing one field, such as a value that grows from two characters to three, shifts everything that follows. The speaker presents asn1template, a small Python script that converts a DER file into a text description that OpenSSL can read back.\n\nThe text output follows the format expected by OpenSSL's ASN1_generate_nconf function, so a file can be edited as plain text and regenerated into valid DER. In the demo, a certificate's country code was changed from US to a three-letter value. The regenerated certificate was then compared with the original, showing the changed field and the shifted offsets. The speaker said the tool helped with two recent CVEs: one involving an infinite loop in elliptic curve key handling, and another involving very large identifiers in these structures. The tool also handles files that concatenate several DER structures, such as eim files.\n\nThe script has few dependencies and runs on Linux and OpenBSD. It can also work with LibreSSL and BoringSSL, provided a small amount of C code is added to reach the regeneration function. A practitioner could use it to craft unusual certificates for CTF challenges or to test how a parser handles malformed input.",
+      "durationSeconds": 346,
+      "publishedAt": "2023-10-19",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "b-oCnLcYa90",
+      "slug": "suricata-language-server",
+      "title": "Suricata Language Server",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "detection",
+        "tool",
+        "developer",
+        "network"
+      ],
+      "teaser": "Presents a language server that adds editor support for writing Suricata detection rules.",
+      "summary": null,
+      "durationSeconds": 250,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "UdymbBD-Yv8",
+      "slug": "token-smart-contract-analyzer",
+      "title": "Token Smart Contract Analyzer",
+      "speakers": [
+        "Thierry Grandjean"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "blockchain",
+        "smart-contracts",
+        "detection",
+        "risk",
+        "tool"
+      ],
+      "teaser": "Shows a snapshot-based analyzer that scores ERC20 token smart contracts for fraud patterns like rug pulls and honeypots.",
+      "summary": "The speaker, from the Luxembourg Institute of Science and Technology, starts with the problem. Tokens on chains such as Ethereum and Binance Smart Chain are managed by smart contracts that the deployer can write in almost any way. As the token market grows, so does the number of malicious designs. The talk focuses on several fraud patterns: rug-pull backdoors that let an operator take back tokens that buyers have already acquired, honeypot-style restrictions that allow buying but block selling, and owner-only privileges reserved for the deployer.\n\nThe approach is algorithmic rather than source code review. The team takes a snapshot of an existing blockchain, hosted on nodes they run in isolation from the wider network, and studies how each contract actually behaves. The demo showed the interface: paste a token's contract address, run an analysis, and receive a risk score. The live analysis was skipped because the connection was too slow, and a precomputed example rated 35 out of 100. The checks cover the cost to buy and to sell, how much liquidity the owner still holds, and whether built-in allow and block lists control who may trade. The score reflects how much risk an investor could reasonably accept.\n\nThe speaker closed with future work: adding more fraud patterns, supporting token standards beyond ERC20, and adding a machine learning layer to automate and generalise the process. The practical takeaway is that token risk can be judged from observed contract behaviour, such as buy and sell tests and ownership checks, without reading the code.",
+      "durationSeconds": 255,
+      "publishedAt": "2023-10-19",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "PzPJc0LdlC4",
+      "slug": "misp-llm-automating-free-form-cti-reports",
+      "title": "MISP ↔️ LLM : Automating Free Form CTI Reports",
+      "speakers": [
+        "S. Mokkadem",
+        "A. Iklody",
+        "A. Kaplan"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "ai",
+        "machine-learning",
+        "automation",
+        "open-source",
+        "threat"
+      ],
+      "teaser": "Shows how a MISP module sends threat reports to an LLM and returns structured indicators for human review.",
+      "summary": "Cyber threat intelligence analysts often have to read large numbers of free-form reports, such as blog posts and articles, and pull out indicators of compromise, TTPs, threat actor details and other context. Doing this by hand means copying text into MISP piece by piece. The talk proposes a faster route: a MISP module that submits a report URL to a REST API server, which asks a language model to extract the structured information and return it to MISP. The model can be swapped, so a local or hosted LLM both fit the design.\n\nIn the live demo, the presenters added a report to a MISP event and trimmed it manually, removing boilerplate at the start and appendices at the end so the model handled it better. After submission, the event received an executive summary and labels drawn from the output, such as an espionage motivation and an associated threat actor. The presenters stressed that the extraction is still very basic and that the prompts need considerable work.\n\nThe main takeaway is that model output must be checked by a human before it is trusted, since the answers may be incorrect. Review is part of the design rather than an optional step. The team plans further work on prompt tuning and quality assurance, and the project is an early proof of concept rather than a finished tool.",
+      "durationSeconds": 261,
+      "publishedAt": "2023-10-18",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "CIdVix6k5Jw",
+      "slug": "avoiding-the-basilisks-fangs-state-of-the-art-in-ai-llm-detectio",
+      "title": "Avoiding The Basilisk's Fangs: State-of-the-art In AI LLM Detection",
+      "speakers": [
+        "Jacob Torrey"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "detection",
+        "open-source"
+      ],
+      "teaser": "Shows how compression ratios can flag LLM-generated text quickly, and why evaluating such detectors is so hard.",
+      "summary": "The talk starts from the idea that large language models produce text that drifts toward the average of their training data, so their output tends to be more predictable than human writing. The speaker frames detection around perplexity, the surprise a model would feel at each word, and asks whether that signal can be estimated without running a large neural model.\n\nThe proposed tool, Zippy, uses LZMA compression, an older technique used for anomaly detection. A corpus of model-generated text is compressed first, then a candidate sample is appended and the change in compression ratio serves as the score. The speaker compared it with several detectors on a test set of about 5,000 documents. Zippy reached roughly 80% accuracy and 86% area under the ROC curve without tuning, ahead of OpenAI's withdrawn detector at 62% and running in minutes rather than hours. Only one commercial service scored higher. Known weaknesses include short inputs, random noise and text in other languages.\n\nThe second half focused on evaluation. Public datasets are sparse, often unprompted, and carry biases such as stiff formal letters. Commercial detectors rarely publish their methods and change over time, which makes results hard to reproduce, and the speaker argued this matters when detectors inform decisions about students. The talk closed with a call for standardized benchmarks, a browser extension that fades out likely AI-written paragraphs, and an invitation to collaborate on the open-source code.",
+      "durationSeconds": 2789,
+      "publishedAt": "2023-10-19",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ve2h1In0KdA",
+      "slug": "permissionless-universal-overlays-2",
+      "title": "Permissionless Universal Overlays",
+      "speakers": [
+        "Dimitrios Valsamaras"
+      ],
+      "track": "mobile",
+      "topics": [
+        "android",
+        "mobile",
+        "attack",
+        "vulnerability-research",
+        "privacy"
+      ],
+      "teaser": "Shows how Android overlay windows can hijack user taps to grant an app sensitive permissions.",
+      "summary": "The talk begins with how Android composes app windows, covering the window manager, the surface compositor, and the Z-order of window types. It explains that some window types can be shown without visible user approval, and that certain flags let a window pass touches through to the window beneath it. These behaviours form the basis for the overlay, task hijacking and activity switching attacks that the speaker groups together.\n\nThe middle of the talk reviews earlier research, including toast-based overlays and a malware family that abused a presentation window type to start activities from the background. The main research shows that users cannot tell which app they are using when activities stack on top of each other. Combined with click-through windows, an attacker can cover system permission dialogs and effectively approve sensitive permissions such as SMS, call logs and device administration without the user noticing. A multi-step variant relies on a predictable app list order and a trampoline activity to reach deeper settings screens. Demonstrations show a test app moving from no granted permissions to several.\n\nThe closing section covers defenses. The speaker points to the obscured-touch check Android uses for its own dialogs, which discards input when a window is partly covered. He also notes the hide-overlay-windows permission added in later versions, which guards against toast and alert overlays but not this technique. A practitioner should take away that permission prompts alone do not protect users when another app can draw over them.",
+      "durationSeconds": 2073,
+      "publishedAt": "2023-10-19",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "xLiXVzHJ0vg",
+      "slug": "raiders-of-the-lost-arts",
+      "title": "Raiders Of The Lost Arts",
+      "speakers": [
+        "Stefan Hager"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "attack",
+        "social",
+        "network",
+        "risk",
+        "management"
+      ],
+      "teaser": "Explains how low-tech sabotage, protocol abuse and legal pressure can drain an organisation's resources without touching a computer.",
+      "summary": "Stefan Hager opens by placing attackers on a spectrum of skill and targeting, then looks back at early internet design, when trust, speed and availability were rarely concerns. He argues that many of those choices persist, and that protocols such as DNS, SNMP, TFTP and NTP remain unauthenticated or unencrypted, which makes them easy to spoof or abuse. His examples include forged log entries sent to a syslog server, cascading time failures from a fake stratum-zero NTP source, and memcached's very large amplification factor for DDoS. The practical advice is to segment networks and limit exposure of these services where possible.\n\nThe second half moves from technology to human processes. Hager describes baiting staff with USB sticks that end up in forensics teams, and flooding a legal department with letters about company websites that nobody internally can trace. He recounts a bomb-threat scenario in which targeting a neighbouring building disrupts communications, and says that paying ransomware in Germany can create legal trouble of its own. He draws on quotes from a World War II sabotage manual to show how obstructive meeting habits can stall decisions.\n\nHe closes by urging listeners to notice patterns of deliberate obstruction inside their own organisations, even when they look like ordinary office friction, and points to links and references in the slides.",
+      "durationSeconds": 1843,
+      "publishedAt": "2023-10-19",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "zUfMka3C58s",
+      "slug": "php-filter-chains-how-to-use-it",
+      "title": "PHP Filter Chains: How To Use It",
+      "speakers": [
+        "Rémi Matasse"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "vulnerability-research",
+        "exploit",
+        "php"
+      ],
+      "teaser": "Shows how PHP filter chains turn local file inclusion into code execution and blind file leaks.",
+      "summary": "The talk starts from local file inclusion, a bug class where an attacker controls a path that PHP loads. After surveying older tricks and their limits, the speaker introduces PHP filter chains. By stacking conversion filters on the php:// wrapper, an attacker can use iconv encodings to prepend arbitrary bytes to a resource, building a payload that runs commands when it is included.\n\nThe second half covers a blind file read that works without any output. Chaining many encodings pushes PHP past its memory limit, and a dechunk filter then reacts differently depending on whether the first character is a hexadecimal digit, giving an error-based oracle. A cp930 codec shifts characters one step at a time, so the first byte of a file can be inferred, and further conversions rotate the content to reach later bytes. The speaker applies this to a file path flaw in the MISP threat-intelligence platform, where user input reached file_get_contents before validation, and shows slow extraction of database credentials from the configuration file.\n\nThe takeaway is that any PHP function reading a path can be abused, including unexpected ones such as md5_file, so hiding file contents is not enough. Limits are practical: a GET parameter caps chain length and restricts leaks to roughly 135 characters, and extraction is slow. Code execution needs an include of attacker-controlled input, which is rare, while blind reads are far more widely reachable.",
+      "durationSeconds": 1754,
+      "publishedAt": "2023-10-18",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "fO5A-DBAwhU",
+      "slug": "building-an-evil-phone-charging-station",
+      "title": "Building An Evil Phone Charging Station",
+      "speakers": [
+        "Stef Van Dop"
+      ],
+      "track": "hardware",
+      "topics": [
+        "mobile",
+        "hardware",
+        "device",
+        "attack",
+        "privacy"
+      ],
+      "teaser": "Shows how a rigged charging port can mirror a phone's screen over USB-C and recover typed passwords with OCR.",
+      "summary": "The talk starts from public charging points in airports, hotels and lounges, where a phone plugged into a port may send more than power. USB-C alternative modes can carry a display signal, and some phones also accept keyboard and Ethernet input over the same connection. The speaker, a red team member at a telecom operator, explains how a phone, a capture adapter and a laptop can be combined into a working setup that shows a phone's screen while it charges.\n\nThe team then tested many phone models bought in stores to see what appears on the mirrored display. Most showed notifications, two-factor codes, and PIN or password entry in plain view, with only small warnings. iPhones hid some input and used smaller notices, while Android devices showed keystrokes. A prototype split the captured video into frames, detected changes that matched typing, and ran Tesseract OCR on keyword-defined regions to rebuild passwords letter by letter. The speaker acknowledged OCR mistakes and the heavy processing needed for real-time use across several devices.\n\nThe main takeaway is that phone makers and app developers should warn users when screen mirroring starts during charging and protect sensitive fields. The speaker also suggested workplace docking stations as a possible target and noted that the code is publicly available. The question round covered iOS keyboard hiding and whether app window flags stop capture.",
+      "durationSeconds": 1451,
+      "publishedAt": "2023-10-18",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "RBwVcjcgMRU",
+      "slug": "identity-in-the-era-of-deepfakes-ai-and-mass-biometrics-exposure",
+      "title": "Identity In The Era Of Deepfakes, AI And Mass Biometrics Exposure",
+      "speakers": [
+        "Vladimir Kropotov"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "identity",
+        "ai",
+        "threat",
+        "risk"
+      ],
+      "teaser": "Shows how public photos and videos expose biometric data that criminals can combine with deepfakes to build digital twins.",
+      "summary": "The talk opens with a Ponzi scheme advert that used a deepfake of a well-known public figure, then asks what changed to make identity abuse so common. The speaker links several trends: social feeds that reward snap judgments, ransomware groups that added data leaks to encryption, cheap deepfake and voice-cloning services sold underground, and public playbooks for manipulating opinion.\n\nThe core argument is that biometric traits such as faces, voices, fingerprints, irises and palm shapes leak through everyday posts, often without anyone noticing. Examples included high-resolution politician photos on a government website and a fingerprint visible on a wine glass posted online. In small hardware experiments, an iris sensor accepted a crudely drawn eye, and some images found online were enrolled successfully. The speaker argued that biometrics only work as a trust anchor when the verifier controls the sensor. Underground markets were described as selling real identities, deepfake tools, and guides for bypassing remote account checks, alongside virtual kidnapping scams, blackmail, and attacks on voice-controlled devices.\n\nThe talk closes by treating elections, summits and concerts as short windows in which fabricated media can cause outsized damage. Its advice is to limit where biometric images and recordings are shared, and to avoid using fingerprints for financial approvals. For practitioners, the takeaway is that biometrics should be paired with a second factor rather than trusted alone.",
+      "durationSeconds": 1824,
+      "publishedAt": "2023-10-18",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Ka70323Y6aQ",
+      "slug": "embedded-threats-a-deep-dive-into-the-esim-world",
+      "title": "Embedded Threats: A Deep Dive Into The ESIM World",
+      "speakers": [
+        "Markus Vervier"
+      ],
+      "track": "wireless",
+      "topics": [
+        "embedded",
+        "mobile",
+        "attack",
+        "device",
+        "vulnerability-research"
+      ],
+      "teaser": "Explores eSIM provisioning, SIM applet abuse and SMS-based command and control from an offensive perspective.",
+      "summary": "The talk began with a question: could an eSIM serve as an out-of-band command-and-control channel, separate from the network connections that security tools usually monitor? Markus Vervier walks through the eSIM stack, from the eUICC chip with its isolated profile domains to the remote provisioning backend, which is certified and protected by mutual TLS plus an additional end-to-end encrypted layer.\n\nOn the attack side, he looks at the Windows Mobile plans app, which renders web content from operator sites, so an attacker in a privileged network position could alter what a user sees. Using a test profile from a provider that allows it, he demonstrates an SMS-based command channel between two eSIM-equipped machines. It works but is slow, and the mobile carrier eventually blocked the test lines. He also installs a custom Java Card applet remotely over SMS and shows SIM-generated dialogs on an iPhone that the operating system does not control. Without the management keys, he examines SCP02 key diversification and a tool for offline key guessing.\n\nThe takeaway is that eSIM is a capable platform for attackers as well as a security control for operators. Applets running on the eUICC are largely invisible to phone-level forensics, so defenders should consider whether they control their eUICC and which provisioning paths are trusted. The speaker said the test applet and attack tools would be released.",
+      "durationSeconds": 1734,
+      "publishedAt": "2023-10-18",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "il0ftgvf0jQ",
+      "slug": "non-vulnerable-package-dependency-resolution",
+      "title": "Non Vulnerable Package Dependency Resolution",
+      "speakers": [
+        "Philippe Ombredanne"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "vulnerabilities",
+        "open-source",
+        "supply",
+        "risk",
+        "tool"
+      ],
+      "teaser": "Shows how a dependency resolver can steer package installs away from versions known to be vulnerable.",
+      "summary": "The talk starts from a familiar problem: package managers such as apt, pip, poetry and Maven fetch packages and pick versions that satisfy the constraints of other packages, but that process does not check whether the chosen version is vulnerable. The speaker notes that CVE records describe affected version ranges in intricate ways, and that vulnerability databases often disagree about those ranges.\n\nTo bridge this gap, the speaker walks through several pieces. Package URL offers a common identifier for a package across ecosystems. A proposed VERS notation aims to express version ranges the same way for every package manager, which is harder than it sounds given how much the ecosystems differ. A tool called python-inspector performs dependency resolution without installing anything, and a vulnerability database keyed by package URLs tracks non-vulnerable version ranges rather than only vulnerable ones.\n\nCombining functional dependency constraints with known vulnerable ranges inside the resolver is what the speaker calls non-vulnerable dependency resolution. A proof of concept feeds vulnerability data and package versions into that process so that vulnerable releases are avoided during selection. The talk closes with a data point: roughly 30 percent of installations of a popular Java logging library still run vulnerable versions, nearly two years after its disclosure. The takeaway is that this kind of resolution could become a standard feature of package management clients.",
+      "durationSeconds": 397,
+      "publishedAt": "2023-10-18",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "odUvmS5lDm4",
+      "slug": "acme-benefits-of-an-internet-security-protocol-in-your-network",
+      "title": "ACME: Benefits Of An Internet Security Protocol In Your Network",
+      "speakers": [
+        "Christophe Brocas"
+      ],
+      "track": "appsec",
+      "topics": [
+        "trust",
+        "web",
+        "automation",
+        "infrastructure",
+        "open-source"
+      ],
+      "teaser": "Shows how an enterprise rolled out ACME certificate automation on its internal PKI, with lessons for other organizations.",
+      "summary": "The speaker, a security engineer at a French public healthcare insurer, starts with the problem. About 80,000 staff use hundreds of internal web applications, and HTTPS was applied unevenly, with expired or weak certificates. The internal certificate authority offered a manual portal workflow that was slow and depended on security staff approving each request. A separate API path served only one large project.\n\nOlder automated enrollment protocols for private PKI had weak security and few clients, so the team turned to ACME, the protocol behind Let's Encrypt. They explained its domain validation: the server issues a token, the client publishes it at a well-known HTTP path, and the server checks it. They deployed an ACME proxy in front of the existing CA. The proxy handles only the protocol while the internal PKI still signs certificates, so endpoints needed no changes. Several clients worked on Linux and Windows, and users adopted others such as acme.sh.\n\nThe main lesson is that an internal PKI can serve every administrator without enrollment or extra staff. More than 140 applications moved to TLS in under two months. Because ACME is an open standard, the security team can enforce the protocol rather than a specific tool. Architects also used it during server provisioning so new machines had certificates from the start. The DNS challenge was skipped because their DNS lacked an API.",
+      "durationSeconds": 2095,
+      "publishedAt": "2023-10-18",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "6OJ9SlJoAzg",
+      "slug": "dos-and-donts-in-file-formats",
+      "title": "Do's And Don'ts In File Formats",
+      "speakers": [
+        "Ange Albertini"
+      ],
+      "track": "appsec",
+      "topics": [
+        "file-formats",
+        "vulnerabilities",
+        "building",
+        "lessons-learned",
+        "code"
+      ],
+      "teaser": "Explains how file format design choices create security risks, using historical examples such as MP3 and common container practices.",
+      "summary": "The talk looks at file formats through historical examples and argues that many were designed without enough structure, and that those early choices still cause problems. It opens with early word processors that saved whole blocks of memory instead of a structured file, then moves to MP3, which began as a raw stream of audio frames with no header or metadata. Players had to guess where data started by scanning for frame sync bytes, which makes small files ambiguous and lets a JPEG be misread as audio.\n\nOver time MP3 gained footers, hardcoded length fields and a second header, so the same data ended up stored more than once. Duplicated fields are a security issue because one parser may check one copy while another acts on the other. The speaker contrasts this with a newer image format that has a fixed header and no room for metadata, and with older formats that put song titles first, which breaks scanning because the start of a file no longer reveals its type.\n\nThe practical advice is to start every file with a reliable magic signature, leave room for extensible metadata, avoid duplicate information, and avoid hardcoding values that were meant to vary, since parsers will treat them as constants. When a new format is needed, wrapping it in a well-known container such as the RIFF structure used by WAV and WebP lets designers reuse existing parsers and metadata handling. PNG is suggested as a reasonable model for a new format. The talk closes with audience questions.",
+      "durationSeconds": 1301,
+      "publishedAt": "2023-10-18",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "xwmGQ-uX6ZY",
+      "slug": "belgian-cyber-reserve-forces",
+      "title": "Belgian Cyber Reserve Forces",
+      "speakers": [
+        "Christophe Vandeplas"
+      ],
+      "track": "community",
+      "topics": [
+        "state",
+        "team",
+        "learning"
+      ],
+      "teaser": "Explains how Belgium's new military cyber reserve works and how civilians can join as part-time reservists.",
+      "summary": "The speaker introduces the cyber command of the Belgian Ministry of Defence, which became the country's fifth operational domain about a year before the talk. He describes cyberspace as layered, spanning physical, logical and social levels, and outlines the focus areas the military uses to organise its work there.\n\nThe core of the talk is the Cyber Reserve. The speaker recently joined as a reservist and explains that reservists keep a civilian job while holding a military role on the side. Candidates can come from government, from universities, or from private companies, and the arrangement is presented as a benefit to both sides: the military gains outside perspectives, and employers get staff who bring new ideas back. Participation is voluntary, and many roles are IT-focused rather than front-line. Work areas mentioned include project management, penetration testing, patching, system administration and incident response. Training is a shortened four-week military course. Only Belgian nationals are eligible, and the speaker frames the reserve as a legal outlet for people who would otherwise do offensive hacking without authorisation.\n\nThe talk closes with an invitation to send questions by email to the recruitment address. A practitioner in Belgium gets a concrete picture of a part-time reserve role, and others get a view of how one European state structures reserve cyber capacity.",
+      "durationSeconds": 305,
+      "publishedAt": "2023-10-18",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "MBas9w752M8",
+      "slug": "you-can-learn-anything",
+      "title": "You Can Learn Anything",
+      "speakers": [
+        "Cookie"
+      ],
+      "track": "community",
+      "topics": [
+        "learning",
+        "open-source",
+        "team",
+        "lesson"
+      ],
+      "teaser": "Argues that learning security is achievable by finding explanations that suit your own learning style.",
+      "summary": "The speaker starts from the common feeling that a new technical subject is too hard to pick up. People take in information in different ways, whether by seeing, hearing, reading or writing, so a topic that seems impossible in one format can make sense in another.\n\nSearching online for learning material often means trying several videos or guides before one matches how you think. Others facing the same problem are usually online too, and their questions and walkthroughs can open the way in. The main mistake to avoid is giving up after the first confusing resource.\n\nThe later part turns to community. Open source and security groups bring together many different ways of thinking, and asking friends or colleagues for another angle often helps. Members can also contribute in their own form, such as writing articles, blog posts, code or issue reports, which builds confidence and benefits the wider team. The speaker closes by urging listeners not to rule themselves out because a field seems far from their background, recalling that their own early struggle with coding eased once they asked people around them.",
+      "durationSeconds": 194,
+      "publishedAt": "2023-10-18",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "2ghZbkk8XS4",
+      "slug": "velocity-raptor-accelerating-velociraptor-hunting-with-tenzir",
+      "title": "Velocity Raptor: Accelerating Velociraptor Hunting With Tenzir",
+      "speakers": [
+        "Matthias Vallentin"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "open-source",
+        "tool",
+        "automation",
+        "data-pipelines"
+      ],
+      "teaser": "Shows how a pipeline engine pulls Velociraptor query results over its gRPC API to filter and export DFIR data.",
+      "summary": "The talk starts from a common DFIR problem: even with Velociraptor, getting endpoint visibility takes time, and once the data arrives, analysts still need to analyze, transform and move it. The speaker presents an open-source, Apache-style pipeline processing engine as a way to handle that stage. A pipeline is built from zero or more sources, transformations and a sink, and it runs from the command line with JSON output by default. Examples included reading a local file and writing top results to a destination, and fetching a remote compressed file, filtering alerts and sending them to a Kafka topic.\n\nThe middle of the talk covers the Velociraptor integration. Velociraptor exposes a gRPC API, so the pipeline tool can connect to the server from a source, run a VQL query and stream the responses into the pipeline. The demo used this to list enrolled hosts and to select and process collected data. From there the results can be imported, written to Parquet, or handed to other tools.\n\nThe takeaway for practitioners is that responders can reshape Velociraptor output during an incident without writing one-off scripts, and make it available to other systems quickly. The speaker noted that a blog post describing the integration was due the following day.",
+      "durationSeconds": 223,
+      "publishedAt": "2023-10-18",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "lng-87nRTGQ",
+      "slug": "tidemec-a-detection-engineering-platform-homegrown-at-the-ec",
+      "title": "TIDeMEC : A Detection Engineering Platform Homegrown At The EC",
+      "speakers": [
+        "Amine Besson"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "detection",
+        "threat-detection",
+        "intelligence",
+        "framework",
+        "open-source"
+      ],
+      "teaser": "Presents a homegrown platform that links threat models to detection rules and automates their deployment for a SOC.",
+      "summary": "This short talk introduces TIDeMEC, a detection engineering platform built inside the European Commission's security operations centre. The detection engineering team needed a way to connect high-level threat intelligence to the low-level detections written to find it, and to make that work repeatable. The project started as research in early 2022, moved into production later that year, and now handles most of the centre's detection operations.\n\nThe core of the platform is three linked models: threat vectors, threat detection models that describe the objective, and detection rules implemented as code. Because the models chain together, a team can start from any deployed rule, trace it back to the threat it detects, and reach the actors likely to use that technique. The talk also covered an automated data pipeline, a knowledge base generated from the models so documentation no longer has to be written by hand, and a deployment layer that pushes rules to multiple systems. It selects the right version for each context and can apply environment-specific modifiers, such as keeping notable events out of staging. A recent addition manages and validates lookups as code.\n\nThe speaker previewed plans to open source the framework and automation first, with detection content to follow depending on community interest. The release is targeted for the end of the year or early next year on the European Commission's code repository. An exploratory idea called TIDeX, aimed at connecting security operations centres that share threat intelligence, was also floated.",
+      "durationSeconds": 264,
+      "publishedAt": "2023-10-18",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "AiK8NLsZkz8",
+      "slug": "deming-open-source-isms",
+      "title": "Deming - Open Source ISMS",
+      "speakers": [],
+      "track": "policy",
+      "topics": [
+        "open-source",
+        "management",
+        "risk",
+        "framework"
+      ],
+      "teaser": "Introduces Deming, an open-source information security management system (ISMS).",
+      "summary": null,
+      "durationSeconds": 331,
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Os-hPti8oEQ",
+      "slug": "the-renaissance-of-cyber-physical-offensive-capabilities",
+      "title": "The Renaissance Of Cyber Physical Offensive Capabilities",
+      "speakers": [
+        "Daniel Kapellmann Zafra"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "malware-analysis",
+        "threat",
+        "intelligence",
+        "attack"
+      ],
+      "teaser": "Examines the Cosmic Energy OT malware and what its links to Russian-linked tooling suggest about industrial attack capability.",
+      "summary": "This talk, given by a Mandiant cyber-physical researcher, starts with the recent history of attacks on operational technology. It places the last few years in a period of change, after the 2022 conflict in Ukraine, when attacks on industrial control systems became more frequent and less specialised than the rare, bespoke cases of the past.\n\nThe main case study is Cosmic Energy, a piece of malware found through threat hunting in a malware analysis sandbox. It talks to industrial equipment over the IEC 60870-5-104 protocol to send switching commands to remote terminal units, and it is split into two modules. The sample contained a logic error that made it erase itself too early, which the researchers fixed with a small change. Its code shares features with the earlier Industroyer and Industroyer2 tools, and the name \"Solar Polygon\" pointed to a Russian cyber training range. The speaker presents that attribution as a likely but unconfirmed link. Leaked contractor documents that asked for tooling covering rail and oil and gas were used to discuss how such capabilities are being bought and built.\n\nThe talk closes with hunting advice. Insecure-by-design protocols and public libraries make reuse easy, Python is an unusual find in tightly controlled engineering networks, and MS SQL servers that bridge IT and OT are a useful place to look. The speaker's view is that barriers to building OT tooling are falling, mainly for nation states, while activists and ransomware groups are not yet at that level. A closing Q&A touched on how much the baseline of OT environments helps spot anomalies.",
+      "durationSeconds": 1803,
+      "publishedAt": "2023-10-18",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "D7qWALTxDag",
+      "slug": "defeating-vpn-always-on-2",
+      "title": "Defeating VPN Always-On",
+      "speakers": [
+        "Maxime Clementz"
+      ],
+      "track": "red-team",
+      "topics": [
+        "network",
+        "windows",
+        "attack",
+        "vulnerabilities"
+      ],
+      "teaser": "Explains how VPN always-on agents can be bypassed through spoofed network checks and Windows filtering rules.",
+      "summary": "The talk examines how the always-on mode of three VPN agents can be defeated before the tunnel is established, letting an unprivileged user reach the network. It covers an on-network attacker and an insider on a hardened laptop, whose settings and logs are readable by the user.\n\nTwo checks are targeted. Trusted network detection can be fooled by impersonating expected DNS and DHCP values. Captive portal detection can be abused with a fake portal that opens a channel, though one vendor disables it by default. Some agents also permit unexpected UDP ports. Windows Filtering Platform rules explain the differences: one vendor hides its filters behind access control, and another shadows a restrictive rule with a higher-priority permit.\n\nResults vary by vendor and version, and the vendors' responses are described. Red teams should expect at least one working path per product. Defenders should avoid trusting network values an attacker can spoof, prefer certificate-based server checks, and protect configuration files.",
+      "durationSeconds": 1504,
+      "publishedAt": "2023-10-18",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "xMuKH7y3n-c",
+      "slug": "ongoing-evileye-campaigns-targeting-ccp-adversaries",
+      "title": "Ongoing EvilEye Campaigns Targeting CCP Adversaries",
+      "speakers": [
+        "Rascagneres Paul"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "intelligence",
+        "mobile",
+        "attack",
+        "privacy"
+      ],
+      "teaser": "Traces a mobile malware campaign that spreads trojanized apps to Tibetan, Uyghur and Taiwanese communities.",
+      "summary": "The talk follows an ongoing campaign run by a threat actor tracked as Evil Eye, also known as Bamboo, which has been active for several years. Unlike intrusions aimed at specific people, this group appears to pursue whole communities at scale. The speaker groups its Android malware into three related families and notes that some variants also have iOS support.\n\nMost of the session covers how the operators reach victims rather than malware internals. Modified copies of popular apps are spread through cracked-app forums, cloud-hosted download links, lure websites, social media accounts and large Telegram groups, often in translated versions aimed at minority-language speakers. One trojanized Signal build can silently pair a victim's phone with an attacker-controlled desktop client and can route traffic through a chosen proxy. JavaScript profiling on lure sites suggests visitors are fingerprinted, possibly to decide who receives an exploit, though no delivery was observed.\n\nEvidence for iOS is indirect, including leftover endpoints in a trojanized app and an app that was later removed from a store. The speaker found the operation efficient and largely automated, and noted the actor was still active but had recently released no new apps. Asked about attribution, the speaker had no firm answer beyond the targeting pattern. The takeaway is that defenders serving targeted communities should treat sideloaded and translated apps as a serious risk.",
+      "durationSeconds": 1853,
+      "publishedAt": "2023-10-18",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "DMQOy5p4n9s",
+      "slug": "how-digital-technologies-are-redefining-warfare-and-why-it-matte",
+      "title": "How Digital Technologies Are Redefining Warfare And Why It Matters",
+      "speakers": [
+        "Mauro Vignati"
+      ],
+      "track": "policy",
+      "topics": [
+        "attack",
+        "threat",
+        "state",
+        "risk"
+      ],
+      "teaser": "Explains how civilian participation in cyber operations during armed conflict blurs the line between civilians and combatants.",
+      "summary": "The talk opens with a 1999 statement by a coalition of hacker groups that condemned an underground group's declaration of cyber war on Iraq and China. The speaker argues that the situation has since worsened: states have militarised digital space, and the line between civilians and combatants has blurred. Offensive tools are now offered as services with simple point-and-click interfaces and scoreboards, letting people with no expertise join attacks. Denial-of-service attacks are often dismissed as low-level, yet they can disrupt hospitals, transport and industrial systems.\n\nThe speaker contends that the consequences of an operation, not its technical sophistication, should decide whether it counts as a cyber attack. Civilians who take part in hostilities lose their protection, and everyday smartphone use can be misread as participation. The speaker and a colleague proposed eight rules for civilian hackers, such as not targeting civilian objects, not releasing self-spreading malware, and avoiding medical and essential services, along with four obligations for states, including responsibility for people they direct and a duty to prosecute war crimes.\n\nThe closing message is that international humanitarian law does not ban hacking as such, but its limits apply to every actor in a conflict. A practitioner should take away that civilian involvement in cyber operations is a legal and humanitarian risk as well as a technical one. An audience question compared the blurring of categories to the doublespeak in George Orwell's 1984.",
+      "durationSeconds": 1389,
+      "publishedAt": "2023-10-18",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "-dMl-SvQl4k",
+      "slug": "pyrrha-navigate-easily-into-your-system-binaries",
+      "title": "Pyrrha: Navigate Easily Into Your System Binaries",
+      "speakers": [
+        "Eloïse Brocas"
+      ],
+      "track": "recon",
+      "topics": [
+        "vulnerability-research",
+        "reverse-engineering",
+        "embedded",
+        "linux",
+        "open-source"
+      ],
+      "teaser": "Shows how the Pyrra tool maps executables, symlinks and dynamic imports across a firmware filesystem for graphical browsing.",
+      "summary": "Firmware from routers, phones and cars usually runs a Linux-derived system made of thousands of files, and auditors need a fast overview of how components depend on each other before digging into any single binary. The talk frames this problem from a vulnerability research workflow, where static analysis often happens without root access and a graphical map of dynamic linking is more useful than long terminal output.\n\nThe talk presents Pyrra, a tool that parses ELF and PE binaries with LIEF, records exported and imported symbols, and resolves symlinks against a chosen root directory so every alias of a binary is visible. Results are written into a Sourcetrail project, where classes, functions and files can be browsed as a graph. A live demo on an OpenWrt-based router shows how BusyBox links can be traced, how to find binaries importing libcurl or a potentially vulnerable crypto library, and how to locate calls that disable SSL verification. A JSON export lets two firmware versions be compared by their symbols to spot changed binaries.\n\nThe speaker is open about limitations: import resolution is simplified and warns when a library name is ambiguous, PE case-sensitivity is only partly handled, and MIPS support depends on an upstream LIEF release. Because the Sourcetrail SDK is no longer maintained, the team is building its own Python API to write compatible projects. The takeaway for practitioners is a quick way to scope a firmware audit, with results that still need manual checking.",
+      "durationSeconds": 1376,
+      "publishedAt": "2023-10-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "vIXvTLkFJHI",
+      "slug": "how-we-build-a-collaborative-trustable-and-crowdsourced-cti",
+      "title": "How We Build A Collaborative, Trustable, And Crowdsourced CTI",
+      "speakers": [
+        "Matthieu Mazzolini"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "intelligence",
+        "machine-learning",
+        "open-source",
+        "network"
+      ],
+      "teaser": "Explains how a crowdsourced IP reputation feed is built, scored and prepared for machine learning.",
+      "summary": "The talk starts by asking what makes a threat intelligence feed useful, and proposes four traits: reliable, up to date, comprehensive and automated. It then introduces an open-source agent written in Go that reads logs, detects abusive behaviour using scenario files, takes a local response such as a notification or firewall rule, and shares offending addresses with a shared network.\n\nThe shared blocklist refreshes every two hours and holds roughly 60,000 addresses, limited to sources reported by many engines across the internet to keep false positives low. Entries expire after seven days without fresh reports. A test with a deliberately weak exposed machine showed it reaching the list within a few days. Scale is presented as the answer to comprehensiveness: tens of thousands of installations, millions of daily signals, thousands of autonomous systems and many operating systems, plus a large library of scenarios.\n\nOn the analysis side, the speaker shows an enriched view of each indicator, with third-party lookups and activity timelines, and two derived scores. A background-noise score from 0 to 10 flags automated, untargeted scanning so teams can cut alert volume. A malicious-duration metric, aggregated per autonomous system, suggests that hosting providers with fast abuse remediation are less attractive to attackers. The talk closes by modelling IP data as a bipartite graph of attackers and attack types, using community detection and GraphSAGE node classification, which can score previously unseen nodes.",
+      "durationSeconds": 1112,
+      "publishedAt": "2023-10-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "TxtdoeMIRGY",
+      "slug": "misp42-connecting-cti-and-soc-teams",
+      "title": "MISP42: Connecting CTI And SOC Teams",
+      "speakers": [
+        "Remi Seguy"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "intelligence",
+        "threat-detection",
+        "security-operations",
+        "hunting",
+        "tool"
+      ],
+      "teaser": "Shows how a Splunk app pulls MISP indicators into log searches and pushes findings back to the threat-sharing platform.",
+      "summary": "Threat intelligence teams produce large volumes of indicators, and MISP makes them shareable across communities. Security operations teams, meanwhile, often keep a year or more of endpoint telemetry in a SIEM. The speaker wanted to search that history for indicators that were frequently weeks or months old, which led to a Splunk custom command for querying MISP and then a packaged app.\n\nThe app is installed on a Splunk search head and configured with the name, URL and API key of each MISP instance. The key is stored encrypted, so users need the right Splunk capabilities to use it. Streaming commands check whether field values have been seen in MISP and retrieve sighting data. Generating commands fetch attributes or events into lookups or indexes for more structured work. A fetch command accepts JSON payloads and can page through all results, and a generic command can call any MISP API endpoint the key is permitted to use. Alert actions create or update MISP events, grouping rows by a unique ID, and increment sighting counters by value or attribute ID.\n\nThe talk closes with a five-step retro-search workflow. Recently received attributes are collected into a lookup, historical logs are searched in two stages to find matching index, source type and time values, and the details are then retrieved. Sightings are incremented, optional events are created for new findings, and CTI and SOC analysts review the results together to decide whether an indicator is poor quality or needs investigation. The speaker also pointed to other open-source projects presented at the event as possible alternatives.",
+      "durationSeconds": 973,
+      "publishedAt": "2023-10-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "k9GeEmGalb8",
+      "slug": "yeti-old-dog-new-tricks",
+      "title": "Yeti: Old Dog, New Tricks",
+      "speakers": [
+        "Sébastien Larinier",
+        "Thomas Chopitea"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "open-source",
+        "tool",
+        "lessons-learned",
+        "architecture",
+        "incident-response"
+      ],
+      "teaser": "Traces the history of the open-source Yeti threat intelligence platform and its shift toward digital forensics.",
+      "summary": "The two incident responders explain how Yeti began around 2014 as a way to store and make sense of indicators from network captures and malware samples. Early versions combined a feed ingestor, a MongoDB store and a visualiser called Malcolm, and organised data into observables, indicators and entities linked through tags. Licensing conflicts with AGPL dependencies and aging code eventually pushed the team to rewrite the project more than once.\n\nThe current rewrite moves to Apache 2.0 licensing, uses ArangoDB as a graph database alongside Redis, and runs on Python 3.10 with FastAPI and Pydantic. The API is self-documenting and can generate client libraries, and the team says it is deliberately narrowing scope, favouring simple code and adding tests. The bigger change is a move from pure threat intelligence toward digital forensics intelligence. Instead of only flagging known bad artifacts, the platform would suggest what to examine, using classification rules over benign items such as binaries, SQLite databases and Run keys, and combining forensic artifact definitions with filters to narrow large log sets.\n\nThe roadmap covers tighter integration with forensic artifact definitions and Turbinia, better graph visualisation, MISP connections, and a Docker Compose setup for quick trials. The closing takeaway is that Yeti aims to become a reusable forensic knowledge base that helps analysts slice their data. In the question period, an audience member with a STIX background encouraged the team to share forensic data models through a standard rather than building one-off integrations.",
+      "durationSeconds": 1448,
+      "publishedAt": "2023-10-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "fphzpP1XCNk",
+      "slug": "turbocharging-ioc-validation-become-a-more-efficient-cti-analyst",
+      "title": "Turbocharging IOC Validation: Become A More Efficient CTI Analyst",
+      "speakers": [
+        "Arwa Alomari"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat-detection",
+        "risk",
+        "automation"
+      ],
+      "teaser": "Presents a three-step method for triaging indicators of compromise so analysts can focus on what needs human review.",
+      "summary": "The talk addresses the volume of indicators of compromise that threat intelligence analysts receive every day. Many arrive without context, and an indicator that matters in one environment may be irrelevant in another. The speaker frames the core problem as one of time: indicators lose value quickly, and smaller teams often lack the staff or context to review each one by hand.\n\nThe proposed workflow has three stages. First, a Low Regret scoring model, described as originating from Johns Hopkins University research, sorts each indicator as low regret, high regret or undefined based on the impact of blocking it, rather than judging whether it is malicious. The speaker showed how domains, file hashes and IP addresses can be scored with simple rules and Python scripts, and noted that results vary with the source of the indicators. Second, the remaining indicators are prioritised by source and confidence, with internal telemetry ranked highest and public reports lowest. Third, analysts apply human review, guided by whether the goal is to validate, enrich or attribute the indicator.\n\nThe scenario section covered dynamic DNS providers, cloud-hosted IP addresses, legitimate Windows binaries abused by attackers, and addresses tied to a campaign. For campaign indicators, the advice was to check when they were collected and which stage of the attack they represent before deciding whether to block or monitor. The closing takeaways were to analyse indicators before their time to live expires and to accept that first-layer triage is often enough.",
+      "durationSeconds": 1407,
+      "publishedAt": "2023-10-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "sNtUkvTP3AI",
+      "slug": "modern-iocs-matching-with-suricata",
+      "title": "Modern IOCs Matching With Suricata",
+      "speakers": [
+        "Eric Leblond",
+        "Peter Manev"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "threat-detection",
+        "network",
+        "intelligence",
+        "open-source",
+        "security-operations"
+      ],
+      "teaser": "Shows how Suricata matches indicators of compromise in network traffic, with streaming tagging and MISP feed integration.",
+      "summary": "The talk opens with an overview of Suricata as an open-source network security monitoring engine. The speakers explain that it keeps protocol metadata and flow records even when signatures are switched off, and they describe conditional packet capture, which stores full sessions for alerts with deduplication. A flow ID links related protocol logs back to a single alert. They argue that a bare indicator match is weak on its own and needs surrounding context and history.\n\nThe middle of the talk covers how IOC matching has moved beyond one signature per indicator. Data sets hold large lists loaded from files or added at runtime through the Unix socket, and a single list can serve several protocol fields. Data sets can also learn values as they are seen, producing a low-cost sightings database for retrospective checks. Flowbits tag matching flows so they can be searched later. The speakers show example queries for newly registered domains, high-entropy names and suspicious downloads, and they present YITE, a Python tool that imports MISP indicators into Suricata and sends sightings back to MISP.\n\nThe closing section recommends Suricata's documentation for further reading and stresses that backward-looking searches over stored logs matter as much as real-time alerts. The main takeaway for practitioners is that retained metadata lets a newly published indicator be checked against past traffic. In the audience questions, the speakers said the project depends on signature-based detection and rich network data rather than unsupervised learning.",
+      "durationSeconds": 1817,
+      "publishedAt": "2023-10-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "XEzk0JIMTYI",
+      "slug": "jtan-data-sharing-network",
+      "title": "JTAN - Data Sharing Network",
+      "speakers": [
+        "Paweł Pawliński",
+        "Alexandre Dulaunoy"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "open-source",
+        "automation",
+        "network",
+        "project"
+      ],
+      "teaser": "Presents a European CERT consortium's open-source tooling for automated, machine-to-machine threat intelligence sharing.",
+      "summary": "The talk introduces JTAN, a project in which a consortium made mostly of national CERTs works to make threat information sharing faster, more proactive and more useful across European cyber defence organisations. The speakers walk through the open-source tools the project supports. MISP handles structured sharing, a tool for analysing unstructured text such as pastes, forums and dumps covers raw data, and a malware configuration repository feeds extracted settings into MISP through a connector.\n\nA central problem is noisy automated data. Indicators collected automatically often contain false positives, so teams tend to withhold them from peers. The project's answer is dedicated MISP instances used only for machine-generated events, combined with MISP's caching feature. Correlations can then be found without loading every record into analysts' instances, and an analyst can export a relevant hit into a working instance for follow-up.\n\nFor high-volume raw data such as passive DNS, certificate transparency and scan results, the speakers presented Cocktail Party, a newly open-sourced Elixir and Phoenix service that offers real-time WebSocket streams and lets partners exchange and merge feeds. A hackathon in Luxembourg in December was announced. The practical takeaway is to separate automated feeds from analyst work and to use streaming where MISP's sync model is a poor fit for the data.",
+      "durationSeconds": 1774,
+      "publishedAt": "2023-10-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "knu5AsqJ5Ds",
+      "slug": "sigma-project-news",
+      "title": "Sigma Project News",
+      "speakers": [
+        "Thomas Patzke"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "detection",
+        "open-source",
+        "tool",
+        "threat-detection"
+      ],
+      "teaser": "Walks through new Sigma project resources, rule packages, CLI post-processing and a web-based converter.",
+      "summary": "The update opens with a new central landing page for the Sigma project, which replaces resources that were previously spread across several GitHub repositories. It gathers documentation, rule repositories and related projects in one place, and short convenience domains point directly to the rules and to a route for reporting false positives. A project blog that has run for a few months carries general news and how-to articles on using Sigma and its converter.\n\nThe main change is a set of regular rule packages, released about every two weeks, added after feedback that the full repository produced too many false positives. A core package holds only high and critical severity rules that are marked stable. Core-plus and core-plus-plus packages need tuning before they are used operationally, an emerging threats add-on is organized by year, and an all-rules package contains everything at release state. The Sigma CLI also gained query post-processing, which uses a templating engine to add rule metadata, scheduling or search-window settings around generated output such as Splunk searches.\n\nFinally, a web-based open-source Sigma converter has been released. It is built on pySigma and includes the processing pipelines, and it can be deployed privately as a container. Its command line output lets users refine a conversion further with Sigma CLI. The speaker mentioned a follow-up workshop the next day and promised more announcements soon.",
+      "durationSeconds": 307,
+      "publishedAt": "2023-10-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "AMGirRG2XY0",
+      "slug": "are-leaked-credentials-dumps-used-by-attackers",
+      "title": "Are Leaked Credentials Dumps Used By Attackers?",
+      "speakers": [
+        "Xavier Mertens"
+      ],
+      "track": "osint",
+      "topics": [
+        "attack",
+        "privacy",
+        "intelligence",
+        "detection",
+        "credential-dumps"
+      ],
+      "teaser": "Shows that low-quality leaked credential dumps are still tried against live email services by attackers today.",
+      "summary": "The speaker opens with a personal story about running free shell accounts and email addresses for students and researchers in the 1990s. Users reused those addresses to register on early web services, and when those services were breached, the leaked data fed phishing campaigns. The point is that reusing an address across unrelated sites has lasting consequences.\n\nThe talk then turns to collecting public credential dumps from a range of sources. The files are usually poor quality, with many entries repeated from older leaks that were recombined into larger lists. To test whether the dumps still matter, the speaker monitored a mail server on a domain no longer in active use over six months. Login attempts using the leaked credentials arrived every day, with occasional large spikes, and came from several countries.\n\nThe conclusion is that even weak dumps get used in practice, because they offer an easy target that attackers can try at scale. Practitioners should avoid reusing credentials across services and change a password promptly when a provider reports that the address appeared in a leak.",
+      "durationSeconds": 262,
+      "publishedAt": "2023-10-17",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "N5M31i0L7DM",
+      "slug": "cobalt-striked",
+      "title": "Cobalt Striked?",
+      "speakers": [
+        "Vincent Hinderer"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "cobalt-strike",
+        "malware-analysis",
+        "threat-intel",
+        "detection",
+        "infrastructure"
+      ],
+      "teaser": "Shows how a leaked Cobalt Strike crack is patched, and how its default certificate exposes servers running it.",
+      "summary": "The presenter, from a security services company, opens with the background to a recently circulated crack of Cobalt Strike, a commercial post-exploitation framework that is widely abused by attackers. Cracks and leaks of the tool have appeared for years, and this one spread through underground forums and messaging channels shortly after a new major release, drawing press coverage. The vendor's team considered whether the release was an official patch, but found no link between the vendor's update and the leak.\n\nThe middle of the talk describes the analysis. The crack works without an authorization file and is not compatible with earlier leaked versions. Testing in an internal environment showed that the loader was modified during startup so that the main classes were swapped for a replacement archive, and the embedded public key was replaced. The application then launches normally. The team had not yet determined whether a backdoor was present, since the reverse engineering work was large, but they noted that this did not change the practical outcome, because the build was not fully functional.\n\nThe closing part focuses on detection. Passive methods such as known traffic fingerprints, including JA4 fingerprints, can identify Cobalt Strike servers. The presenter pointed out that operators who run the cracked build with its default certificate expose a certificate common name that reveals the crack's origin, making those servers easy to spot. Internet-wide passive sensors had already found several such servers. The takeaway for defenders is to check certificate fields as part of hunting, and to use passive scanning data to catch new deployments early.",
+      "durationSeconds": 273,
+      "publishedAt": "2023-10-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "E-no8kKv3vQ",
+      "slug": "liberate-the-csam-hashsets",
+      "title": "Liberate The CSAM Hashsets!",
+      "speakers": [
+        "Andras Iklody"
+      ],
+      "track": "policy",
+      "topics": [
+        "open-source",
+        "detection",
+        "intelligence",
+        "threat"
+      ],
+      "teaser": "Argues that known CSAM hash sets should be shared openly so defenders can automatically detect and block abusive material.",
+      "summary": "Known-material hash sets can be used to flag child sexual abuse material (CSAM) automatically, but this talk argues that they are kept away from the open-source security community. The speaker describes how a 2022 conference keynote and a related talk pushed practitioners to start blocking and alerting on this content, which would also spare analysts from viewing it while crawling or doing incident response.\n\nThe search for usable hash sets reached a dead end. Such sets are typically sold in paid feeds or shared only with closed groups such as law enforcement, and requests for access received no clear answer. One objection raised was that offenders could use the hashes to check their own material. The speaker compares this to earlier resistance to sharing IP-address indicators of compromise, and suggests that a lucrative market explains why the data stays scarce.\n\nWork in progress includes automatically detecting onion addresses that host such material, generating hash sets from them, and testing whether sets can be produced from existing content without analysts viewing it. The talk closes with an appeal to anyone holding these data sets to release them to open source, and to law enforcement agencies and vendors to cooperate. The takeaway for practitioners is that automated detection and blocking depend on the underlying data being shared at all.",
+      "durationSeconds": 315,
+      "publishedAt": "2023-10-17",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Gv2jmTzQecA",
+      "slug": "exploring-data-collection-analysis-and-security",
+      "title": "Exploring Data Collection, Analysis & Security",
+      "speakers": [
+        "P. Ventuzelo",
+        "T. Laucournet"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "monitoring",
+        "network",
+        "ipfs"
+      ],
+      "teaser": "Shows how IPFS content addressing, peer records and node monitoring can support threat intelligence and malware tracking.",
+      "summary": "IPFS is a peer-to-peer network that addresses files by content identifiers (CIDs) rather than by server location. Peers hold records that point to which node owns each CID, while the content stays on the owner's node. The network is about ten years old, and both blockchain projects and abusive actors use it, including phishing pages, darknet marketplaces and the IPStorm botnet, which used it for command and control.\n\nThe middle of the talk explains how investigators can pivot on IPFS data. Links surface in blockchain transactions, email, forums and chat, and existing scanning results may already cover them. A gateway error can mean censorship or an unreachable host, so trying other gateways or archives helps. Because a CID embeds a SHA-256 digest, a file hash can be derived from a link and checked against indicator feeds. Node identities can be profiled through peer IDs, addresses, agent versions and pubsub topics. IPFS keeps no history, so continuous monitoring with many nodes spread across the identifier space is needed.\n\nThe closing advice is that blocklists built on specific gateway URLs are easy to bypass, since switching gateways is trivial, so matching on CIDs or hashes is more durable. Attackers may run their own nodes to keep content available, and malware may try IPFS first and fall back to other channels. Requests to centralized gateway or pinning providers may also reveal who uploaded content.",
+      "durationSeconds": 1655,
+      "publishedAt": "2023-10-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "FteyxcRFVdI",
+      "slug": "he-is-everywhere-a-tale-of-lazarus-and-his-family",
+      "title": "He Is Everywhere: A Tale Of Lazarus And His Family",
+      "speakers": [
+        "JeongGak Lyu",
+        "@lazarusholic"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "state",
+        "attribution",
+        "north-korea"
+      ],
+      "teaser": "Traces how one North Korean threat actor family picked up its many vendor code names, clusters, and attack patterns.",
+      "summary": "The talk tackles a practical problem in threat intelligence: the same North Korean activity is reported under many different names by different vendors. Drawing on a personal collection of public reports, the speaker shows how the number of Lazarus-related write-ups has grown since 2018, and how vendors differ in whether they publish malware analysis or incident investigations, depending on how they obtain samples.\n\nThe speaker then groups roughly 140 code names into six clusters, including Lazarus, Kimsuky, Andariel and Konni, and compares the naming conventions used by different companies, from numeric labels to animal, gemstone and colour prefixes. The incident review sorts activity by motivation, such as destruction, espionage, data theft and financial gain, and notes that supply chain compromise, watering hole attacks and abuse of management software recur as initial access and lateral movement methods. South Korea, the United States, Japan and India appear as the most frequently affected countries.\n\nThe closing takeaway is that code names are confusing but useful for tracking overlapping activity, and that the group's focus appears to be shifting toward financial gain. Financial and cryptocurrency organisations are advised to assume they may already be targeted, and to check mail systems and web infrastructure, since compromised sites are often used in operations.",
+      "durationSeconds": 1492,
+      "publishedAt": "2023-10-17",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "JhbejNkAboE",
+      "slug": "cerebrate-learning-to-run",
+      "title": "Cerebrate - Learning To Run",
+      "speakers": [
+        "Andras Iklody"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "open-source",
+        "management",
+        "tool",
+        "trust"
+      ],
+      "teaser": "Shows how the open-source Cerebrate tool centralises contact directories and MISP instance management for security communities.",
+      "summary": "Cerebrate is an open-source tool for running information-sharing communities among CERTs and similar groups. The talk explains that early MISP communities were small, isolated islands, but growing numbers of interconnection, organisation and enrollment requests now consume administrator time. The tool aims to give these communities a self-service, single source of truth, and it also works as a contact directory that can look up responsible contacts for an IP address and map organisations to their IP ranges and other metadata.\n\nThe middle of the talk covers management of the tools themselves. Connectors let an operator push and pull organisation and sharing group data to MISP and other systems, diagnose connected instances, manage users, and trigger custom actions from one interface. A worked example showed a central node linked to several MISP instances, flagging one that was offline and others with misconfigurations. The speaker also described community-centric key lookup, where keys are associated with organisations rather than individual email addresses, and access control that can be pushed to an identity provider such as Keycloak.\n\nThe talk closes with recent development and the roadmap. Over the past year there were six releases and many commits, with feedback from a European CERT pilot shaping the work. Upcoming items include a fleet management release with a graphical view of connected tools, reworked sharing group handling, and propagating signing keys across a community for MISP's protected mode. The practical takeaway is that teams running many separate MISP instances can consolidate administration and automate how those instances interconnect.",
+      "durationSeconds": 735,
+      "publishedAt": "2023-10-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "jAXhPVzH-gk",
+      "slug": "unraveling-the-cyber-battle-between-ukraine-and-russia",
+      "title": "Unraveling The Cyber Battle Between Ukraine And Russia",
+      "speakers": [
+        "Ondrej Nekovar",
+        "Jan Pohl"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "detection",
+        "state",
+        "defensive-security"
+      ],
+      "teaser": "Traces the cyber campaigns tied to the Ukraine war and shows how threat intelligence can drive active defense.",
+      "summary": "The talk opens with the presenters' background at a Czech cloud provider serving public administration, and frames threat intelligence as a source of early warning and better resilience. It then walks through cyber activity linked to the Ukraine conflict, from earlier campaigns against Estonia and Georgia to the wiper malware, website defacements and satellite and mobile network disruption seen before the February 2022 invasion. The speakers describe how attacks continued afterward, including constant denial-of-service pressure and a sharp rise in hacktivist groups, one of which was a volunteer call to arms that drew many participants.\n\nThe middle section explains how their team moved from reactive monitoring toward active cyber defense. They present a six-step loop that starts with threat intelligence input, then analyzes and prioritizes threats, models likely adversary behaviour, verifies current detection coverage, tunes detections and deception elements such as decoy personas and honeypots, and finally validates the setup. To support this, they extended MISP with custom taxonomy, object and threat-group records. They also note that active defense has traditionally belonged to militaries and intelligence services, so smaller organizations need to choose what is practical for them.\n\nIn the question session, an attendee asked where system modeling fits in the process. The presenters said attack surface and threat landscape understanding came first and is still being improved, and they acknowledged relying on information from national authorities that they could not fully verify themselves. The main takeaway is that intelligence must be processed before it is useful, and that deception and intelligence-driven detection can help cover blind spots that traditional security misses.",
+      "durationSeconds": 1778,
+      "publishedAt": "2023-10-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "-uZdTsfezBw",
+      "slug": "ensuring-ioc-quality-at-cert-fr",
+      "title": "Ensuring IoC Quality At CERT-FR",
+      "speakers": [
+        "Victor Barrault"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "detection",
+        "automation",
+        "tool",
+        "practical"
+      ],
+      "teaser": "Shows how CERT-FR enforces indicator quality through internal Python tooling built around MISP and lifecycle tagging.",
+      "summary": "The talk comes from the operations department of CERT-FR, the French national cybersecurity agency, where a dedicated unit maintains the central indicator of compromise base used for threat intelligence, detection and incident response. The speaker starts with the problems that build up when many analysts share one MISP instance: duplicate or meaningless traffic-light tags, events carrying incompatible classification markings, and malformed attributes such as several IP addresses packed into one field or typos in names and hashes.\n\nTo address this, the team wrote an internal Python library on top of PyMISP. It requires mandatory fields, standardizes tags and taxonomies, checks that traffic-light and classification markings are compatible, and validates formats for IPs, hashes and dates. A capitalization script driven by a structured file lets analysts create and update events step by step, and it explains clearly when a value breaks a rule. The tooling also manages an indicator lifecycle: events start as creating, become qualified once tested against internal and external sources for likely false positives, and attributes are marked archived when they go stale, so consumers filtering on qualified data receive vetted indicators. Exports are logged so the team can see what leaves the platform.\n\nThe speaker acknowledges the limits. Checks run on analysts' machines, so anyone calling the MISP API directly can bypass them, and enforcing rules through scripts adds friction for users with very different workflows. Server-side MISP workflows could close that gap, but rebuilding checks that depend on external lookups is hard. In the Q&A, the speaker described operating across instances holding millions of attributes and clarified that archiving applies to attributes rather than whole events. The main takeaway is that shared conventions and enforced checks matter as much as the tooling itself.",
+      "durationSeconds": 1441,
+      "publishedAt": "2023-10-16",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "0Xa4E4ZpX2E",
+      "slug": "malware-av-evasion-tricks-cryptography-in-malware",
+      "title": "Malware AV Evasion Tricks: Cryptography In Malware",
+      "speakers": [
+        "Cocomelonc"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "detection",
+        "attack",
+        "cryptography"
+      ],
+      "teaser": "Shows how less common ciphers in malware payloads can lower antivirus detection scores, measured by entropy and VirusTotal results.",
+      "summary": "The talk looks at why common encryption schemes in malware development, such as XOR and RC4, are easy for antivirus engines and analysts to spot, since they are widely reimplemented and recognized. The speaker explores whether less common, textbook ciphers can reduce detection when used to encrypt payloads, strings and command-and-control traffic.\n\nTest samples start from a Metasploit payload, a message box, or a simple reverse shell, then get encrypted with several algorithms, including Z85, TEA, A5/1, Madryga and Skipjack. Each variant is compared on Shannon entropy of the PE sections and on VirusTotal detection counts. Several ciphers cut the score noticeably, for instance from 31 to 17 or 24, while entropy rises. Lab tests against Microsoft Defender, Bitdefender and Kaspersky showed similar bypasses, and Slack and Telegram API channels avoided detection where a custom C2 server did not.\n\nThe main takeaway is that a single cipher rarely works on its own. Results held up when several algorithms were chained with base64 or similar encoding, but entropy climbs with every extra round. The speaker also shares proof-of-concept code and YARA rules for these implementations so defenders can detect them, and notes that some rules produced false positives.",
+      "durationSeconds": 1294,
+      "publishedAt": "2023-10-16",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "50YY_cbJRoU",
+      "slug": "misp-updates",
+      "title": "MISP Updates",
+      "speakers": [
+        "Andras Iklody"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "open-source",
+        "development",
+        "vulnerabilities"
+      ],
+      "teaser": "Recaps a year of MISP threat-intelligence platform releases, new features, security fixes and the planned MISP 3 move.",
+      "summary": "Andras Iklody gives a yearly recap of the MISP threat-intelligence sharing platform, covering development since the previous CTI Summit. He reports a steady monthly release cadence, a large volume of commits from many contributors, and ongoing work toward a new framework generation called MISP 3. Much of the effort has gone into bug fixes, minor improvements and internal refactoring meant to ease the later port.\n\nThe middle of the talk walks through notable features. Workflows now offer many new actions and filters, with a worked example from a hackathon. A one-way push of filtered data to external sharing servers is available in the sync actions menu. Native OTP can be mandatory or optional, with single-use fallback tokens. Tags can now carry a verb describing their relationship, timelines were reworked for large events, and enrichment works on whole objects. Dashboard widgets are configurable, and admins gain better logging and API keys bound to IP ranges.\n\nThe closing section covers security: thirteen CVEs in the past year, and a fuzzing tool from a firm contracted by the Luxembourg army that found issues the team would otherwise have missed. The MISP 3 effort aims for full API compatibility with MISP 2 and a more analyst-centric interface, and contributions are welcome. Practitioners should update to current releases and review the features they may have missed.",
+      "durationSeconds": 1343,
+      "publishedAt": "2023-10-16",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "yFvvFIq7TKk",
+      "slug": "cratos-use-your-bloody-indicators",
+      "title": "Cratos: Use Your Bloody Indicators",
+      "speakers": [
+        "Dennis Rand"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "incident-response",
+        "detection",
+        "infrastructure",
+        "tool"
+      ],
+      "teaser": "Shows how a caching proxy in front of MISP can deliver indicators to firewalls and EDR tools during incident response.",
+      "summary": "The talk starts from the incident response lifecycle and the way responders move from an initial alert to deciding whether to stay passive, monitor, or actively block. Pushing indicators quickly to DNS servers, firewalls, EDR and XDR is hard in large organisations, where change management, outsourcing partners and fear of false positives slow every step. Adversaries adapt quickly once they see blocks, so speed matters.\n\nThe middle of the talk examines the risks of letting every security device query MISP directly. Read keys expose the wider event context, many pollers can overload the instance, and devices that accept only single addresses cannot use CIDR ranges without expansion. The speaker presents Katos, a FastAPI service with Memcached as a caching layer, that sits between MISP and security tools and serves only indicators as feeds. Feeds can be filtered by tags, IDS flags, publish state and warning lists, with deduplication and regex checks on fields such as IP. A repeated one-year query dropped from about 2.3 seconds to under a second, and cache entries expire automatically.\n\nAccess is limited through IP allowlists and per-instance tokens tied to the MISP security model. Future work includes better documentation, data minimisation and more output formats. The release is aimed at community feedback, and the takeaway is that a caching proxy lets detection tools use MISP data without exposing the whole instance.",
+      "durationSeconds": 1513,
+      "publishedAt": "2023-10-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ud2op0mWSgs",
+      "slug": "why-does-the-cti-industry-struggle-with-communicating-uncertaint",
+      "title": "Why Does The CTI Industry Struggle With Communicating Uncertainties?",
+      "speakers": [
+        "Ondra Rojcik"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "risk",
+        "trust",
+        "communication"
+      ],
+      "teaser": "Explains how CTI reports express uncertainty and compares common likelihood and confidence wording across vendors.",
+      "summary": "The speaker, a CTI analyst with a government intelligence background, starts with where uncertainty comes from in threat intelligence work. Analysts rarely have complete information, human behaviour is hard to model, and predictive judgments are themselves a source of doubt. Analysts often soften their wording with phrases such as \"probably\" or \"we believe\", and those phrases are easily read in different ways.\n\nThe talk separates two concepts that are often mixed up. Words of estimative probability describe how likely a judgment is, while levels of confidence describe how well the judgment is supported by sources, rated low, moderate or high. The speaker showed example sentences that combine the two, and noted that a small comparison of four vendor reports found inconsistent use, with some using only one expression and one mixing both without a clear reason. A five-level likelihood scale was presented, along with rough evidence criteria, such as strong supporting evidence and a history of similar events, for choosing terms like \"highly likely\".\n\nIn the Q&A, the speaker explained that likelihood and confidence describe different things, so a well-sourced claim can still be unlikely. Numeric percentages were discouraged because the estimates are qualitative. The closing advice is to keep the approach simple, apply it consistently, be transparent about the terms used, and explain why a given level was chosen.",
+      "durationSeconds": 1519,
+      "publishedAt": "2023-10-16",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "p8eUzcpG1JE",
+      "slug": "kunai-your-new-threat-hunting-tool-for-linux",
+      "title": "Kunai: Your New Threat Hunting Tool For Linux",
+      "speakers": [
+        "Quentin Jerome"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "threat-detection",
+        "linux",
+        "kernel",
+        "open-source",
+        "ebpf"
+      ],
+      "teaser": "Introduces Kunai, an eBPF-based Linux monitoring tool for threat hunting, and explains how it was built.",
+      "summary": "The speaker, an independent incident response consultant, introduces Kunai, a Linux monitoring tool for threat hunting intended to fill the gap left by Sysmon on Windows. His objections to the existing Linux port covered its XML configuration, a C++ codebase that is hard to collaborate on, a Windows-style event set that fits Linux poorly, and a repository that had gone quiet. His goals were to keep the useful ideas, balance raw and over-processed events, and provide solid documentation.\n\nKunai relies on eBPF rather than a kernel module. eBPF programs pass a verifier, run in a sandboxed virtual machine inside the kernel, attach to many kernel points, and share data with user space through maps. Rust was chosen so one language covers both kernel and user-space code, using the Aya library. The speaker also describes the learning curve, a mid-project library switch, and upstream contributions. Features include process tracking by unique IDs, events for executed and memory-mapped files, chronological JSON output, and host-side correlation, such as attaching a hostname to a connection using an earlier DNS event. Container activity is harder because files inside containers are not visible from the host.\n\nUsing CO-RE, a single binary runs on LTS kernels from 5.4 to 6.1, and the project's CI tests each kernel. Future development depends on funding and includes new probes. In questions, the speaker suggested Android could work but doubted Apple's kernel supports the needed eBPF features.",
+      "durationSeconds": 1547,
+      "publishedAt": "2023-10-16",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "wVo8xqg1WHo",
+      "slug": "fosstering-an-isac-enabling-a-community-with-open-source-tools",
+      "title": "FOSStering An ISAC: Enabling A Community With Open-Source Tools",
+      "speakers": [],
+      "track": "threat-intel",
+      "topics": [
+        "open-source",
+        "intelligence",
+        "building",
+        "project"
+      ],
+      "teaser": "Shows how an information sharing community can be set up and run using open-source tools.",
+      "summary": null,
+      "durationSeconds": 2004,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "vg6gozYzZso",
+      "slug": "cti-is-dead-long-live-cti",
+      "title": "CTI Is Dead, Long Live CTI!",
+      "speakers": [
+        "David"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat-intel",
+        "incident-response",
+        "intelligence",
+        "security-operations"
+      ],
+      "teaser": "Explores how threat intelligence teams can time and tailor their support for incident response teams during active cases.",
+      "summary": "The talk starts from a debate over whether cyber threat intelligence still has a place alongside incident response teams. The speaker, a senior threat analyst at a Swiss managed security provider, frames the purpose of intelligence as preparing for attacks that have not yet happened. Incident response teams see successful intrusions and high-severity alerts first hand, which makes their findings valuable to intelligence work, while intelligence teams need actionable findings shared quickly.\n\nThe middle of the talk uses firefighting as an analogy. Responders move through a fast cycle of assessing the situation, containing damage and regaining control of the network, and they are most focused and least responsive during that sprint. The speaker maps the work of an intelligence team against this rhythm, describing it as steadier and broader, covering threat landscape tracking and sector trends. Useful windows for contribution appear at the start of a case, during hunting and scoping, and in the case summary afterwards. Suggested contributions include concise written landscape notes early on, indicators or detection ideas during the hunt, and a second opinion once responders have time to reflect.\n\nThe closing section covers points of friction. Analysts make errors that responders cannot afford under pressure, and repeated requests for customer approvals add load. Open communication channels, succinct written input tailored to the case, and discussing hypotheses once pressure drops are offered as practical approaches. The speaker concludes that intelligence teams add lasting value to incident response teams when they pay attention to pacing and context.",
+      "durationSeconds": 1505,
+      "publishedAt": "2023-10-16",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "idtOY4kwoig",
+      "slug": "cloaking-malicious-web-content-delivery",
+      "title": "Cloaking Malicious Web Content Delivery",
+      "speakers": [
+        "Jeroen Pinoy"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "web",
+        "attack",
+        "threat",
+        "intelligence",
+        "privacy"
+      ],
+      "teaser": "Shows how browser fingerprinting lets attackers serve malicious content only to chosen targets while showing benign pages to analysts.",
+      "summary": "The talk introduces browser fingerprinting by comparing it to the guessing game Guess Who: a set of attributes collected from a browser can narrow it down to a single unique identity. One example given is canvas fingerprinting, where an image rendered in the browser varies with its hardware and settings, and the resulting data is sent back to a server.\n\nThe speaker then moves to cloaking, where a server changes what it delivers based on a visitor's fingerprint. An attacker could target a specific browser version or even a particular person, showing harmless content to everyone else and the malicious payload only to the chosen device. A decoy page can also waste an analyst's time, because the investigator may look at the benign content, decide the lead is bad, and never receive the real payload.\n\nThe main takeaway is that analysts should not assume every visit returns the same content, and that using different browser profiles may help reveal what is actually served. The speaker also points out that threat intelligence has little precise terminology for this behaviour, since existing tags describe only basic checks such as a browser version. The call is to share examples and, if the pattern recurs, to work toward a shared taxonomy.",
+      "durationSeconds": 298,
+      "publishedAt": "2023-10-16",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Elc5XM7C9eg",
+      "slug": "the-composition-analysis-of-binary-java-elf-go-and-javascript-ap",
+      "title": "The Composition Analysis Of Binary Java, ELF, Go, And JavaScript Apps",
+      "speakers": [
+        "P. Ombredanne"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply",
+        "open-source",
+        "reverse-engineering",
+        "code"
+      ],
+      "teaser": "Shows how to match compiled Java, ELF, Go and JavaScript binaries back to the source code they came from.",
+      "summary": "The talk starts with a practical problem: when you are handed binaries, you often need to know which parts come from your own source checkout and which parts came from elsewhere, such as open source packages, commercial prebuilt vendor components, or code that someone may have slipped in. Unidentified origins can hide bugs or unwanted functionality. The speaker gives the example of vendor-relocated copies of Log4j, which are bundled inside other published jars under different package paths.\n\nThe middle of the talk covers techniques for each format. For Java, class file paths usually mirror the original source file names, so mapping file names by path is a first step, followed by comparing symbols, function names and strings. Decompiling and comparing against a recompiled version of the source is another option, though decompiled names often differ from the source. JavaScript is treated as a binary in practice, since it is shipped minified or transpiled. Source maps, where present, can be used to match strings and confirm origins. For ELF files, DWARF debug information records source paths, which helps map symbols precisely, and mangled C++ names can make matching even more efficient. Go binaries keep a line table even in non-debug builds, so extracted symbols and lines can be matched back to source files efficiently.\n\nThe takeaway for practitioners is that each ecosystem leaves metadata that can be used to trace where code came from. Combining these clues gives a way to account for the origin of components in a build and to spot code that does not belong.",
+      "durationSeconds": 323,
+      "difficulty": "intermediate",
+      "publishedAt": "2023-10-16"
+    },
+    {
+      "youtubeId": "nDTYstIdrUI",
+      "slug": "geoopen-and-mmdb-server-an-open-source-solution-for-ip-address-g",
+      "title": "GeoOpen And MMDB-Server: An Open Source Solution For IP Address Geoloc.",
+      "speakers": [
+        "A. Dulaunoy"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "open-source",
+        "intelligence",
+        "tool",
+        "network",
+        "practical"
+      ],
+      "teaser": "Presents a free, regularly updated IP geolocation database and a local server for querying it.",
+      "summary": "The talk starts from a common pain point in threat intelligence work: IP geolocation data. Commercial sources often require registration and payment, and historical records are usually locked behind paid tiers. Many analysts instead turn to public lookup websites, which means they hand over the addresses they are investigating. Forensic work makes this worse, because an address's location can change over months or a year, so older geolocation data is often needed.\n\nThe speaker introduces GeoOpen, a free geolocation database distributed in the MaxMind DB format. Because that format is open, the files can be read by existing tools, and users can also build their own files from their own sources. The project refreshes its data daily and publishes historical snapshots of both location and network ownership data for download. Alongside the data, the MMDB-Server project offers an open source server that loads these files and answers lookups through an API. It has integrations for MISP and other tools, and it returns location and historical records for an address. Because it runs locally, queries stay off the internet and responses are fast. A public lookup service runs the same code for people who prefer not to host anything. The lookups cover both IPv4 and IPv6.\n\nThe practical takeaway is that teams can replace ad hoc lookup websites and paid historical feeds with a local, open data source that is easy to version and swap into MaxMind-compatible workflows.",
+      "durationSeconds": 187,
+      "publishedAt": "2023-10-16",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "LAJ6riWbW6g",
+      "slug": "case-management",
+      "title": "Case Management",
+      "speakers": [
+        "Cruciani"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "tool",
+        "open-source",
+        "project"
+      ],
+      "teaser": "Shows a lightweight open-source case management tool for tracking tasks, notes, reports and deadlines across organizations.",
+      "summary": "The speaker presents a case management application built to be flexible across different kinds of investigations and to stay light, so the key information can be seen quickly. The demo starts with a list of cases showing each one's title, description, last modification and status, with options to complete, edit or delete. Opening a case reveals its tasks, which can be assigned to users, given a status, and expanded with attached files and notes.\n\nNotes are written in markdown and can include Mermaid diagrams, and a report can be exported as PDF. Assigning a user to a task triggers a notification and places the task in that user's view. The tool supports several organizations, so teams can avoid duplicating work or creating entries that already exist. A calendar displays case and task creation dates and deadlines. Cases with their tasks can be imported from a structured file, and templates let a team reuse a baseline methodology, such as one for forensic investigations.\n\nThe speaker says the project is open source, hosted on GitHub, and under active development, and invites feedback through issues and pull requests. For practitioners, the main takeaway is a simple option for organizing investigation work, tracking responsibilities and producing reports, with room to shape it through contributions.",
+      "durationSeconds": 284,
+      "publishedAt": "2023-10-16",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "uNV16Sg2VVo",
+      "slug": "token-smart-contract-analyzer-2",
+      "title": "Token Smart Contract Analyzer",
+      "speakers": [
+        "Thierry Grandjean"
+      ],
+      "track": "appsec",
+      "topics": [
+        "smart-contract",
+        "tool",
+        "detection",
+        "threat",
+        "risk"
+      ],
+      "teaser": "Shows how simulating ERC-20 tokens on a controlled node can reveal backdoors and sell restrictions.",
+      "summary": "The talk introduces an in-progress analyzer for spotting fraudulent ERC-20 tokens on Ethereum and Binance Smart Chain. The presenter starts with the threat model: a token's behavior is governed by its smart contract, and whoever controls the deployment can embed logic that drains liquidity, traps holders, or blocks sales. Typical patterns include backdoors that let certain parties pull funds and restrictions where a token can be bought but not sold.\n\nThe approach is to take a snapshot of the current chain state, deploy the contract onto a node the team controls, and run it to see what is actually possible. This reveals whether selling works, which fees apply, and how supply and burn figures look.\n\nIn the live demo, the presenter pasted a token address into the tool, which deployed the contract and reported supply data, buy and sell fees, and a risk section. That section flagged a remaining owner address and whitelist or blacklist controls that determine who may trade. Findings feed a set of risk tables that produce a score, and the demo token scored around 30 out of 100. The presenter closed by planning to add machine learning to automate the process and extend coverage. The practical takeaway is that simulating a token on a controlled node can expose trading restrictions that reading the code alone may not make obvious.",
+      "durationSeconds": 314,
+      "publishedAt": "2023-10-16",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "SHdv_YK58kk",
+      "slug": "sboms-are-they-a-threat-or-a-menace",
+      "title": "SBOMs: Are They A Threat Or A Menace?",
+      "speakers": [
+        "Philippe Ombredanne"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply",
+        "open-source",
+        "vulnerabilities",
+        "risk",
+        "sbom"
+      ],
+      "teaser": "Explains software bills of materials, the standards behind them, and why vulnerability data and tooling still fall short.",
+      "summary": "The talk starts from the growing number of third-party packages in modern software, where a commercial application can pull in ten thousand components and spreadsheets stop being useful for tracking them. It introduces the software bill of materials, borrowed from manufacturing, as a machine-readable inventory of the components used to build a product, covering where each one comes from, its name, its version and optionally its license. The speaker walks through ways to produce one: parsing manifests and lock files, reading package databases, matching files by checksum or approximate similarity, instrumenting builds, and comparing binaries against source.\n\nThe middle section covers the two main formats, SPDX and CycloneDX, which the speaker treats as interchangeable containers rather than something to fight over. It also explains the package URL identifier, which maps components to vulnerability databases more cleanly than the older CPE scheme. The speaker argues that keeping component lists secret does not provide real security, and that exchange documents such as VEX are needed to state which known issues actually apply to a given product. Regulatory pressure is covered too, including a recent US executive order and upcoming European rules that could require disclosure, even for some open-source projects.\n\nThe closing part identifies the gaps. Few tools can ingest SBOMs on the receiving end, commercial vulnerability feeds often contain invented versions and packages, and the current curation process does not scale. The takeaway is that SBOMs are moving toward becoming a mandate, that the community needs better and more reliable vulnerability data, and that open-source maintainers face a compliance burden they did not sign up for and have no funding to cover.",
+      "durationSeconds": 1718,
+      "publishedAt": "2023-10-16",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "sXnYU1l3tZ0",
+      "slug": "detecting-vpns-proxies-by-analyzing-their-attack-patterns-over-t",
+      "title": "Detecting VPNs/Proxies By Analyzing Their Attack Patterns Over Time",
+      "speakers": [
+        "Emanuel Seemann"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "machine-learning",
+        "detection",
+        "privacy",
+        "network"
+      ],
+      "teaser": "Shows how crowdsourced intrusion data can reveal VPN and proxy addresses through their shifting attack patterns over time.",
+      "summary": "The talk looks at how crowdsourced intrusion data from an open-source intrusion prevention system can be used to spot VPN and proxy addresses. The data only records abusive activity, so anonymized services with mostly legitimate users show up as gaps and irregular bursts rather than steady traffic.\n\nThe analysis has two parts. A static view compares which attack scenarios are more common from proxy addresses than from other addresses. Brute-force attempts tend to come from compromised hosts, while spam comments often arrive through anonymized traffic, which suggests attackers rely on anonymization when interrupted attacks still succeed. The dynamic view groups each address's daily mix of attack types into clusters, so small day-to-day variation counts as the same pattern while major shifts count as changes. Frequent changes in cluster membership, along with missing days and erratic activity, point toward a proxy or VPN.\n\nThese signals feed a machine learning model trained on externally sourced labels. The model is tuned for recall, which accepts many false positives, and the speaker notes that some of these were later confirmed as unlabeled anonymizers. The pipeline runs serverless on AWS and takes about half a second per lookup. The talk closes with a public labeled dataset released as a competition, giving practitioners a way to build and test their own models.",
+      "durationSeconds": 1035,
+      "publishedAt": "2023-10-16",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "O_7x2qhayDQ",
+      "slug": "sbud-infovis-in-infosec",
+      "title": "Sbud: Infovis In Infosec",
+      "speakers": [
+        "Ange Albertini"
+      ],
+      "track": "malware",
+      "topics": [
+        "reverse-engineering",
+        "malware-analysis",
+        "open-source",
+        "visualization",
+        "file-formats"
+      ],
+      "teaser": "Shows how a JSON-driven SVG renderer replaces hand-drawn hex editor screenshots for file format diagrams.",
+      "summary": "Analysts often document binary file structures by taking screenshots of hex editors and adding arrows and labels in drawing tools. Ange Albertini, who works on malware analysis at Google's Flare team, explains why this approach is slow, inconsistent across viewers and themes, and produces images that cannot be reused when a report, slide deck or translation needs updating. He walks through his earlier attempts at automating the diagrams, including a layout system based on constraint solving that became too hard to debug.\n\nThe current version, called Sbud, takes a JSON description of the bytes, labels and highlights, then generates SVG directly with no framework and no external dependencies, so it works offline in an isolated virtual machine. Albertini demonstrated switching themes and fonts, skipping large empty regions such as padding in disc images, and exporting to PDF or PNG at chosen dimensions. He noted that bit-level and character-based formats need special handling, that the tool cannot list installed fonts without enabling fingerprinting, and that existing parsers can already emit compatible JSON.\n\nThe main takeaway is to keep the underlying information rather than the picture. Once a structure is described, the same data can be regenerated for new layouts, localisations or house styles, and the output stays vector-based. The tool is open source under the MIT license and remains experimental, with planned additions such as source code views, timelines and packet diagrams.",
+      "durationSeconds": 1709,
+      "publishedAt": "2023-10-16",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "dn7ozCQvZZ8",
+      "slug": "cti-operational-procedures-with-jupyter-notebooks-and-misp",
+      "title": "CTI Operational Procedures With Jupyter Notebooks And MISP",
+      "speakers": [
+        "Koen Van Impe"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "automation",
+        "tool",
+        "practical"
+      ],
+      "teaser": "Shows how Jupyter notebooks and PyMISP turn threat intelligence investigation steps into shareable, documented procedures.",
+      "summary": "Koen Van Impe starts from a common problem in cyber threat intelligence work: operational procedures live in documents that quickly fall out of date. Analysts copy commands into a virtual environment, paste the output into a report, and the written steps drift away from what the tooling now requires. He describes consumer and producer versions of such procedures, such as checking an IP address against feeds and internal MISP instances, then enriching it with ownership and DNS lookups, or guiding a junior analyst to encode attributes into a MISP event.\n\nThe middle of the talk presents Jupyter notebooks as one place to hold code, its output and explanatory text, stored as JSON so version tracking works. He walks through starting a notebook server safely, including binding it to a reachable address, using the access token, keeping API keys out of the notebook, and running it in a managed environment rather than on the MISP server itself. Practical habits include a skeleton script, separating variables from logic, printing results at each step, and clearing outputs before saving. He also shows an integration example that wraps a third-party API.\n\nHe closes with limits and ideas. Notebooks are effectively single-user unless paired with JupyterHub, resource use needs watching, and future work could link notebooks with MISP workflows. The audience questions covered whether to store notebooks with or without results, and whether this kind of tooling belongs inside the MISP interface.",
+      "durationSeconds": 1245,
+      "publishedAt": "2022-10-20",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "tjmGPcqM7oI",
+      "slug": "the-holy-grail-for-stix-and-misp-format",
+      "title": "The Holy Grail For STIX And MISP Format",
+      "speakers": [
+        "Christian Studer"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "open-source",
+        "tool",
+        "framework",
+        "standards"
+      ],
+      "teaser": "Covers how MISP-STIX conversion grew into a standalone library, and the mapping gaps still open.",
+      "summary": "Christian Studer, a MISP core developer and OASIS CTI participant, looks at how the project's STIX integration has developed and where it still falls short. He starts with the original export from MISP to STIX 1.1 and 2.0, and the limits that came with it: exports could only work on whole events, and feeds had to be imported into a MISP instance before any conversion could happen.\n\nThe middle of the talk covers the response: a standalone Python library in its own repository, now with STIX 2.1 support, attribute-level conversion, command-line use, and generated mapping documentation. The speaker describes vendor STIX bundles that fail strict UUID validation, which led the team to a more permissive loader that keeps references to the original identifiers. Custom objects fill gaps where STIX lacks required fields, while indicator patterns, course-of-action semantics and the choice between objects, attributes and galaxy clusters remain open questions.\n\nThe closing section lays out the roadmap: importing STIX 2.1 into MISP, TAXII support, exporting individual objects, and closer work with standards partners. A short live demo shows a STIX file uploaded and turned into a MISP event. The takeaway for practitioners is that conversion between the two formats is never fully lossless, so sample files and clear issue reports matter.",
+      "durationSeconds": 2128,
+      "publishedAt": "2022-10-20",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "sxbVxKdiW-A",
+      "slug": "whids-update",
+      "title": "WHIDS Update",
+      "speakers": [
+        "Quentin Jerome"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "defensive-security",
+        "incident-response",
+        "threat-detection",
+        "windows",
+        "tool"
+      ],
+      "teaser": "Walks through the latest updates to an EDR agent and manager, covering ETW support, per-rule actions and centralized configuration.",
+      "summary": "The talk gives an update on a self-built endpoint detection and response project with two parts: an agent on each endpoint that reads Sysmon logs and applies custom detection rules in real time, and a manager that exposes APIs for administrators and for the agents. The speaker first recaps the core capabilities. When an alert fires, the agent can capture process memory, registry changes or a structured JSON report within seconds, and it can kill or blacklist processes. The manager handles endpoints, logs, stored artifacts and aggregated detection reports that help rank machines for triage. Events can also be streamed over a websocket to plugins, with MISP integrations as examples.\n\nThe main part covers what changed over the past year. Response actions can now be set per rule instead of only by alert criticality. Sysmon and OSQuery deployment and configuration, previously done by hand on each machine, can be pushed from the manager, and the agent configuration is centralized the same way. Indicator handling was decoupled from MISP through a generic API, so any data source can feed it. On Windows, the agent moved from hooking the older event log API to consuming ETW, which the speaker presents as faster, more flexible and less exposed to a known evasion. API documentation is now generated from tests through a git hook, and a CI/CD pipeline was built.\n\nThe talk closes with next steps: finishing a long-delayed release, publishing real attack and malware case studies, and eventually porting to Linux and macOS, where the speaker says no framework matches Sysmon's telemetry. In the Q&A, API hooking was rejected as intrusive and easy for malware to bypass in user mode. The speaker invited feedback, feature requests, code contributions and sponsorship.",
+      "durationSeconds": 1595,
+      "publishedAt": "2022-10-20",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "rM8cyEOUT0w",
+      "slug": "community-orchestration-via-cerebrate",
+      "title": "Community Orchestration Via Cerebrate",
+      "speakers": [
+        "Andras Iklody"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "open-source",
+        "trust",
+        "management",
+        "automation"
+      ],
+      "teaser": "Explains how Cerebrate centralizes contacts, sharing groups and keys across MISP instances for a threat-sharing community.",
+      "summary": "The talk introduces Cerebrate, an open-source tool built within an EU-funded project to help information-sharing communities manage their members and interconnections. The speaker describes the problems that grow with large, diverse communities: keeping track of who the partners are, finding the right CERT for a compromised system, resolving clashing identifiers when organisations join several communities, and setting up links between MISP instances by hand, which is slow and error-prone.\n\nThe middle of the talk walks through how the tool works. Cerebrate nodes exchange metadata about organisations, individuals, PGP keys and sharing groups. Two nodes can agree to interconnect through a request and confirmation handshake, after which the tool instructs the MISP instances on each side to set up the sync link, and the data then flows through the native APIs. Communities can define custom metadata libraries, connectors can manage other tools, and user management, auditing and an API are included. An opt-in public listing of organisations and a planned distinction between trusted upstream sources and ordinary feeds were also presented.\n\nFor practitioners, the main takeaway is that contact, key and sharing-group coordination can be centralised instead of run through email exchanges, though trust between members still depends on building relationships over time. The speaker closes with the roadmap, which covers signing and encrypting sharing groups, further integrations such as ticketing and messaging, and a shared codebase that will move MISP onto the same stack.",
+      "durationSeconds": 1954,
+      "publishedAt": "2022-10-20",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "7k8flUpGF5c",
+      "slug": "docintel-a-context-centric-threat-intelligence-platform",
+      "title": "DocIntel: A Context-Centric Threat Intelligence Platform",
+      "speakers": [
+        "Antoine Cailliau"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "open-source",
+        "tool",
+        "web",
+        "lightning"
+      ],
+      "teaser": "Presents a self-hosted platform that organizes and searches threat reports by context rather than raw indicators.",
+      "summary": "The talk starts from a common problem in cyber threat intelligence: teams must absorb and produce information quickly, yet many threat intelligence platforms concentrate on technical indicators rather than context. Reports end up spread across paid vendor portals, PDF folders on individual analysts' desktops, and blogs that can disappear. Knowledge is lost when subject matter experts leave, and searching across all of these sources is slow, especially when adversaries keep changing how they write up observables.\n\nThe speaker introduces DocIntel, a web application that acts as a central, searchable repository for threat reports. Users read documents in the browser, search with filters, and organize material with tags grouped into facets such as geography, software and source. Reports arrive by upload or automated collection, and the tool pre-processes them by extracting metadata, tags and observables using keywords and regular expressions. An analyst then reviews the result, corrects titles and classifications, and the system learns which extracted URLs to ignore over time. Access is controlled through groups, with multi-factor authentication, LDAP integration and audit logs of who viewed which document.\n\nThe tool is written in .NET, runs under Docker, and is open source, with commercial support offered on request. The speaker says it scales to hundreds of thousands of documents with some tuning, and mentions a planned Python API client and documentation still in progress. He also invited feed providers to help build connectors. In the Q&A, binary file storage was noted as not yet supported. The main takeaway is to keep threat knowledge centralized and contextual instead of relying on folders and indicator lists.",
+      "durationSeconds": 1103,
+      "publishedAt": "2022-10-20",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "2VckWfgS2mE",
+      "slug": "news-from-the-automation-department",
+      "title": "News From The Automation Department",
+      "speakers": [
+        "Sascha Rommelfangen"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "automation",
+        "vulnerabilities",
+        "incident-response",
+        "open-source"
+      ],
+      "teaser": "Shows how exposure data about vulnerable Exchange servers gets turned into automated notices to their owners.",
+      "summary": "The talk starts from a practical gap: exposure data from leaked scan results gives only bare IP addresses for hosts with recently disclosed Exchange Server vulnerabilities. Looking up owners through WHOIS and DNS rarely produces a usable contact quickly, so the speaker's team built a pipeline to reach the responsible people faster.\n\nThe pipeline pulls results from the LeakIX API with a Go client, then resolves each IP to its DNS names and alternate domain names using OpenSSL. A validation step runs an Nmap script, written by a colleague for Exchange issues, to check whether a host is still exposed to the latest referenced attacks. WHOIS and DNS lookups then produce candidate email addresses, which can be corrected or extended by hand when the list looks thin. A notification template is attached, and a ticket is opened that sends the condensed advisory to the contacts. A live demo showed this flow end to end for one organisation whose server had been patched but was not fully covered by the check.\n\nThe second part concerns a large MISP community of roughly 3,000 users across about 1,500 organisations, many of them external and therefore outside the speaker's control. Bounce messages from departed users or full mailboxes were piling up, so a small script collects them from a mailbox fed by Postfix and Exchange bounce notices, extracts the addresses, runs sanity checks, and then either disables email notifications or disables the account. The takeaway is that modest glue scripts around existing APIs and mail handling can keep both outreach and user hygiene manageable at scale.",
+      "durationSeconds": 361,
+      "publishedAt": "2022-10-20",
+      "difficulty": "intermediate"
+    }
+  ]
+}

@@ -1,0 +1,344 @@
+{
+  "villageSlug": "ground-floor",
+  "villageName": "Ground Floor",
+  "eventSlug": "bsides-las-vegas-2024",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLjpIlpOLoRNRdgvjTXIWgHJP7UsA4sFcE",
+  "description": "Ground Floor talks from BSides Las Vegas 2024.",
+  "talks": [
+    {
+      "youtubeId": "zGBty3bXORU",
+      "slug": "whois-the-boss-building-your-own-whois-dataset-for-reconnaissanc",
+      "title": "WHOIS the boss? Building Your Own WHOIS Dataset for Reconnaissance",
+      "speakers": [
+        "Will Vandevanter"
+      ],
+      "track": "osint",
+      "topics": [
+        "recon",
+        "intelligence",
+        "infrastructure",
+        "automation",
+        "open-source"
+      ],
+      "teaser": "Shows how to build a large WHOIS dataset to find a company's domains and get alerted when new ones appear.",
+      "summary": "The talk starts from a common reconnaissance step: reverse WHOIS lookups on registrant details such as an email address or organization, which can reveal other apex domains a company owns. Commercial data brokers offer this but charge for access and throttle queries. The speaker recounts a continuous pentest where a second apex domain found this way exposed a hardcoded cloud credential and gave a foothold into the environment.\n\nThe middle of the talk covers building an in-house dataset. Source domains come from a free top-million list and a daily feed of newly registered domains. Lookups avoid home IP rate limits by rotating IPv6 addresses through a local SOCKS proxy, using RDAP where registrars support its JSON responses, and running a Go tool across many concurrent serverless functions on a schedule that changes the source address. The tool backs off when a registrar pushes back. Alerts fire when fields such as email, organization or registrar match a watch list, so new domains tied to a target surface quickly. Matching on registrar as well as name helps catch assets that a single field would miss.\n\nThe closing section weighs trade-offs. Data brokers keep historic records going back more than a decade, which a self-built set cannot match, and bulk data is expensive. A personal pipeline needs ongoing curation to track which lookups were throttled, but its structured output loads easily into a database. The speaker considers alerting on new registrations the most valuable outcome, and points to certificate transparency and zone data as further sources for the same kind of work.",
+      "durationSeconds": 1389,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "fP-TFxEUYgQ",
+      "slug": "detection-engineering-demystified-building-custom-detections-for",
+      "title": "Detection Engineering Demystified: Building Custom Detections for GitHub Enterprise",
+      "speakers": [],
+      "track": "blue-team",
+      "topics": [
+        "detection",
+        "defensive-security",
+        "building",
+        "engineering"
+      ],
+      "teaser": "Shows how to build custom detections for GitHub Enterprise, demystifying the detection engineering process.",
+      "summary": null,
+      "durationSeconds": 2620,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "W5IeHKLYFOE",
+      "slug": "pipeline-pandemonium-how-to-hijack-the-cloud-and-make-it-rain-in",
+      "title": "Pipeline Pandemonium: How to Hijack the Cloud and Make it Rain Insecurity",
+      "speakers": [
+        "Blake Hudson"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "devops",
+        "identity",
+        "build",
+        "attack"
+      ],
+      "teaser": "Shows how CI/CD pipeline misconfigurations in GitHub Actions can expose cloud secrets and grant administrative access to AWS.",
+      "summary": "The talk opens with a primer on CI/CD pipelines and the common providers, including Jenkins, CircleCI, TeamCity, GitLab and GitHub Actions, with GitHub Actions and AWS as the focus. The speaker, an offensive security engineer, explains why pipelines often hold the most serious cloud attack paths: developer access and stored credentials are reachable from a single repository and are seldom monitored.\n\nThe middle section walks through attack paths. Secrets kept in repositories, environment variables or pipeline settings can be located by searching code and reading workflow files. Masking of secrets in logs is easy to get around with simple text transformations or encoding. Pushing a new branch with a malicious workflow runs code without any approval. Cloud roles that trust GitHub's OpenID Connect integration can be assumed from workflows, and a loose wildcard in the trust condition let an outside repository gain access. Pull request triggers can satisfy weak conditions, and a demo showed stolen tokens used to approve and merge a change.\n\nThe closing advice centers on least privilege: limiting roles to the tasks they need, restricting which repositories developers can reach, separating runners by team, tightening trust conditions, scoping secrets to protected environments and branches, and keeping session lifetimes short. The speaker also urged forwarding GitHub logs to monitoring and said GuardDuty had been inconsistent at catching misuse. An audience question confirmed the scenarios assume an insider with developer access.",
+      "durationSeconds": 2355,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "wwfry_ttJ4o",
+      "slug": "nothing-went-to-plan-because-you-didnt-have-a-plan",
+      "title": "Nothing Went to Plan..... Because You Didn't Have a Plan",
+      "speakers": [
+        "Odd Job"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "management",
+        "risk",
+        "team",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how to draft an incident response plan covering people, process and technology before a breach hits.",
+      "summary": "The talk opens with a scenario in which a CISO learns of a breach on a Monday and finds the response chaotic, with unclear decisions, an inaccurate press statement and no defined roles. The speaker argues that a usable incident response plan has to exist before the next incident, and that it should begin with people rather than tools. Many existing plans are bloated, so reviewing and salvaging an old one is a sensible first step.\n\nThe middle section walks through the building blocks. Identify key contacts across technology, HR, legal, finance, facilities and regulatory teams, each with a primary and a backup. Agree on definitions for security event, incident and breach with legal, since contract and regulatory wording depends on them. Set severity levels that determine who gets pulled in, add incident categories, and structure the plan around phases from identification through recovery and post-incident review. Other points cover out-of-band communication channels arranged in advance and separating operational response from executive decisions.\n\nTo finish, the speaker recommends keeping the document short enough for an executive to read in about ten minutes, with technical detail moved into playbooks. The plan should be tested through tabletop exercises, starting with technical teams, and repeated every year. Writing a first draft and iterating is more useful than waiting for a perfect version.",
+      "durationSeconds": 3095,
+      "publishedAt": "2024-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "RGZgdzWo4k8",
+      "slug": "a-quick-story-of-security-pitfalls-with-exec-commands-in-softwar",
+      "title": "A Quick Story Of Security Pitfalls With Exec Commands In Software Integrations",
+      "speakers": [
+        "Lenin Alevski"
+      ],
+      "track": "appsec",
+      "topics": [
+        "vulnerability-research",
+        "appsec",
+        "open-source",
+        "exploit",
+        "defensive-security"
+      ],
+      "teaser": "Walks through a command injection flaw in an open-source automation UI, from code review to exploitation and mitigation.",
+      "summary": "The talk opens with the choices developers face when connecting software: use a library or SDK, call an external API, or run another program directly through an exec-style system call. The speaker argues that the last option carries the most risk, because it opens the door to command injection, a long-standing weakness that still drives major breaches.\n\nThe core example is an open-source web interface for Ansible, a popular automation tool. While reading the Go code, the speaker found that the project launched playbooks through a system call. The binary path was hardcoded, but several arguments still came from users. A low-privileged account could supply extra variables that were evaluated at run time, so arbitrary commands could execute on the host and on other machines the tool managed. The speaker reported the issue responsibly, the project patched it, and it was assigned CVE-2023-39059 with high severity.\n\nTo close, the speaker offers a red-team view of what to examine in this kind of code: injectable commands, arguments, environment variables, working directories, and output that may leak secrets. The defensive guidance favors APIs over exec, threat modeling each integration, dropping privileges, sanitizing input with allowlists, reviewing risky flags, and combining static analysis with developer training.",
+      "durationSeconds": 1462,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "X5u8-ARrFkw",
+      "slug": "the-road-to-developers-hearts",
+      "title": "The road to developers' hearts",
+      "speakers": [
+        "Sing Ambikapathi"
+      ],
+      "track": "community",
+      "topics": [
+        "lessons-learned",
+        "development",
+        "team",
+        "risk",
+        "management"
+      ],
+      "teaser": "Shares practical ways for security teams to build trust, reduce friction and collaborate with software developers.",
+      "summary": "This talk looks at the friction that often arises when software engineers and security teams work on the same projects. The speaker, who has built security products since 2017 and worked on both sides, explains that differing priorities, tight deadlines and limited resources can turn small disagreements into escalations. The talk is organised around people, process, technology and culture.\n\nOn the people side, the speaker argues that trust grows when security staff are easy to reach and get involved early, through office hours, design reviews or a quick asynchronous channel. On process, early engagement helps, but heavy controls can slow prototypes, and a late audit that surprises teams breeds resentment. Security tooling is most useful when it is added to continuous integration and tuned to cut false positives, because noisy results cause developers to abandon it. Escalations go better when they come with a concrete mitigation plan and clear success criteria, and security groups should rank their requests ruthlessly so developers can see what matters most.\n\nThe closing section covers culture. Security changes can take a year or two of repeated reminders, so the speaker recommends finding allies inside development teams who will prompt security questions. Mentoring people and encouraging them to attend training and community events can influence an entire organisation. The talk ends with the speaker's own path into security, which began with a mentor.",
+      "durationSeconds": 951,
+      "publishedAt": "2024-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "KVy-kSPrHk8",
+      "slug": "tactics-of-a-trash-panda",
+      "title": "Tactics of a Trash Panda",
+      "speakers": [
+        "Angel Gamboa"
+      ],
+      "track": "red-team",
+      "topics": [
+        "tool",
+        "device",
+        "building",
+        "hardware",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how one tester can build their own physical entry tools from everyday retail and craft materials.",
+      "summary": "The talk asks how far a single physical tester can get by making their own entry tools instead of buying specialized kits. The speaker points out the drawbacks of commercial tooling: it costs money, can look like obvious red team gear that undermines a pretext, and may be restricted by local law. The proposed alternative is resourcefulness, using materials from pleasure-focused retailers, craft stores and hardware shops. Preparation comes first, including reading fire and accessibility standards, scoping the site, building several pretexts with matching props and clothing, and packing a kit that is legal to carry and plausible to explain.\n\nThe middle of the talk covers homemade versions of common tools. These include under-the-door tools made from copper tubing, framing wire or Kevlar cord, shims cut from stencil sheets, and a titanium J-tool for crash bars. Lock picks were made from bobby pins and windshield wiper internals. Bump keys were used with a 3D printed bump hammer, and the speaker explained how material stiffness changes the result. He also demonstrated casting a key in a low-melting alloy using a polymer clay mold. Other techniques included dusting keypads for fingerprints with a cheap powder and highlighter traps under UV light, magnetic bypass of a door alarm, and low-cost hardware such as Raspberry Pi based HID implants, passive network taps and a wireless setup.\n\nThe closing advice is to practice each technique with minimal supplies and under pressure, and to plan for failure so a bad outcome can be talked through. The speaker stresses legal limits and authorization, and points to resources and practice environments for building these skills.",
+      "durationSeconds": 2529,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "C2w3TZNuTa8",
+      "slug": "spear-phishing-at-scale-using-generative-ai",
+      "title": "Spear-Phishing at Scale using Generative AI",
+      "speakers": [
+        "Josh Kamdjou"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "phishing",
+        "ai",
+        "threat",
+        "detection",
+        "social"
+      ],
+      "teaser": "Shows how generative AI lets attackers build convincing, fabricated email threads for phishing campaigns at scale.",
+      "summary": "The talk looks at how generative AI changes email-based attacks, which remain a leading route for social engineering. The argument is that attackers are chasing better return on investment, and generative models cut the time and cost of writing targeted lures while making them more convincing. The examples come from attacks seen in the wild, with the caveat that AI authorship can only be judged as likely rather than proven.\n\nThe examples move from polished, generic invoice fraud with no spelling mistakes, to benefits-enrollment phishing whose attached PDF carried a QR code, to the most elaborate case: a fabricated email thread with invented replies from real people at the target organization about a real event, sent from a newly registered lookalike domain. The speaker notes that AI-text detectors gave unreliable verdicts, with many false positives and misses, so they should not be relied on as a primary signal. A short exercise showed that scraped profile data and recent posts, fed into a prompt, produced a believable lure after little iteration.\n\nFor detection, many existing signals still apply, such as first contact from an unknown sender and malicious documents or links. Defenders can also use language models for intent and entity extraction. Practical advice includes layered defenses, user education about convincing lures, phishing-resistant multi-factor authentication such as hardware keys, and out-of-band approval for large payment changes.",
+      "durationSeconds": 1415,
+      "publishedAt": "2024-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "xOlj0rgu_G4",
+      "slug": "rolling-out-the-c2-a-take-on-modern-red-team-infrastructure",
+      "title": "Rolling out the C2: A Take on Modern Red Team Infrastructure",
+      "speakers": [
+        "George Polivka",
+        "arv"
+      ],
+      "track": "red-team",
+      "topics": [
+        "infrastructure",
+        "cloud",
+        "open-source",
+        "tool",
+        "devops"
+      ],
+      "teaser": "Walks through building a Terraform-deployed Azure C2 platform with overlay VPN, redirectors, and reporting services.",
+      "summary": "Two red team members at a large retailer explain why they built their own command-and-control platform. Their previous infrastructure was static, hard to change between engagements, and poorly documented after staff turnover. They set goals for a cloud-hosted stack that could be spun up and torn down per engagement, stayed modular so components could be swapped, and could be deployed by any team member with a single Terraform run.\n\nThe architecture sits in one Azure network with a handful of small virtual machines. One host runs a self-hosted Headscale coordination server in place of the hosted Tailscale control plane, along with a reverse proxy and Keycloak for single sign-on. Other hosts provide a Git repository, a dashboard, a private paste service, and a report-writing tool, while C2 listeners such as Sliver and a Metasploit handler run on separate machines to keep them isolated. A live demo showed a deployment finishing in roughly two minutes and a teardown taking about as long.\n\nThe presenters estimated the stack costs around fifty dollars a month and relies mostly on open-source components. Planned improvements include making the design cloud-agnostic, wrapping Terraform in a guided Python front end, supporting parallel deployments, pre-baking virtual machine images, and exploring a local model for exploit development. They were candid that most of the design was learned by trial and error over about two months, and that the code was still being cleaned up before release.",
+      "durationSeconds": 3216,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "l_9wabniJhQ",
+      "slug": "adversaries-also-lift-and-shift-cloud-threats-through-the-eyes-o",
+      "title": "Adversaries Also Lift & Shift: Cloud Threats Through the Eyes of an Adversary",
+      "speakers": [
+        "Roy Sherman",
+        "Adi"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "attack",
+        "threat",
+        "identity",
+        "detection",
+        "defensive-security"
+      ],
+      "teaser": "Compares how attackers and defenders approach cloud environments, where identity and API access replace traditional breach paths.",
+      "summary": "The talk opens by widening the definition of cloud to include any provider, system or SaaS application that delivers services online. The speakers argue that cloud adoption is growing faster than cloud security, and they point to a recent incident in which a state-linked group used password spraying against a legacy test tenant without MFA and then reached production systems and source code. The lesson given is that cloud intrusions often need no exploit at all.\n\nFrom the attacker's side, the speakers explain that cloud consoles and APIs make activity easy to perform and automate, and that misconfigured public storage is a common target. Identity has replaced the network perimeter as the main entry point, whether through phished human credentials or non-human keys left in code repositories. A second case described a stolen non-human credential that opened a storage bucket holding data for many customers, with further keys for other companies inside it. On the defensive side, the speakers describe how cloud offers fewer familiar indicators, logs arrive late and are often off by default, formats differ between providers, SaaS logs may depend on license tier, and responsibility is split across teams.\n\nThe closing recommendations are practical. Check that logs are enabled in every region, on every provider and across SaaS platforms, and turn on the native cloud security services each provider offers. Run a red team exercise to reveal visibility gaps, then build behavioural detections based on which APIs are called, in what order and at what timing.",
+      "durationSeconds": 1584,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "iHOfDqlCdsw",
+      "slug": "discover-the-hidden-vulnerability-intelligence-within-cisas-kev",
+      "title": "Discover the Hidden Vulnerability Intelligence within CISA's KEV Catalog",
+      "speakers": [
+        "Glenn Thorpe"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "vulnerabilities",
+        "threat",
+        "risk",
+        "patch-management"
+      ],
+      "teaser": "Analyzes CISA's Known Exploited Vulnerabilities catalog to reveal trends that help rank competing vulnerabilities for remediation.",
+      "summary": "Glenn Thorpe, who leads the security research team at GreyNoise, examines the Known Exploited Vulnerabilities catalog that CISA built for federal agencies but that many organizations now use as a reference. He opens with the basics: the entry criteria, the fact that the catalog records exploitation that has already happened rather than predicting it, and the remediation deadlines attached to each entry. He notes that five vendors account for about half of the entries and that most vendors appeared in the first year.\n\nThe middle of the talk splits the data into three groups: the initial November 2021 batch, a large burst of additions tied to the start of the Russia-Ukraine invasion, and everything else. That burst skews the average age, which makes the headline figure of roughly a thousand days misleading. Using 2023 as the first clean baseline year, he shows that newly added entries are increasingly recent, suggesting exploitation is being disclosed and acted on faster. CVSS scores look nearly identical across the groups, so they offer little help for ranking.\n\nThe more useful signals sit in the catalog's fields. The known ransomware campaign use flag is updated silently and only moves from unknown to known, and he found dozens of changes by harvesting the data daily and comparing it. Time-to-fix values, which shifted toward shorter windows over time, and the weekday an entry was added can also hint at urgency. Practitioners should recheck the fields they rely on and treat the catalog as prioritization context rather than a prediction tool.",
+      "durationSeconds": 1320,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "WKuE23aWkiE",
+      "slug": "building-data-driven-access-with-the-tools-you-have",
+      "title": "Building Data Driven Access with the tools you have",
+      "speakers": [
+        "John Evans"
+      ],
+      "track": "cloud",
+      "topics": [
+        "identity",
+        "automation",
+        "lessons-learned",
+        "building"
+      ],
+      "teaser": "Shows how HR data and identity provider rules can automate employee access grants and revocations with low-code workflows.",
+      "summary": "Access reviews and deprovisioning get harder as zero trust principles demand more granular permissions. This talk asks how quickly access is removed after an employee leaves, how much of that work is manual, and what should change when someone is promoted. It describes a two-year effort at a regulated healthcare technology company growing from a small team to several hundred staff, with no single product solving the problem.\n\nThe core idea is to treat the HR system as the authoritative source and pull as many attributes from it as possible, such as location and whether someone actually manages people. Identity provider rules then assign group membership automatically, with exclusion groups that block access for people abroad or during an incident. The presenter warns against automating from easily changed fields like manager or job title. Offboarding moved from a roughly forty-step manual process to an HR-triggered workflow that calls other systems, including a tool for Google licenses and a service that ships equipment back from remote staff. Access requests now go to system owners through delegated approval, which reportedly cut IT tickets by about two thousand a year.\n\nThe talk also covers limits: single sign-on often sits behind costly plans, and apps lacking provisioning or group sync force manual steps. Involving procurement early and sorting systems into simple sensitivity tiers help. The takeaway is to push logic into the platform you already own and empower your team to build small custom integrations.",
+      "durationSeconds": 2236,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "WSmvvkLq9Ak",
+      "slug": "prepare-for-the-appocalypse-exposing-shadow-and-zombie-apis",
+      "title": "Prepare for the Appocalypse - Exposing Shadow and Zombie APIs",
+      "speakers": [
+        "Amit Srour"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "web",
+        "vulnerabilities",
+        "open-source",
+        "risk"
+      ],
+      "teaser": "Shows how to find undocumented and forgotten API endpoints and reconcile them with API specifications.",
+      "summary": "Shadow APIs are undocumented endpoints exposed through misconfiguration or human error, while zombie APIs are forgotten endpoints left running after an upgrade or planned shutdown. Both sit outside security review and both carry real risk. The talk illustrates this with scenarios: an old API version kept alive, a debugging library that registers routes in production, an outdated package, a wildcard route, and a gateway missing authentication.\n\nAttackers find these endpoints through brute forcing, DNS history, decompiled mobile apps, error messages, logs and bug bounty scopes. Defenders can reconcile what is actually served with an OpenAPI specification, using visibility extensions and validation in gateways and CI/CD pipelines. Telemetry, clear service ownership and threat modelling also help, and framework-specific discovery was covered for Express, Spring Boot and Flask.\n\nThe live demo ran a deliberately vulnerable Node.js application, captured its router registration logs and parsed them into an endpoint list. After normalising path parameter names, a Spectral linter compared that list against the Swagger file and flagged routes that were exposed but missing from the specification. Scripts and workshop material were shared afterwards. The practical takeaway is to continuously inventory served endpoints and check them against specs.",
+      "durationSeconds": 1333,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "19ARuCbLTHM",
+      "slug": "the-b-side-that-no-one-sees-the-ransomware-that-never-reached-ma",
+      "title": "The B-side that no one sees: the ransomware that never reached mainstream popularity",
+      "speakers": [
+        "Mauro Eldritch",
+        "Cybelle Olivera"
+      ],
+      "track": "malware",
+      "topics": [
+        "ransomware",
+        "threat",
+        "intelligence",
+        "malware-analysis"
+      ],
+      "teaser": "Surveys ransomware operations that never gained notoriety, from copied builders to rebranded crews and failed extortion schemes.",
+      "summary": "The talk looks at ransomware operations that stayed out of the headlines, groups that rarely collected much money or recognition. The speakers contrast them with well-known families such as LockBit and explain why these smaller crews still matter for understanding the threat landscape.\n\nThey walk through a range of examples. Hello Kitty, which leaked stolen game source code, is followed through its rebrands and the passwords and files it left behind, showing how stolen material gets recycled. Cuba and its successors illustrate how a single file and hybrid encryption can be reused across rebrands. A Hitler-themed strain is described as renaming files and showing a fake error window rather than actually encrypting anything. Commodity families such as Hermes, Chimera and Tesla Crypt are discussed as rentable builders sold on forums, with Hermes first linked to a Lazarus-attributed bank attack. The Everest group is traced through its shift from ransomware to data extortion and initial access brokering, including claims against an Argentinian government body.\n\nThe closing part turns to practical lessons: the affiliate payment model, exit scams like the one attributed to BlackCat, and the value of transparent incident disclosure. The question session covers contacting threat actors directly, initial access brokers in Latin America, and the gaps in documenting tactics for the region.",
+      "durationSeconds": 3366,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "DKTVl1gwvCw",
+      "slug": "windows-eventlog-persistence-the-windows-can-help-us",
+      "title": "Windows EventLog Persistence? The Windows can help us",
+      "speakers": [
+        "Fabricio Gimenes"
+      ],
+      "track": "red-team",
+      "topics": [
+        "windows",
+        "exploitation",
+        "attack",
+        "detection",
+        "defensive-security"
+      ],
+      "teaser": "Shows red team bypasses of PowerShell constrained language mode and shellcode hidden in a Windows event log for persistence.",
+      "summary": "The talk walks through three stages of a Windows red team operation: getting past restrictions, escalating privileges, and staying on the host. The speaker starts with PowerShell Constrained Language Mode, which limits what scripts can do, and shows that enabling it through an AppLocker rule or a registry setting still leaves a way around it. Running code through a custom runspace, built from a C# helper, is presented as the route past the restriction.\n\nThe second stage is privilege escalation. Recon finds an elevated installer configuration, and the speaker builds a malicious MSI from a WiX XML source that opens a new PowerShell session as a local administrator. The third stage is persistence. A new Application event log is created, with shellcode stored in hex inside its event data. A loader reads that data back and runs it through standard Windows APIs, and a scheduled task re-launches the loader on a short interval to keep a command channel open. In the live demo the chain produced an administrator session while Microsoft Defender was still enabled.\n\nFor practitioners, the main point is that these techniques chain legitimate Windows features, which makes them harder to spot. Defenders can look for newly created event logs, unusually large binary blobs in event records, scheduled tasks that launch loaders, and changes to AppLocker or constrained mode settings. During Q&A, the speaker was asked about event logs being overwritten once full; the answer was that a differently named log can be created to hold another payload.",
+      "durationSeconds": 1897,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5Qys4TGqMHQ",
+      "slug": "hacking-arcades-for-fun",
+      "title": "Hacking arcades for fun",
+      "speakers": [
+        "Ignacio Navarro"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "vulnerabilities",
+        "application",
+        "device",
+        "attack"
+      ],
+      "teaser": "Shows how a cashless arcade payment system exposed customer data, free credit and card cloning through web, API and NFC flaws.",
+      "summary": "The talk begins with a curious old Windows machine in a Brazilian arcade, which led the speaker to examine the cashless card system behind it. Early reconnaissance of the vendor's public websites yielded little, but a global client map and an Android app pointed to a wider API. Its behavior changed by account code, and an older API version skipped authorization checks.\n\nFindings covered several areas. Sequential object identifiers exposed other customers' cards, balances and personal details. Password reset and email change flows accepted requests without tokens, enabling account takeover. A race condition let a single promotion be claimed many times. Exposed files held invoices with customer data, a booking search returned every reservation when left empty, and public admin panels and bundled JavaScript revealed more internals. On the physical side, arcade cards used MIFARE Classic with default keys and stored only a card number, so they could be cloned to a Flipper Zero or emulated from the app.\n\nThe talk closes with responsible disclosure: the vendor was contacted, a meeting followed, and a report was sent, though no reply came afterward. Takeaways include enforcing object-level authorization on every endpoint, validating tokens server-side, guarding state changes against concurrent requests, and avoiding default keys and identifier-only tokens on physical cards.",
+      "durationSeconds": 1635,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    }
+  ]
+}

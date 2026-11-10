@@ -1,0 +1,324 @@
+{
+  "villageSlug": "ground-floor",
+  "villageName": "Ground Floor",
+  "eventSlug": "bsides-las-vegas-2022",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLjpIlpOLoRNQXGaso0TwnSmeqq6sUR0W8",
+  "description": "Ground Floor talks from BSides Las Vegas 2022.",
+  "talks": [
+    {
+      "youtubeId": "a3SeASgtINY",
+      "slug": "cicd-security-a-new-eldorado",
+      "title": "CICD security: A new eldorado",
+      "speakers": [
+        "Remi Escourrou",
+        "Xavier Gerondeau",
+        "Gauthier Sebaux"
+      ],
+      "track": "red-team",
+      "topics": [
+        "devops",
+        "cloud",
+        "kubernetes",
+        "identity",
+        "attack"
+      ],
+      "teaser": "Walks through a pentest of CI/CD pipelines, from source code leaks to Jenkins, Kubernetes and AWS privilege escalation.",
+      "summary": "The talk argues that CI/CD pipelines are a strong route to privilege escalation inside an organisation, even if they are rarely the easiest way in. The speakers say DevOps teams often operate with looser policies, thinner monitoring and cloud or Kubernetes setups they do not fully understand, which makes them attractive targets for testers.\n\nDrawing on a real-world engagement, the presenters trace an attack from a foothold into source control. They describe finding secrets through automated scanners and manual review, and pulling credentials from leaked commit history, shell history and build artifacts. Compromising the orchestrator, through poisoned pipeline execution or a build agent that leads back to the master, gives access to production. They also cover package repository poisoning and dependency confusion as ways to persist or gain entry. Kubernetes weaknesses follow, including flat cluster networking, cloud metadata access from pods, broad Jenkins permissions and weak container isolation. The final section shows how chained AWS IAM role permissions led from one account to administrator access in the organisation's root account.\n\nThe closing recommendations focus on least privilege, removing plaintext secrets, network segmentation, separating environments and accounts, and monitoring the pipeline and its infrastructure. In the Q&A, the presenters note that keeping build configuration on a restricted branch reduces risk, but no control fully prevents poisoned pipeline runs.",
+      "durationSeconds": 2914,
+      "publishedAt": "2022-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "w-R2PT2jfdU",
+      "slug": "climbing-the-production-mountain-practical-ci-cd-attacks-using-c",
+      "title": "Climbing the Production Mountain: Practical CI/CD Attacks Using CI/CD Goat",
+      "speakers": [
+        "Omer Gil",
+        "Asaf Greenholts"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "devops",
+        "build",
+        "attack",
+        "open-source",
+        "challenge",
+        "lessons-learned"
+      ],
+      "teaser": "Walks through three CI/CD attacks against a deliberately vulnerable lab, with the fix for each weakness.",
+      "summary": "The speakers, both from a company focused on CI/CD security, start from the problem that build and deployment pipelines hold production credentials yet are rarely practised by defenders. They present CI/CD Goat, an open-source, Docker-based capture-the-flag lab that combines a Git server, Jenkins, a local AWS emulator and a small web server, with challenges that map to the top CI/CD security risks.\n\nThey then work through three attacks in the lab. The first is poisoned pipeline execution: with only read access to a public repository, a modified Jenkinsfile submitted from a fork ran inside the build, exposed a token that had write access, and let them push straight to the main branch. The second abuses an auto-merge step that approves pull requests when simple checks pass, such as changes limited to a version file and a balanced count of added and removed words. Padding the change to satisfy the naive word count got the pull request merged into a protected branch. The third is a supply chain scenario: a pull request title was injected into a shell command to leak a deployment key, and a remote script fetched on every run without integrity checks showed how a compromised upstream could steal secrets from downstream users.\n\nFor each attack the speakers explain the root causes and remedies. Keep secrets away from builds triggered by forks, scope secrets to individual jobs rather than agents, grant tokens only the permissions they need, and require reviewed branch protection. Avoid auto-merge unless its logic is airtight, never place untrusted input in shell commands, restrict outbound connections, and verify hashes or signatures on fetched artifacts. Their closing point is that a single weak link in a CI/CD environment can be enough to reach production.",
+      "durationSeconds": 2836,
+      "publishedAt": "2022-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "YKN-gm3elzY",
+      "slug": "look-the-scammer-is-coming",
+      "title": "Look! The scammer is coming!",
+      "speakers": [
+        "Cybelle Oliveira"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "social",
+        "threat",
+        "identity",
+        "privacy"
+      ],
+      "teaser": "Surveys how Brazilian fraud schemes work, from mule accounts and fake banking pages to social engineering and scam resilience.",
+      "summary": "The speaker, a cybersecurity analyst from Brazil, explains why Brazil ranks among the leading countries for online fraud. She points to large public data leaks, a culture of improvised workarounds, and a banking system that relies heavily on instant transfers, payment slips and messaging apps. The history she traces starts with website defacement in the late 1990s and moves to bank robbers who switched to cheap, ready-made attack kits once online banking took off.\n\nThe middle of the talk covers how the schemes operate. Criminals open or rent accounts at small digital banks using stolen identity data and purchased selfies, and they recruit car dealers and insiders to push fraudulent vehicle financing through approval systems. She walks through a phishing setup in which an operator watches a victim's session in real time, fake online stores that take payment by payment slip and never deliver, and an email attack that swaps payment barcodes over IMAP. Overlay trojans targeting desktop banking and lookup panels that aggregate personal records round out the examples.\n\nThe closing argument is that these schemes persist because of weak deterrence, limited digital education, economic inequality and attackers who keep iterating. For practitioners, the takeaways are that smaller institutions with light onboarding checks are attractive targets, and that social engineering remains the foundation of most of these scams.",
+      "durationSeconds": 3161,
+      "publishedAt": "2022-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "0vjdnocYFH0",
+      "slug": "when-devsecops-fails",
+      "title": "When DevSecOps Fails",
+      "speakers": [
+        "Tanya Janca"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "devops",
+        "developer",
+        "lessons-learned",
+        "risk"
+      ],
+      "teaser": "Explains common DevSecOps missteps and offers practical ways to add security to pipelines without alienating developers.",
+      "summary": "The talk starts from a pattern the speaker has seen across many consulting engagements: security teams bolt several scanners onto a CI/CD pipeline, the pipeline grows from minutes to many hours, false positives break builds, and developers stop trusting the security group. She frames DevSecOps as a cultural change rather than a set of tools, and argues that the common failures are predictable.\n\nThe middle of the talk gives concrete fixes. Teams should only fail builds for reasons they can defend, and should tune a new tool outside the pipeline until its results are reliable. Long scans can run out of band on a schedule, with the pipeline checking a pass or fail result. Only a fast subset of tests belongs in CI, and recorded browser sessions can focus a dynamic scanner on the features that changed. Newer pattern-matching scanners can be quicker than deep analysis when a team must cover many applications. Security also belongs earlier in the lifecycle, through requirements, threat modelling, security unit tests, secure coding training and peer review. Triage rules, realistic service level agreements, and management support help teams actually fix what is found.\n\nIn the closing section and Q&A, the speaker suggests scaling security champions by prioritising the most sensitive applications and calculating how much time the security staff really has. For a fundamental flaw that cannot be fixed quickly, she proposes a web application firewall or runtime protection as a stopgap. The main takeaway is to start small, communicate expectations, and keep the pipeline a place developers trust.",
+      "durationSeconds": 3166,
+      "publishedAt": "2022-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "OF_iN516B5U",
+      "slug": "from-vulnerability-to-ctf",
+      "title": "From Vulnerability to CTF",
+      "speakers": [
+        "Ron Bowes"
+      ],
+      "track": "community",
+      "topics": [
+        "challenge",
+        "vulnerabilities",
+        "lessons-learned",
+        "exploitation",
+        "learning"
+      ],
+      "teaser": "Shows how real vulnerabilities, from proxy auth bypasses to game glitches, get turned into teaching CTF challenges.",
+      "summary": "Ron Bowes opens with his background in open-source tooling and security research, then explains what capture-the-flag events are and why he values them. He argues that CTFs offer hands-on practice many newer practitioners never get on real systems, and that write-ups help lessons spread. He also notes that bugs found during client work can inspire teaching challenges once customer details are removed.\n\nThe middle of the talk covers several vulnerabilities he has worked on or followed. They include an F5 BIG-IP authentication bypass where a Connection header led a proxy to strip a token before the backend checked it, and a Windows service permission flaw in a Cisco WebEx updater that allowed code to run as SYSTEM. Other examples are a Diablo II item duplication bug, a Game Boy Pokemon use-after-free triggered by the Old Man glitch, and a weak substitution cipher in a point-of-sale config file. For each, he explains how the flaw became a challenge, with practical reversing tips such as checking strings in a binary.\n\nHe closes by noting that some real bugs translate well into challenges, while others are too hard, too fragile or too tied to customer work to rebuild. Platforms such as Windows services and cloud-hosted targets proved difficult to run reliably as CTF infrastructure. The overall takeaway is that a good challenge distills a real flaw into a clear lesson.",
+      "durationSeconds": 3136,
+      "publishedAt": "2022-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "l80L-eK2n58",
+      "slug": "analyzing-network-traffic-of-vacuum-bots",
+      "title": "Analyzing network traffic of vacuum bots",
+      "speakers": [
+        "Karan Dwivedi"
+      ],
+      "track": "privacy",
+      "topics": [
+        "iot",
+        "network",
+        "privacy",
+        "vulnerabilities",
+        "device"
+      ],
+      "teaser": "Shows how packet captures of consumer robot vacuums expose weak authentication, location leaks and floor-plan data.",
+      "summary": "Robot vacuums are sold in large numbers and often sit on home networks with little scrutiny, so this talk asks what they actually send over the wire. The speaker builds a simple home lab with a router, a switch with a mirror port and a cable modem, then captures traffic from several bots while exercising their features: scheduled cleaning, spot and manual driving, auto mode, maintenance reminders, floor mapping and live video.\n\nAnalysis of those captures shows the bots resolving their cloud providers over DNS, sending movement and cleaning commands as text messages, and sending periodic keepalives even when idle. Some models authenticated with SASL using plaintext credentials, while others used MQTT, which avoided plaintext. Setup was another weak point: the bot creates a temporary Wi-Fi network and receives the home Wi-Fi credentials from the phone. The app also pushed the phone's time and time zone to the device, which could reveal location and disrupt cleaning schedules when travel changed the zone.\n\nThe talk then covers threat models: a visitor on the local network could replay commands on an unprotected setup, a remote attacker would most easily target app credentials since no two-factor authentication was present, and floor plans could leak through the app or the phone. The speaker describes a months-long disclosure with the vendor, which closed the report without public disclosure or a CVE. The takeaway is to treat consumer IoT devices as untrusted and to test them on your own network before buying.",
+      "durationSeconds": 2505,
+      "publishedAt": "2022-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "uaBftA--vgA",
+      "slug": "i-got-an-alert-now-what",
+      "title": "I got an alert, now what?",
+      "speakers": [
+        "Kellen Benson"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "malware-analysis",
+        "threat-detection",
+        "security-operations",
+        "lessons-learned"
+      ],
+      "teaser": "Walks through a step-by-step triage method for a suspicious Excel alert, from reading the alert to containment and scoping.",
+      "summary": "A newer analyst asked the speaker what to do when an alert fires, and the speaker set out to lay out a full triage methodology instead of a shortcut. The example is a high-severity alert saying Excel launched a suspicious program. The talk starts by working out what the alert actually reports, building a process tree, and noting file names and hashes, while warning against chasing side investigations too early.\n\nNext comes the question of whether the activity is a threat. Hashes are checked against public lookup services, with a caution never to upload company files to a public scanner. A clean signature from a major vendor does not prove safety, because trusted built-in tools can be abused. The lookups pointed to a known malware family, and the speaker explained how to judge its likely impact, including delivery through email and a goal of stealing credentials. Containment, scoping across other endpoints, and reimaging followed.\n\nWhen indicators come back inconclusive, the speaker suggests tracing where the file came from and where it went, checking whether the behavior is normal for the user, device, or environment, and asking colleagues for context. The takeaways: document normal behavior, tune detections that keep firing, and pass along the relevant artifacts rather than every data point when escalating.",
+      "durationSeconds": 3112,
+      "publishedAt": "2022-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ODEbgXgQkAA",
+      "slug": "malware-analysis-red-team-edition",
+      "title": "Malware Analysis - Red Team Edition",
+      "speakers": [
+        "Uriel Kosayev"
+      ],
+      "track": "red-team",
+      "topics": [
+        "malware-analysis",
+        "reverse-engineering",
+        "ransomware",
+        "detection",
+        "attack"
+      ],
+      "teaser": "Shows how red teamers can learn from ransomware internals and build antivirus-evading malware with detection in mind.",
+      "summary": "The talk argues that red teamers should learn malware analysis, because real adversaries mostly go after data through ransomware and info-stealers rather than domain admin rights. The speaker lays out levels of analysis, from sandbox detonation and static inspection to dynamic monitoring and full reverse engineering, and urges offensive practitioners to understand the tools they run instead of relying on them.\n\nThe main demo walks through a Darkside ransomware sample. Its import table exposes only one library function, which points to runtime API resolution, and most of the code sits in an encrypted section that is decrypted when the program runs. Stepping through it in a debugger shows the code being revealed and the APIs being resolved dynamically. The talk then covers a simple reverse shell compiled and inspected the way a defender would look at it, followed by two evasion ideas: renaming suspicious functions and strings, and memory bombing to exhaust a dynamic engine's resources. Detection results were compared before and after these changes.\n\nThe closing advice is to go as deep as possible on tooling, study the indicators left in compiled output, and learn from ransomware code that other groups reuse. The speaker also stresses working with blue teams and building threat-informed simulations. Sandbox options were discussed in the Q&A, including self-hosted and cloud services.",
+      "durationSeconds": 3288,
+      "publishedAt": "2022-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "8r8pHHGVt0s",
+      "slug": "parsing-differential-problem",
+      "title": "Parsing Differential Problem",
+      "speakers": [
+        "Cher Boon Sim"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "appsec",
+        "vulnerabilities",
+        "framework"
+      ],
+      "teaser": "Shows how repeated URL parameters parsed differently across frameworks can let malicious input slip past front-end checks.",
+      "summary": "The talk introduces the parsing differential problem, where two components read the same input differently and undermine assumptions about how data is handled. The speaker, a software engineer who also lectures part-time, explains how systems grow from a monolith into services written in several languages, often chosen for whatever the team finds easiest. That mix is where the gap appears.\n\nThe central example compares a Go service and a Django service reading a query parameter that appears twice. Go's accessor returns the first value while Django's returns the last, so a value that passes a check in one layer can become an SQL injection payload in the next. The speaker notes the idea has appeared in web security literature for about a decade, in HTTP parameter pollution research, and in a recent GitLab case that enabled file reads or writes. A community-maintained list of payloads is also mentioned.\n\nStandards such as the URI specification do not define how repeated parameters should be handled, and behavior varies across PHP, Node.js, Python frameworks, and even request bodies and headers. Practical steps include knowing which parsers sit in the stack, avoiding assumptions of uniform behavior, writing tests for these edge cases, and normalizing input at the API gateway before it reaches downstream services. The talk closes by raising the same question for multi-cloud environments.",
+      "durationSeconds": 877,
+      "publishedAt": "2022-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "je-97WMp8KA",
+      "slug": "tomb-raider-automating-data-recovery-and-digital-forensics",
+      "title": "Tomb Raider - Automating Data Recovery and Digital Forensics",
+      "speakers": [
+        "Blue Hephaestus"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "tool",
+        "linux",
+        "incident-response",
+        "open-source",
+        "practical",
+        "data-recovery"
+      ],
+      "teaser": "Shows how a Linux wrapper tool chains imaging, file carving and classification to recover data from damaged drives.",
+      "summary": "The speaker opens with the motivation: many drives that look dead have simple, fixable faults, and people often discard them without trying. Sending a private drive to a paid recovery service also raises privacy concerns, so a self-run workflow is appealing. The talk introduces Tomb Raider, a tool built to automate that workflow and developed mainly on Linux, and frames the work around a library analogy in which the file system is the catalog and the drive contents are the books.\n\nThe middle of the talk walks through the pipeline. The drive is first imaged with a tolerant copy utility that makes repeated passes over damaged areas, so the physical device is needed only once. The tool then tries to rebuild the file system with TestDisk and, if that fails or deleted data is wanted, carves files from unallocated space using signature-based recovery with PhotoRec. Carving produces many false positives, including system files and logs. To cut that noise, the tool flattens the directory tree into a single listing with sanitized names, hashes files with MD5 to remove duplicates, filters out known Windows system files using NSRL hash sets, and classifies files by extension and by content. Entropy scoring was tested but produced too many false positives, because encrypted and compressed formats also score high.\n\nThe speaker closes by noting that most failures are minor, that unknown drives should be connected to an isolated machine rather than a work desktop, and that the tool is a first step for overloaded forensic teams. Planned work includes rebuilding a cleaner file system with deduplication and better filtering. The talk also covers finding discarded drives, through online marketplaces, hackerspaces and e-waste, and it shows the kinds of personal data that surviving drives can still reveal.",
+      "durationSeconds": 3462,
+      "publishedAt": "2022-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "V6u4kjFokyA",
+      "slug": "zero-days-should-not-be-a-fire-drill",
+      "title": "Zero Days should not be a fire drill",
+      "speakers": [
+        "Steve Winterfeld",
+        "Tony Lauro"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "vulnerabilities",
+        "risk",
+        "management",
+        "lessons-learned"
+      ],
+      "teaser": "Argues zero-day response belongs in crisis management, covering vendors, leadership, and customer communication.",
+      "summary": "Steve Winterfeld and Tony Lauro draw on their incident response work across breaches and widely publicized vulnerabilities to argue that a zero day is a systemic problem, not just a SOC incident. They point to events such as Heartbleed, Log4j, SolarWinds, Spectre and Meltdown, and say the first questions are where the affected software and firmware sit in your environment and where they sit in your critical vendors' environments. Asset inventories, software bills of materials and a firmware patch process are presented as the basis for answering those questions quickly.\n\nThe middle of the talk covers coordination. Response needs a clear owner, a notification plan with secondary contacts, and input from legal, privacy, PR and vendor management, since some disclosures carry statutory deadlines. Tabletop exercises are recommended to expose gaps in call trees and decision-making under pressure, and to set update expectations for leadership and analysts. The speakers recount how Heartbleed's first fix was incomplete, and how Log4j exploitation attempts reached a large share of one vendor's customers, with most blocked by virtual patching far from the vulnerable code. Board conversations should be framed around business risk rather than technical detail.\n\nThe closing guidance is practical: document the process, rehearse it against past incidents, pull best-practice wording from NIST publications, join industry ISACs, and build a cross-functional internal group before the next disclosure. Transparency with customers and regulators is presented as the stronger long-term position.",
+      "durationSeconds": 2957,
+      "publishedAt": "2022-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "8SwFz4smP8c",
+      "slug": "code-dependency-chinese-apts-in-software-supply-chain-attacks",
+      "title": "Code Dependency: Chinese APTs in Software Supply Chain Attacks",
+      "speakers": [
+        "Cheryl Biswas"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "threat",
+        "intelligence",
+        "supply",
+        "open-source",
+        "build"
+      ],
+      "teaser": "Traces Chinese state-linked supply chain attacks and how trusted open-source dependencies become the entry point.",
+      "summary": "The talk, given by a threat intelligence analyst rather than a developer, frames software supply chain attacks as an abuse of trust. An adversary compromises one trusted source, such as a vendor's update channel or build system, and the malicious code then reaches many downstream customers. The speaker argues that modern applications rely heavily on third-party and open-source dependencies, producing deep dependency trees that teams rarely audit or update. Misconfigurations such as exposed SonarQube instances and hard-coded credentials in source code make the problem worse.\n\nThe middle section walks through a timeline of incidents. These include the 2009 Operation Aurora intrusion into source code systems, the 2017 NotPetya wave spread through a hijacked accounting software update, the 2019 ShadowHammer abuse of ASUS Live Update, and the SolarWinds Orion compromise, which altered the build environment and used stolen code-signing certificates. Later cases cover dependency confusion, the Codecov uploader tampering, and the Kaseya VSA agent hotfix. The speaker then covers Chinese state-linked groups, including APT17 and its CCleaner and ShadowPad operations, and the GoldenSpy malware hidden in tax payment software.\n\nThe takeaways focus on visibility. Organizations need far better insight into the open-source components they use, because static scans from legacy tools miss changes and real exposure. The speaker points to Sigstore for signing software artifacts and GitLab's Package Hunter for flagging malicious code and unexpected behavior in dependencies. Defenders should also scrutinize service accounts that hold broad privileges and rarely get reviewed.",
+      "durationSeconds": 2794,
+      "publishedAt": "2022-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "wakBgjHdH2A",
+      "slug": "navigating-security-pitfalls-during-m-and-a-playbooks-and-strate",
+      "title": "Navigating Security pitfalls during M&A : Playbooks & Strategies for doing acquisitions right",
+      "speakers": [
+        "vinay prabhushankar"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "management",
+        "team",
+        "project",
+        "lessons-learned"
+      ],
+      "teaser": "Walks through pre-acquisition due diligence and post-close integration playbooks for security teams handling M&A deals.",
+      "summary": "The speaker, a security lead who has worked through more than twenty acquisitions, frames the problem: security teams are often given a target company and only a few weeks to report its risk, and an inherited weakness can quickly become the parent company's problem after close. The talk places acquisitions within corporate development cycles and notes that deal timelines are compressed, often running eight to sixteen weeks from start to finish.\n\nBefore close, the playbook starts with an architecture review and a questionnaire covering assets, cloud providers and network design. Scoped assessments are often run through a third-party vendor, which lets the buyer learn about the target without direct access to its code. Other steps include reconnaissance of domains and cloud footprint, a check that audit logging is enabled, and a scan for open-source exposure. The speaker also covered edge cases such as an earlier ransomware event, a credible nation-state threat, privacy rules that limit installing monitoring agents in the EU, and lab equipment whose long-running sessions clashed with standard session expiry. Severe findings can be handled through remediation deadlines written into the deal.\n\nAfter close, the focus moves to rebuilding the asset inventory, since questionnaire answers often proved incomplete. Cross-checking with finance uncovered additional assets through billing records. Other priorities included shared ownership of critical accounts, onboarding basic corporate security tooling, and agreeing on an integration model and exit criteria with the business. The main takeaways were to keep checklists flexible, communicate early and often, and act as an enabler rather than a blocker.",
+      "durationSeconds": 3059,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "6mQzM5KNexE",
+      "slug": "the-telenovela-of-latin-america-banking-trojans-a-dramatic-story",
+      "title": "The Telenovela of Latin America Banking Trojans: A Dramatic story about Cybercrime",
+      "speakers": [],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "threat",
+        "attack"
+      ],
+      "teaser": "Traces the history and cast of banking trojans targeting Latin America, told as a dramatic cybercrime story.",
+      "summary": null,
+      "durationSeconds": 2723,
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "gtmxnTZdUr8",
+      "slug": "build-hybrid-mobile-applications-like-a-security-pro",
+      "title": "Build hybrid mobile applications like a security pro!",
+      "speakers": [
+        "Vineeta Sangaraju"
+      ],
+      "track": "mobile",
+      "topics": [
+        "mobile",
+        "appsec",
+        "open-source",
+        "vulnerabilities",
+        "building"
+      ],
+      "teaser": "Shows how to vet third-party libraries in hybrid mobile apps against core application security principles.",
+      "summary": "The talk opens with the mobile threat model. Hybrid apps are built from one codebase using frameworks such as React Native, Flutter, Cordova and Ionic, and much of their functionality comes from third-party open source libraries pulled from package managers. The speaker explains that device-side data and code are the main assets, that malicious apps and people with physical access are the usual threats, and that remote exploitation is generally considered less likely.\n\nThe core of the session walks through five application security principles and how each applies when choosing a library: least privilege for permissions, avoiding reliance on obscurity alone, minimizing the attack surface such as web views and deep links, client-side trust with jailbreak and certificate pinning considerations, and defense in depth. For each principle, the speaker points to specific API design issues, most notably boolean-returning checks that an attacker can flip on a device, and insecure defaults such as enabling JavaScript in web views or allowing certificate pinning to be disabled.\n\nA short quiz showed three library documentation snippets with insecure options. The closing advice is to read past the example pages into full API docs, check for CVEs and maintenance status, confirm controls work on every supported platform, and lean on native OS security features. Resources included OWASP guides and the Apple platform security documentation.",
+      "durationSeconds": 2720,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    }
+  ]
+}

@@ -1,0 +1,1017 @@
+{
+  "villageSlug": "talks",
+  "villageName": "Talks",
+  "eventSlug": "shmoocon-2024",
+  "conference": "shmoocon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLyhOxx0tizfDAgAoh3wfNGIEGThJBf5Px",
+  "description": "Talks from ShmooCon 2024.",
+  "talks": [
+    {
+      "youtubeId": "6dlGjhfwMeU",
+      "slug": "no-sbom-will-not-solve-all-your-software-supply-chain-problems",
+      "title": "No SBOM Will Not Solve All Your Software Supply Chain Problems",
+      "speakers": [
+        "Andrew Hendela"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply",
+        "open-source",
+        "trust",
+        "risk",
+        "management"
+      ],
+      "teaser": "Argues that SBOMs alone miss malicious code, unreliable version numbers, and compromised build systems behind supply chain attacks.",
+      "summary": "The talk questions whether software bills of materials (SBOMs) can stop supply chain attacks. The speaker notes that SBOMs have become a regulatory requirement, and that many vendors supply them as a cheap checkbox. He argues that an SBOM mostly lists components and version numbers, which says little about whether something will behave maliciously. Version numbers are weak evidence: he contrasts a legitimate PuTTY release with a North Korean backdoored build that carried the same version, and he points out that a CPE identifier for the project changed over time.\n\nHe then goes through other defenses. Code signing does not help when a build system is compromised, because malware gets signed anyway. Reproducible builds still reproduce whatever malicious code entered the source. Building the same software on multiple systems is harder for attackers, but it still leaves the question of whether the result is trustworthy. He also accepts that SBOMs are useful for vulnerability management, while criticizing vendors who present known CVEs as if they were supply chain compromises.\n\nHe closes by observing that customers and end users rarely ask for these controls, and that questionnaires reduce security to checkboxes. He sees some progress in heavily regulated sectors such as finance and healthcare. The takeaway for practitioners is that an SBOM is a useful inventory but not an answer to whether a dependency will do something harmful. Tools should aim at that question.",
+      "durationSeconds": 666,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "XwYBQIiYv90",
+      "slug": "building-canaries-with-elk-and-elastalert",
+      "title": "Building Canaries with ELK & ElastAlert",
+      "speakers": [
+        "Andrew Januszak",
+        "Keith Ericson"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "threat-detection",
+        "defensive-security",
+        "monitoring",
+        "deception",
+        "phishing"
+      ],
+      "teaser": "Explains how canary tokens feed an ELK stack and ElastAlert 2 to raise near real-time alerts on phishing activity.",
+      "summary": "The talk introduces canary tokens, also called honey tokens, which are decoys such as a fake admin account, a fake payroll spreadsheet, or fake API keys that nobody should ever use. The speakers, systems engineers at a higher-education institution, explain why they built theirs on an existing Elasticsearch, Logstash and Kibana stack, with ElastAlert 2 running queries and sending alerts. They stress that alerting must happen in near real time rather than in a next-morning report.\n\nTheir canaries sat on internet-facing sites, including scripts embedded in login pages that attackers were cloning. Tuning Lucene queries was still needed, because translation services, search engines, test servers and accessibility tools caused harmless false positives. The most valuable results were phishing and credential harvesting campaigns, which often launched around holidays. Attackers frequently tested their kits from one IP address first, letting the team block those domains and filter email before delivery.\n\nAttackers showed mixed sophistication: some deobfuscated code, some cloned sites lazily, and others stitched pages together from several organizations. The speakers encourage creative canary placement, while warning analysts not to poke around live phishing backends they discover, since that can be risky. The takeaway is that inexpensive decoys wired into existing logging can shorten response time considerably.",
+      "durationSeconds": 765,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "FDuHAHAjJII",
+      "slug": "intel-is-a-fallacy-but-i-may-be-biased",
+      "title": "Intel is a Fallacy But I May Be Biased",
+      "speakers": [],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "incident-response",
+        "detection"
+      ],
+      "teaser": "Argues that threat intel reports should show their evidence and separate what is known from what is assumed.",
+      "summary": "Andy Piazza, head of threat intelligence at IBM X-Force, argues that intelligence in the infosec industry is often misused. He starts with the word \"targeted.\" Much of the activity organizations see is opportunistic, such as broad phishing or internet-wide scanning for a known vulnerability. Derivative reports and rolled-up actor profiles can turn that activity into apparent targeting of specific sectors. He points to a government ransomware advisory that makes targeting claims without showing the evidence behind them.\n\nThe second theme is capabilities. Playbooks built from past campaigns can make teams believe they have full coverage, even though attackers change tools and techniques. He warns that analysts sometimes chase the techniques listed in a report instead of the evidence in front of them. He recommends structured analytic techniques such as key assumptions checks, which means regularly asking what you know, why you know it, and whether it still holds during an investigation. He also suggests reading original reports rather than summaries.\n\nIn the question period, he tells consumers to push internal intel teams and vendors for better output. He says intel should serve the security operations center more than executives. He also argues that threat hunting is largely reactive, and that true hunting searches your own data rather than outside sources. The takeaway is to show your work, keep facts, gaps and opinions separate, and treat intelligence as an input to an investigation rather than a substitute for it.",
+      "durationSeconds": 1322,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "LRsmOjryzDE",
+      "slug": "breaking-http-servers-using-the-http-garden",
+      "title": "Breaking HTTP Servers Using the HTTP Garden",
+      "speakers": [
+        "Ben Kallus",
+        "Prashant Anantharaman"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "vulnerability-research",
+        "network",
+        "infrastructure",
+        "attack"
+      ],
+      "teaser": "Shows how HTTP parser mismatches in servers and proxies enable access control bypasses and cache poisoning.",
+      "summary": "The talk opens with a refresher on HTTP/1.1 requests and connection reuse through pipelining. The researchers, funded to study parser differentials, first demonstrate an embedded web server, Mongoose, that loops forever when a pipelined request carries a negative content length. They then show LightSpeed, which accepts a leading zero in a content length header and parses it differently than a proxy would, desynchronizing a pipelined pair.\n\nPlacing HAProxy in front of the vulnerable server turns these disagreements into security problems. Mismatched message boundaries let a request slip past an access control list, smuggle an extra request, and poison a cache so a private key was served to anyone. Later sections examine whitespace and chunk extensions in the spec, where carriage return handling differs across Apache Traffic Server, Node.js and cloud load balancers, letting a blocked DELETE request through. Google issued bounties for related findings, while Akamai, affected by the same bypass, had no public bounty program at the time.\n\nTo find these bugs, the team built what they call the HTTP garden: a driver sends crafted payloads through many real servers and proxies, each echoing back how it parsed the request, and the results are compared. A coverage-guided differential fuzzer with an HTTP grammar generates new inputs. The takeaways are to never assume two parsers agree, to fuzz rewritten parsers against existing implementations, and not to rely on a proxy's access controls alone.",
+      "durationSeconds": 2906,
+      "publishedAt": "2025-09-28",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "jQWDGTVF-KE",
+      "slug": "cache-crashers",
+      "title": "Cache Crashers",
+      "speakers": [
+        "Brian Alexander"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "fuzzing",
+        "exploit",
+        "detection",
+        "network"
+      ],
+      "teaser": "Walks through fuzzing Memcached's proxy, exploiting a stack overflow, and writing a network signature to detect it.",
+      "summary": "Stripe's memcache proxy, a component that routes requests through configurable Lua logic, had drawn little outside scrutiny despite growing use in its caching infrastructure. The talk explains memcache as a RAM-only key-value cache with its own text and meta protocols, which makes its hand-written parser a promising fuzzing target. Because memcache ships as one monolithic binary, the team linked against its object files and fed AFL inputs straight into the proxy's request parsing code.\n\nRunning at about 4,000 executions per second on a single CPU, the fuzzer produced around 80 crashes in a week, many sharing one root cause. The most useful finding was a stack-based buffer overflow in multi-get handling, where long runs of spaces between tokens let copies overrun a small stack buffer. The speaker walks through how this could be steered toward control of the stack and the connection object, and how stack canaries and other mitigations would complicate exploitation. The crash was confined to the proxy rather than upstream data nodes, and it has since been fixed in the latest release.\n\nOn the defensive side, a crude rule that flagged oversized get requests followed by a process fork would miss payloads that stay in memory. A better signature re-implemented memcache's tokenization and checked the gaps between tokens, catching the malformed request on the wire whatever the exploit did next. The takeaways are to keep memcache forks patched, to know a target deeply before fuzzing, and to consider Google's OSS-Fuzz for free continuous fuzzing of C code.",
+      "durationSeconds": 1293,
+      "publishedAt": "2025-09-28",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "qx_meq-qzuQ",
+      "slug": "14-questions-are-all-you-need-2",
+      "title": "14 Questions Are All You Need",
+      "speakers": [
+        "Carson Zimmerman"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "security-operations",
+        "incident-response",
+        "defensive-security",
+        "detection",
+        "management"
+      ],
+      "teaser": "Presents 14 questions for judging how a security operations center is growing and performing.",
+      "summary": "The talk starts from a question many security operations leaders struggle to answer: how well is the SOC really doing? The speaker argues that the common measurement frameworks are long, with hundreds of questions, and that a leader should be able to reach a credible picture in a short conversation. Rather than prescribing fixed targets, the talk offers a set of measures, explains the intent behind each one, and suggests that rough estimates can be nearly as useful as heavy data collection.\n\nThe first group covers growth. It asks how long staff stay in the same role doing the same work, how many procedures and playbooks have been refreshed recently, whether engineering sits close enough to the SOC to respond quickly, and how complete and accurate monitoring coverage and asset inventory are. The second group covers performance. It looks at the health of the incident funnel, false positive and true positive rates, the share of incidents the SOC finds on its own, whether investigations can be answered with the data available, containment readiness, and how well threat intelligence leads to action. The speaker also flags organizational problems such as split responsibilities and repeated reorganizations.\n\nThe takeaway is that these questions work as prompts for conversation and prioritization, not as a scorecard to compute exactly. Teams should set their own targets, accept that monitoring will never be complete, and use the answers to focus effort and explain the SOC's needs to leadership.",
+      "durationSeconds": 1083,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "0-siVGiLdlc",
+      "slug": "hacking-network-apis-2",
+      "title": "Hacking Network APIs",
+      "speakers": [
+        "Dan Nagle"
+      ],
+      "track": "red-team",
+      "topics": [
+        "network",
+        "reverse-engineering",
+        "iot",
+        "application",
+        "malware-analysis"
+      ],
+      "teaser": "Shows how a network audio player's UDP and TCP protocols are reverse engineered, replayed, and rebuilt in Packet Sender.",
+      "summary": "The speaker takes a network audio player app for a Raspberry Pi and works out how it talks to its device. Using Wireshark to watch traffic, he finds a UDP broadcast discovery exchange and a command channel on the same port. He then uses the Packet Sender network utility to send the discovery replies and command messages himself, so the app can control the player without the original hardware responding. Finally he rebuilds a simpler interface with just play and stop buttons and sets it as the starter panel, so an end user sees only the controls they need.\n\nThe second demo covers simulated IoT malware on an isolated network. Live capture shows the device probing for a gateway and then an outside address, and once those are assigned it attempts connections to a port with nothing listening. Opening a listener on that port reveals a network scan and repeated attempts to reach a remote server for instructions. The lesson is to place IoT devices on a segregated guest network.\n\nFor mitigation, the talk suggests encrypting the discovery broadcast with symmetric encryption plus a sequence number to block replay, using TLS for command traffic, and calling a remote service over HTTPS for instructions. The takeaway is that unauthenticated, unencrypted device protocols are easy to copy and replay.",
+      "durationSeconds": 1001,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ZI3aY9P9pLg",
+      "slug": "fuzzing-at-mach-speed",
+      "title": "Fuzzing at Mach Speed",
+      "speakers": [
+        "Dillon Franke"
+      ],
+      "track": "red-team",
+      "topics": [
+        "fuzzing",
+        "vulnerability-research",
+        "reverse-engineering",
+        "exploitation",
+        "kernel"
+      ],
+      "teaser": "Walks through fuzzing macOS Mach IPC handlers to find low-level vulnerabilities and possible sandbox escape paths.",
+      "summary": "The speaker presents about a year of on-and-off research into fuzzing macOS inter-process communication, focusing on Mach messages, the lowest-level IPC mechanism on the platform. The opening covers fuzzing basics, attack vectors, and why memory-unsafe code yields serious bugs. It then explains Mach ports, port rights, and the bootstrap server, plus how these messages have enabled sandbox escapes in earlier research.\n\nThe middle section covers the practical workflow. Rather than picking targets blindly, the researcher used an existing sandbox-checking tool to narrow down which services a sandboxed process could reach, landing on a core audio daemon. Framework binaries are not on disk on modern macOS, so they were pulled from the dyld shared cache. Early attempts that hooked the send call in a debugger were slow and made it hard to tie crashes to inputs, so the approach shifted to a custom harness that calls the message handler directly. Because the handler was not exported, the harness resolved its offset through a custom symbol parser. Seed inputs were captured by dumping live messages while generating audio traffic.\n\nCoverage instrumentation, run alongside Guard Malloc, guided the mutation-based fuzzer toward unexplored branches, and crashes were triaged by exploitability heuristics and whether they reproduced reliably. The talk stresses that early attempts failed often and that this kind of work is slow. Future work includes stateful fuzzing, since handlers may depend on message order, and automatic initialization of services. The researcher planned to release the tooling once approval came through.",
+      "durationSeconds": 2984,
+      "publishedAt": "2025-09-28",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "Pa1CkmaN_28",
+      "slug": "attacking-web-applications-with-js-tap",
+      "title": "Attacking Web Applications With JS Tap",
+      "speakers": [
+        "Drew hoodoer Kirkpatrick"
+      ],
+      "track": "red-team",
+      "topics": [
+        "web",
+        "attack",
+        "appsec",
+        "tool",
+        "exploiting"
+      ],
+      "teaser": "Shows how a client-side JavaScript payload can persist in web apps and capture user activity during red team engagements.",
+      "summary": "Drew Kirkpatrick presents JSTap, an open-source tool for red teams that runs a JavaScript payload in a victim's browser after a cross-site scripting flaw or a server foothold. It attacks only the client side, instrumenting what a user does without touching the server. Two modes exist: implant mode, where the payload sits in the application's own scripts, and trap mode, which uses iframe traps for persistence and spoofs the address bar so the victim believes they are still on the expected page.\n\nThe first demo uses a WordPress site with a vulnerable reflected XSS plugin. A lure pushes a user to a login page, and JSTap logs cookies and storage values, scraped HTML, visited URLs, screenshots and keystrokes, including the credentials. Watching the victim add a second admin, the speaker recovers that account's generated password from the page source. A second demo targets a single-page app using XHR, fetch and jQuery. Because JavaScript lets code rewrite built-in APIs at runtime, the payload monkey-patches those network functions to capture request bodies, responses and an authentication token from local storage.\n\nFor defenders, the advice is to eliminate XSS and to enforce a strict Content Security Policy, particularly a connect-src directive that blocks exfiltration to unlisted servers. Same-origin framing policies stop clickjacking but not iframe traps; blocking all framing does.",
+      "durationSeconds": 1378,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "98AmYx8Sy3U",
+      "slug": "ntlmv1-ssp-des-mechanics-explained",
+      "title": "NTLMv1 SSP DES Mechanics Explained",
+      "speakers": [
+        "Dustin EvilMog Heywood"
+      ],
+      "track": "red-team",
+      "topics": [
+        "windows",
+        "exploitation",
+        "vulnerabilities",
+        "tool",
+        "practical"
+      ],
+      "teaser": "Explains how NTLMv1 challenge responses are built from DES keys and shows them cracked into domain controller hashes.",
+      "summary": "The talk opens with coercion. The speaker starts from a low-privilege domain account and makes a domain controller authenticate to his machine, which is running Responder to catch the hash. The capture is an NTLMv1 challenge response, and the speaker points out that older rainbow-table approaches stop working once the client challenge is modified by the extended session security setting. He then uses his own Python tool to split the response into its parts.\n\nThe middle of the talk covers the mechanics. The NT hash is divided into three seven-byte chunks, each padded and used as a DES key to encrypt the client challenge. The three ciphertexts are concatenated to form the response. Because of this structure, the attacker cracks three DES keys separately with hashcat mode 14000 and then reassembles them into the original NT hash. In the live demo, the recovered hash is validated against the domain controller machine account and used to dump credentials.\n\nThe closing section is about defense and cost. The speaker says the risk comes from the LAN Manager compatibility level being set to 0, 1 or 2, which permits NTLMv1 and leaves no real defense once it is allowed. He estimates the cracking cost at several thousand dollars of GPU time for a few hours of work. Administrators should find the setting in the domain controller security policy and raise it so that NTLMv1 is refused. The talk is mostly a live demonstration.",
+      "durationSeconds": 615,
+      "publishedAt": "2025-09-28",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "VAlkqLjAvKU",
+      "slug": "unlocking-enterprise-scale-security-visibility",
+      "title": "Unlocking Enterprise scale Security Visibility",
+      "speakers": [
+        "Eknath Venkataramani",
+        "Frank Olbricht"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "monitoring",
+        "architecture",
+        "linux",
+        "threat-detection",
+        "infrastructure"
+      ],
+      "teaser": "Explains how a custom eBPF-based agent gives security visibility across a fleet of over 100,000 hosts.",
+      "summary": "The speakers explain why their organisation built a custom security visibility tool rather than buying one. They describe three needs: threat monitoring, compliance evidence, and vulnerability management driven by software inventories. Licensing cost at scale, an awkward fit with unusual infrastructure, and limited programmatic access made off-the-shelf products a poor match. The requirements were low resource use, high reliability, support for over 100,000 hosts, and open data for many teams.\n\nThe architecture has three layers. A Go agent attaches eBPF probes to kernel events such as process starts, DNS lookups and file activity, and runs scheduled jobs for host configuration. Events are enriched with process ancestry, filtered and deduplicated, then sent to a central collector over gRPC using protobuf. The stateless collector writes Parquet files, generating schemas on the fly, so standard analytics tools can read the data without a bundled interface.\n\nAfter roughly a year in production, most nodes use under one percent of CPU, and the collector handles around 180,000 records per second on modest capacity. A practical example showed how the data identified which workloads still relied on IMDSv1, down to the process level. The build took about three months of one engineer's time plus six months to deploy. The speakers argue that trading licence fees for engineering effort can pay off when fleets are large.",
+      "durationSeconds": 2705,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "HxQg3RUbTV8",
+      "slug": "tracking-the-worlds-dumbest-cyber-mercenaries-2",
+      "title": "Tracking the World's Dumbest Cyber Mercenaries",
+      "speakers": [
+        "Eva Galperin"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "malware-analysis",
+        "state"
+      ],
+      "teaser": "Follows a long-running campaign by a sloppy cyber mercenary group that targeted Kazakh journalists and dissidents.",
+      "summary": "The talk revisits a cyber mercenary group that targeted a small independent newspaper in Kazakhstan. After the paper published leaked government emails, its staff received spear-phishing messages carrying a fake legal invoice. Opening the attachment's error prompt installed a remote access trojan on Windows machines. The researchers found that the operators' command-and-control server ran a Windows web stack with open directory listings, which exposed stolen files and let them map dozens of other victims.\n\nThe campaign later showed an Android component hidden inside popular privacy and messaging apps. Exposed Apache status pages revealed attacker IP addresses, and geolocation of the admin logins pointed to downtown Beirut. A Wi-Fi network named after a building floor led the team to a government security headquarters. That government denied involvement.\n\nLater variants used a second domain that the operators had never registered, so the team registered it and ran a sinkhole. It showed hundreds of infected machines across several countries, and possible ties to ransomware were noted but not confirmed. The takeaway is that low-skill operators can still be effective through persistence, and that as web encryption spreads, attackers increasingly go after endpoints.",
+      "durationSeconds": 1430,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "36G9kYcMb6g",
+      "slug": "back-45-years-in-the-ussr",
+      "title": "Back 45 Years in the USSR",
+      "speakers": [
+        "EVM"
+      ],
+      "track": "hardware",
+      "topics": [
+        "reverse-engineering",
+        "architecture",
+        "exploitation",
+        "linux"
+      ],
+      "teaser": "Explores the undocumented Elbrus processor architecture and a C++ vtable overflow exploit ported to its compiler.",
+      "summary": "The talk looks at Elbrus, a 64-bit processor family with an architecture designed in Russia since the late 1970s and currently fabricated abroad. The speaker explains that the vendor publishes no datasheets or instruction encodings, so the research relied on a Russian programming guide, a Linux machine, the vendor's compiler and disassembler, and open-source binutils.\n\nTo test the chip, the speaker revisited a classic C++ virtual pointer overflow from a 2000-era hacking magazine and updated it for 64-bit addresses and modern GCC. The exploit needed changes for the new object layout, but after recompiling on the Elbrus machine it ran without further modification, since the vendor's compiler is a close port of GCC. The middle of the talk covers the very long instruction word format with its six ALU slots, register windowing with a separate procedure stack, and a two-stage call mechanism. The speaker patched binutils to print decoded instruction fields alongside the disassembly.\n\nThe takeaway is that an undocumented processor can be studied with open-source toolchains and a patched disassembler, and that older memory-safety bug classes still work on unfamiliar silicon. The speaker left exceptions and interrupt handling unexplored and notes that the platform's real-world use appears limited, so its future is uncertain.",
+      "durationSeconds": 2654,
+      "publishedAt": "2025-09-28",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "HrXIidIy6_8",
+      "slug": "lean-developer-friendly-threat-modeling",
+      "title": "Lean Developer Friendly Threat Modeling",
+      "speakers": [
+        "Falcon Darkstar Momot"
+      ],
+      "track": "appsec",
+      "topics": [
+        "threat",
+        "appsec",
+        "developer",
+        "risk",
+        "team"
+      ],
+      "teaser": "Reframes threat modeling around business assets and controls so developers can run it without rigid checklists.",
+      "summary": "The talk starts by questioning the data flow diagram approach to threat modeling, using a Microsoft-style diagram as the example. The speaker argues that STRIDE-style enumeration produces long lists of low-value threats, such as a file system being flooded or an OS process being spoofed, that barely affect the business. Completeness is out of reach anyway, because a system cannot be fully reasoned about, so repeating the exercise with different people will never yield identical results.\n\nThe middle of the talk proposes flipping the starting point. Assets should be the business outcomes an organization depends on, such as compliance standing, perceived reliability, subscription revenue, or trust in its stated values, rather than servers or keys. A threat is anything that reduces the future benefit from an asset, and a control is any response that lessens that loss. Developers identify the assets and the failure scenarios they worry about, while the security professional checks whether the assets are real, whether the threats are reasonably complete, and whether the controls make sense. A worked example breaks a user data confidentiality asset into a credential leakage threat, with controls such as prefixed and randomly generated credentials.\n\nThe closing point is that the security team's role should shrink to facilitating conversation and validating that tracked controls stay in place. Red teamers can add newly discovered threats to a shared control baseline, and blue teams can then address the gaps they reveal. The takeaway is that threat modeling is a repeated, subjective brainstorm rather than a checklist, unless a system is simple enough for formal verification.",
+      "durationSeconds": 1288,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "IkXxqLXmk8k",
+      "slug": "war-planning-for-tech-companies",
+      "title": "War Planning for Tech Companies",
+      "speakers": [
+        "Greg Conti",
+        "Tom Cross"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "threat",
+        "state",
+        "management"
+      ],
+      "teaser": "Explores how tech companies can plan for a great power conflict, from risk assessment to continuity of operations.",
+      "summary": "The talk argues that tech companies should extend traditional risk management, business continuity and cyber resilience to include deliberate planning for a great power conflict. It opens by noting that regional conflicts in Ukraine and Israel showed how quickly the odds of wider war can change. Companies around the world responded with sudden moves such as exiting markets, cutting network transit and reworking infrastructure, none of which appear in standard continuity plans. An informal audience poll on the chance of a major power war within ten years is used to make the case that planning should start now.\n\nThe middle section frames the problem. The speakers propose a scale running from normal operations through degraded service and lost markets to the failure of partners and, finally, of civilization, and they describe factors that push an organization up that scale, such as exposure, dependence on third parties and a divided workforce. They suggest a generic war plan with tailored scenario plans, a cross-functional team that brings in legal and HR alongside continuity and security staff, and attention to effects like sanctions, staff mobilization, deliberate infrastructure destruction and the spread of exploits to criminals.\n\nThe closing part raises unresolved questions about picking sides, insider threats and whether a company should take offensive action, noting the legal limits under the law of armed conflict. The speakers shared a 17-page self-assessment checklist for estimating scenario probability and exposure, and they framed the session as a starting point for discussion rather than a finished method.",
+      "durationSeconds": 3015,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "c13zLd8AOIw",
+      "slug": "a-legal-defense-fund-for-hackers",
+      "title": "A Legal Defense Fund for Hackers",
+      "speakers": [
+        "Harley Geiger",
+        "Charley Snyder"
+      ],
+      "track": "policy",
+      "topics": [
+        "vulnerability-research",
+        "bug-bounty",
+        "risk",
+        "trust"
+      ],
+      "teaser": "Explains a new legal defense fund that pays lawyers for good-faith security researchers facing threats over their vulnerability work.",
+      "summary": "The speakers open with the legal risk that good-faith researchers face when they test or report vulnerabilities. Even where US law offers defenses, such as the DMCA security-research exemption, many researchers cannot find good counsel, and even bogus threats can cost enough to silence them. They argue that vendors and users all lose when researchers stay quiet, and that a chilling effect leaves more flaws unfixed.\n\nThe talk presents the Security Research Legal Defense Fund, a nonprofit that has recently been recognized as a 501(c)(3) public charity. It pays the researcher's attorney rather than the researcher directly. Grants depend on three things: the work must count as good-faith research under a definition taken from US law, the researcher must show financial need, and an independent board must approve the grant. The speakers announced a first grant, to researchers in Poland who found a backdoor in train software and were threatened with lawsuits. They also described remaining gaps, including trafficking liability for exploits and state computer crime laws that lack a charging policy.\n\nThe closing part is a call to action. Attendees are asked to spread awareness, and to donate, since the fund cannot rely on a single source and needs community support to last. Questions covered how grants are scoped, how donations work, turnaround times, and how bug bounty programs might route payments. The takeaway for practitioners is that legal support now exists for ethical researchers, and that its credibility rests on researchers acting in good faith.",
+      "durationSeconds": 1351,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "0JCICwAu6zY",
+      "slug": "dns-is-still-lame",
+      "title": "DNS is Still Lame",
+      "speakers": [
+        "Ian Foster"
+      ],
+      "track": "recon",
+      "topics": [
+        "network",
+        "infrastructure",
+        "vulnerabilities",
+        "open-source",
+        "tool"
+      ],
+      "teaser": "Explains lame DNS delegations and dependency trees, then demonstrates a tool that tests every resolution path.",
+      "summary": "The talk opens with the basics of DNS delegation. A lame delegation happens when a name server is handed control of a zone but cannot give an authoritative answer for it. Such faults can stay hidden for a long time: a domain may keep resolving through its healthy servers while a broken one remains in its set. If the address behind that broken server is unused, someone else could claim it and take over part of the zone's queries.\n\nThe speaker then explains that every name server is itself a domain with its own name servers, which creates dependency trees that can reach dozens of links. Glue records shorten much of this chain, but a fault several levels away can still affect a domain. Walking the resolution process by hand shows how one timed-out server changes the outcome depending on which server a resolver picks. The speaker then demonstrates an open-source tool that checks every possible path through the tree instead of stopping at the first valid answer. It flags lame delegations, unexpected answers, and authoritative servers that disagree. Scans of random domains and country-code TLDs turned up many problems, mostly in ccTLDs.\n\nThe practical takeaways are to keep DNS dependency trees small, check them automatically, and report faults upstream when they sit outside your own control. The speaker also notes that registry operators varied widely in how they responded to reports, which may matter when choosing where to host a domain.",
+      "durationSeconds": 950,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "sHGNd1-M9qo",
+      "slug": "fuzzllm",
+      "title": "FuzzLLM",
+      "speakers": [
+        "Ian Harris",
+        "Marcel Carlsson"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "fuzzing",
+        "machine-learning",
+        "attack",
+        "model"
+      ],
+      "teaser": "Shows how template-based fuzzing with LLM paraphrasing finds jailbreak prompts that slip past chatbot safety guardrails.",
+      "summary": "The talk opens with a plain explanation of large language models. They predict likely tokens from statistics learned over huge training sets that nobody can fully review, which makes their behaviour hard to audit and means they can reveal data they should not. The speakers place direct prompt injection, meaning jailbreaks, among the OWASP risks for LLM applications and note that many developers building these systems lack a security background.\n\nThe core of the work is FuzzLLM, a fuzzing approach for jailbreaks. Known jailbreak techniques from published papers are distilled into templates with placeholders for a malicious question and for behavioural constraints. An LLM paraphrases each template, the placeholders are filled from lists of prohibited requests, and the resulting prompts are sent to target models. A second LLM labels whether each response violates policy. The team tested six open-source models and two GPT versions with hundreds of prompts per model, reporting success rates per template. Combining two templates often raised effectiveness, and the automated labeling disagreed with manual review in roughly four percent of cases.\n\nThe live demo ran a short version of the pipeline against ChatGPT, stepping through scripts for paraphrasing, filling and collecting responses, with one answer describing how to sell counterfeit goods. The takeaway for practitioners is that refusal training is hard to make robust against rephrasing, so safety testing of LLM products should be automated and repeated, much like traditional fuzzing of software inputs.",
+      "durationSeconds": 2986,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "pfU8w9tUSY4",
+      "slug": "improving-red-team-maturity-through-red-team-as-code",
+      "title": "Improving Red Team Maturity Through Red Team as Code",
+      "speakers": [
+        "Jack Hulto"
+      ],
+      "track": "red-team",
+      "topics": [
+        "automation",
+        "framework",
+        "attack",
+        "detection",
+        "infrastructure"
+      ],
+      "teaser": "Shows how a red team can use infrastructure-as-code ideas and a scriptable C2 framework to improve repeatability and onboarding.",
+      "summary": "The speaker, a red teamer who has played in collegiate red-versus-blue competitions, describes how hand-built bash one-liners struggled to compromise a large environment in minutes. From those events he identifies four problems that also apply to real engagements: reliability at high callback volume, repeatability for training and detection testing, onboarding of new team members, and speed.\n\nHe proposes using infrastructure-as-code tooling as a command-and-control layer and reports three years of running Ansible this way. Its strengths were scale, rerunnable discrete tasks, readable YAML that documents itself, and version history that shows how techniques changed from year to year. The drawbacks were heavy logging artifacts, a need for remote management services and credentials that an attacker rarely holds, and weak support for in-memory execution. To address these, he presents Realm, a C2 framework whose Rust agent embeds a Python-like interpreter. Techniques are written as scripts that can be tested locally, uploaded through a GraphQL API, and tasked to beacons. Logging records who ran what and when, the server is stateless on a managed database, and finished scripts can be exported as standalone test cases for detection engineers.\n\nThe live demo built a script that enumerates user home directories and collects private SSH keys. The speaker notes that it would need hardening before production use. The takeaway for practitioners is that encoding techniques as versioned, reusable code can make red team operations more repeatable, easier to hand off, and easier to validate against detections. The project is open for anyone to find on GitHub.",
+      "durationSeconds": 1244,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "9H9gPkBB2SE",
+      "slug": "hack-the-planet-gently-with-a-code-of-practice",
+      "title": "Hack the Planet Gently With a Code of Practice",
+      "speakers": [
+        "Casey Ellis",
+        "Katie Msurus",
+        "Leonard Bailey",
+        "Harley Guyer"
+      ],
+      "track": "policy",
+      "topics": [
+        "panel",
+        "vulnerability-research",
+        "bug-bounty",
+        "discussion",
+        "trust",
+        "legal"
+      ],
+      "teaser": "Panelists debate whether the security community can agree on voluntary norms for good-faith vulnerability research.",
+      "summary": "The panel opens with a problem: security researchers who test systems can face legal threats, and people outside the field, including lawmakers and companies, struggle to tell legitimate good-faith research from misconduct. The discussion asks whether the community could agree on voluntary norms, short of regulation or certification, that outsiders would recognise as legitimate.\n\nPanelists review the legal landscape in the United States. They cover the Computer Fraud and Abuse Act, a DMCA exemption process that created a good-faith security research protection, and a Justice Department charging policy that declines to prosecute good-faith research. They note that this policy does not bind private lawsuits or state laws. Historical attempts at disclosure norms are also reviewed, from early hacker-written policies to a vendor publicly stating it would not pursue good-faith reporters. Speakers acknowledge the tension: accidental damage to fragile systems, vendors that lack capacity to handle reports, and the risk that a formal code becomes a restrictive legal document.\n\nMost participants agree that vendors must still carry responsibility, and that self-organised norms could help avoid being regulated or certified from outside. For practitioners, the practical advice is to state up front that you are disclosing a vulnerability, check whether the vendor follows published handling standards, and escalate through known contacts if there is no reply. The panel closes without a firm answer on whether a code of practice is worth pursuing.",
+      "durationSeconds": 3060,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "8kyvnizB5DA",
+      "slug": "sobriety-hacks",
+      "title": "Sobriety Hacks",
+      "speakers": [
+        "Jennifer Van Antwerp"
+      ],
+      "track": "community",
+      "topics": [
+        "team",
+        "management",
+        "lessons-learned",
+        "practical"
+      ],
+      "teaser": "Shares personal habits for managing stress and staying sober, plus ways events can welcome non-drinkers.",
+      "summary": "Jennifer Van Antwerp opens with the stress of working in security, citing a 2022 survey in which two-thirds of team members reported significant job stress. She connects that pressure to drinking, pointing to a 2019 CISO study and a later industry survey that found heavy daily alcohol use among practitioners. She then shares her own history, including family patterns of addiction, negative self-talk and social anxiety, and describes her path into sobriety while working in cyber security.\n\nThe middle of the talk covers five practical habits. She recommends finding a personal mantra tied to your reason for change, keeping a daily gratitude log, and building a circle of trusted people to lean on when cravings appear, since talking about urges tends to weaken them. She also suggests always holding a non-alcoholic drink at work events so colleagues stop offering alcohol, and recommends a non-sugary alcohol-free option.\n\nShe closes with advice for managers and organizers. Alcohol-free drinks help people who abstain for many reasons, including training, pregnancy, religion or simply needing a break. Her takeaway is that change can be gradual, made one step at a time, and does not have to be all-or-nothing.",
+      "durationSeconds": 701,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "JaAERfXDL_I",
+      "slug": "bbot",
+      "title": "BBOT",
+      "speakers": [
+        "Joel TheTechromancer Moore"
+      ],
+      "track": "recon",
+      "topics": [
+        "recon",
+        "open-source",
+        "tool",
+        "bug-bounty",
+        "architecture"
+      ],
+      "teaser": "Explains the pitfalls of building a recursive internet scanner, from runaway cloud enumeration to infinite redirects and DNS loops.",
+      "summary": "The talk traces the development of BBOT, an open-source recursive internet scanner aimed at pentesters and bug bounty hunters. The speaker begins with a consulting story: external assessments kept missing subdomains that internal testing later exposed, which revealed flaws in a conventional chain of enumeration, port scanning and web discovery. Spiderfoot's design, where each module takes one data type, emits another and feeds results back into the loop, became the core idea.\n\nRecursion brought its own failures. Cloud provider CNAMEs pulled in whole provider ranges, DNS wildcards created false positives, infinite HTTP redirects and CNAME loops made scans run forever, and any scanner that follows links effectively becomes a web spider. The fix was a scope distance counter on every finding that caps how far a scan wanders out of bounds, along with cloud tagging and stronger wildcard detection. Moving from threads to asyncio simplified the code, and fuzzing the async stack exposed bugs in DNS and HTTP libraries and in Python itself, which were fixed upstream.\n\nOn a large eBay target, BBOT found nearly twice as many subdomains as the other tools tested, while some of those tools ran for hours or crashed. The main takeaway for practitioners is to treat all internet data as untrusted input and to build an explicit exit condition into any recursive process. The tool installs from PyPI and can also be used as a Python library, including in small chat-bot integrations.",
+      "durationSeconds": 2409,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "zr9fbsCbYDU",
+      "slug": "more-money-fewer-foss-security-problems",
+      "title": "More Money Fewer FOSS Security Problems",
+      "speakers": [
+        "John Meyers",
+        "Sara Brackett",
+        "Stewart Scott"
+      ],
+      "track": "policy",
+      "topics": [
+        "open-source",
+        "supply-chain",
+        "risk",
+        "vulnerabilities",
+        "trust"
+      ],
+      "teaser": "Examines whether funding for popular open source projects correlates with better security practices, using OpenSSF Scorecard data.",
+      "summary": "The talk asks whether general funding for open source software, money not tied to any security goal, makes the projects it supports more secure. The presenters, policy researchers at a national security think tank, explain that a randomized experiment would be the ideal test but does not exist for this question. They instead compared the top one thousand packages on PyPI and npm, identifying funded projects through five channels such as GitHub Sponsors, Open Collective, Tidelift, NumFOCUS and Google Summer of Code. They used the OpenSSF Scorecard as a rough stand-in for security posture.\n\nResults varied by ecosystem. In Python, most funding types were associated with higher Scorecard scores, while in npm only some sources showed a significant boost. Certain individual checks, including dependency update tooling and branch protection, moved in unexpected directions for some funders. The speakers were clear about the limits: Scorecard checks have not been validated as measures of real security outcomes, funded projects may already have been more mature, and the data is a single snapshot from 2023 with no before-and-after view.\n\nFor practitioners and policymakers, the main takeaway is to decide which concrete security outcome a funder wants before paying, and to measure it. The team suggested follow-up work such as matching funded and unfunded projects more carefully and tracking scores over time around funding events. Audience questions covered causality, whether funding follows high-profile incidents, and whether company staff time spent on open source should count as a form of funding.",
+      "durationSeconds": 3078,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "fFYpjgqm74Y",
+      "slug": "network-layer-confusion",
+      "title": "Network Layer Confusion",
+      "speakers": [
+        "Joshua DeWald"
+      ],
+      "track": "red-team",
+      "topics": [
+        "network",
+        "attack",
+        "web",
+        "vulnerabilities",
+        "introduction"
+      ],
+      "teaser": "Walks through layers 2 to 7 of networking and shows how framing and routing confusion enable attacks like request smuggling.",
+      "summary": "The talk opens with the observation that network layers are easy for application engineers to forget, and that many surprises sit at the boundaries between them. It climbs from the physical medium through Ethernet framing, MAC learning on switches, and ARP, showing that addresses are not reliable identities and that switches and ARP responders accept whatever they are told.\n\nThe middle section covers IP routing. Routing amounts to handing a packet to a neighbouring device by its MAC address, so a host can be made to carry traffic meant for another machine. The speaker demonstrates a layer 2 chat that never touches layer 3, and notes that some VPNs leave traffic to link-local routes unencrypted, which an attacker can exploit. The focus then shifts to HTTP request smuggling, where a front-end proxy and a back-end server disagree about where one request ends, letting a request reach an internal system that the front end would block. The example used is a patched build of Varnish.\n\nThe closing advice is to assume that anything sent on a local network can be observed, and to enable managed-switch protections such as DHCP snooping and ARP inspection. Requests that pass through a supposedly trusted intermediary should still be treated as untrusted input. The speaker argues that framing confusion is a recurring class of bug, and that newer protocols such as HTTP/2 and QUIC change its shape rather than remove it.",
+      "durationSeconds": 2939,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "kYHPlBrhB40",
+      "slug": "why-we-need-to-stop-panicking-about-zero-days",
+      "title": "Why We Need to Stop Panicking About Zero Days",
+      "speakers": [
+        "Katie Nickels"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "vulnerabilities",
+        "threat",
+        "intelligence",
+        "incident-response",
+        "risk"
+      ],
+      "teaser": "Argues that zero-day panic is overblown and shows how threat intelligence helps defenders plan calmly for vulnerabilities.",
+      "summary": "The speaker, a threat intelligence director, opens by arguing that online warnings about zero-day flaws often spread panic through groupthink, a wish to prove one's work matters, and shiny-object distraction from foundational tasks. She links that constant alarm to burnout in the security community. She frames a vulnerability as an unlocked door: it only becomes a problem when an adversary walks through it.\n\nDrawing on CISA's known-exploited catalog and GreyNoise reporting, she shows that most exploited vulnerabilities are older than the current year, and that even state-sponsored groups keep using aged flaws, such as a Cisco router bug, rather than spending rare zero days. She then describes a recurring intrusion pattern: attackers breach an internet-facing appliance like a VPN or firewall, plant web shells, move laterally, often over RDP, and dump credentials. Mapping a newly disclosed zero day onto this path helps teams predict where to look and where monitoring is weakest.\n\nFor defenders, she recommends a written plan for handling vulnerabilities, not only incidents. Start by confirming whether you run the affected product, using asset inventories and even finance records. Then weigh the flaw type, check whether anyone has seen it exploited, and judge how hard patching would be before relying on mitigations. Finally, she asks the community to stop amplifying fear and to share useful mitigations and detection analytics instead.",
+      "durationSeconds": 1250,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "5LP4b1PR4pg",
+      "slug": "level-up",
+      "title": "Level Up",
+      "speakers": [
+        "Kirsten Renner"
+      ],
+      "track": "community",
+      "topics": [
+        "village",
+        "learning",
+        "lessons-learned",
+        "team"
+      ],
+      "teaser": "Shows how volunteering and teaching in the security community can open career doors through relationships and reputation.",
+      "summary": "Level Up is a short talk on how giving time and knowledge to the security community can shape a career. The speaker traces her own path, starting with a temporary receptionist job and a fundraiser for a family after a tragic workers' compensation case. It moves through HR, recruiting, and volunteer work that eventually led to running a car hacking village and speaking at events. Each unpaid role built skills in problem solving, coordination, and relationship building that a formal job had not provided.\n\nThe talk also draws on interviews with several well-known community members, who described giving as a natural habit rather than a tactic. Recurring themes include acting authentically, starting now instead of waiting for permission, and treating each conference as a chance to help someone, whether by answering a call for papers or offering a hand to a tired volunteer. Rejected talk submissions are presented as some of the most useful feedback a speaker can receive.\n\nThe closing message is that reputation is built from how you treat others, and that a useful network is measured by quality rather than quantity. Attendees are encouraged to notice where help is needed, share what they know, and ask for help when they need it. Several of the speaker's later jobs began with a text message from someone she had met at a conference.",
+      "durationSeconds": 700,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "LG04JcpiKXg",
+      "slug": "you-wouldnt-scrape-the-internet-to-make-an-llm",
+      "title": "You Wouldn't Scrape the Internet to Make an LLM",
+      "speakers": [
+        "Kurt Opsahl"
+      ],
+      "track": "policy",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "privacy",
+        "web",
+        "risk"
+      ],
+      "teaser": "Explains how US copyright, hacking and privacy law apply to scraping public web data for training AI models.",
+      "summary": "Kurt Opsahl opens by noting that large language models are commonly trained on data scraped from the internet, and that this has prompted lawsuits and a policy debate. He presents the talk as a primer on the legal side of scraping, and warns that rushed reactions to AI could bring collateral damage to the open web.\n\nThe talk then covers three main areas of law. On copyright, facts and ideas are not protected, and fair use often depends on whether a use is transformative. He reviews earlier cases on image search, book search and video search to show how courts have treated scraping. On hacking law, he discusses the Computer Fraud and Abuse Act, the Van Buren decision, and the LinkedIn and Power Ventures cases. His view is that terms of service alone should not turn scraping of public pages into unlawful hacking. US privacy law is patchy, so protection comes from FTC enforcement over deceptive statements and from state laws such as Illinois' biometric statute.\n\nThe closing section looks ahead. New AI-specific laws may be hard to write well, and automated analysis of personal data could enable mass surveillance even when it is accurate. The practical takeaway is that scraping publicly available information is generally defensible, while protecting non-public data requires technical controls such as authentication, access controls and encryption.",
+      "durationSeconds": 1307,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "q88eaJDDo9Q",
+      "slug": "tobacco-2-0-when-money-buys-the-truth-and-the-outcome",
+      "title": "Tobacco 2.0 When Money Buys the Truth & the Outcome",
+      "speakers": [
+        "Libby Liu",
+        "Joan Donovan"
+      ],
+      "track": "policy",
+      "topics": [
+        "interview",
+        "privacy",
+        "trust",
+        "discussion"
+      ],
+      "teaser": "Explores how big tech uses money and influence to suppress research, and how whistleblowers can respond.",
+      "summary": "The session opens with the chief executive of a nonprofit that supports public interest whistleblowers, and a journalism professor who says she was pushed out of her university research role after obtaining internal Facebook documents. They frame the problem as a tobacco-style playbook: hiding harms, building favorable public narratives, and drowning out independent research with money and influence.\n\nThe middle of the talk covers the professor's experience of losing research funding and staff after her planned publication of those documents drew pressure from a platform with many alumni and donors at her institution. The nonprofit explains how it selects cases, prioritizing motive, public interest and potential reach, and what support it gives whistleblowers, including legal help, security measures, therapy and practical needs. They also describe the predictable retaliation tactics, such as discrediting the person, isolating them, and redirecting attention away from the facts.\n\nThe closing turns to wider stakes, including a platform's decision to restrict news access in Canada and the resulting gap that disinformation can fill. The speakers encourage people with technical and policy skills to find better ways to distribute reliable news and reduce platform dominance over information. For practitioners, the main takeaway is to get legal advice before acting, plan for retaliation, and treat corporate influence over independent research as a real risk to the public.",
+      "durationSeconds": 1220,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "gRtJ_OiN-XE",
+      "slug": "ciso-risk-dumpster-fires",
+      "title": "CISO Risk Dumpster Fires",
+      "speakers": [
+        "Liz Wharton",
+        "Danette Edwards",
+        "Cyndi Gula"
+      ],
+      "track": "policy",
+      "topics": [
+        "panel",
+        "risk",
+        "incident-response",
+        "management"
+      ],
+      "teaser": "Explores how SEC enforcement, cyber disclosure rules and personal liability are reshaping the role of CISOs after recent breaches.",
+      "summary": "The talk opens by framing a run of recent SEC actions against companies and their security leaders as the public fallout of breaches. The speakers use two casino operators hit by the same attacker as an example: they filed very different disclosures, and the one reporting larger losses had written far less in its filing. They then explain how SEC investigations often begin with tips, how the agency can compel testimony and documents, and how inquiries stay private until charges are filed.\n\nThe middle section covers the rules. Public companies must report material cyber incidents on a form 8-K within four days, and the speakers expect repeated corrective filings as facts change. New York's financial regulations overlap with the SEC rules and sometimes diverge from them. The SEC whistleblower program is growing, and agreements that discourage employees from speaking to regulators can draw enforcement, even at private companies.\n\nFor security leaders, the advice centers on written communication and personal exposure. Internal chat and email can be read later as evidence of intent, so sarcasm and casual admissions need care. Leaders should confirm their title and reporting line, check indemnification and insurance coverage for themselves, and document budget or staffing requests that were refused. Reading other companies' 8-K filings is suggested as a practical way to learn from their incidents.",
+      "durationSeconds": 3034,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "XMej3-t6VLo",
+      "slug": "going-meta-pulling-info-from-encrypted-radios",
+      "title": "Going Meta–Pulling Info from Encrypted Radios",
+      "speakers": [
+        "Luke Berndt"
+      ],
+      "track": "wireless",
+      "topics": [
+        "open-source",
+        "device",
+        "privacy",
+        "intelligence",
+        "tool"
+      ],
+      "teaser": "Shows how passive listening to encrypted public safety trunked radio systems leaks metadata about talk groups and radio activity.",
+      "summary": "The talk opens with the basics of trunked radio. Talk groups are dynamically assigned channels, and digital P25 systems, standardized from 1989 with little security input, are widely used by public safety agencies. Voice traffic is usually encrypted, while control messages are not, and most radios and base stations do not authenticate each other. The speaker notes that the standards are costly to obtain, though some are available through archive sites.\n\nNext, he walks through his setup: a cheap software-defined radio running open-source software such as trunk recorder, GNU Radio and OP25, with results stored in a database and analysed in a notebook. Over nine days of Washington, DC traffic, about three quarters of the calls he captured were encrypted. Even without audio, the metadata showed clear patterns. A large fire drew hundreds of listening units and a spike in transmissions, and a police special operations talk group spiked during a week of school bomb threats. Registration and affiliation records also suggested that a few radios powered up only during big events, possibly tied to special vehicles.\n\nHe closes by arguing that open dispatch audio has exposed dispatch errors and police conduct issues, while encryption complicates interoperability. He is unsure whether radio designs will be improved, and calls for community discussion about what should stay open. He invites listeners to build on the tooling, including a light that alerts when activity thresholds are crossed.",
+      "durationSeconds": 1381,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "tniR1dqFMyQ",
+      "slug": "hi-my-name-is-keyboard",
+      "title": "Hi My Name is Keyboard",
+      "speakers": [
+        "Marc Newlin"
+      ],
+      "track": "wireless",
+      "topics": [
+        "vulnerability-research",
+        "bluetooth",
+        "device",
+        "mobile",
+        "linux",
+        "reverse-engineering"
+      ],
+      "teaser": "Shows how Apple Magic Keyboard and Bluetooth HID flaws leak link keys and allow force pairing with keystroke injection.",
+      "summary": "Marc Newlin opens with a gaming keyboard project that stalled. A USB fuzzer bricked a Dell dongle, and later firmware updates turned out to be encrypted with a key derived only from image size. That pushed the research toward Bluetooth and Apple hardware, which he had long assumed was beyond his reach.\n\nThe core of the talk covers Apple's Magic Keyboard, which talks over USB when plugged in and Bluetooth when not. Newlin found that the Bluetooth link key was sent to the keyboard over USB in a HID feature report. The key could be read back through the lightning port, or during a timing window at unplug over unauthenticated Bluetooth. Writable USB identifiers could also let an attacker pull the key from a Mac. Using a spoofed address during reconnection, he force-paired with macOS, iOS, Android and Linux hosts without confirmation and injected keystrokes, including at the Android lock screen. Windows required a user click but still allowed the pairing. The root cause traces to the no-input, no-output pairing mode in the Bluetooth specification.\n\nThe takeaway is that long-trusted Bluetooth Classic HID behaviour and everyday devices deserve the same scrutiny as new products. The patches also had side effects, such as breaking Android Fast Pair and Linux game controller support. Newlin published proof-of-concept code and encourages researchers to test technology people assume is secure.",
+      "durationSeconds": 2704,
+      "publishedAt": "2025-09-28",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "CMA1zJ1wXHg",
+      "slug": "the-cosmic-turtle-of-code",
+      "title": "The Cosmic Turtle of Code",
+      "speakers": [
+        "Mark Griffin"
+      ],
+      "track": "malware",
+      "topics": [
+        "reverse-engineering",
+        "fuzzing",
+        "vulnerability-research",
+        "code",
+        "tool"
+      ],
+      "teaser": "Shows how call graphs, coverage overlays and trace views help reverse engineers and fuzzers understand binary code faster.",
+      "summary": "The speaker, a code security reviewer, starts from the observation that people read code top to bottom, which makes it hard to hold the structure of many functions in mind. He compares a single function's control flow graph with a call graph and shows how the same logic becomes harder to follow once functions are reordered or split across files. These graph views are decades old and have long been built into reverse engineering tools such as IDA Pro and Binary Ninja, but they are most useful when they can be scripted.\n\nTo test this idea he wrote Ariadne, a Binary Ninja plugin built on NetworkX that renders a live call graph as the user navigates the binary. Applied to reachability, it traced a path from an entry point to a vulnerable function in an old CVE. For a data-flow question, intersecting the ancestor sets of two file-handling functions revealed a shared parent, main. Overlaying fuzzing coverage data showed that POST request handling was never reached, which pointed the fuzzer toward the string comparisons that gated it. He also tried patch analysis on a complex libwebp heap bug and found that static graphs struggled with allocation lifetimes and ordering, which are time-dependent.\n\nHe then surveyed time-based views, including instruction-address scatter plots, the DARPA filament view, flame graphs, and the tenant plugin, and showed an animated visualization of a live head-to-head CTF. His takeaway is that graphs supplement rather than replace find and cross-reference workflows, and that the designer should decide whether a view is for comparison or for interactive drill-down.",
+      "durationSeconds": 2816,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "LbR10GOtxLE",
+      "slug": "summiting-the-pyramid-of-pain",
+      "title": "Summiting the Pyramid of Pain",
+      "speakers": [
+        "Michaela Adams",
+        "Roman Daszczyszak",
+        "Steve Luke"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "detection",
+        "threat-detection",
+        "defensive-security",
+        "attack",
+        "framework",
+        "open-source"
+      ],
+      "teaser": "Presents a scoring model that rates how resistant detection analytics are to adversary changes.",
+      "summary": "The talk starts from the Pyramid of Pain, which ranks indicators from easy-to-change hashes and IP addresses up to the tactics, techniques and procedures that are costly for adversaries to alter. The speakers note that ATT&CK documents techniques well, and that a recent campaign they studied used many techniques already catalogued. Even so, many public Sigma analytics tied to those techniques missed the campaign, because they depended on low-level fields such as executable file names that an attacker can simply rename.\n\nTo address this, the team proposes a scoring model with two dimensions: the logic of the behavior being matched, from ephemeral values up to invariant technique behaviors, and the event source, from user-mode to kernel-mode telemetry. A scheduled task example shows a Sysmon rule scoring low, then rising as fields change, moving to Windows event 4688, and finally monitoring the registry key the scheduler reads. Each step can trade precision for robustness, so the speakers suggest mixing robust and less robust analytics in a SOC.\n\nThe takeaway for practitioners is to check which observables an adversary can easily change, and to favor behaviors that cannot be avoided without a substantially different implementation. The team scored about 40 Sigma analytics, and Sigma has since added a pyramid score tag to its rules. They invite help scoring other platforms, event sources and EDR telemetry, and critiques of the method.",
+      "durationSeconds": 2733,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "GLBW7DksFUM",
+      "slug": "i-can-lte-even",
+      "title": "I Can LTE Even",
+      "speakers": [
+        "Noble Trout"
+      ],
+      "track": "wireless",
+      "topics": [
+        "network",
+        "building",
+        "infrastructure",
+        "device"
+      ],
+      "teaser": "Walks through building a private LTE network on shared CBRS spectrum, from certification and hardware to a working packet core.",
+      "summary": "The speaker frames this as a build guide rather than a break-in story. Earlier research involved scanning the internet for carrier core equipment and finding many exposed devices, which led to looking into Citizens Broadband Radio Service, a shared slice of 3.55 GHz spectrum that lets private parties run their own mobile networks.\n\nThe middle of the talk lays out the steps. CBRS access is split into three tiers, and the lowest, opportunistic tier is the one most individuals will use. Installing equipment requires becoming a certified professional installer, which involves an online course and a credential issued as a cryptographic certificate. The build then needs a base station, a compatible test handset, SIM cards, a spectrum assignment service, and a hosted packet core that takes on the difficult backend work. The speaker also describes an open-source packet core as a self-hosted option for those who want to understand the layers, and suggests keeping experiments receive-only unless properly authorized.\n\nThe takeaway is that a working network can be assembled in a few hours for a modest budget, and that the main obstacles are administrative rather than technical. The speaker also raises community wireless, where one backhaul connection is shared among neighbors, while leaving open questions about carrier terms of service. Questions afterward covered alternative packet cores and antenna placement, with an attic-mounted unit reaching roughly several hundred feet.",
+      "durationSeconds": 1138,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5lfXgSnGHcQ",
+      "slug": "backtrace-in-time",
+      "title": "Backtrace in Time",
+      "speakers": [
+        "Andréanne Bergeron"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "attack",
+        "threat",
+        "intelligence",
+        "windows",
+        "network"
+      ],
+      "teaser": "Analyzes brute-force RDP login attempts on an exposed Windows system to reveal when attackers work, pause and slow down.",
+      "summary": "The talk looks at brute-force attacks against a deliberately exposed Windows machine with Remote Desktop enabled and no lockout policy. The researcher explains that a recording tool captured attacker sessions, showing what intruders typed, pasted and ran once inside. Most login attempts tried a small set of usernames, with variations of administrator the most common, and many passwords were built from details of the host itself, which suggests some attackers gathered system information before guessing.\n\nThe main focus is timing. Working from roughly 190,000 logged login attempts, the researcher plotted activity by day and hour. Only a small share of source addresses attacked continuously. Many showed a clear gap on weekends, which the researcher links to operators working office-style schedules, and a recurring quiet window of about eight hours that may match a daytime job or sleep. A look at holiday periods found no reliable surge once traffic from Russian-origin addresses was separated out. Activity from that group did spike at several points across the year, not only during the holidays.\n\nThe practical takeaway is that timing patterns could help defenders decide when to staff monitoring and when to expect quieter periods. The speaker stresses the findings come from one US address and one unrestricted system, so they do not describe all attacker behavior at all times. The session closes with a short question round about the plotting tools used to build the visualizations.",
+      "durationSeconds": 1338,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "QdTNp5C9j4w",
+      "slug": "hacking-the-planet-under-glass",
+      "title": "Hacking the Planet Under Glass",
+      "speakers": [
+        "Rich Wickersham"
+      ],
+      "track": "hardware",
+      "topics": [
+        "iot",
+        "vulnerability-research",
+        "embedded",
+        "bluetooth",
+        "gaming"
+      ],
+      "teaser": "Shows how a Bluetooth-enabled pinball machine's companion app exposed a bug that could affect live tournament play.",
+      "summary": "Rich Wickersham opens by explaining that modern pinball machines have become connected devices, with Bluetooth, Wi-Fi and other protocols, while classic electromechanical designs had no computers at all. He frames the risks around competitive play, where tournament prize pools can reach six figures, and where score integrity, cheating and machine availability matter to both players and operators.\n\nThe middle of the talk covers a bug found in 2020 in the companion mobile app for an early Bluetooth-enabled pinball machine. In one version of the app code, the flaw could affect players in an active multiplayer game. After the app was pulled from the app stores, the next code version dropped support for it, but the underlying protocol stayed in place. Disclosure was slow, and the speaker found that contacting developers directly worked better than approaching senior executives.\n\nIn closing, Wickersham offers recommendations for tournament directors, such as removing the Bluetooth dongle where the design allows it, and argues that small manufacturers often under-prioritize security. He encourages researchers to keep pressing vendors and says he is now building contacts with larger pinball companies. The takeaway is that adding connectivity to long-lived physical devices needs security review from the start.",
+      "durationSeconds": 720,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "pjCA0BdPC3I",
+      "slug": "ai-enhanced-hacks",
+      "title": "AI Enhanced Hacks",
+      "speakers": [
+        "Ryan Ashley",
+        "Ari Chadda"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "attack",
+        "network",
+        "iot"
+      ],
+      "teaser": "Shows how a machine learning model can sit inside a man-in-the-middle attack and alter camera images in transit.",
+      "summary": "The talk opens with background on Skyscan, an earlier aircraft-recognition project that used aircraft transponder signals to label camera images for training a model. The speakers explain that this session uses a simpler setup: a basic man-in-the-middle position on the same local network, with an image-serving camera as the target. Only the image request is rerouted, while other traffic, such as camera control commands, passes through unchanged, so the operator sees nothing unusual. The main precondition is that attacker and victim share a layer-2 broadcast domain.\n\nThe middle section covers model choice. A pretrained object detector trained on a large public dataset handles common classes and runs fast enough on a CPU, which matters because the rig had to be portable and run unattended. A second, older model was deliberately left imperfect, producing occasional misses and false positives that make the manipulation harder to spot. In the live demo, detected cars, animals and other objects in captured frames are replaced with substitute images, and the confidence threshold acts as a tunable parameter for how often and how precisely the change is applied.\n\nThe closing part weighs trade-offs between accuracy, inference speed and model sophistication, and frames the technique as an augmentation of a classic attack pattern rather than a new one. Suggested mitigations are the familiar ARP defenses: segmenting the network, encrypting traffic where possible, and monitoring ARP activity. The speakers also raise open questions about detecting subtle pixel-level tampering and responding to it, and they say they plan to release the tooling.",
+      "durationSeconds": 2973,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "b_xQYgHQja4",
+      "slug": "bad-romance",
+      "title": "Bad Romance",
+      "speakers": [
+        "Sean Gallagher"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "social",
+        "threat",
+        "intelligence",
+        "mobile",
+        "attack"
+      ],
+      "teaser": "Traces how romance and crypto investment scams are built, from lure messages to fake trading apps and DeFi wallet drains.",
+      "summary": "Sean Gallagher, a principal threat researcher at Sophos, walks through pig butchering, a multi-billion-dollar crime pattern that blends romance and crypto investment scams. He explains how it grew from gambling-linked schemes in China into operations across Southeast Asia and beyond, split between front-office staff who run chats and video calls and back-office teams who build apps, personas, smart contracts and laundering routes. Victim stories range from small losses to hundreds of thousands of dollars, and generative AI and compromised social accounts make lures more convincing.\n\nThe middle of the talk follows how the scam apps evolved. Early lures pushed fake exchanges as iOS web clips and Android packages, then moved to TestFlight, enterprise profiles and modified MetaTrader configurations pointing at hostile servers. Scammers later slipped real apps past app store review by swapping in remote HTML after approval. Gallagher shows how shared site code lets one script reveal hundreds of related domains, and describes DeFi variants where a wallet's built-in browser grants attackers access to funds. He also covers infrastructure such as VoIP numbers, cloud hosting behind Cloudflare, and layered laundering through shell companies.\n\nHe closes with a tally of tracked scam groups, which together took roughly $2 million from about 100 victims, and with the growing obstacles to research as operators add invite codes, VPNs and anti-analysis checks. Practical takeaways include ignoring unsolicited texts, reporting lures to carriers, and educating older relatives, since victims are often targeted again.",
+      "durationSeconds": 3066,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Ch0QVvD4lfg",
+      "slug": "driving-forward-in-android-drivers",
+      "title": "Driving Forward in Android Drivers",
+      "speakers": [
+        "Seth Jenkins"
+      ],
+      "track": "red-team",
+      "topics": [
+        "android",
+        "kernel",
+        "vulnerability-research",
+        "exploitation",
+        "device"
+      ],
+      "teaser": "Maps overlooked Android chipset drivers beyond the GPU and walks one kernel race bug through to root.",
+      "summary": "Seth Jenkins, a Google Project Zero researcher, argues that GPU drivers have drawn most Android kernel research, so attackers will likely look next at the other chipset drivers. Those drivers sit in the kernel and are reachable from apps through device files. He describes three ways to map this attack surface: walking the filesystem and testing access, reading kernel source for device creation calls, and checking SELinux policy for files untrusted apps may touch.\n\nApplying these methods to three phones, he found few reachable drivers on a Pixel, with an edge TPU driver gated by an allow list. The MediaTek JPEG decoder driver was more exposed. Its locking had a flaw: a core check happened outside the mutex, so two threads could race and free the same file object twice. He explains how the resulting use-after-free could be shaped into an arbitrary read and write by reclaiming freed memory with a general-purpose kernel object, then used to free and reclaim a kernel array and disable SELinux enforcement.\n\nThe main takeaway is that Android vendor kernel code remains weakly reviewed, and that a freed object can still be useful without reclaiming it with a matching type. A live demo on stage crashed the phone on the first attempt and then reached root on the next run.",
+      "durationSeconds": 2866,
+      "publishedAt": "2025-09-28",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "N0MoVjojo3Y",
+      "slug": "fedramp-is-broken",
+      "title": "FedRAMP is Broken",
+      "speakers": [
+        "Shane Angel",
+        "Wendy Knox Everette"
+      ],
+      "track": "policy",
+      "topics": [
+        "cloud",
+        "risk",
+        "management",
+        "trust",
+        "compliance"
+      ],
+      "teaser": "Argues that the FedRAMP cloud authorization program adds burdens without improving security, and suggests how it could change.",
+      "summary": "The speakers open by asking who has worked on a FedRAMP project, and almost no one in the room thinks the program has met its goals. FedRAMP began in 2011 as a way for federal agencies to vet the security of cloud products, with low, moderate and high baselines meant to match controls to data sensitivity. The program was supposed to be a one-stop shop that other agencies could reuse, but the speakers describe slow, repetitive and expensive authorizations, especially for small companies.\n\nThe middle of the talk turns to specific controls that the speakers see as counterproductive. Examples include mandatory password rotation despite NIST guidance against it, account lockout rules that let an attacker lock out administrators, scanner requirements that are not enforced, and no requirement for customer-specific encryption keys. They point to a Microsoft breach involving a leaked key and a CircleCI incident, arguing that compliance checkboxes did not stop either. They also criticise the Tailored baseline, which eased entry but has very few authorized offerings, and the slow move to Revision 5.\n\nThe closing portion looks at possible fixes: a mechanism to update outdated controls, less reliance on a single third-party assessor, more automation, and fewer open remediation plans for every disputed control. The speakers encourage attendees to comment on the federal feedback request and to engage with the people who want the program to work. Their takeaway for practitioners is that compliance should be treated as a minimum, not a replacement for real security work.",
+      "durationSeconds": 3018,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "iQxC_N8fHKc",
+      "slug": "taskmooster-i",
+      "title": "TaskMooster I",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "village",
+        "challenge",
+        "social"
+      ],
+      "teaser": "Follows a Taskmaster-style comedy game show at ShmooCon where contestants complete silly tasks for points.",
+      "summary": "This segment is a comedy game show modeled on the British series Taskmaster, staged as an entertainment break at the conference. Four contestants compete for points while a host and a judge score their performances. The format borrows the original show's structure but swaps its comedians for hackers who take on playful assignments aimed at the audience's amusement rather than at technical content.\n\nThe first task asks each contestant to bring the best possible item to the con. The answers range from snacks and a joke token to a framed photo of event staff, and the judge scores each one with blunt, playful commentary. The second task has contestants recreate a favorite movie scene forward and then backward within tight time limits. The results mix finished attempts with confused or botched ones, and some contestants improvise heavily or bend the rules to earn points.\n\nThe segment closes with a running tally, with one contestant in the lead and the host promising more tasks and a live task during closing. There is no technical material here, so the practical takeaway is the event's social side: bringing friends, meeting people in the lobby, and taking part in the fun. Attendees looking for technical sessions should check the main schedule instead.",
+      "durationSeconds": 1615,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "d2iNBQX23l4",
+      "slug": "taskmooster-ii",
+      "title": "TaskMooster II",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "challenge",
+        "team",
+        "game-show",
+        "hack"
+      ],
+      "teaser": "Follows four contestants through a run of absurd physical and kitchen challenges, from a button press to cooking eggs.",
+      "summary": "TaskMooster II is a live, comedic game show staged at ShmooCon 2024, in which four contestants work through a series of challenges set by its hosts. Early rounds include trying to trigger a button from a distance, and a costume that has to be fully inflated before a cocktail task can begin. Much of the fun comes from the contestants interpreting vague instructions, such as what \"activate\" means or whether a tool may be moved between stations.\n\nThe middle of the show covers an egg challenge, in which each contestant had to cook three eggs three ways at separate stations with limited equipment. Improvised setups, a stack of heating fuel cans, and an untimed format stretched each task far beyond the planned length. The hosts admit they did not anticipate how badly the tasks could go wrong.\n\nThe closing segment is a live round of a cork-and-paper-towel-tube game on stage, followed by a tally of points and prizes. The hosts reflect on how a silly idea grew into a full day of production. Viewers mainly get an entertaining look at how people handle vague rules, and the takeaway is that clear specifications and time limits matter for any test or challenge.",
+      "durationSeconds": 3798,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "zg2zKRDOwUI",
+      "slug": "the-shmoo-group-0wn-the-con",
+      "title": "The Shmoo Group 0wn the Con",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "lessons-learned",
+        "management",
+        "team",
+        "building",
+        "discussion"
+      ],
+      "teaser": "Shows how the ShmooCon volunteer team plans, funds, staffs and runs its conference, from ticket sales to sponsors.",
+      "summary": "This annual behind-the-scenes talk walks through how the ShmooCon organizers run their event. The speakers, a married couple who have led the conference for most of its history, begin by explaining why the group operates as an LLC rather than a nonprofit, pointing to the administrative overhead and the value of a small, committed core. They also announce that next year will be the final edition.\n\nThe middle of the talk covers the mechanics. Roughly 100 volunteers handle roles from AV and streaming to security and the program, and the organizers say matching people to work they enjoy has kept the team stable. They break down revenue from sponsorships and tickets, and show that hotel AV and internet fees are the biggest costs. Ticketing gets a closer look, including the bot countermeasures, the waitlist process, and efforts to curb resale at a profit. Call for papers numbers returned to just over 200 submissions, and the speakers urge applicants to follow instructions and cite prior work.\n\nThe takeaway for anyone organizing a volunteer-run event is candid. Budgeting, staffing, training and vendor relationships take far more effort than attendees see. The speakers stress recognizing the people who do the work, and the talk leaves a clear picture of the tradeoffs behind a conference of this size.",
+      "durationSeconds": 3489,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "vUNqbICnJFo",
+      "slug": "various-fire-talks",
+      "title": "Various Fire Talks",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "lightning",
+        "android",
+        "lessons-learned",
+        "management",
+        "learning"
+      ],
+      "teaser": "Six lightning talks cover Android app collusion, NIST 800-53, internal security conferences, metabolism tracking, and cookie dough analogies.",
+      "summary": "This recording captures the ShmooCon 2024 Fire Talks evening, where six speakers each get fifteen minutes to deliver a quick talk, then receive playful feedback from a panel of judges. The lineup mixed first-time presenters with seasoned speakers, so the subjects vary widely from one talk to the next.\n\nAmong the talks, a newer engineer reflects on internship lessons, such as understanding what a tool does versus how it works and treating research progress in smaller steps. An Android researcher walks through how improperly exported components let an app with no permissions trigger a phone call or reach a browser's stored data. Another speaker explains why an organization might run its own internal security conference, covering budget, management buy-in, speaker prototyping, and barriers that keep some staff from attending outside events. Further talks look at self-experimentation with continuous glucose monitors, a plain-language tour of NIST SP 800-53 as a control catalog, and an analogy comparing food safety labeling with designing security defaults that users can rely on.\n\nThe main takeaways are to pick the controls that matter most for your environment, to build safe defaults so users do not have to think about security, to restrict exported Android components to what is actually needed, and to use internal events to grow community. The judges also stressed practice, pacing, and readable slides for audiences far from the stage.",
+      "durationSeconds": 8035,
+      "publishedAt": "2025-09-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "wrRnXdFrqgg",
+      "slug": "exploitable-security-architecture-mistakes-we-just-keep-making",
+      "title": "Exploitable Security Architecture Mistakes We Just Keep Making",
+      "speakers": [
+        "William"
+      ],
+      "track": "red-team",
+      "topics": [
+        "exploitation",
+        "architecture",
+        "vulnerabilities",
+        "linux",
+        "detection"
+      ],
+      "teaser": "Shows how untrusted build code escapes SaaS trust boundaries through PATH, environment variables, git hooks, and LD_PRELOAD.",
+      "summary": "The talk examines a recurring design problem in software-as-a-service products: the platform runs code that customers supply, such as build steps, plugins or dynamically generated content, on infrastructure that holds privileged access. The speaker frames the real boundary as one between an untrusted user and a root process, since attackers gain value by crossing it to reach internal systems or third-party credentials.\n\nDrawing on real engagements, the speaker walks through several hijack patterns. A build could plant a directory high in the PATH order, so a cleanup step that called a tool without an absolute path ran the attacker's binary. Environment variables such as PYTHONPATH and LD_PRELOAD let a customer inject code into an interpreter or program. Git hooks like post-merge and post-checkout ran planted scripts when the service updated a repository or its submodules, especially where working directories persisted between jobs. Suggested fixes include absolute paths, setting variables at the last responsible moment, enforcing checks that fail early, and avoiding running git as root.\n\nFor defenders, the talk notes that a host-based Kubernetes detection tool did not fire when a payload was loaded through LD_PRELOAD, so runtime coverage can be bypassed. Recommended detections include canary tokens, decoy Kubernetes service account credentials with no real permissions that alert when the API is touched, and infrastructure-specific threat detections. The takeaway is to verify how tools actually behave rather than trusting assumptions.",
+      "durationSeconds": 1206,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "wkVgMo-4pUU",
+      "slug": "ewe-cant-trusst-yore-eers",
+      "title": "Ewe Cant Trusst Yore Eers",
+      "speakers": [
+        "Aaron Brown"
+      ],
+      "track": "red-team",
+      "topics": [
+        "attack",
+        "threat",
+        "social",
+        "web",
+        "vulnerability-research"
+      ],
+      "teaser": "Shows how homophones, Unicode tricks and ARIA labels make screen readers speak misleading domains and messages.",
+      "summary": "The talk opens with an audience exercise: four audio clips of domain names read aloud by a screen reader, where only one is the real site. The speaker explains that the sounds of sound-alike and lookalike strings can fool listeners who cannot check spelling visually. He frames this as homophone attacks, extending earlier research into sound-alike domain squatting used for phishing.\n\nThe middle section shows that the attack surface goes further than plain homophones. Unicode characters from different scripts can be chained so that they sound out an English word, and emoji domains can collide with text domains when read aloud. ARIA labels, which override what a screen reader announces for a link, can make a link sound like a different site, and that override can be injected through cross-site scripting. Some Unicode tricks that fool sighted users are blocked by screen readers, but the audio-based ones have received little attention. The question session covered registrar and TLD rules for mixed-script domains and whether waveform comparison could help.\n\nThe closing recommendations are practical. Ask users which accessibility tools they rely on, update anti-phishing training to teach spelling mode, and encourage link resolution instead of trusting ARIA. Re-transcribing suspicious audio with speech-to-text can expose the true domain, though the speaker doubts that this scales. He asks threat hunters to look for these attacks and researchers to fuzz screen readers and speech-to-text tools.",
+      "durationSeconds": 3034,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "453RbZb3a6Y",
+      "slug": "groovy-x-ray-reverse-engineering-like-its-the-70s",
+      "title": "Groovy X Ray Reverse Engineering like its the 70s",
+      "speakers": [
+        "Aleksandar Nikolic",
+        "Travis Goodspeed"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "reverse-engineering",
+        "device",
+        "practical",
+        "tool"
+      ],
+      "teaser": "Shows how film can replace a missing digital sensor when imaging electronics with a cabinet X-ray machine.",
+      "summary": "The talk opens with the cost problem. Cabinet X-ray machines turn up cheaply at auction, but the digital sensor that makes them useful is expensive, and some used units arrive without one. X-rays cannot be focused like visible light, so a sensor must match the size of the image, which keeps prices high. The speakers propose film as a workaround and show sample images of a mouse caught in a trap, a garage remote switch, a potted microcontroller, and an RFID reader.\n\nThe middle covers the method. Large-format black-and-white film, a diluted developer and fixer, a light-tight holder made without metal parts that would block X-rays, and a changing bag are the basic supplies. Exposure is scripted over the serial port, with tube voltage near the machine's maximum and exposure times measured in minutes. Development is slow and forgiving, and the film is dried for hours before scanning on a light table or with a camera on a copy stand. The speakers also tested instant Polaroid and Instax film, which needs a brief pre-flash and develops by rolling through chemical pouches. Polaroid results were softer.\n\nThe closing section covers limits and results. Thick boards with heavy copper need higher-contrast development rather than longer exposures, because scatter raises noise along with signal. Examples of a Thunderbolt dock board, an iPhone board, and an SD card show component locations and bond wires. The speakers conclude that a hobbyist can produce full-size, high-detail images cheaply, and they stress basic radiation checks before use.",
+      "durationSeconds": 3071,
+      "publishedAt": "2025-09-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "cyILVTTAfrI",
+      "slug": "blue2thprinting",
+      "title": "Blue2thprinting",
+      "speakers": [
+        "XenoKovah"
+      ],
+      "track": "wireless",
+      "topics": [
+        "vulnerability-research",
+        "device",
+        "iot",
+        "network",
+        "bluetooth"
+      ],
+      "teaser": "Shows how passive and active Bluetooth probing can identify the chip, firmware and vendor behind nearby devices.",
+      "summary": "The talk addresses a practical gap in Bluetooth research. When a chip is found to have an over-the-air code execution flaw, nobody knows which products use it. The speaker walks through the supply chain from chip makers to module makers to product makers, explaining why that mapping is hard. Past Bluetooth bugs in Texas Instruments, Broadcom and other silicon set the stakes.\n\nThe core of the talk is a survey of \"toothprinting\" methods for working out which silicon a device runs. Passive methods read the company identifier in Bluetooth addresses and the manufacturer-specific advertising data, where byte order mismatches were common. Semi-active and active methods send link-layer version requests and unusual feature-page requests, which can expose chip steppings and sometimes cause crashes or leaked memory. GATT reads expose services, UUIDs and firmware strings, and some vendors' magic UUIDs point to a specific manufacturer. Each method has limits. Response rates were often low, GATT reads are slow, and on Broadcom devices the subversion field tracked silicon revision rather than firmware version.\n\nThe main takeaway is that no single data point is reliable. A precise fingerprint combines several signals, and any method needs validating against devices with known chips before it can be trusted. The speaker's data came from years of sniffing traffic with a Raspberry Pi, and he closes by inviting collaborators to help build the tooling and pointing to a bibliography of Bluetooth security research.",
+      "durationSeconds": 3172,
+      "publishedAt": "2025-09-28",
+      "difficulty": "advanced"
+    }
+  ]
+}

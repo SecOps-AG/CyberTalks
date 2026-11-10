@@ -1,0 +1,244 @@
+{
+  "villageSlug": "ground-floor",
+  "villageName": "Ground Floor",
+  "eventSlug": "bsides-las-vegas-2023",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLjpIlpOLoRNQxps_vyfFPTMNqOkA8exWn",
+  "description": "Ground Floor talks from BSides Las Vegas 2023.",
+  "talks": [
+    {
+      "youtubeId": "WZdf371zCI8",
+      "slug": "becoming-a-dark-knight-adversary-emulation-demonstration-for-att-3",
+      "title": "Becoming a Dark Knight: Adversary Emulation Demonstration for ATT&CK Evaluations",
+      "speakers": [
+        "Cat Self",
+        "Kate Esprit"
+      ],
+      "track": "adversary-emulation",
+      "topics": [
+        "attack",
+        "intelligence",
+        "detection",
+        "framework",
+        "defensive-security"
+      ],
+      "teaser": "Shows how CTI and red development combine to emulate a Latin American threat actor using ATT&CK techniques.",
+      "summary": "The talk comes from the MITRE ATT&CK Evaluations team, which builds threat-informed adversary emulations of a named actor, hands them to security vendors for blind testing, and publishes the results. The speakers explain how an emulation differs from a looser red team simulation, since it has to closely match one group's behavior. They walk through choosing an actor, using the Latin American group Blind Eagle as the example, with criteria such as recent open reporting, relevance to defenders, and enough technique variety to support backup plans.\n\nThe middle of the talk covers how threat intelligence feeds development. Reports with concrete detail such as file names, infection chains and C2 ports become an emulation plan, a software flow diagram and alternate pivot options. The developer scopes which behaviors are actually needed, studies community code and a public proof-of-concept to rebuild process hollowing, and found that the reported persistence did not work as described. The team resolved that gap by reconstructing a startup-folder shortcut chain that the reporting supported.\n\nThe session closed with a recorded demo of the full chain: a phishing PDF, a callback, credential theft from a browser, and reuse of those credentials against a lookalike banking site. Practical takeaways include scoping an emulation to the techniques that matter most, turning single techniques into automated tests to rerun against detections, and citing ATT&CK IDs in code so detection discussions with vendors stay precise. The emulation plan and code were slated for public release on GitHub the following week.",
+      "durationSeconds": 3222,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "M73g0AmK1R8",
+      "slug": "hyper-scale-detection-and-response",
+      "title": "Hyper-scale Detection and Response",
+      "speakers": [
+        "Neerja Sonawane",
+        "Kiran Shirali"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "security-operations",
+        "threat-detection",
+        "open-source",
+        "incident-response",
+        "detection"
+      ],
+      "teaser": "Shows how eBay replaced a costly third-party SIEM with open-source Kafka, Flink and Hadoop for near real-time detection.",
+      "summary": "The speakers, from eBay's security analytics and detection engineering teams, start with the problem. Licensing fees for a commercial SIEM grew painful once daily ingestion reached about 20 terabytes. Their infrastructure is mostly on-premises with many custom log sources, and older syslog-style transport was losing logs, so both cost and reliability had to be addressed.\n\nThey describe the replacement, called Argus, which pairs Kafka for reliable transport, Apache Flink for stream processing and Hadoop for inexpensive large-scale storage. Logs reach the pipeline through an internal monitoring platform built on Elastic Beats agents. Detections are written as Flink SQL, optionally extended with Java user-defined functions, and saved as jobs that run continuously and push alerts to ServiceNow. A short demo showed a detection engineer building a rule and an incident responder opening a prepopulated drill-down query against Hadoop. Templates keep the analyst workflow simple.\n\nThe results cited were ingestion growing to about 55 terabytes per day, broader coverage, lower licensing spend and less dependence on a vendor. The team plans to retire the third-party SIEM fully and explore machine learning on the larger datasets. Their advice was to try unfamiliar open-source stacks, which proved easier than expected, and they noted that Druid, Elasticsearch and S3 were also evaluated before these three components were chosen.",
+      "durationSeconds": 1493,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "4kraSpEMwz4",
+      "slug": "the-art-of-letting-go-secure-delegation-of-permissions-in-aws-en",
+      "title": "The Art of Letting Go: Secure delegation of permissions in AWS environments",
+      "speakers": [
+        "Sara Perez"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "identity",
+        "aws",
+        "automation",
+        "kubernetes"
+      ],
+      "teaser": "Shows how AWS Organizations SCPs, permission boundaries and EventBridge-triggered Lambda checks let engineers manage IAM safely.",
+      "summary": "The talk walks through how a cloud security team let engineering teams create privileged IAM resources in AWS without manual approval for each request. The need grew out of a move away from hand-built server environments toward EKS clusters and a second cloud provider, which required IAM users for cross-cloud data flows and OIDC identity providers for Kubernetes service accounts. Both actions had been blocked at the organization level, so the speaker laid out the layers available for control: service control policies, identity policies, permission boundaries and resource policies.\n\nFor IAM users, the team gave the automation role a permission boundary that forces every user it creates to carry an approved boundary, and protected those boundaries with SCPs. A live demo showed that creating a user with the wrong boundary, or changing or removing one afterward, was refused. For OIDC providers, policies alone could not stop a provider from being created in the wrong account, so an EventBridge rule in each account forwarded events to a central bus. A Lambda function there checked the provider type, principal, thumbprint and account, then removed the provider and sent an alert when a check failed.\n\nThe closing section covered the trade-offs. Per-account limits on IAM users make the approach hard to scale, and long-term keys required rotation. The team planned to replace those users with IAM Roles Anywhere and to restrict source IPs for the credentials that remained. The main takeaway is to pair scoped delegation with automated detection and remediation, so teams can move quickly while security keeps visibility.",
+      "durationSeconds": 2018,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "wX9xzU_xqgU",
+      "slug": "next-generation-enterprise-security",
+      "title": "Next Generation Enterprise Security",
+      "speakers": [
+        "Josh Bressers"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "attack",
+        "framework",
+        "lessons-learned"
+      ],
+      "teaser": "Uses Star Trek: The Next Generation episodes to map fictional security incidents to ATT&CK and draw practical lessons.",
+      "summary": "Josh Bressers opens with the idea that stories are how people learn best, and argues that Star Trek: The Next Generation is full of security incidents worth studying. He describes watching the series closely and cataloguing 178 threats, 54 of them insiders, then plotting them to see which adversaries recur. The data view shows that a few characters, including the android Data and the ship's intern Wesley, account for much of the risk.\n\nThe middle of the talk walks through specific episodes. Recurring themes include a starship with no authentication, a holodeck sandbox that fails to contain a rogue program, a supply chain compromise hidden in a shuttle's materials list, and malware carried in logs downloaded from a compromised ship. Each example is paired with a mapping to MITRE ATT&CK techniques and a set of suggested mitigations, such as segmentation, physical access controls, removable media restrictions and recurring phishing training.\n\nThe closing section argues that many of the fictional failures repeat because the crew never fixed the root cause after the first incident. Bressers suggests that practitioners use familiar frameworks and realistic tabletop exercises to pull lessons from any source, and that teams treat recurring incidents as a signal to change process rather than rely on luck. The humor keeps the material approachable, while the framework mapping gives defenders a repeatable way to structure threat reviews.",
+      "durationSeconds": 2777,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Ba_yApBLpss",
+      "slug": "how-to-avoid-being-labeled-a-chicken-little-while-promoting-bett",
+      "title": "How to avoid being labeled a “Chicken Little” while promoting better security decision making",
+      "speakers": [
+        "Vanessa Redman"
+      ],
+      "track": "community",
+      "topics": [
+        "management",
+        "risk",
+        "team",
+        "lessons-learned",
+        "discussion"
+      ],
+      "teaser": "Shows negotiation tactics that help security staff win leadership support for better decisions without relying on fear.",
+      "summary": "Vanessa Redman opens with the difficulty security teams face in getting business leaders and IT colleagues to adopt better hygiene practices. She presents the talk as a conversation about soft skills rarely covered in formal training, aimed at people moving into middle management who now influence decisions rather than only carry them out.\n\nThe core is a set of negotiation techniques borrowed from other industries. Among them: keep tone measured so urgency does not read as alarm, reserve dramatic language for truly serious events, and lower expectations about how fast an environment can change. She suggests proposing a deliberately extreme option so others can rule it out, defining non-negotiables while accepting \"not yet\" answers placed on a roadmap, and offering a fair, low-cost path with compensating controls. Offering to write documentation is a useful value add, and framing risk in the business's own vocabulary helps. Pitfalls include reports without recommendations, no follow-up, and constant negativity that ignores progress.\n\nRedman closes by noting that even a well-prepared pitch can be rejected, and that the practical response is to keep the initiative alive, log it for later, and attach security work to existing compliance efforts. She frames the advice as opinion drawn from experience and invites the audience to compare their own results.",
+      "durationSeconds": 2760,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Dx20_cxjjk0",
+      "slug": "actions-have-consequences-the-overlooked-security-risks-in-3rd-p",
+      "title": "Actions have consequences: The overlooked Security Risks in 3rd party GitHub Actions",
+      "speakers": [
+        "Yaron Avital"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply-chain",
+        "build",
+        "open-source",
+        "devops",
+        "github-actions"
+      ],
+      "teaser": "Examines how permissive GitHub Actions tokens and unpinnable third-party actions expose CI pipelines to compromise.",
+      "summary": "The talk opens with GitHub Actions' permission model. Each workflow run receives a short-lived token whose scopes can be broad. Organizations created before February 2023 defaulted to read-write access, and most projects still have that setting, so a compromised third-party action can push code, publish packages, or reach cloud resources through the token.\n\nThe speaker built Piper, a tool that statically analyzes an action's code to work out the minimum permissions it needs. Using build logs from the top 2,000 starred repositories on GitHub, he found that most projects granted more permissions than their workflows required, and that about half of the actions he examined never needed a token at all. He then challenged commit pinning, the commonly recommended defense. He described \"unpinnable\" actions that still change after pinning, for example by pulling a mutable container tag such as latest, installing unlocked packages, downloading binaries without checksums, or fetching remote scripts. He estimated that roughly a third of popular marketplace actions fall into this category.\n\nHe closed with practical steps: set the default workflow token to read-only, declare exact permissions in each workflow file, isolate jobs so one compromise does not spread, pin dependencies with tooling such as ratchet, and fork or vet actions that cannot be pinned safely.",
+      "durationSeconds": 1376,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "qiT42VFzA9k",
+      "slug": "the-importance-of-engineering-privacy-from-the-get-go",
+      "title": "The Importance of Engineering Privacy From the Get Go",
+      "speakers": [
+        "Christina Liu"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "risk",
+        "engineering",
+        "trust",
+        "practical"
+      ],
+      "teaser": "Explains how personal data gets re-identified and gives practical steps for building privacy into software from the start.",
+      "summary": "The talk opens with a hypothetical food app that quietly shares location, diet and health-related habits with third parties, to show how seemingly harmless data can become harmful. The speaker separates privacy, which is an individual's control over their own information, from security, which is the set of controls that protect it. Personally identifiable information is split into sensitive and non-sensitive categories, and the speaker notes that the split depends on jurisdiction.\n\nNext, the talk walks through de-identification techniques: redaction, masking or pseudonymization, generalization, and noise-based obfuscation. It shows why these fail in practice using two cases: a movie-rating dataset that was linked back to public reviews, and a study that matched released hospital records to newspaper articles. Regulatory fines under GDPR and the patchwork of US state privacy laws are presented as business reasons to act.\n\nTo close, the speaker offers five practical rules: collect and store less data, automatically delete old data through a retention policy, process only what a job needs, build privacy and security in from the beginning, and consult a privacy lawyer because the rules change quickly. The takeaway is that engineers who handle user data are its stewards and should design with that responsibility in mind.",
+      "durationSeconds": 1500,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "kt-gGh5ryks",
+      "slug": "youve-gained-2-perception-leveling-up-your-red-team-with-a-new-m",
+      "title": "You’ve Gained +2 Perception! Leveling Up Your Red Team with a New Maturity Model",
+      "speakers": [
+        "Brent Harrell",
+        "Garet Stroup"
+      ],
+      "track": "red-team",
+      "topics": [
+        "team",
+        "management",
+        "framework",
+        "attack",
+        "project"
+      ],
+      "teaser": "Presents a capability maturity model that helps red teams gauge readiness, plan growth, and report progress to leadership.",
+      "summary": "The talk opens with an analogy to the SPECIAL stat system in the Fallout games, using it to frame how a red team can plan its own progression deliberately rather than by chance. The speakers, who lead red team and threat simulation work at Humana, explain how a capability maturity model works. They trace the idea from software engineering, where it runs from being able to perform a task, to repeatable outcomes, documented processes, measured performance, and continuous improvement.\n\nThe middle of the talk covers their model, which builds on an earlier lightweight red team model and reorganizes it into a common format. It has four categories (people, processes, technology, and program) and 27 subjects. The speakers stress that teams do not need to reach the top level in every area, that the model suits internal staffed teams, and that small teams have to choose where to invest. Examples include relationships with defenders and legal, documenting methods so work is repeatable, building tooling that fits the organization and is tested, and sharing results with leadership.\n\nFor implementation, the team described having each member score current and target levels independently, then consolidating the answers and turning the gaps into a prioritized backlog. The practical takeaway is that a maturity model gives a red team a shared picture of its readiness and a common language for reporting to executives. The model and slide template are available on the speakers' GitHub and a companion website.",
+      "durationSeconds": 1038,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5XeIYxR3PMM",
+      "slug": "lies-telephony-and-hacking-history",
+      "title": "Lies, Telephony, and Hacking History",
+      "speakers": [
+        "Matt Scheurer"
+      ],
+      "track": "community",
+      "topics": [
+        "social",
+        "history",
+        "telephony",
+        "attack",
+        "network"
+      ],
+      "teaser": "Traces the origins of phone phreaking and early hacking, showing vintage telephone hardware and how it connects to modern threats.",
+      "summary": "The talk walks through how telephone networks grew from manual switchboards and party lines into automated, tone-driven systems, and why that design was open to abuse. The speaker traces the early phone phreaking scene, where enthusiasts experimented with routing tones and used homemade devices, from whistles to blue, beige and red boxes, to make free calls.\n\nThe middle section covers how the same ideas carried over to private branch exchanges and voicemail, where default PINs, dial-by-name directories and open call-forwarding lines let outsiders reach company systems. Social engineering of operators and phone company staff, along with dumpster diving for manuals and written-down passwords, shows how human trust was exploited long before the security industry existed. Physical relics, including a payphone handset, a lineman's handset and a tape-based tone recorder, were passed around to illustrate these methods.\n\nThe closing section compares those early tricks with modern problems such as reverse toll fraud, video-call bombing, SIM swapping and port-out fraud, and notes that several techniques resemble today's replay and man-in-the-middle attacks. The main takeaway is that the weaknesses of telephony and trust-based processes persist even as the tools and motives have changed.",
+      "durationSeconds": 2484,
+      "publishedAt": "2023-10-12",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "-MT0tNi2vvc",
+      "slug": "enemy-within-leveraging-purple-teams-for-advanced-threat-detecti",
+      "title": "Enemy Within: Leveraging Purple Teams for Advanced Threat Detection & Prevention",
+      "speakers": [
+        "Jayson Grace",
+        "Adam Bradbury"
+      ],
+      "track": "purple-team",
+      "topics": [
+        "detection",
+        "intelligence",
+        "team",
+        "attack",
+        "open-source"
+      ],
+      "teaser": "Shows how a purple team pairs threat intelligence with offensive testing to validate detections against real adversary playbooks.",
+      "summary": "The talk opens with the problem of sudden shifts in the threat landscape, such as a group that began hitting large technology companies in 2022 and left leadership asking whether they had been targeted. The speakers, from a purple team and a threat intelligence function inside a large company, explain that intelligence teams rarely see new actors or fresh exploits coming. Instead they rebuild an adversary's playbook from public incident reports, vendor research, sharing communities and internal tracking, then decide which techniques matter most.\n\nThe middle of the talk covers how the two teams work together. Purple teaming is run as an internal consultancy with joint reports, and the speakers introduce TTP Forge, an open-source framework that describes simulated techniques as stackable building blocks. The live demo follows a credential captured through a phishing proxy, a cloud-logging gap that hid API activity for a while, retrieval of a database secret from a cloud secrets manager, persistence on a macOS host, and a database dump. They also report that a broad hunt for the proxy's session pattern returned hundreds of hits, which they narrowed by flagging sources tied to recently registered domains.\n\nThe closing section names shared obstacles, including getting management to fund security work, avoiding floods of low-value signal, and translating probabilistic intelligence into concrete detection results. The takeaways are the release of TTP Forge and a companion collection of commodity techniques focused on Linux, cloud and macOS, plus a call for offensive and intelligence staff to work together on realistic testing.",
+      "durationSeconds": 3036,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "TH8PxsNzuJw",
+      "slug": "open-source-gitops-for-detection-engineering",
+      "title": "Open Source GitOps for Detection Engineering",
+      "speakers": [
+        "Zach Wasserman"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "threat-detection",
+        "open-source",
+        "security-operations",
+        "automation",
+        "framework"
+      ],
+      "teaser": "Shows how to manage detection rules as code in Git using osquery, Fleet, and Matano with reviewed pull requests.",
+      "summary": "Detection engineering is often done by hand through consoles and alert triage, which makes changes hard to track and review. The talk argues for treating detections like software: keep rules in text files under version control and push them through pull requests. It frames this as detection as code, borrowing the configuration-as-code idea from DevOps.\n\nThe talk assembles an open source stack. osquery exposes system data across Mac, Linux and Windows as SQL tables. Fleet deploys osquery at scale, schedules its queries from YAML, and ships results to S3. Matano, a serverless security data lake on AWS, ingests those logs and runs Python detections that carry metadata such as runbooks, false positive notes and ATT&CK mapping. A live demo adds a query that flags SSH daemons listening on a non-standard port. A reviewer approves the pull request, and a CI job applies the Fleet and Matano configuration in under a minute.\n\nPractical takeaways include requiring approvals so changes get a second look and leave an audit trail, and restricting UI edits or running scheduled syncs to limit configuration drift. Testing and validation should accompany each detection, and repetitive response steps are worth automating. The Q&A covered where to find starter queries and how osquery's watchdog stops runaway queries from hurting endpoint performance.",
+      "durationSeconds": 2843,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    }
+  ]
+}

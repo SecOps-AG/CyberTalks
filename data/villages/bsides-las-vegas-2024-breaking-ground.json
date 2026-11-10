@@ -1,0 +1,330 @@
+{
+  "villageSlug": "breaking-ground",
+  "villageName": "Breaking Ground",
+  "eventSlug": "bsides-las-vegas-2024",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLjpIlpOLoRNQ5KSaL-eUgpUBhkpkphelZ",
+  "description": "Breaking Ground talks from BSides Las Vegas 2024.",
+  "talks": [
+    {
+      "youtubeId": "oyOS-ujMJ-U",
+      "slug": "lo-level-shells",
+      "title": "LO Level Shells",
+      "speakers": [
+        "Elysee Franchuk",
+        "Mohnish Dhage"
+      ],
+      "track": "red-team",
+      "topics": [
+        "network",
+        "attack",
+        "detection",
+        "windows"
+      ],
+      "teaser": "Shows how raw Ethernet frames can carry covert remote shell traffic that slips past common layer 3 and higher detections.",
+      "summary": "The talk presents a post-compromise technique for running a remote shell over raw Ethernet frames instead of TCP/IP. The premise is that layer 3 and above are closely watched while layer 2 often is not, so commands can ride inside frame payloads. The attacker sends commands as frames, the compromised host decodes them and passes them to a local listener over loopback, and the output returns the same way.\n\nThe demonstration used a Windows victim and a Debian operator, with a chosen Ethertype to blend into ordinary traffic. An endpoint EDR flagged netcat on the host but not the frame-based tool. After an administrator locked the machine and cut the RDP session, the frame-based shell still responded. Limits discussed include frames being dropped at routers, so reach is mostly confined to a broadcast domain unless an attacker pivots through multi-homed hosts or bridges. Admin rights, plus Python and C available on the host, were listed as requirements.\n\nFor defenders, the speakers said layer 2 detection needs sensors fed by span ports and baselining of frame sizes, entropy and expected Ethertypes, since unusual Ethertypes stand out while IPv4, ARP and IPv6 traffic is much harder to separate from normal activity. Correlating endpoint loopback traffic with network data was suggested as a useful signal. The main takeaway is that layer 2 is a blind spot that needs explicit monitoring.",
+      "durationSeconds": 1202,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "N_OSFk9AP04",
+      "slug": "how-instacart-uses-ai-to-keep-doors-open-and-risks-closed",
+      "title": "How Instacart Uses AI to Keep Doors Open and Risks Closed",
+      "speakers": [
+        "Dominic Zanardi",
+        "Matthew Sullivan"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "identity",
+        "ai",
+        "automation",
+        "cloud",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how Instacart automates just-in-time access approvals with an LLM that scores requests against existing role holders.",
+      "summary": "Instacart's infrastructure security team set out to move employees from long-lived access to just-in-time access on its most critical systems, a goal tied to its preparation for going public and the audit obligations that came with it. The speakers found that manager approval was a weak control: requests were almost always approved, approvals were slow, and approvers often lacked the context to judge them. Without a faster process, employees kept standing access and the old habits returned.\n\nTheir answer was to pre-approve access based on attributes kept in Terraform, with time-limited grants that users could renew immediately if they matched. For roles where the eligibility rules were hard to write down, such as high-impact developer roles, they built Gadget, an open-source and pluggable tool. It asks an LLM to compare a requester's job title and organizational unit with those of people who already hold the entitlement, returns numeric similarity scores, and auto-approves when the combined score clears a threshold. Otherwise it leaves guidance for the approver. The speakers described validating scores by replaying three months of real requests, and they warned that model output can be invented, so results should be checked against the original inputs. They also demonstrated using an LLM to draft role descriptions from policy statements, submitted through a pull request for auditor evidence.\n\nThe main takeaway is that an LLM works well on gray-area context across large datasets, while humans still review its output and keep prompts simple and structured. Attendees who run similar access workflows, or who want to automate tedious security and audit tasks, would find practical patterns to adapt.",
+      "durationSeconds": 1731,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "g25FjTgLaYw",
+      "slug": "chrome-cookie-theft-on-macos-and-how-to-prevent-it",
+      "title": "Chrome Cookie Theft on macOS, and How To Prevent It",
+      "speakers": [
+        "Nick Frost"
+      ],
+      "track": "red-team",
+      "topics": [
+        "attack",
+        "defensive-security",
+        "detection",
+        "web",
+        "tool"
+      ],
+      "teaser": "Walks through three ways to steal Chrome cookies on macOS and the Santa and osquery controls that block or detect them.",
+      "summary": "The talk starts from a simple question: if malware runs as a user on a MacBook, can it read that user's Chrome cookies? The speaker, who works on a security team, argues that browser sessions are now valuable because much of a person's email and SaaS access lives there. macOS code signing and process isolation stop one signed app from freely controlling another, but Chrome's design leaves several openings.\n\nThree attack paths are covered. The first abuses Chrome's remote debugging server, which can be asked for every cookie over a local port. The second copies the cookie database, whose values are encrypted with a key held in the login keychain that a signed Chrome binary can read, so the encryption adds limited protection. The third replaces the network service binary inside the app bundle, kills it so Chrome relaunches it, and passes the key and cookie access to a process the attacker controls.\n\nFor defense, the speaker recommends disabling remote debugging through a Chrome Enterprise policy, using Santa file authorization so only Chrome's network helper can open the cookie file, and protecting the policy folder so deleting it cannot open a startup window. For detection, osquery can flag network service launches from any parent other than Chrome, and extension inventories help spot suspicious add-ons. The Q&A compares Firefox, Safari, Chromium forks and Electron apps, and the speaker admits there is no fix yet for the IPC attack.",
+      "durationSeconds": 944,
+      "publishedAt": "2024-09-04",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "vEvP-fn0OsU",
+      "slug": "you-are-a-threat-actor-as-yet-you-have-no-name",
+      "title": "You Are a Threat Actor. As Yet You Have No Name.",
+      "speakers": [
+        "Kaichi Sameshima",
+        "Atsushi Kanda",
+        "Ryo Minakawa"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "infrastructure",
+        "attack",
+        "lessons-learned"
+      ],
+      "teaser": "Tracks a pro-Russian hacktivist group's DDoS botnet, its command-and-control protocol, and the infrastructure it keeps rotating.",
+      "summary": "This talk covers Operation So-seki, a months-long investigation into a pro-Russian hacktivist group referred to as X, which has run DDoS attacks against organisations worldwide since March 2022. The speakers, from a Japanese telecommunications company's threat intelligence team, describe how the group recruits volunteers through a set of Telegram channels: a public channel that announces successful attacks, and private channels that distribute tooling, share targets and reward participants through a points and ranking system.\n\nThe research centred on the group's botnet client. The team analysed its command-and-control exchange, which wrapped AES-256 GCM encrypted data in JSON, and was able to decrypt the target lists the server returned. Because the infrastructure changed every few days, they used a fast internet scanner to narrow the search to HTTP servers and then probed those for the client's fingerprint, automating daily collection of targets. Across more than a thousand attacks they compared target lists with Telegram success reports, noting scheduled posting hours, shifting target-country patterns and attack success rates that varied widely from day to day. Many targets were hit repeatedly.\n\nThe speakers argue that public disclosure of technical details appeared to prompt the group to change servers or protocols within weeks, and that publicised victims fed its propaganda. Their approach was to notify affected organisations privately, which helped them separate attack traffic from benign spikes and focus response resources. Practitioners should weigh whether sharing a given detail helps defenders more than it helps the attackers.",
+      "durationSeconds": 2537,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "b1jeOCxaPQQ",
+      "slug": "hell-0-world-making-weather-cry",
+      "title": "Hell-0_World | Making Weather Cry",
+      "speakers": [
+        "Amelia Weeding",
+        "Dave Bailey"
+      ],
+      "track": "hardware",
+      "topics": [
+        "iot",
+        "reverse-engineering",
+        "embedded",
+        "device",
+        "vulnerabilities"
+      ],
+      "teaser": "Shows how a cheap Tuya-based weather station leaks credentials in firmware and accepts forged commands over its network.",
+      "summary": "The speakers open with a survey of consumer Internet of Things devices, covering their radios, cloud back ends, mobile apps and remote configuration paths. They recall a casino breach that started with a connected fish tank on a flat network. Their case study is an unreviewed weather station bought online, with an undocumented Bluetooth setup, a 433 MHz sensor radio, and a display that mishandled sub-zero temperatures.\n\nOpening the unit revealed a Tuya-based wireless module, and its published serial documentation helped them reach debug output on a UART port. Firmware dumped with an open-source tool was unpacked with binwalk and studied in Ghidra. It exposed Wi-Fi credentials stored in base64 and cloud keys. A hidden service on TCP port 6668 carried encrypted messages; the key turned out to be an eight-byte local key expanded per character into AES-128 in ECB mode. With that, they wrote a console tool that sends commands over the local network, changes display units, triggers alerts and supports fuzzing.\n\nTheir recommendations include segregating IoT devices on physically separate networks, using strong passwords, securely disposing of old hardware, and keeping an asset inventory with a documented incident response plan. After disclosure, the vendor supplied OEM samples, and a later board revision had fixed the temperature bug, so comparing firmware versions became the next step. Code is published on GitHub.",
+      "durationSeconds": 1199,
+      "publishedAt": "2024-09-04",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "N46vMQ1YzAA",
+      "slug": "bolabuster-harnessing-llms-for-automating-bola-detection-2",
+      "title": "BOLABuster: Harnessing LLMs for Automating BOLA Detection",
+      "speakers": [
+        "Jay Chen",
+        "Ravid Mazon"
+      ],
+      "track": "appsec",
+      "topics": [
+        "vulnerability-research",
+        "ai",
+        "web",
+        "automation",
+        "open-source"
+      ],
+      "teaser": "Shows how large language models can automate finding broken object level authorization flaws in APIs.",
+      "summary": "Broken object level authorization, or BOLA, ranks at the top of the OWASP API Security list and appears often in HackerOne reports, yet few tools can find it at scale. The difficulty comes from applications with many roles and resources, stateful workflows where one call depends on earlier calls, and the lack of a clear pattern like the signatures used for injection bugs. The talk presents BOLABuster, a pipeline that starts from an OpenAPI or Swagger file.\n\nThe method uses an LLM to shortlist endpoints whose parameters point to sensitive objects, then asks it to infer producer and consumer relationships between endpoints by their meaning rather than by parameter name. Each target endpoint gets a dependency tree and one or more execution paths, which are turned into bash test scripts. The pipeline registers users, runs the tests against a live server using two accounts, and flags successful cross-user requests for human review. In a benchmark against deliberately vulnerable applications, the team reported finding every known BOLA while sending under 1% of the API requests used by RESTler, which found none under default settings.\n\nThe presenters described issues found in Harbor, where a maintainer could change project configuration through the API even though the UI blocked it, in Grafana (CVE-2024-1313), and in Easy Appointments, with 15 CVEs. Their lessons: use heuristics where they suffice, validate AI output because models invent endpoints and parameters, split large specs into small relevant pieces, and expect results to depend on the accuracy of the spec. They noted that model costs are falling and that newer models improve results.",
+      "durationSeconds": 2249,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "6KR9NZoUUZk",
+      "slug": "redis-or-not-argo-cd-and-gitops-from-an-attackers-perspective",
+      "title": "Redis or Not: Argo CD & GitOps from an Attacker's Perspective",
+      "speakers": [
+        "Oreen Livni Shein",
+        "Elad Pticha"
+      ],
+      "track": "cloud",
+      "topics": [
+        "kubernetes",
+        "vulnerability-research",
+        "devops",
+        "supply-chain",
+        "exploitation"
+      ],
+      "teaser": "Shows how a compromised pod can poison Argo CD's Redis cache to deploy malicious workloads and take over a Kubernetes cluster.",
+      "summary": "The speakers start by asking why GitOps deserves security research. They point to recurring mentions at cloud-native conferences and to a CNCF survey showing heavy adoption, then select Argo CD, a Kubernetes-focused continuous delivery tool, as the target. They explain how it treats a git repository as the source of truth and syncs that state into a cluster through a Redis cache server.\n\nProbing that cache, the researchers found that it held the full set of application manifests. Their first attempt to inject a privileged pod directly into Redis was reverted by the sync process. Reading the open-source code, they found that the cache entry hash was a non-cryptographic checksum meant only to catch data corruption. They recalculated the hash for a modified manifest, and the altered deployment was accepted. From a pod with low privileges, this gave them access to other pods' filesystems and secrets, the ability to sniff and intercept production traffic, and a route to the node's cloud identity. The flaw was rated 9.1 and fixed with the Argo CD maintainers.\n\nThe closing takeaways are to update Argo CD, run the GitOps controller in a separate cluster, enforce network policies with a CNI plugin that supports them, and grant the tool only the permissions it needs rather than default admin rights. A recorded demo showed the full path from a compromised pod to cluster control.",
+      "durationSeconds": 2162,
+      "publishedAt": "2024-09-04",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "5icq3eLspsY",
+      "slug": "the-fault-in-our-metrics-rethinking-how-we-measure-detection-and-2",
+      "title": "The Fault in Our Metrics: Rethinking How We Measure Detection & Response",
+      "speakers": [
+        "Allyn Stott"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "threat-detection",
+        "incident-response",
+        "security-operations",
+        "management",
+        "framework"
+      ],
+      "teaser": "Shows how to build detection and response metrics that answer real questions, drive progress, and avoid gaming.",
+      "summary": "The talk opens with a problem many detection and response teams know well: metrics that were inherited, copied from past jobs, or built around alert counts, true and false positive ratios, and broad incident timers. The speaker, who has spent about a decade on call, admits to several of his own mistakes. These include tracking things his team could not change, chasing costly measurements when a rough one would do, and presenting specialist detail to executives who needed business impact.\n\nTo fix this, he suggests asking which question each metric answers, tying it to an outcome such as streamlining, threat awareness, vigilance or readiness, and filtering out time the team cannot reduce so that a result of zero signals no action is needed. Examples include measuring analyst time spent on false positives rather than their count, limiting coverage work to a top five threats list instead of the full ATT&CK matrix, and arranging metrics in a pyramid that links operational data to business impact. He also introduces a maturity model with 14 capabilities, each scored across process, tools, documentation and testing.\n\nThe closing guidance covers checking each metric for risky incentives, retiring metrics that no longer matter, and weighing data collection cost against the time a team actually has. When replacing an entrenched metric, he recommends expecting pushback and using a maturity view to tell the new story. Questions covered building the maturity graph and weighting ATT&CK test coverage.",
+      "durationSeconds": 2646,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "x4PcmQKS0Ao",
+      "slug": "from-keyless-to-careless-abusing-misconfigured-oidc-authenticati",
+      "title": "From keyless to careless: Abusing misconfigured OIDC authentication in cloud environments",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "identity",
+        "attack",
+        "vulnerabilities"
+      ],
+      "teaser": "Demonstrates how misconfigured OIDC authentication in cloud environments can be abused to gain access.",
+      "summary": null,
+      "durationSeconds": 1030,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ySBl0CbGBsI",
+      "slug": "14-years-later-proving-ground-is-proving-out",
+      "title": "14 Years Later, Proving Ground is Proving Out",
+      "speakers": [
+        "Phil Young",
+        "Grant Dobbe",
+        "Daemon Tamer"
+      ],
+      "track": "community",
+      "topics": [
+        "panel",
+        "learning",
+        "lessons-learned",
+        "discussion"
+      ],
+      "teaser": "Panelists explain how the Proving Ground mentorship track at BSides Las Vegas helps first-time speakers build talks and careers.",
+      "summary": "This panel session introduces the Proving Ground track at BSides Las Vegas, a mentorship program that pairs first-time conference speakers with experienced presenters for about ten to twelve weeks of coaching. The track chairs explain how the program started around 2011 and how its focus has been on telling stories of risk to people who make decisions. They share memorable talks, from social engineering experiments with robots to a satellite penetration test, and note effects beyond this event, including a speaker coaching program that Black Hat later created.\n\nCurrent mentors and mentees then describe what they took away. The recurring lessons were to condense research into a clear hook, to write for the audience rather than recite material, and to build confidence through practice and feedback. Several mentees admitted nerves about presenting late in a crowded schedule. The panel suggested keeping the existing structure while introducing mentors to each other earlier, improving logistics guidance for speakers, and offering more help with writing call for papers submissions.\n\nThe session closes with an overview of the selection process. Planning starts in January, with calls for papers and mentors opening around February. Applicants go through two rounds of review, and anyone who has already spoken at major international conferences is excluded. Mentors rank the anonymized talks they would like to coach, and checkpoint emails track progress. A pre-conference dry run gives speakers feedback from attendees, and donor-funded stipends help first-time speakers cover travel. The takeaway for practitioners is that the program is open to anyone with a technical idea who has not yet presented at a major conference.",
+      "durationSeconds": 2929,
+      "publishedAt": "2024-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "iLiWNrkdOR8",
+      "slug": "the-dark-side-of-themoon",
+      "title": "The Dark Side of TheMoon",
+      "speakers": [
+        "Chris Formosa",
+        "crudd"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "malware-analysis",
+        "intelligence",
+        "network",
+        "iot",
+        "threat"
+      ],
+      "teaser": "Traces a proxy botnet back from the dead and the criminal proxy service it was feeding, plus a failed takedown.",
+      "summary": "The talk follows researchers from Lumen's Black Lotus Labs as they rediscover the Moon, a proxy botnet first seen in 2014 and disrupted in 2019. Analysis of a sample showed a multi-stage loader that decrypts its next stage, contacts hardcoded command servers, and downloads further payloads. Those payloads pointed to a separate proxy service called Faceless, which sold access to infected devices spread across many countries.\n\nNetflow hunting and malware analysis showed the two networks were tightly linked. Most Moon bots began contacting Faceless servers within about two days, and nearly all Faceless command servers were built from Moon bots. The Faceless design kept users apart from exit nodes, used command servers dedicated to individual networks, and ran its own scanners and FTP servers to recruit newly vulnerable devices. Only about a quarter of its users came through hosted addresses, so most appeared to use their own connections, and the user base skewed toward countries often linked to fraud.\n\nThe team's August takedown removed about 70 percent of the bots and briefly knocked the service offline, but it returned at full strength within a day or two. The operators supplied new bots, likely from mobile gateways, and set up a new Moon command server in July. The speakers concluded that one network operator can only cut part of such a botnet, and that effective disruption needs many transit partners acting together. Defenders should expect proxy operators to rebuild quickly after a takedown.",
+      "durationSeconds": 1589,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "U-bK-WFJk_c",
+      "slug": "my-terrible-roommates-discovering-the-flowfixation-vulnerability",
+      "title": "My Terrible Roommates: Discovering the FlowFixation Vulnerability & the Risks of Sharing a Cloud Domain",
+      "speakers": [
+        "Liv Matan"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "web",
+        "vulnerability-research",
+        "risk",
+        "application"
+      ],
+      "teaser": "Explains how shared cloud parent domains enable session fixation, using a one-click AWS Airflow account takeover as the case study.",
+      "summary": "Liv Matan opens by explaining why a shared parent domain is risky in cloud environments. When many customers host subdomains under one domain, a script running on one tenant's subdomain can affect cookies that the others receive, similar to cross-site scripting on a subdomain in a web bug bounty. Cookie tossing and session fixation are the main risks discussed.\n\nThe public suffix list, a community-maintained list started by Mozilla, tells browsers which domains are shared among unrelated parties. The speaker reviewed major cloud providers and found service domains missing from it. Some gaps were fixed after reports, while one provider judged the issue not severe enough. Past cloud vulnerabilities exploited through cookie tossing were cited as cases the list could have prevented.\n\nThe central case is FlowFixation, a one-click account takeover in AWS Managed Workflows for Apache Airflow. An unauthenticated request retrieves a session identifier that becomes usable only after token-based verification, letting an attacker fix a known session into a victim's browser. An S3 bucket domain was blocked by the list, so the attacker used an API Gateway endpoint that was not, to set the cookie on the shared domain and redirect the victim to log in. AWS fixed it by refreshing the session after login. The takeaway: check whether your service domain is on the public suffix list, and treat same-site requests as untrusted if it is not.",
+      "durationSeconds": 1040,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Mh4FbqF4oJQ",
+      "slug": "introducing-serberus-a-multi-headed-serial-hardware-hacking-tool",
+      "title": "Introducing Serberus - a multi headed serial hardware hacking tool",
+      "speakers": [
+        "Patrick Kiley"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "embedded",
+        "open-source",
+        "tool",
+        "device",
+        "learning"
+      ],
+      "teaser": "Introduces an open-source adapter that connects to serial, JTAG, SPI, I2C and SWD targets at mixed logic levels.",
+      "summary": "Patrick Kiley presents Serberus, a multi-port hardware hacking adapter built to reach several embedded targets at once. The talk opens with the motivation: standard USB-to-serial adapters leave a tangle of cables when a tester needs both ends of a serial link, and low-voltage parts can go unrecognised. The device packs four channels onto one board, with headers for serial, JTAG, SPI, I2C and SWD, and a switch-selected level shifter that covers target voltages from 1.65 V to 5.5 V.\n\nThe middle section covers the design process, from a breadboard proof of concept to hand-built prototypes and connector revisions. The FTDI chip's configuration memory pins were repurposed to drive per-channel status LEDs, and stable power came from following vendor reference designs. Live demonstrations showed serial boot output from a router, JTAG access to an automotive security gateway through OpenOCD, and simultaneous serial links to avionics units, with a brief explanation of inverted RS-232 signals.\n\nThe main takeaway is that every board file, from layouts to schematics, is released openly, so testers can build their own copy from the Gerbers and bill of materials. The speaker argues that formal electrical engineering is not required for a board like this, and says a low-cost version for embedded testers is planned.",
+      "durationSeconds": 2388,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "U8MlBzl4Cak",
+      "slug": "insights-on-using-a-cloud-telescope-to-observe-internet-wide-bot",
+      "title": "Insights on using a Cloud Telescope to observe internet-wide botnet propagation activity",
+      "speakers": [
+        "Fabricio Bortoluzzi"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "cloud",
+        "iot",
+        "malware-analysis",
+        "intelligence",
+        "network"
+      ],
+      "teaser": "Presents a Terraform-based cloud telescope that captures unsolicited internet traffic and profiles Mirai infection patterns.",
+      "summary": "The talk opens with internet background radiation, the unsolicited traffic that reaches any publicly addressed host, and explains how traditional network telescopes are passive sensors usually run by universities. The presenters' alternative is a Cloud Telescope: a Terraform-defined fleet of small virtual machines spread across AWS regions, opened to all inbound traffic and recording packet captures. Spot pricing keeps the fleet cheap and ephemeral.\n\nThe middle section covers a 45-day capture in 2023 across 26 regions, with ten sensors each. Most unsolicited traffic was TCP, and Telnet was the most targeted port, which the speaker linked to low-cost IoT devices. Some services answered attacker sessions so the team could record commands run after infection. Captured payloads pointed to Mirai and its variants, typically 32-bit embedded Linux binaries, and the most exploited weakness was an old CCTV device flaw. Source concentration in certain hosting and anonymization networks was noted, with the speaker's explanation presented as a guess.\n\nThe takeaway is that IoT devices currently face the heaviest exploitation in this traffic. The packet captures have been published so others can study them. Whether the activity has a geopolitical motive remains open, and the presenters invited collaboration on that question.",
+      "durationSeconds": 2250,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "0x3PJ6rJqxo",
+      "slug": "modern-coldfusion-exploitation-and-attack-surface-reduction",
+      "title": "Modern ColdFusion Exploitation and Attack Surface Reduction",
+      "speakers": [
+        "Brian Reilly"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "vulnerabilities",
+        "web",
+        "exploitation",
+        "defensive-security"
+      ],
+      "teaser": "Maps ColdFusion attack surface through recent vulnerabilities and offers ways to reduce exposure in legacy deployments.",
+      "summary": "The talk opens by arguing that ColdFusion remains widely deployed in government, financial services and smaller businesses, despite its reputation. A rough search turned up tens of millions of pages, and the speaker points to several zero-day flaws in 2023 along with decades-old bugs that still show up in ransomware kits. The core question is whether patterns from past bugs can help predict where the next one will be found.\n\nThe middle section walks through three areas of exposure. Administrator interfaces have been bypassed through path tricks, such as a trailing dot on Windows, which can reach protected endpoints from the internet. Remote component files expose a wide class of risk: XML external entity issues, Java deserialization chains that kept surviving successive patches, and mass assignment that let an attacker write into protected variable scopes. The talk also covers server-side request forgery, where certain file parameters accept URLs and fetch them, with some affected functions existing in the open-source Lucee engine as well.\n\nThe closing guidance focuses on reducing what is reachable. Patching comes first, followed by ColdFusion's lockdown tool and sandbox to disable risky tags and functions. Teams that do not use remote components should block access to those files, and restricting admin paths by trusted IP helps as well. Egress filtering can expose SSRF callbacks, and endpoint detection offers a last line of alerting. The speaker also notes recent breaking security changes and Adobe's move to a paid bug bounty.",
+      "durationSeconds": 2534,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    }
+  ]
+}

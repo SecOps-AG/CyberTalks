@@ -1,0 +1,280 @@
+{
+  "villageSlug": "common-ground",
+  "villageName": "Common Ground",
+  "eventSlug": "bsides-las-vegas-2024",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLjpIlpOLoRNTvGwEukpcKt7r0Jpocm7lF",
+  "description": "Common Ground talks from BSides Las Vegas 2024.",
+  "talks": [
+    {
+      "youtubeId": "fdP0MtoSYi4",
+      "slug": "101-things-your-application-is-doing-without-your-knowledge",
+      "title": "101 Things Your Application is Doing Without Your Knowledge",
+      "speakers": [
+        "Mike Larkin"
+      ],
+      "track": "appsec",
+      "topics": [
+        "application",
+        "supply",
+        "monitoring",
+        "vulnerabilities",
+        "linux"
+      ],
+      "teaser": "Shows how third-party dependencies make applications open files, load code and make network calls the developers never intended.",
+      "summary": "The talk starts from the idea that an application often does more than its developers wrote. Code pulled in from libraries, distribution builds and the runtime environment can open files, read environment variables and reach out over the network, usually without the development team knowing. Even a two-line shell script triggers dozens of file opens once the loader and library initialization are counted.\n\nThe middle of the talk walks through behaviors the speaker's team has observed by tracing system calls and setting breakpoints on environment lookups. Examples include a tracing framework that wrote shared libraries to a temporary directory with world-writable permissions under predictable names, log and configuration files created with mode 777, and logging code that writes unsanitized input. Other cases included a leftover audit library injected through a preload variable so that every process made an outbound connection, a dashboard product that polled an update server every second against every resolved address, and a hard-coded IP connection traced back to a dependency. Weak random number functions and unbounded string handling also turned up in inherited code.\n\nThe takeaways are practical. Keep binaries lean and avoid linking features that are not needed, periodically audit process behavior, and compare current behavior against earlier baselines to catch drift. Environment variables should not be treated as a secret boundary, since same-user processes can read them. The speaker also acknowledged that whether a given behavior justifies a deep investigation depends on how critical the application is to the business.",
+      "durationSeconds": 2053,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "0Ms2psC3J2o",
+      "slug": "how-we-accidentally-became-hardware-hackers",
+      "title": "How We Accidentally Became Hardware Hackers",
+      "speakers": [
+        "Caleb Davis",
+        "Kyle Shockley"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "lessons-learned",
+        "embedded",
+        "device",
+        "learning"
+      ],
+      "teaser": "Traces an engineer's path from circuit-board mistakes to hardware hacking, touching on fault injection and power analysis.",
+      "summary": "This light-hearted talk follows two former electrical engineers who moved from HVAC embedded work into hardware security. They open with the everyday errors that pushed them toward hacking: wrong component footprints, crossed schematic wires, parts placed on the wrong side of a board, and accidental shorts from vias. Fixing those boards by hand, cutting and bridging traces under a microscope, and debugging in freezing test chambers taught them skills that map directly onto hardware attacks.\n\nThe middle of the talk covers those skills and the tools behind them. Logic analyzers, portable oscilloscopes and universal programmers were central to their work, and dumping firmware through JTAG or external flash often exposed hardcoded credentials. The speakers also described fault injection against microcontroller bootloader protections, correlation power analysis against AES implementations, and physical intrusion testing at a former workplace. In the Q&A they gave examples of exposed UART root access and firmware updates that could be triggered by SMS, and argued that a device's API keys can expose the backend services it talks to.\n\nThey closed by urging engineers and hobbyists to keep a growth mindset, celebrate small wins and treat failed boards as learning. Public datasheets, FCC filings and low-cost kits were suggested as starting points for newcomers who feel intimidated by hardware.",
+      "durationSeconds": 2522,
+      "publishedAt": "2024-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "vkUTblxa9y8",
+      "slug": "security-for-ai-basics-not-by-chatgpt",
+      "title": "Security for AI Basics - Not by ChatGPT",
+      "speakers": [
+        "Chloé Messdaghi"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "threat",
+        "risk",
+        "intelligence"
+      ],
+      "teaser": "Offers a lighthearted beginner overview of the main risks to AI models and systems, from data poisoning to prompt injection.",
+      "summary": "The talk opens with a light icebreaker and a case for why AI security matters now: AI tools already sit inside everyday products, and many organizations do not have a clear inventory of the models they run. The speaker, who leads threat intelligence at a security firm, uses quick true-or-false questions, analogies and jokes to keep the session approachable for newcomers.\n\nThe middle section separates an AI model from the wider AI system around it, including data pipelines, interfaces and deployment tooling, and names the likely adversaries: nation states, competitors and cybercriminals. It then walks through the main attack classes. Data poisoning corrupts training or continuously learned data. Evasion uses adversarial inputs that look normal to people but cause misclassification, illustrated with a stop sign altered by stickers that fooled a self-driving car. Model theft uses repeated queries to rebuild a model's behavior. Prompt injection is covered in direct, indirect and multimodal forms, along with cases where a language model's generated code is executed on a server. Supply chain risks close the section, covering backdoored pre-trained models and unsafe serialization formats in widely used machine learning libraries.\n\nThe closing part looks at policy, contrasting the EU's restrictive AI act with the more market-driven US approach, and notes that AI red teaming standards are still being defined. It ends with lifecycle recommendations: check data sources and model provenance at design time, scan and verify model integrity before deployment, then monitor inputs and outputs, run adversarial testing and educate users afterward. The overall takeaway is that AI security needs proactive work across teams because the field is still catching up.",
+      "durationSeconds": 2494,
+      "publishedAt": "2024-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "sf_FdCqOSLg",
+      "slug": "beyond-whack-a-mole-scaling-vulnerability-management-by-embracin",
+      "title": "Beyond Whack-a-Mole: Scaling Vulnerability Management by Embracing Automation",
+      "speakers": [
+        "Yotam Perkal"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "vulnerabilities",
+        "risk",
+        "automation",
+        "supply",
+        "framework"
+      ],
+      "teaser": "Shows how SBOM, CSAF and VEX data can automate vulnerability triage and shift prioritization toward real risk.",
+      "summary": "The talk looks back at vulnerability scanning in the early 2000s, when scanner databases held only a couple of thousand entries and about 25 new vulnerabilities appeared each week. Today the count is around 260,000 entries, with close to 800 added weekly. Many organizations still rank work by CVSS base scores, a measure of severity rather than real-world risk, even though only a small share of vulnerabilities is ever exploited.\n\nThe middle section walks through discovery, assessment, prioritization and remediation. The speaker proposes comparing SBOMs generated at different lifecycle stages to surface gaps, and gathering asset, business, threat, runtime and remediation context in one place. CSAF is presented as a machine-readable format for security advisories, and VEX as a way to record whether a product is actually affected and why. A worked example shows how reachability, network exposure and configuration checks can narrow one flaw's hundred instances to a single item. SSVC, a decision-tree method, is introduced as a transparent way to weigh several risk factors.\n\nThe takeaway is to define how risk is measured in your organization, starting with a few decision points, and to automate the evidence behind them. During questions, the speaker noted that auditors often still demand patching by CVSS threshold, and argued that explainable, data-driven evidence is needed to shift that expectation.",
+      "durationSeconds": 2673,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "m8zQfR48rI4",
+      "slug": "one-port-to-serve-them-all-google-gcp-cloud-shell-abuse",
+      "title": "One Port to Serve Them All - Google GCP Cloud Shell Abuse",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "attack",
+        "vulnerabilities",
+        "network"
+      ],
+      "teaser": "Examines how a single port can be abused in Google Cloud Shell, the browser-based environment for GCP.",
+      "summary": null,
+      "durationSeconds": 1002,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "hpa4Kw3OdJo",
+      "slug": "when-will-it-break-public-key-cryptography",
+      "title": "When will it break Public Key cryptography?",
+      "speakers": [
+        "James Ringold"
+      ],
+      "track": "policy",
+      "topics": [
+        "cryptography",
+        "quantum",
+        "risk",
+        "threat",
+        "infrastructure"
+      ],
+      "teaser": "Estimates when quantum computers could break RSA and Diffie-Hellman, and what organizations can prepare now.",
+      "summary": "James Ringold opens by asking the audience to guess when a cryptographically relevant quantum computer might arrive. He frames the risk around public-key schemes such as RSA and Diffie-Hellman, which protect most network communication used since early TLS. Shor's algorithm is the mechanism that would make them vulnerable, while symmetric AES is far more resistant.\n\nThe middle of the talk compares current hardware with the estimated requirement. The largest machine mentioned has roughly 56 qubits, while breaking RSA is estimated to need on the order of a million or more error-corrected qubits. Ringold cites a 2035 projection from the Cloud Security Alliance and notes that migration could take around a decade, given how widely cryptography is embedded in IoT devices, legacy systems and certificate authorities.\n\nTo close, he highlights \"harvest now, decrypt later\" collection of network traffic as a near-term concern and suggests modeling where traffic travels. Because NIST had not finalized its post-quantum standards at the time, he recommends testing candidate algorithms in non-production environments and isolating legacy devices where upgrades are hard. Audience questions covered key sizes, blockchain signing and embedded systems.",
+      "durationSeconds": 1118,
+      "publishedAt": "2024-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Wu15CTuKztc",
+      "slug": "free-your-mind-battling-our-biases",
+      "title": "Free Your Mind: Battling Our Biases",
+      "speakers": [
+        "Dade"
+      ],
+      "track": "community",
+      "topics": [
+        "learning",
+        "team",
+        "lessons-learned",
+        "discussion",
+        "social"
+      ],
+      "teaser": "Explores how beginners and experts alike fall into cognitive biases, and offers a divergent thinking exercise to counter them.",
+      "summary": "This non-technical talk looks at how cognitive biases shape the way people in security ask questions, share information and make decisions. The speaker starts with newcomers and the feelings that often come with being new, such as fearing you look foolish when you ask something basic. These feelings are linked to self-handicapping, where people avoid challenges to protect their self-esteem, and to shared information bias, where groups spend their time on what everyone already knows and skip what only a few people know.\n\nThe second part addresses experienced practitioners. Accumulated knowledge brings status quo bias, confirmation bias and a blind spot about one's own biases, which can make it hard to hear good ideas from less experienced colleagues. The speaker argues that experts should ask clarifying questions even when they know the answer, and that teams should make room for others to fail safely and speak up. The talk also covers divergent thinking, illustrated with the many uses of a paper clip, a red team interview scenario about controlling a light, and a classroom exercise on getting out of a test.\n\nThe closing takeaways are practical: beginners should stay curious and question claims regardless of seniority, while experts should model open questioning. The session ends with an audience exchange about other ways to turn a light off or prevent it from being switched off.",
+      "durationSeconds": 1144,
+      "publishedAt": "2024-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "NS6modyB_sI",
+      "slug": "introduction-to-software-defined-radio-for-offensive-and-defensi",
+      "title": "Introduction to Software Defined Radio – For Offensive and Defensive Operations",
+      "speakers": [
+        "Grey Fox"
+      ],
+      "track": "wireless",
+      "topics": [
+        "device",
+        "iot",
+        "network",
+        "attack",
+        "tool"
+      ],
+      "teaser": "Walks through software defined radio basics, from FM listening and ADS-B tracking to replaying signals and disrupting Wi-Fi.",
+      "summary": "Grey Fox presents a hands-on introduction to software defined radio for newcomers and security professionals. Drawing on a background in intelligence and special operations cyber work, the speaker focuses on inexpensive commercial hardware, including an RTL-SDR receiver, a HackRF transmitter and a Flipper Zero, paired with free software running on Windows.\n\nThe talk starts with passive collection: tuning in to broadcast FM and narrowband transmissions, then decoding aircraft ADS-B signals and plotting them on a map. It moves to sub-gigahertz devices, where a cheap wireless door alarm is captured with a Flipper Zero and replayed. The speaker then uses a HackRF to transmit enough power to stop a key fob and a car unlock signal from reaching their receivers. A Wi-Fi section shows a deauthentication attack that captures a WPA2 four-way handshake, which is then cracked offline against a weak passphrase.\n\nThe closing discussion turns to defense. Radio has no firewall equivalent, so the speaker suggests spotting unknown emitters with spectrum tools, looking up FCC IDs for device details, and hardening Wi-Fi with WPA3 and long, unique passphrases. Attendees are also warned that transmitting on protected frequencies can draw attention from regulators and law enforcement.",
+      "durationSeconds": 2682,
+      "publishedAt": "2024-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "2g4IDldonNw",
+      "slug": "raiders-of-the-lost-artifacts-racing-for-hidden-treasures-in-pub",
+      "title": "Raiders of the Lost Artifacts: Racing for Hidden Treasures in Public GitHub Repositories",
+      "speakers": [
+        "Yaron Avital"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply",
+        "build",
+        "open-source",
+        "attack",
+        "automation"
+      ],
+      "teaser": "Shows how leaked GitHub Actions tokens in public build artifacts can be stolen in a race before they expire.",
+      "summary": "The talk looks at GitHub Actions, the CI/CD platform that runs builds and tests for many open-source projects, and at build artifacts, which public repositories expose for anyone to download. The speaker scanned popular repositories' artifacts for secrets and found cloud keys, personal tokens and short-lived workflow tokens. Two patterns caused most leaks: a checkout action that stored credentials in the local git folder, which users then uploaded with the whole directory, and a linter that printed environment variables into logs that were also uploaded.\n\nWorkflow tokens expired when a job finished, so most could not be used to push code. A runtime token lasted about six hours, and by swapping an artifact for a malicious one, the speaker achieved code execution in any job that consumed it. A later artifact change made uploads visible immediately, opening a window of roughly two and a half seconds. The speaker built an automated tool that watched for pipeline runs, downloaded the new artifact, extracted the token and created a branch, running it from GitHub Actions to reduce latency. Live demos showed branches created in a container scanner and other widely used projects.\n\nThe main takeaways are to restrict workflow permissions and to scan artifacts for secrets before upload. The speaker released an action that blocks uploads containing secrets and fails the pipeline. GitHub's response placed responsibility on users to avoid uploading secrets.",
+      "durationSeconds": 1151,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "tq_saeZkF18",
+      "slug": "on-your-oceans-11-team-im-the-ai-guy-or-girl",
+      "title": "On Your Ocean's 11 Team, I'm the AI Guy (or Girl)",
+      "speakers": [
+        "Harriet Farlow"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "attack",
+        "risk",
+        "privacy"
+      ],
+      "teaser": "Shows how adversarial machine learning can weaken facial recognition, framed as a casino heist.",
+      "summary": "The talk uses a casino heist as a frame for looking at AI security. The speaker explains why facial recognition is the most important AI system in a casino, since surveillance is built into how the venue operates and card counting itself is not illegal. Interviews with organisations suggest that many firms run AI systems but few can describe how they secure them.\n\nThe middle of the talk covers adversarial machine learning, where small crafted changes to an input cause a model to misclassify it. Open-source face recognition models tend to learn similar internal structure, so a surrogate model can stand in for a target. The method places adversarial regions around a subject rather than altering the subject itself. A code demo on an open-source model showed match confidence dropping by roughly 40 percent, and results varied widely between models because machine learning outputs are probabilistic.\n\nThe speaker argues that AI security should be discussed in terms of risk and the highest-value assets, not as a simple count of attacks and defences. Disruption-style attacks that reliably break a model may matter more to an operator than a precise deception. Ownership of AI security is often unclear, sitting somewhere between IT, data science and cyber teams, and regulation rarely requires robustness testing.",
+      "durationSeconds": 2908,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "pxVCqDZsMdM",
+      "slug": "cyber-harassment-stop-the-silence-save-lives",
+      "title": "Cyber Harassment: Stop the silence, save lives",
+      "speakers": [
+        "Laura Johnson"
+      ],
+      "track": "policy",
+      "topics": [
+        "social",
+        "privacy",
+        "lessons-learned",
+        "risk"
+      ],
+      "teaser": "Shows how targets of online harassment can document abuse, seek protective orders, and find support.",
+      "summary": "Laura Johnson opens by arguing that online harassment does as much harm as in-person harassment, and that targets often feel powerless. She examines where the line falls between hurtful words and actionable harassment, noting that free speech does not shield messages that predictably injure someone, and that outcomes in court depend heavily on the judge and the evidence.\n\nThe middle of the talk draws on her own protective order case and several cases she has helped with. She describes harassers spoofing phone numbers and creating look-alike accounts, a flood of long emails that ran up legal fees, and a small-town case where devices were repeatedly blocked on a network and the pattern was hard to prove. She explains why evidence must be forensically sound, why a protective order should cover children in general rather than minors only, and how temporary orders differ from permanent ones.\n\nShe closes with support and self-care. Her practical advice includes hiring a lawyer with cyber training, using job-protected leave for mental health, relying on a therapist rather than friends who may be triggered, and avoiding replies that could later be used against the target. She urges the audience to speak up when they see harassment, citing cases of young people who died by suicide after online abuse.",
+      "durationSeconds": 2594,
+      "publishedAt": "2024-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "fB-ykqpCYfk",
+      "slug": "dont-make-this-mistake-painful-learnings-of-applying-ai-in-secur-3",
+      "title": "Don't Make This Mistake: Painful Learnings of Applying AI in Security",
+      "speakers": [
+        "Kirill Efimov",
+        "Eitan Worcel"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "appsec",
+        "vulnerabilities",
+        "development",
+        "lessons-learned"
+      ],
+      "teaser": "Shows why AI-generated vulnerability fixes often break applications, and how a hybrid approach can work better.",
+      "summary": "The talk examines an attempt to use a generative AI model to automatically remediate application security vulnerabilities in source code. The presenters began with a simple prompt template and tested OpenAI models against deliberately vulnerable web applications. The results were weak: only a minority of suggested changes were sound, many edited unrelated code, and some fixes broke application logic or did not compile. A live demo of a reflected cross-site scripting issue and a SQL injection fix showed how the same request could produce very different outcomes.\n\nThe middle of the talk covers techniques that improved reliability. Custom prompts tailored to each vulnerability and code pattern, limiting context to the relevant method, and asking the model to prefix each code line so output could be parsed without relying on JSON all helped. The presenters then described a hybrid design, where deterministic syntax-tree transformations apply the fix and the model supplies only small pieces, such as a conditional check. They also noted that rule-based tools from established vendors take a similar route, but writing and maintaining those rules for every pattern is slow.\n\nThe takeaway is that AI works best as a supervised assistant rather than a standalone remediation engine. Model output is non-deterministic, so practitioners should expect to verify every change, run regression tests, and keep the model's role narrow. Automated fixes can reduce remediation time, but they do not yet remove the need for review at scale.",
+      "durationSeconds": 2624,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5OX7MgxD5J8",
+      "slug": "securing-your-cloud-native-devops-a-zero-trust-approach",
+      "title": "Securing Your Cloud-Native DevOps: A Zero Trust Approach",
+      "speakers": [
+        "Emma Fang"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "devops",
+        "trust",
+        "identity",
+        "supply-chain"
+      ],
+      "teaser": "Maps cloud-native DevOps threats and applies zero trust principles to secure CI/CD pipelines and developer environments.",
+      "summary": "The talk opens by describing cloud-native DevOps as a way of building and shipping applications from microservices, containers, serverless functions and APIs, with fast release cycles and heavy automation. The speaker argues that this speed and distributed design widen the attack surface, leaving pipelines, developer tooling and underlying infrastructure exposed. Supply chain compromises, misconfigurations and identity abuse are presented as the main pressures on these environments.\n\nUsing publicly reported incidents, the speaker walks through example attacks: a password-spray intrusion against a legacy tenant, an overly permissive token that exposed internal data in a public code repository, a compromised service account that led to further breaches, and open source backdoors and poisoned editor extensions. Each case shows how a basic mistake or a trusted dependency can move laterally and persist. The defenses are framed around zero trust principles: verify explicitly, enforce least privilege, and assume breach.\n\nThe practical guidance covers securing identities with single sign-on, MFA and just-in-time access; hardening the build environment with scanning, SBOMs, restricted registries, isolated runners and secret management; and applying branch protection and policy-as-code to deployments. Monitoring and network segmentation are also covered. The main takeaway is to treat security as a continuous, layered effort across the whole software lifecycle rather than a single gate. A short Q&A touched on balancing speed with security and on using SBOMs for cloud infrastructure.",
+      "durationSeconds": 2803,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    }
+  ]
+}

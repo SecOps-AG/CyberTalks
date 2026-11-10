@@ -1,0 +1,178 @@
+{
+  "villageSlug": "track-3",
+  "villageName": "Track 3",
+  "eventSlug": "cactuscon-2025",
+  "conference": "cactuscon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PL4umh_7S4rRt2UYpL8jrrrATpmF-q34id",
+  "description": "Track 3 talks from CactusCon 13 2025.",
+  "talks": [
+    {
+      "youtubeId": "O7-zxAmP13o",
+      "slug": "js-tap-mark-ii-attacking-web-apps-with-even-more-red-team-shenan",
+      "title": "JS-Tap Mark II: Attacking Web Apps With Even More Red Team Shenanigans",
+      "speakers": [
+        "Drew “Hoodoer” Gilbert"
+      ],
+      "track": "red-team",
+      "topics": [
+        "web",
+        "appsec",
+        "attack",
+        "tool",
+        "defensive-security"
+      ],
+      "teaser": "Demonstrates turning an XSS foothold into a JavaScript C2 platform that captures credentials and replays user actions.",
+      "summary": "The talk presents JS-Tap Mark II, an open-source browser-side tool for red teams that began as a recon utility for watching tapped users. Version two adds a backend that scales beyond a single-threaded Flask app by using Gunicorn and Nginx, a C2 for queuing custom JavaScript tasks to connected clients, and Mimic, a feature that turns intercepted browser requests into stubbed-out replay scripts. The speaker explains implant mode for post-exploitation and trap mode for XSS, where a same-origin iframe keeps a victim engaged while the address bar is spoofed.\n\nThe demos cover a WordPress XSS trap that captured keystrokes and form posts, then used Mimic to add an administrator account. Monkey-patching XHR and fetch exposed API tokens and let a generic payload change a Defcon level through an authenticated call. An osTicket implant showed unprotected session cookies and session fixation, and a custom payload took the help desk offline.\n\nFor defenders, the talk recommends file integrity monitoring on servers, caution with third-party JavaScript, and a strict Content Security Policy set early without inline exceptions. Audience questions covered how victims break out of the trap through refreshes or cross-domain navigation, and the limits of this approach without XSS or server access.",
+      "durationSeconds": 2841,
+      "publishedAt": "2025-05-09",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "JPsAGEwChF4",
+      "slug": "ntlmv1-reversion-to-ntlm-with-hashcat-and-the-ntlmv1-multi-tool",
+      "title": "NTLMv1 reversion to NTLM with hashcat and the NTLMv1-multi tool",
+      "speakers": [
+        "EvilMog"
+      ],
+      "track": "red-team",
+      "topics": [
+        "windows",
+        "vulnerabilities",
+        "exploitation",
+        "identity",
+        "tool"
+      ],
+      "teaser": "Shows how a captured NTLMv1 challenge response is cracked with hashcat and turned into domain controller NT hashes.",
+      "summary": "The talk explains why NTLMv1 remains a risk in Windows environments even though it is considered legacy. The speaker starts with background on how Windows stores passwords as NT hashes, how LM and NTLM variants differ, and how the NTLMv1 challenge-response exchange works at a high level. The key detail for the attack is that, without extended session security, the response can be split into DES keys, and those keys can be recovered with GPU-based cracking instead of rainbow tables.\n\nThe exploitation path combines Responder, which listens for and captures authentication attempts, with Coercer, which forces a domain controller to authenticate to the attacker. The captured response is reformatted by a helper script called NTLMv1-multi so Hashcat can crack it in mode 14000. The speaker estimates cloud GPU cost and time against a typical penetration test window, then shows the cracked DES keys being converted back into an NT hash and used with netexec to run a DCSync.\n\nThe takeaway is that a domain whose LAN Manager compatibility level is two or lower exposes NTLMv1 and should be treated as compromised. Mitigations discussed include raising that compatibility level, which is a separate policy from the regular domain policy and is often left at old settings on domain controllers, and making sure vulnerability scanners do not spray credentials in NTLMv1 format.",
+      "durationSeconds": 1088,
+      "publishedAt": "2025-05-09",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "nCA94mNrbZw",
+      "slug": "deep-dive-into-jwt-algorithm-confusion",
+      "title": "Deep dive into JWT Algorithm Confusion",
+      "speakers": [
+        "Louis"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "appsec",
+        "vulnerabilities",
+        "identity",
+        "code"
+      ],
+      "teaser": "Shows how JWT algorithm confusion lets attackers forge tokens, and how libraries can block it in code.",
+      "summary": "The talk opens with why JSON Web Tokens are so widely used for sessions, API calls and service-to-service trust, then walks through the basics: the three-part layout, URL-safe encoding, and the contrast between shared HMAC secrets and RSA or ECDSA key pairs. It highlights the header's algorithm field, which a verifier reads before checking the signature, as the point where things can go wrong.\n\nThe middle section explains algorithm confusion: a token claiming HMAC is checked using an RSA or ECDSA public key as the secret. The speaker shows how an ECDSA public key can be recovered from signatures on two tokens, and how an RSA key can be brute-forced from tokens, then runs live demos that forge a token and log in as an admin. Code walkthroughs of several libraries follow, including a Scala library that trusted the token's algorithm, a C library with the same flaw, and a Ruby library whose key-type check only applied when signing.\n\nDefenses are compared: restricting the library to one configured algorithm, ignoring the token's algorithm, combining both, and detecting key types, which can be fragile when based on regular expressions, as a past CVE showed. The closing advice covers enforcing one algorithm, rejecting the none algorithm, setting expiry, and running scheduled tests that send unsigned tokens to your own services.",
+      "durationSeconds": 2635,
+      "publishedAt": "2025-05-09",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "o3sLhLnVgoA",
+      "slug": "navigating-blind-ssrf-attacking-and-defending-critical-systems",
+      "title": "Navigating Blind SSRF: Attacking and Defending Critical Systems",
+      "speakers": [
+        "Yelena Williams",
+        "Trevor Costanzi"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "cloud",
+        "defensive-security",
+        "devops",
+        "vulnerabilities"
+      ],
+      "teaser": "Shows how blind SSRF is found, exploited through out-of-band callbacks, and defended with secure infrastructure defaults.",
+      "summary": "The session opens with a red-team and blue-team pairing that explains how blind server-side request forgery differs from the ordinary kind. The vulnerable server fetches an attacker-chosen address but returns nothing visible, so results must be inferred through out-of-band callbacks, timing or error differences. The offensive half covers spotting URL-consuming parameters, testing them manually and with tooling, slipping past a web application firewall with encodings and IP-based hosts, and proving impact with an interaction server.\n\nThe defensive half treats blind SSRF as a standard input validation failure. It recommends secure-by-default Terraform modules, service mesh rules that limit east-west traffic, layered controls instead of relying on a WAF, and CI/CD pipelines that run static and dynamic scans. Detection ideas include requests to the cloud metadata address, DNS lookups from blocked requests, and SIEM baselines.\n\nThe closing case study follows a malicious PDF containing PostScript that was fetched through an SSRF and reached a serverless function, exposing its credentials and a bucket full of personal documents. Automated alerts on unusual credential use enabled containment within minutes. Takeaways include patching document-processing tools, sandboxing them, enforcing least-privilege IAM, and coordinating fixes between red and blue teams.",
+      "durationSeconds": 2714,
+      "publishedAt": "2025-05-09",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "tQingeQbhgk",
+      "slug": "when-ai-meets-cybersecurity-challenges-and-strategies-for-profes",
+      "title": "When AI Meets Cybersecurity: Challenges and Strategies for Professionals",
+      "speakers": [
+        "Harlequinn"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "security-operations",
+        "learning",
+        "management"
+      ],
+      "teaser": "Explores how over-reliance on AI can erode analyst skills, introduce bias and misinformation into SOC work, and what teams can do.",
+      "summary": "The speaker, an adviser who works with vulnerability management teams, opens by explaining why AI adoption has become a concern for customers. Tools are being pushed into daily workflows quickly, while their downsides get little attention. The talk treats AI broadly, covering generative tools, copilots and the models behind them, and asks what professionals give up when they depend on these tools over years.\n\nThe middle of the talk walks through four challenges. Misinformation appears because training data is not vetted, and a simple demonstration shows a model giving different answers to a basic question while presenting each one as fact. Over-reliance and skill decay follow, with references to research suggesting that AI assistance speeds people up but can weaken problem-solving, especially for newcomers. Cognitive offloading, where tools take over note-taking and routine tasks, is presented as another way skills fade. The talk then covers opaque training data and accountability, citing a court case in which fabricated legal citations from an AI tool were submitted, and bias in threat prioritisation that can skew SOC and incident response decisions.\n\nThe closing section offers three mitigations. The first is an AI-usage policy grounded in the NIST AI Risk Management Framework. The second is reversing the workflow so humans draft first and AI refines the result, which keeps critical thinking active. The third is investing in team building, mentoring and community so foundational skills stay sharp. The speaker ends by asking attendees to check whether their own organisations have AI policies and to reflect on what they are giving up by using these tools.",
+      "durationSeconds": 1497,
+      "publishedAt": "2025-05-09",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "PAkzDsEHGdw",
+      "slug": "presenting-like-a-boss-virtual-and-physical-presenting-tips-and",
+      "title": "Presenting Like a Boss: Virtual & Physical Presenting Tips & Tricks",
+      "speakers": [
+        "R.J. Chap"
+      ],
+      "track": "community",
+      "topics": [
+        "learning",
+        "guide",
+        "practical",
+        "lessons-learned"
+      ],
+      "teaser": "Gives practical tips for presenting well, both over video calls and on a conference stage.",
+      "summary": "The talk opens by arguing that presenters should choose topics they genuinely care about, since enthusiasm carries through to the audience. The speaker also admits to early missteps, which he uses to frame the advice as lessons to avoid repeating.\n\nThe middle section is a practical checklist. For virtual talks, it recommends front-facing lighting, a dedicated camera set at eye level, comfortable clothing and a tidy background. For audio, it covers silencing phones and fans, choosing between dynamic and condenser microphones, and using a gate and compressor to clean up the signal. On stage, it stresses knowing the room ahead of time, scanning the audience, and using a wireless clicker so you can move. Screen sharing gets heavy attention: hide desktop icons and notifications, use a clean guest browser profile, enlarge fonts and OS scaling so people at the back can read, and use zoom and cursor highlight tools during demos. Slides should stay simple, and AI-generated images are often unreliable with text.\n\nThe closing part argues that practice helps with timing and filler words, that nervous energy can be managed through movement and familiarity with the room, and that presenting should be fun and leave the audience with at least one useful takeaway. The session ends with audience questions.",
+      "durationSeconds": 3266,
+      "publishedAt": "2025-05-09",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "qpGMVuQ5yO8",
+      "slug": "that-shouldn-t-have-worked-payload-development-101",
+      "title": "That Shouldn't Have Worked - Payload Development 101",
+      "speakers": [
+        "Corey Overstreet"
+      ],
+      "track": "red-team",
+      "topics": [
+        "attack",
+        "windows",
+        "detection",
+        "defensive-security",
+        "learning"
+      ],
+      "teaser": "Shows how payloads get past AV and EDR defenses, and what defenders should monitor to catch them.",
+      "summary": null,
+      "durationSeconds": 3214,
+      "difficulty": "intermediate",
+      "publishedAt": "2025-05-09"
+    },
+    {
+      "youtubeId": "yGLT93CoKuY",
+      "slug": "llms-your-wireless-hacking-friend",
+      "title": "LLMs: Your Wireless Hacking Friend",
+      "speakers": [
+        "Alissa Gilbert"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "network",
+        "attack",
+        "tool",
+        "practical"
+      ],
+      "teaser": "Shows how chatbot prompts can speed up wireless pentest tasks, from packet capture review to handshake extraction.",
+      "summary": "Alissa Gilbert argues that general-purpose chatbots can shorten parts of wireless penetration testing. She starts with the basic flow of recon, enumeration and attack, then outlines what language models handle well: reading logs, interpreting packet captures and helping with reconnaissance. She is clear about their limits. They cannot run attacks or touch hardware, and prompts work better when they state a lab or testing context, stay narrow, and include device details or documentation.\n\nThe middle of the talk walks through example prompts. They cover a Wi-Fi reverse shell draft, retrieving CVE details for a router model, encrypting payloads, finding a four-way handshake in a capture, and spotting hidden SSIDs in packet data. Generated output is then fed into aircrack-ng and other tools. She also discusses wordlist suggestions for WPA-PSK cracking and a WPA3 Dragonblood prompt. Her tips focus on referencing timeframes or packet numbers and splitting large captures.\n\nShe closes by noting that her attempts with a self-hosted model fell short, and that she prefers Claude for scripting. The takeaway is that these tools speed up familiar steps, but an experienced operator still has to check results, reprompt when answers drift, and verify output before relying on it.",
+      "durationSeconds": 915,
+      "publishedAt": "2025-05-09",
+      "difficulty": "intermediate"
+    }
+  ]
+}

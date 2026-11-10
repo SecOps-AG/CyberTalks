@@ -1,0 +1,341 @@
+{
+  "villageSlug": "common-ground",
+  "villageName": "Common Ground",
+  "eventSlug": "bsides-las-vegas-2023",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLjpIlpOLoRNSjOa_3lSaWf4qQOeVDkZu6",
+  "description": "Common Ground talks from BSides Las Vegas 2023.",
+  "talks": [
+    {
+      "youtubeId": "aSn26QCvBXA",
+      "slug": "strategies-for-secure-development-with-graphql",
+      "title": "Strategies for secure development with GraphQL",
+      "speakers": [
+        "Mister Glass"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "web",
+        "development",
+        "monitoring",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how to scope threats, build secure defaults, and log GraphQL APIs so developers can ship secure features.",
+      "summary": "The talk targets a common gap: teams talk about security but rarely give developers practical help. The speaker organizes the material around three questions: how to find what needs protecting, how to build a secure foundation, and what to log. The examples use GraphQL, though the advice applies to most development work.\n\nFor scoping, the speaker suggests threat modeling with STRIDE, paying attention to framework-level denial of service and privilege escalation, and to mutations, where custom side effects need the closest access review. Security work should be planned like a feature, with functional tests that confirm blocked requests also log correctly and return clear responses. For the foundation, choose a well-maintained framework that patches security issues quickly, extend its base classes with safe defaults, disable superuser access, and centralize authorization in helpers and decorators so developers do not reimplement checks. Test helpers make broad coverage practical.\n\nOn logging, GraphQL's single endpoint and in-body errors make ordinary request logs weak, so the speaker favors logging the query portion without inline sensitive values. Structured JSON, timestamps, object versioning, explicit records of permission changes, and point-in-time database recovery all help reconstruct events. The talk ends with regular drills so log searches work during an incident.",
+      "durationSeconds": 2343,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Q1WmIl4amjo",
+      "slug": "big-siem-energy-at-micro-siem-cost",
+      "title": "Big SIEM Energy at micro-SIEM cost",
+      "speakers": [
+        "Kenneth Kaye"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "threat-detection",
+        "cloud",
+        "security-operations",
+        "automation",
+        "monitoring"
+      ],
+      "teaser": "Shows how to build a low-cost AWS monitoring pipeline that alerts on root console logins using native services.",
+      "summary": "The speaker, a security architect at a cloud-native startup, explains why a full commercial SIEM or a self-hosted stack was a poor fit for a small team with a tight budget. Managed SIEMs often price by data volume or event count and ship with broad rule sets that create noise in environments they were not built for. The alternative presented is to start from a threat model, identify the few events that matter most, and write narrow detections for them.\n\nThe main example is an alert that fires when the AWS root account signs in. CloudTrail management events supply the data, and an EventBridge rule matches successful sign-ins from a default AWS service, which avoids per-event evaluation charges. The rule publishes to an SNS topic that AWS Chatbot forwards to Slack. The stack is defined in Terraform, and Chatbot is restricted with deny-all guardrails so it only delivers messages and cannot run commands from the channel. In a live demo, the infrastructure was deployed and an alert appeared in Slack roughly fifteen seconds after a root login. Questions covered chaining rules to create thresholds, using a custom event bus for cross-region delivery because sign-in events route through one region, and running simple Lambda remediation.\n\nThe takeaway is that this approach trades breadth for control and low cost. It suits teams with a well-understood threat model and a small number of critical detections, and maintenance grows quickly as rule counts rise, which is the point where a fuller product becomes worth considering. Because many vendors read events from S3, migrating later is described as feasible.",
+      "durationSeconds": 2357,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "buEp5yB8-FE",
+      "slug": "cyber-crash-investigations-seizing-the-opportunity-to-learn-from",
+      "title": "Cyber Crash Investigations: Seizing the Opportunity to Learn from Past Crises",
+      "speakers": [
+        "David Stocks",
+        "Julia Wighton"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "risk",
+        "detection",
+        "ransomware",
+        "lessons-learned"
+      ],
+      "teaser": "Draws on real Australian incident response cases to show where organizations stay exposed before, during and after a cyber crisis.",
+      "summary": "Julia Wighton and David Stocks, incident readiness and response practitioners, use aviation accident investigation as a model for examining past cyber crises. Their goal is to surface root causes and prompt listeners to question how ready their own organizations are in less obvious areas, rather than to offer a full checklist.\n\nThe middle of the talk moves through the stages of an incident. Before one, they point to inconsistent multifactor authentication, plaintext credentials in code, overloaded domain admin roles and unclear patching ownership, illustrated by an M365 account that was never challenged because enforcement was missing. During an incident, they flag monitoring blind spots, alert fatigue, unclear escalation with outsourced SOCs and weak data management; a double extortion case grew worse because old customer records and staff personal files sat on a file server. For recovery, they stress containment plans with clear decision owners, business continuity plans that last weeks rather than days, and the ability to restore everything in bulk. A final case showed that a slow decision to disconnect from the internet let an attacker reach more systems and take data.\n\nThey close by arguing that expensive tooling matters less than tested processes. Data management and business continuity deserve more attention, and pre-agreed decisions, messaging and joint exercises with executives, technical teams and outside providers can shorten response time.",
+      "durationSeconds": 2631,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "uzNQjAmZU-A",
+      "slug": "the-evolution-of-magecart-attacks",
+      "title": "The Evolution of Magecart Attacks",
+      "speakers": [
+        "Gal Meiri",
+        "Roman Lvovsky"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "attack",
+        "threat",
+        "supply",
+        "detection"
+      ],
+      "teaser": "Shows how Magecart attackers hide skimming code, evade scanners and smuggle card data out of e-commerce checkout pages.",
+      "summary": "Magecart, also called web skimming or formjacking, is an attack where malicious JavaScript is injected into a website, usually an e-commerce checkout page, to capture payment details as shoppers type them. The speakers explain why it is hard to spot: the code is served by the site itself, so every session is affected, and the page keeps working normally, so victims notice nothing. Infection typically happens either through a vulnerability or leaked credentials on the site itself, or through a compromised third-party vendor script.\n\nThe middle of the talk covers how attackers hide their code. Techniques include obfuscating variable names and control flow, abusing trusted services such as tag managers, loading the real payload from a separate request, or hiding it inside a CSS file or an image, and using anti-debugging checks that wipe traces when developer tools are open. For exfiltration, the talk covers encoding or encrypting stolen data, sending it over WebSockets, embedding it in image or link requests, messaging it through a Telegram channel, staging it in browser storage until the next page, and fake overlay forms that imitate a payment iframe.\n\nThe closing section reviews defenses. Content Security Policy and subresource integrity help but are hard to maintain and do not cover malicious code inside a legitimate third-party script. External scanners can miss code that runs only in some sessions, while runtime protections running in the page can watch for suspicious interactions with payment fields. The takeaway is that checkout pages need monitoring of what scripts actually do in real sessions.",
+      "durationSeconds": 1550,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "vJKK29CI8GM",
+      "slug": "rockstar-role-security-tpm",
+      "title": "Rockstar Role: Security TPM",
+      "speakers": [
+        "Lea Snyder"
+      ],
+      "track": "community",
+      "topics": [
+        "interview",
+        "management",
+        "team",
+        "learning"
+      ],
+      "teaser": "Explains what a security technical program manager does, how the role differs from related jobs, and how people can move into it.",
+      "summary": "The talk opens with the observation that the security technical program manager role is widely misunderstood, which makes it hard for people to enter it or to hire for it. The speaker, a principal security engineer who once worked as a TPM, describes the role as leading large, cross-functional programs end to end. Examples include preparing an organization for a privacy regulation and building an internal capture-the-flag program. Security expertise is expected, since the person is hired for it.\n\nThe middle contrasts the role with product managers, who focus on the what and why, and with engineering managers, whose scope is a single team. A TPM instead concentrates on the how, when and who across an organization. The speaker warns that people who only take notes, schedule meetings or write status reports are not doing the job, and suggests ways to take ownership, such as turning meeting discussions into action items or automating a small task. Useful traits include an understanding of system design, active listening, tenacity, and communicating with different audiences. Common entry paths include engineering backgrounds, security awareness or developer education, organizing volunteer events, and internal transfers.\n\nThe talk closes with the speaker's own non-linear career and the recurring challenge of explaining the value of the role to colleagues. The main takeaway is that the job suits people who move toward problems and enjoy building networks, and that the field needs more security TPMs.",
+      "durationSeconds": 2567,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "yBfZFr-B4H8",
+      "slug": "your-ad-here-helping-your-organization-build-their-security-bran",
+      "title": "Your Ad Here: Helping your organization build their security brand",
+      "speakers": [
+        "Leif Dreizler",
+        "Coleen Coolidge"
+      ],
+      "track": "community",
+      "topics": [
+        "team",
+        "management",
+        "building",
+        "learning"
+      ],
+      "teaser": "Shows security leaders how to encourage their teams to blog, podcast and speak publicly.",
+      "summary": "The talk, given by Leif Dreizler and Coleen Coolidge, argues that security teams gain real benefits when their members write, podcast and speak publicly. The presenters point to recruiting as the most visible payoff: a well-known team draws stronger candidates and makes cold outreach from recruiters more likely to get a reply. They also argue that public work builds communication skills, which helps security staff get engineering and executive teams to act on their requests.\n\nThe middle section focuses on leadership. Managers are urged to go first by publishing and speaking themselves, to build sharing into job ladders and career development plans, and to recognise colleagues who present their work. The speakers describe tracking contributions on a simple shared page, using a coaching service to help colleagues through the process, and promoting posts on social channels and internal chat. For writing, they recommend starting from a detailed outline, choosing between a story and a tutorial, and drafting in one sitting.\n\nThe final part moves to speaking. Podcasts are presented as a low-risk entry point, and conference proposals should be checked by a critical peer and kept clear and concise. Meetups and lightning talks are suggested as easier first stages, and co-presenting is recommended. Attendees leave with a practical checklist: build the outline, promote the work through your network, and rehearse aloud before going on stage.",
+      "durationSeconds": 2786,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "WiBTFwZALro",
+      "slug": "the-history-of-malware-from-floppies-to-droppers",
+      "title": "The History of Malware- From Floppies to Droppers",
+      "speakers": [
+        "Eliad Kimhy"
+      ],
+      "track": "malware",
+      "topics": [
+        "ransomware",
+        "malware-analysis",
+        "evolution",
+        "threat",
+        "attack"
+      ],
+      "teaser": "Traces malware from 1980s boot sector viruses and floppy-disk ransomware through macro viruses and botnets to modern droppers.",
+      "summary": "The talk opens with the 1989 AIDS Trojan, which was distributed on floppy disks and locked victims' files until a ransom was paid. From there the speaker follows how malware moved from a curiosity into a serious threat. Early programs such as Creeper and Reaper, and a 1984 magazine column that exposed readers to real viruses, show how the idea of self-replicating code took hold. The talk then covers DOS boot sector viruses, polymorphic infectors, and destructive payloads, noting how each era combined novelty with growing damage.\n\nThe middle section covers the shift to networks and documents. Macros in Office 95 enabled macro viruses, and Melissa and later worms spread through email at a scale that disrupted large companies. Remote access trojans such as NetBus and Back Orifice made backdoors common, and combining worms with command-and-control channels produced botnets. Those botnets were monetized through spam, denial-of-service rental, and banking theft, and ransomware eventually became a final payload dropped onto infected machines.\n\nThe closing part links this history to the present. Cryptocurrency and widely exploitable vulnerabilities made ransomware more profitable, and the speaker suggests AI-assisted malware may follow the same pattern, where early experiments later become serious threats. The practical takeaway is that many current attack chains still reuse old techniques, such as macros delivered through phishing, so understanding past malware helps explain today's defenses.",
+      "durationSeconds": 3299,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "43BdfFrHfZQ",
+      "slug": "vulnerability-intelligence-for-all-say-goodbye-to-data-gatekeepi",
+      "title": "Vulnerability Intelligence for All: Say Goodbye to Data Gatekeeping",
+      "speakers": [
+        "Jerry Gamblin"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "vulnerabilities",
+        "intelligence",
+        "risk",
+        "open-source",
+        "threat"
+      ],
+      "teaser": "Shows how open vulnerability data sources like CISA KEV, Metasploit and EPSS can help teams prioritize patching.",
+      "summary": "Teams can typically patch only about a tenth of the vulnerabilities on their network in a given month, so the speaker argues that the real task is choosing which tenth matters. He separates threat intelligence, which covers who is attacking and why and is often sold for large sums, from vulnerability intelligence, which answers what is being exploited, when, and where. Most organizations, he says, need the second far more than the first.\n\nThe middle of the talk walks through free sources. CISA's Known Exploited Vulnerabilities catalog is presented as a practical starting point, Metasploit is treated as a list of flaws attackers already have working code for, and the EPSS model from FIRST estimates the likelihood of exploitation within 30 days. Exploit-DB has faded while GitHub proof-of-concept repositories have grown, though many of them only check for a version rather than exploit it. He also argues that CVSS scores are static and do not reflect exploitation, and that proof of exploit, meaning working code from low privilege, matters more than proof of concept.\n\nTo close, he introduced a combined list built from CISA, Metasploit and FIRST data, refreshed hourly as a CSV that teams can check against their scanners. In questions, the discussion covered licensing for commercial exploit libraries and how to hand developers a short list of high-priority library updates rather than a long backlog.",
+      "durationSeconds": 1405,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "0_B9Z8-mlF4",
+      "slug": "are-we-too-early-for-the-party-the-perils-of-baking-cyber-in-fro",
+      "title": "Are We too Early for the Party? (the perils of Baking Cyber in from the Beginning)",
+      "speakers": [
+        "Steve Bichler",
+        "Lillian Ash Baker"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "management",
+        "lessons-learned",
+        "engineering",
+        "team"
+      ],
+      "teaser": "Explores the practical difficulties of designing cybersecurity into an aircraft program from its earliest development stages.",
+      "summary": "The speakers, who do cyber security work on a civil aircraft program, open with the familiar claim that security belongs in a project from day one. They describe their current position: an uncrewed aerial vehicle is heading into civil certification, and much of the design still exists only as block diagrams. Early involvement brings friction. Product teams resist added requirements, leadership prioritises certification over security, and architecture changes repeatedly, which forces threat models to be rebuilt.\n\nThey also set out the benefits. Early requirements reduce rework and hardware respins, and tracking testing from the start makes the documentation regulators need easier to assemble. Their approach was to reach out to product teams rather than wait to be invited, build governance and policy to anchor work as things shift, and model only the tangible system boundaries instead of every external factor. Agile sprints were a recurring obstacle, so they split security work into phased tickets that fit into delivery cycles.\n\nThe main takeaway is that early involvement helps but is not easy. Practitioners in this position should expect a documentation and advisory role rather than hands-on testing, plan for flexibility, and use relationships and advocacy with managers to make risks visible. The audience questions covered handling schedule pressure in conversations with product managers and fitting security into agile workflows.",
+      "durationSeconds": 1480,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Hzk_e19Rg5o",
+      "slug": "what-the-yandex-leak-tells-us-about-how-big-tech-uses-your-data",
+      "title": "What the Yandex Leak Tells Us About How Big Tech Uses Your Data",
+      "speakers": [],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "intelligence",
+        "open-source"
+      ],
+      "teaser": "Examines what the Yandex leak reveals about how big tech companies use personal data.",
+      "summary": null,
+      "durationSeconds": 1342,
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Owj_i-UtZmQ",
+      "slug": "wrangling-cats-how-we-coordinate-red-team-testing",
+      "title": "Wrangling Cats: How We Coordinate Red Team Testing",
+      "speakers": [
+        "Jennifer Traband"
+      ],
+      "track": "red-team",
+      "topics": [
+        "management",
+        "team",
+        "operations",
+        "project",
+        "tool"
+      ],
+      "teaser": "Shows how a dedicated coordinator uses Jira to run red team assessments from intake through closeout.",
+      "summary": "Running red team assessments is hard for an organization, and the coordination around them, including collaboration, approvals and administration, can pull testers away from their research. This talk proposes a dedicated coordinator to take on that load. The coordinator's responsibilities run from intake of a request through prioritization, scoping, resource allocation, training, account provisioning and clearing blockers.\n\nThe process described handles two kinds of requests: new technology that business lines want to deploy, and internal customer requests or individual research interests. Requests arrive through a portal or internally, get prioritized and scoped, and prerequisites are completed before testing. Findings are then reported and reviewed with the teams responsible for fixing issues. Jira is the tracking layer: features contain stories, stories contain activities, and tests link back up the hierarchy. Board views with per-person quick filters show progress, and reported fields feed key performance indicators such as assessment timelines, number of assessments, and customer satisfaction.\n\nTo make the structure concrete, the speaker used a playful example of taking a cat to the veterinarian, mapping the feature, story, activities and test onto the steps and walking through a live board as the work moved to done. The main takeaway is a repeatable intake-to-closeout workflow, along with Jira conventions and metrics that a team could adapt to run its own red team.",
+      "durationSeconds": 917,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "d6z_aoL7N2M",
+      "slug": "how-to-communicate-with-non-security-specialists-to-drive-action",
+      "title": "How to communicate with non-security specialists to drive action",
+      "speakers": [
+        "Ashleigh Lee"
+      ],
+      "track": "community",
+      "topics": [
+        "social",
+        "management",
+        "team",
+        "learning",
+        "practical"
+      ],
+      "teaser": "Shows security practitioners how to make their advice clearer and more persuasive to non-technical colleagues.",
+      "summary": "The speaker, a product marketing manager with years in security marketing, starts with a pattern she saw while working at a mobile app security firm. Pentesters reported findings, clients delayed fixes, and retests turned up many of the same problems. She notes that the people who find issues often do not own the systems, and that awareness training and champion programs have not fully solved the problem, since human factors still feature in most breaches.\n\nThe core of the talk is three ingredients for driving action: provide value, be clear, and connect with the audience. For value, she lists seven reasons people pay attention, including novelty, counter-narratives, controversy, fear, and simple ranked lists that executives can scan. For clarity, she shows how to find jargon in a dense NIST definition of multi-factor authentication using a jargon-highlighting tool and a readability grader, then rewrites it in plainer language that drops to roughly a seventh-grade reading level. For connection, she recommends two books on influence and negotiation and urges practitioners to uncover the real obstacle behind someone's refusal to act.\n\nShe closes with a 2017 anecdote in which a session speaker tailored a message to marketers, which prompted her to enable MFA and recheck permissions. In the Q&A she covers following up without sounding punitive, building rapport with remote international partners through informal get-togethers, and learning a new audience by observing people rather than relying on surveys. The takeaway is to tailor messages to each group and explain what a security measure means in their own context.",
+      "durationSeconds": 1315,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "DmOLgm-bneE",
+      "slug": "how-to-have-perfect-vulnerability-reports-and-still-get-hacked",
+      "title": "How to have perfect vulnerability reports and still get hacked",
+      "speakers": [
+        "Zachary Newman",
+        "Luca Guerra"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "vulnerabilities",
+        "open-source",
+        "container",
+        "risk",
+        "build"
+      ],
+      "teaser": "Explains why software composition analysis and SBOMs miss vulnerabilities in container images and how tooling is improving.",
+      "summary": "The talk starts from the common assumption that organizations can know which known vulnerabilities sit inside their applications and container images. The speakers argue that this goal is harder than it sounds. Software composition analysis tools build an inventory by reading package metadata from an image, so anything without that metadata, such as a compiled web server binary copied in by hand, can disappear from the results. They describe this unexplained content as software dark matter, and note that many popular base images contain a large share of files that no bill of materials accounts for.\n\nNext, they walk through the vulnerability databases that scanners rely on. Sources such as NVD, distribution security trackers and ecosystem advisories use different identifiers and scopes, so a package can be matched in one database and missed in another. A PostgreSQL build installed from its own vendor repository was not matched, because the Debian tracker only covers packages distributed by Debian maintainers. Backported fixes from enterprise distributions add further confusion, since version numbers alone can make patched software look vulnerable.\n\nThe closing section covers improvements: source-linked advisories, package URL and SWID identifiers, declarative image builders that produce complete SBOMs, minimal base images, runtime evidence for reachability, and machine-generated VEX statements. The takeaway is that these tools are useful but not silver bullets, so practitioners should learn where each one is blind and check results against their own environment.",
+      "durationSeconds": 2806,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "U5rGA6cQCxI",
+      "slug": "sure-let-business-users-build-their-own-what-could-go-wrong-2",
+      "title": "Sure, Let Business Users Build Their Own. What Could Go Wrong?",
+      "speakers": [
+        "Michael Bargury"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "owasp",
+        "identity",
+        "vulnerabilities",
+        "risk",
+        "privacy"
+      ],
+      "teaser": "Shows how business-built low-code apps leak data and mishandle identity, and how an OWASP Top 10 frames the risks.",
+      "summary": "The talk starts from the observation that people outside IT, such as HR staff, now build much of their own business software with low-code and no-code platforms, often with no prior development experience. The speaker, who helps lead an OWASP project on this area, argues that security teams have little visibility into these apps and few controls over them.\n\nInstead of running through the whole OWASP list, the speaker walks through a few real-world style cases and asks the audience to spot the failures. An HR onboarding form stored its records in a database that anyone in a shared default environment could open, and an automation logged full record contents, exposing sensitive identifiers. A second app copied a worker's corporate mail to a personal account, sidestepping email filtering, and it relied on reused refresh tokens with no consent prompt, which could enable phishing inside an organization. Other issues included injection through data passed between apps and automations, and supply chain weaknesses.\n\nThe speaker explains why standard controls break down: apps run under the maker's identity so individual users cannot be told apart, there is no development lifecycle or review gate, and the volume is far larger than traditional development. Suggested responses include plain-language awareness material based on the OWASP Top 10, clear rules on which environments and use cases are acceptable, and using the logs these platforms already produce, with automation to detect and fix problems.",
+      "durationSeconds": 1312,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "33HDO2MXFHk",
+      "slug": "towards-effective-and-scalable-vulnerability-management",
+      "title": "Towards Effective & Scalable Vulnerability Management",
+      "speakers": [
+        "Yotam Perkal"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "vulnerabilities",
+        "risk",
+        "supply-chain",
+        "automation",
+        "open-source"
+      ],
+      "teaser": "Explains why CVSS-only prioritization falls short and how CSAF, VEX and exploitability data can automate triage.",
+      "summary": "The talk opens by questioning how organizations prioritize vulnerabilities today. The speaker argues that published vulnerability counts keep climbing while remediation capacity lags far behind, and that relying on CVSS base scores is neither scalable nor a good proxy for real risk, since severity measures technical impact rather than whether a flaw will actually be exploited. A short audience poll at the start gauged how many attendees depend on CVSS alone.\n\nThe middle section builds up layers of context that can narrow the workload. An SBOM provides the inventory baseline, while exploitability signals such as EPSS and known-exploited catalogs, vulnerability attributes like attack vector, and environmental factors such as compensating controls and reachability add further filters. The speaker then introduces CSAF, a machine-readable security advisory format, and VEX, which lets vendors state whether a product is affected by a given vulnerability and what action is recommended. An SSVC-style decision tree is presented as a way to combine these inputs into act, attend or track decisions.\n\nThe closing part frames the result as a funnel: scanner output is reduced through VEX statements and then through the decision tree, so teams start with the work that reduces the most risk and move down the list. The takeaway is to move toward a risk-based vulnerability management program and to automate the steps that are still manual and time-consuming.",
+      "durationSeconds": 1255,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "W3svpHuviBg",
+      "slug": "conti-leaks-and-carver-analysis-for-threat-intel-analysts",
+      "title": "Conti Leaks and CARVER Analysis for Threat Intel Analysts",
+      "speakers": [],
+      "track": "threat-intel",
+      "topics": [
+        "ransomware",
+        "intelligence",
+        "threat",
+        "malware-analysis"
+      ],
+      "teaser": "Applies the CARVER framework to the Conti leaks to support threat intelligence analysis.",
+      "summary": null,
+      "durationSeconds": 1335,
+      "difficulty": "intermediate"
+    }
+  ]
+}

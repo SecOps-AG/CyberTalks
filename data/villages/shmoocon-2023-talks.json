@@ -1,0 +1,936 @@
+{
+  "villageSlug": "talks",
+  "villageName": "Talks",
+  "eventSlug": "shmoocon-2023",
+  "conference": "shmoocon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLyhOxx0tizfAnoond3jNirbT7nfhiihwH",
+  "description": "Talks from ShmooCon 2023.",
+  "talks": [
+    {
+      "youtubeId": "sO2jZ2GGPc8",
+      "slug": "it-must-be-nice",
+      "title": "It Must Be Nice",
+      "speakers": [
+        "Joshua Bailey",
+        "Robert Barr",
+        "Amanda Lee",
+        "Jonah Schimpf"
+      ],
+      "track": "hardware",
+      "topics": [
+        "reverse-engineering",
+        "embedded",
+        "machine-learning",
+        "tool",
+        "code"
+      ],
+      "teaser": "Shows how firmware binaries can be split back into object files, then unlinked, decompiled and patched.",
+      "summary": "The talk comes from a team at Johns Hopkins APL working under a DARPA program on assured micropatching for embedded systems. The speakers argue that embedded firmware has seen few of the security gains found in enterprise software, and that reverse engineers rarely feed their analysis back into development. Their goal is to recover the object-file structure of a fully linked firmware image so it can be decompiled, patched and rebuilt.\n\nThe core technique, called Code Cut, finds where object files start and stop inside a linked binary. The earlier signal-processing heuristic was noisy, so the team treats function calls as a graph and trains a graph neural network to predict whether connected functions share a module. Training drew on a large corpus of packaged software with build metadata. A modularity-based partitioning step then turns those predictions into contiguous boundaries. Reported results reach about 97 percent accuracy on call-edge classification and roughly 93 percent on boundary recovery, a sevenfold gain over the old method.\n\nAdditional tools let analysts rename, move and merge recovered modules, guess module names from strings, and export module maps. One component unlinks a single library into a relocatable object file, and another emits recompilable C with workarounds for external symbols, decompiler intrinsics and undefined types. Limits remain: stack canary handling is unresolved, and the approach suits ordinary commercial firmware rather than packed or obfuscated malware. The takeaway is that reverse engineers can work at the object-file level, and the tooling is publicly released.",
+      "durationSeconds": 2924,
+      "publishedAt": "2025-09-29",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "TBeo9Jwz7ZQ",
+      "slug": "0wn-the-con",
+      "title": "0wn The Con",
+      "speakers": [
+        "Heidi",
+        "Bruce"
+      ],
+      "track": "community",
+      "topics": [
+        "lessons-learned",
+        "management",
+        "team",
+        "project",
+        "building"
+      ],
+      "teaser": "Organizers share how ShmooCon is planned, staffed, funded, and ticketed, with lessons from running a volunteer conference.",
+      "summary": "This session is an annual behind-the-scenes update from the two organizers of ShmooCon, covering how the conference started and how it has grown. They describe the event beginning as a casual idea, why they keep running it, and how a volunteer staff of roughly ninety people is organized into departments, each led by a pair of co-leads.\n\nThe middle of the talk is mostly numbers and process. The call for papers drew 169 submissions, below pre-pandemic levels, and the program committee scores talks while also balancing topic tracks. Speakers are urged to follow submission instructions exactly, credit earlier research, and bring real updates to talks already published elsewhere. Ticket sales run first-in-first-out with bot countermeasures, and the organizers explain hotel room commitments, insurance, and the difficulty of collecting sponsor payments.\n\nThe closing questions cover why attendance is capped, how student participation dropped after the pandemic, and advice for people starting their own events. The main takeaway for anyone running a volunteer-driven gathering is that clear ownership, early planning, and strict written guidelines reduce chaos, and that volunteers are the core of the event.",
+      "durationSeconds": 4583,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "wLKpFzcXOqc",
+      "slug": "phantom-of-the-pipeline-abusing-self-hosted-ci",
+      "title": "Phantom of the Pipeline Abusing Self Hosted CI",
+      "speakers": [
+        "Adnan Khan",
+        "Mason Davis",
+        "Matt Jackoski"
+      ],
+      "track": "red-team",
+      "topics": [
+        "devops",
+        "attack",
+        "open-source",
+        "tool",
+        "infrastructure"
+      ],
+      "teaser": "Shows how attackers turn stolen GitHub tokens and self-hosted runners into footholds on internal networks.",
+      "summary": "The talk covers abusing self-hosted runners in GitHub Actions. Organizations use them to cut costs, run custom hardware and reach internal networks, but they are not ephemeral by default, so jobs run directly on the host. The attack starts with a leaked personal access token found in artifacts, logs or secret scanning, then uses API queries to reveal the token's scopes and reachable organizations.\n\nMuch of this activity leaves little trace. Most read API calls and git clones produce no audit log entry unless an organization pays for the top enterprise tier, and IP logging must be enabled manually. Repo and workflow scopes let an attacker push a malicious workflow, while repo scope alone allows editing scripts that existing workflows call. Persistence can come from a detached Docker container or background process that survives job cleanup. Public repositories add a hurdle because pull request runs need maintainer approval, which often gets skipped for first-time contributors after a small documentation change. The team released Gato, an open-source toolkit for search, enumeration and attack.\n\nA live demo ran the toolkit against a demo organization, listing the token's permissions and vulnerable repositories, then executing a command on a runner and optionally deleting the run log. The takeaway is that one stolen token with the right scopes can give an attacker a foothold on internal infrastructure with no obvious audit trail. Defenders should audit token scopes, isolate runners, treat self-hosted runners on public repositories as risky, and log activity on the runner itself.",
+      "durationSeconds": 2988,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "DV2Wi1RbmvU",
+      "slug": "open-source-software-y-u-no-secure",
+      "title": "Open Source Software—Y U No Secure",
+      "speakers": [
+        "Aeva Black"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "open-source",
+        "supply",
+        "risk",
+        "trust",
+        "infrastructure"
+      ],
+      "teaser": "Examines how open source software ends up insecure and who is responsible for keeping shared code safe.",
+      "summary": "The talk looks at open source software and the security problems that come with depending on code that many people use and few people audit. It starts from the everyday reality that organizations and individuals rely on software they did not write, often without knowing what it contains or who maintains it. The speaker touches on how insecure defaults and unpatched components become normalized, and on the gap between the people who use a product and the people responsible for keeping it safe.\n\nThrough the middle of the session, the discussion moves across several examples from widely used platforms and commercial products, including mobile operating systems and large social networks, to show that open and licensed code can fail in similar ways. The speaker also raises the question of who should answer for vulnerabilities in shared components, and how upgrades and maintenance get handled when no single owner exists.\n\nThe closing points suggest that practitioners should treat open source dependencies as part of their own attack surface, ask who maintains each component, and plan for updating software over its lifetime rather than assuming it is secure once deployed. The talk reads as an awareness-level overview rather than a technical walkthrough.",
+      "durationSeconds": 1283,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "MHM27ZuY4_c",
+      "slug": "textiles-and-technology",
+      "title": "Textiles and Technology",
+      "speakers": [
+        "Amanda Draeger"
+      ],
+      "track": "community",
+      "topics": [
+        "technology",
+        "innovation",
+        "social",
+        "learning"
+      ],
+      "teaser": "Looks at where textile work and technology meet, from home-based production to workplace safety and conditions.",
+      "summary": "The talk looks at where textiles and technology meet, beginning with the making of fabric and the people who produce it. Its early portion discusses home-based production, including women who make goods from their own homes and how that work fits into household and neighborhood life. The framing stays on the people doing the work rather than on any particular tool or system.\n\nThe middle of the presentation shifts to working conditions. Ventilation and exposure to toxic materials are raised, along with the hazards of certain tasks and the tools workers depend on. The speaker connects these concerns with the technology involved, treating safety as part of any discussion of how the industry changes.\n\nThe closing stretch returns to takeaways for the audience and invites questions, with the speaker offering to continue the conversation by email. The result is a non-technical overview of labor and safety in textile work, suited to listeners who have no security background.",
+      "durationSeconds": 1266,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "6l-u5TNCRxI",
+      "slug": "the-osint-game-that-reveals-hidden-helicopters-of-dc",
+      "title": "The OSINT Game that Reveals Hidden Helicopters of DC",
+      "speakers": [
+        "Andrew Logan"
+      ],
+      "track": "osint",
+      "topics": [
+        "open-source",
+        "intelligence",
+        "machine-learning"
+      ],
+      "teaser": "Shows how crowdsourced sightings, radio captures and computer vision identify military helicopters flying over Washington, DC.",
+      "summary": "The talk opens with why helicopters over Washington, DC have drawn criticism, and why public flight trackers show only part of the picture. Government aircraft are often exempt from broadcasting ADS-B position data in sensitive cases, so the project began as a simple ADS-B bot and then turned to crowdsourcing. Members of the public submit photos, video and location through a social account, a web map or a Telegram bot, and earn points on a leaderboard.\n\nTo identify aircraft, the team first relied on a manual method based on counting main rotor blades and landing gear layout. Once thousands of user photos arrived, they trained a computer vision model on annotated images. The speaker reported it found the correct type about 77 percent of the time in a sample of uses, performing well on common types and struggling with rare ones. For nighttime sightings, where photos fail, a receiver near the DCA tower captured radio calls for public annotation. Notable finds included a near collision between two military helicopters, neither of which broadcast ADS-B.\n\nThe speaker also described the risk of depending on one platform, after flight tracking accounts were suspended, which pushed the project toward a Telegram backup. The talk closed with an audience quiz on identifying which agency operates a pictured helicopter. The practical lesson is that public sensor data, crowd input and modest machine learning can fill transparency gaps, though accuracy limits and platform dependence need weighing.",
+      "durationSeconds": 690,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Vn0MFQwuTm8",
+      "slug": "an-insight-into-railway-security",
+      "title": "An Insight into Railway Security",
+      "speakers": [
+        "Brian Butterly"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "infrastructure",
+        "threat",
+        "risk"
+      ],
+      "teaser": "Surveys security concerns across railway systems, from the operational technology that runs them to the threats their operators face.",
+      "summary": "This talk is an overview of security for railway systems, the networks and equipment that operate trains and move freight and that rail operators depend on every day. The speaker treats rail as critical infrastructure, where problems in one part of the system can carry into day-to-day operations.\n\nThrough the middle of the talk, the speaker moves between examples and general observations. The references that come through concern how rail control relies on connected systems, how threats to those systems are weighed, and where operational needs and protection pull in different directions. The automatic captions are too fragmented to recover specific technical findings, named incidents, or precise recommendations, so this summary stays with the themes that can be identified and does not supply details the recording does not clearly support.\n\nFor a practitioner, the useful takeaway is to treat railway environments as operational technology with physical and safety consequences rather than as ordinary IT. Anyone assessing transport or other critical systems should map dependencies, consider how an outage or tampering would affect physical operations, and check the full recording or slides before relying on specifics from this talk.",
+      "durationSeconds": 2946,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "t9kedb9j0KM",
+      "slug": "how-to-save-your-soc-from-stagnation",
+      "title": "How to Save Your SOC from Stagnation",
+      "speakers": [
+        "Carson Zimmerman"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "security-operations",
+        "incident-response",
+        "detection",
+        "hunting",
+        "defensive-security"
+      ],
+      "teaser": "Gives SOC teams seven practical process changes to reduce alert fatigue, improve hunting, and make response work sustainable.",
+      "summary": "The talk opens with the familiar feeling of SOC work: overwhelming alerts, weak data, and processes that never seem to improve. The presenter argues that teams can break out of this by changing how they work rather than simply buying more tooling, and introduces seven practices that can be adopted one or two at a time.\n\nThe middle of the talk covers those practices. Regular detection review meetings bring triage staff, detection authors, hunters and data specialists together to rank ideas, and detections should be tested before they count as working. After significant cases, a short technical review walks through the queries and data sources used, which doubles as training. Teams should record their data sources in a structured catalogue, since most of the data they depend on sits outside their control. Response automation can begin with low-risk work such as ticket creation, and proactive hunts can run saved queries on a schedule, with random findings kept separate from hypothesis results. Standard operating procedures should be maintained by everyone, and post-incident reviews should capture problems quickly in rough notes, then turn them into tracked fixes. Service owners can also join onboarding, hunts and detection writing.\n\nThe closing point is that these changes free up capacity, so analysts are ready when the next major incident arrives. The presenter advises starting small, and suggests checking whether some compliance activities the team performs are actually required.",
+      "durationSeconds": 1314,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "pT5S6-0NaEI",
+      "slug": "us-covid19-immunization-credentials-privacy-friendly-qr-codes-fo",
+      "title": "US Covid19 Immunization Credentials Privacy friendly QR Codes for Iden",
+      "speakers": [
+        "Christian Paquin"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "identity",
+        "healthcare",
+        "trust"
+      ],
+      "teaser": "Presents privacy-friendly QR code designs for verifiable US Covid-19 immunization credentials.",
+      "summary": "The talk looks at how proof of COVID-19 immunization can be carried in a QR code in the United States while revealing as little personal information as possible. It frames the core problem as a tension: a verifier needs to confirm that a credential is genuine and that the holder has been vaccinated, but the code should not expose more about the person than that check requires.\n\nThe middle of the talk moves to the credential design itself, including how the data is structured and encoded into a QR code so it can be scanned and checked. The speaker draws on earlier research on digital credentials and refers to a published paper and a framework that inform the approach. The emphasis stays on the privacy goals behind the design rather than on any single implementation detail.\n\nFor practitioners, the main takeaway is that health credentials can be designed for everyday verification with data minimisation built in from the start. Anyone working on identity, health data or verifiable credentials can use the talk as a starting point for thinking about what a checker needs to learn and what it should never learn.",
+      "durationSeconds": 1197,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "GbqIcw0fIKw",
+      "slug": "the-song-must-not-go-on",
+      "title": "The Song Must NOT Go On",
+      "speakers": [
+        "Christopher Forte"
+      ],
+      "track": "community",
+      "topics": [
+        "mobile",
+        "discussion",
+        "community",
+        "introduction"
+      ],
+      "teaser": "Moves through phone apps, remote setups and audience exchanges in a loosely structured session at ShmooCon 2023.",
+      "summary": "This ShmooCon 2023 session, titled The Song Must NOT Go On, is delivered by Christopher Forte and opens by asking who a given idea or tool is meant for and whether it is accessible to everyone. The early part centres on the idea that people can get involved simply by downloading an app to their phone, presented as a way to bridge a gap between groups.\n\nThe middle of the session moves to remote participation and the basic requirements people need before they can take part. The speaker asks the audience for a show of hands and responds to the answers, and several exchanges concern how the setup works in practice, including a few hitches that are acknowledged and worked through.\n\nThe closing minutes wrap up the material and return to the audience, with the speaker reflecting on the work still left to do. For a practitioner, the main takeaway is less a specific technique than a prompt to check who a tool is built for and how easily people can reach it on the devices they already carry.",
+      "durationSeconds": 1266,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "tRyGAGeMp2M",
+      "slug": "bringing-the-curtain-down-on-flash-protection",
+      "title": "Bringing the Curtain Down on Flash Protection",
+      "speakers": [
+        "Christopher Hewitt"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "embedded",
+        "reverse-engineering",
+        "attack",
+        "device",
+        "learning"
+      ],
+      "teaser": "Walks through glitching a microcontroller's flash protection to recover a locked chip's ID code and dump its firmware.",
+      "summary": "The speaker bought a small VHF/UHF radio transceiver module, a surface-mount board with a built-in power amplifier, hoping to add digital voice modes that its stock firmware did not support. The module's microcontroller was a Renesas part with little public documentation. Its flash was protected by a seven-byte ID code that the boot ROM checks before allowing any memory access. A published timing attack depended on a status pin this chip did not expose, and the comparison appeared to run in constant time.\n\nPower analysis over hundreds of thousands of unlock traces produced nothing useful, because the slow internal clock introduced heavy jitter. The breakthrough came from changing the target. Instead of glitching the unlock comparison, the speaker aimed crowbar glitches at flash page reads while the chip was locked. A successful glitch returned a 256-byte page instead of nothing. That data could be sliced for candidate ID codes and each one tested. A tool automated the sweep until a matching code unlocked the device and the full flash could be dumped.\n\nThe main takeaway is that fault injection is within reach of a newcomer with inexpensive equipment, and that a tight, automated loop and patience matter more than perfect timing. The talk also argues for archiving datasheets and tools for obscure parts, since their documentation can disappear quickly. Later decapping of the die showed the part shared silicon with other members of its family.",
+      "durationSeconds": 930,
+      "publishedAt": "2025-09-29",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "FuphAzM7rxA",
+      "slug": "the-un-parsing-manifesto-reconnecting-our-corpus-callosum",
+      "title": "The Un parsing Manifesto Reconnecting our Corpus Callosum",
+      "speakers": [
+        "Falcon Darkstar Momot"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "web",
+        "vulnerabilities",
+        "code",
+        "application"
+      ],
+      "teaser": "Argues that output encoding and structured intermediate representations work better than input sanitization for preventing injection attacks.",
+      "summary": "The speaker, who runs product security at a cloud database company, opens by criticizing the habit of relying on input sanitization to stop cross-site scripting and injection. Using examples of strings that are harmless in one context and dangerous in another, the talk argues that whether data is safe depends on the output context where it lands, not on the characters themselves.\n\nA recurring example is a review website that allows limited formatting. The same user content may be displayed, later mined for data, or searched during a legal dispute, and each use needs different handling. The talk also notes that bans on certain characters break real names and that developers already depend on output encoding through parameterized queries, escaping libraries and streaming encoders, which are easier to test and contain.\n\nThe proposed approach is to parse user input into a canonical intermediate representation, check permissions against that structure, and then emit it into whatever format is needed through verified encoders. In the questions, the speaker says sanitization still has a limited role, mainly filtering spam, and that effort is better spent on verifiable output encoders. The main takeaway for practitioners is to make the code that writes data understand the format it writes into.",
+      "durationSeconds": 1288,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "bXHKENXmebM",
+      "slug": "firetalks",
+      "title": "FireTalks",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "lightning",
+        "discussion",
+        "management",
+        "risk"
+      ],
+      "teaser": "Packs a series of short talks on security policy, cyber insurance, careers and everyday security habits.",
+      "summary": "This is a FireTalks session, a run of short, rapid-fire presentations rather than one long talk. The opening segments cover how government, private industry and the security community relate to one another. Presenters urge listeners to contact their representatives about security legislation and note that many organizations struggle to get cyber insurance.\n\nLater segments move to everyday security habits, including password managers and why frustrated users abandon strong passwords. Presenters also give career advice on building a security career through networking and mentorship, and touch on leading security teams, balancing research with the daily demands of a program, and hiring people who keep learning.\n\nThe session closes with an audience question round covering social media, password rules, and whether a college degree matters for entering the field. The takeaways are broad: engage with policy, treat insurance as part of the security picture, and invest in people and professional networks.",
+      "durationSeconds": 8712,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "nBGs9_POJCQ",
+      "slug": "hide-your-valuables-mitigating-physical-credential",
+      "title": "Hide Your Valuables: Mitigating Physical Credential",
+      "speakers": [
+        "Gabriel Landau",
+        "Mark Mager"
+      ],
+      "track": "purple-team",
+      "topics": [
+        "windows",
+        "memory",
+        "defensive-security",
+        "kernel",
+        "attack"
+      ],
+      "teaser": "Shows how a kernel driver keeps LSASS memory from lingering in physical RAM to thwart credential dumping.",
+      "summary": "The talk starts with the basics of virtual and physical memory on Windows, then explains why attackers target LSASS for Kerberos tickets, NTLM hashes and cleartext passwords. It walks through common dumping routes: reading process memory directly, using bring-your-own-vulnerable-driver attacks to get past Protected Process Light, and pulling physical memory through forensic drivers, crash dump settings, or virtual machine snapshot files.\n\nThe core idea is to shorten how long sensitive pages stay resident in RAM. The presenters built Silhouette, a kernel driver that watches LSASS's working set and flushes standby and modified pages so they are not resident for long. They also cover blocking raw disk reads and volume shadow copy access to the page file. Live demos show the dumping tools failing against the protected setup, and the speakers are candid about limits, such as flushing that applies systemwide and attackers who might repeatedly race short-lived pages.\n\nFor defenders, the takeaways are to run LSASS as a protected process with its UEFI lock, enable Credential Guard where hardware allows, block vulnerable and forensic memory drivers, and watch for changes to page file configuration. Their basic benchmarks showed no noticeable performance hit, though results will depend on workload and hardware.",
+      "durationSeconds": 1289,
+      "publishedAt": "2025-09-29",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "7pI0EkvI2-k",
+      "slug": "hacking-isps-with-pppoe",
+      "title": "Hacking ISPs with PPPoE",
+      "speakers": [
+        "Gal Zror"
+      ],
+      "track": "hardware",
+      "topics": [
+        "vulnerability-research",
+        "embedded",
+        "exploitation",
+        "network",
+        "infrastructure"
+      ],
+      "teaser": "Shows how a layer 2 PPPoE logging overflow let the researcher take root on an ISP's broadband access server.",
+      "summary": "The talk treats internet service provider access equipment as a target, arguing it resembles a home router in its exposure and its rarely patched state. The speaker explains that a subscriber's modem reaches the provider's broadband remote access server over a layer 2 link, so that server can be approached from the customer side. Possible impacts discussed include outages, DNS redirection across a whole customer base, and access to individual subscriber records.\n\nThe research focused on a Redback Smart Edge unit running a NetBSD-derived system on PowerPC. Walking through PPPoE and the link control phase, the speaker found that one LCP option, the endpoint discriminator, was accepted with oversized length and no data checks. Logging copied that field into a fixed-size stack buffer, producing an overflow. A live demo crashed the daemon and gave root command access. Since IP reachability could not be assumed, a layer 2 only shell was built, using packet capture facilities on the device to receive commands in stages. A second flaw, where broadcast session termination was sent to all clients, was also covered.\n\nPractical lessons covered how to start such research without the hardware: emulating user space, cross-compilation pitfalls, debugger workarounds, and buying a cheap used unit to learn the ISP-side setup from long manuals. The vendor, Ericsson, assigned CVEs and confirmed the product had reached end of life. The speaker estimated around 500 exposed devices across about 20 countries. Suggested mitigations were disabling PPP logging, filtering broadcast traffic at the switch, and replacing old hardware.",
+      "durationSeconds": 2893,
+      "publishedAt": "2025-09-29",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "9wK6HurU6mc",
+      "slug": "hacker-law-for-hackers",
+      "title": "Hacker Law for Hackers",
+      "speakers": [
+        "Harley Geiger"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "trust",
+        "hack"
+      ],
+      "teaser": "Covers the legal questions that hackers and security researchers commonly face in their work.",
+      "summary": null,
+      "durationSeconds": 1250,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "F42GqZIHomk",
+      "slug": "putting-on-a-big-show-defending-by-attacking-attacker-incentives",
+      "title": "Putting on a Big Show Defending by Attacking Attacker Incentives",
+      "speakers": [
+        "Jacob Torrey"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "defensive-security",
+        "detection",
+        "attack",
+        "risk"
+      ],
+      "teaser": "Shows how fake credit cards and padded databases can drain the payoff attackers expect from stolen data.",
+      "summary": "Torrey opens with a critical look at deception products, which he says generate a lot of hype but little lasting value. He presents his work at Thinkst Canary, where cheap tripwires such as canary tokens alert defenders when an intruder touches them. The core idea is conspicuous deception: openly signalling that an organization uses decoys, so attackers grow cautious and their calculations change. He frames attackers by what they want, mainly money, intelligence, or political aims, and by how hard it is to turn stolen access into that goal.\n\nThe middle of the talk covers a freely available canary credit card token. It looks like a real, active card that declines every charge but alerts its owner when someone tries to use it, and a live demo showed a test transaction triggering an alert. The second, earlier-stage prototype is a drop-in MySQL driver called deception DB. It inserts fake rows and generated medical records and images, so a stolen database is padded with bogus data. Torrey acknowledges rough edges, including added friction for database administrators and possible bypasses through SQL injection.\n\nThe takeaway is that defenders can lower the value of stolen data and create doubt for attackers at little cost, mostly storage and compute. Practitioners can deploy the free tokens now, place them where stolen payment data might sit, and track their expiry, since these cards last about two years.",
+      "durationSeconds": 2620,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "zmQoR1y8dR8",
+      "slug": "mainframe-hacking-for-cics-and-giggles",
+      "title": "Mainframe Hacking for CICS and Giggles",
+      "speakers": [
+        "Jan Nunez",
+        "Jay Smith"
+      ],
+      "track": "red-team",
+      "topics": [
+        "mainframe",
+        "vulnerabilities",
+        "application",
+        "exploiting",
+        "tool"
+      ],
+      "teaser": "Shows how flipping 3270 field attribute bits exposes protected and hidden fields in CICS mainframe applications.",
+      "summary": "The speakers argue that mainframe applications, particularly those built on CICS, get far less security testing than they deserve. Most mainframe talks concentrate on the operating system, so this one focuses on the application layer. They stress that these machines still underpin banking, insurance and government, yet many of the programs were written decades ago without security in mind. Getting started is hard: licences are costly, tooling is scarce and the documentation is old.\n\nThe core of the research is the 3270 data stream carried over TN3270. Because the terminal only sends input back to the host when a function key is pressed, a proxy can intercept traffic and flip the field attribute bits that control protection, numeric limits and visibility. Using that, the team made a protected price field editable, exposed a hidden purchase option, and reached a hidden screen by cycling through attention keys. They also brute-forced a four-digit supervisor code. All of this ran against a deliberately vulnerable demo application.\n\nThe team reports having seen these issues across roughly 50 real CICS applications, most of them reachable only internally, so the threat is closer to an insider. Mitigations include IBM's 3270 IDS, which needs tuning because it flags anomalies rather than malicious traffic, enforcing access control at the system level, and not hiding sensitive data in hidden fields. Practitioners can start learning with a Docker-packaged vulnerable CICS application.",
+      "durationSeconds": 2646,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ddgKQ0fGjAo",
+      "slug": "mr-radar-layer-1-recon",
+      "title": "Mr Radar Layer 1 Recon",
+      "speakers": [
+        "Jason Baird"
+      ],
+      "track": "recon",
+      "topics": [
+        "network",
+        "hardware",
+        "device",
+        "tool",
+        "detection"
+      ],
+      "teaser": "Shows how a small handheld device can reveal whether a wall jack connects to a live switch and what power it offers.",
+      "summary": "The speaker, a physical penetration tester with a counter-surveillance background, starts from a close-access problem. When entering a building, an operator often cannot tell whether an empty wall jack leads to a switch. Plugging in a device blindly can waste a limited asset or trigger port security. Adversaries have used leave-behind devices on networks before, and common tools such as multimeters and off-the-shelf USB implants each have drawbacks.\n\nThe talk then covers Cat 5 basics at a simplified level. Balanced pairs terminate in transformer coils, so a small test voltage sent down a pair returns a measurable reading only when something is on the far end. Pairs used by 10/100 and gigabit links differ, and some devices can be recognized as 10/100-only from which pairs respond. The speaker describes earlier prototypes, including an Arduino-based ohmmeter, before arriving at Mr. Radar: a battery-powered microcontroller board that uses LEDs to report whether a switch is present, whether the link is likely 10/100-only, and which power over Ethernet mode is offered, all in under a second. Current-limiting resistors protect both the tool and the equipment. A live demonstration on a switch and a VoIP phone shows the expected light patterns.\n\nThe closing section lists open problems, including voltage readings that vary between switch vendors and the need for a larger sample to fingerprint devices at the end of a line. Planned work includes a single integrated board and a housing, and the project's hardware and firmware files are published. The practical takeaway is that a cheap, simple check can save equipment and reduce risk during physical access.",
+      "durationSeconds": 2625,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5kcIrfVaIXs",
+      "slug": "escalating-attack-and-defense-on-cloud-based-kubernetes",
+      "title": "Escalating Attack and Defense on Cloud based Kubernetes",
+      "speakers": [
+        "Jay Beale"
+      ],
+      "track": "cloud",
+      "topics": [
+        "kubernetes",
+        "cloud",
+        "identity",
+        "container",
+        "attack"
+      ],
+      "teaser": "Shows how Kubernetes workload identity tools for AWS fail once a single node is compromised, with live demos.",
+      "summary": "The talk examines how Kubernetes clusters running on AWS hand cloud credentials to individual workloads, and where those mechanisms break down. The starting problem is that by default every container on a node shares the node's IAM role, so anything running there can reach every service that role allows. The speaker traces three generations of workload identity tools, including kube2iam, kiam and IAM Roles for Service Accounts.\n\nIn the middle section, the demos assume an attacker has escaped a container or landed on a node through an overprivileged pod. Against kube2iam, the attacker enumerates the roles used across the cluster and assumes them directly from the node. With kiam, the server never checks whether a requesting agent actually hosts the pod IP it claims, so stolen agent credentials allow impersonation of any pod. The speaker reports a zero-day in this design and notes that the project has moved into maintenance mode. The service account approach fares better, because short-lived tokens are mounted as volumes, although a node's filesystem still exposes the tokens of pods running on it.\n\nThe practical takeaway is to treat the node as a trust boundary. Sensitive workloads can be separated onto dedicated node groups, pod creation and privileged or host-path volumes should be restricted, and the metadata endpoint should be blocked where it is not needed. Identity brokers should also be checked to confirm they verify which pod is asking for credentials. Defaults alone do not provide that separation.",
+      "durationSeconds": 3025,
+      "publishedAt": "2025-09-29",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "xPsMjmVP4-0",
+      "slug": "you-and-me-but-mostly-me",
+      "title": "You and Me But Mostly Me",
+      "speakers": [
+        "Jesika McEvoy"
+      ],
+      "track": "community",
+      "topics": [
+        "management",
+        "team",
+        "service",
+        "trust"
+      ],
+      "teaser": "Shares a personal perspective on moving from hands-on security work into product leadership.",
+      "summary": "The talk is given by a speaker introduced as a field security professional who now leads a product organization. The opening sets up the speaker's own career path as the lens for the subject, rather than presenting a technical method or tool.\n\nThrough the middle, the talk moves across themes that recur in the spoken material: security treated as a service delivered to customers, the gap between confident claims and what teams actually know, and how vulnerabilities and product choices meet in everyday work. The discussion stays at the level of broad themes rather than detailed case studies, so it reads more as reflection than as a walkthrough.\n\nThe talk closes by returning to the speaker's own experience and to the idea that security succeeds when it is shared between internal teams and the people who depend on the product. A practitioner who attends can take away a prompt to consider how security decisions land with customers, and to treat product and security staff as working toward the same outcome.",
+      "durationSeconds": 1359,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "VweYbtkLeBQ",
+      "slug": "i-spy-a-spy-degrading-adv-phishing-campaigns-against-your-org-an",
+      "title": "I Spy a Spy Degrading Adv Phishing Campaigns Against Your Org and Clients",
+      "speakers": [
+        "Joe Oney"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "threat-detection",
+        "incident-response",
+        "intelligence",
+        "defensive-security"
+      ],
+      "teaser": "Shows how honey credentials on external phishing pages let defenders watch attackers, gather intelligence, and add friction.",
+      "summary": "The talk starts with a baseline of phishing, from classic username-and-password theft to adversary-in-the-middle proxy kits that capture session tokens and get past MFA. The speaker argues that training users alone is not enough. Instead, the approach is external deception: plant honey credentials on your own services and watch what an attacker does after using them on a phishing site.\n\nThe method has four phases. Requirements means logging authentication to external applications and creating honey accounts with MFA enabled. Detection logic and a response plan come next, followed by setup on a clean, dedicated system with thorough capture and careful notes on which fake credentials went to which site. During tactical reaction, the speaker notes that attackers are often sloppy, with mass logins from one address, so the advice is to wait before blocking. Strategic use turns those findings into high-fidelity alerts, historical hunts, and arguments for IT changes such as disabling legacy protocols. A low-effort option is flooding attacker data sets with fake credentials to add friction.\n\nMeasuring effect is hard. Useful signs include behavioral attribution, fewer password resets, attackers shifting to VPNs or paying more for hosting, and evidence that helps takedown requests, though some bulletproof hosts ignore those. The takeaway is that practitioners can impose real costs on adversaries using cheap, creative friction and make them spend time on defense.",
+      "durationSeconds": 1829,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "2ugxtEFIo7o",
+      "slug": "from-the-keyboards-through-the-walls-got-implant-shells-for-yall",
+      "title": "From the Keyboards Through the Walls Got Implant Shells for Yall",
+      "speakers": [
+        "Jonathan Fischer"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "attack",
+        "device",
+        "network",
+        "tool",
+        "open-source"
+      ],
+      "teaser": "Demonstrates an open-source keyboard implant that uses mesh radio for remote control, reverse shells, and file exfiltration.",
+      "summary": "Jonathan Fischer presents Inject Hide, an open-source implant that sits between a keyboard and a target computer. The talk starts with the baseline features: keystroke logging, live sniffing, keystroke injection, and an insomnia mode that keeps the machine from going idle. Remote management lets an operator push and delete scripts, pull keystroke recordings, and trigger a go-dark mode that wipes the SD card and stops answering commands when detection seems likely.\n\nThe main design choice is a mesh radio network, which lets operators extend range with repeaters and reach the command server from a nearby spot. The implant also exposes a second serial port, so a PowerShell session launched through keystroke injection can tunnel a reverse shell back over radio. The speaker shows attaching to and detaching from sessions, then exfiltrating a file that is encoded and compressed before transfer. New in this release are an exfiltration path that writes to the SD card, a parser that turns raw keystroke packets into readable text, and automatic chunking of long injected scripts.\n\nThe closing section covers work in progress. Chip shortages forced a pivot to a board that can be implanted, and the team is reworking memory handling so the device still works without an SD card. A planned boot mode would record keystrokes with no radio present. The public repository and documentation are pointed out for anyone who wants to test it. The takeaway for practitioners is that a cheap, keyboard-adjacent device can provide persistent collection and remote control, which makes physical access and USB device monitoring worth reviewing.",
+      "durationSeconds": 1239,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "nFhKCl6sA0E",
+      "slug": "large-scale-infiltration-and-monitoring-of-c-and-c-servers",
+      "title": "Large Scale Infiltration and Monitoring of C&C Servers",
+      "speakers": [
+        "Jonathan Fuller"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "intelligence",
+        "infrastructure",
+        "malware-analysis"
+      ],
+      "teaser": "Shows how command-and-control servers can be infiltrated and monitored at large scale.",
+      "summary": "The talk covers large-scale infiltration of command-and-control (C2) servers, the infrastructure malware uses to receive instructions and move data. It treats these servers as a target that can be reached in volume, rather than as isolated hosts seen from a single infected machine.\n\nThe speaker describes monitoring this infrastructure over time, so that the operators' activity and the servers' behaviour can be observed. The focus is on scale, meaning many servers handled together instead of one case at a time.\n\nFor practitioners, the main takeaway is that C2 infrastructure can be watched as a source of intelligence. Monitoring it at scale can help with tracking campaigns, understanding how malware operations are run, and spotting new infrastructure earlier, which gives defenders a wider view than single-host analysis alone.",
+      "durationSeconds": 2340,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5NwQdIyn3uU",
+      "slug": "riverside-a-network-security-visualization-tool",
+      "title": "Riverside A Network Security Visualization Tool",
+      "speakers": [
+        "Kaitlyn DeValk"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "network",
+        "monitoring",
+        "security-operations",
+        "tool",
+        "open-source"
+      ],
+      "teaser": "Riverside is an agent-based tool that maps hosts and protocol traffic on a timeline for network analysts.",
+      "summary": "The speaker, a recent master's graduate who works in the Coast Guard and previously worked in a SOC doing vulnerability assessments, starts with the problem. Network maps and asset lists were often missing or wrong, and working out what connected to what took days. Community input gathered for the thesis pushed the design toward dynamic discovery and drill-down views rather than showing everything at once.\n\nRiverside is agent-based. Agents written in Go send raw host data over gRPC using protocol buffers to a server, which feeds a web front end through websockets and stores history in a database. Hosts appear as nodes, edges are colored by detected protocol, and thickness reflects throughput. A timeline lets viewers scrub backward or replay from a past moment. The demo replayed a simulated attack built in Docker, covering RDP brute forcing, SMB lateral movement, DNS beaconing and FTP exfiltration, with compromised hosts recolored to track them.\n\nThe speaker was candid about gaps: no PCAP import yet, no confirmed behavior on tap ports, and testing only up to about thirty hosts. Windows 10 and 11 plus several Linux distributions were checked. The takeaway is that a complete, time-aware map helps analysts spot unaccounted hosts and explain activity to non-technical stakeholders. The tool is on GitHub, and development is expected to continue.",
+      "durationSeconds": 1371,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "qo9MN9ymJrE",
+      "slug": "escaping-the-tar-pit-and-securing-the-supply-chain",
+      "title": "Escaping the Tar Pit and Securing the Supply Chain",
+      "speakers": [
+        "Kasimir Schulz"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "open-source",
+        "vulnerabilities",
+        "supply-chain",
+        "automation",
+        "tool"
+      ],
+      "teaser": "Explains a Python tarfile path traversal flaw and the large-scale GitHub scanning and patching effort it triggered.",
+      "summary": "The talk covers a path traversal flaw in the tarfile module that ships with CPython, triggered through extract and extractall calls. The bug was first reported in 2007, but for years the upstream discussion centred on whether it should be fixed at all, so no resolution landed. The speaker explains the mechanism: archive member names are joined to the destination path without validation, so an entry can write outside the intended directory.\n\nTo measure exposure, the team found that GitHub code search caps results, so they worked with GitHub directly and found millions of files importing tarfile across hundreds of thousands of repositories. Bandit could not easily match these multi-node patterns, so they built a custom scanner on Python's abstract syntax tree that adds parent references, looks back at surrounding context, and assigns confidence tiers. Among popular Python projects they reviewed by hand, a large share were vulnerable, and many tutorials demonstrated the unsafe pattern.\n\nThey patched affected code by checking that resolved member paths stay inside the target directory, applied edits through the syntax tree to preserve formatting, and opened tens of thousands of pull requests over roughly three months. Several notable projects merged the fixes. The takeaway is that a known flaw in a widely used library can persist for years, and automated scanning combined with coordinated patching can reach far beyond what manual review achieves.",
+      "durationSeconds": 3019,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "K1dO-Xbv86M",
+      "slug": "under-pressure-balancing-privacy-breach-notification-with-ir",
+      "title": "Under Pressure Balancing Privacy Breach Notification with IR",
+      "speakers": [
+        "Kelly Ohlert"
+      ],
+      "track": "policy",
+      "topics": [
+        "incident-response",
+        "privacy",
+        "breach-notification",
+        "risk",
+        "management"
+      ],
+      "teaser": "Explains how breach notification laws and reporting deadlines shape an organization's response to a security incident.",
+      "summary": "The talk looks at the legal side of responding to a data breach, focusing on when and how an organization must notify regulators, affected people and others. The speaker describes a patchwork of state rules with different deadlines, some measured in 12, 24 or 48 hours, along with requirements to notify state attorneys general and internal stakeholders.\n\nThe discussion then moves to federal and sector-specific rules. One example is a reporting requirement for rail operators to report cyber incidents on critical infrastructure within 24 hours. The speaker also covers affirmative defense provisions, which can give credit to organizations that had a recognized security framework in place. Cases where data was only possibly accessed, or where ransomware is involved, are presented as harder to classify under these rules. Questions from board members about cost and the effect on the bottom line are raised as well.\n\nAudience questions close the session. The speaker suggests consulting legal counsel when a question falls outside what can be answered directly, and argues that meeting compliance obligations is not the same as being secure. The practical takeaway is that incident response plans should account for these deadlines and involve counsel before an incident happens.",
+      "durationSeconds": 2790,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "ORxGHM5p7D0",
+      "slug": "the-un-cybercrime-treaty-the-one-treaty-to-rule-all-the-hacking",
+      "title": "The UN Cybercrime Treaty The One Treaty to Rule All the Hacking Laws",
+      "speakers": [
+        "Kurt Opsahl"
+      ],
+      "track": "policy",
+      "topics": [
+        "cybercrime-treaty",
+        "policy",
+        "privacy",
+        "international-law"
+      ],
+      "teaser": "Explains the proposed UN cybercrime treaty and the policy debates it raises for researchers and users.",
+      "summary": "This talk looks at the proposed United Nations cybercrime convention, an international treaty effort to set shared rules for computer-related crime. The speaker, Kurt Opsahl, frames the discussion around how a treaty meant to cover hacking could also reach into areas such as copyright, the handling of security research, and cross-border access to data.\n\nThe middle of the presentation moves through the concerns that specific draft provisions raise. It contrasts the approaches of different countries, including the United States and China, and refers to the negotiating sessions in which the text has been developed and revised. The focus stays on policy and how broad criminal wording could be read in practice.\n\nThe talk closes with the speaker's view of what is at stake and a call to keep an eye on the drafting process. The practical takeaway for practitioners is that international criminal law language can have consequences for researchers, service providers and ordinary users, so following the treaty's progress is worthwhile even without a legal background.",
+      "durationSeconds": 2945,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "h-rIuzhJRBI",
+      "slug": "big-tech-whistleblowers",
+      "title": "Big Tech Whistleblowers",
+      "speakers": [
+        "Libby Liu"
+      ],
+      "track": "policy",
+      "topics": [
+        "social",
+        "trust",
+        "risk",
+        "privacy",
+        "state"
+      ],
+      "teaser": "Explores the risks and barriers faced by technology company insiders who report wrongdoing to outside parties.",
+      "summary": "This talk turns to employees inside large technology companies who decide to raise concerns about their employers with outside parties. The speaker frames the subject around social media platforms and the effects their decisions can have on the public and on people in the real world.\n\nMuch of the discussion centers on what a whistleblower faces after speaking up. Legal representation is described as a major expense that can stand between a person and their goals, and the talk touches on the consequences that disclosures can carry. Policy makers and proposed legislation come up as part of how these cases could be handled, alongside questions of national security and the role of investigators.\n\nThe closing portion returns to the balance between public accountability and the risks to the people who come forward. The main takeaway is a clearer picture of why protections and practical support for tech insiders matter to wider debates about platform oversight.",
+      "durationSeconds": 1088,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "rT7U6Q4y6pA",
+      "slug": "you-found-a-sec-vuln-in-an-open-source-proj-now-wh",
+      "title": "You Found a Sec Vuln in an Open Source Proj Now Wh",
+      "speakers": [
+        "Madison Oliver",
+        "Jonathan Leitschuh"
+      ],
+      "track": "policy",
+      "topics": [
+        "open-source",
+        "vulnerabilities",
+        "lessons-learned"
+      ],
+      "teaser": "Explains how to handle a vulnerability found in an open source project when maintainers are slow or unresponsive.",
+      "summary": "The talk looks at what a researcher should do after finding a security vulnerability in an open source project. It focuses on the communication side of reporting: maintainers who may not respond, the pressure that builds when a fix stalls, and how to decide when an issue can go public. The speakers discuss working through a project's vulnerability policy and security contact, and they point out that some organizations have no clear process at all, so reporters need to be careful about how they reach out.\n\nAlong the way the talk covers disclosure timelines, including the idea of giving a maintainer an extra 30 days before full disclosure. It also touches on warning programs and the difficulty of getting an important issue in front of a team that is not paying attention to reports. The speakers draw on their own experience reporting bugs to projects.\n\nThe closing takeaway is practical: identify the right contact early, keep the timeline explicit, and think carefully before going public with a vulnerability that has not been fixed.",
+      "durationSeconds": 1385,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "ap528ArzM24",
+      "slug": "ok-so-what-is-working",
+      "title": "OK So What IS Working",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "discussion",
+        "lessons-learned",
+        "risk",
+        "learning"
+      ],
+      "teaser": "Closes the conference by asking which security approaches are actually working and what to try next.",
+      "summary": "This closing plenary takes a broad look at which approaches in security are actually working, rather than which ones are simply popular. The session is framed around the question of what works, pushing the audience to consider how they judge results and what they should keep doing.\n\nThe middle of the talk moves through several themes that come through clearly: the role of community and people sharing their experiences, the value of building software and tools, and how outside pressures such as cyber insurance and government-level expectations shape what organisations choose to do. The discussion stays at a high level and is aimed at a general security audience rather than a specialist one.\n\nThe closing portion returns to encouragement. Attendees are urged to act on changes they have been putting off, to tell their stories to others, and to test ideas in practice and learn from the outcome. The main takeaway is that progress comes from honest evaluation and shared learning rather than from assumptions about what should work.",
+      "durationSeconds": 2942,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "RMCoPcmTXyE",
+      "slug": "parkalot",
+      "title": "Parkalot",
+      "speakers": [
+        "Michael Rudden"
+      ],
+      "track": "appsec",
+      "topics": [
+        "input-validation",
+        "vulnerabilities",
+        "system",
+        "interview"
+      ],
+      "teaser": "Shows how special characters in North Carolina license plates create edge cases that parking systems normalize inconsistently.",
+      "summary": "The speaker, a security engineer in Raleigh, North Carolina, describes a day when a one-hour metered spot ran out during a long city council session and the parking app would not let him renew it. He is clear that the story is about everyday parking rules, not a flaw in any app or city system, and he frames the episode as a way to apply security thinking to ordinary life.\n\nThe core of the talk is North Carolina's personalized plate rules. A DMV guide says special characters are ignored when checking whether a plate is available, which means a plate with a dollar sign, hyphen or space can be written several ways and still be valid. He shows how different parking kiosks, apps and license plate readers normalize these characters differently, and how zero and the letter O may or may not match. He also covers the city's enforcement flow, where plate readers flag unmatched plates for manual review and many appeals are accepted.\n\nHe closes by linking these problems to input validation and sanitization, inconsistent rule enforcement across vendors, and end-user awareness. The takeaway is that components which normalize the same input differently will produce inconsistent results, and that clear guidance on zones and facilities reduces surprises. For long stays, he notes, a parking deck was the cheaper choice.",
+      "durationSeconds": 627,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "ddW1upg6b9Q",
+      "slug": "ya-got-trouble-and-slsa-may-help",
+      "title": "Ya Got Trouble And SLSA May Help",
+      "speakers": [
+        "Nicole Schwartz"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply",
+        "open-source",
+        "build",
+        "risk",
+        "management"
+      ],
+      "teaser": "Explains how SLSA supply chain requirements apply to build integrity, artifact verification, and vulnerability response in software teams.",
+      "summary": "Nicole Schwartz opens by comparing software to physical products: code is assembled from many suppliers, so the same supply chain risks apply to what developers pull in from platforms, dependencies and vendors. She frames the discussion around government expectations for secure software, which push suppliers toward documented practices, and argues that developers and security staff should learn those requirements early rather than meeting them as a late hurdle.\n\nThe middle of the talk walks through the requirement areas tied to SLSA. These cover how a build is produced, whether its output can be checked against what was intended, and how provenance records let someone trace when and how an artifact was made. She also covers having a working vulnerability response program and checking open source components as part of the same picture.\n\nTo close, she warns that teams motivated to satisfy a checklist can hollow out the intent, and that controls are hard to enforce when individuals argue their way around them. The practical takeaway is to spread ownership across development, security and operations, and to start with the fundamentals of build integrity and known-vulnerability handling rather than paperwork alone.",
+      "durationSeconds": 1134,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "JuN4dqn7HEg",
+      "slug": "inglourious-drivers-the-revenge-of-the-peripheral-devices",
+      "title": "Inglourious Drivers The Revenge of the Peripheral Devices",
+      "speakers": [
+        "Omer Tsarfati"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "windows",
+        "kernel",
+        "device",
+        "exploitation",
+        "vulnerabilities"
+      ],
+      "teaser": "Explores vulnerable drivers shipped with peripheral devices and the risks they create for the systems that load them.",
+      "summary": "This talk looks at device drivers that come bundled with peripheral hardware and asks what happens when those drivers contain security flaws. The title points to the familiar problem of drivers running with high privilege on the host, where a single weak component can give an attacker a route from ordinary access to deeper control of the machine.\n\nThe middle of the talk turns to the kind of vulnerable driver that keeps appearing in real systems. The speaker describes drivers that were shipped with products and then left in place, including cases where a model was retired from service while its driver stayed on machines in the field. Those leftover components are the kind of attack surface defenders often miss, because the hardware looks harmless and the software is rarely inventoried or updated.\n\nThe closing portion touches on the disclosure side of the work and on the guidance given to people who want to read more. For a practitioner, the main takeaway is that peripheral drivers deserve the same scrutiny as any other privileged code. Teams should track which drivers are present on their endpoints, check whether they are still supported, and treat old or unmaintained device software as a potential weak point even when the hardware itself seems unimportant.",
+      "durationSeconds": 2054,
+      "publishedAt": "2025-09-29",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "v83Ib2LLjvA",
+      "slug": "how-a-covert-russian-disinformation-effort-is-bypassing-censorsh",
+      "title": "How a Covert Russian Disinformation Effort Is Bypassing Censorship",
+      "speakers": [
+        "Patricia Bailey"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "state",
+        "social"
+      ],
+      "teaser": "Explains how a covert Russia-linked disinformation operation gets its messaging past censorship barriers.",
+      "summary": "This talk looks at a covert disinformation effort linked to Russia and asks how it manages to get its messaging past censorship. It frames the problem for the audience: state-backed influence campaigns depend on content reaching readers even where platforms and governments try to block it, so understanding how that reach is achieved matters to anyone tracking these operations.\n\nThrough the middle of the session, the speaker walks through the campaign at the level of how it is organised and the routes its content takes to audiences. The material stays focused on observed behaviour and structure rather than deep technical exploitation, which makes it accessible to people working in threat intelligence, trust and safety, or policy without specialist tooling.\n\nBy the end, the talk points toward practical takeaways for defenders: recognising the signs of covert influence activity, understanding why blocking alone may not stop it, and considering how monitoring and attribution fit into a response. Listeners leave with a clearer picture of how censorship-resistant disinformation can be pursued and why it is difficult to counter.",
+      "durationSeconds": 2407,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "-S3jeIDenIo",
+      "slug": "the-uefi-threat-or-how-i-can-permanently-brick-your-computer",
+      "title": "The UEFI Threat Or How I Can Permanently Brick Your Computer",
+      "speakers": [
+        "Paul Asadoorian"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "device",
+        "vulnerabilities",
+        "supply-chain",
+        "linux",
+        "trust"
+      ],
+      "teaser": "Shows how weak UEFI firmware protections on SPI flash let attackers brick machines and how exposed real systems are.",
+      "summary": "Paul Asadoorian opens by pointing out that most people never update or customize the UEFI firmware on their computers, even though it sits at the highest privilege level and loads before the operating system. He explains how that firmware lives on an SPI flash chip split into regions, such as the flash descriptor, the BIOS region, Intel ME, and embedded controller data, and how access controls on each region decide what can be rewritten.\n\nThe middle of the talk covers research from Eclipsium's firmware database and live system scans. Using open tools such as Chipsec, the team found widespread missing write protections, a frequent buffer overflow problem in firmware, and many machines lacking microcode, DBX revocation, and BMC updates. Vendor mistakes, such as a leftover manufacturing mode and a disabled secure boot check, show how the supply chain between chip makers and OEMs adds risk. The speaker also explains how overwriting the flash descriptor or NVRAM variables could leave a system unbootable.\n\nFor takeaways, he urges people to apply firmware updates, run firmware security checks on Linux through fwupd, and keep DBX revocation lists current. He also calls for a community repository of firmware dumps to help spot bad updates before they spread, and notes that TPM measurement cannot catch problems that happen before it starts.",
+      "durationSeconds": 3191,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "G8Dgmqxc0BE",
+      "slug": "how-to-use-sauteed-onion",
+      "title": "How to Use Sauteed Onion",
+      "speakers": [
+        "Paul Syverson"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "network",
+        "infrastructure"
+      ],
+      "teaser": "Covers the subject of Sauteed Onion as presented at ShmooCon 2023.",
+      "summary": null,
+      "durationSeconds": 1145,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "0Vm7fKSA-Hs",
+      "slug": "reveal-unmasking-malwares-true-identity",
+      "title": "Reveal Unmasking Malware's True Identity",
+      "speakers": [
+        "Scott Young"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "reverse-engineering",
+        "detection",
+        "open-source",
+        "code"
+      ],
+      "teaser": "Presents a method for linking malware samples across obfuscation and architecture changes using sector hashing and data flow slicing.",
+      "summary": "The talk introduces Reveal, an open-source tool for linking malware samples that have been obfuscated or rebuilt for a different processor architecture. The speaker starts with why this matters: signature-based antivirus engines are fast but shallow, and malware authors change instruction sequences so byte-level signatures stop matching. Fuzzy whole-file similarity scores also fall short, because a small malicious component can be drowned out by large bundled libraries.\n\nThe core idea is match set analysis. Reveal hashes every window of a binary into a database, using a rolling hash so matches survive offset shifts, and then records which files share each piece. The speaker also covers data flow slicing, which lifts functions into an intermediate representation, splits them into slices, zeroes out offsets that move between builds, and canonicalizes each slice before hashing. In a test with 14 AsyncRAT samples, the slices grouped variants that VirusTotal engines had labeled only generically, and correlations between samples were visible even when individual names were missing.\n\nThe remaining problems are candid: matching whole inline functions is unfinished, subgraph matching is handled by growing slices guided by database hits, and the flow slicer currently needs a commercial Binary Ninja license. The practical takeaway is that grouping samples by the code they share can give analysts a more useful lead than a similarity percentage, and that the approach may scale to larger corpora.",
+      "durationSeconds": 3019,
+      "publishedAt": "2025-09-29",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "y-bK-H8iqc0",
+      "slug": "shmoofaq",
+      "title": "ShmooFAQ",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "challenge",
+        "village",
+        "learning"
+      ],
+      "teaser": "Runs a live audience trivia game with tech and security questions, scoring teams across rounds at ShmooCon 2023.",
+      "summary": "This recording is a live multiple-choice quiz held on stage at ShmooCon 2023. A host reads each question aloud, opens the answers to audience teams, and checks how the room split before revealing the correct choice. Teams submit their answers from their seats, and the host often picks individuals out of the crowd to explain their picks.\n\nThe categories are mixed and mostly tech-flavored. They cover networking ports and Ethernet connectors, computing history, the Java feature abused in Log4Shell, Windows registry key types, macOS release names, and the first known computer worm. Star Trek, video game, and leap second trivia also come up. Points are added or taken away per question, a running leaderboard is updated between rounds, and wrong answers sometimes earn a prize. The host keeps the pace up with jokes and audience banter.\n\nNear the end, the host shows unofficial standings, notes that a tie will be settled at closing ceremonies, and hands out prizes. A birthday moment closes the segment. There is no technical lesson to take away. The useful point for organizers is the format itself: a light, interactive game that gets attendees engaged between sessions.",
+      "durationSeconds": 4331,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "DGP-9_iT6E0",
+      "slug": "the-perfect-resume-for-entry-level-infosec",
+      "title": "The Perfect Resume For Entry Level Infosec",
+      "speakers": [
+        "Space Rogue"
+      ],
+      "track": "community",
+      "topics": [
+        "careers",
+        "interview",
+        "lessons-learned",
+        "learning"
+      ],
+      "teaser": "Gives hiring-manager advice on what to include and cut from an entry-level infosec resume to earn an interview.",
+      "summary": "The speaker, who stepped in for a scheduled presenter, draws on years of running an internship program at IBM X-Force that received hundreds of resumes for roughly ten slots. He frames the resume as a teaser whose only job is to earn an interview, not to present a complete work history.\n\nHe covers common mistakes. Candidates often list every class they took when they should describe projects instead, and they pad documents past one page. Other habits he criticises include listing references, adding photos, using decorative layouts that hide information, stuffing keywords to satisfy automated filters, and uploading cover letters into sections that do not exist. He recommends listing any job, even unrelated work, along with competitions, bug bounty participation, volunteering, conference attendance, military service, and public code. He also notes that reviewers rarely have time to inspect GitHub projects, and that keeping a plain text and Word version helps because formatting often breaks in applicant systems.\n\nHe closes by pointing out that advice shifts for candidates with several years of experience, who may need tailored resumes and cover letters. The unifying principle he leaves the audience with is to show concrete things you have actually done rather than a list of topics you were taught.",
+      "durationSeconds": 1401,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "jx2R_OXPKdM",
+      "slug": "social-engineering-from-the-detective-perspective",
+      "title": "Social Engineering from the Detective Perspective",
+      "speakers": [
+        "Tom Howard"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "social",
+        "engineering",
+        "attack",
+        "lessons-learned"
+      ],
+      "teaser": "Draws on a former detective's interviewing experience to explain how social engineers build rapport and apply pressure.",
+      "summary": "The talk looks at social engineering through the eyes of a former detective. The speaker frames the subject as a question of how people get others to share information or act against their own interests, and draws on the interview room, where investigators work to build rapport with a subject. Everyday examples, such as buying a car, are used to show how pressure and emotion shift a conversation.\n\nThe middle of the talk covers the techniques themselves. The speaker describes easing pressure and then building it back up, which can leave a target on an emotional roller coaster, and talks about adopting a role or persona rather than simply pretending. The speaker also reflects on moments from police work when their own approach fell short, and on how adversaries are often skilled at reading people.\n\nThe closing message is that the lessons from interviewing carry over directly to understanding how social engineering works. Practitioners are encouraged to watch how a target's emotional state changes during an interaction and to treat that awareness as a core skill.",
+      "durationSeconds": 1150,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "QMIiJNAFvbM",
+      "slug": "dit-dit-dah-dit-the-evolution-of-cellular-networks",
+      "title": "Dit Dit Dah Dit The Evolution of Cellular Networks",
+      "speakers": [
+        "Tracy Mosley"
+      ],
+      "track": "wireless",
+      "topics": [
+        "network",
+        "infrastructure",
+        "attack",
+        "vulnerabilities",
+        "system"
+      ],
+      "teaser": "Traces cellular networks from 1G analog phones through 5G, covering each generation's core architecture and public attack vectors.",
+      "summary": "The talk walks through the history of cellular networks, starting with telegraphs and landline telephony and moving into the first analog mobile systems such as AMPS and the Nordic mobile telephone network. The speaker explains the core idea behind each generation: whether the network was circuit switched or packet switched, and how new components were layered onto older ones rather than replacing them.\n\nMoving through 2G, GPRS, 3G, LTE and 5G, the talk maps each network's radio access and core components, from base stations and controllers to the home location register, serving gateways and the newer virtualized functions in 5G. For each generation, it lists publicly documented weaknesses. These include missing mutual authentication that enables rogue base stations and IMSI catchers, unencrypted GTP traffic, a malformed packet that knocked a Nokia gateway offline, and downgrade attacks that keep older, weaker protocols reachable.\n\nThe closing takeaway is that legacy generations stay in service, so old weaknesses remain relevant even on newer networks. The speaker also points to outside research on exposed core interfaces and router firmware flaws. Listeners leave with a map of which components to examine when studying a given network.",
+      "durationSeconds": 2884,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "dr7L0xXzt6g",
+      "slug": "a-mask-rom-tool-in-qt6-and-c",
+      "title": "A Mask ROM Tool in Qt6 and C++",
+      "speakers": [
+        "Travis Goodspeed"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "reverse-engineering",
+        "open-source",
+        "tool",
+        "device"
+      ],
+      "teaser": "Shows how photographing and chemically delayering mask ROM chips lets their stored bits be extracted with a Qt6 tool.",
+      "summary": "Mask ROM stores its contents as a fixed pattern set during chip manufacture. That makes it expensive to produce in small runs, but it is a valuable reverse engineering target, because the data sits in the physical layout of the die. A photograph can reveal the stored bits even when the chip is broken or has no usable interface. The talk introduces a new open-source tool, written in Qt6 and C++, that turns annotated microscope images into grids of ordered bits.\n\nThe speaker walks through the workflow. The package is opened with nitric acid, and the upper metal layers are removed with hydrofluoric acid baths so the transistors become visible. Many overlapping microscope images are stitched into a panorama, and row and column lines are placed over the bits. The software offers design rule checks for ambiguous readings, can merge annotations from several chips to correct errors, and exports to formats such as ASCII art, CSV, JSON and Python arrays. Examples include a 1988 greeting card chip, a Game Boy ROM whose hash matched existing extractions, and the Clipper and Capstone chips, which yielded Skipjack tables and an ARM6 program.\n\nThe main takeaway is that converting physical bit positions into logical byte order is a separate and harder problem, with existing tools such as Zorrom helping there. Good tooling, speed and patience with the chemistry and imaging can recover firmware from chips that otherwise resist analysis. The speaker also notes that the approach becomes harder as features shrink below the wavelength of light.",
+      "durationSeconds": 2335,
+      "publishedAt": "2025-09-29",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "k6_gAS9tKF4",
+      "slug": "open-security-training-2-free-deep-technical-training",
+      "title": "Open Security Training 2 Free Deep Technical Training",
+      "speakers": [
+        "Xeno Kovah"
+      ],
+      "track": "community",
+      "topics": [
+        "learning",
+        "open-source",
+        "project",
+        "reverse-engineering",
+        "engineering"
+      ],
+      "teaser": "Describes a free nonprofit catalog of deep security classes and how its learning paths are built.",
+      "summary": "The speaker, a longtime maintainer of free security courseware, traces the project's history from an earlier volunteer effort, built while working at an employer, to the current version relaunched in 2021 as a nonprofit. The goal is to match the quality of paid private training while offering it for free, so instructors can reach thousands of students instead of a few dozen. He argues that free online courses and paid in-person courses serve largely separate audiences, so both can coexist.\n\nNext he walks through the catalog to show that the classes are deep rather than introductory. Examples include symbolic analysis with SMT solvers and angr, C++ reverse engineering, Intel firmware attack and defense, UEFI and coreboot, and a developer-focused course on memory corruption bugs in C-family code. The strategy is to sequence classes into learning paths tied to job roles, share foundational material such as assembly and debugging rather than repeating it in every course, and let advanced instructors assume prerequisites.\n\nHe closes by suggesting that teaching a class can multiply an engineer's impact more than doing individual engineering work, and that open source projects and niche platforms can gain exposure to the site's existing audience. The takeaway for practitioners is that well-made free training can spread expertise widely, and that building or contributing a course is a concrete option.",
+      "durationSeconds": 1515,
+      "publishedAt": "2025-09-29",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "okIH2uvZiOY",
+      "slug": "les-miserable-persistence-hunting-through-scheduled-tasks",
+      "title": "Les Miserable Persistence Hunting Through Scheduled Tasks",
+      "speakers": [
+        "Brandon DeVault"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "windows",
+        "threat-detection",
+        "hunting",
+        "defensive-security"
+      ],
+      "teaser": "Shows how to hunt for malicious Windows scheduled tasks that already exist on endpoints, using PowerShell and an Elastic dashboard.",
+      "summary": "Most published guidance explains how to catch newly created Windows scheduled tasks through command-line activity, process creation, registry changes, or event logging. This talk asks the harder question of what to do about tasks already sitting on machines. The speaker argues that scheduled tasks are a common secondary persistence method across threat groups, and that the relevant Windows event IDs are disabled by default, so existing tasks need a separate hunt.\n\nThe walkthrough uses PowerShell on a fresh Windows build seeded with one simulated malicious task. Grouping task actions by executable and filtering on folder location, arguments, author and run-as user surfaces many legitimate tasks that look suspicious, including Amazon EC2 startup scripts and Microsoft tasks with inconsistent metadata. The planted task is finally found through an unusual local administrator author pointing to an executable running from a temp directory. The speaker then tried several routes to load the XML task files into Elasticsearch, including JSON, NDJSON and a Logstash parser, before converting to CSV and building dashboards for timelines, settings and principals.\n\nThe main takeaways are that creation dates and other task metadata can be set to anything, so a date alone does not prove a task is new, and that hidden and disabled tasks ship by default and offer cover for persistence. Knowing what normal looks like on your own builds matters more than any single filter. The speaker closed with open questions about mimicking Microsoft's hidden tasks and whether tasks can enable privilege escalation.",
+      "durationSeconds": 2556,
+      "publishedAt": "2025-09-29",
+      "difficulty": "intermediate"
+    }
+  ]
+}

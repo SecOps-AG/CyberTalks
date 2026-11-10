@@ -1,0 +1,424 @@
+{
+  "villageSlug": "talks",
+  "villageName": "Talks",
+  "eventSlug": "objective-by-the-sea-2022",
+  "conference": "objective-by-the-sea",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLliknDIoYszt5m1kz1vNY90LnR6VMuyOZ",
+  "description": "Talks from Objective by the Sea v5.0 (2022).",
+  "talks": [
+    {
+      "youtubeId": "aK0xPGMG0NI",
+      "slug": "fugu15-the-journey-to-jailbreaking-ios-15-4-1",
+      "title": "Fugu15 - The Journey to Jailbreaking iOS 15.4.1",
+      "speakers": [
+        "Linus Henze"
+      ],
+      "track": "mobile",
+      "topics": [
+        "vulnerability-research",
+        "kernel",
+        "exploit",
+        "mobile"
+      ],
+      "teaser": "Walks through the exploit chain that jailbreaks iOS 15.4.1 despite pointer authentication and PPL protections.",
+      "summary": "The talk starts from the problem that iOS 15 and later made jailbreaking much harder. Code signing checks, pointer authentication (PAC) and the page protection layer (PPL) mean a single kernel bug is no longer enough, so the speaker presents the full Fugu15 chain that works on iOS 15.4.1.\n\nThe chain is built from several separate weaknesses. A flaw in how CoreTrust reads certificate object identifiers lets an attacker claim an App Store signature without any signer check, which gives initial code execution. A second bug in installd's handling of fat binaries, where the team ID check is the only control, lets a second executable run under the trusted signature. A writable PCI driver kit memory mapping that lacks offset checks then yields arbitrary kernel read and write, with kernel addresses recovered by reasoning about memory layout rather than a leak. Later stages cover a PAC bypass through a thread recovery handler that returns without authentication, and a PPL bypass that abuses a stale translation cache entry in nested page tables to remap protected memory.\n\nThe talk closes with a live demonstration of installing the chain through a signed developer app and running commands on a phone. The main takeaway is that layered mitigations only hold when every check on every path is complete, since several of the bypasses exploited partial or incomplete fixes.",
+      "durationSeconds": 2186,
+      "publishedAt": "2022-11-01",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "pT8C9P3BiVw",
+      "slug": "att-and-cking-pandas-drawing-out-att-and-ck-techniques-in-the-wi",
+      "title": "ATT&CKing Pandas: Drawing out ATT&CK Techniques in the Wild",
+      "speakers": [
+        "Cat Self"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "malware-analysis",
+        "framework",
+        "attack",
+        "detection",
+        "intelligence"
+      ],
+      "teaser": "Maps macOS malware behaviors, such as Gatekeeper bypass and installer abuse, to ATT&CK techniques and data sources.",
+      "summary": "Cat Self, the macOS lead for the ATT&CK project at MITRE, opens with a short overview of how the framework is organized into tactics, techniques and sub-techniques. The point is that entries should describe what an adversary actually does on a platform, not just match the name of a feature. The talk uses a comic-strip analogy to explain how macOS security mechanisms are meant to work, starting with file quarantine, code signing, notarization and Gatekeeper, and then how malware such as Shlayer gets past them.\n\nThe middle section covers discovery and persistence on the platform. Examples include using Bonjour and mDNS queries to find other Macs and their services, abusing apps that already hold sharing permissions, and hiding payloads in application bundles, resource forks or stripped run-only AppleScript. The Osa Miner case shows how missing decompiler support delayed analysis for years. Installer package scripts, which run alongside credential prompts, and BPF-filter socket listeners that activate backdoors later are also mapped to techniques.\n\nThe closing part stresses that recent ATT&CK changes for macOS came from community feedback, and that some new entries were still in draft at the time. The speaker urged researchers to publish reports on macOS activity, since the gap between reporting and publication slows coverage. In the Q&A, the speaker said red-team techniques are not planned for ATT&CK itself, though a separate project could cover them.",
+      "durationSeconds": 1624,
+      "publishedAt": "2022-11-01",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "LR_A3hIZEZE",
+      "slug": "bombastically-abominating-bomshellz",
+      "title": "Bombastically Abominating Bomshellz",
+      "speakers": [
+        "Jaron Bradley",
+        "Ferdous Saljooki"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "exploit",
+        "detection",
+        "system",
+        "threat-detection"
+      ],
+      "teaser": "Explains two macOS Gatekeeper bypasses in Safari and Archive Utility that let unsigned apps run unchecked.",
+      "summary": "The talk opens with an overview of Gatekeeper, the macOS control that checks code signing and notarization before an app launches, and why attackers want to slip past it. The speakers, both from Jamf Threat Labs, describe how unsigned indie games from a game distribution site were getting through when downloaded with Safari, while Chrome and Firefox downloads were blocked as expected.\n\nTracing the download with Endpoint Security events, they found that Safari's sandbox unpacks archives and applies the quarantine attribute to the extracted files. A zip archive with its top-level header removed left the bill of materials out of sync with the contents, so the app bundle directory never received the quarantine attribute. Gatekeeper only inspects that directory, so it never checked the app. The second flaw sits in Archive Utility. When an archive holds two or more top-level items, the utility wraps them in a folder named after the archive, and that wrapper is never quarantined. Naming the archive with an .app extension therefore produced an unchecked application. Apple patched the Safari issue in macOS 12.3 and the Archive Utility issue in 12.5.\n\nFor defenders, the speakers outlined Endpoint Security detections: watching rename events where the source is an archive service temporary folder and the destination ends in .app, and flagging extracted apps that are unsigned or ad hoc signed. The main takeaway is that the quarantine attribute on a bundle is not a reliable signal, and that archive extraction deserves monitoring alongside downloads.",
+      "durationSeconds": 1541,
+      "publishedAt": "2022-11-01",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "dylcK3RpbuE",
+      "slug": "do-as-i-say-not-as-i-did-pivoting-into-mac-malware-analysis-for",
+      "title": "Do as I say, Not as I did: Pivoting into Mac Malware Analysis for the 1st Time",
+      "speakers": [
+        "K. Del Rosso"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "learning",
+        "lessons-learned",
+        "tool",
+        "intelligence"
+      ],
+      "teaser": "Follows a newcomer's route into Mac malware analysis, covering app bundle structure, Mach-O files and common pitfalls.",
+      "summary": "K. Del Rosso, who had no prior experience with macOS internals, documents an attempt to learn Mac malware analysis from scratch. The talk starts by urging analysts to define their goal first, whether that is incident response triage, threat intelligence tracking or deeper research, so the work does not drift into low-level detail that fails to answer the question. It then separates static analysis, which inspects files without running them, from dynamic analysis, which executes samples in a controlled environment.\n\nBuilding a working lab proved hard. Virtualization products that suited older Intel Macs were troublesome on Apple silicon, and built-in protections such as quarantine and Gatekeeper made older macOS installers difficult to obtain. Once a sample was open, the talk walked through the app bundle: the code signature, useful for developer pivots; the info property list, with settings such as a flag that hides the app from the Dock or login-item hooks; the resources folder; and the Mach-O executable. Quick checks included reading signing details, pulling readable strings with tools such as FLOSS, and spotting oddities like a file named as text that carried executable permissions. Packers and string obfuscation were flagged as common hindrances.\n\nThe closing section covered the time needed to learn the skill, suggesting a structured reading path, hands-on practice and simple command-line and GUI utilities for triage. The main takeaway is that a useful high-level picture can come from inspecting a bundle before opening a disassembler, while assembly and deeper reversing remain necessary for full analysis.",
+      "durationSeconds": 1773,
+      "publishedAt": "2022-11-01",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Snwh4mMe-Cg",
+      "slug": "farming-the-apple-orchards-living-off-the-land-techniques",
+      "title": "Farming The Apple Orchards: Living off the Land Techniques",
+      "speakers": [
+        "Chris Ross",
+        "Cedric Owens"
+      ],
+      "track": "red-team",
+      "topics": [
+        "attack",
+        "exploiting",
+        "system",
+        "network",
+        "practical"
+      ],
+      "teaser": "Surveys native macOS utilities and data sources that attackers can abuse for reconnaissance and post-exploitation.",
+      "summary": "The talk explores how attackers on macOS can rely on built-in utilities, APIs and data sources instead of custom malware. Cedric Owens starts with situational awareness, showing how mdfind can search inside files for credentials or AWS key identifiers, and how the Spotlight query API offers the same route. He also covers stripping quarantine attributes with ordinary commands, grabbing clipboard contents, checking for virtual machines, and judging whether a user is away from the screen. Unsaved TextEdit documents, Sticky Notes and plaintext Firefox cookies are presented as easily reached data.\n\nChris Ross then covers binaries for other stages. dns-sd browses Bonjour advertisements to reveal SSH, web, screen sharing and AirPlay services, and its traffic blends into normal local network noise. osacompile produces app bundles whose AppleScript or JXA source remains unobfuscated, which helps analysts but suggests payloads should be encrypted. lldb plugins can run Python through a .lldbinit file, and background threads avoid stalling the debugger. Audio Unit plugins loaded by auval can execute code from a bundle initializer during testing.\n\nThe talk ends with safaridriver, which exposes a WebDriver server that can carry C2 or second-stage downloads through a browser and look more legitimate. Its visible window and end-session prompt make it better suited to short-lived use. The practical takeaway is that native tools and their data stores deserve monitoring as much as dropped binaries.",
+      "durationSeconds": 939,
+      "publishedAt": "2022-11-01",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "cbR0DC-LKEg",
+      "slug": "sandboxing-with-esf-playground-on-macos",
+      "title": "Sandboxing with ESF Playground on macOS",
+      "speakers": [
+        "Matt Carman"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "sandbox",
+        "automation",
+        "detection",
+        "network"
+      ],
+      "teaser": "Shows how a Python wrapper around ESF Playground automates macOS malware detonation and event collection on a physical Mac.",
+      "summary": "Matt Carman opens by explaining what a malware sandbox does: it runs suspicious samples in a disposable environment, records execution, file writes and network activity, and then resets the system. He points out that the Cuckoo-based Mac sandbox he drew on stopped working after macOS system extension changes and Intel-related restrictions, and that commercial sandboxes are expensive and opaque. His goal was a small, low-cost system for Apple hardware.\n\nThe system he built, ESFriend, wraps ESF Playground in Python and runs on one physical Mac, with the server able to run on macOS, Windows or Linux. Physical hardware sidesteps many anti-VM and anti-debug checks. A MongoDB queue lets the analysis machine pull jobs without opening inbound ports. Traffic is captured through a man-in-the-middle proxy, and the reset relies on a paid snapshot utility. Because ESF produces a flood of events, he filters noise by hashing condensed event strings from a baseline run, a method he admits can filter too aggressively. A live demo failed because of network problems, so he walked through the results screens instead.\n\nPlanned work includes running as root to collect dropped files, network detection rules, virtualization once tools allow command-line control, similarity matching on event strings, automated detonation and a custom ESF agent. The takeaway is that a free, extensible triage pipeline on physical Macs is workable today, though its certificate-based proxy and reliance on Intel hardware limit it.",
+      "durationSeconds": 1015,
+      "publishedAt": "2022-11-01",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "59RtyIjyRuQ",
+      "slug": "learning-how-to-machine-learn-classifying-macho-malware",
+      "title": "Learning how to Machine Learn - Classifying MachO Malware",
+      "speakers": [],
+      "track": "malware",
+      "topics": [
+        "machine-learning",
+        "malware-analysis",
+        "detection"
+      ],
+      "teaser": "Explains how machine learning can be applied to classify Mach-O malware.",
+      "summary": null,
+      "durationSeconds": 1710,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "H5oz1U03U1Q",
+      "slug": "abusing-iphone-co-processors-for-privilege-escalation",
+      "title": "Abusing iPhone Co-Processors for Privilege Escalation",
+      "speakers": [
+        "Ian Beer"
+      ],
+      "track": "hardware",
+      "topics": [
+        "vulnerability-research",
+        "exploiting",
+        "kernel",
+        "embedded",
+        "mobile"
+      ],
+      "teaser": "Shows how an in-the-wild iPhone exploit escaped the app sandbox through a zero-day in Apple's display co-processor.",
+      "summary": "The talk starts with a phishing text that pushed a victim to install an enterprise-signed app. The app bundled several exploit frameworks. Five of them followed a familiar pattern of kernel memory corruption, but one did not. Its logging referred to a display co-processor very early in the flow, before the usual kernel exploitation steps would make sense.\n\nThe speaker explains the display co-processor, which took over display setup work that previously ran in a kernel driver. It runs a custom real-time operating system called RTKit, which has no authentication, no address space layout randomization, and predictable heap addresses. Requests the co-processor could make up to the kernel were permissive enough to map arbitrary memory into its IOMMU-style address table. Code running on the co-processor could therefore read and write kernel memory. The underlying bug was a C++ memory corruption in the display uniformity compensation code. It was not a novel bug class, but the weakened mitigations made exploitation far easier.\n\nThe main takeaway is that moving driver code onto co-processors can quietly regress security boundaries, even when the bugs themselves are ordinary. Practitioners should treat co-processor firmware as part of the attack surface, not just the main processor and kernel. The talk closes by listing many other co-processors on Apple silicon as areas for further research.",
+      "durationSeconds": 1495,
+      "publishedAt": "2022-11-01",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "lQO7tvNCoTI",
+      "slug": "the-achilles-heel-of-endpoint-security",
+      "title": "The Achilles Heel of Endpoint Security",
+      "speakers": [
+        "Fitzl Csaba"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "defensive-security",
+        "privacy",
+        "vulnerabilities",
+        "device"
+      ],
+      "teaser": "Shows how tccutil and Full Disk Access let attackers disarm macOS EndpointSecurity clients, and how Apple's successive fixes fell.",
+      "summary": "The talk looks at Apple's EndpointSecurity framework, which lets third-party tools observe and act on system events on macOS. Every such client needs Full Disk Access before it can register. The speaker argues this is a weak point, because revoking the permission switches the client off. The permission can be cleared with the tccutil utility, which at first offered a reset with no checks, so any user could disable a security product.\n\nThe presenter then walks through the first reported issue and the series of Apple mitigations that followed. Each fix was bypassed in turn. An authorization prompt was defeated by editing the authorization database as root, a later check that relied on reading the TCC database was sidestepped, and a mount placed over the client binary made tccutil stop recognising it as a client. An older tccutil build from a previous macOS release still worked. Apple then moved the reset logic into the tccd daemon and added a dedicated TCC permission for EndpointSecurity clients, which the speaker judged a sounder design that still has conditions under which it is weak.\n\nThe talk closes by arguing that Full Disk Access is a master permission reaching well beyond TCC, covering private user data, APFS snapshots and administrative config files. Practitioners should treat it as a sensitive grant, avoid giving it to terminals and scripting tools, and watch for a split into finer permissions and a better-protected TCC database.",
+      "durationSeconds": 1904,
+      "publishedAt": "2022-11-01",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "YWadRAKkwec",
+      "slug": "handoff-all-your-privacy-again",
+      "title": "Handoff All Your Privacy (Again)",
+      "speakers": [
+        "Christine Fossaceca"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "reverse-engineering",
+        "device",
+        "vulnerability-research"
+      ],
+      "teaser": "Shows how Apple's Continuity Bluetooth packets leak device and user activity to nearby observers, and how to capture them.",
+      "summary": "Apple's Continuity features, including Handoff, Universal Clipboard, Instant Hotspot and auto unlock, let a user's devices coordinate over Bluetooth and Wi-Fi. The speaker argues that much of the data these features broadcast is unencrypted, so nearby observers can capture it and infer a person's habits and device details. The work builds on earlier research from the FuriousMAC team and on later analysis by other researchers.\n\nThe walkthrough shows how to capture Continuity Bluetooth Low Energy advertisements with a sniffer dongle and parse them with a custom Wireshark dissector, then reads a packet byte by byte. Message types determine what each packet carries. A Nearby message can reveal whether AirDrop or Wi-Fi is enabled, whether a phone is locked, and activity such as a call or driving. Handoff packets use nonces that were sequential, which could link two devices in an ongoing exchange. AirPods proximity packets were shown to expose battery levels, a lid-open counter that increments, case colour and whether each earbud is in the ear.\n\nThe speaker described Apple fixing an issue where authentication tags did not rotate with advertising addresses, which had allowed tracking across rotations. She also noted that offline Find My messages appear only when at least two Apple devices share an account. The takeaway for practitioners is that Bluetooth devices should rotate addresses and avoid static counters, and that Continuity traffic reveals more about users than people expect.",
+      "durationSeconds": 1867,
+      "publishedAt": "2022-11-01",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "cC7c-eTGMOQ",
+      "slug": "in-the-aftermath",
+      "title": "In the Aftermath",
+      "speakers": [
+        "Matt Benyo"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "open-source",
+        "framework",
+        "detection",
+        "malware-analysis"
+      ],
+      "teaser": "Shows how the open-source Swift framework Aftermath gathers and timelines macOS endpoint artifacts after a malware alert.",
+      "summary": "Matt Benyo, of Jamf's macOS threat research team, starts with a familiar gap in incident response: by the time outside help arrives, days or weeks may have passed and the endpoint evidence is stale. Many smaller organizations hand alerts to admins who lack the expertise to interpret them, which leaves support staff caught between vendor and customer.\n\nTo close that gap, the team built Aftermath, a lightweight, open-source incident response framework written in Swift so it runs natively on macOS without requiring Python. It collects roughly a dozen categories of artifacts, including persistence items, running processes, unified logs, browser history and downloads, a copy of the TCC permissions database, and a system overview. The demo followed a pirated video editing app that carried a cryptocurrency miner. Aftermath was triggered by an MDM-driven detection workflow, and its analysis mode parsed the TCC data and normalized mixed timestamp formats into a single timeline. That timeline exposed the download chain and an unfamiliar anonymous-network daemon.\n\nThe talk closes with planned version two work: uploading collected output to cloud storage, gathering extended attributes, and pivoting from property list files to the binaries they reference. The practical takeaway is that collection should be automated and fast, and that normalized timelines help less experienced responders reach a useful story about how malware got onto a host.",
+      "durationSeconds": 1135,
+      "publishedAt": "2022-11-01",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "rPTifU1lG7Q",
+      "slug": "fugu15-the-journey-to-jailbreaking-ios-15-4-1-2",
+      "title": "Fugu15 - The Journey to Jailbreaking iOS 15.4.1",
+      "speakers": [
+        "Linus Henze"
+      ],
+      "track": "mobile",
+      "topics": [
+        "vulnerability-research",
+        "kernel",
+        "exploitation",
+        "mobile",
+        "ios",
+        "code-signing"
+      ],
+      "teaser": "Walks through the vulnerability chain behind Fugu15 and how it defeats iOS 15 mitigations to jailbreak iOS 15.4.1.",
+      "summary": "The talk explains how the Fugu15 jailbreak got around the hardening Apple added in iOS 15, where a kernel bug alone is no longer enough. The speaker starts with how iOS code signing works and how CoreTrust validates signature blobs. The first flaw is that certificate object identifiers directly set trust flags, so a crafted certificate can claim App Store origin and skip signer checks. A second issue lets a fat binary carry a second executable past the installer's team ID comparison, which yields initial code execution.\n\nThe middle covers the kernel stage. A PCI driver kit method accepts an unchecked 64-bit offset, giving out-of-bounds access to memory. Because PCI memory addresses are predictable and the physical RAM layout is constrained, the exploit can locate the kernel's memory map and derive the slide without a separate leak, reaching arbitrary read and write. Later steps bypass pointer authentication by abusing a thread recovery handler that returns without authentication, then defeat PPL by exploiting a stale TLB entry left behind by nested shared-cache page tables.\n\nThe talk closes with a partly live demo on a device running iOS 15.4.1. The exploit repurposes a signed developer app to install the jailbreak, then shows kernel information and memory reads, and installs a package manager. The takeaway is that trust decisions made from attacker-supplied data and incomplete cache invalidation can undo layered mitigations.",
+      "durationSeconds": 2157,
+      "publishedAt": "2022-11-01",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "pEr_cyKRj9Q",
+      "slug": "tales-from-developing-and-deploying-endpoint-security-in-osquery",
+      "title": "Tales from Developing and Deploying Endpoint Security in Osquery",
+      "speakers": [
+        "Sharvil Shah"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "open-source",
+        "building",
+        "device",
+        "lessons-learned",
+        "trust"
+      ],
+      "teaser": "Walks through the entitlements, provisioning, packaging and notarization steps needed to ship an Endpoint Security client on macOS.",
+      "summary": "The talk looks at the practical problems of shipping a macOS agent that uses Apple's Endpoint Security framework, with the osquery project as a worked example. The speaker argues that writing the monitoring code was the easier part, and that packaging and distributing the binary to machines the developer does not control was the harder task. The Endpoint Security headers are well documented, but the surrounding requirements were, at the time, unclear.\n\nThe talk then follows the steps in order. It starts with weak linking and availability checks, so the tool runs on older macOS releases without crashing when symbols are missing. Next is the entitlement request process, which the speaker describes as slow and opaque. Provisioning profiles come after that: a per-device profile is useful for local testing, while an embedded profile tied to a distribution certificate is needed for general release. Because osquery is a command-line tool, it has to be wrapped in an app bundle to carry that profile, and the speaker first built the bundle by hand before porting it to CMake and CPack. Code signing, product signing and notarization are then automated in GitHub Actions on a macOS runner that uses a temporary keychain.\n\nThe end result is a signed installer that passes Gatekeeper and can use Endpoint Security on target machines. The speaker closes by pointing to new event types in later macOS releases as the reason the effort is worthwhile, and notes that the code is open source for others to extend. Questions covered whether Apple adds requested event types and how to test them on newer systems.",
+      "durationSeconds": 1308,
+      "publishedAt": "2022-11-01",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Z38n7UHSpFQ",
+      "slug": "evolution-of-the-mac-threat-landscape",
+      "title": "Evolution of the Mac Threat Landscape",
+      "speakers": [
+        "Thomas Reed"
+      ],
+      "track": "malware",
+      "topics": [
+        "threat",
+        "malware-analysis",
+        "evolution",
+        "lessons-learned"
+      ],
+      "teaser": "Traces how Mac threats evolved from early viruses to today's adware, backdoors and fake security apps.",
+      "summary": "The talk traces how Mac threats have changed since the first widespread virus, Elk Cloner, which hit Apple II machines in 1982 through floppy disks and was largely a prank. Early examples such as Seven Dust added encryption and file deletion, while Thief Quest in 2020 infected binaries in user folders by prepending malicious code to them.\n\nThe talk then compares older behaviors with current ones. Malware now relies on obfuscated shell scripts, often base64 strings piped into a shell from a launch agent, along with packers and custom string hiding. Compiled AppleScript and Go, Rust or Electron apps make analysis harder. Backdoors have become near universal, from early Trojans in 2004 to custom Objective-C or Swift code. Financial threats began with the 2007 DNS changer case, where the FBI kept a rogue server running for years so victims would not lose connectivity. Today's stealers and fake wallet apps target cryptocurrency, while potentially unwanted programs, scam antivirus apps and subscription traps in the App Store are common. Adware and pups now account for most detections the speaker's company sees.\n\nThe closing part looks at what practitioners should take away. Signing and notarization changes mean many modern samples are unsigned and rely on users bypassing Gatekeeper prompts. Apple is limited in acting against pups without proof of wrongdoing, so third-party vendors take that role. Malvertising is the main delivery path today. Defenders should watch behaviors such as scripts being decoded and executed, rather than relying on static code signatures.",
+      "durationSeconds": 1954,
+      "publishedAt": "2022-11-01",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "bd1hqzC4WPY",
+      "slug": "improving-macos-security-by-reducing-authentication-prompts",
+      "title": "Improving macOS Security by Reducing Authentication Prompts",
+      "speakers": [
+        "Michael Epping"
+      ],
+      "track": "cloud",
+      "topics": [
+        "identity",
+        "cloud",
+        "device",
+        "trust",
+        "management"
+      ],
+      "teaser": "Shows how reducing excessive sign-in prompts on macOS can strengthen security through modern SSO and passwordless methods.",
+      "summary": "Excessive authentication prompts hurt the user experience and can train people to approve requests carelessly. The speaker argues that macOS lacks single sign-on out of the box, so Mac users often face repeated sign-ins and MFA challenges when reaching cloud applications. Presented solo after a co-presenter could not attend, the talk frames identity as the main control plane in place of the network perimeter.\n\nThe middle of the talk covers practical steps. Administrators can use prebuilt Azure AD reporting to find which users, applications, or device states trigger prompts. Enrolling Macs in MDM lets conditional access see device compliance. The speaker contrasts older Kerberos and LDAP binding with token-based SSO through Apple's Enterprise SSO extension, which uses a primary refresh token and redirects authentication traffic for web-based apps. Limitations include public preview status, browsers such as Chrome and Firefox that bypass the framework, and a warning that lock-screen sign-in using resource owner password flows can trigger false password-spray detections and account lockouts.\n\nThe closing takeaway is to enroll Macs in MDM, deploy SSO extensions, move applications off Kerberos, and adopt passwordless options such as authenticator apps and FIDO2 keys. Organizations should also work with their identity teams before tightening policy for unmanaged devices.",
+      "durationSeconds": 2920,
+      "publishedAt": "2022-11-01",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "jKE1ZW33JpY",
+      "slug": "lock-picking-the-macos-keychain",
+      "title": "Lock Picking the macOS Keychain",
+      "speakers": [
+        "Cody Thomas"
+      ],
+      "track": "red-team",
+      "topics": [
+        "attack",
+        "identity",
+        "vulnerability-research",
+        "macos",
+        "kerberos"
+      ],
+      "teaser": "Shows how macOS keychain item protections can be enumerated and bypassed, illustrated with Microsoft, Slack and Kerberos case studies.",
+      "summary": "The talk looks at the macOS keychain, the place where the operating system and applications store passwords, keys, certificates and other secrets on a user's behalf. The speaker explains that the file-based keychains on disk are a frequent red team target. Their contents stay encrypted, but an attacker who obtains the user's plaintext password can decrypt them offline. The goal presented is to extract secrets without ever touching the file or triggering a user prompt.\n\nEach keychain item pairs encrypted data with readable metadata and an access control list that names trusted applications and the operations they may perform. The speaker walks through how the partition ID field ties an entry to a team ID or to Apple-signed binaries, and how the security command line tool and the Security framework search and export functions behave. A practical route emerges: code running inside an Apple-signed scripting host can meet the partition requirements and read entries silently. The talk then covers three case studies. Microsoft Office stored cached access tokens in an unencrypted general attribute. Slack's safe storage key was guarded by a requirement string that did not pin a version, so an older signed build could be abused. The local Kerberos key distribution center keys on each Mac could be exported as root without prompts, which would allow forging tickets.\n\nThe closing takeaways are that secrets should not be placed in general attributes, that code requirements should be pinned to specific versions, and that defenders should consider rotating local Kerberos credentials after a Mac compromise. The speaker also released open-source tools for enumerating and dumping keychain entries.",
+      "durationSeconds": 2080,
+      "publishedAt": "2022-11-01",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "_6e2LhmxVc0",
+      "slug": "what-happens-on-your-mac-stays-on-apples-icloud",
+      "title": "What Happens on your Mac, Stays on Apple's iCloud?!",
+      "speakers": [
+        "Wojciech Regula"
+      ],
+      "track": "red-team",
+      "topics": [
+        "privacy",
+        "vulnerability-research",
+        "cloud",
+        "exploiting",
+        "device"
+      ],
+      "teaser": "Shows how a malicious macOS app can pull iCloud-held location, contacts, calendars and reminders without extra permissions.",
+      "summary": "The talk looks at how macOS protects personal data with System Integrity Protection and the Transparency, Consent, and Control framework, which prompts the user before apps reach documents, contacts and similar resources. Entitlements add another layer. The speaker explains that they are checked against the running process, so code injected into a trusted process can inherit that process's rights.\n\nBuilding on that, the speaker examines an iCloud helper service that hands out account tokens to clients holding a private iCloud entitlement. Two Apple applications with that entitlement, GarageBand and iMovie, could be used to load a malicious dynamic library, because GarageBand disabled library validation and iMovie lacked hardened runtime. With the tokens in hand, the speaker showed that location, contacts, calendar and reminder data could be requested directly from iCloud over HTTP, with no prompts and no root access. Apple has since fixed the issue by blocking those apps through launch requirements. The research is still open for notes, photos and messages, which use protobuf.\n\nFor defenders, the takeaway is that data synchronized to iCloud can be reached through a compromised app's token path, not only through the local protections. Keeping macOS updated and reviewing which data types are synced to iCloud, such as mail, contacts or photos, reduces that exposure.",
+      "durationSeconds": 1424,
+      "publishedAt": "2022-11-01",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "0Tg0GX-mTJk",
+      "slug": "process-injection-breaking-all-macos-sec-layers-with-a-single-vu",
+      "title": "Process injection: breaking all macOS Sec Layers with a Single Vulnerability",
+      "speakers": [
+        "Daan Keuper",
+        "Thijs Alkemade"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "exploiting",
+        "macos",
+        "attack",
+        "system"
+      ],
+      "teaser": "Shows how one process injection flaw in macOS let an attacker escape the sandbox, gain root and bypass SIP.",
+      "summary": "The talk covers CVE-2021-30873, a process injection flaw in macOS that affected applications built on AppKit. The researchers, from Computest, start by contrasting the traditional Unix user-based model of macOS with the newer layers added since System Integrity Protection: entitlements, protected data locations and per-application boundaries between processes running as the same user. They then describe the saved application state feature, which stores window and document data in a custom file whose serialized objects were encrypted with a key stored right beside them and had no integrity check.\n\nThe middle of the talk follows the exploit chain. The team found that the older, non-secure decoding path let them create arbitrary Objective-C objects and invoke methods during deserialization. They used those primitives to run AppleScript inside the target process, then to load Python through a scripting bridge that ships with macOS. Python's C types module, with the function-pointer features removed, gave native code execution despite the hardened runtime and library validation. From there they showed a sandbox escape through the open and save panel service, privilege escalation to root via an Apple-signed installer entitlement, and a SIP bypass by altering the kernel extension approval database. A live demo ended with a root shell and a write to a protected directory.\n\nThe closing takeaways are that adding security layers to a long-lived codebase is hard, because old code still assumes the previous trust model, and that one bug can defeat several layers at once. Apple's complete fix shipped in Monterey and makes secure coding the default for new applications, but third-party developers must still update their own apps to close the issue.",
+      "durationSeconds": 2637,
+      "publishedAt": "2022-11-01",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "JBC9kxAILBM",
+      "slug": "making-orat-go",
+      "title": "Making oRAT, Go",
+      "speakers": [
+        "Patrick Wardle"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "reverse-engineering",
+        "vulnerability-research",
+        "exploitation"
+      ],
+      "teaser": "Shows how a custom command-and-control server can coax a Go-based macOS RAT into revealing its capabilities.",
+      "summary": "The talk examines oRAT, a macOS malware sample written in Go and tied to the Earth Berberoka group. It starts with triage: the binary is a UPX-packed 64-bit Mach-O that expands to a much larger executable because Go statically bundles its libraries. The speaker walks through the difficulties of reversing Go binaries, including strings that are not null-terminated and confuse disassemblers, and shows how to separate third-party code from the malicious logic.\n\nRather than reverse engineering every feature by hand, the analysis recovers the encrypted configuration appended to the file, decrypts it with AES-GCM, and re-encrypts a copy pointing at a custom server. Because the implant multiplexes all its traffic over one connection using the smux library, the speaker built a matching Go server that opens streams and sends routed tasking requests. Process, file and network monitors then recorded the implant carrying out commands such as info collection, file download, a tunnel, a port scan and self-deletion. A separate section covers a local privilege escalation zero-day in Parallels' installer, presented as an aside.\n\nThe main takeaways are that studying APT malware reveals its capabilities and sophistication, and that dynamic analysis through a purpose-built server can be more efficient than heavy static reversing. The speaker also notes that a reconfigurable implant paired with a compatible server is useful to analysts and to attackers alike.",
+      "durationSeconds": 2132,
+      "publishedAt": "2022-11-01",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "GK6TNBjs49g",
+      "slug": "in-walled-gardens-be-careful-of-poisoned-apples",
+      "title": "In Walled Gardens be Careful of Poisoned Apples",
+      "speakers": [
+        "Matthias Frielingsdorf"
+      ],
+      "track": "mobile",
+      "topics": [
+        "mobile",
+        "malware-analysis",
+        "threat-detection",
+        "vulnerabilities"
+      ],
+      "teaser": "Surveys known zero-click iOS malware campaigns and explains why detecting them on-device remains so difficult.",
+      "summary": "The talk opens with a survey of publicly documented iOS malware campaigns, from Pegasus in 2016 through later zero-click and one-click examples. For each case the speaker outlines the infection path, the exploit chain that was used, and the capabilities the implant gave an operator, such as access to messages, contacts, files, the camera and the location. The aim is to connect the dots across reports that were already analysed in depth.\n\nThe middle section separates jailbreaks from malware. Both begin with an exploit and privilege escalation, but a jailbreak then changes the device so users can install tools, while malware wants to stay hidden and typically relies on zero-day exploits. The speaker explains why most mobile defense products look for jailbreak artifacts such as files, remounted partitions and URL handlers, and why that approach misses on-device malware. Options such as crash log review, network analysis and forensic backup inspection are covered along with their practical limits.\n\nTo close, the talk proposes changes to detection. Products should flag malicious behaviour instead of a jailbreak label, separate active jailbreak traces from leftovers after a reboot or update, and correlate several artifacts before drawing conclusions. The speaker also asks Apple for richer forensic and endpoint-style access on iOS, and calls for more training in mobile exploitation and detection. The takeaway is that vendor tooling needs better telemetry and that the community has to work on the problem together.",
+      "durationSeconds": 2197,
+      "publishedAt": "2022-11-01",
+      "difficulty": "intermediate"
+    }
+  ]
+}

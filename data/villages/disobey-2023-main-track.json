@@ -1,0 +1,285 @@
+{
+  "villageSlug": "main-track",
+  "villageName": "Main Stage",
+  "eventSlug": "disobey-2023",
+  "conference": "disobey",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLLvAhAn5sGfjb6p-34rx8B3kKu1xxg-nh",
+  "description": "Main Stage talks from Disobey 2023.",
+  "talks": [
+    {
+      "youtubeId": "9T8pJ5SdwOs",
+      "slug": "the-story-of-vastaamo",
+      "title": "The Story of Vastaamo",
+      "speakers": [
+        "Antti Kurittu"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "ransomware",
+        "lessons-learned",
+        "privacy",
+        "healthcare"
+      ],
+      "teaser": "Traces the Vastaamo psychotherapy patient data breach from an exposed database to extortion, leaked records and regulatory fallout.",
+      "summary": "The talk walks through the rise and fall of Vastaamo, a Finnish company founded around 2010 that offered psychotherapy through many local locations and a digital notes and billing system. The presenter, who led the forensic examination of the breached server for an outside firm, frames the story as a tragedy: fast growth and confidence, followed by a sudden reversal once the company's patient data was exposed.\n\nThe middle section follows the attacker, who posted extortion demands on Finnish forums and released batches of patient records. After a mistake that packed the attacker's whole home folder into one archive, the full dataset spread across the internet and the extortion lost its leverage. The investigation traced the root cause to a database port left open to the internet with a root account that had no password. Earlier unauthorized access was found, but logging was weak, so timing had to be reconstructed from network flow data and the released records.\n\nThe talk then covers the aftermath: the company filed for bankruptcy within about four months, a data protection fine followed, a search site for the stolen records appeared online, and a suspect was later arrested abroad. The presenter argues that regulation at the time did not clearly cover psychotherapy notes and that routine audits never tested for exposed services. The practical takeaway is that sensitive data needs basic exposure checks, logging and backups, because the damage to trust can outlast any technical fix.",
+      "durationSeconds": 3110,
+      "publishedAt": "2023-05-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "YrG6DpMkPFA",
+      "slug": "drug-traders-on-the-dark-web",
+      "title": "Drug Traders on the Dark Web",
+      "speakers": [
+        "J. Tuomas Harviainen"
+      ],
+      "track": "osint",
+      "topics": [
+        "trust",
+        "threat",
+        "intelligence",
+        "privacy",
+        "social"
+      ],
+      "teaser": "Examines how drug buyers and sellers build trust on dark web image boards and the closed groups replacing them.",
+      "summary": "The talk looks at how drug buying and selling works on dark web marketplaces, drawing on research into the Finnish and Polish markets. The speaker, a cultural scholar, explains that the work relies mainly on a dataset of about three million posts from a defunct image board, supplemented by data from other sites. The speaker outlines the channel types involved, from crypto markets and vendor shops to image boards and invitation-only messaging groups, and notes that the trade is moving toward closed apps.\n\nThe middle of the talk covers how participants try to establish trust where almost any claim can be faked. Fake reviews and escrow systems both have weaknesses, so sellers lean on store reputation, nationality-based rules and convenience. Most buyers are recreational users, and many show weak operational security, reusing names from other platforms. Expert knowledge clusters around stolen hardware, fraud and harm-reduction discussions, while the clumsiest posts often come from people asking for help with those same topics.\n\nThe closing section reports that the pandemic and the war have had little lasting effect on the drug trade beyond temporary shortages. For researchers, the talk stresses careful handling of personal data, since third-party names in posts can make large portions of a dataset unusable. The curated dataset has been opened to other researchers on request, subject to review of their intended use.",
+      "durationSeconds": 1697,
+      "publishedAt": "2023-05-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "lkaaodZ46o4",
+      "slug": "need-for-network-visibility-in-the-age-of-modern-edr",
+      "title": "Need for network visibility in the age of modern EDR",
+      "speakers": [
+        "Ville Vainikka",
+        "Henri Aalt"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "threat-detection",
+        "network",
+        "detection",
+        "phishing",
+        "defensive-security"
+      ],
+      "teaser": "Compares EDR endpoint telemetry with SSL-decrypting gateway visibility for spotting C2 traffic and adversary-in-the-middle logins.",
+      "summary": "Two security architects from Valtori, the in-house IT provider for the Finnish government, make the case that endpoint detection and response alone leaves gaps. An EDR sees process, file and basic connection metadata from the operating system, but not what travels inside encrypted web traffic. Their goal is to catch threats that get past prevention controls.\n\nThey compared what an EDR records with what an SSL-decrypting secure web gateway sees. A PowerShell script correlated process and connection data to show the endpoint view, and gateway logs exposed HTTP methods, headers, downloaded files and passive DNS. In a live phishing-to-C2 scenario, the endpoint raised no alert. The gateway's website categorisation blocked the first implant by chance, but a rebuilt client that used a reused, already-categorised domain got through. They then proposed hunting heuristics: base64 in GET requests to uncategorised sites, highly regular polling, and steady periodic connections, with a clear warning that each produces false positives.\n\nFor adversary-in-the-middle phishing, a demo showed a stolen session cookie replayed to get past MFA. Decrypted logs revealed the full login flow, which let responders identify the account that was actually compromised. Their takeaway was to combine application control, EDR and network logs, since no single layer is enough.",
+      "durationSeconds": 2714,
+      "publishedAt": "2023-05-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "17yKWIT6e8w",
+      "slug": "i-am-a-weapon-of-the-mind",
+      "title": "I am a weapon of the mind",
+      "speakers": [
+        "Pyry Åvist"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "phishing",
+        "ai",
+        "machine-learning",
+        "social",
+        "defensive-security",
+        "lessons-learned"
+      ],
+      "teaser": "Compares red team phishing emails with ChatGPT-generated ones across tens of thousands of simulated attacks.",
+      "summary": "The talk opens with a common customer question: will large language models change social engineering? The speaker gives a short, non-technical explanation of how these models predict the next token from large amounts of public text, and argues that at scale human writing is quite predictable.\n\nThe core of the talk is a phishing experiment run on a security awareness platform. An experienced internal red team wrote four phishing emails, and the same prompts were given to ChatGPT to produce matching versions. Across more than 53,000 simulated sends to users in over 100 countries, the AI-written emails had a failure rate of about 2.9 percent, while the human-written ones reached 4.2 percent. Reporting rates were close for both. The gap narrowed for users with more phishing experience, and the speaker noted that the AI emails read as more formal, whereas the human emails were more aggressive and urgent. Country results varied, with some differences tied to the fact that the emails were in English.\n\nThe speaker concludes that language models can already produce lures that work, and that they could make individually tailored attacks cheap. Existing email filtering and awareness training still apply, so defenders should keep those controls current and test these tools themselves.",
+      "durationSeconds": 1709,
+      "publishedAt": "2023-05-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "NnXU-_SDNds",
+      "slug": "locked-sky-boats-simplified",
+      "title": "Locked Sky Boats (simplified)",
+      "speakers": [
+        "Benjamin Nagel"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "architecture",
+        "risk",
+        "system",
+        "trust",
+        "lessons-learned"
+      ],
+      "teaser": "Explains how aircraft are engineered and where cybersecurity fits, from redundancy and building blocks to segregation and testing.",
+      "summary": "The talk walks through how aircraft are designed, built and operated, and where cybersecurity engineering fits into that process. The speaker, who has an avionics background and has worked on aircraft security at a manufacturer and as a consultant, starts with why aircraft fly and how aviation has moved toward more automation, digital flight documents and tighter connectivity. The speaker notes that fewer crew members now carry more responsibility, which raises human-factors questions when systems fail.\n\nThe middle section covers the engineering lifecycle. Aircraft are assembled from interdependent components, and design is iterative: interfaces must match, and parts that do not fit are rebuilt. Redundancy is a key safety tool, but duplicated systems should use dissimilar hardware or software so that one flaw does not disable every copy. Shared multi-core platforms raise a central security concern, because safety-critical avionics must stay separated from passenger networks. Segregation with controlled boundaries and defense in depth address this. Security testing on aircraft relies on detailed test plans and, where possible, isolated test environments, since operational aircraft cannot be probed freely.\n\nThe closing part looks at operations, incident coordination and regulation, including a new European requirement for information security management. The speaker's takeaways are to treat security as end to end, not to trust any interface by default, and to explain security in terms engineering teams can act on without frightening them away.",
+      "durationSeconds": 3095,
+      "publishedAt": "2023-05-14",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "TksmFSNwjZE",
+      "slug": "building-cybersecurity-in-maritime-world",
+      "title": "Building cybersecurity in maritime world",
+      "speakers": [
+        "Karo Vallittu"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "building",
+        "lessons-learned",
+        "risk",
+        "network",
+        "system"
+      ],
+      "teaser": "Traces how Rolls-Royce built cyber defenses for Swan, a demonstrator autonomous passenger ferry, and what went wrong.",
+      "summary": "The talk follows Swan, a 54-metre ferry that Rolls-Royce's research centre in Turku converted into a demonstrator for autonomous navigation. The cyber security lead on the project starts by separating levels of maritime autonomy, from crewed ships with automation up to fully autonomous vessels, and notes that autonomous and uncrewed differ. Because international conventions said little about autonomous ships, the team built its design on class society rules, a US Coast Guard maritime profile of the NIST framework, and the failure-mode methods Rolls-Royce already used for aircraft engines.\n\nThe team concluded that a ship and its shore station needed separate architectures, since a vessel must fail safe without a human while a remote operator is always present. Systems were containerised, duplicated and isolated behind one-way links, with a goal of distributed, immutable and ephemeral components and a minimal attack surface. Security testing exposed navigation equipment that could be manipulated to shift the ship's position. Because satellite links were slow and unreliable, the remote station received a computer-generated view built from lidar point clouds instead of video.\n\nTwo weeks before the voyage, a suspicious connection to a Ukrainian server raised alarms. It turned out to be a time server misconfiguration combined with a network misconfiguration that hid the outgoing traffic. The maiden voyage in December 2018 carried about 120 passengers, with roughly half of the 42 minutes in autonomous mode and the rest under remote control. The main takeaways: security incidents often become safety incidents, so plan for fail-safe states and do not hesitate to get outside help.",
+      "durationSeconds": 3213,
+      "publishedAt": "2023-05-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "fJUT8UZPpYk",
+      "slug": "vulnerability-handling-for-the-masses",
+      "title": "Vulnerability handling for the masses",
+      "speakers": [
+        "Jussi Eronen"
+      ],
+      "track": "recon",
+      "topics": [
+        "vulnerabilities",
+        "infrastructure",
+        "network",
+        "incident-response",
+        "risk"
+      ],
+      "teaser": "Explains how a national cyber security center finds and notifies owners of vulnerable internet-facing systems at scale.",
+      "summary": "Jussi Eronen, from Finland's National Cyber Security Center, looks at what happens after a vulnerability has been fixed and published, when the real work is getting defenders to patch. He starts from the range of incident reports the center receives and argues that vulnerabilities still play a major role in many of them, so they must be handled across a whole country's internet.\n\nThe middle of the talk covers the method. The team first defines \"Finland\" in network terms, building a list of autonomous systems and IP ranges from routing data, registry records, domain lists and cloud partner input. They then compare internet search engines such as Shodan and Censys, noting how much their results differ and how quickly they go stale. To confirm exposure, they check version numbers where these are visible and, where they are not, send lightweight requests for a file that exists only on vulnerable builds. For actively exploited flaws, they searched for known web shell names and found compromised hosts, and a malware sample analysis revealed a hidden backdoor. Notifications went out through operators and by phone, with messages escalating depending on whether a host was vulnerable or already compromised.\n\nThe closing part looks at open problems: compromised small office routers that can sit in an adversary-in-the-middle position, and open services that could be abused for amplified denial-of-service attacks from inside Finland. The takeaways are that accurate asset inventories matter, that scan data needs constant refreshing, and that defenders must decide which problems to chase first.",
+      "durationSeconds": 3461,
+      "publishedAt": "2023-05-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5WoZ9Pv9k0I",
+      "slug": "hacks-of-the-future-and-the-role-of-humans-and-hackers",
+      "title": "Hacks of the Future and The Role of Humans and Hackers",
+      "speakers": [
+        "Connie McIntosh"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "phishing",
+        "threat",
+        "social",
+        "lessons-learned"
+      ],
+      "teaser": "Surveys how generative AI, deepfakes and human error are reshaping attacks and what defenders should expect.",
+      "summary": "The talk opens with ChatGPT's rapid uptake, viewed from a hacker's perspective. The speaker, who leads market-area security at Ericsson, runs a live demonstration: the chatbot is coaxed into writing a phishing email, file-stealing code, and Ducky Script that pulls a saved Wi-Fi password and emails it out. Plain-English prompts, refined over several tries, were enough to produce working tooling.\n\nThe middle section looks ahead to AI-driven reconnaissance and botnets, password cracking aided by adversarial networks, and deepfakes, including a voice-cloned executive that reportedly authorised a large bank payment. Shadow APIs, open source dependencies, browsers, cloud services and supply chains are presented as growing entry points. Citing several industry studies, the speaker argues that human error drives most breaches, and discusses decision fatigue, phishing susceptibility and attacker motives.\n\nThe closing points were to remember that AI-driven hacking has arrived, that APIs and open source libraries need proper inventories, and that people remain the weakest link. Practical measures included enforcing MFA and teaching staff security through visible role models. The Q&A covered executive accountability and whether AI can be limited, with the speaker doubting that regulation will arrive quickly.",
+      "durationSeconds": 3458,
+      "publishedAt": "2023-05-20",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "XGSWNXa4XmU",
+      "slug": "finding-vulnerabilities-in-offensive-security-tooling",
+      "title": "Finding vulnerabilities in offensive security tooling",
+      "speakers": [
+        "Jonas Vestberg"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "windows",
+        "tool",
+        "trust",
+        "lessons-learned"
+      ],
+      "teaser": "Walks through local privilege escalation flaws found in example scripts of a popular Windows pentest toolkit.",
+      "summary": "Jonas Vestberg examines whether the offensive tools that penetration testers rely on can be trusted, using three example scripts from the Impacket collection as case studies. He frames the scenario as an attacker with a low-privilege foothold on a Windows domain environment, where a tester's own tooling becomes part of the attack surface. The examples were reported to their maintainers beforehand, and no CVEs were assigned.\n\nThe first case is a secrets-dumping script that saves registry hives to a predictable location in the system directory, which standard users can reach. A local attacker who watches for those files can copy the boot key and password material before the script removes them. The same logic had been copied into other tools. A second case is a remote-execution script that writes its command output and batch file to a fixed path in the temp folder. A race condition lets a standard user take ownership of that file and swap in a payload that runs as SYSTEM. The third case is a PsExec-style tool whose named pipe grants access to everyone, so an interrupted session can leave a service that any authenticated user can reach.\n\nThe talk closes with practical guidance: review and audit tools before use, build them yourself where possible, test them in a lab while watching the artifacts they leave, agree on rules of engagement with clients, and weigh the risk of relying on vendors for offensive software.",
+      "durationSeconds": 2524,
+      "publishedAt": "2023-05-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "nTRfgEO6tHs",
+      "slug": "stormy-skies-modern-cloud-attacks-and-their-countermeasures",
+      "title": "Stormy Skies - Modern Cloud Attacks and their Countermeasures",
+      "speakers": [
+        "Nick Jones"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "attack",
+        "detection",
+        "identity",
+        "devops",
+        "infrastructure"
+      ],
+      "teaser": "Walks through real-world AWS attack paths, from leaked credentials and CI/CD pipelines, plus detection and hardening advice.",
+      "summary": "This talk focuses on cloud attacks seen in the field, mostly against AWS, with the view that most lessons carry over to Azure and other providers. It argues that rapid deployment, serverless functions and container workloads without operating system access have changed how attacks unfold and how defenders need to watch for them. Credential theft is presented as the dominant entry point, with leaked keys in public repositories, stolen single sign-on sessions, and pivots from on-premises directory services into cloud administration all appearing in real engagements.\n\nThe middle section walks through composite attack paths drawn from client work. One shows how found access keys can be tied to an owning account and an identity while limiting log noise, and how service-linked role names hint at which services are running. Another follows a malicious merge request that triggers code during an infrastructure-as-code plan step, exposing deployment credentials with administrative reach. Detection gaps are covered too: cloud-native threat services catch obvious tooling but are easy to bypass, so control plane audit logs and service-specific logs should be enabled first.\n\nThe closing part lists controls: multi-factor authentication, least privilege on key resources, short-lived credentials instead of long-lived keys, separate accounts per environment, restricted shared services such as central build servers, and regular secret scanning. The main takeaway is to treat CI/CD pipelines and source code platforms as core parts of the security model rather than supporting tools.",
+      "durationSeconds": 3075,
+      "publishedAt": "2023-05-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "cK3j7w8oJzo",
+      "slug": "dont-mind-the-air-gap-maximizing-exfiltration-speeds-via-hdmi-te",
+      "title": "Don't mind the air gap - Maximizing exfiltration speeds via HDMI TEMPEST",
+      "speakers": [
+        "windytan"
+      ],
+      "track": "wireless",
+      "topics": [
+        "attack",
+        "hardware",
+        "device",
+        "network",
+        "practical"
+      ],
+      "teaser": "Shows how HDMI display signals leak radio emissions that can be captured from another room to move data across an air gap.",
+      "summary": "The talk starts with a persistent radio noise the speaker kept hearing at home. Plotting its samples as an image revealed a recognisable desktop, showing that a display link was leaking what it showed. Because HDMI encodes each colour as a 10-bit symbol with differing radio amplitudes, the speaker mapped colours to signal levels and built a crude one-way channel using stripes on screen.\n\nFrom there the speaker designed a unidirectional protocol with packets, position headers, forward error correction, checksums, preambles and frame repetition, since there is no return channel to request retransmission. An early vertical layout suffered from cache misses and tearing on a Raspberry Pi 4, so the layout was changed to horizontal. Reception used a cheap software-defined radio, a directional antenna and a laptop. Throughput reached roughly 200 kbit/s through a closed door, and about a megabit per second after optimisation. The talk also covered hiding data in screensaver-like images, the limits for file transfer versus streaming, and possible uses such as keylogging and game debugging.\n\nNear the end the speaker described HDMI 2.0 spread-spectrum as a mitigation that makes the signal less repeatable, and reported that foil and chicken wire had no measurable effect in tests. The takeaway is that a display link can leak outside an air gap, so physical emanations should be treated as a possible channel in sensitive environments.",
+      "durationSeconds": 2040,
+      "publishedAt": "2023-05-14",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "sH9mNQ5TdjI",
+      "slug": "harvest-attackers-wont-wait-for-post-quantum-standards",
+      "title": "Harvest attackers won't wait for post quantum standards",
+      "speakers": [
+        "Suvi Lampila"
+      ],
+      "track": "privacy",
+      "topics": [
+        "post-quantum-cryptography",
+        "network",
+        "risk",
+        "lessons-learned"
+      ],
+      "teaser": "Explains why harvest-now-decrypt-later attacks make post-quantum key exchange urgent and how to migrate existing network protocols.",
+      "summary": "The speaker, who works on secure shell and VPN encryption products, argues that quantum computers pose a near-term risk to public key cryptography. Attackers can record encrypted traffic today and decrypt it once capable machines exist, so the key exchange needs protection first, with signature algorithms following. The talk contends that quantum key distribution is impractical at internet scale, which makes post-quantum algorithms the realistic option because they run on existing protocols such as TLS, IPsec and SSH.\n\nTimelines for migration have been shrinking, and the presenter pointed to recent government mandates and standardisation work. Because post-quantum algorithms are new and less scrutinised, the recommended approach is hybrid key exchange, which pairs a classical algorithm with a post-quantum one so that either can protect the session. Regions favour different algorithms, and authentication keys are much harder to make hybrid. Practical notes covered OpenSSH 9.0 support, the TLS 1.3 requirement for post-quantum key exchange, and the value of short-lived credentials.\n\nThe closing advice is to start with an inventory of which data must stay confidential for years, such as medical records, then plan for legacy TLS 1.2 systems and embedded devices that are hard to upgrade. Organisations should prepare an emergency migration plan and, where possible, enforce hybrid key exchange now. Audience questions covered data at rest versus data in transit, size constraints on small devices, and the CNSA 2.0 guidance.",
+      "durationSeconds": 2322,
+      "publishedAt": "2023-05-14",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "vZvL6ZRiKls",
+      "slug": "exploiting-insecure-certificate-validation-in-tls-clients",
+      "title": "Exploiting insecure certificate validation in TLS clients",
+      "speakers": [
+        "Aapo Oksman"
+      ],
+      "track": "appsec",
+      "topics": [
+        "vulnerabilities",
+        "trust",
+        "network",
+        "attack",
+        "application"
+      ],
+      "teaser": "Shows how clients that skip certificate checks can be tricked into trusting forged TLS servers, with demos against iOS and Windows.",
+      "summary": "The talk opens with a primer on TLS and certificates, explaining how a certificate lets a client confirm it is talking to the right server. It covers the three checks a client should make: who issued the certificate, who it was issued to, and whether the signature is valid. The speaker argues that many non-browser clients, including IoT devices and internal applications, skip some or all of these checks, and that this is a long-known problem.\n\nThe middle section shows the problem in practice. Using openssl, the speaker creates a self-signed certificate and then clones a publicly issued certificate with a swapped public key, so the signature no longer matches. A code sample from a Microsoft Intune component was shown where the validation function always returned true, which the speaker linked to a 2021 remote code execution issue. Live demos then used rogue DHCP and DNS to redirect an iPhone's App Store traffic to a TLS-terminating listener, and redirected a Windows 11 machine to a spoofed configuration server. The speaker reported that the iOS issue was fixed by Apple and that further related issues are still undisclosed.\n\nThe takeaway is that developers should validate issuer, subject and signature in every client, and should not rely on TLS alone for sensitive downloads or configuration, adding an application-layer encryption or signature check. The speaker also points to badssl.com as a way to test invalid certificate cases in unit tests.",
+      "durationSeconds": 3703,
+      "publishedAt": "2023-05-14",
+      "difficulty": "intermediate"
+    }
+  ]
+}

@@ -1,0 +1,468 @@
+{
+  "villageSlug": "talks",
+  "villageName": "Talks",
+  "eventSlug": "objective-by-the-sea-2024",
+  "conference": "objective-by-the-sea",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLliknDIoYszuWU8jz_QzSrzlpRot4Vrn5",
+  "description": "Talks from Objective by the Sea v7.0 (2024).",
+  "talks": [
+    {
+      "youtubeId": "Iyz5sS67_Vg",
+      "slug": "sweet-quadreams-or-nightmare-before-christmas-dissecting-an-ios-2",
+      "title": "Sweet QuaDreams or Nightmare before Christmas? Dissecting an iOS 0-Day",
+      "speakers": [
+        "Bill Marczak",
+        "Christine Fossaceca"
+      ],
+      "track": "mobile",
+      "topics": [
+        "mobile",
+        "malware-analysis",
+        "exploit",
+        "vulnerability-research",
+        "threat"
+      ],
+      "teaser": "Traces a zero-click iOS spyware campaign from device log artifacts to a calendar invite that carried malicious XML.",
+      "summary": "The talk opens with the private sector offensive actor market, where firms sell intrusion and surveillance tools to governments, and the risk when those tools reach journalists, dissidents and opposition figures. The case centers on a spyware sample tied to QuaDream, an Israeli vendor that has since gone out of business. The speakers separate zero-day from zero-click attacks and explain why BlastDoor hardening of iMessage pushed attackers toward other entry points.\n\nThe research combined two directions. One began with a victim phone, where log review found an implausible binary launched from a system staging directory. The other started from a Go sample attributed to the same actor and was reversed top-down. The sample collected device status, audio, photos, location and keychain items, and it used a declarative predicate language so operators could decide when each feature fired. It also injected code into the process that generates Apple ID two-factor codes and hooked time functions to mint codes for arbitrary times. A calendar cleanup routine led the team to recover a backdated invite from iCloud. That invite carried XML inside a calendar field, which reached the phone's XML parser. The exact parser flaw was not identified, but the injected XML was confirmed to reach the parser.\n\nThe takeaways are practical. Sharing findings across groups uncovered the vector. Newly added cloud-synced services create fresh attack surface. Lockdown mode blocked such interactions from unknown accounts in cases the researchers saw. Because persistence is hard on iOS, a reliable zero-click lets attackers simply reinfect a device after a reboot.",
+      "durationSeconds": 2512,
+      "publishedAt": "2024-12-16",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "nu0G4rPbyHI",
+      "slug": "macos-stealers-stealing-your-coins-cookies-and-keychains",
+      "title": "macOS Stealers: Stealing Your Coins, Cookies and Keychains",
+      "speakers": [
+        "Maddie Stewart",
+        "Suweera De Souza"
+      ],
+      "track": "malware",
+      "topics": [
+        "macos",
+        "malware-analysis",
+        "threat",
+        "intelligence",
+        "network"
+      ],
+      "teaser": "Surveys the macOS infostealer market, its operators, delivery campaigns, and Cuckoo stealer's C2 protocols.",
+      "summary": "The talk opens by explaining why macOS infostealers matter to criminal operators. Windows still holds roughly 70 percent of devices worldwide, so Mac-capable stealers extend reach into the rest of the market. The speakers note that Mac stealers rent for far more than Windows ones because supply is thin. They walk through how these DMG-delivered tools get past Gatekeeper, sometimes with a terminal command that strips quarantine attributes, then prompt for a password and harvest keychains, browser data and crypto wallet material.\n\nThe middle section traces the operators behind the wave. Amos, which appeared in 2023, prompted copycats, and several former customers later launched their own stealers. The speakers cover a timeline of rebrands, exits and retirements, then the delivery side: SEO poisoning, malvertising, fake games, fake job offers, malicious IDE extensions and a vishing campaign that hijacked a router's DNS settings. Lures targeted IT staff, crypto users and gamers.\n\nThe technical centrepiece examines Cuckoo stealer, which adds remote command capabilities beyond data theft. Its three C2 protocols cover configuration retrieval and exfiltration, a backdoor channel for shell commands and reboots, and a file operations channel. The speakers highlight elliptic curve key exchange, the privacy prompt for desktop access, and muting the volume to hide that prompt. They link the developer to a Windows stealer, then close by expecting the same delivery tactics and rat-like features to spread into broader commodity malware.",
+      "durationSeconds": 1653,
+      "publishedAt": "2024-12-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "DqOOggWDtes",
+      "slug": "unraveling-the-iphones-baseband-architecture-to-defend-against-c",
+      "title": "Unraveling the iPhone's Baseband Architecture to Defend Against Cellular Attacks",
+      "speakers": [
+        "Lukas Arnold"
+      ],
+      "track": "wireless",
+      "topics": [
+        "reverse-engineering",
+        "detection",
+        "mobile",
+        "privacy",
+        "network"
+      ],
+      "teaser": "Shows how iPhone baseband traffic can be decoded and used to flag suspicious cell towers with the CellGuard app.",
+      "summary": "iPhone basebands handle the cellular connection, yet they receive little research, and iOS has no system-wide defence against attacks on that link, such as fake base stations or forced downgrades to 2G. The talk walks through how the baseband talks to the rest of the phone: carrier configuration bundles, Apple's remote invocation protocol on Intel modems, and Qualcomm's QMI protocol on newer models. The speaker showed how these messages can be captured and decoded with the BaseTrace tooling, including wireless diagnostics metadata stored as protocol buffers.\n\nThe research then moves to Qualcomm diagnostics data, which exposes over-the-air frames, and to a way of persuading the baseband to use an older logging format. The firmware of the Qualcomm chip, which runs on the Hexagon architecture, is harder to analyse and cannot be modified because it is verified at boot. Location data matters for detection, so the talk explained how Apple's location database maps cells to coordinates and how crowdsourced iPhones populate it.\n\nTo act on this, the team built CellGuard, an iOS app that scores each cell by whether it appears in that database, how far it sits from the reported position, its signal strength and any unexpected network rejections. Cells are classed as trusted, anomalous or suspicious, analysis runs on the device, and data is discarded after a few days. A study across Europe over six to seven months found few anomalous cells, and lab tests with a rogue base station worked best on LTE and older networks. The takeaway is that database coverage was strong in the region, but confirming a suspicious cell remains difficult.",
+      "durationSeconds": 2359,
+      "publishedAt": "2024-12-17",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "2tiC3gjFhew",
+      "slug": "swift-reversing-in-2024-its-not-so-bad",
+      "title": "Swift Reversing in 2024 - It's Not So Bad :)",
+      "speakers": [
+        "Chris Lopez"
+      ],
+      "track": "malware",
+      "topics": [
+        "swift",
+        "reverse-engineering",
+        "malware-analysis",
+        "code",
+        "tool"
+      ],
+      "teaser": "Walks through how Swift binaries look in arm64 disassembly, covering strings, arrays, metadata and calling conventions.",
+      "summary": "Chris Lopez opens by explaining why reverse engineers need to be comfortable with Swift. The language dates to 2014 and has had a stable ABI since Swift 5, and macOS malware written in Swift, including recent info stealers and spyware, is becoming more common. He notes that Swift symbols are mangled but that existing decompiler plugins can demangle them, and that much of the standard library and runtime is open source, which helps when working out how code behaves.\n\nThe middle of the talk covers the low-level details, using disassembly from recent Swift malware samples. On arm64, Swift passes self in register x20 rather than x0 as C++ and Objective-C do, and many tools get this wrong. Small strings are stored inline with a marker and a length, while large strings hold a pointer that must be offset by a native bias before the text can be read. Arrays begin with a metadata header, followed by an element count and then the elements. Static heap objects live inside the binary, structs lay out much like C structs, and Swift classes are backed by Objective-C class structures, so method offsets can be traced through metadata accessors. Type metadata and value witness tables, reached through negative offsets from a type's metadata pointer, round out the picture.\n\nTo make large strings easier to analyze, he showed a Binary Ninja script that resolves them and adds comments at the places where they are used. The main takeaway is that knowing these memory layouts and the calling convention lets an analyst follow what data flows where without guessing, which makes Swift samples far less intimidating.",
+      "durationSeconds": 1033,
+      "publishedAt": "2024-12-17",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "Hv6A2XcUv2s",
+      "slug": "stealer-crossing-new-horizons",
+      "title": "Stealer Crossing: New Horizons",
+      "speakers": [
+        "Alden Schmidt",
+        "Stuart Ashenbrenner"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "threat-detection",
+        "reverse-engineering",
+        "threat"
+      ],
+      "teaser": "Traces macOS infostealer families like AMOS and Poseidon through their code, obfuscation, and infrastructure, with detection ideas.",
+      "summary": "The talk opens with the rise of macOS infostealers in 2024, which target browser data, saved passwords, keychain contents, and cryptocurrency wallets, and which often reach victims through cracked software, fake installers, and poisoned search results. The speakers note that leaked stealer dumps help show the real impact, and that stolen data feeds initial access for later ransomware activity.\n\nThe core of the session walks through several families. Poseidon relies heavily on AppleScript and a base32-encoded payload, and its web panel exposed unprotected admin routes. Banshee moved between C++ and Objective-C builds and protected its strings with a per-string XOR scheme. AMOS has cycled through many packers and eventually wrapped a Poseidon-style AppleScript payload in a custom base64 alphabet. Cthulu's Go source was recovered from a binary, and its exfiltration relied on free file-sharing sites and an open database. A North Korean stealer, RustDoor, is covered briefly for its launch agent persistence. Across these, the payloads are often similar code with new wrappers.\n\nFor detection, the speakers recommend behavioral approaches using endpoint security telemetry. They focus on process trees where a stealer-like application spawns osascript, a shell, dscl for password validation, or system_profiler. Their takeaway is that wrappers change often while the underlying AppleScript and command patterns stay consistent, and that the tool name should not be read as the identity of the operator.",
+      "durationSeconds": 1838,
+      "publishedAt": "2024-12-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Ellb76t7nrc",
+      "slug": "patch-different-on-os-2",
+      "title": "Patch Different on *OS",
+      "speakers": [
+        "John McIntosh"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "reverse-engineering",
+        "open-source",
+        "tool",
+        "mobile",
+        "vulnerabilities"
+      ],
+      "teaser": "Walks through patch diffing Apple OS updates with IPSW files, Ghidra and open-source tools, tying binary changes to CVEs.",
+      "summary": "Patch diffing compares two builds of a binary to reveal what a security fix changed. John McIntosh explains why Apple platforms make this harder than Windows: updates ship as IPSW archives, system binaries are packed into the dyld shared cache, and iOS, macOS, watchOS and tvOS each receive their own updates. The opening section covers finding CVEs on Apple's security release pages and choosing a build to compare against the one before it.\n\nThe middle of the talk covers the workflow. The ipsw tool downloads two firmware versions, diffs them, and extracts the changed binaries, including those inside the shared cache. The binaries are then loaded into Ghidra and compared with Griff, an open-source diffing tool the speaker wrote, to list added, removed and modified functions. Case studies follow: a telephony use-after-free matched against a published write-up, a crypto library timing fix that introduced a safer decode routine, and a privacy-control issue where the fix was an entitlement change with no code difference, so dynamic testing was needed to confirm the path.\n\nThe closing point is that diffing shrinks thousands of functions to a handful worth reviewing, but tying them to a CVE still takes experience. Newcomers are advised to take one CVE end to end, using public research as a check on their own conclusions.",
+      "durationSeconds": 1643,
+      "publishedAt": "2024-12-19",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "qTc_q79IoEY",
+      "slug": "mach-o-in-three-dimensions",
+      "title": "Mach-O in Three Dimensions",
+      "speakers": [
+        "Jaron Bradley"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "machine-learning",
+        "hunting",
+        "threat-detection"
+      ],
+      "teaser": "Shows how mapping macOS malware into 3D space helps analysts tune YARA rules, identify families and hunt threats.",
+      "summary": "This talk from Jamf's macOS threat labs presents a research project that places a large collection of macOS malware samples into a three-dimensional space. Each sample is converted into a vector built from its static features or its assembly code, so binaries that are similar end up plotted close together. The team built a custom browser viewer on a 3D JavaScript library and calls it Titan.\n\nThe demonstration walks through clusters of samples and what an analyst can read from them, including family labels, vendor consensus, YARA coverage, architecture and signing team. Several use cases stand out. An outlier inside an Atomic Stealer cluster exposed a YARA rule that missed related samples, and a group of generic detections turned out to likely be the same family. Encoded variants still landed beside their families, and a filter showed Intel builds far outnumbering ARM ones. The speaker noted that the dataset is somewhat dated.\n\nThe final case study looked at BeaverTail, which earlier public reporting linked to the Lazarus Group. Nearby in the space sat a known Lazarus backdoor, and a binary diff of the two showed similar functions with extra logic added. The speaker framed the output as leads for manual analysis rather than automated attribution, and closed with an update on an upcoming self-published book.",
+      "durationSeconds": 1648,
+      "publishedAt": "2024-12-19",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "G7JAHkk0MW0",
+      "slug": "endless-exploits-the-saga-of-a-macos-vulnerability-exploited-sev",
+      "title": "Endless Exploits: The Saga of a macOS Vulnerability Exploited Seven Times",
+      "speakers": [
+        "Mickey Jin"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "exploitation",
+        "vulnerabilities",
+        "lessons-learned",
+        "macos"
+      ],
+      "teaser": "Traces a PackageKit logic flaw through repeated Apple patches and the bypasses that followed each fix.",
+      "summary": "The talk examines a logic flaw in PackageKit, the private macOS framework that handles package installation. Privileged installer services move package payloads into place, and in some cases they follow symbolic links, so an install can be redirected into SIP-protected locations while the code also clears restrictive file flags and extended attributes. The speaker explains that the same flawed assumption affects some third-party installers as well, and that the result can reach root-level access, bypass System Integrity Protection, and touch TCC-protected data.\n\nThe middle of the talk follows a long back-and-forth with Apple. Each fix changed how the installer checked paths: trust checks on the original and resolved destination, dropping a privilege through a flag, descriptor-based checks, and sandbox directory validation. Each time, the speaker found a way around it using symlink swaps, race windows, disk image mounts to control where sandbox directories landed, and gaps where a check and the flag handling did not match. Some later variants were assigned their own CVEs, and one further variant was withheld from the talk at Apple's request.\n\nThe closing takeaway is that a patch is only as sound as the whole code path it sits in. The speaker argues that several fixes were incomplete or introduced new errors, and that developers and reviewers should examine symlink resolution, path trust checks and attribute propagation together rather than one at a time.",
+      "durationSeconds": 1526,
+      "publishedAt": "2024-12-17",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "DqYyw2WjQPc",
+      "slug": "broken-isolation-draining-your-credentials-from-popular-macos-pa",
+      "title": "Broken isolation: Draining your Credentials from Popular macOS Password Managers",
+      "speakers": [
+        "Wojciech Regula"
+      ],
+      "track": "red-team",
+      "topics": [
+        "application",
+        "vulnerability-research",
+        "attack",
+        "trust",
+        "exploiting"
+      ],
+      "teaser": "Shows how low-privileged code can drain credentials from popular macOS password managers through isolation gaps.",
+      "summary": "The talk opens with the process isolation model on macOS. Applications running under the same user ID should not be able to control each other, and injecting into another process normally depends on entitlements, System Integrity Protection and the hardened runtime. The speaker explains why this boundary matters, since injecting into an entitled app could bypass privacy controls, and notes that hardened runtime exceptions are often switched on by developers.\n\nThe middle of the talk tests several password managers chosen for different languages and distribution channels. A native Objective-C client that disables library validation could load a malicious plugin from a user-writable Application Support folder. A Mac App Store build of an Electron-based manager ran without the hardened runtime, so dynamic library injection worked and a simple keylogger captured the master password. An Electron app with the Node inspector enabled accepted injected JavaScript that decrypted and dumped the vault. In KeePassXC, the key material used by the browser extension pairing channel could be read from browser files, exposing entries. A browser-only manager was decrypted automatically when driven through Selenium.\n\nThe closing recommendations target developers: enable the hardened runtime and review its exceptions, notarize distributed software, disable risky Electron fuses, and penetration test applications. The takeaway is that these protections are only as strong as their exceptions and the weakest component around them, such as the browser.",
+      "durationSeconds": 1655,
+      "publishedAt": "2024-12-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "vWdKjVCZtTI",
+      "slug": "idecompile-writing-a-decompiler-for-ios-applications",
+      "title": "iDecompile: Writing a Decompiler for iOS Applications",
+      "speakers": [
+        "Laurie Kirk"
+      ],
+      "track": "mobile",
+      "topics": [
+        "reverse-engineering",
+        "application",
+        "open-source",
+        "tool",
+        "ios",
+        "machine-learning"
+      ],
+      "teaser": "Presents an open-source iOS decompiler that unpacks IPA resources and reconstructs Swift and Objective-C code on any platform.",
+      "summary": "The talk starts from a gap in tooling: few dedicated resources exist for analyzing iOS apps, and the usual workflow forces analysts to chain separate utilities that run on different operating systems. The speaker splits an IPA bundle into four areas to examine: permissions, resources, the executable, and libraries with frameworks.\n\nEach area gets a cross-platform approach. Binary and XML property lists are decoded with a Java library, and the embedded provisioning profile is stripped of its signature so its entitlements can be read. Localized strings and other resource files are scanned with regular expressions, universal Mach-O binaries are split into architecture slices, and Swift and Objective-C method names are demangled to rebuild class structure. Lifecycle methods serve as entry points, library code is separated from app code by checking documentation, and runtime dispatch calls are resolved from their string arguments. An LLM step then translates decompiled pseudocode into an approximate Swift or Objective-C form.\n\nA demonstration shows the open-source tool, Malimite, loading an IPA with decoded resources and a method view, with translation requested for one function. The takeaway is that a single tool can automate most of the iOS triage workflow across Mac, Linux and Windows, and that the code is released so researchers can extend it.",
+      "durationSeconds": 1594,
+      "publishedAt": "2024-12-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "cU9Az43D2Ic",
+      "slug": "how-to-use-ml-to-detect-bad",
+      "title": "How to Use ML to Detect Bad?",
+      "speakers": [
+        "Martina Tivadar"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "machine-learning",
+        "malware-analysis",
+        "threat-detection",
+        "detection"
+      ],
+      "teaser": "Shows how a machine learning service that flags macOS malware gets built, from log collection to a deployed web app.",
+      "summary": "The talk starts from a familiar bottleneck: manually analysing malware takes hours or even days per sample, and evasion techniques such as obfuscation make the work harder still. The speaker presents a web service that predicts whether a submitted file is malicious, so an analyst only needs to run the sample and gather its logs.\n\nThe training data came from a public collection of macOS malware samples. Each sample was executed in a virtual machine, its behaviour logs were captured as JSON and converted to CSV, and the records were labelled manually based on an analysis tool's output. The rest of the pipeline, covering data fetching, preprocessing, training and deployment, runs automatically through GitHub Actions. Datasets are versioned with DVC rather than Git, and experiments are tracked with MLflow. A binary classifier produces a confidence score, and only when that score is high enough does a multiclass model suggest a malware family name.\n\nThe model is served through a small Flask application packaged in Docker and hosted on Render. A live demo showed a JSON log being uploaded and returning a confidence score followed by a family name. The speaker's takeaway is that machine learning is less intimidating than it might seem. Listed improvements include collecting logs automatically from an uploaded file and speeding up slow processing on the hosting platform. The project was announced as coming soon as open source.",
+      "durationSeconds": 490,
+      "publishedAt": "2024-12-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "N6zpLzrUgCw",
+      "slug": "unraveling-time-understanding-time-formats-in-ios-sysdiagnose-fo",
+      "title": "Unraveling Time: Understanding Time Formats in iOS Sysdiagnose for Sec Forensics",
+      "speakers": [
+        "L. Wilske"
+      ],
+      "track": "mobile",
+      "topics": [
+        "mobile",
+        "device",
+        "incident-response",
+        "detection"
+      ],
+      "teaser": "Explains the timestamp formats found in iOS sysdiagnose files and how they can reveal system time and time zone changes.",
+      "summary": "The talk starts from a forensic problem: when a device may have been tampered with, investigators need exact times to work out when file changes and compromises happened. The speaker shows how a sysdiagnose archive is generated on an iPhone by pressing a button combination, then how it appears under the privacy and analytics settings. The files inside it do not share one layout, and they often use different time representations.\n\nThe middle section surveys the formats seen across these files, including UTC offsets, several ISO 8601 variants, RFC 3339, Unix epoch values, and some unusual weekday, month and year strings. Some files mix formats within a single document. Using a flight from Germany to Ireland as the example, the speaker shows how a time zone change is recorded in the logs and how comparing timestamps across several files narrows the moment of the change. The plist data brings the gap down to about ten seconds, while baseband logs, which record several entries per second, give the most precise view when they are available.\n\nThe closing takeaway is that baseband logs are the most precise source but expire after about 21 days unless enabled manually. For everyday analysis, the plist, the system logging daemon logs, and the log data statistics file hold the most useful time information, with app conduit and mobile activation logs as supporting evidence.",
+      "durationSeconds": 688,
+      "publishedAt": "2024-12-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "_xoA5MrB6ug",
+      "slug": "triangulating-truetype-fonts-on-macos-reconstructing-cve-2023-41",
+      "title": "Triangulating TrueType Fonts On macOS: Reconstructing CVE-2023-41990",
+      "speakers": [
+        "Aleks Nikolic"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "reverse-engineering",
+        "exploitation",
+        "memory",
+        "detection"
+      ],
+      "teaser": "Traces a macOS font rendering bug from an undocumented TrueType instruction to memory corruption, rebuilt without a sample.",
+      "summary": "The talk starts from the Operation Triangulation campaign against iOS devices, where a font embedded in a PDF was reportedly the initial entry point. Public reporting only said it abused an undocumented TrueType bytecode instruction in Apple's font renderer, and no exploit sample was available. Because Apple removed the instruction outright, patch diffing offered nothing, so the vulnerability had to be rediscovered by hand.\n\nThe middle of the talk covers how hinted fonts rely on a bytecode interpreter, and why macOS usually skips that interpreter in favour of auto-hinting. The researcher found that two font properties push the renderer onto the slow interpreter path, then inserted the hidden instruction with font tooling and confirmed it could be reached in a debugger. Reverse engineering showed the instruction takes three parameters and walks point arrays that must stay synchronised. A search loop never checks its starting index, so an out-of-bounds index can reach neighbouring memory, though the value written is only partly controllable.\n\nThe closing section looks at variant analysis across other undocumented opcodes, and at why a practical detection signature would require parsing the font format in depth. Fuzzers struggle with this code unless they are structure-aware and steered toward the interpreter. The PDF path also accepts fonts whatever type the document declares, which widens the surface a defender should consider.",
+      "durationSeconds": 2493,
+      "publishedAt": "2024-12-19",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "Fz6QtdjhtB8",
+      "slug": "apples-not-so-rapid-security-response",
+      "title": "Apple's Not So Rapid Security Response",
+      "speakers": [],
+      "track": "supply-chain",
+      "topics": [
+        "update",
+        "response",
+        "vulnerabilities",
+        "apple",
+        "macos"
+      ],
+      "teaser": "Examines the delivery of Apple's Rapid Security Response updates and how their timing compares to the name.",
+      "summary": null,
+      "durationSeconds": 974,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "RM8fk_-JlYs",
+      "slug": "iphone-backup-forensics",
+      "title": "iPhone Backup Forensics",
+      "speakers": [],
+      "track": "mobile",
+      "topics": [
+        "mobile",
+        "device",
+        "incident-response"
+      ],
+      "teaser": "Covers how investigators recover and examine data held in iPhone backup files for forensic work.",
+      "summary": null,
+      "durationSeconds": 1159,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "kXrGvOfasps",
+      "slug": "a-better-way-yara-x-mach-o-feature-extraction-and-malware-simila",
+      "title": "A Better Way, YARA-X, Mach-O Feature Extraction, and Malware Similarity",
+      "speakers": [
+        "Greg Lesnewich",
+        "Jacob Latonis"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "intelligence",
+        "open-source",
+        "detection",
+        "threat"
+      ],
+      "teaser": "Shows how Mach-O metadata features like dylib hashes and entitlement clusters help track North Korean macOS malware families in YARA-X.",
+      "summary": "Greg Lesnewich and Jacob Latonis of Proofpoint start from a practical gap: when an unknown macOS sample arrives, analysts usually pivot on strings, symbols and disassembly, which takes time. Windows analysts can pivot quickly on import hashes and rich header artifacts, and the speakers wanted comparable metadata pivots for Mach-O binaries. They frame the work around North Korean actors whose macOS and cryptocurrency-focused families they track, and they show how each family's developer habits can be visible even when the code changes.\n\nThe core of the talk is the set of Mach-O features the team built into the Mach-O module of YARA-X, a Rust rewrite of YARA. They parse dylib load commands, including timestamps and version fields, and hash the normalized, sorted list of library names in a way similar to import hashing. They also extract code signing entitlements from the signature blobs and hash those. Export tries and imports, which macOS stores as prefix trees and small state-machine encodings, can be read even when a binary is stripped. Case studies walk through AppleJeus-linked samples, Candy Corn, and TraderTraitor-related families, including first-stage loaders clustered by entitlement hash alone. The speakers also report retro hunting these rules against VirusTotal, where they found few hits for one rule.\n\nThe takeaway is that lightweight metadata similarity points to shared build preferences and developer habits, not to proven code overlap, so it works best as a selector that narrows a large set. The features are open source and usable from YARA rules or the Python package, and the speakers listed ongoing work such as linker option parsing and certificate parsing.",
+      "durationSeconds": 2161,
+      "publishedAt": "2024-12-17",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "MZbDiKI4j9Q",
+      "slug": "tripwires-in-the-dark-developing-behavior-detections-for-macos",
+      "title": "Tripwires in the Dark: Developing Behavior Detections for macOS",
+      "speakers": [
+        "Colson Wilhoit"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "threat-detection",
+        "detection",
+        "defensive-security",
+        "malware-analysis",
+        "threat"
+      ],
+      "teaser": "Shows how behavior-based rules catch macOS threats that signatures and ML models miss, using real C2 tradecraft examples.",
+      "summary": "Colson Wilhoit, a senior security research engineer at Elastic, argues that macOS defenses built on signatures, YARA rules and machine learning models leave gaps, since notarized, signed samples often pass all three. He surveys the macOS threat landscape and the built-in controls such as Gatekeeper, TCC and SIP, along with the endpoint security framework and unified logs that endpoint tools rely on, and notes how attackers slip past each one.\n\nThe core of the talk is behavior detection, defined as rules that sequence observable actions and flag deviations from normal system behavior. He stresses that useful detections depend on selective, high-quality telemetry, knowledge of how macOS is meant to work, and tracking of current attacker techniques. He then walks through two examples from the Mythic C2 framework: an XPC-based execution method that appears as launchd spawning xpc_proxy to run itself, and in-memory JavaScript for Automation loading, which leaves library load events that are hard to avoid. Cases include an Amos-family sample caught by rules written for earlier, unrelated malware, and a DPRK intrusion that a single file-based rule flagged at a late stage.\n\nTo close, he covers network domain enrichment for catching Python-based initial access droppers, chaining rules with AI-assisted summarization, and Elastic's open-source rules and stack. The takeaway is that behavior rules raise attacker cost, keep working against new payloads, and fill gaps left by other controls.",
+      "durationSeconds": 2726,
+      "publishedAt": "2024-12-17",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "nXbmng0U_Iw",
+      "slug": "mac-wheres-my-bootstrap-what-is-the-bootstrap-server-and-how-can",
+      "title": "Mac, Where’s my Bootstrap? What is the Bootstrap Server & How Can U Talk To It?",
+      "speakers": [
+        "Brandon Dalton",
+        "Csaba Fitzl"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "macos",
+        "threat-detection",
+        "vulnerability-research",
+        "exploitation",
+        "defensive-security"
+      ],
+      "teaser": "Explains how launchd can be queried for XPC service metadata to help detect abuse of privileged macOS helper services.",
+      "summary": "The talk opens with XPC, the Mach-based inter-process communication used across Apple platforms, and why privileged third-party helper services are attractive targets. The speakers walk through the checks a service should perform on connecting clients, such as code-signing requirements, bundle and team identifiers, version and hardening, and audit tokens, and note how easily these are missed. They then cover the Endpoint Security XPC_CONNECT event introduced in Sonoma and what it leaves out.\n\nThe main gap is that the event gives a service name and domain but not the program path of the service, which detection needs in order to verify code signing on both ends. The speakers explain launchd domains, including system, user, login, GUI and per-process PID domains, and show how launchctl and a community reimplementation of its queries can be used. Some undocumented routines return data through shared memory as C strings, so parsing requires careful handling. The speakers present a free tool that resolves service paths from these events and runs a basic detection. They demonstrate it against a public proof-of-concept exploit, which produced alerts for a mismatched team ID and for a replaced helper binary.\n\nTo close, they recommend that Apple include the service program path and team ID in the XPC connection event so detection is simpler, and they announce a planned macOS vulnerability research training.",
+      "durationSeconds": 1204,
+      "publishedAt": "2024-12-17",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "VCRWZDMlWdo",
+      "slug": "from-theory-to-practise-lets-find-an-ios-commercial-spyware-samp",
+      "title": "From Theory to Practise - Let's find an iOS Commercial Spyware Sample",
+      "speakers": [
+        "Matthias Frielingsdorf"
+      ],
+      "track": "mobile",
+      "topics": [
+        "mobile",
+        "malware-analysis",
+        "exploitation",
+        "threat-detection",
+        "vulnerability-research"
+      ],
+      "teaser": "Walks through the analysis of an NSO BlastPass iOS exploit sample and what it reveals about commercial spyware detection.",
+      "summary": "The talk continues a series on detecting iOS spyware and asks whether forensic-based detection holds up on a real case. It starts with a customer's device whose crash logs and iTunes backup showed repeated crashes in system processes, which pointed to an exploit sample tied to NSO's BlastPass chain. The sample was delivered through an image attachment, and its hidden payload was built from NSExpression code that could call Objective-C runtime functions and sidestep code-signing controls.\n\nThe middle section covers the analysis itself. The staged payloads were compressed, encoded and partly encrypted, so the work involved decoding them and rewriting the NSExpression logic into a readable pseudo-Objective-C form. The analysis showed a configuration check that limited the exploit to certain iOS versions and device models, timing checks that exited when execution looked slow, suppression of logging, and deliberate crashes of helper processes so that other bugs were not exposed. Some stages stayed unrecovered, including the sandbox escape and the command-and-control structure.\n\nThe speaker then tested the approach at scale. A consumer feature that accepted uploaded diagnostic data was used to scan about 2,500 devices, producing roughly 2.5 Pegasus detections per 1,000 devices. The closing section argues for better iOS telemetry similar to macOS Endpoint Security, clearer notifications that show attack timing, better access to memory and samples for forensics, and more sharing of samples between defenders. The takeaway is that detection depends on collecting the right forensic data, and that current access limits make that difficult.",
+      "durationSeconds": 1476,
+      "publishedAt": "2024-12-17",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "d_QR7dUt0bY",
+      "slug": "a-little-less-malware-a-little-more-context-using-llms-to-detect",
+      "title": "A Little Less Malware, A Little More Context: Using LLMs to Detect Malicious macOS Activity",
+      "speakers": [
+        "Kimo Bumanglag",
+        "Joseph Millman"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "ai",
+        "threat-detection",
+        "macos",
+        "malware-analysis",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how an LLM can triage macOS command-line telemetry to flag malware and masquerading that static checks miss.",
+      "summary": "The speakers, both from OpenAI's threat intelligence and detection teams, start from the idea that process command lines are language a model can read. They built a macOS lab that logged endpoint security events into an Elastic stack, then sent process groups to a model through an API and requested a structured verdict, a suspicion score, ATT&CK tags and a short analysis. Test families included info stealers, a loader, a remote access tool driven by a Caldera agent, admin scripts that mimicked insider activity, and ransomware. Most malicious cases scored high, while routine administrator work stayed benign. Ransomware was missed because it spawned no extra processes and left little command-line context.\n\nThe middle of the talk focused on context and prompting. Analyzing commands one at a time produced far more false positives than grouping them by process group, since the model could not judge whether an action was expected. Adding the user's role to the grouped data cut false positives further and helped the model judge intent. Sequences also exposed masquerading and encode-decode chaining that single commands hid. A detailed system prompt, which breaks the task into tagging, scoring and explanation steps, gave much better precision than a short prompt at similar recall.\n\nThe takeaways were that LLM detections should augment EDR rather than replace it, and that one prompt can cover several attack types without depending on exact syntax the way signatures do. Prompt edits change output, so versioning and evaluation matter, and structured outputs make it easier to feed results into SIEM or SOAR tooling. Future ideas included larger context windows, retrieval from internal repositories, fine-tuning, and applying the approach to application logs and network data.",
+      "durationSeconds": 1640,
+      "publishedAt": "2024-12-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "2fQIDWJV1nk",
+      "slug": "unveiling-the-apple-cve-2024-40834-a-shortcut-to-the-bypass-road",
+      "title": "Unveiling the Apple CVE-2024-40834 - A 'shortcut' to the Bypass Road",
+      "speakers": [
+        "Marcio Almeida"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "phishing",
+        "attack",
+        "trust",
+        "exploitation"
+      ],
+      "teaser": "Shows how Apple's Shortcuts app can be abused to run commands and read files past its script-execution block.",
+      "summary": "The talk grew out of a red team engagement that needed an initial payload for macOS without relying on a zero-day. Shortcuts looked promising because users already trust it. The speaker, a penetration tester at a small Australian firm, explains how the app chains actions into automations that Apple signs and lets people share. Script execution is blocked by default and must be enabled manually, but file operations such as write, append, move and rename need no special approval.\n\nBy writing a shell startup file in the home directory and then opening Terminal, the speaker showed that code runs without warnings. An early attempt failed because appending only worked on files that already existed. The working version saved a payload, renamed it to a dotfile with the extension stripped so the file was created, and then shared the shortcut. Apple signed it, and a calculator pop-up served as the demo. The signed or unsigned file could be sent by email, and the speaker reported that mail services and antivirus tools did not flag it at the time. Apple's fix added a prompt on move and rename, but appending to existing files remained exploitable. The talk also described file read through URL handlers and several other Shortcuts issues.\n\nThe main takeaway is that a trusted, vendor-signed automation tool can serve as a phishing delivery and execution path. Defenders should treat such apps as part of their attack surface, and researchers are encouraged to probe handler protocols and file primitives in similar tools.",
+      "durationSeconds": 1129,
+      "publishedAt": "2024-12-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "2Tvo8YpVaek",
+      "slug": "mirror-mirror-restoring-reflective-code-loading-on-macos",
+      "title": "Mirror Mirror: Restoring Reflective Code Loading on macOS",
+      "speakers": [
+        "Patrick Wardle"
+      ],
+      "track": "red-team",
+      "topics": [
+        "macos",
+        "attack",
+        "detection",
+        "threat",
+        "defensive-security"
+      ],
+      "teaser": "Shows how in-memory code loading still works on macOS 15 by reusing an older open-source dyld loader.",
+      "summary": "Reflective, or in-memory, code loading runs a compiled payload straight from memory so it never touches disk, which sidesteps file-based scanning. This talk looks at how that works on macOS, where Apple's process memory isolation stops security tools from reading another process's memory. It reviews earlier malware that used Apple's loader APIs for the technique, some of it copied almost unchanged from old sample code.\n\nThe speaker shows that newer versions of the loader quietly write the memory buffer to a file first, which undoes the technique. He tests workarounds: redirecting the temp directory to a RAM disk, lengthening the generated file name so a hardcoded path check misses it, and finally compiling an older open-source dyld into a custom loader. That loader maps code in-process without writing files, and it still runs under the hardened runtime when Apple's supported entitlement exceptions are added.\n\nFor detection, the loading step produced no unified log or Endpoint Security events in his tests. Reactive checks such as inspecting memory mappings with vmmap or sampling threads for unknown binaries are possible but limited, and the exception entitlements are common enough to be a weak signal. The practical takeaway is to watch what the payload does after it runs.",
+      "durationSeconds": 1714,
+      "publishedAt": "2024-12-17",
+      "difficulty": "advanced"
+    }
+  ]
+}

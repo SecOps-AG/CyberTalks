@@ -1,0 +1,500 @@
+{
+  "villageSlug": "talks",
+  "villageName": "Talks",
+  "eventSlug": "objective-by-the-sea-2023",
+  "conference": "objective-by-the-sea",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLliknDIoYszseXmn3z7XVwPzWO504Wup8",
+  "description": "Talks from Objective by the Sea v6.0 (2023).",
+  "talks": [
+    {
+      "youtubeId": "f9UJubLacAQ",
+      "slug": "her-hax-podcast-live",
+      "title": "Her Hax podcast live",
+      "speakers": [
+        "Andy Rosenberg"
+      ],
+      "track": "community",
+      "topics": [
+        "interview",
+        "diversity",
+        "learning",
+        "social",
+        "discussion"
+      ],
+      "teaser": "The founders of Objective by the Sea discuss the conference's origins, diversity initiatives, and student scholarships.",
+      "summary": "Recorded live at the Objective by the Sea conference in Marbella, this HerHax podcast episode features the conference's founders discussing how the event started. They trace it to a chance meeting in Argentina that led to a first edition in Hawaii in 2018, built around a welcoming community and a strong focus on technical content.\n\nThe middle of the conversation covers the Objective We initiative, launched the previous year with a commitment of $100,000 toward diversity work. The founders describe their approach as education and communication, pointing to student scholarships for young people in Maui and for students attending the conference. They say the talent already exists, so the goal is to encourage people, especially those nervous about submitting a talk, and they mention plans for a speaker mentoring idea.\n\nThe episode closes with ways listeners can support the nonprofit: encouraging people at companies to ask their employers to sponsor it, sending ideas for future events, and spreading word of mouth. The practical takeaway is that a community-first, merit-based approach can grow participation without forcing it, and that a direct invitation to submit a talk can change who ends up on stage.",
+      "durationSeconds": 2038,
+      "publishedAt": "2023-10-23",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Uov3KKO959E",
+      "slug": "a-journey-into-reversing-rustbucket-on-macos",
+      "title": "A Journey into Reversing RustBucket on macOS",
+      "speakers": [
+        "Jaron Bradley",
+        "Ferdous Saljooki"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "reverse-engineering",
+        "threat-detection",
+        "threat",
+        "tool"
+      ],
+      "teaser": "Follows the reverse engineering of a Rust-based macOS backdoor attributed to BlueNoroff, from initial triage to C2 emulation.",
+      "summary": "The talk opens with the North Korean Lazarus group and its BlueNoroff subgroup, which runs financially motivated campaigns against crypto firms and banks and often wins targets' trust through fake job or business approaches. The speakers explain how RustBucket came to light: not from a customer endpoint, but from an unsigned, unnotarized compiled AppleScript app found on VirusTotal while hunting for generic curl-in-AppleScript patterns.\n\nTo trace the malware's behavior, they introduce SpriteTree, a Swift and SpriteKit tool that visualizes macOS process trees from es_logger captures, with a timeline slider and coloring by responsible process. Running the first stage showed it downloading a second app that showed a PDF viewer and did little else. Pivoting on a shared XOR key led them to PDF files, and then to one that unlocked the download-and-execute routine. The third stage is a Rust binary, and the speakers walk through its static linking, mangled symbols, and crate fingerprints, which they used to estimate a late-2022 development window. They also map its check-in protocol, including the POST data prefixes and command bytes the server uses.\n\nTo confirm their understanding, they built a custom C2 server in Rust that served the payload, logged check-ins, tasked the malware to launch calculator, and then terminated it. The practical takeaways are network detections based on the structure of POST data and the value of process-tree views for hunting macOS threats.",
+      "durationSeconds": 2537,
+      "publishedAt": "2023-10-23",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "5JuSp_7Xf1o",
+      "slug": "iobfuscate-unraveling-ios-obfuscation-techniques",
+      "title": "iObfuscate Unraveling iOS Obfuscation Techniques",
+      "speakers": [
+        "Laurie Kirk"
+      ],
+      "track": "mobile",
+      "topics": [
+        "mobile",
+        "malware-analysis",
+        "reverse-engineering",
+        "obfuscation",
+        "tool"
+      ],
+      "teaser": "Walks through the obfuscation layers in iOS apps, from App Store encryption to Swift name mangling and VM-based protection.",
+      "summary": "The talk walks through the protections that stand between a reverse engineer and an iOS app's logic. Apple encrypts App Store binaries with FairPlay, so getting a usable binary normally requires a jailbroken device, and tools that claim to fetch decrypted IPAs often return only the encrypted copy. Beyond that platform layer, malware authors add their own obfuscation. Swift name mangling looks daunting at first, but the demangler built into Swift reverses it, and the speaker shares a Ghidra script that automates renaming across a binary.\n\nAuthor-applied techniques include identifier renaming, control-flow flattening that routes code through a dispatch variable, and dead code inserted around lifecycle callbacks. The runtime section covers Objective-C swizzling, shown in a case from the Goon spyware family, where hooked session resume and suspend methods were exchanged to run extra code while the original methods still appeared unused. A second Ghidra script flags swizzling-related runtime calls. The talk then covers anti-debugging, jailbreak and simulator checks, and virtual-machine obfuscation, where custom bytecode is translated by an interpreter in native C++ code.\n\nThe closing section looks at App Store cases, including InstaAgent, which uploaded Instagram credentials in cleartext and reached around 500,000 downloads, and XcodeGhost, which infected apps during development by tampering with Xcode. The takeaway is that these layers protect legitimate developers but also slow analysts, so analysts should expect them. The speaker also announced an open-source iOS reverse engineering wiki and sample IPAs for practice.",
+      "durationSeconds": 1548,
+      "publishedAt": "2023-10-23",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "PwxmRqfsU18",
+      "slug": "the-clock-is-tccing",
+      "title": "The Clock is TCCing",
+      "speakers": [
+        "Calum Hall",
+        "Luke Roberts"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "privacy",
+        "macos",
+        "detection",
+        "defensive-security",
+        "open-source"
+      ],
+      "teaser": "Shows how macOS TCC permissions can be made more visible and controllable for end users through logs and a new tool.",
+      "summary": "The talk opens with a quick look at Apple's Transparency, Consent and Control (TCC) framework, which gates application access to resources such as the microphone, camera and protected folders. The speakers explain how the TCC daemon consults several stores, including user and system databases, MDM overrides and app entitlements, before deciding on a request.\n\nFrom an attacker's perspective, they outline three routes: inheriting Full Disk Access through a terminal, abusing bugs in legitimate applications to borrow their grants, and wearing users down with repeated prompts. They point out that permissions are keyed to bundle identifiers rather than versions, that prompts reveal little, and that no usage history exists. For visibility, they mine the unified log written by the daemon, using six structured entry types that link a request to its responsible, accessing and requesting processes and the outcome. Log formats shift subtly between macOS releases, which they tracked with a CI matrix.\n\nThey introduce Kronos, an open-source tool that enriches TCC prompts with the requesting binary path and PID, keeps a searchable usage history, shows signing details, and lets users revoke grants after a time limit or when an app quits. It also uses Endpoint Security to alert on direct edits to the user TCC database. Planned work covers bug fixes, version-aware permissions and UI improvements, and the speakers suggest Apple could publish TCC events through Endpoint Security.",
+      "durationSeconds": 1310,
+      "publishedAt": "2023-10-23",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "1BN8G4l2L1c",
+      "slug": "stewie-talking-to-apples-satellite-network",
+      "title": "Stewie: Talking to Apple's Satellite Network",
+      "speakers": [
+        "Jiska Classen",
+        "Alexander Heinrich"
+      ],
+      "track": "mobile",
+      "topics": [
+        "mobile",
+        "privacy",
+        "reverse-engineering",
+        "wireless"
+      ],
+      "teaser": "Examines how Apple's satellite SOS and location sharing services work and how they protect access and privacy.",
+      "summary": null,
+      "durationSeconds": 2384,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "v9U4oXgVMEM",
+      "slug": "santas-got-a-brand-new-bag",
+      "title": "Santa's Got a Brand New Bag",
+      "speakers": [
+        "Matt White",
+        "Pete Markowsky"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "open-source",
+        "defensive-security",
+        "detection",
+        "device",
+        "lessons-learned"
+      ],
+      "teaser": "Explains Google's redesign of the open-source Santa Mac agent around Endpoint Security and the features it enables.",
+      "summary": "Santa is an open-source policy enforcement agent for macOS that Google uses across a large fleet. It mainly handles binary authorization and file access authorization, and it also collects process, file and mount telemetry. Administrators run it in lockdown or monitor mode and manage it through a sync protocol. That protocol runs in phases, with pre-flight status, event upload, rule download and postflight, so configuration changes are applied together and rolled back if they fail.\n\nThe speakers walk through the agent's components, including the main daemon, the bundle, metrics and sync services, and the command line tool. They describe how Google builds and staggers releases across rollout tracks, and how a social voting process lets colleagues approve unknown binaries before a fleet-wide allow rule is pushed. The talk then traces the move from an older kernel-extension design to Endpoint Security, the split into separate clients, and the structured protobuf logging that followed. New capabilities covered include USB mass storage control, file access rules that guard paths such as browser cookies, team and signing ID rules, and static rules that override user exceptions.\n\nFor defenders, the closing section shows how richer process data, such as pipe tracking, code signing flags and environment variables, supports detection, and how tripwire files can reveal which process touched a credential. The roadmap includes closing USB blocking gaps, logging entitlements, timestamp-based rules and process-tree conditions. The speakers finish by inviting documentation fixes, code contributions and new sync service implementations.",
+      "durationSeconds": 2218,
+      "publishedAt": "2023-10-23",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Yw8yre1W4io",
+      "slug": "electronizing-macos-privacy-a-new-weapon-in-your-red-teaming-arm-3",
+      "title": "ELECTRONizing macOS Privacy - a New Weapon in Your Red Teaming Armory",
+      "speakers": [
+        "Wojciech Reguła"
+      ],
+      "track": "red-team",
+      "topics": [
+        "macos",
+        "privacy",
+        "attack",
+        "application",
+        "detection",
+        "open-source"
+      ],
+      "teaser": "Shows how abusing Electron defaults lets attackers inherit macOS privacy permissions from trusted desktop apps.",
+      "summary": "The talk looks at macOS Transparency, Consent and Control (TCC), the framework that gates access to sensitive resources such as files, the camera, microphone and screen capture. It explains that user decisions are stored in per-user SQLite databases, and that permissions granted to an application can pass down to the processes it spawns. Many Electron-based programs, including chat clients, code editors and developer tools, are installed from the internet and usually hold such permissions, which makes them a useful route in.\n\nThe speaker described how Electron apps pair an embedded web view with a bridge to native system APIs, and how default settings can allow code to be injected into a running app through its developer tools debugging interface. A free, open-source tool was shown that lists installed Electron apps, checks whether they are vulnerable, and injects predefined or custom JavaScript. Demonstrations included a shell spawned from Visual Studio Code reaching a protected desktop folder, a camera capture through Microsoft Teams, and a screenshot taken through an older Slack build. Because injection leaves the main binary untouched, it sidesteps the app protection added in macOS Ventura. Electron fuses can disable the debugging flag, but the code signing requirements stored for TCC only identify the publisher, not the app version, which keeps downgrade attacks viable.\n\nFor defenders, the main recommendation is detection, such as monitoring endpoint security exec events for Electron processes launched with the inspect flag. The speaker argued that a complete fix has to come from Apple, since developers cannot protect their own apps against this behaviour.",
+      "durationSeconds": 1569,
+      "publishedAt": "2023-10-23",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "RCLuFojYHvg",
+      "slug": "snapshot-fuzzing-macos-kernel-via-emulation",
+      "title": "Snapshot Fuzzing macOS Kernel Via Emulation",
+      "speakers": [
+        "Aleksander Nikolic"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "fuzzing",
+        "kernel",
+        "virtual",
+        "vulnerabilities"
+      ],
+      "teaser": "Shows how snapshot-based coverage-guided fuzzing of macOS kernel components can run under an x86 emulator on commodity hardware.",
+      "summary": "The talk presents a project that brings snapshot-based, coverage-guided fuzzing to macOS kernel components. The speaker explains why fuzzing closed-source Apple code is hard: there is no source for compile-time instrumentation, dynamic binary instrumentation tools struggle with kernel code, and testing on Apple hardware limits how far the work can scale. Snapshot fuzzing avoids repeated startup cost by recording a running state and restoring it for each test case.\n\nThe middle of the talk covers the build. An earlier prototype on a bare-metal hypervisor needed dedicated physical hardware, so the team took VMware Fusion snapshots instead. They used the VMware GDB stub to pause the guest at a chosen breakpoint, then saved the memory and CPU state. The undocumented machine state file was parsed by patching an existing Volatility parser. The memory dump was loaded into an extended version of an existing Windows-focused fuzzer that runs an x86 emulator, and crashes are caught with a breakpoint on the kernel exception triage function.\n\nThe worked example targets the IPv6 input path. A packet is mutated in the mbuf before each run, and a single core reached roughly 1,000 executions per second. Coverage tracing, symbolized traces and IDA Lighthouse visualization were added for analysis. The main takeaway for practitioners is that emulation-based snapshots let kernel fuzzing run on ordinary servers, while Apple silicon support and more kernel targets remain future work.",
+      "durationSeconds": 1559,
+      "publishedAt": "2023-10-23",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "m_RTWaBkEwk",
+      "slug": "poisoned-how-do-we-find-them",
+      "title": "Poisoned - How Do We Find Them?",
+      "speakers": [
+        "Matthias Frielingsdorf"
+      ],
+      "track": "mobile",
+      "topics": [
+        "malware-analysis",
+        "threat-detection",
+        "mobile",
+        "device",
+        "incident-response"
+      ],
+      "teaser": "Shows how to collect forensic data from iPhones, including a live backup and sysdiagnose demo, to spot spyware.",
+      "summary": "The talk updates the speaker's earlier overview of iOS spyware with the samples reported in 2023, including Operation Triangulation, a third Pegasus version, Quadream Reign and a new Predator sample. For each, it looks at which indicators of compromise were published and how the infections were found. The core point is that an app on the device sees very little, while backups and sysdiagnose archives expose files, network activity and running processes.\n\nThe middle section covers a practical workflow. A live demo creates an encrypted local backup in Finder and triggers a sysdiagnose on an iPhone, then copies the archive to a Mac, where its process list can show root-level processes from unexpected sources. The speaker stresses the drawbacks: long runtimes, little feedback on the phone, the need for Python skills, and a shortage of forensic experts. He suggests that targeted people keep their systems updated, back up regularly to storage away from their Mac, and consult specialists when a phone behaves oddly.\n\nThe closing section looks at developer mode, which the Predator sample checks before running, and demonstrates on a jailbroken iOS 15 device how privileged access reveals apps and a known Predator-associated file. The conclusion is that iOS spyware is still found mainly through manual forensics, that endpoint visibility on iOS needs work, and that companies should plan for targeted staff.",
+      "durationSeconds": 1898,
+      "publishedAt": "2023-10-23",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "kTAVU_2Jjs4",
+      "slug": "dissecting-the-protocols-inside-apple-airtags",
+      "title": "Dissecting the Protocols Inside Apple AirTags",
+      "speakers": [
+        "Christine Fossaceca"
+      ],
+      "track": "wireless",
+      "topics": [
+        "privacy",
+        "reverse-engineering",
+        "device",
+        "networks",
+        "bluetooth"
+      ],
+      "teaser": "Breaks down the Bluetooth packet format and key exchange that let Apple AirTags report locations through the FindMy network.",
+      "summary": "The talk follows up on a previous year's session about Apple's Continuity protocol and focuses on the FindMy packets AirTags send over Bluetooth Low Energy. The speaker shows how to split raw captures into fields: the access address, packet header, rotating advertising address, and the manufacturer data marked with Apple's identifier. She cautions that this identifier alone does not prove a device is genuine, since any Bluetooth emitter can spoof it.\n\nThe central section covers offline finding. An AirTag has no GPS, so it broadcasts a public key that nearby phones use to encrypt their own location reports before uploading them to Apple. The speaker explains the P-224 elliptic curve exchange, the ECIES construction built on SHA-256 and AES-128, and how the owner's device derives matching keys to download and decrypt reports. She also walks through the pairing state machine and the separated-mode broadcast, which packs key material into the advertising address and spare bytes to fit Bluetooth size limits.\n\nThe talk closes by stressing limits: forged locations from compromised finder devices, delayed uploads, and the fact that this is not live tracking. Practitioners leave with a method for parsing Continuity packets and a view of why the design is strong on paper yet open to misuse. The speaker also looks ahead to new IETF standards that may affect how long this protocol remains in use.",
+      "durationSeconds": 1710,
+      "publishedAt": "2023-10-23",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "AqFsFPVXkcU",
+      "slug": "two-more-ways-the-quarantine-attribute-can-fail-us",
+      "title": "Two More Ways the Quarantine Attribute Can Fail Us",
+      "speakers": [
+        "Arthur Valiev",
+        "Rasmus Sten"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "reverse-engineering",
+        "exploitation",
+        "system",
+        "defensive-security"
+      ],
+      "teaser": "Walks through two macOS Gatekeeper bypasses caused by missing quarantine attributes, from discovery to root cause.",
+      "summary": "The talk looks at two Gatekeeper bypasses in macOS, CVE-2021-1810 and CVE-2023-27943, both uncovered while the presenters built their own endpoint protection product. Gatekeeper only runs its checks on files carrying the quarantine attribute, which the system normally sets when a browser downloads a file. The first case involved a Chrome download that arrived without that attribute. Tracing it through the launch services code led to a flag passed to a kernel call: vulnerable builds sent zero where patched builds sent one, and overriding the value in a debugger confirmed the fix.\n\nThe second bug surfaced from a customer complaint about long file paths inside archives. Archive Utility skipped quarantine for files nested at a particular path length, because its extraction code asked the traversal API to keep absolute paths and skip changing directories, and the staging location pushed those paths past the system limit. A crafted archive, paired with Safari's refusal to unpack it, pushed users toward Archive Utility in a demonstration. Apple moved quarantine handling into a separate helper process that works with relative paths.\n\nFor practitioners, the takeaways are that quarantine-based protections can fail in edge cases, that low-level path handling is easy to get wrong, and that testing software against common tools on the platform can surface such issues early. The speakers left open questions about a kernel change between Monterey and Ventura and about reliable kernel debugging, and suggested that path-length boundaries deserve more research.",
+      "durationSeconds": 1734,
+      "publishedAt": "2023-10-23",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "yCkThfoTnKI",
+      "slug": "demystifying-macoss-background-task-management",
+      "title": "Demystifying macOS's Background Task Management",
+      "speakers": [
+        "Patrick Wardle",
+        "Chris Lopez"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "reverse-engineering",
+        "threat-detection",
+        "malware-analysis",
+        "vulnerability-research",
+        "macos"
+      ],
+      "teaser": "Explains how macOS Background Task Management tracks persistent items, and how security tools and attackers interact with it.",
+      "summary": "Persistence is what lets most macOS malware survive a reboot, and Apple's Background Task Management (BTM), introduced in Ventura, centralizes persistent items and alerts users when new ones appear. The talk starts from the question of how this subsystem actually works, since its internals are undocumented and proprietary.\n\nChris Lopez walks through the BTM daemon and its user agent. He shows how file system events are turned into item records in a proprietary database, how access to the daemon's XPC service is limited by an entitlement, and how profile-managed and curated items are handled. Patrick Wardle then explains that the database holds serialized Objective-C objects, builds an open-source library to read it, and demonstrates a tool that lists persistent software and subscribes to the endpoint security event raised whenever something persists.\n\nThe speakers close with the weaknesses they found. A reset command in Apple's SFL tool, which requires root, can suppress user alerts. A non-privileged attack can put the user agent to sleep and kill it so the notification is never displayed. A kernel-side flaw in endpoint security event submission can drop the event when the persisting process exits quickly. The takeaway for practitioners is that BTM provides useful telemetry for defenders, but its alerts and events should not be treated as a guarantee that silent persistence is impossible.",
+      "durationSeconds": 1726,
+      "publishedAt": "2023-10-23",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "xbjYhEAkn68",
+      "slug": "elevating-privileges-on-macos-by-audit-token-spoofing",
+      "title": "Elevating Privileges on macOS by Audit Token Spoofing",
+      "speakers": [
+        "Thijs Alkemade"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "exploiting",
+        "reverse-engineering",
+        "system",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how a mismatched XPC connection lets a process spoof audit tokens and escalate privileges on macOS.",
+      "summary": "Thijs Alkemade, a security researcher at Computest, opens by explaining how XPC is used across Apple's operating systems to split privileges, so that a low-privilege client can ask a more privileged service to act for it. Such services must authorize their callers. Checking process IDs is known to be unsafe, so audit tokens are the usual recommendation. He notes that XPC internals are not publicly documented, so much of his material comes from reverse engineering.\n\nHe then walks through how XPC connections are built on Mach messages, which allow many senders to reach one receiver, while XPC assumes a strictly one-to-one link. The audit token stored on a connection is replaced whenever a new message arrives. By routing a second process's messages into the same connection, an attacker can cause a privileged service to check the wrong caller. He demonstrates this against the service management daemon on macOS, getting it to install a privileged helper without a password prompt, which yields root code execution. A second variant abuses forwarded reply ports to race the token update. Apple fixed the specific instance in that daemon, but Alkemade argues the flaw is structural and may exist in other services.\n\nFor developers, he recommends checking the caller when a connection is accepted and saving its audit token at that point, dropping messages that lack expected fields, and avoiding per-operation checks that read the live connection token. He also notes that sandbox restrictions on service lookup do not stop connections formed through passed ports.",
+      "durationSeconds": 2213,
+      "publishedAt": "2023-10-23",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "cMJ0wPLcsxQ",
+      "slug": "escaping-the-safari-sandbox-in-ios-16",
+      "title": "Escaping the Safari Sandbox in iOS 16",
+      "speakers": [
+        "Ian Beer"
+      ],
+      "track": "mobile",
+      "topics": [
+        "vulnerability-research",
+        "exploitation",
+        "mobile",
+        "reverse-engineering",
+        "lessons-learned"
+      ],
+      "teaser": "Walks through a 2023 in-the-wild iOS 16 chain that escapes the hardened Safari renderer sandbox via WebKit's custom IPC.",
+      "summary": "Ian Beer of Google Project Zero examines one part of a 2023 in-the-wild iOS 16 exploit chain. Apple has been tightening the Safari renderer sandbox, which removes direct access to kernel-adjacent GPU drivers and forces attackers to build longer chains. Moving GPU work into a separate GPU process made WebKit's custom IPC layer the bridge between web content and the services behind it. That IPC framework was never disabled, even though the feature it served was not exposed to users.\n\nThe talk then shows the flaw at the centre of this stage: an IPC message handler accepts a vector from the untrusted side and copies it into a buffer with no size check. The rest of the talk covers the exploitation framework built on that primitive. The payload is a very large serialized NSExpression object that was meant to have dangerous operations disabled by flags, which the attacker simply overwrote. Beer describes how he recovered readable logic from it by converting the expression graph, spotting NSNull alloc calls used to sequence statements, and refactoring the output.\n\nThe final stages run JavaScript inside the GPU process to corrupt objects, build a call interface to signed function pointers, and take over an existing IPC connection to issue the messages needed for a kernel bug. Beer concludes that a simple bad copy enabled the whole chain and that data-only exploitation is now routine. He said a companion blog post with the full details would follow.",
+      "durationSeconds": 2010,
+      "publishedAt": "2023-10-23",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "OVJOCn5E0Ss",
+      "slug": "modern-macos-threat-hunting",
+      "title": "Modern macOS Threat Hunting",
+      "speakers": [
+        "Karl Hiramoto"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "hunting",
+        "threat-detection",
+        "malware-analysis",
+        "intelligence",
+        "detection"
+      ],
+      "teaser": "Shows how newer similarity search and automatic YARA generation make macOS threat hunting faster on VirusTotal.",
+      "summary": "Karl Hiramoto, a VirusTotal software engineer who works mainly on sandboxing, opens with the platform's scale and how analysts can search it. He frames threat hunting as an iterative process that starts from a few indicators, such as a sample, a domain or a distinctive string, and expands through repeated pivots until the set covers a campaign. He demonstrates the search syntax, including detection counts, file types, submitter country, sandbox network behaviour, CVE tags and date ranges, and shows how the relationships view links files, domains and URLs.\n\nThe middle of the talk is a worked case study of a macOS adware campaign described in a report by AT&T Alien Labs. Searching one URL path from that report returned hundreds of samples, and a commonality tool exposed the domains they shared. Pivoting on one domain surfaced dozens more files, an IDS rule found additional matches, and a similarity search on a single hash returned structurally related samples. He then covers persistence locations that are easy to search for, and YARA, including retrospective and live hunts, rules that draw on sandbox behaviour, and a diff approach that compares a sample set against known false positives. That approach extracted a long byte pattern which matched about sixty further files.\n\nThe main takeaway for practitioners is to treat hunting as a loop: expand indicators, validate them, and follow how a campaign changes over time. He closes by encouraging users to submit more files, comment on samples and contribute open-source rules, and mentions a capture-the-flag challenge built on the platform.",
+      "durationSeconds": 1126,
+      "publishedAt": "2023-10-23",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "k1wEJFqirT8",
+      "slug": "safari-hold-still-for-nan-minutes",
+      "title": "Safari, Hold Still for NaN Minutes!",
+      "speakers": [
+        "Javier Jimenez",
+        "Vignesh Rao"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "fuzzing",
+        "exploit",
+        "web",
+        "code"
+      ],
+      "teaser": "Covers three JavaScriptCore bugs from one Safari commit, plus a brute-force ASLR bypass that leads to renderer code execution.",
+      "summary": "Javier Jimenez and Vignesh Rao, vulnerability researchers at Exodus Intelligence, examine Safari's JavaScript engine, JavaScriptCore, and why it changes so often. They focus on one large upstream commit that reworked how for-in enumeration works, and show that it contained several bugs, some of which fed into their exploit. The opening covers how JavaScriptCore represents values using NaN boxing, how its tiers of compilation work, and how a differential fuzzer built on an existing tool was adapted to target the JIT.\n\nThe middle of the talk walks through the bugs. The first is a register spill mistake in the JIT that gave a limited information leak, found through fuzzing. The second, found by reading code near that bug, comes from floating-point values loaded from typed arrays that are not checked for NaN, letting an attacker craft an invalid pointer. The third is a mismatch in a strict-equality comparison in the optimizing compiler that the speakers turned into a brute-force oracle. Combining these, they defeat ASLR by brute force, then reduce the search space by exploiting pointer alignment and web worker heap layout, bringing the search down to a few seconds.\n\nThe closing section covers how the pieces combine into arbitrary read and write in the renderer, and notes that PAC and APRR mitigations would still need to be bypassed for full code execution. They end with takeaways: fuzzing and code auditing complement each other, large commits deserve scrutiny, and the browser landscape changes quickly with frequent upstream updates.",
+      "durationSeconds": 2472,
+      "publishedAt": "2023-10-23",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "ockSeCM-4sI",
+      "slug": "an-examination-of-interactive-intrusions-by-a-north-korean-apt",
+      "title": "An Examination of Interactive Intrusions by a North Korean APT",
+      "speakers": [
+        "Greg Longo",
+        "Ben Wiley"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "intelligence",
+        "hunting",
+        "social",
+        "detection"
+      ],
+      "teaser": "Traces a North Korea-linked actor's interactive macOS intrusions, from social-engineered access to credential theft and hunting leads.",
+      "summary": "The speakers from CrowdStrike's OverWatch hunting team introduce LABYRINTH CHOLLIMA, a North Korea-linked actor pursuing both espionage and revenue. They explain why the group has increasingly targeted cryptocurrency firms and their macOS fleets, and how it selects individuals, especially developers, executives and sales staff, through recruiter-style lures. Common initial access methods such as trojanized crypto-themed applications are also covered.\n\nThe core of the talk walks through two intrusions from late 2022 into early 2023, one at a crypto organization and one at a technology company. In each, a multi-stage implant ran light reconnaissance before deeper stages were dropped. Persistence came through launch agents, hidden files and hijacking of legitimate Adobe helper services. The operators collected shell history, SSH keys and stored credentials, used a fake system prompt to harvest passwords, and in one case moved to AWS hosts. Attempts to alter the TCC database and the use of stolen code-signing identities were also described.\n\nThe speakers closed by discussing why this activity is hard to track: tooling changes quickly, the footprint is low, and living-off-the-land commands blend into normal developer and administrator activity. Their practical guidance centers on process lineage, unusual launch agent details, unexpected curl use on endpoints, and distinctive code-signing characteristics, which they said had produced useful hunting results.",
+      "durationSeconds": 2418,
+      "publishedAt": "2023-10-23",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "vvTuoDa-OBM",
+      "slug": "bypassing-the-signature-verification-and-pwning-the-kernel",
+      "title": "Bypassing the Signature Verification and Pwning the Kernel",
+      "speakers": [
+        "Mickey Jin"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "kernel",
+        "exploiting",
+        "update",
+        "trust",
+        "system"
+      ],
+      "teaser": "Shows how crafted macOS over-the-air updates can bypass signature checks and inject code into the kernel.",
+      "summary": "The talk examines how Apple delivers macOS over-the-air updates and where that process can be abused. It walks through the stages of an update: fetching the privileged update service, downloading and unpacking the package into a temporary location, and handing the package to a service that verifies and applies it. The weak points include a time-of-check, time-of-use window in that temporary directory, where swapping the manifest file for a symbolic link lets an attacker forge checksums for every other file in the package. A second flaw came from a move operation that carried over writable file flags, so unprotected package contents ended up in protected system locations.\n\nUsing these primitives, the speaker demonstrates a SIP bypass that removes protected paths through the package's removal list. He then edits a kernel patch file in the undocumented bsdiff format to run code in the kernel on Intel Macs without the T2 chip. A live demo replaces the kernel file in the update snapshot at a log-detected moment, and the rebooted system shows altered output. Other findings include package files missing from the manifest, such as boot components, and a downgrade attack that swaps in an older, Apple-signed update service binary.\n\nThe takeaway is that the update path is highly privileged and must treat every file as untrusted until it is verified in a protected location. Apple's fixes include no-follow reads, copying before moving, restricted download directories and fuller manifest coverage. Secure boot remains the main hardware mitigation, and machines without it are the most exposed.",
+      "durationSeconds": 2362,
+      "publishedAt": "2023-10-23",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "WIR_Vue7eC0",
+      "slug": "unexpected-unreasonable-unfixable-filesystem-attacks-on-macos",
+      "title": "Unexpected, Unreasonable, Unfixable: Filesystem Attacks on macOS",
+      "speakers": [
+        "Gergely Kalman"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "exploiting",
+        "vulnerabilities",
+        "system",
+        "attack"
+      ],
+      "teaser": "Walks through logic bugs in macOS file operations that break TCC, sandbox and root boundaries.",
+      "summary": "The talk looks at how file operations on macOS can be abused through logic bugs rather than memory corruption. The speaker explains why races, symlink-following calls, rename behaviour and user-mountable disk images open paths that classic Unix hardening does not cover, and why the newer permission layers on macOS sit on top of decades of POSIX assumptions.\n\nFive of the seven findings are walked through with demos. One abuses a rename in a logging path to overwrite the TCC database and gain automation access. A debug query log in a bundled SQLite build follows symbolic links, and the speaker shows how extra tables can be planted in an application's own database. Spotlight's indexing of user-mounted volumes is turned into a file write against sudoers, using hex-edited volumes and union mounts. A malloc stack logging environment variable forces a file write that a setuid crontab then leaks through an inherited file descriptor, yielding root.\n\nThe closing takeaway is that file-system isolation between users or processes is needed for a real security boundary, and that letting unprivileged users mount attacker-controlled volumes widens the attack surface considerably. The speaker presents the work as a repeatable methodology, and notes that the reported issues have since been addressed.",
+      "durationSeconds": 1555,
+      "publishedAt": "2023-10-24",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "ZeBOwwNR124",
+      "slug": "dropping-lotus-bombs-att-and-ck-in-macos-purple-team-operations",
+      "title": "Dropping Lotus Bombs: ATT&CK in macOS Purple Team Operations",
+      "speakers": [
+        "Cat Self",
+        "Megan Carney"
+      ],
+      "track": "purple-team",
+      "topics": [
+        "attack",
+        "threat-detection",
+        "lessons-learned",
+        "open-source",
+        "macos"
+      ],
+      "teaser": "Shows how to build an ATT&CK-based macOS emulation of an OceanLotus scenario and turn it into validated enterprise detections.",
+      "summary": "Public adversary emulation resources have offered little for macOS, which made it hard for the presenters to test detections against realistic attacker behavior. Their answer was an emulation plan for OceanLotus, a suspected Vietnamese threat group, now published in the MITRE Adversary Emulation Library. Without in-house reverse engineers, the team worked from public vendor reporting and rebuilt the group's implant, command-and-control message format and dynamic library loading as ATT&CK-mapped steps. They also noticed that reports titled as new backdoors often described the same implant over several years.\n\nThe middle of the talk covered detection. Alerting on every unsigned launch agent produced constant false positives across a fleet of several thousand machines. The approach shifted to alerting only when a new unsigned agent had no VirusTotal record or a known-bad verdict. The presenters then described a normalized baseline method: compare each command against a fourteen-day history and a short sample window, normalize variable values such as interface names and temporary paths, and check whether the parent process is new or common. Timestomping with touch served as a worked example, where the approach filtered routine developer tooling down to a usable signal.\n\nThe main takeaway is to aim detections at attacker behaviors that are costly to change, rather than easily swapped indicators. Validate them with emulation that records full process context and points to the code behind each technique, so blue teams can separate attacker activity from legitimate software. Red teams can supply that context in their reports. The emulation code and hunting playbooks are open for community contributions.",
+      "durationSeconds": 1738,
+      "publishedAt": "2023-10-23",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "dzmhQKEErT8",
+      "slug": "launch-and-environment-constraints-overview",
+      "title": "Launch and Environment Constraints Overview",
+      "speakers": [
+        "Fitzl Csaba"
+      ],
+      "track": "red-team",
+      "topics": [
+        "reverse-engineering",
+        "kernel",
+        "vulnerability-research",
+        "exploitation",
+        "system"
+      ],
+      "teaser": "Explains how Apple's launch and environment constraints limit macOS process launches and blunt logic-bug exploitation.",
+      "summary": "The talk opens with earlier macOS TCC bypasses that abused system applications. Attackers copied signed Apple apps out of the protected system volume, planted plugins or dylibs where the apps would load them, or used a daemon's bundle-loading option. These logic bugs were easy to exploit and prompted Apple to add launch constraints in Ventura. Each constraint applies to the process itself, its parent, or its responsible process, and binaries are grouped into categories recorded in the trust cache.\n\nThe speaker shows how to pull the trust cache out of the OS launch policy files and read the category column. He then explains where the constraint definitions live in the AMFI kernel extension, how to get the binary from a kernel development kit, and how the DER-encoded data describes each category. Constraints block copied system binaries from running outside their trusted location, which stops the earlier plugin and bundle tricks. For third-party software, he argues the picture is weaker. Environment constraints extend the mechanism to apps, but the open command can still pass environment variables and arguments. For global XPC daemons, the responsible process turns out to be the service itself, so the constraint does not stop a random client from starting it.\n\nThe main takeaway is that launch constraints are a solid design for Apple's own binaries but cover few of the third-party bugs seen in practice. Developers should still perform proper client validation for XPC services. Library load constraints, which accept frameworks only from listed team IDs, are practical when every plugin's team ID is known.",
+      "durationSeconds": 1870,
+      "publishedAt": "2023-10-24",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "8uDvNxXywy4",
+      "slug": "from-crash-to-trash-cash-or-bin-bash",
+      "title": "From Crash …to trash? cash? or (bin)bash?",
+      "speakers": [
+        "Patrick Wardle"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "reverse-engineering",
+        "kernel",
+        "malware-analysis",
+        "crash-reports"
+      ],
+      "teaser": "Shows how macOS crash reports from everyday use expose bugs, from uninitialized pointers to kernel heap overflows.",
+      "summary": "Patrick Wardle opens by arguing that crash reports deserve more attention. Users send them to developers so bugs get fixed, security teams use them to catch failed exploit attempts, and malware that misbehaves can leave them behind for detection. He cites a Microsoft case where a rare crash exposed a zero-day, and a leaked NSA document that treated crash data as useful fingerprinting.\n\nNext he explains the anatomy of a macOS crash report, including the exception type, crashing thread, stack trace, register state and loaded binaries. Because address space layout randomization shifts binaries in memory, he rebases them in a disassembler before matching the faulting instruction to code, demonstrating this with a deliberate null pointer write. He then covers crashes from his own machine during normal use: stack exhaustion from unbounded recursion in his open-source firewall, an uninitialized pointer in Apple's Security framework, and a kernel panic from an off-by-one error whose patch introduced a kernel memory leak. An unbounded copy in the same kernel code led to a heap overflow. Further crashes hit Safari with a null dereference, the shell with a use-after-free in signal handling, and Apple's notarization service with another use-after-free.\n\nHe closes by saying crash reports help developers, can reveal exploitable memory corruption, and can flag malware. The practical lesson is to read the registers and map the faulting instruction back to source before guessing at causes.",
+      "durationSeconds": 2315,
+      "publishedAt": "2023-10-23",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "-YgDyqnM88s",
+      "slug": "closure-and-announcements",
+      "title": "Closure and announcements",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "open-source",
+        "initiative",
+        "learning",
+        "social",
+        "scale"
+      ],
+      "teaser": "Closes the conference with thanks, raffle prizes, and plans for student-focused events and the next edition.",
+      "summary": "The closing segment begins by thanking supporters and explaining that the nonprofit funds student scholarships, diversity programs and free open-source tools. The speaker asks attendees to back the foundation through individual donations or by encouraging their employers to sponsor it. As an example, an attendee who worked at a large tech company helped secure funding that tripled the number of students the foundation could bring to the event.\n\nAnnouncements follow. A second volume of a book on Mac malware focuses on detection and will be published free online, with royalties returning to the foundation. The diversity initiative has spent nearly half of its $100,000 commitment, and a new series of smaller, one- or two-day events aimed at students is planned for university cities, with free introductory trainings. The next full conference is set for Hawaii in fall 2024. Thanks then go to trainers, speakers, sponsors, long-time attendees, first-time attendees and the organizer who handles logistics.\n\nThe remainder is awards and gifts: prizes for the best video, photos and supporter, recognition for social media contributors, a farthest-traveled prize, and raffle drawings for consumer electronics. A CTF organizer and scholarship students also receive gifts, before a group photo and a farewell gathering.",
+      "durationSeconds": 1398,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    }
+  ]
+}

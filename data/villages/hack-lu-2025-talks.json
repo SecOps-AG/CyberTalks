@@ -1,0 +1,1066 @@
+{
+  "villageSlug": "talks",
+  "villageName": "Talks",
+  "eventSlug": "hack-lu-2025",
+  "conference": "hack-lu",
+  "playlistUrl": "https://www.youtube.com/watch?v=T3Xo4C6vIto",
+  "description": "Talks from hack.lu 2025.",
+  "talks": [
+    {
+      "youtubeId": "T3Xo4C6vIto",
+      "slug": "drm-as-a-playground-for-hackers",
+      "title": "DRM As A Playground For Hackers",
+      "speakers": [],
+      "track": "red-team",
+      "topics": [
+        "drm",
+        "reverse-engineering",
+        "vulnerability-research",
+        "web"
+      ],
+      "teaser": "Revisits Widevine L3 digital rights management as a hands-on hacking target.",
+      "summary": null,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "Qp5GDh2sj6A",
+      "slug": "how-to-better-identify-weaponized-file-formats-with-ftguess",
+      "title": "How To Better Identify (Weaponized) File Formats With Ftguess",
+      "speakers": [
+        "Philippe Lagadec"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "detection",
+        "machine-learning",
+        "tool",
+        "attack"
+      ],
+      "teaser": "Explains why content-only file identifiers fail on weaponized files and proposes combining extensions with content checks.",
+      "summary": "Philippe Lagadec opens with a guessing game: finding someone's nationality by asking questions or by checking a passport. He uses the comparison to argue that file identification should lean on the extension, since operating systems choose the application that opens a file based on it. A quick demo on Linux shows the same bytes opening in a text editor, a browser or a PDF viewer depending only on the file name.\n\nThe middle of the talk reviews common identification tools: libmagic-based file, TrID, YARA rules and Google's Magika. Libmagic matches binary signatures well but misses scripts, while Magika samples the start and end of a file and classifies it with a neural network. Examples include PDFs with leading junk bytes that fool both tools, a PDF with macros disguised as a Word document, and a signed MSI with an appended Java archive. He also shows Magika mistaking Base64 text for PowerShell, and padding a script with whitespace so Magika reports plain text.\n\nIn the final part he outlines an algorithm: check whether the extension is known, run a small parser for each candidate format, and grade confidence by whether content and extension agree, falling back to content tools otherwise. He presents FTGuess, his experimental prototype. His takeaways are to check both extension and content, and to keep original file names when handling suspicious samples.",
+      "durationSeconds": 1756,
+      "publishedAt": "2025-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "-3dF0zWtO_o",
+      "slug": "the-resurgence-skid-gangs-in-cybercrime-space",
+      "title": "The Resurgence Skid Gangs In Cybercrime Space",
+      "speakers": [
+        "0xSeeker"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "malware-analysis",
+        "open-source",
+        "attack"
+      ],
+      "teaser": "Traces how small French infostealer crews operate, evolve, and branch into other cybercrime, and why they deserve monitoring.",
+      "summary": "The talk starts from a 2024 wave of attacks against streamers, media outlets and large French companies, carried out by groups that had almost no public documentation. Their small size and low profile kept them out of reports, and the speaker argues that this made them easy to overlook even though they are dangerous.\n\nThe main case study is the Nova stealer group, followed over time from early builds with no obfuscation to later versions that were obfuscated, though still reversible. Its targets also shifted, from lures aimed at students to cryptocurrency wallets, bank accounts and personal email. The operation runs on a selling site that issues a key, Telegram or Discord bots that configure each build, file-hosting links for delivery, and exfiltration first to chat channels and later to a collection website. Rebranding was frequent, and much of the code and infrastructure matched open-source stealers on GitHub. To map the wider ecosystem, the researchers used group hierarchies that some crews published, admins exposing each other in chat, recruitment wording, and open access to public Telegram and Discord communities. They also linked the group to sales of stolen data on underground forums, a fraud attempt, and a separate criminal service.\n\nThe takeaway is that these crews matter to companies too. Work data can sit on home machines infected through personal downloads, and reused passwords and combo lists pass stolen credentials to larger attackers. Continued monitoring of small, under-documented groups can reveal how they diversify into other crime.",
+      "durationSeconds": 1809,
+      "publishedAt": "2025-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "2ogJ6LkvNGw",
+      "slug": "cli-ambush",
+      "title": "CLI Ambush",
+      "speakers": [
+        "William Robinet"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "trust",
+        "open-source",
+        "tool",
+        "vulnerabilities"
+      ],
+      "teaser": "Shows how crafted certificate fields inject terminal control codes into OpenSSL output, misleading administrators who review them.",
+      "summary": "The talk opens with a refresher on X.509 certificates and ASN.1, covering how structures are defined abstractly and then encoded in BER and DER, and why PEM is used to move them as text. It then presents a small Perl tool that converts a DER file into an OpenSSL configuration template, so a certificate can be edited as text without manually recalculating length fields.\n\nThe middle section moves from parsing to output. The speaker found that OpenSSL's ASN.1 printing could pass control characters through to the terminal, so certificate name fields and subject alternative name fields could carry escape sequences that change what a viewer sees. Demonstrations included a signing request whose common name hid extra text, and an alternative name field that could clear the screen and display different content. Behaviour varied across OpenSSL versions and terminal emulators. Surveying a large certificate dataset turned up unusual fields with backspaces and embedded line breaks, but no clear real-world exploitation.\n\nThe closing part frames the risk: an administrator who approves a request based on a command-line view may be shown something other than the real contents. The practical takeaway is to avoid trusting raw tool output for certificates, to pipe it through a pager, or to inspect it with a hex view before making decisions.",
+      "durationSeconds": 1999,
+      "publishedAt": "2025-10-24",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "WqFrNRgBpEM",
+      "slug": "beyond-post-quantum-stereotypes",
+      "title": "Beyond Post-quantum Stereotypes",
+      "speakers": [
+        "Antoine Gicquel",
+        "Benjamin Sepe"
+      ],
+      "track": "appsec",
+      "topics": [
+        "post-quantum-cryptography",
+        "encryption",
+        "tls",
+        "risk",
+        "infrastructure"
+      ],
+      "teaser": "Explains how quantum computers threaten current key exchange and signatures, and what organizations and auditors can do now.",
+      "summary": "The talk opens with a refresher on classical secure communication. Two parties use asymmetric cryptography to agree on a shared key over an untrusted network, then switch to symmetric encryption for the traffic. Certificates from a trusted authority guard against a man-in-the-middle, and security is measured by the work an attacker needs to forge or decrypt data.\n\nThe middle section covers the quantum threat. Shor's algorithm would break the factoring and discrete logarithm problems behind RSA, ECDH and ECDSA, while Grover's algorithm weakens symmetric keys, so AES-128 falls short and AES-256 remains acceptable. The speakers describe the lattice and hash-based schemes standardised by NIST, stress that they run on ordinary hardware, and explain hybrid designs that pair a classical and a post-quantum algorithm so both must be broken. They also outline the store-now, decrypt-later risk for recorded traffic and the forged-signature risk for certificates.\n\nThe closing part is practical. Organizations should inventory where cryptography is used, since many browsers, CDNs, reverse proxies and recent OpenSSH releases already negotiate hybrid key exchange, while some Windows services and VPNs lag behind. For auditors, post-quantum implementations are still classical software: check conformance to standards and test vectors, random number generation, key handling, and side channels such as timing and cache leakage.",
+      "durationSeconds": 1519,
+      "publishedAt": "2025-10-24",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "QSOjcQzLMA0",
+      "slug": "dcom-turns-20-revisiting-a-legacy-interface-in-the-modern-threat",
+      "title": "DCOM Turns 20: Revisiting A Legacy Interface In The Modern Threatscape",
+      "speakers": [
+        "Julien Bedel"
+      ],
+      "track": "red-team",
+      "topics": [
+        "windows",
+        "attack",
+        "network",
+        "detection",
+        "defensive-security"
+      ],
+      "teaser": "Shows how COM and DCOM are abused for execution, persistence, lateral movement and impersonation on Windows.",
+      "summary": "The talk revisits the Component Object Model (COM) and its network counterpart, DCOM, which remain deeply embedded in Windows and Active Directory environments and keep appearing in recent security research. The speaker, Julien Bedel, pitches it as a beginner-level introduction. He explains how a program turns a friendly ProgID into a CLSID through the registry, then loads the server DLL that exposes an object's interfaces, methods and properties.\n\nFollowing the mechanism through the kill chain, the talk starts with initial access, where COM classes can run commands or download files from a phishing payload. For persistence, it shows how registry lookups fall back from the current user hive to machine-wide settings, so a planted CLSID in HKCU can redirect a program to an attacker's DLL. Good hijack candidates are programs that launch often, keep running and reach the internet, such as office suites, browsers, VPN clients and endpoint agents.\n\nFor lateral movement, only classes with an AppID can be activated remotely over DCOM on TCP 135. With administrator rights on a target, the speaker runs a command through a remote class, a method resembling a known Python tool. He then applies remote COM hijacking to run code as a domain administrator logged on interactively elsewhere. Defensive ideas include alerting on unusual HKCU CLSID changes, unsigned or oddly located DLLs, and workstations contacting COM servers they rarely use, alongside RPC filtering and least-privilege network segmentation. The takeaway is that an old mechanism still yields new research, and basic controls still matter.",
+      "durationSeconds": 1790,
+      "publishedAt": "2025-10-24",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "LseD22_ph78",
+      "slug": "an-automated-and-attack-graph-based-evaluation-of-on-board-netwo",
+      "title": "An Automated And Attack Graph-Based Evaluation Of On-Board Networks",
+      "speakers": [
+        "Martin Salfer"
+      ],
+      "track": "red-team",
+      "topics": [
+        "attack",
+        "risk",
+        "network",
+        "model",
+        "device"
+      ],
+      "teaser": "Shows how attack graphs over automotive network topology can rank which vehicle assets carry the highest risk.",
+      "summary": "The talk starts from the rising cyber risk of connected vehicles, which carry well over a hundred computers and must receive security support for decades. Earlier attack graph methods, from fault trees to model checking, scale poorly to a network the size of a car. The speaker addresses two audiences: architects weighing the risk of new smart features, and penetration testers choosing which of many computers to test first.\n\nThe approach combines three inputs: the vehicle's network topology, the attack surface each component exposes, and an attacker model covering motivation, capabilities and target assets. Path probabilities come from estimating the chance of a vulnerability and whether the attacker's budget covers the exploit cost, approximated with a Gaussian distribution. Low-probability paths are dropped early, which the speaker said keeps computation fast while still covering most relevant risk. A demo ran a small Java and XML prototype that produced a risk-weighted attack graph in about ten seconds. Benchmarks on synthetic chain, bus and mesh networks compared it against a Bayesian network approach, which grew far faster in runtime and memory.\n\nThe main takeaway is that the method can guide budget toward the most exposed computers and entry points, and it can run on ordinary laptops or in the cloud. The speaker closed by noting that supplier-built software and dissolved development teams make long-term patching hard, so some premium makers now write their own software stacks.",
+      "durationSeconds": 1705,
+      "publishedAt": "2025-10-24",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "l2G2TZvzj0E",
+      "slug": "exploiting-legit-apis-for-covert-c2-a-new-perspective-on-cloud-b",
+      "title": "Exploiting Legit APIs For Covert C2: A New Perspective On Cloud-based Malware Operations",
+      "speakers": [
+        "Cocomelonc"
+      ],
+      "track": "malware",
+      "topics": [
+        "attack",
+        "threat",
+        "network",
+        "detection",
+        "cloud"
+      ],
+      "teaser": "Shows how malware operators can route command-and-control traffic through legitimate web APIs to blend into trusted traffic.",
+      "summary": "The talk starts from a simple problem: traditional command-and-control infrastructure is easy to spot. Unfamiliar domains, unusual TLS server names and poor IP reputation get flagged by sandboxes, EDR, firewalls and deep packet inspection. The speaker argues that attackers and red teams can avoid this by routing C2 through widely trusted web services that most networks already allow.\n\nThe middle of the talk surveys these services. A Telegram bot used to receive stolen logins from a phishing page targeting government staff in Kazakhstan serves as an early example. Slack and Discord webhooks, GitHub issues and comments, Bitbucket webhook descriptions, VirusTotal file comments and Telegram bot messages are then shown as carriers for system information, files and commands, often Base64-encoded. Most require only a token, which can be rotated or revoked to maintain persistence. Further cases include an IoT camera API, Azure DevOps work items, and an Xbox messaging flaw that let messages reach users without a friend relationship; Microsoft has since fixed that bug.\n\nThe closing advice is that the traffic itself looks ordinary, so detection has to rely on context. The speaker suggests inventorying approved API tokens and treating calls to legitimate services made with unrecognised tokens as suspicious, alongside heuristic analysis and deeper packet inspection. No complete mitigation is offered, and generative AI APIs are flagged as a likely next channel.",
+      "durationSeconds": 1822,
+      "publishedAt": "2025-10-24",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "YjCHGWIGxbU",
+      "slug": "lethal-language-models-from-bit-flip-to-rce-in-ollama",
+      "title": "Lethal Language Models: From Bit Flip To RCE In Ollama",
+      "speakers": [
+        "Paul Gerste"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "exploiting",
+        "ai",
+        "memory",
+        "machine-learning"
+      ],
+      "teaser": "Shows how a heap out-of-bounds bit write in Ollama's model parser can be turned into remote code execution.",
+      "summary": "Paul Gerste, a vulnerability researcher at Sonar, examines Ollama, a tool for downloading and running large language models locally, as a target in the AI category of Pwn2Own Berlin 2025. He explains the client-server design, where the server starts a separate runner process that loads models stored in the GGUF format, and walks through the file's layout of metadata, tensor descriptions and raw weight data.\n\nThree parser bugs were covered. An unchecked string copy overflows a small fixed buffer. A helper that reads arrays of strings never verifies element types, which yields a pointer read that is only useful with an information leak. The most useful bug was a heap out-of-bounds write through a bit-packed boolean vector, which can only flip zero bits to one. Targeting null function pointers in a backend struct gave a way to redirect control flow. Because the runner's memory layout is randomized for each process and no leak was available, the speaker built a test variant with PIE disabled. He then assembled a ROP chain that pivoted the stack and rewrote a libc free entry in the global offset table to point at system, triggered by a follow-up prompt. A live demo and a public CTF challenge based on the bug followed.\n\nThe exploit only worked without PIE, so it would not have been a viable contest entry. Shortly before the event, Ollama replaced the vulnerable C++ engine with a Go rewrite, removing the bug. The takeaway is that performance-driven C and C++ code in AI tooling carries memory-safety risk, and that fast development cycles can ship such issues. The speaker also recommends Pwn2Own as a learning exercise, even without a winning entry.",
+      "durationSeconds": 1670,
+      "publishedAt": "2025-10-24",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "vvbozBgfWSI",
+      "slug": "changes-in",
+      "title": "Changes In",
+      "speakers": [
+        "Vladimir Kropotov"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "intelligence",
+        "ransomware",
+        "ai",
+        "state"
+      ],
+      "teaser": "Maps how geopolitics, remote work and AI are reshaping criminal business models on Russian-speaking underground forums.",
+      "summary": "Vladimir Kropotov opens by explaining why the community is called Russian-speaking rather than Russian. The shared language lets actors from many countries collaborate without revealing where they are based, and these forums are often where new criminal tooling and business practices first appear.\n\nThe middle of the talk covers the forces driving change. Remote work and social media during the pandemic widened attack surfaces and pushed criminals into specialised roles, so one intrusion can now involve several groups, which makes attribution harder. Russia's war in Ukraine, sanctions and migration are presented as factors that eroded trust between groups, reshaped payment and logistics flows, and moved some services into EU territory. Infrastructure is shifting too, with hosting chosen by jurisdiction and residential proxies used to slip past anti-fraud checks. Stolen personal data, biometrics and AI tooling are described as enabling fake accounts and impersonation.\n\nHe closes by pointing to a longer white paper for more detail. The practical takeaway for defenders is that technical indicators alone can mislead when several specialised groups share one intrusion, and that identity checks and geographic signals weaken as fraud tooling matures.",
+      "durationSeconds": 1343,
+      "publishedAt": "2025-10-24",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "YUbN6MuiuFM",
+      "slug": "from-yaml-to-root-ci-cd-pipeline-attacks-and-countermeasures",
+      "title": "From YAML To Root: CI/CD Pipeline Attacks And Countermeasures",
+      "speakers": [
+        "Hugo"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "devops",
+        "cloud",
+        "attack",
+        "infrastructure",
+        "defensive-security"
+      ],
+      "teaser": "Shows how attackers abuse CI/CD pipelines in Azure DevOps and Terraform to run code and steal cloud credentials.",
+      "summary": "CI/CD pipelines were once the preserve of developers and administrators, but they now serve marketing, HR and client sandboxes, which widens the attack surface. The speaker separates platform-hosted runners from self-hosted ones, and notes that shared self-hosted pipelines can let a compromise in a development environment reach production. The scenarios assume a standard contributor role and cover YAML files, official tasks, Terraform providers and a case where only the right to create service connections is available.\n\nInline script steps give direct code execution, and official cloud CLI tasks let an attacker use the pipeline's own rights to create service principals and download Terraform state files. Terraform's external and local provisioners can also run commands, and a renamed fork of the external provider, published to the public registry, got around a blocklist. Another path used the classic editor to point a pipeline at an attacker-controlled repository. Secrets can leak because base64-encoded values are not masked. Scans of published Microsoft address ranges found many reachable hosts, and a shell restriction was sidestepped with an interactive session. Runners often run as root and lack monitoring, so attacks often went unnoticed.\n\nThe practical lessons are that a generic checklist is not enough, since controls must match how each pipeline is used. Useful measures include isolating secrets, restricting network access, segmenting runners and alerting on pipeline logs. Short-lived runners complicate endpoint tools, and verbose logs carry cost, so defenders must decide per pipeline.",
+      "durationSeconds": 2775,
+      "publishedAt": "2025-10-24",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "3lQ5gxKTmw4",
+      "slug": "remote-full-compromise-exploit-chain",
+      "title": "Remote Full Compromise Exploit Chain",
+      "speakers": [
+        "Maxime Escourbiac"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "windows",
+        "network",
+        "exploitation",
+        "vulnerabilities"
+      ],
+      "teaser": "Shows how a GlobalProtect client flaw chains from network-level redirection to code execution and then SYSTEM privileges.",
+      "summary": "The talk presents research on the Palo Alto GlobalProtect client, looking only at the endpoint software rather than the server. The speaker, from a red team, first outlines how the client is split between a user interface, a background service, and a portal and gateway that handle configuration and authentication. The attack starts on a rogue access point, where the client accepts DNS settings from the network, and then exploits weak certificate checks to install an attacker-controlled certificate authority and redirect the login flow.\n\nOnce traffic is redirected, a malicious HTA page delivered through the embedded browser runs commands on the workstation, and a live demonstration shows the chain working end to end. The second half covers local privilege escalation. The researcher recovered the key protecting the local channel between client components, got around a process-origin check by duplicating a socket into a helper binary, and abused the update logic's impersonation and file-move steps. A symlink race combined with a separate arbitrary file deletion issue reached SYSTEM.\n\nThe findings were reported in 2024, with vendor responses taking months, overlapping reports and a later regression. A practitioner should verify that hardened VPN client settings are applied, avoid trusting DNS or certificate settings pushed by an untrusted network, and treat endpoint VPN software as a serious attack surface.",
+      "durationSeconds": 1634,
+      "publishedAt": "2025-10-24",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "aNS6cScjKQA",
+      "slug": "breaking-android-ipc-a-deep-dive-into-aidl-fuzzing",
+      "title": "Breaking Android IPC: A Deep Dive Into AIDL Fuzzing",
+      "speakers": [],
+      "track": "mobile",
+      "topics": [
+        "android",
+        "fuzzing",
+        "vulnerability-research",
+        "mobile",
+        "ipc"
+      ],
+      "teaser": "Covers fuzzing Android's AIDL interfaces to probe the inter-process communication attack surface.",
+      "summary": null,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "Vv4y4rrYDSM",
+      "slug": "2038-is-gonna-be-epoch",
+      "title": "2038 Is Gonna Be Epoch!",
+      "speakers": [
+        "Trey Darley",
+        "Pedro Umbelino"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "infrastructure",
+        "vulnerabilities",
+        "device",
+        "trust"
+      ],
+      "teaser": "Maps how the 2038 Unix time rollover threatens systems worldwide and why coordinated remediation is so hard.",
+      "summary": "The talk opens by framing modern infrastructure as a fragile machine that depends on shared time, then traces how Unix time, stored as a signed 32-bit counter since 1970, runs out in January 2038. The speakers place this beside the NTP rollover in 2036, explaining that early designers chose small fields to save memory, and compare the problem with the slow IPv4 transition.\n\nThe middle of the talk covers measurement. With no complete inventory available, the speakers combined internet-wide scanning of SNMP and NTP servers, sinkhole telemetry from smart TVs, and firmware and SBOM data. They reported that roughly a third of scanned NTP servers still ran vulnerable versions, that most fingerprinted SNMP hosts were 32-bit, and that devices such as connected tank monitors and smart TVs failed when tested with shifted dates. They also argued that GPS spoofing and NTP manipulation make time-based attacks cheap today.\n\nThe closing section argues that remediation depends more on coordination, procurement and economics than on code, drawing parallels to Y2K. It proposes triaging by impact, starting with life safety, and offers practical steps: test failover behaviour, inventory assets, use authenticated and local time sources, isolate control networks, and ask vendors to prove post-2038 validity. The main takeaway for practitioners is to start the inventory and testing now.",
+      "durationSeconds": 2571,
+      "publishedAt": "2025-10-23",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "yQa7_ylSh-Q",
+      "slug": "hacking-for-hoodies-misp-edition",
+      "title": "Hacking For Hoodies: MISP Edition",
+      "speakers": [],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "open-source",
+        "tool"
+      ],
+      "teaser": "Focuses on MISP, the open-source threat intelligence sharing platform, as the subject of this talk.",
+      "summary": null,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "xNY-p8J9oQc",
+      "slug": "taking-over-dells-wyse-management-suite",
+      "title": "Taking Over Dell's Wyse Management Suite",
+      "speakers": [],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "exploiting",
+        "device",
+        "attack",
+        "infrastructure"
+      ],
+      "teaser": "Examines how Dell's Wyse Management Suite can be taken over by an attacker.",
+      "summary": null,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "NwWZBc1CFbM",
+      "slug": "whats-new-in-suricata-8-enhanced-detection-and-performance",
+      "title": "What's New In Suricata 8: Enhanced Detection And Performance",
+      "speakers": [
+        "Peter Manev",
+        "Eric Leblond"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "threat-detection",
+        "open-source",
+        "network",
+        "intelligence",
+        "detection"
+      ],
+      "teaser": "Covers Suricata 8's new detection keywords, transactional rules, IOC context matching and firewall mode.",
+      "summary": "Peter Manev and Eric Leblond introduce Suricata, the open source network threat detection engine developed since 2007 and owned by a non-profit foundation under the GPL version 2 license. They explain the difficulty of handling a wide variety of traffic and users, from large cloud providers to hobbyists and researchers, while keeping up with very high packet rates. The project ships a major release about every two years, with regular patches in between.\n\nThe core of the talk covers what Suricata 8 adds after roughly two years of development. Detection gains more than 100 new keywords, a 38 percent increase over version 7, and transactional rules let one signature match both directions of a stream instead of splitting the logic across separate rules. For threat intelligence, data sets can now hold JSON entries, so an alert carries the matching indicator context into the SIEM rather than a bare hit. The speakers also cover added protocol support such as LDAP, a larger share of code written in Rust including the HTTP and FTP parsers, and Lua scripting that runs inside a sandbox.\n\nThey close with a new firewall mode, which lets operators drop flows at chosen protocol stages, and with the use of the engine as a library inside other tools. The talk ends by encouraging users to send feedback, pointing to the documentation, the annual Suricon meeting and training options as ways to get involved.",
+      "durationSeconds": 1442,
+      "publishedAt": "2025-10-23",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "yh7RK_5W6M4",
+      "slug": "livewire-remote-command-execution-through-unmarshalling",
+      "title": "Livewire: Remote Command Execution Through Unmarshalling",
+      "speakers": [
+        "Rémi Matasse",
+        "Pierre Martin"
+      ],
+      "track": "appsec",
+      "topics": [
+        "vulnerability-research",
+        "exploiting",
+        "web",
+        "framework",
+        "appsec"
+      ],
+      "teaser": "Shows how a Livewire unmarshalling chain in Laravel can lead to remote command execution when the app key is known.",
+      "summary": "The talk covers a remote command execution issue in Livewire, a full-stack framework for Laravel that keeps front-end and back-end component state in sync through a JSON update endpoint. The presenters explain how Livewire serializes component data with its synthesizers, and how the collection synthesizer can be abused to instantiate arbitrary PHP classes when an attacker controls the metadata. Each request carries a checksum derived from the Laravel application key, so the attack depends on that key being known.\n\nThe middle section introduces PHP magic methods and how they are used to select unmarshalling gadgets. The researchers chained several gadgets, some already patched against classic unserialization, to reach arbitrary function calls and then remote command execution. They added a final gadget that ends the request early so the activity avoids normal error logging. A helper tool that computes valid checksums was demonstrated against Snipe-IT, an open-source asset management application that uses Livewire in its login flow.\n\nThe vendor did not treat the app-key requirement as a vulnerability, so the chain was left unpatched apart from advice to rotate keys. The presenters said they later found a route that needs no app key, which was patched quickly, and they plan to release their tooling later. The practical takeaway is to treat the application key as a high-value secret, to rotate it if exposure is suspected, and to keep framework components up to date.",
+      "durationSeconds": 1501,
+      "publishedAt": "2025-10-23",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "butpTDpYkWo",
+      "slug": "building-a-pipeline-to-analyse-ios-devices-at-scale",
+      "title": "Building A Pipeline To Analyse IOS Devices At Scale",
+      "speakers": [
+        "David Durvaux",
+        "Christophe Vandeplas"
+      ],
+      "track": "mobile",
+      "topics": [
+        "mobile",
+        "incident-response",
+        "device",
+        "open-source",
+        "building"
+      ],
+      "teaser": "Explains how a team collects and analyses iOS sysdiagnose data across thousands of managed devices.",
+      "summary": "The talk starts from reports of spyware targeting civil society and journalists, and from the question of how an organisation could check many phones for signs of compromise. The speakers argue that backup-based tools give little view of operating-system activity, so they turned to the sysdiagnose archive that Apple builds into every iOS device. That archive holds logs, running processes, battery and network statistics, lock data and preferences, which makes it a much richer source for analysis.\n\nThe middle of the talk covers the tooling and collection problem. The team built an open-source framework, inspired by memory forensics tooling, that parses the many file formats in a sysdiagnose, aligns the different timestamp formats, and outputs JSON or JSON Lines for analytics platforms. Collection is the harder part. Manual triggering does not scale, so they reviewed options such as iOS shortcuts, MDM-deployed companion apps, remote triggers, and assisted collection through a computer. They described a companion app that guides users through sharing their file and works around sandbox limits to detect when generation has finished.\n\nThe closing sections look at what remains unsolved. Local collection holds only short time windows of logs, data volumes are very large, and there are few shared indicators or mobile threat descriptions to search for. The speakers also point out that mobile vendors offer no way to verify device integrity. Their plans include releasing more components as open source, exploring further artifacts, and working with other organisations to share techniques.",
+      "durationSeconds": 1572,
+      "publishedAt": "2025-10-23",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "XASfEx-TdcY",
+      "slug": "field-guide-to-physical-attacks-against-full-disk-encryption",
+      "title": "Field Guide To Physical Attacks Against Full-disk Encryption",
+      "speakers": [
+        "Edouard D'hoedt",
+        "Hayk Gevorgyan"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "windows",
+        "attack",
+        "device",
+        "disk-encryption"
+      ],
+      "teaser": "Surveys physical attacks that recover BitLocker keys, from DMA and boot tampering to sniffing the TPM bus, with mitigations.",
+      "summary": "This talk surveys how an attacker with physical access can defeat BitLocker, the Windows full-disk encryption product. The speakers explain the key hierarchy, where a volume master key is sealed by key protectors and the TPM releases it at boot only when measured values in registers such as PCR 7 and 11 match expected ones. They present the session as an aggregation of existing research and say they do not advise against BitLocker when it is configured properly.\n\nAttack routes covered include recovery keys exposed through cloud directory accounts, memory extraction over DMA with a hardware device, and the Bit Pixie boot-manager weakness that abuses an outdated, vulnerable boot manager served over the network. The most reliable method is sniffing unencrypted traffic on the SPI bus between the TPM and the processor, clipping a logic analyzer to the BIOS chip and decoding frames to recover the volume master key. A live demo recovered the key, mounted the protected drive on Linux, and outlined post-exploitation options such as resetting local credentials.\n\nFor defenders, mitigations include enabling pre-boot DMA protection, tightening recovery key access in the cloud directory, and requiring TPM plus PIN, which blocks most reboot-based attacks but not an insider who knows the PIN. Chassis intrusion protection was judged easy to bypass, and detection is hard because these attacks leave little trace. Future TPM parameter encryption may counter bus sniffing.",
+      "durationSeconds": 2041,
+      "publishedAt": "2025-10-23",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "C7XwPuf58ac",
+      "slug": "my-other-classloader-is-your-classloader-creating-evil-twin-inst-2",
+      "title": "My Other ClassLoader Is Your ClassLoader: Creating Evil Twin Instances",
+      "speakers": [],
+      "track": "appsec",
+      "topics": [
+        "vulnerability-research",
+        "exploitation",
+        "appsec",
+        "code"
+      ],
+      "teaser": "Explains how Java class loaders can be abused to produce evil twin instances of the same class.",
+      "summary": null,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "U4QXtI9nx50",
+      "slug": "one-day-at-the-internet-storm-center",
+      "title": "One Day At The Internet Storm Center",
+      "speakers": [
+        "Xavier Mertens"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "open-source",
+        "honeypot",
+        "defensive-security"
+      ],
+      "teaser": "Walks through the Internet Storm Center's podcast, diaries, honeypot network, free threat feeds and how to join as a handler.",
+      "summary": "The speaker introduces the Internet Storm Center, a volunteer-run service that grew out of the Lion worm incident and that he has contributed to as a handler since 2015. The talk is a tour of the free resources the service offers rather than a technical deep dive.\n\nThe middle of the talk covers the five-minute daily podcast aimed at commuters, the handler-written diaries that range from Linux malware analysis to campaigns abusing short videos, and the infocon threat level, which has stayed green since 2017 to avoid alert fatigue. The main data comes from the DShield honeypot network, whose logs are sent back daily. Search interfaces show new URLs, top scanning addresses, port trends and keyword activity, and threat feeds are available through an open API without registration. The speaker warns that only the published block list should be applied directly in firewalls, since reputation lookups produce false positives. He also described reconfiguring honeypots to mimic targeted products, which pushed the Netherlands to the top of a WebLogic exposure statistic.\n\nThe closing part is a call for participation. Listeners can run a honeypot on inexpensive hardware, submit samples with control over how they are credited, or apply to become a handler. Applicants need prior security training, must communicate openly, and must be vetted by existing handlers. Handlers publish without legal or marketing review, and the speaker said the group would welcome more European members.",
+      "durationSeconds": 1769,
+      "publishedAt": "2025-10-23",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "ZHPlhhINd5o",
+      "slug": "attacking-the-developer-environment-through-drive-by-localhost-a",
+      "title": "Attacking The Developer Environment Through Drive-by Localhost Attacks",
+      "speakers": [
+        "Joseph Beeton"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "developer",
+        "vulnerability-research",
+        "attack",
+        "ai"
+      ],
+      "teaser": "Shows how a visited web page can silently reach developer services bound to localhost and run code on the machine.",
+      "summary": "The talk starts from a small set of cross-site scripting and CSRF issues in a Java feature-toggle framework. The speaker noticed that the toggle console could evaluate JavaScript on the server, which made the findings more serious if an attacker could reach the endpoint. Browsers still send \"simple\" cross-origin requests to localhost even though the page cannot read the replies, so a malicious site can trigger local services without the user noticing.\n\nThe middle of the talk walks through several examples. A toggle endpoint could be reached this way and used to run code. Spring Boot actuators from an end-of-life version, combined with Spring Cloud, allowed properties to be changed and the application restarted, and redirecting an H2 in-memory database URL led to code execution through H2's alias feature. A Quarkus developer UI accepted similar configuration edits from an unmodified quick-start project. An MLflow server could be pointed at an attacker-controlled storage location to exfiltrate training data or, through pickle deserialisation, run code. Finally, an MCP server using server-sent events did not check session IDs or content types, so a browser could make it write a file on the developer's disk.\n\nThe talk closes with the vendor responses, which included fixes from Red Hat, Spring and Anthropic. Browser work such as Private Network Access was pulled back after breaking sites, and a permission prompt for local network access is the current direction, with uneven adoption. The practical takeaway is that developer tools bound to localhost should still require authentication and strict content-type checks, since the exposure persists.",
+      "durationSeconds": 2065,
+      "publishedAt": "2025-10-23",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "h8sk9gSkhBo",
+      "slug": "compromising-threat-actor-communications",
+      "title": "Compromising Threat Actor Communications",
+      "speakers": [
+        "Ben (@polygonben)"
+      ],
+      "track": "malware",
+      "topics": [
+        "infostealer",
+        "malware-analysis",
+        "intelligence",
+        "attack",
+        "threat-detection"
+      ],
+      "teaser": "Shows how an infostealer's Telegram exfiltration channel, exposed through operator mistakes, lets an analyst monitor a criminal's chat.",
+      "summary": "Infostealers are among the most common malware families, and many of them send stolen data through trusted platforms such as Telegram rather than servers the attacker runs. The talk explains why this is attractive to criminals and how a bot token and chat ID embedded in a sample can be used to find the bot's groups and forward messages from a criminal's chat into one the researcher controls.\n\nThe speaker works through a live case that began with a phishing email carrying an archive with a script. The script fetched a PowerShell loader that dropped a .NET binary, which started a legitimate Windows utility in a suspended state and injected a Nova infostealer payload. Its configuration held Telegram credentials. Mirroring the operator's chat exposed screenshots and keylogs from victims, along with the operator's own infrastructure: purchased domains, Cloudflare and SSH logins, and panel credentials stored in plain text. The chat also showed mass mail campaigns and other malware and credential harvesting activity.\n\nThe main takeaway is that operator mistakes such as hardcoded tokens, reused or exposed credentials, and unchanged default hostnames can produce intelligence and high-fidelity detections. Defenders can look for Telegram API traffic in sandbox or VirusTotal telemetry to surface bot tokens quickly. The closing questions covered how many victims were involved and whether the operator could see the researcher's actions, with the speaker noting that a group admin can hide the bot's identity.",
+      "durationSeconds": 1831,
+      "publishedAt": "2025-10-23",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "9vN_I8WbfJg",
+      "slug": "instrumenting-software-builds-to-detect-stealth-backdoors-and-ot",
+      "title": "Instrumenting Software Builds To Detect Stealth Backdoors And Other Curiosities",
+      "speakers": [
+        "Hilko Bengen"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply",
+        "build",
+        "linux",
+        "detection",
+        "open-source"
+      ],
+      "teaser": "Shows how eBPF tracing of compiler and linker activity can expose hidden backdoors in software builds.",
+      "summary": "The talk addresses supply chain attacks, where a build can be altered in ways that never appear in the source code or the final binary. The speaker builds on an idea from a conference talk about Debian packaging and applies it at the level of the build itself. While a build runs, the approach records which processes read and write which files, then links those relationships into a graph that runs from the finished artifact back to its sources.\n\nUsing the GNU Hello package as an example, the talk shows how many compiler, assembler and archive steps even a trivial program goes through, which makes the graph messy quickly. Only a few kinds of events are needed: file opens for reading and writing, some renames, and process creation. eBPF probes make this practical with low overhead, whereas LD_PRELOAD fails on statically linked tools and strace is too costly. Applied to the XZ backdoor, the method would have flagged an object file that no compiler produced and a source file patched during the build. It also exposed race conditions in OCaml builds that compile bytecode and native variants in parallel.\n\nThe tooling is not yet published. Planned releases include a watcher tool, scripts with signatures for spotting anomalies in the graph, and possible CI integration. In questions, an audience member asked how this differs from nm, which lists symbols but not how files entered a build. The speaker noted that reproducible builds efforts could benefit, and described the work as still in its early stages.",
+      "durationSeconds": 1075,
+      "publishedAt": "2025-10-23",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "jywvoot4bMs",
+      "slug": "nightmare-on-ntlm-street-legacys-revenge-3",
+      "title": "Nightmare On NTLM Street: Legacy’s Revenge",
+      "speakers": [
+        "Marina Bochenkova"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "windows",
+        "identity",
+        "lessons-learned",
+        "incident-response",
+        "infrastructure"
+      ],
+      "teaser": "Recounts a stalled enterprise effort to retire NTLM, with its rollout missteps and the lessons drawn from them.",
+      "summary": "The talk follows a multi-year effort to retire LAN Manager and NTLM from a corporate Windows environment, a project that never reached its original goal. The speaker explains why these older authentication protocols are weak, covering cracking, relay and pass-the-hash attacks, and why Kerberos was meant to replace them. In practice the work stalled: authentication logs did not show where connections were headed, vendor support offered generic advice, and clients quietly fell back to NTLM whenever a direct path to a domain controller was missing.\n\nThe rollout proceeded in stages, starting with LM and NTLMv1 on workstations and then moving to servers. Testing by quietly changing settings and waiting for complaints surfaced legacy dependencies, and restarts had to be coordinated with an outside service provider. The final step, tightening domain controllers, went wrong when a misapplied setting locked staff out of the network on a Monday morning. A colleague reverted it after an overnight response, but the domain controllers were left accepting the older protocols.\n\nThe main takeaways are to map hidden dependencies and fallback paths before changing anything, enable detailed logging early, and communicate every change, especially when a major change coincides with personal absence. Technical guard rails matter more than relying on one person's care. The speaker also argues that blaming individuals slows recovery, and that a vendor keeping a weak protocol for compatibility shifts heavy work onto operators.",
+      "durationSeconds": 2170,
+      "publishedAt": "2025-10-23",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ilZnz6qXNyA",
+      "slug": "the-beauty-of-vibe-coding",
+      "title": "The Beauty Of Vibe Coding",
+      "speakers": [
+        "Andras Iklody"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "development",
+        "code",
+        "appsec",
+        "lessons-learned"
+      ],
+      "teaser": "Follows one developer's attempt to build a web UI entirely through LLM prompting, and where that approach broke down.",
+      "summary": "The speaker set out to test whether a complete application could be built with vibe coding, where a large language model makes every technical decision and the human only prompts for changes. The test project was the user interface of an anonymous reporting tool that submits data to MISP. The front end stores no data, so it looked like a low-risk candidate. The model chose Alpine.js, Bootstrap and plain HTML and CSS, and early progress looked promising, including a dynamic form layer generated from MISP object definitions.\n\nProblems grew as the project moved into refactoring. During one refactor the model silently dropped Alpine.js in favour of another approach, split a single-page design into separate HTML files with duplicated menus and drifting styles, and rewrote whole files so that unrelated parts broke. Limited context made it forget earlier decisions and drop parts of the codebase. A long chat also overwhelmed the browser. The generated code did no output sanitisation, which left it open to cross-site scripting.\n\nThe speaker finished the last part by hand. By their estimate the project took two to three weeks, when writing it manually might have taken about one. The takeaway is that the approach suited small, tightly scoped tasks and up-front planning, but not large, multi-file, long-running projects. Generated code can look clean while hiding defects, and the time spent waiting on prompts can disguise the real cost.",
+      "durationSeconds": 689,
+      "publishedAt": "2025-10-22",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "SC2zIli8MNA",
+      "slug": "kaitai-struct-a-tool-for-dealing-with-binary-formats",
+      "title": "Kaitai Struct: A Tool For Dealing With Binary Formats",
+      "speakers": [
+        "Petr Pucil",
+        "Mikhail Yakshin"
+      ],
+      "track": "appsec",
+      "topics": [
+        "reverse-engineering",
+        "open-source",
+        "fuzzing",
+        "tool",
+        "code",
+        "web"
+      ],
+      "teaser": "Shows how a declarative format language turns binary file and protocol descriptions into parsers across many languages.",
+      "summary": "The speakers introduce Kaitai Struct, an open-source declarative language for describing binary formats. They trace its origins to reverse engineering undocumented protocols from packet captures, where each hypothesis about a byte had to be checked against thousands of samples. Moving from ad hoc scripts in one language to another led to a single format description that could drive code in many languages.\n\nThe talk covers how a format specification is compiled into ready-made parsers, currently for twelve languages, with serializers for Python and Java. Other uses include building reference parsers to check hand-written code, guiding fuzzers with a clean implementation, and sharing one format definition between back end and front end teams. A community library of about 185 format specifications was mentioned, along with auto-generated diagrams for explaining formats to colleagues.\n\nThe second speaker demonstrates the browser-based web IDE using the GIF format. The header, logical screen descriptor and global color table are defined step by step, with derived fields extracted from bit flags, and the parsed object tree updates as the specification changes. The demo ends by exporting the result to JSON and generating Python parser code. In the Q&A, the limits were discussed: the tool stops at the first malformed structure, a proposal for scanning damaged data is still unfinished, and most language implementations stream large files rather than loading them into memory.",
+      "durationSeconds": 1828,
+      "publishedAt": "2025-10-22",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "k7Fd1Ewy2_I",
+      "slug": "101-how-to-break-ips-and-siem",
+      "title": "101: How To Break IPS & SIEM",
+      "speakers": [
+        "Nicol Dankova"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "security-operations",
+        "detection",
+        "lessons-learned",
+        "defensive-security"
+      ],
+      "teaser": "Recounts how a rushed IPS rule deployment flooded a SIEM and reset production settings to defaults.",
+      "summary": "Nicol Dankova recounts an incident from several years ago, when a security operations analyst had to write and deploy intrusion prevention rules for a newly disclosed vulnerability because the vendor had not yet released a signature. The team was under pressure during a busy period after a ransomware wave, so the rules were checked for matching behaviour and then rolled out to every IPS on a Friday evening.\n\nThe next morning, the SIEM was overwhelmed by IPS alerts, and the prevention systems in the core data center were blasting out events. The IPS settings had apparently reverted to defaults. Recovery was slow because there was no snapshot to roll back to, so the analyst had to export the list of changed rules and reset hundreds of them one by one. No on-call coverage existed for core security functions at the time, which made the outage harder to handle.\n\nThe takeaways are practical. Test how a new rule affects alert volume, not only whether it matches. Keep on-call coverage for critical security tooling, back up IPS and management configurations, and confirm whether the management console can roll back changes. Be cautious about making changes right before a weekend. The talk closes with a critique of the vendor's recovery mechanism, which the speaker described as unreliable.",
+      "durationSeconds": 626,
+      "publishedAt": "2025-10-22",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "lrtNKy4XOEA",
+      "slug": "what-malware-leaves-behind-analysing-forensic-traces-of-ransomwa",
+      "title": "What Malware Leaves Behind: Analysing Forensic Traces Of Ransomware",
+      "speakers": [],
+      "track": "malware",
+      "topics": [
+        "ransomware",
+        "malware-analysis",
+        "incident-response",
+        "defensive-security"
+      ],
+      "teaser": "Examines the forensic traces ransomware leaves on a system and how analysts can read them.",
+      "summary": null,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "WVSzEXo1_jE",
+      "slug": "integrating-zeek-with-third-party-applications",
+      "title": "Integrating Zeek With Third-Party Applications",
+      "speakers": [
+        "Christian Kreibich"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "network",
+        "detection",
+        "open-source",
+        "monitoring",
+        "intelligence"
+      ],
+      "teaser": "Shows how external applications plug into a running Zeek cluster through events, APIs, storage and telemetry integrations.",
+      "summary": "Christian Kreibich, tech lead of the Zeek project, explains how external applications can be connected to a running Zeek deployment. He first outlines the architecture: packet parsing produces events, which a scripting layer processes, and the processes of a cluster exchange those events over publish-subscribe message buses. Any application that speaks websockets can join this bus through a port on the manager node, subscribe to topics, and publish events as if it were a Zeek process.\n\nThe middle of the talk covers integration patterns from real deployments. A large university used enrichment data, such as which department or Wi-Fi network an address range belongs to, to add context to its logs. Machine learning verdicts came back through paired events acting like remote procedure calls, and a host agent added user and application details to connection logs. Other examples included YARA file analysis fed by a job queue, blocking abusive hosts at a research lab, and threat indicator import from MISP. Older file-based frameworks and the database-backed storage framework were also covered.\n\nThe closing advice favours the event interface with the provided client libraries over the legacy Broker library, and a single websocket connection rather than many. The Q&A added that Zeek does not deduplicate traffic and that packet sampling at the tap removes the detail needed for parsing. The speaker invited developers building integrations to get in touch with the project.",
+      "durationSeconds": 1834,
+      "publishedAt": "2025-10-22",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "PQAKfl0uACI",
+      "slug": "digic8-oracle",
+      "title": "Digic8 Oracle",
+      "speakers": [
+        "Laurent Clevy"
+      ],
+      "track": "hardware",
+      "topics": [
+        "reverse-engineering",
+        "embedded",
+        "device",
+        "hardware",
+        "vulnerability-research"
+      ],
+      "teaser": "Shows how emulating a camera's firmware crypto routine can decrypt and verify Canon DIGIC 8 update files.",
+      "summary": "Laurent Clevy opens with his interest in Canon digital cameras as a playground for file formats and cryptography, and his goal of running native code on a recent EOS model. He examines Canon's firmware update files, which contain a small updater that runs a stripped-down operating system to write new firmware to flash. Both parts are signed and encrypted, and a region table defines which byte ranges each signature covers.\n\nComparing the old and new formats, the layout is largely unchanged, but the signature section now holds four values instead of two and the decryption routine is smaller, so old keys no longer work. He dumped firmware with a hidden script, then ran a crypto routine copied into RAM under Unicorn emulation without extracting its algorithm or key. Since one key is reused across several DIGIC 8 models, a dump from one camera could decrypt an update for another, which he calls an oracle. Crypto constants such as an S-box and the SHA-256 K table then helped locate hashing and verification functions, which he matched to the region table before scripting decryption and signature checks.\n\nThe main takeaway is that asymmetric signatures make forging valid updates far harder on newer cameras, and Canon changed keys again later. In questions, he noted that no integrity check was found at boot, so writing flash directly would be risky. For practitioners, emulation offered a quick route to understanding an unfamiliar scheme with little manual reversing.",
+      "durationSeconds": 1831,
+      "publishedAt": "2025-10-22",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "Dd-SGkb50uU",
+      "slug": "security-monitoring-and-response-in-large-linux-environments",
+      "title": "Security Monitoring And Response In Large Linux Environments",
+      "speakers": [
+        "Hilko Bengen",
+        "Hendrik Schmidt"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "linux",
+        "incident-response",
+        "monitoring",
+        "threat-detection",
+        "security-operations"
+      ],
+      "teaser": "Shows how a large enterprise builds Linux security monitoring with auditd, Laurel and Velociraptor for incident response.",
+      "summary": "The speakers describe a security monitoring project for a large enterprise running more than 10,000 systems, mostly Linux, with over 100,000 clients connecting to them. Asset inventories were out of date, and cloud and container hosts appeared and disappeared constantly, so a central asset list could not be trusted. Their raw audit output was too noisy to be useful in Splunk, so they wrote a post-processor that turned it into structured JSON.\n\nThe Laurel tool runs on each endpoint and adds process ancestry and custom labels based on its configuration. A labelled web application process that spawns a shell becomes an easy signal to hunt for. The team also evaluated commercial EDR products and found Windows-first designs with weak Unix handling, opaque detection logic and limited custom rules. They chose Velociraptor for Linux server response, running clients on every server with a distributed master and minion nodes behind a TCP load balancer. The shared NFS state became a bottleneck they were still working on. Velociraptor artifacts gather package, port and service data to label hosts, run integrity checks and YARA scans, and work with the SIEM, whose alerts trigger automated investigations.\n\nThe main lessons were that enterprises should contribute back to open-source projects, since maintainers lack their operational experience, and that the setup scaled to roughly 10,000 to 20,000 systems with more hardware. The team plans to move its sensors to eBPF and publish more of its artifacts.",
+      "durationSeconds": 1484,
+      "publishedAt": "2025-10-22",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "H56WqnRxf-g",
+      "slug": "open-source-is-a-virus",
+      "title": "Open Source Is A Virus",
+      "speakers": [],
+      "track": "supply-chain",
+      "topics": [
+        "open-source",
+        "risk",
+        "supply",
+        "trust"
+      ],
+      "teaser": "Examines the claim that open source behaves like a virus, spreading into the software that uses it.",
+      "summary": null,
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "ceE3HodIZTo",
+      "slug": "smack-my-llm-up",
+      "title": "Smack My LLM Up!",
+      "speakers": [
+        "Jindrich Karasek"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "intelligence",
+        "social",
+        "ai",
+        "attack"
+      ],
+      "teaser": "Traces a scam ring that locks influencers out of their social accounts and abuses automated support channels to take them over.",
+      "summary": "The talk opens with a few quick demonstrations of fooling AI systems. A steganography-style overlay caused a computer vision model to misdetect an image, and a chat model was reportedly coaxed into giving dangerous chemistry guidance through a framing trick. The speaker then moves to the main case study: a coordinated scheme that targets social media influencers, mostly women, by mass-reporting their accounts until the platform locks them out.\n\nVictims are approached by fake support contacts who demand payment to restore access. After payment, the attackers obtain email and social account credentials, then trigger an automated support workflow that unlocks the account through a crafted reply. The speaker describes contacting the operators, observing their coordination on messaging apps, and analyzing a victim intake web page that appeared poorly secured and held victim data. Natural language processing was used to test which phrasing the support model responded to, and the speaker shares that analysis as a Jupyter notebook.\n\nThe takeaway is that automated support pipelines and LLM chatbots can be manipulated by crafted input, and that threat hunting benefits from applying NLP to scam and phishing text to link campaigns and actors. The talk also flags the ethical questions that arise when researchers probe criminal infrastructure and victims directly.",
+      "durationSeconds": 1455,
+      "publishedAt": "2025-10-22",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "PgowsteTZ7M",
+      "slug": "silent-killers-unmasking-a-large-scale-legacy-driver-exploitatio-2",
+      "title": "Silent Killers: Unmasking A Large-Scale Legacy Driver Exploitation Campaign",
+      "speakers": [
+        "Jiří Vinopal"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "reverse-engineering",
+        "vulnerability-research",
+        "windows",
+        "detection"
+      ],
+      "teaser": "Traces a large-scale campaign that abused an old signed driver to terminate security products and deliver a RAT.",
+      "summary": "The talk opens with background on vulnerable drivers and why attackers use them to terminate protected security processes. The speaker, from Check Point Research, explains how a signed driver exposing process termination can serve as an EDR killer, and how a future-focused hunting approach was used to search public and internal telemetry for drivers not yet on blocklists.\n\nThe hunt surfaced a campaign attributed to the Chinese APT Silverfox. Its first-stage samples numbered in the hundreds of thousands, and they repeatedly dropped more than 2,500 variants of an old anti-rootkit driver, version 202, that was missing from Microsoft's blocklist because its certificate hash had not been added. The loader chain used three stages with encrypted payloads disguised as image files, loaded in memory and persisted through scheduled tasks and DLL side-loading. Variants were produced by altering the PE checksum and certificate padding, which kept signatures valid while defeating hash-based detection. The EDR-killing module, protected with VMProtect, was analysed by dumping process memory and rebuilding imports in IDA, which confirmed the same control code used to terminate processes.\n\nThe campaign ended with a Ghost RAT variant. For practitioners, the key takeaways are to rely on authentihash rather than file hashes for these drivers, to apply the vulnerable driver blocklist manually rather than waiting for infrequent automatic updates, and to treat old signed drivers with unusual service registrations as risky even when they are not flagged.",
+      "durationSeconds": 1850,
+      "publishedAt": "2025-10-22",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "uwiCu7di59Q",
+      "slug": "slipping-through-the-cracks-how-malicious-emails-evade-detection",
+      "title": "Slipping Through The Cracks: How Malicious Emails Evade Detection",
+      "speakers": [],
+      "track": "social-engineering",
+      "topics": [
+        "detection",
+        "attack",
+        "threat-detection"
+      ],
+      "teaser": "Explains how malicious emails get past detection controls and the techniques attackers use to slip through.",
+      "summary": null,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Go2h2FEB2x0",
+      "slug": "reversing-a-pay-phone-for-fun-but-no-profit",
+      "title": "Reversing A Pay Phone For Fun But No Profit",
+      "speakers": [
+        "Inbar Raz"
+      ],
+      "track": "hardware",
+      "topics": [
+        "reverse-engineering",
+        "hardware",
+        "embedded",
+        "device",
+        "tool"
+      ],
+      "teaser": "Shows how an obscure payphone CPU was reverse engineered by writing a Ghidra processor module and patching ROM firmware.",
+      "summary": "The speaker set out to reverse engineer a decommissioned payphone from the 1990s, a rugged unit built to resist vandalism. Public manuals were scarce, so the device was obtained secondhand, and its pin lock was opened with help from a lockpicking enthusiast. Later, a junkyard offered several more units, which had to be drilled free from their poles.\n\nInside, the main board carried an uncommon CMOS processor from a family used in spacecraft. The firmware was read from a flash chip, and its strings showed phone-related text and the original developers' names. No disassembler supported the chip, so the speaker wrote a processor module for Ghidra from text definitions, covering opcodes, registers and an unusual rule where call arguments sit after the opcode. Hebrew text needed a code page conversion script. Logic analyzer captures failed to reveal which of thirteen branches printed the out-of-service message, so the firmware was patched with hooks that drew custom text on the LCD.\n\nThe project then turned toward reusing the chassis, with an Arduino driving the display and a caller ID module considered as a modern replacement. Work stalled during the pandemic and other commitments, and it resumed after a conversation at a conference, leading to a Hebrew blog post that drew far more readers than expected. The main lesson is that routine knowledge is new to others, so sharing findings is worthwhile.",
+      "durationSeconds": 1885,
+      "publishedAt": "2025-10-22",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "mdSFc9b5VZE",
+      "slug": "exploring-threats-leveraging-blockchains",
+      "title": "Exploring Threats Leveraging Blockchains",
+      "speakers": [
+        "Paul Rascagneres"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "intelligence",
+        "malware-analysis",
+        "network",
+        "blockchain"
+      ],
+      "teaser": "Shows how threat actors use public blockchains like Ethereum as command-and-control channels and how analysts can hunt them.",
+      "summary": "The talk starts from the problem that attackers are using public blockchains as command-and-control infrastructure, which is hard to take down because the chain is decentralised and the traffic looks like ordinary blockchain use. The speaker, a malware analysis lead who came to this topic only recently, gives a beginner-friendly primer. He covers full nodes, RPC endpoints reached over HTTPS or WebSockets, and smart contracts, which can be read for free but cost a small fee to write to. Because updating stored data is cheap, an operator can swap out a server address without touching the malware.\n\nThe middle of the talk walks through several cases. One malware family stored PowerShell commands in a contract. A North Korean-linked campaign kept obfuscated JavaScript as its next stage. Another sample used a contract to hold a C2 address, with write access tied to a specific wallet, which blocked a would-be hijacker. Other cases used decentralised storage networks, IPFS and NKN, the latter giving a reverse shell. Each new chain meant learning its protocol and bytecode again, and some chains have almost no analysis tools.\n\nThe closing section covers hunting. Analysts can search for RPC endpoint strings in sandbox or file repositories, watch transactions for encoded payloads or URLs, and use block explorers, transaction simulators, decompilers and graph tools to pivot from wallets to contracts. Victims are largely invisible because infected machines do not write transactions. Blocking well-known RPC endpoints may also disrupt legitimate business use.",
+      "durationSeconds": 1710,
+      "publishedAt": "2025-10-22",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "y943TG71ws4",
+      "slug": "a-pragmatic-approach-to-build-a-threat-landscape",
+      "title": "A Pragmatic Approach To Build A Threat Landscape",
+      "speakers": [
+        "Thomas Patzke"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "intelligence",
+        "framework",
+        "practical"
+      ],
+      "teaser": "Shows how a chemical company builds a relevance-scored threat landscape from free sources and MITRE ATT&CK.",
+      "summary": "A cyber defense team at a chemical company kept receiving stakeholder questions about which threats and actors actually mattered to them. With no budget for paid threat intelligence services, the team needed a method that was practical, grounded in its own environment rather than general public reporting, and simple enough for anyone on the team to repeat.\n\nThe approach starts by gathering threat actors from free or already-paid sources: community exchange, MISP, MITRE resources, threat report collections, feed readers, vendor portals, and the team's own cases and detections, which received a scoring bonus. Filtering by the chemical sector alone left too little data, so the scope widened to customer sectors such as pharma, food, and personal care. Opportunistic threats were also considered, and actor aliases that differ between sources were accepted as a known inaccuracy. Techniques tied to the relevant actors were scored by how many sources agreed, then normalised. The outputs included ATT&CK Navigator layers, spreadsheets with mitigation and data source mappings, and a selection of Atomic Red Team tests.\n\nThe speaker stressed that mitigation mappings are only partial and that only about a fifth of techniques ended up rated relevant. Remaining techniques should not be ignored, since sources are biased and threats change, and low-coverage areas reveal gaps to fill. Endpoint telemetry proved especially important. Technique changes were around ten percent over a year, so a yearly refresh was judged enough. Planned improvements include decaying scores for older threats, adding related sectors, weighing source credibility, and including opportunistic threats at a lower score.",
+      "durationSeconds": 1729,
+      "publishedAt": "2025-10-22",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "-5tbZP1JiwY",
+      "slug": "slovakian-lessons-on-proactive-cybersecurity-and-vuln-disclosure",
+      "title": "Slovakian Lessons On Proactive Cybersecurity & Vuln Disclosure",
+      "speakers": [
+        "Michal Rampášek",
+        "Alexander Valach"
+      ],
+      "track": "policy",
+      "topics": [
+        "vulnerabilities",
+        "intelligence",
+        "network",
+        "risk",
+        "trust"
+      ],
+      "teaser": "Shows how a national CSIRT builds proactive scanning, vulnerability assessment and threat intelligence for public sector clients.",
+      "summary": "The speakers, from Slovakia's national CSIRT, explain how their unit moved from reactive incident handling toward proactive services after the NIS2 directive widened its remit. They cover the legal and technical reasoning behind non-intrusive scanning of public-facing networks, and the role national law gives the team as a coordinated vulnerability disclosure intermediary while a national disclosure policy is still pending.\n\nThe core of the talk is three services built since 2021. Achilles runs semi-automated vulnerability assessment against assets that constituents register in a government system, using Nessus as the main scanner, with monthly reports and a ranking of the worst-performing organisations. Afrodita is a threat intelligence service that shares indicators through MISP and issues early warnings after analysts manually validate the data. The team illustrated its value with a distributed denial-of-service campaign that had no effect on organisations that had been warned in advance. A third service offers on-demand penetration testing, configuration benchmarking and open-source vulnerability research.\n\nLooking ahead, the team plans a second version of Achilles, intended to be open source, with more frequent scanning, a client web portal and additional scanners to reduce dependence on one vendor. Their main lessons are that proactive services need explicit legal support, reliable asset data and automation, since manual validation does not scale. In the Q&A they explained that false-positive suppression is kept per organisation and that the scanning service is offered free to constituents.",
+      "durationSeconds": 2007,
+      "publishedAt": "2025-10-22",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "cBW6oQUVVDc",
+      "slug": "oops-i-hacked-it-again-tales-and-disclosures",
+      "title": "Oops, I Hacked It Again: Tales And Disclosures",
+      "speakers": [
+        "Ignacio Navarro"
+      ],
+      "track": "policy",
+      "topics": [
+        "vulnerabilities",
+        "web",
+        "lessons-learned",
+        "practical"
+      ],
+      "teaser": "Walks through web and API flaws found in real companies and the disclosure approaches used to report them.",
+      "summary": "The talk opens with a look at how ethical hacking is defined differently depending on who is asked, and argues that the right way to disclose a finding depends heavily on local law. A disclaimer notes that some activities shown may not be legal everywhere and are presented for educational purposes only.\n\nThe middle section tells a series of stories from testing done in Argentina. They cover an amusement park payment system with weak APIs and race conditions, a web server that exposed a version control directory containing secrets, a supermarket customer portal where sequential identifiers exposed personal records, a ticketing platform where a modified request let the speaker reset an administrator password, and an internal login flow whose pre-authentication response leaked a value that worked as the password. The speaker also covers common mistakes in penetration testing, such as hitting systems that turn out to be production and leaving shells or backdoors behind.\n\nThe closing part compares full, private, responsible, coordinated and bug bounty disclosure, and notes that some countries run coordinated programs through national CERTs. Practical advice includes verifying a finding before reporting, keeping the report clear about who you are and what the impact is, and offering help with the fix. Companies often do not reply, so patience and realistic expectations matter. The talk ends with a reminder to look after mental health while doing this work.",
+      "durationSeconds": 1470,
+      "publishedAt": "2025-10-22",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "IUbB9Eb4CM8",
+      "slug": "intelmq-ai-adding-ml-model-support-to-intelmq",
+      "title": "intelmq.ai - Adding ML Model Support To Intelmq",
+      "speakers": [
+        "Aaron Kaplan",
+        "Sebastian Wagner",
+        "Jürgen Brandl"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "open-source",
+        "automation",
+        "lessons-learned"
+      ],
+      "teaser": "Shows where LLM-generated code for IntelMQ bots works and fails, and how feedback loops and documentation help.",
+      "summary": "IntelMQ is an open-source tool that processes structured security feeds, such as CSV or JSON files from scanning services, and forwards normalised events to databases or MISP. The speakers explore how large language models could fit into that pipeline. They split the question into three cases: structured input already covered by generic bots, structured input with no matching bot, and unstructured threat intelligence reports.\n\nFor the first case, a model given a CSV feed mapped columns to the wrong fields and invented configuration options, because implicit meanings such as source and destination were never written down. For the second, one-shot generation failed, so the team built a small agent that fetches a file, writes code, runs quality checks and tests the bot in a live IntelMQ setup. It eventually produced working output, yet it often claimed success when it had not, so self-reported grades could not be trusted. Writing documentation for newcomers and having a model follow it exposed gaps, suggesting docs can be tested much like code. For unstructured reports, a typed extraction framework produced events and a MISP export, but it still mislabelled some fields.\n\nThe practical lessons are that models need explicit documentation, a feedback loop backed by tests, and human verification of every result. Letting an agent execute code on a machine is risky, and the prototype remains a proof of concept. The speakers closed with links to the main project and the generated bot code.",
+      "durationSeconds": 1520,
+      "publishedAt": "2025-10-21",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "-K0LsW0hl3M",
+      "slug": "phishing-detection-using-various-parts-of-dns-ecosystem",
+      "title": "Phishing Detection Using Various Parts Of DNS Ecosystem",
+      "speakers": [
+        "Piotr Białczak",
+        "Michał Hałoń"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "phishing",
+        "threat-detection",
+        "machine-learning",
+        "network",
+        "intelligence"
+      ],
+      "teaser": "Shows how DNS registry, resolver and query-stream data can surface phishing domains using machine learning and graph-based correlation.",
+      "summary": "Phishing and fraud together made up about 95% of the roughly 98,000 incidents the Polish national CERT recorded in 2024. The speakers described the national response: a manually verified warning list of malicious domains that major Polish providers apply, and a detection system built on data from the .pl registry. After phishing registrations dropped, that registry-based model roughly doubled its detections, though it still caught only about 30% of listed domains. They reported that around 20% of its detections were not found by other methods, and that it was usually faster at spotting domains.\n\nThe middle of the talk moved to DNS resolver query streams, covering traffic across Europe under the DNS4EU project. The pipeline filtered out popular domains using allowlists, scored the remaining names with a fastText model and then a LLaMA-based embedding classifier, and grouped domains that clients queried close together in time to find related infrastructure. On a three-hour sample of about 31 million queries, the team found roughly 31,000 unique suspected phishing domains. A random check of 800 of them against VirusTotal found that more than half were already flagged. Open challenges included class imbalance across top-level domains in training data, automating graph review, handling streaming volume, and verifying detections when only a domain name is available.\n\nThe closing lessons were that registry-based detection depends on a steady supply of phishing, that TLD server data is underused, and that simple regex and keyword hunting remains valuable alongside machine learning. Results are feeding the DNS4EU threat feed and the Polish warning list, while the other methods are moving toward production.",
+      "durationSeconds": 2137,
+      "publishedAt": "2025-10-21",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "-ek5znxcMb0",
+      "slug": "no-ssh-to-your-router-vendor-might-have-things-to-hide",
+      "title": "No SSH To Your Router? Vendor Might Have Things To Hide",
+      "speakers": [
+        "Stanislav Dashevskyi",
+        "Francesco La Spina"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "reverse-engineering",
+        "embedded",
+        "iot",
+        "exploitation"
+      ],
+      "teaser": "Shows how researchers reach root on a locked-down TP-Link router by reverse engineering its modified Lua bytecode.",
+      "summary": "The talk looks at why many consumer and business routers ship with firmware that blocks root access, even though most of them are built on OpenWRT or its forks. The presenters explain the usual reasons researchers want root, such as testing exploits on real hardware, running dynamic analysis tools, or customising a device. They then outline where to look first: vendor documentation, recurring and historical bugs, hidden support features, and above all the web management interface.\n\nThe middle of the talk focuses on a TP-Link Omada router. An older debug mechanism let anyone derive the root password from the MAC address, and the vendor later replaced it with a challenge-response scheme tied to a private key. A leftover debug-file fallback kept a weaker path alive, and the same key also signs firmware, which makes downgrades impossible. The team turned to the LuCI web interface component instead and found that the vendor had altered the Lua bytecode format in unusual ways. Once they corrected those deviations, they could recover readable source and found a newline-handling flaw in a WireGuard key setting that allowed chained OS commands, though it required authentication first.\n\nThe closing live demo showed a related TP-Link device where the same approach produced a root password. The takeaways are that root access is often reachable through documentation, support paths or the web UI, and that vendors who lock down open-source software without contributing back tend to create more security problems.",
+      "durationSeconds": 1528,
+      "publishedAt": "2025-10-21",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "r-vsdcoFP2k",
+      "slug": "overlaps-overriding-laps-logic-2",
+      "title": "OverLAPS: Overriding LAPS Logic",
+      "speakers": [],
+      "track": "red-team",
+      "topics": [
+        "windows",
+        "identity",
+        "attack",
+        "exploiting"
+      ],
+      "teaser": "Examines how the logic of Windows LAPS, the local administrator password tool, can be overridden.",
+      "summary": null,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "r-rChSE8-VA",
+      "slug": "uncovering-how-cybercriminals-are-exploiting-the-employment-mark",
+      "title": "Uncovering How Cybercriminals Are Exploiting The Employment Market",
+      "speakers": [
+        "Ionuț Baltariu"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "open-source",
+        "attack",
+        "intelligence",
+        "social",
+        "engineering"
+      ],
+      "teaser": "Shows how fake recruiter coding tests hide multi-stage malware in cloned projects, tied to North Korean Lazarus subgroups.",
+      "summary": "The talk examines a malware campaign that uses fake recruiters on LinkedIn, Upwork and Fiverr to lure developers. The offers promise generous remote work paid in cryptocurrency, and candidates are asked to complete a coding assessment hosted in a repository. The presenter recounts an approach from start to finish and points out warning signs: vague repository and user names, generic company details, and a recent commit from an unfamiliar author that touched nearly every file in an existing project.\n\nThe middle section follows the infection chain. Malicious code is hidden through obfuscation or fetched at runtime from attacker-controlled endpoints, sometimes disguised with error handlers or public JSON hosting. A JavaScript loader runs when the project starts under Node.js, targets browser extensions for crypto wallets, and launches a Python process chosen by operating system. The Python scripts are wrapped in many layers of Base64 and other encodings, sometimes dozens deep. Modules cover keylogging, clipboard capture, credential and card theft from Chromium-based browsers, a configurable file stealer, a backdoor, and a cryptominer for Monero and Ethereum that backs off when a full-screen application is running.\n\nThe presenter links the activity to the Lazarus group and its subgroup APT38, tied to the Contagious Interview campaign. The operators keep changing tactics, moving to live interviews, npm packages, Visual Studio Code extensions and AI-assisted malware development. The practical advice is to treat unexpected coding tests with suspicion, verify recruiters through official company channels, and run unfamiliar code only in isolated environments.",
+      "durationSeconds": 1804,
+      "publishedAt": "2025-10-21",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5g1X8_0Gbs8",
+      "slug": "from-buzzword-to-battlefield-the-cybersecurity-challenges-of-sma",
+      "title": "From Buzzword To Battlefield: The Cybersecurity Challenges Of Smart Cities",
+      "speakers": [
+        "Marina Bochenkova"
+      ],
+      "track": "policy",
+      "topics": [
+        "iot",
+        "ics",
+        "privacy",
+        "risk",
+        "infrastructure"
+      ],
+      "teaser": "Argues that smart city security needs a holistic view across IT, OT and IoT, illustrated with incidents from Amsterdam and Luxembourg.",
+      "summary": "Marina Bochenkova argues that smart cities need to be treated as a security problem of their own, because they combine IT systems, operational technology, IoT devices and many different stakeholders. Each of these brings its own weaknesses, so protecting one department in isolation does not work. The talk opens by framing that definition and then walks through how a city creates exposure. Open data portals with APIs can give an attacker a detailed picture of organisations and infrastructure, and property and civic records add personal details. Examples from the Netherlands include insider misuse of COVID track and trace data, an access control misconfiguration that exposed every record to every employee, and an exposed database of a private testing company.\n\nThe middle section moves to operational technology and IoT. Sensors and actuators in water and traffic systems have long lifecycles, are costly to patch and are often connected to the internet without adequate protection. Using examples from Belval in Luxembourg and Amsterdam, the talk describes planned sensor deployments that collect pedestrian and vehicle data, and how city-owned hardware can capture phone identifiers even when no one connects to city Wi-Fi. A flood-gate control failure in Amsterdam during a storm, which left gates open until staff noticed, shows how one unnoticed fault can have physical consequences. The talk also notes rising attacks on OT organisations, some causing physical damage.\n\nThe closing part argues for security built in from the start, repeated testing and use of existing guidance such as IEC 62443, cyber-informed engineering and an adapted NIST framework for smart cities. The speaker stresses that well-informed legislation and community involvement are needed, since trust in institutions depends on protecting citizens' data.",
+      "durationSeconds": 1681,
+      "publishedAt": "2025-10-21",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "XDFWsWIATxA",
+      "slug": "lolblue-living-off-the-land-with-blue-team-tools",
+      "title": "LOLBlue : Living Off The Land With Blue Team Tools",
+      "speakers": [],
+      "track": "red-team",
+      "topics": [
+        "attack",
+        "windows",
+        "defensive-security",
+        "detection"
+      ],
+      "teaser": "Explores abusing defensive security tools already present on a host to carry out living-off-the-land attacks.",
+      "summary": null,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "XpDBRsuzwbg",
+      "slug": "containing-the-threat-analyzing-cryptomining-campaigns",
+      "title": "Containing The Threat: Analyzing Cryptomining Campaigns",
+      "speakers": [
+        "Bogdan Trufanda",
+        "Mihai Vasilescu"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "cloud",
+        "container",
+        "malware-analysis",
+        "threat",
+        "detection"
+      ],
+      "teaser": "Traces how TeamTNT-style cryptomining campaigns abuse exposed Docker APIs and how runtime detection and prevention can stop them.",
+      "summary": "The talk opens with a container primer written from the host's point of view. A container is a regular process on the host, isolated by namespaces, which limit what it can see, and cgroups, which limit how much it can use. The speakers show that Docker containers have no resource limits by default, and they walk through capabilities and seccomp profiles, noting that these controls only help when the operator sets them.\n\nThe core of the talk is cryptomining activity that has persisted for several years. The speakers report tens of thousands of weekly detections in their telemetry and trace how the TeamTNT actor moved from exposed Redis servers to exposed Docker APIs and later to Kubernetes. The typical flow scans for open endpoints, starts a privileged container, and downloads a miner, then steals credentials and plants SSH keys for persistence. They say they built a comparable setup in under an hour. A live demo compared a prevention product with a detection-only Falco setup: the prevention side killed the miner before memory climbed, while the detection-only side let the miner consume nearly all available memory.\n\nThe main takeaway is that an unauthenticated Docker daemon exposed over TCP gives anyone who finds it root-level control, so not exposing it is the only dependable control. TLS authentication and runtime monitoring reduce the risk, and rootless Podman limits what a compromised container can do on the host. The speakers also note that Docker and Redis are moving to drop unauthenticated remote access by default, which may change how this opportunistic activity develops.",
+      "durationSeconds": 1987,
+      "publishedAt": "2025-10-21",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "CRqRVzuLJXc",
+      "slug": "incident-response-when-hackers-try-to-steal-your-spotlight",
+      "title": "Incident Response When Hackers Try To Steal Your Spotlight",
+      "speakers": [
+        "Melina Phillips"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "linux",
+        "threat-detection",
+        "web",
+        "security-operations"
+      ],
+      "teaser": "Traces the post-compromise artifacts a breached beauty retailer left on Linux systems and how responders can spot them.",
+      "summary": "The talk follows the traces an attacker leaves after breaking into a server, using a breach at a small beauty retailer as the case study. Its appointment booking site had broken access controls: a logged-in customer could change a predictable role identifier, reach an administrator upload function, and push a shell file to the host. From there the intruder enumerated accounts and environment variables, gained remote access, and moved between machines.\n\nThe speaker argues that EDR or XDR consoles should not be the only source of truth, since an attacker with console access can stop the sensor or isolate a host. Forwarding those logs to a SIEM and adding network detection, deception, and forensic collection with Velociraptor provide alternatives. On Linux the useful artifacts include authentication files, shell history, modified hosts or name-resolution files, persistence through cron jobs or services, and oddly named services such as a fake updater. Network clues included bursts of failed logins from many countries and an outbound transfer to a domain the attacker already controlled. An exposed remote management interface on port 9090 was also noted.\n\nThe closing checklist covers the controls that would have stopped this chain: server-side authorization checks, restricted upload types, multi-factor authentication, outbound egress filtering, and lateral movement detection. For responders, the advice is to learn what normal activity looks like in your environment, automate log review where possible, test controls before relying on them, and layer defenses rather than trusting one product.",
+      "durationSeconds": 1651,
+      "publishedAt": "2025-10-21",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "LjCnCetbfBc",
+      "slug": "anti-forensics-you-are-doing-it-wrong-believe-me-im-an-ir-consul-3",
+      "title": "Anti-Forensics - You Are Doing It Wrong (Believe Me, I'm An IR Consultant)",
+      "speakers": [
+        "Stephan Berger"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "windows",
+        "linux",
+        "defensive-security",
+        "detection"
+      ],
+      "teaser": "Shows how forensic artifacts still expose attackers who try to erase their traces on Windows and Linux.",
+      "summary": "An incident response consultant argues that attackers who delete files, logs and tools often leave evidence in places they overlook. On Windows, the talk starts with the NTFS master file table, where entries for a deleted rclone configuration file still held credentials for an exfiltration server in a real case. The USN journal recorded an LSASS dump being written and then deleted minutes later, and the System Resource Usage Monitor database showed network activity from an exfiltration tool that never appeared on disk.\n\nThe talk then covers further artifacts. PowerShell console history is stored in a plain text file that can survive attempts to remove it, and RDP bitmap cache tiles can reveal staging folders, tool names and IP addresses. On Linux, clearing the kernel ring buffer with dmesg leaves kern.log and the journal intact, while vacuuming the journal generates its own log entry noting that it was cleared. The speaker stresses that each cleanup action can trigger another artifact.\n\nThe practical takeaway is to baseline your environment so that rare actions stand out, such as fsutil deleting the USN journal, clearing PowerShell history or vacuuming the journal, and to search for keywords across every log source rather than trusting one. In the Q&A, the speaker said that detecting deletion from memory without standard binaries is harder, and that even advanced groups make mistakes.",
+      "durationSeconds": 1686,
+      "publishedAt": "2025-10-21",
+      "difficulty": "intermediate"
+    }
+  ]
+}
