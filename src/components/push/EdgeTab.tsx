@@ -21,6 +21,7 @@ export function EdgeTab({
   tabRef,
   activeCount,
   hidden,
+  tucked = false,
   onClick,
   gesture,
 }: {
@@ -28,6 +29,8 @@ export function EdgeTab({
   activeCount: number;
   /** True while the panel is open: the tab rides out with it and leaves the tab order. */
   hidden: boolean;
+  /** True while the inline Filters bar is on screen: the tab would only cover content. */
+  tucked?: boolean;
   onClick: () => void;
   gesture: PushGesture;
 }) {
@@ -60,9 +63,9 @@ export function EdgeTab({
       type="button"
       data-testid="edge-tab"
       className="edge-tab"
-      data-hidden={hidden}
+      data-hidden={hidden || tucked}
       data-nudge={nudge || undefined}
-      inert={hidden}
+      inert={hidden || tucked}
       onClick={onClick}
       onAnimationEnd={() => setNudge(false)}
       {...gesture}

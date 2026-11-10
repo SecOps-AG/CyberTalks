@@ -8,6 +8,7 @@ import { inDefconVillage, villageEditionPath } from "@/lib/hubs";
 import { canonicalUrl } from "@/lib/canonical";
 import { DC34_EVENT_SLUG, DC34_VILLAGE_LABEL } from "@/lib/dc34";
 import { loadEventPage } from "@/lib/page-runtime";
+import { initialBrowsePage } from "@/lib/search";
 import { topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ event: string }> };
@@ -37,13 +38,18 @@ export default async function EventPage({ params }: Props) {
   const isDefconEvent = defconEditions.length > 0;
   // DEF CON 34 leads with its filterable talk list; the village cards follow.
   const isDc34 = event.slug === DC34_EVENT_SLUG;
+  // Only the first page of cards is in the document; the rest loads after.
+  const initial = initialBrowsePage(talks);
 
   const browser = (
     <section>
       <SectionHeading title={`All ${event.shortName} talks`} />
       <TalkBrowser
         pushFilters
-        talks={talks}
+        talks={initial.talks}
+        listing={talks.length > initial.talks.length ? { kind: "event", key: event.slug } : undefined}
+        catalogSize={talks.length}
+        resultSize={initial.total}
         hide={isDefconEvent ? ["years"] : ["years", "villages"]}
         topicLabels={topicLabels()}
         emptyHint={`No ${event.name} talks match these filters.`}

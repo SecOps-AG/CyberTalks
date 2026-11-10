@@ -1,5 +1,5 @@
 /**
- * Client loader for a topic, track, or speaker talk list.
+ * Client loader for a topic, track, speaker, or event talk list.
  *
  * Production reads the precomputed catalog shard (a static asset). Dev, where
  * those shards are not generated, falls back to /api/listings.
@@ -10,10 +10,10 @@ import {
   speakerShardPath,
   topicBucketPath,
 } from "./catalog-layout";
-import { trackPagePath } from "./page-layout";
+import { eventPagePath, trackPagePath } from "./page-layout";
 import type { TalkIndexEntry } from "./types";
 
-export type ListingKind = "topic" | "track" | "speaker";
+export type ListingKind = "topic" | "track" | "speaker" | "event";
 
 const largeTopics = new Set<string>(catalogMeta.largeTopics);
 
@@ -54,7 +54,7 @@ async function readDirect(
 
   let url: string;
   try {
-    url = trackPagePath(key);
+    url = kind === "event" ? eventPagePath(key) : trackPagePath(key);
   } catch {
     return null;
   }

@@ -184,6 +184,16 @@ export function TalkBrowser({
   const pushBarRef = useRef<HTMLButtonElement>(null);
   const pushOpenerRef = useRef<HTMLElement | null>(null);
   const scrollAfterPushRef = useRef(false);
+  // The edge tab only shows once the inline Filters bar has scrolled away.
+  const [pushBarVisible, setPushBarVisible] = useState(true);
+  const hasPush = push != null;
+  useEffect(() => {
+    const bar = pushBarRef.current;
+    if (!hasPush || !bar || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(([entry]) => setPushBarVisible(entry.isIntersecting));
+    observer.observe(bar);
+    return () => observer.disconnect();
+  }, [hasPush]);
 
   // While staging, also fetch what the staged years/conferences need so the
   // Apply count is honest. Hints only ever widen (empty = everything), so a
@@ -841,14 +851,14 @@ export function TalkBrowser({
       </div>
 
       {examples.length > 0 && !draftQuery ? (
-        <p className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 px-1 text-[11px] text-mint/40">
-          <span className="uppercase tracking-[0.18em]">try</span>
+        <p className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 px-1 text-[11px] text-mint/40 max-[599px]:gap-x-1.5 max-[599px]:gap-y-1.5 max-[599px]:px-0 max-[599px]:text-xs">
+          <span className="uppercase tracking-[0.18em] max-[599px]:mr-1">try</span>
           {examples.map((example) => (
             <button
               key={example}
               type="button"
               onClick={() => setDraftQuery(example)}
-              className="text-cyan underline-offset-4 transition hover:text-acid hover:underline"
+              className="text-cyan underline-offset-4 transition hover:text-acid hover:underline max-[599px]:inline-flex max-[599px]:min-h-8 max-[599px]:items-center max-[599px]:rounded-sm max-[599px]:border max-[599px]:border-cyan/35 max-[599px]:px-2.5 max-[599px]:hover:no-underline"
             >
               {example}
             </button>
@@ -967,12 +977,12 @@ export function TalkBrowser({
             </p>
             <div className="flex flex-wrap items-center gap-3">
               {hasExtras ? (
-                <label className="flex cursor-pointer select-none items-center gap-1.5 text-[11px] uppercase tracking-[0.14em] text-mint/70 transition hover:text-acid">
+                <label className="flex cursor-pointer select-none items-center gap-1.5 text-[11px] uppercase tracking-[0.14em] text-mint/70 transition hover:text-acid max-[599px]:min-h-11 max-[599px]:gap-2">
                   <input
                     type="checkbox"
                     checked={filters.includeExtras}
                     onChange={(e) => update({ includeExtras: e.target.checked })}
-                    className="rounded-sm border border-acid/40 bg-void accent-cyan"
+                    className="rounded-sm border border-acid/40 bg-void accent-cyan max-[599px]:h-4 max-[599px]:w-4"
                   />
                   <span>Clips &amp; extras</span>
                 </label>
@@ -981,7 +991,7 @@ export function TalkBrowser({
                 <button
                   type="button"
                   onClick={clearAll}
-                  className="fold-clear text-[11px] uppercase tracking-[0.14em] text-mag hover:text-acid lg:hidden"
+                  className="fold-clear text-[11px] uppercase tracking-[0.14em] text-mag hover:text-acid max-[599px]:min-h-11 max-[599px]:px-1 lg:hidden"
                 >
                   Clear
                 </button>
@@ -994,7 +1004,7 @@ export function TalkBrowser({
                   id="talk-sort"
                   value={filters.sort}
                   onChange={(event) => update({ sort: event.target.value as SortKey })}
-                  className="rounded-sm border border-acid/25 bg-void px-2 py-1 font-mono text-[11px] text-mint outline-none focus:border-cyan"
+                  className="rounded-sm border border-acid/25 bg-void px-2 py-1 font-mono text-[11px] text-mint outline-none focus:border-cyan max-[599px]:min-h-11 max-[599px]:text-[13px]"
                 >
                   {sortOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -1008,7 +1018,7 @@ export function TalkBrowser({
 
           {awaitingCatalog || awaitingListing ? (
             <div
-              className="fold-cards grid min-h-[70vh] gap-4 sm:grid-cols-2 xl:grid-cols-3"
+              className="fold-cards grid min-h-[70vh] gap-4 max-[599px]:gap-2 sm:grid-cols-2 xl:grid-cols-3"
               aria-hidden
             >
               {Array.from({ length: 6 }, (_, index) => (
@@ -1032,7 +1042,7 @@ export function TalkBrowser({
               ) : null}
             </div>
           ) : (
-            <div className="fold-cards grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="fold-cards grid gap-4 max-[599px]:gap-2 sm:grid-cols-2 xl:grid-cols-3">
               {paged.items.map((talk, index) => (
                 <TalkCard key={talk.id} talk={talk} priority={paged.page === 1 && index === 0} />
               ))}
@@ -1081,6 +1091,7 @@ export function TalkBrowser({
             ) : undefined
           }
           openerRef={pushOpenerRef}
+          tabTucked={pushBarVisible}
         />
       ) : null}
     </div>

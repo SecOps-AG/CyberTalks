@@ -38,6 +38,7 @@ export function PushFilters({
   sections,
   extras,
   openerRef,
+  tabTucked = false,
 }: {
   open: boolean;
   pageRef: RefObject<HTMLElement | null>;
@@ -58,6 +59,8 @@ export function PushFilters({
   sections: PushSection[];
   extras?: ReactNode;
   openerRef: RefObject<HTMLElement | null>;
+  /** The inline Filters bar is on screen, so the edge tab stays out of the way. */
+  tabTucked?: boolean;
 }) {
   const [mounted, setMounted] = useState(false);
   // Null until the reader folds or unfolds a section: the first section plus
@@ -254,6 +257,7 @@ export function PushFilters({
         tabRef={motion.tabRef}
         activeCount={activeCount}
         hidden={open}
+        tucked={tabTucked}
         onClick={() => {
           if (!motion.consumeDragClick()) onOpen(motion.tabRef.current);
         }}
