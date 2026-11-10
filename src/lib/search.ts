@@ -549,6 +549,37 @@ export function initialBrowsePage(talks: TalkIndexEntry[]): {
   };
 }
 
+/** Longest topic / speaker list sent ahead of the full listing. */
+export const INITIAL_FACET_LIMIT = 40;
+
+/**
+ * First page plus the default-browse facet counts, so a listing page can draw
+ * its filter rail from the document and leave the full talk list unfetched
+ * until someone uses a control. Topic and speaker options are the commonest
+ * few: they are long tails, and the type-ahead only needs the whole set once
+ * the listing has loaded.
+ */
+export function initialBrowse(talks: TalkIndexEntry[]): {
+  talks: TalkIndexEntry[];
+  total: number;
+  facets: Facets;
+} {
+  const entries = withHaystack(talks);
+  const filtered = filterTalks(entries, EMPTY_FILTERS);
+  const sorted = sortTalks(filtered, "relevance", "");
+  const everyExtra = talks.length > 0 && talks.every((talk) => talk.kind !== "talk");
+  const facets = computeFacets(entries, { ...EMPTY_FILTERS, includeExtras: everyExtra });
+  return {
+    talks: paginate(sorted, 1).items.map(stripSearchFields),
+    total: filtered.length,
+    facets: {
+      ...facets,
+      topics: facets.topics.slice(0, INITIAL_FACET_LIMIT),
+      speakers: facets.speakers.slice(0, INITIAL_FACET_LIMIT),
+    },
+  };
+}
+
 /* ---------- URL <-> filter state ---------- */
 
 /** URL key -> filter field. `speakers` is plural to match /speakers/<slug>. */

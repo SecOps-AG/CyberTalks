@@ -1,26 +1,39 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { TopicIndex } from "@/components/TopicIndex";
 import { canonicalUrl } from "@/lib/canonical";
 import { loadTopicCounts } from "@/lib/page-runtime";
-import { TOPIC_INDEX_MIN, topicIndexView, topicQueryValue } from "@/lib/topic-indexability";
+import {
+  TOPIC_INDEX_MIN,
+  topicIndexView,
+  topicPageValue,
+  topicQueryValue,
+} from "@/lib/topic-indexability";
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
-  const query = topicQueryValue((await searchParams).q);
+  const params = await searchParams;
+  const query = topicQueryValue(params.q);
+  // Later pages of the hub list stay crawlable but out of the index; the
+  // sitemap already lists every hub.
+  const listed = query || topicPageValue(params.page) > 1;
   return {
     title: "Topics",
     description: "Topic hubs across the archive. The filter searches every topic.",
     alternates: { canonical: canonicalUrl("/topics") },
-    robots: query ? { index: false, follow: true } : { index: true, follow: true },
+    robots: listed ? { index: false, follow: true } : { index: true, follow: true },
   };
 }
 
 export default async function TopicsPage({ searchParams }: Props) {
-  const query = topicQueryValue((await searchParams).q);
-  const view = topicIndexView(await loadTopicCounts(), query);
+  const params = await searchParams;
+  const query = topicQueryValue(params.q);
+  const page = topicPageValue(params.page);
+  const view = topicIndexView(await loadTopicCounts(), query, page);
+  if (!query && page > view.totalPages) notFound();
 
   return (
     <div className="space-y-6">

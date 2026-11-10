@@ -19,11 +19,13 @@ import {
   filtersToQuery,
   filterTalks,
   mergeSummaries,
+  PAGE_SIZE,
   paginate,
   queryTerms,
   sortTalks,
   toggleValue,
   withHaystack,
+  type Facets,
   type Filters,
   type SortKey,
 } from "@/lib/search";
@@ -86,6 +88,13 @@ export type TalkBrowserProps = {
    * topic, track, and speaker documents stay small.
    */
   listing?: { kind: ListingKind; key: string };
+  /**
+   * Default-browse facet counts computed on the server. When set, the full
+   * `listing` is not fetched on load: it is fetched the first time someone
+   * uses a filter, the sort, the search box or the pagination, or when the URL
+   * already carries filter state. Until then this draws the filter rail.
+   */
+  initialFacets?: Facets;
   /** Unfiltered talk count, shown before `listing` finishes loading. */
   catalogSize?: number;
   /** Default-filter result count, shown before `listing` finishes loading. */
@@ -123,6 +132,7 @@ export function TalkBrowser({
   remoteIndex = false,
   pushFilters = false,
   listing,
+  initialFacets,
   catalogSize,
   resultSize,
   linkArchiveSearch = false,
@@ -149,6 +159,12 @@ export function TalkBrowser({
   const [catalogLoading, setCatalogLoading] = useState(remoteIndex);
   const [listedTalks, setListedTalks] = useState<TalkIndexEntry[] | null>(null);
   const [listReady, setListReady] = useState(!listing);
+  // Without `initialFacets` the listing loads on mount, as it always has.
+  const [listWanted, setListWanted] = useState(!initialFacets);
+  const wakeListing = useCallback(() => setListWanted(true), []);
+  const intent = initialFacets && !listWanted
+    ? { onPointerDownCapture: wakeListing, onFocusCapture: wakeListing }
+    : {};
   const loadedChunkFilesRef = useRef<Set<string>>(new Set());
   const loadedSummaryYearsRef = useRef<Set<number>>(new Set());
   const remoteTalksRef = useRef<TalkIndexEntry[]>([]);
@@ -219,7 +235,7 @@ export function TalkBrowser({
   const listingKey = listing?.key;
 
   useEffect(() => {
-    if (!listingKind || !listingKey) return;
+    if (!listingKind || !listingKey || !listWanted) return;
     let cancelled = false;
     const controller = new AbortController();
     setListReady(false);
@@ -240,10 +256,11 @@ export function TalkBrowser({
       cancelled = true;
       controller.abort();
     };
-  }, [listingKind, listingKey]);
+  }, [listingKind, listingKey, listWanted]);
 
   const talks = remoteIndex ? remoteTalks : (listedTalks ?? talksProp);
   const listingPending = Boolean(listing) && !listReady;
+  const listingLoading = listingPending && listWanted;
 
   const hasExtras = useMemo(() => talks.some((t) => t.kind !== "talk"), [talks]);
   const allExtras = useMemo(() => talks.length > 0 && talks.every((t) => t.kind !== "talk"), [talks]);
@@ -268,6 +285,7 @@ export function TalkBrowser({
         const parsed = filtersFromParams(params);
         setFilters(parsed);
         setDraftQuery(parsed.q);
+        setListWanted(true);
       } else if (allExtras) {
         setFilters((f) => ({ ...f, includeExtras: true }));
       }
@@ -344,9 +362,16 @@ export function TalkBrowser({
     return mergeSummaries(base, summaries, terms);
   }, [talks, summaries, draftQuery]);
 
+  const activeCount = countActive({ ...filters, q: draftQuery });
+  // Until the listing lands the rail shows the server's counts; the page's
+  // own talks are only the first 24 and would count wrong.
+  const serverFacets = initialFacets != null && listingPending && activeCount === 0;
   const facets = useMemo(
-    () => computeFacets(searchable, effective, { alwaysShowDifficulties }),
-    [searchable, effective, alwaysShowDifficulties],
+    () =>
+      serverFacets && initialFacets
+        ? initialFacets
+        : computeFacets(searchable, effective, { alwaysShowDifficulties }),
+    [serverFacets, initialFacets, searchable, effective, alwaysShowDifficulties],
   );
   const filtered = useMemo(() => filterTalks(searchable, effective), [searchable, effective]);
   const sorted = useMemo(
@@ -370,11 +395,20 @@ export function TalkBrowser({
     [topicLabels],
   );
 
-  const activeCount = countActive({ ...filters, q: draftQuery });
   const pendingUnfiltered = listingPending && activeCount === 0 && resultSize != null;
+  // Only the first page is in hand: anything else waits for the listing.
+  const awaitingListing = listingPending && (activeCount > 0 || filters.page > 1);
+  const pendingTotalPages = Math.max(1, Math.ceil((resultSize ?? 0) / PAGE_SIZE));
+  const pendingPage = Math.min(filters.page, pendingTotalPages);
   const shownTotal = pendingUnfiltered ? resultSize : paged.total;
-  const shownFrom = pendingUnfiltered ? (resultSize === 0 ? 0 : 1) : paged.from;
-  const shownTo = pendingUnfiltered ? Math.min(paged.items.length, resultSize ?? 0) : paged.to;
+  const shownFrom = pendingUnfiltered
+    ? resultSize === 0
+      ? 0
+      : (pendingPage - 1) * PAGE_SIZE + 1
+    : paged.from;
+  const shownTo = pendingUnfiltered
+    ? Math.min(pendingPage * PAGE_SIZE, resultSize ?? 0)
+    : paged.to;
   const universe = listingPending && catalogSize != null ? catalogSize : talks.length;
 
   const stagedEffective = useMemo<Filters | null>(
@@ -496,22 +530,6 @@ export function TalkBrowser({
           compact
         />
       ) : null}
-      {!hide.includes("years") ? (
-        <FacetList
-          label="Year"
-          options={facets.years}
-          selected={filters.years}
-          onToggle={(value) => update({ years: toggleValue(filters.years, value) })}
-        />
-      ) : null}
-      {!hide.includes("lengths") ? (
-        <FacetList
-          label="Length"
-          options={facets.lengths}
-          selected={filters.lengths}
-          onToggle={(value) => update({ lengths: toggleValue(filters.lengths, value) })}
-        />
-      ) : null}
       {!hide.includes("difficulties") ? (
         <FacetList
           label="Difficulty"
@@ -542,11 +560,27 @@ export function TalkBrowser({
         onToggle={(value) => update({ topics: toggleValue(filters.topics, value) })}
         labelFor={labelFor}
       />
+      {!hide.includes("lengths") ? (
+        <FacetList
+          label="Length"
+          options={facets.lengths}
+          selected={filters.lengths}
+          onToggle={(value) => update({ lengths: toggleValue(filters.lengths, value) })}
+        />
+      ) : null}
       {!hide.includes("speakers") ? (
         <SpeakerFacet
           options={facets.speakers}
           selected={filters.speakers}
           onToggle={(value) => update({ speakers: toggleValue(filters.speakers, value) })}
+        />
+      ) : null}
+      {!hide.includes("years") ? (
+        <FacetList
+          label="Year"
+          options={facets.years}
+          selected={filters.years}
+          onToggle={(value) => update({ years: toggleValue(filters.years, value) })}
         />
       ) : null}
     </div>
@@ -608,38 +642,6 @@ export function TalkBrowser({
             options={fc.conferences}
             selected={f.conferences}
             onToggle={(value) => stage({ conferences: toggleValue(f.conferences, value) })}
-          />
-        ),
-      });
-    }
-    if (!hide.includes("years")) {
-      sections.push({
-        id: "years",
-        label: "Year",
-        selected: f.years.length,
-        content: (
-          <FacetList
-            bare
-            label="Year"
-            options={fc.years}
-            selected={f.years}
-            onToggle={(value) => stage({ years: toggleValue(f.years, value) })}
-          />
-        ),
-      });
-    }
-    if (!hide.includes("lengths")) {
-      sections.push({
-        id: "lengths",
-        label: "Length",
-        selected: f.lengths.length,
-        content: (
-          <FacetList
-            bare
-            label="Length"
-            options={fc.lengths}
-            selected={f.lengths}
-            onToggle={(value) => stage({ lengths: toggleValue(f.lengths, value) })}
           />
         ),
       });
@@ -706,6 +708,22 @@ export function TalkBrowser({
         />
       ),
     });
+    if (!hide.includes("lengths")) {
+      sections.push({
+        id: "lengths",
+        label: "Length",
+        selected: f.lengths.length,
+        content: (
+          <FacetList
+            bare
+            label="Length"
+            options={fc.lengths}
+            selected={f.lengths}
+            onToggle={(value) => stage({ lengths: toggleValue(f.lengths, value) })}
+          />
+        ),
+      });
+    }
     if (!hide.includes("speakers")) {
       sections.push({
         id: "speakers",
@@ -717,6 +735,22 @@ export function TalkBrowser({
             options={fc.speakers}
             selected={f.speakers}
             onToggle={(value) => stage({ speakers: toggleValue(f.speakers, value) })}
+          />
+        ),
+      });
+    }
+    if (!hide.includes("years")) {
+      sections.push({
+        id: "years",
+        label: "Year",
+        selected: f.years.length,
+        content: (
+          <FacetList
+            bare
+            label="Year"
+            options={fc.years}
+            selected={f.years}
+            onToggle={(value) => stage({ years: toggleValue(f.years, value) })}
           />
         ),
       });
@@ -736,7 +770,7 @@ export function TalkBrowser({
   });
 
   const search = (
-    <div>
+    <div {...intent}>
       <div
         className={`panel flex items-center gap-3 transition focus-within:border-cyan/60 ${
           large ? "px-4 py-3.5 sm:px-5 sm:py-4" : "p-3 sm:p-4"
@@ -834,7 +868,7 @@ export function TalkBrowser({
 
       <div className="fold-layout grid gap-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start lg:gap-8">
         {/* Desktop rail grows with the page; only compact facets scroll internally. */}
-        <aside className="fold-rail hidden lg:block">
+        <aside className="fold-rail hidden lg:block" {...intent}>
           <div className="space-y-5">
             <div className="flex items-center justify-between">
               <p className="font-display text-xs uppercase tracking-[0.2em] text-acid">Filters</p>
@@ -852,6 +886,7 @@ export function TalkBrowser({
           {/* Mobile facets */}
           <details
             open
+            {...intent}
             className={`fold-drawer panel group lg:hidden ${push ? "max-[599px]:hidden" : ""}`}
           >
             <summary className="cursor-pointer list-none px-4 py-3 font-display text-xs uppercase tracking-[0.2em] text-acid">
@@ -895,6 +930,7 @@ export function TalkBrowser({
           <div
             ref={resultsRef}
             className="flex flex-wrap items-center justify-between gap-3 scroll-mt-24"
+            {...intent}
           >
             <p className="text-[11px] uppercase tracking-[0.16em] text-mint/60">
               {shownTotal === 0
@@ -904,7 +940,7 @@ export function TalkBrowser({
                 <span className="text-mint/30"> / {universe}</span>
               ) : null}
               {/* Not in the server HTML: `ready` only flips after mount, so crawlers see a plain count. */}
-              {ready && (catalogLoading || listingPending) ? (
+              {ready && (catalogLoading || listingLoading) ? (
                 <span className="text-mint/30"> · loading…</span>
               ) : null}
             </p>
@@ -949,7 +985,7 @@ export function TalkBrowser({
             </div>
           </div>
 
-          {awaitingCatalog ? (
+          {awaitingCatalog || awaitingListing ? (
             <div
               className="fold-cards grid min-h-[70vh] gap-4 sm:grid-cols-2 xl:grid-cols-3"
               aria-hidden
@@ -982,7 +1018,12 @@ export function TalkBrowser({
             </div>
           )}
 
-          <Pagination page={paged.page} totalPages={paged.totalPages} onChange={goToPage} />
+          <Pagination
+            page={pendingUnfiltered ? pendingPage : paged.page}
+            totalPages={pendingUnfiltered ? pendingTotalPages : paged.totalPages}
+            onChange={goToPage}
+            onIntent={initialFacets && !listWanted ? wakeListing : undefined}
+          />
           </div>
       </div>
 

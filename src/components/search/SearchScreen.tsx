@@ -132,15 +132,6 @@ export function SearchScreen({
       {facets ? (
         <>
           <FacetLinks
-            label="Year"
-            options={facets.years}
-            selected={query.years}
-            scroll
-            hrefFor={(value) =>
-              hrefFromQuery({ ...query, years: toggleNumbers(query.years, Number(value)), page: 1 })
-            }
-          />
-          <FacetLinks
             label="Conference"
             options={facets.conferences}
             selected={query.conferences}
@@ -154,15 +145,6 @@ export function SearchScreen({
             }
           />
           <FacetLinks
-            label="Track"
-            options={facets.tracks}
-            selected={query.tracks}
-            scroll
-            hrefFor={(value) =>
-              hrefFromQuery({ ...query, tracks: toggleStrings(query.tracks, String(value)), page: 1 })
-            }
-          />
-          <FacetLinks
             label="Difficulty"
             options={facets.difficulties}
             selected={query.difficulties}
@@ -172,6 +154,15 @@ export function SearchScreen({
                 difficulties: toggleStrings(query.difficulties, String(value)) as Difficulty[],
                 page: 1,
               })
+            }
+          />
+          <FacetLinks
+            label="Track"
+            options={facets.tracks}
+            selected={query.tracks}
+            scroll
+            hrefFor={(value) =>
+              hrefFromQuery({ ...query, tracks: toggleStrings(query.tracks, String(value)), page: 1 })
             }
           />
           <section>
@@ -238,6 +229,15 @@ export function SearchScreen({
               <p className="mt-1.5 text-[10px] text-mint/40">Showing the most common topics.</p>
             ) : null}
           </section>
+          <FacetLinks
+            label="Year"
+            options={facets.years}
+            selected={query.years}
+            scroll
+            hrefFor={(value) =>
+              hrefFromQuery({ ...query, years: toggleNumbers(query.years, Number(value)), page: 1 })
+            }
+          />
         </>
       ) : null}
     </div>

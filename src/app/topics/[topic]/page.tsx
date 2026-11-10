@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import { loadTopic } from "@/lib/catalog-runtime";
 import { canonicalUrl } from "@/lib/canonical";
-import { initialBrowsePage } from "@/lib/search";
+import { initialBrowse } from "@/lib/search";
 import { topicLabel, topicLabels } from "@/lib/topic-labels";
 import { topicRobots } from "@/lib/topic-indexability";
 
@@ -36,7 +36,7 @@ export default async function TopicPage({ params }: Props) {
   const { topic } = await params;
   const talks = await loadTopic(topic);
   if (!talks) notFound();
-  const initial = initialBrowsePage(talks);
+  const initial = initialBrowse(talks);
 
   return (
     <div className="space-y-8">
@@ -57,6 +57,7 @@ export default async function TopicPage({ params }: Props) {
       <TalkBrowser
         talks={initial.talks}
         listing={{ kind: "topic", key: topic }}
+        initialFacets={initial.facets}
         catalogSize={talks.length}
         resultSize={initial.total}
         topicLabels={topicLabels()}
