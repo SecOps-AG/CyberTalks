@@ -104,7 +104,8 @@
       ],
       "teaser": "Catalogs critical vulnerability classes in SAML, OAuth, and JWT SSO implementations used across enterprise environments.",
       "summary": "SSO Wars: Attacking Single Sign-On\n\nAlvaro Muñoz (Principal Security Researcher, GitHub Security Lab) presents a comprehensive attack taxonomy against enterprise Single Sign-On (SSO) implementations, demonstrating how identity federation protocols are systematically misimplemented.\n\nSAML Vulnerabilities\n\nThe talk covers XML Signature Wrapping (XSW) attacks, where attackers inject a valid signature into an unsigned forged assertion without invalidating the cryptographic check. Muñoz demonstrates multiple XSW variants that bypass authentication in real-world SP implementations.\n\nOAuth 2.0 and OIDC Attack Surface\n\nCommon OAuth misconfigurations including open redirectors, insufficient state parameter validation, and CSRF in authorization endpoints allow account takeover without any cryptographic break. The talk covers code injection via redirect_uri manipulation.\n\nJWT Pitfalls\n\nMuñoz documents the 'alg:none' attack, RSA/HMAC confusion attacks, and weak secret brute-forcing against JWT implementations, providing tooling and detection strategies.",
-      "durationSeconds": 2249
+      "durationSeconds": 2249,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "dKrNJhbGgHY",
@@ -161,7 +162,8 @@
       ],
       "teaser": "Deep-dives into .NET CLR internals to equip analysts with techniques for reversing obfuscated .NET malware families.",
       "summary": ".NET Malware Internals\n\nAlexandre Borges, malware researcher, delivers an in-depth technical session on analyzing modern .NET-based malware, covering CLR internals, obfuscation techniques, and dynamic analysis strategies.\n\nCLR Architecture Fundamentals\n\nThe talk begins with the Common Language Runtime's execution model — MSIL compilation, JIT compilation, AppDomain isolation, and the managed heap — providing the foundational context for understanding how malware abuses these mechanisms.\n\nObfuscation Techniques\n\nBorges catalogs common .NET obfuscation strategies: string encryption, control flow flattening, method name mangling, and anti-decompilation tricks targeting dnSpy and ILSpy. He demonstrates automated de-obfuscation using de4dot and custom MSIL patching.\n\nDynamic Analysis with CLR Profiler\n\nUsing the CLR Profiling API, analysts can hook JIT compilation events to capture de-obfuscated MSIL at runtime without static unpacking. Borges demonstrates this against real AgentTesla and AsyncRAT samples.",
-      "durationSeconds": 2889
+      "durationSeconds": 2889,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "w-eJM2Pc0KI",
@@ -180,7 +182,8 @@
       ],
       "teaser": "Presents HTTP request smuggling as a modern attack primitive for cache poisoning, session hijacking, and WAF bypass.",
       "summary": "HTTP Desync Attacks\n\nJames Kettle (albinowax), Director of Research at PortSwigger Web Security, presents HTTP request smuggling (desync attacks) — a rediscovered attack class with devastating impact on modern web infrastructure.\n\nThe Desync Primitive\n\nHTTP/1.1 allows two mechanisms to delimit request bodies: Content-Length and Transfer-Encoding. When a frontend proxy and backend server disagree on which header takes precedence, an attacker can 'smuggle' a partial HTTP request that poisons the backend's request queue.\n\nAttack Scenarios\n\nKettle demonstrates: bypassing WAFs and access controls by wrapping the prohibited request inside an innocuous smuggled prefix; hijacking other users' sessions by capturing their request data; and poisoning the shared reverse proxy cache to serve malicious responses to arbitrary users.\n\nReal-World Impact\n\nFindings affect major CDN providers and web frameworks. Kettle provides detection methodologies and recommends disabling HTTP/1.1 Keep-Alive on internal proxy-to-backend hops where possible.",
-      "durationSeconds": 2492
+      "durationSeconds": 2492,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "KkgxFplsTnM",
@@ -199,7 +202,8 @@
       ],
       "teaser": "Demonstrates automated CAN bus reverse engineering tooling that maps unknown message IDs to physical vehicle functions in minutes.",
       "summary": "Automated Automotive CAN Bus Reverse Engineering\n\nBrent Stone presents a methodology and toolchain for rapidly reverse engineering CAN bus message formats across 17+ vehicle makes and models, reducing the time from plug-in to functional control mapping to under 10 minutes.\n\nCAN Bus Fundamentals\n\nCAN bus carries thousands of messages per second encoding sensor readings, control commands, and status telemetry from every ECU in the vehicle. Most automotive security research requires weeks of manual fuzzing to identify which message IDs control which functions.\n\nAutomated Discovery via Correlation\n\nStone's approach correlates CAN message timing and value changes with physical vehicle sensor readings (GPS speed, accelerometer, steering angle sensor from OBD-II) to automatically associate unknown message IDs with likely vehicle systems.\n\nCross-Vehicle Generalization\n\nBy building a database of correlated mappings across 17 vehicles, the tool identifies recurring message patterns (e.g., speed reporting formats) that generalize across manufacturers, accelerating subsequent vehicles.",
-      "durationSeconds": 1066
+      "durationSeconds": 1066,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "NoZ7ujJhb3k",
@@ -256,7 +260,8 @@
       ],
       "teaser": "Introduces modern shellcoding techniques that survive ASLR, NX, and common AV detection by combining gadget chaining with runtime resolution.",
       "summary": "Modern Shellcoding Tradecraft\n\nHadrian Barral presents an updated shellcoding methodology that addresses the challenges introduced by modern exploit mitigations — ASLR, NX/DEP, stack canaries, and AV signature detection.\n\nPosition-Independent Shellcode\n\nClassic shellcodes relied on fixed addresses. Barral demonstrates PIC techniques using delta stubs, hash-based API resolution, and EAT walking to locate and call Windows API functions without hardcoded addresses.\n\nGadget-Assisted Execution\n\nFor scenarios where classic shellcode is blocked by NX, Barral combines short-form ROP chains that pivot execution to a decoded shellcode stub, bypassing both DEP and common signature-based detections.\n\nAV Evasion at the Shellcode Level\n\nThe talk covers junk code insertion, polymorphic encoding schemes, and sleep-before-decode techniques that defeat dynamic sandboxes with short analysis windows.",
-      "durationSeconds": 2176
+      "durationSeconds": 2176,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "z5cXNLeTn9U",
@@ -351,7 +356,8 @@
       ],
       "teaser": "Exploits the Picture Transfer Protocol over USB and Wi-Fi to remotely ransomware a Canon DSLR camera.",
       "summary": "Ransomwaring a DSLR Camera\n\nEyal Itkin (vulnerability researcher, Check Point Research) demonstrates a complete exploit chain targeting Canon DSLR cameras, achieving remote code execution over both USB and Wi-Fi using the Picture Transfer Protocol (PTP).\n\nPicture Transfer Protocol Attack Surface\n\nPTP is an unauthenticated protocol designed for image transfer. Itkin identifies multiple buffer overflow and integer overflow vulnerabilities in the Canon EOS 80D firmware's PTP request handler, exploitable over both USB and the camera's built-in Wi-Fi.\n\nFull RCE and Ransomware Payload\n\nAfter triggering RCE, the researcher writes a proof-of-concept ransomware that encrypts all photos on the SD card using AES and displays a ransom demand on the camera's LCD, demonstrating the real-world impact of ignoring IoT security.\n\nCoordinated Disclosure\n\nCanon was notified before the talk and released firmware updates. Itkin discusses the disclosure timeline and the broader implications for embedded device update mechanisms.",
-      "durationSeconds": 2597
+      "durationSeconds": 2597,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "JGezOYIfOWQ",
@@ -389,7 +395,8 @@
       ],
       "teaser": "Demonstrates how deep learning models outperform classical DPA attacks for power-analysis-based key extraction from AES implementations.",
       "summary": "Deep Learning for Side Channel Attacks\n\nElie Bursztein (Lead Security Researcher, Google) presents research applying deep neural networks to power side-channel analysis, achieving superior key extraction performance compared to classical Differential Power Analysis (DPA).\n\nClassical vs. ML-Based SCA\n\nClassical DPA requires profiling attacks with a known device or relies on univariate statistical models. Neural network models trained on power traces directly learn the mapping from trace shape to intermediate computation values, handling misalignment and noise that breaks classical methods.\n\nConvolutional Neural Network Architecture\n\nBursztein's approach uses CNNs to process raw power traces, with the model learning alignment-invariant features automatically. On STM32 AES implementations, the CNN recovers full 128-bit AES keys with fewer traces than classical CPA.\n\nOpen-Source Dataset and Framework\n\nThe talk releases a public power trace dataset and open-source framework for training and evaluating SCA models, enabling reproducible research.",
-      "durationSeconds": 2421
+      "durationSeconds": 2421,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "TwRE2QK1Ibc",
@@ -446,7 +453,8 @@
       ],
       "teaser": "Exposes critical authentication and authorization failures in enterprise HVAC and building automation systems reachable from corporate networks.",
       "summary": "HVAC Security Failures\n\nDouglas McKee (Lead Vulnerability Researcher, McAfee ATR) presents findings from a systematic assessment of enterprise HVAC and building automation systems (BAS), revealing severe security gaps that allow attackers to manipulate physical infrastructure.\n\nBACnet and Modbus Exposure\n\nBuilding automation protocols (BACnet, Modbus, LonWorks) were designed without authentication or encryption. McKee demonstrates scanning for internet-exposed BACnet/IP devices and enumerating available control points (temperature setpoints, damper positions, alarm states) with no credentials required.\n\nCorporate Network Lateral Movement\n\nIn typical enterprise environments, HVAC controllers share network segments with IT infrastructure. McKee demonstrates pivoting from a compromised workstation to the BAS network and remotely controlling CRAC units in data centers — potentially causing thermal damage or triggering fire suppression systems.\n\nVendor Response\n\nThe talk covers disclosure efforts with major BAS vendors and the difficulty of patching legacy embedded controllers deployed in multi-decade building infrastructure.",
-      "durationSeconds": 2406
+      "durationSeconds": 2406,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "xei8lAPitX8",
@@ -465,7 +473,8 @@
       ],
       "teaser": "Demonstrates a complete Azure Active Directory attack chain from initial access through Global Administrator privilege escalation.",
       "summary": "Azure AD Attack Chain\n\nDirk-jan Mollema (security researcher, Fox-IT) presents a comprehensive attack chain against Microsoft Azure environments, starting from a compromised employee workstation and escalating to full Azure tenant compromise.\n\nPass-the-Hash to Azure AD\n\nFrom a domain-joined Windows machine, the attacker extracts NTLM hashes and uses them against Azure AD's legacy authentication endpoints (Basic Auth, NTLM over WinRM), bypassing modern MFA policies that don't apply to legacy protocols.\n\nAADConnect Exploitation\n\nMollema reveals that Azure AD Connect sync accounts (required for hybrid identity) hold excessive privileges. Extracting the sync account credentials from the AADConnect server's encrypted configuration allows on-premises-to-cloud lateral movement with Directory Synchronization account rights.\n\nGlobal Admin Privilege Escalation\n\nChaining these techniques, the attacker escalates from a standard user to Global Administrator in the Azure tenant, achieving full control over all Azure subscriptions, O365, and Intune-managed devices.",
-      "durationSeconds": 2525
+      "durationSeconds": 2525,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Ed-LTOZmCeA",
@@ -541,7 +550,8 @@
       ],
       "teaser": "Breaks the BLE 5.0 channel hopping PRNG to predict future advertisement channels and enable targeted jamming of Bluetooth 5 devices.",
       "summary": "BLE 5 PRNG Attack\n\nDamien Cauquil (security researcher, Digital Security) presents a cryptanalytic attack against the Bluetooth Low Energy 5.0 pseudo-random number generator used for channel hopping in advertisement and connection events.\n\nBLE Channel Hopping Mechanism\n\nBLE uses FHSS across 37 advertising channels and 37 data channels, with channel selection determined by a PRNG seeded from the access address and connection parameters. The PRNG is documented in the Bluetooth Core Spec as a linear feedback shift register.\n\nPRNG Prediction and Targeted Jamming\n\nBy observing a small number of advertisement packets, Cauquil recovers the PRNG state and predicts future channel selections. Using a software-defined radio, he then jams only the predicted channels, creating selective denial-of-service against specific BLE devices while leaving other nearby devices unaffected.\n\nImpact on BLE 5 Long Range\n\nThe attack extends to BLE 5's Long Range (coded PHY) mode, which extends range to ~1km but uses the same vulnerable PRNG, enabling targeted jamming of medical implants and industrial sensors at significant distance.",
-      "durationSeconds": 2235
+      "durationSeconds": 2235,
+      "difficulty": "expert"
     },
     {
       "youtubeId": "OQVz7y2EyHM",
@@ -560,7 +570,8 @@
       ],
       "teaser": "Demonstrates NFC tag-side attacks that manipulate reader-side applications via malformed tag responses and relay injection.",
       "summary": "NFC Tag-Side Security\n\nChristopher Wade presents research on the underexplored attack surface of NFC from the tag's perspective — malicious or manipulated tags that attack the reader-side software stack.\n\nMalformed Tag Responses\n\nNFC reader software (on smartphones, POS terminals, access control readers) must parse complex tag response PDUs. Wade demonstrates buffer overflows, integer overflows, and use-after-free vulnerabilities in reader software triggered by carefully crafted malformed NDEF records.\n\nRelay Attacks via Proxy Tags\n\nUsing a custom NFC relay tool, Wade shows how a malicious tag can transparently proxy reader queries to a remote legitimate tag, enabling long-range NFC relay attacks against transport payment cards and building access badges.\n\nAndroid and iOS Parsing Vulnerabilities\n\nThe talk includes specific CVEs in Android's NFC stack and iOS's Core NFC framework triggered by specially crafted NFC tag data, demonstrating impact on mainstream mobile devices.",
-      "durationSeconds": 2153
+      "durationSeconds": 2153,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "YwEQt4i_AUo",
@@ -579,7 +590,8 @@
       ],
       "teaser": "Presents Firmware Slap, a framework combining concolic execution and fuzzing to automatically discover exploitable bugs in embedded firmware.",
       "summary": "Automated Firmware Vulnerability Discovery\n\nChristopher Roberts presents Firmware Slap, an open-source framework for automated vulnerability discovery in embedded device firmware.\n\nFramework Architecture\n\nFirmware Slap combines three analysis phases: static binary analysis using Angr for taint tracking, concolic execution to explore complex conditional branches, and targeted fuzzing guided by the static analysis results to generate exploiting test cases.\n\nFirmware Extraction and Normalization\n\nThe framework handles the heterogeneous input formats (raw binary blobs, UBIFS/SquashFS filesystem images, encrypted firmware) produced by different vendors' firmware update mechanisms, automating extraction and binary identification.\n\nReal-World Results\n\nFirmware Slap identified multiple previously undiscovered vulnerabilities in consumer router firmware from D-Link and TP-Link, including stack buffer overflows in HTTP server CGI handlers, within minutes of automated analysis.",
-      "durationSeconds": 1968
+      "durationSeconds": 1968,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "YlqJCPk2OvQ",
@@ -598,7 +610,8 @@
       ],
       "teaser": "Demonstrates practical GSM interception using commodity SDR hardware and open-source software to decrypt 2G voice calls.",
       "summary": "Practical GSM Voice Interception\n\nCampbell Murray (Global Head of Security Services, BlackBerry) presents a practical demonstration of GSM (2G) voice call interception using commodity software-defined radio hardware and open-source software tools.\n\nGSM Security Model Failures\n\nGSM provides one-way authentication (network authenticates subscriber; subscriber cannot authenticate network) and uses the A5/1 stream cipher, which was broken cryptanalytically in 2009 with rainbow table attacks. GSM networks also transmit calls in cleartext when the network operator sets the encryption indicator to none.\n\nFull Interception Setup\n\nUsing a $35 RTL-SDR dongle, Osmocom software, and publicly available A5/1 rainbow tables, Murray demonstrates decrypting and recording live 2G voice calls within range of a passive SDR antenna — no IMSI catcher required for unencrypted calls.\n\nLTE Fallback Vulnerabilities\n\nThe talk covers LTE networks' forced fallback to 2G (SRVCC) as an attack vector: a malicious cell tower can force a target's LTE phone to downgrade to vulnerable 2G for interception.",
-      "durationSeconds": 2305
+      "durationSeconds": 2305,
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "G0WRV7gosRA",
@@ -750,7 +763,8 @@
       ],
       "teaser": "Provides a structured adversarial ML red team methodology for attacking production AI systems beyond naive input perturbation.",
       "summary": "Red Teaming AI Systems\n\nAriel Herbert-Voss (OpenAI safety researcher) presents a structured methodology for red teaming AI and machine learning systems, going beyond naive adversarial examples to address production attack surfaces.\n\nBeyond Adversarial Images\n\nThe popular conception of ML red teaming focuses on adversarial perturbations (image classifiers fooled by small pixel changes). Herbert-Voss argues this misses the most impactful attack surfaces in production systems: training data poisoning, model extraction, and API-level inference attacks.\n\nModel Extraction and Intellectual Property Theft\n\nBy sending carefully crafted queries to a black-box ML API, attackers can reconstruct an approximate clone of the target model. The talk demonstrates extracting a functionally equivalent model from a commercial API with a budget of under $100 in API calls.\n\nProduction Deployment Attacks\n\nThe talk covers supply chain attacks on ML pipelines: poisoning training datasets via malicious contributions to public datasets, inserting backdoors into pre-trained models distributed via model hubs, and exploiting serialization vulnerabilities (pickle deserialization) in model file formats.",
-      "durationSeconds": 1720
+      "durationSeconds": 1720,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "AgCNPc5RfL8",
@@ -807,7 +821,8 @@
       ],
       "teaser": "Discovers critical pre-authentication remote code execution vulnerabilities in three leading enterprise SSL VPN products.",
       "summary": "SSL VPN Pre-Auth RCE Research\n\nOrange Tsai (Principal Security Researcher, DEVCORE) presents critical vulnerabilities in three leading enterprise SSL VPN products that allow unauthenticated remote code execution — providing direct access to corporate intranets without credentials.\n\nPulse Secure VPN\n\nCVE-2019-11510: An unauthenticated arbitrary file read in Pulse Secure VPN allows reading cached plaintext credentials from active VPN sessions, providing credential-based access. CVE-2019-11539: Remote code execution via unauthenticated format string injection in the ping diagnostic function.\n\nFortigate SSL VPN\n\nCVE-2018-13379: Unauthenticated path traversal allows downloading arbitrary files from the Fortigate VPN appliance, including session files containing cleartext VPN credentials and authentication tokens.\n\nPalo Alto GlobalProtect\n\nCVE-2019-1579: Format string vulnerability in the GlobalProtect portal pre-auth request handler allows unauthenticated remote code execution on the VPN gateway.\n\nMass Exploitation Impact\n\nAll three CVEs were actively exploited in the wild within weeks of disclosure by nation-state actors (APT5, suspected Chinese-nexus) to gain persistent access to government and critical infrastructure networks.",
-      "durationSeconds": 2758
+      "durationSeconds": 2758,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "F9pR37dos8M",
@@ -826,7 +841,8 @@
       ],
       "teaser": "Exposes the malware-driven underground industry providing fake engagement (followers, likes, shares) powering disinformation operations at scale.",
       "summary": "Malware-Backed Social Media Manipulation\n\nOlivier Bilodeau (Cybersecurity Research Director, GoSecure) presents research exposing the technical infrastructure behind coordinated social media manipulation operations powered by malware botnets.\n\nThe Manipulation Industry\n\nA well-organized underground market provides 'social media marketing' services: fake followers, likes, retweets, YouTube views, and review scores. These services are typically powered by infected devices in consumer malware botnets, not server farms, providing realistic geographically distributed traffic.\n\nMalware Integration\n\nBilodeau analyzes malware families that include social media manipulation modules alongside traditional banking trojans and ransomware droppers, showing how click fraud, credential theft, and fake engagement generation run as parallel monetization threads on the same compromised systems.\n\nOperation Analysis\n\nThe talk includes analysis of a specific manipulation operation's infrastructure: C2 panels managing 100,000+ infected devices performing coordinated social media actions, complete with task scheduling, anti-detection delays, and revenue reporting dashboards.",
-      "durationSeconds": 2964
+      "durationSeconds": 2964,
+      "difficulty": "expert"
     },
     {
       "youtubeId": "2IT2oAzTcvU",
@@ -978,7 +994,8 @@
       ],
       "teaser": "Presents new NTLM relay attack techniques targeting previously protected services in modern Windows environments.",
       "summary": "Modern NTLM Relay Attacks\n\nMarina Simakov (security researcher, Preempt Security) presents new NTLM relay attack vectors and techniques that bypass Microsoft's published mitigations and target services previously believed to be protected from relay attacks.\n\nNTLM Relay Background\n\nNTLM relay attacks intercept NTLM authentication handshakes and forward them to a different target server, authenticating as the victim to services they didn't intend to access. Microsoft's mitigations (SMB signing, EPA/channel binding) block relay in many scenarios.\n\nBypass Techniques\n\nSimakov presents CVE-2019-1040, a vulnerability in the NTLM authentication protocol that allows dropping MIC (Message Integrity Code) and modifying authentication messages, enabling relay even to SMB-signed targets. The bypass breaks EPA (Extended Protection for Authentication) for many real-world configurations.\n\nCross-Protocol Relay\n\nThe talk demonstrates relaying NTLM from HTTP to LDAP/LDAPS, enabling creation of new computer accounts and delegation rights in Active Directory without any credentials — providing a path to full domain compromise from only network access.",
-      "durationSeconds": 2666
+      "durationSeconds": 2666,
+      "difficulty": "expert"
     },
     {
       "youtubeId": "4BkAxMfHSzI",
@@ -1016,7 +1033,8 @@
       ],
       "teaser": "Presents a systematic methodology for intercepting and manipulating traffic from modern mobile applications that implement certificate pinning and root detection.",
       "summary": "Modern Mobile App Interception\n\nLeon Jacobs presents practical techniques for intercepting and manipulating network traffic from modern Android and iOS applications that implement multiple layers of anti-analysis protections.\n\nCertificate Pinning Bypass\n\nThe talk covers bypassing certificate pinning using Frida dynamic instrumentation, hooking the platform SSL libraries at the function level to override pinning checks. For apps with multiple pinning layers (HTTPS, WebSocket, gRPC), Jacobs demonstrates a systematic bypass methodology.\n\nRoot/Jailbreak Detection Bypass\n\nRoot and jailbreak detection checks using file system probes, package manager queries, and native code integrity checks are bypassed using Magisk Hide (Android) and Liberty Lite (iOS), with Frida hooks handling any remaining programmatic checks.\n\nDeep Traffic Analysis\n\nWith interception established, the talk demonstrates modifying API responses in transit, replaying authenticated requests with modified parameters, and extracting API keys and session tokens from intercepted traffic.",
-      "durationSeconds": 2203
+      "durationSeconds": 2203,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "z4OvVFw5pYI",
@@ -1092,7 +1110,8 @@
       ],
       "teaser": "Exposes the underground market for US carrier real-time location data, demonstrating purchase of precise GPS location for any phone number.",
       "summary": "Carrier Location Data Market\n\nJoseph Cox (journalist, Motherboard/VICE) presents investigative findings on the commercial market for US carrier real-time location data, demonstrating that any person's precise real-time GPS location can be purchased for approximately $300.\n\nLocation Data Supply Chain\n\nUS carriers (AT&T, T-Mobile, Sprint, Verizon) sell aggregated location data to 'location aggregators' (Zumigo, LocationSmart, Babel Street) for legitimate uses (fraud detection, roadside assistance). These aggregators resell access to hundreds of downstream 'location intelligence' companies.\n\nHigh-Risk Access Points\n\nBail bond companies and private investigators access location data through specialized 'skip tracing' services that provide real-time phone location without a court order. Cox demonstrates purchasing the real-time location of a specific person's phone with consent, revealing precise coordinates accurate to within 100 meters.\n\nPolicy Response\n\nFollowing Cox's reporting (published in Motherboard), all four major US carriers announced they would cease selling location data to aggregators. The FCC ultimately issued $200M+ in fines for unauthorized location data sharing.",
-      "durationSeconds": 2316
+      "durationSeconds": 2316,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "w8SG2V3n4-U",
@@ -1111,7 +1130,8 @@
       ],
       "teaser": "Reveals how telematics API vulnerabilities allowed unauthorized remote unlocking, location tracking, and engine start of any vehicle in a major connected car fleet.",
       "summary": "Connected Car Telematics Exploitation\n\nJmaxxz presents research disclosing critical vulnerabilities in a major connected car telematics platform that allowed unauthorized remote control and tracking of vehicles across an entire fleet.\n\nConnected Car Architecture\n\nModern connected vehicles include a telematics control unit (TCU) that maintains a persistent cellular connection to the manufacturer's cloud platform, enabling remote lock/unlock, geofencing alerts, remote engine start, and location tracking through a smartphone app.\n\nAPI Authentication Bypass\n\nReverse engineering the companion mobile application reveals the telematics API structure. Jmaxxz discovers that the API uses a predictable vehicle identifier (VIN-derived) as the primary authorization token, allowing enumeration and impersonation of any vehicle in the fleet.\n\nUnauthorized Remote Control\n\nWith the authorization token, any registered account holder can remotely unlock, locate, and start any vehicle in the fleet — not just vehicles they own. The talk demonstrates unlocking a vehicle belonging to a consenting third party from miles away, then tracking its real-time location.",
-      "durationSeconds": 2463
+      "durationSeconds": 2463,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "k5nj7Jhwn9c",
@@ -1321,7 +1341,8 @@
       ],
       "teaser": "Discovers widespread SSRF vulnerabilities introduced by Apple Pay merchant validation requirements in e-commerce applications.",
       "summary": "Apple Pay API Induced SSRF\n\nJoshua Maddux (security researcher) presents research identifying a class of SSRF vulnerabilities systematically introduced across thousands of e-commerce sites by Apple Pay integration requirements.\n\nApple Pay Merchant Validation\n\nApple Pay requires merchants to validate their identity with Apple's servers during payment sessions via a server-to-server API call. Merchant implementations accept the Apple payment session URL from the client-side JavaScript and proxy the validation request through their own server.\n\nSSRF Introduction Pattern\n\nWhen merchants implement this validation without validating the provided URL, the endpoint becomes a generic URL-fetching proxy — a textbook SSRF vulnerability. The bug exists in Apple's own integration documentation examples and in third-party payment libraries.\n\nScope of Impact\n\nMaddux discovers this pattern across hundreds of major e-commerce sites, payment gateways, and SaaS platforms that followed Apple's integration documentation, demonstrating how a single API design decision propagated a vulnerability class at scale across the web ecosystem.",
-      "durationSeconds": 2448
+      "durationSeconds": 2448,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "pmYM5sBtIGs",
@@ -1378,7 +1399,8 @@
       ],
       "teaser": "A practical beginner's guide to hardware hacking fundamentals: identifying and exploiting UART, JTAG, and SPI debug interfaces on consumer electronics.",
       "summary": "Hardware Hacking Fundamentals\n\nPhilippe Laulheret (Security Researcher, McAfee ATR) delivers a comprehensive practical introduction to hardware security research targeting consumer IoT devices.\n\nTooling Setup\n\nThe talk covers essential hardware hacking tools: multimeters, oscilloscopes, soldering stations, logic analyzers, bus pirate/FT232H adapters, and software (sigrok/PulseView for protocol decoding).\n\nIdentifying Debug Interfaces\n\nLaulheret demonstrates techniques for identifying unpopulated UART, JTAG, SWD, and SPI headers on PCBs using visual inspection, continuity testing, and logic analyzer probing. UART ports typically provide Linux shell access at boot time.\n\nFirmware Extraction\n\nThe talk covers multiple firmware extraction paths: UART console commands, JTAG memory dumps, SPI flash chip-off using dedicated programmer hardware (FlashCAT, CH341A), and OTA update capture via network interception. Each path is demonstrated against real target devices.",
-      "durationSeconds": 2767
+      "durationSeconds": 2767,
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "ZB8ODpw_om8",
@@ -1435,7 +1457,8 @@
       ],
       "teaser": "A thorough security analysis of internet-connected intimate devices revealing Bluetooth vulnerabilities, insecure APIs, and privacy failures.",
       "summary": "Security Research: Connected Intimate Devices\n\nsmea (security researcher, known for Nintendo 3DS research) presents comprehensive security research on Bluetooth-connected intimate devices — an underexamined IoT category with unique privacy sensitivity.\n\nDevice Architecture Analysis\n\nThe research covers multiple popular devices from major manufacturers, analyzing their Bluetooth LE protocol implementations, companion mobile applications, and cloud connectivity features. All devices are disassembled for hardware analysis and firmware extraction.\n\nBluetooth Vulnerabilities\n\nCritical findings include: unauthenticated BLE connections allowing any nearby device to take control, replay attacks that bypass authentication challenges, and trivial brute-force of 4-digit numeric pairing codes across all tested devices.\n\nPrivacy and Security Implications\n\nCompanion apps transmit usage telemetry, session duration logs, and device control events to cloud servers without user notice. smea demonstrates capturing this data through MitM interception, revealing detailed intimate behavior patterns. The talk advocates for significantly stronger privacy standards in this device category.",
-      "durationSeconds": 2734
+      "durationSeconds": 2734,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "4Ing58vWkx0",
@@ -1512,7 +1535,8 @@
       ],
       "teaser": "Achieves remote code execution on Google Home smart speakers by chaining SQLite injection with a use-after-free memory corruption vulnerability.",
       "summary": "Google Home SQLite Exploitation\n\nWenxiang Qian (Security Researcher, Tencent Blade Team) presents a complete exploit chain for achieving remote code execution on Google Home smart speakers through SQLite vulnerabilities.\n\nAttack Vector: Local Network SQLite Injection\n\nGoogle Home exposes a local REST API for device discovery and setup. A SQLite database stores device configuration. Qian identifies a SQL injection vulnerability in a specific API endpoint that allows injecting arbitrary SQLite queries.\n\nSQLite as an Exploitation Primitive\n\nExploiting a SQLite vulnerability for code execution is unconventional. Qian demonstrates using SQLite's LOAD_EXTENSION feature to load arbitrary shared libraries, and uses a UAF (use-after-free) vulnerability in SQLite's virtual table implementation as a memory corruption primitive for ASLR bypass and shell execution.\n\nFull Chain and Impact\n\nThe complete exploit chain achieves root shell access on the Google Home from the local network — allowing persistent access to the always-listening microphone, home network traffic interception, and lateral movement to other Google-connected devices.",
-      "durationSeconds": 2316
+      "durationSeconds": 2316,
+      "difficulty": "expert"
     },
     {
       "youtubeId": "HXM1rBk_wXs",
@@ -1531,7 +1555,8 @@
       ],
       "teaser": "Reveals thousands of publicly exposed AWS EBS snapshots containing plaintext credentials, encryption keys, and production database dumps.",
       "summary": "AWS EBS Snapshot Data Exposure\n\nBen Morris (security researcher) presents research revealing thousands of publicly exposed Amazon Web Services EBS (Elastic Block Store) snapshots containing sensitive data from production environments.\n\nEBS Snapshot Exposure Mechanism\n\nAWS allows EBS snapshots to be shared publicly for legitimate use cases (distributing AMI base images). Misconfigured AWS accounts accidentally make production volume snapshots public, exposing complete disk images of running EC2 instances.\n\nAutomated Discovery at Scale\n\nMorris builds automated tooling that enumerates publicly accessible EBS snapshots by region, mounts them read-only, and scans for sensitive data patterns: passwords, API keys, private keys, database credentials, and PII.\n\nFindings\n\nThe research discovers: hundreds of plaintext database dumps with customer PII, thousands of SSH private keys and API credentials for major cloud services, complete source code repositories with embedded secrets, and several Fortune 500 company production configurations — all publicly accessible without any authentication.",
-      "durationSeconds": 2690
+      "durationSeconds": 2690,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "9gkconldTAU",
@@ -1607,7 +1632,8 @@
       ],
       "teaser": "Achieves over-the-air code execution on Android phones by exploiting vulnerabilities in Qualcomm WLAN and modem baseband firmware.",
       "summary": "Qualcomm Baseband Over-the-Air Exploitation\n\nXiling Gong (Security Researcher, Tencent Blade Team) presents research achieving over-the-air code execution on Android smartphones by exploiting vulnerabilities in Qualcomm WLAN and modem baseband firmware.\n\nBaseband Attack Surface\n\nThe Qualcomm modem and WLAN chips run separate firmware operating systems (AMSS/QuRT) isolated from the main Android OS. These components process all wireless protocol data (LTE, Wi-Fi, Bluetooth) and represent a powerful attack surface reachable without any user interaction.\n\nWLAN Vulnerabilities\n\nGong discovers heap overflow vulnerabilities in the Qualcomm WLAN firmware's 802.11 management frame parser (QCACLD-3.0 driver). By transmitting specially crafted Probe Response frames from a malicious access point, the attacker triggers the overflow in the WLAN chip's firmware.\n\nModem Protocol Stack Attacks\n\nOn the LTE modem side, vulnerabilities in the NAS (Non-Access Stratum) protocol implementation allow a malicious base station to trigger memory corruption in the modem firmware, achieving code execution in the baseband OS with full network hardware access.",
-      "durationSeconds": 1946
+      "durationSeconds": 1946,
+      "difficulty": "expert"
     },
     {
       "youtubeId": "HRbwkpnV1Rw",
@@ -1645,7 +1671,8 @@
       ],
       "teaser": "Ironically weaponizes Windows Control Flow Guard (CFG) internals to construct more reliable ROP exploit chains by abusing CFG's bitmap.",
       "summary": "Weaponizing CFG for ROP\n\nOmer Yair (Security Researcher, Checkpoint Research) presents a paradoxical technique: using Windows Control Flow Guard (CFG), a code-flow integrity mitigation, to improve the reliability of ROP exploit chains.\n\nCFG Background\n\nCFG is a Windows exploit mitigation that maintains a bitmap of valid indirect call targets. Before any indirect call or virtual function dispatch, a CFG check verifies the target address exists in the bitmap, preventing ROP chains that call into arbitrary code locations.\n\nBitmap as Information Leaker\n\nYair demonstrates that the CFG bitmap itself is a side-channel: by testing whether specific addresses are marked as valid call targets in the CFG bitmap, attackers can enumerate which code pages are mapped and executable in the process — bypassing ASLR without a memory disclosure vulnerability.\n\nCFG as Gadget Identifier\n\nFurthermore, the CFG bitmap marks all valid indirect call targets — which are precisely the function entry points used as ROP/JOP gadgets. By querying the bitmap, attackers enumerate function locations across ASLR-randomized DLLs, dramatically improving gadget chain reliability.",
-      "durationSeconds": 2533
+      "durationSeconds": 2533,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "tfRFV7NSeSI",

@@ -7,6 +7,7 @@ const NAV = [
   { href: "/", label: "All talks" },
   ...HUBS.map((hub) => ({ href: hub.href, label: hub.label })),
   { href: "/tracks", label: "Tracks" },
+  { href: "/skill-tree", label: "Skill Tree" },
   { href: "/topics", label: "Topics" },
   { href: "/speakers", label: "Speakers" },
   { href: "/saved", label: "Saved" },
