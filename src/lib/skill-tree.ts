@@ -59,24 +59,36 @@ export const RANKS = [
 ] as const;
 
 /**
- * Compact grid: a branch label column, then one column per tier. Sized so a
- * whole field fits a laptop screen at close to 1:1.
+ * Icon tree geometry, in world pixels. Talks are round nodes placed at their
+ * tier's column; several talks in one tier of a branch fork side by side.
+ * A field emblem on the left feeds a trunk, the trunk feeds one gate per
+ * branch, and each branch ends in a capstone with the branch name.
  */
 export const LAYOUT = {
-  labelW: 196,
-  cardW: 292,
-  cardH: 44,
-  gap: 4,
-  lanePad: 6,
-  laneGap: 4,
-  tierX: [236, 574, 912, 1250],
+  rootX: 64,
+  rootR: 40,
+  trunkX: 136,
+  gateX: 188,
+  tierX: [330, 570, 810, 1050],
+  capX: 1210,
+  /** Branch name starts here, right of the capstone. */
+  labelX: 1246,
+  width: 1440,
+  /** Talk node radius by tier: deeper tiers are a little bigger. */
+  nodeR: [17, 18, 20, 22],
+  capR: 26,
+  rowGap: 46,
+  lanePad: 12,
+  laneGap: 8,
 } as const;
 
 export type PlacedTalk = SkillTalk & {
   key: string;
   branchIndex: number;
+  /** Node center. */
   x: number;
   y: number;
+  r: number;
   /** youtubeIds of the talks that unlock this one. Empty = entry point. */
   parents: string[];
 };
@@ -93,6 +105,8 @@ export type PlacedBranch = {
 export type FieldLayout = {
   width: number;
   height: number;
+  /** Field emblem center height. */
+  rootY: number;
   branches: PlacedBranch[];
   talks: PlacedTalk[];
   byYoutubeId: Map<string, PlacedTalk>;
@@ -102,25 +116,26 @@ export function layoutField(field: SkillField): FieldLayout {
   const L = LAYOUT;
   const branches: PlacedBranch[] = [];
   const all: PlacedTalk[] = [];
+  const maxR = Math.max(...L.nodeR);
   let y = 0;
 
   field.branches.forEach((branch, branchIndex) => {
     const columns: SkillTalk[][] = [[], [], [], []];
     for (const talk of branch.talks) columns[TIER_INDEX[talk.difficulty]].push(talk);
     const rows = Math.max(1, ...columns.map((c) => c.length));
-    const stack = (n: number) => n * L.cardH + Math.max(0, n - 1) * L.gap;
-    const height = stack(rows) + L.lanePad * 2;
+    const height = (rows - 1) * L.rowGap + maxR * 2 + L.lanePad * 2;
+    const centerY = y + height / 2;
 
     const placed: PlacedTalk[] = [];
     columns.forEach((column, tier) => {
-      const top = y + (height - stack(column.length)) / 2;
       column.forEach((talk, row) => {
         placed.push({
           ...talk,
           key: `${branchIndex}:${talk.youtubeId}`,
           branchIndex,
           x: L.tierX[tier],
-          y: top + row * (L.cardH + L.gap),
+          y: centerY + (row - (column.length - 1) / 2) * L.rowGap,
+          r: L.nodeR[tier],
           parents: [],
         });
       });
@@ -134,18 +149,36 @@ export function layoutField(field: SkillField): FieldLayout {
       talk.parents = [...new Set([...own, ...talk.after])];
     }
 
-    branches.push({ name: branch.name, index: branchIndex, y, height, centerY: y + height / 2, talks: placed });
+    branches.push({ name: branch.name, index: branchIndex, y, height, centerY, talks: placed });
     all.push(...placed);
     y += height + L.laneGap;
   });
 
+  const height = Math.max(L.rootR * 2 + 40, y - L.laneGap);
+  // Shift everything down if the field is shorter than the emblem.
+  const shift = (height - Math.max(0, y - L.laneGap)) / 2;
+  if (shift > 0) {
+    for (const b of branches) {
+      b.y += shift;
+      b.centerY += shift;
+    }
+    for (const t of all) t.y += shift;
+  }
+
   return {
-    width: L.tierX[3] + L.cardW + 8,
-    height: Math.max(0, y - L.laneGap),
+    width: L.width,
+    height,
+    rootY: height / 2,
     branches,
     talks: all,
     byYoutubeId: new Map(all.map((t) => [t.youtubeId, t])),
   };
+}
+
+/** Talks with no later talk in their branch: they feed the capstone. */
+export function branchLeaves(branch: PlacedBranch): PlacedTalk[] {
+  const top = Math.max(...branch.talks.map((t) => TIER_INDEX[t.difficulty]));
+  return branch.talks.filter((t) => TIER_INDEX[t.difficulty] === top);
 }
 
 export type TalkStatus = "watched" | "ready" | "locked";

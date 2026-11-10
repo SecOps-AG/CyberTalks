@@ -6,6 +6,7 @@ import { getSavedState, markWatched, unmarkWatched } from "@/lib/saved";
 import { thumbnailSrc } from "@/lib/materials";
 import { formatDuration } from "@/lib/search";
 import {
+  branchLeaves,
   hoursMinutes,
   LAYOUT,
   layoutField,
@@ -29,15 +30,23 @@ const FIELD_KEY = "cybertalks:skill-tree-field";
 /** Tier header strip height inside the canvas, in screen pixels. */
 const STRIP = 46;
 const PAD = 16;
-/** Below this zoom the card titles stop being comfortable to read. */
-const READABLE_K = 0.8;
+/** Smallest zoom the first screen may use to fit the whole tree. */
+const MIN_FIT_K = 0.6;
+/** Branch gate (small diamond) half-size, world pixels. */
+const GATE_R = 9;
+/** Width of the faint band behind each tier column, world pixels. */
+const COLUMN_W = 130;
 const MAX_K = 1.6;
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
-function edgePath(x1: number, y1: number, x2: number, y2: number) {
+/** Circuit-style link: flat, a short diagonal in the middle, flat again. */
+function elbow(x1: number, y1: number, x2: number, y2: number) {
+  const dy = y2 - y1;
+  if (Math.abs(dy) < 0.5) return `M${x1},${y1} H${x2}`;
   const mid = (x1 + x2) / 2;
-  return `M${x1},${y1} C${mid},${y1} ${mid},${y2} ${x2},${y2}`;
+  const run = Math.min(Math.abs(dy), (x2 - x1) * 0.6);
+  return `M${x1},${y1} H${mid - run / 2} L${mid + run / 2},${y2} H${x2}`;
 }
 
 export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
@@ -248,17 +257,21 @@ type SharedProps = {
 /* ------------------------------------------------------------------ */
 
 function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, onWatch }: SharedProps) {
+  const L = LAYOUT;
   const viewportRef = useRef<HTMLDivElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(640);
   const [fitK, setFitK] = useState(1);
   const [view, setView] = useState<View>({ x: PAD, y: STRIP, k: 1 });
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [showNames, setShowNames] = useState(false);
+  const [query, setQuery] = useState("");
   const viewRef = useRef(view);
   viewRef.current = view;
 
-  // Size the canvas so the whole tree fits the rest of the screen, never
-  // smaller than readable. If it can't fit, the canvas grows and the page scrolls.
+  // Size the canvas so the whole tree fits the rest of the screen.
+  // If it can't fit even at the smallest zoom, the canvas grows and the page scrolls.
   const measure = useCallback(() => {
     const el = viewportRef.current;
     if (!el || el.offsetParent === null) return;
@@ -266,8 +279,8 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
     const topOnPage = el.getBoundingClientRect().top + window.scrollY;
     const below = (hintRef.current?.offsetHeight ?? 44) + 12;
     const room = Math.max(420, window.innerHeight - topOnPage - below);
-    const k = clamp(Math.min((w - PAD * 2) / layout.width, (room - STRIP - PAD) / layout.height, 1.15), READABLE_K, MAX_K);
-    const h = Math.round(layout.height * k + STRIP + PAD);
+    const k = clamp(Math.min((w - PAD * 2) / layout.width, (room - STRIP - PAD * 2) / layout.height, 1.3), MIN_FIT_K, MAX_K);
+    const h = Math.round(layout.height * k + STRIP + PAD * 2);
     setWidth(w);
     setHeight(h);
     setFitK(k);
@@ -337,6 +350,7 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
     if (!d.moved && Math.hypot(dx, dy) < 5) return;
     if (!d.moved) {
       d.moved = true;
+      setHovered(null);
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     }
     setView((v) => ({ ...v, x: d.vx + dx, y: d.vy + dy }));
@@ -357,6 +371,8 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
 
   // Ctrl/⌘ + wheel (and trackpad pinch) zooms; a plain wheel scrolls the page
   // when the tree is fitted, and pans once zoomed in.
+  const fittedRef = useRef(fitted);
+  fittedRef.current = fitted;
   useEffect(() => {
     const el = viewportRef.current;
     if (!el) return;
@@ -375,10 +391,9 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
   }, [zoomAt]);
-  const fittedRef = useRef(fitted);
-  fittedRef.current = fitted;
 
   function onKeyDown(e: React.KeyboardEvent) {
+    if ((e.target as HTMLElement).closest("input")) return;
     const step = 80;
     const cx = width / 2;
     const cy = height / 2;
@@ -417,46 +432,97 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
   function focusBranch(index: number) {
     if (suppressClick.current) return;
     const b = layout.branches[index];
-    const k = clamp(Math.min(1.25, (height - STRIP - PAD * 2) / b.height), fitK, MAX_K);
-    // Show the label column through the branch's last talk; if that is wider than the screen, keep the left edge.
-    const span = Math.max(...b.talks.map((t) => t.x + LAYOUT.cardW));
-    const x = span * k <= width - PAD * 2 ? (width - span * k) / 2 : PAD;
+    const x0 = L.gateX - 30;
+    const x1 = L.width;
+    const k = clamp(Math.min(1.5, (height - STRIP - PAD * 2) / b.height, (width - PAD * 2) / (x1 - x0)), fitK, MAX_K);
     setSelected(null);
-    setView({ k, x, y: STRIP + (height - STRIP) / 2 - (b.y + b.height / 2) * k });
+    setView({ k, x: (width - (x1 - x0) * k) / 2 - x0 * k, y: STRIP + (height - STRIP) / 2 - b.centerY * k });
   }
 
+  // ---- search ----
+  const q = query.trim().toLowerCase();
+  const matches = (t: PlacedTalk) =>
+    !q || t.title.toLowerCase().includes(q) || t.speakers.some((s) => s.toLowerCase().includes(q));
+
   // ---- edges ----
-  const edges: { key: string; d: string; cls: string }[] = [];
-  for (const t of layout.talks) {
-    const st = status(t);
-    const tx = t.x;
-    const ty = t.y + LAYOUT.cardH / 2;
-    const focus = selected === t.youtubeId ? styles.edgeFocus : "";
-    if (t.parents.length === 0) {
-      const b = layout.branches[t.branchIndex];
-      edges.push({
-        key: `label-${t.key}`,
-        d: edgePath(LAYOUT.labelW, b.y + b.height / 2, tx, ty),
-        cls: `${st === "watched" ? styles.edgeDone : styles.edgeOpen} ${focus}`,
-      });
-      continue;
+  type Edge = { key: string; d: string; cls: string };
+  const edges: Edge[] = [];
+  const lit = (done: boolean, open: boolean) => (done ? styles.edgeDone : open ? styles.edgeOpen : styles.edgeLocked);
+  const firstY = layout.branches[0]?.centerY ?? layout.rootY;
+  const lastY = layout.branches[layout.branches.length - 1]?.centerY ?? layout.rootY;
+  edges.push({ key: "root", d: `M${L.rootX + L.rootR},${layout.rootY} H${L.trunkX}`, cls: styles.edgeOpen });
+  edges.push({
+    key: "trunk",
+    d: `M${L.trunkX},${Math.min(firstY, layout.rootY)} V${Math.max(lastY, layout.rootY)}`,
+    cls: styles.edgeOpen,
+  });
+  for (const b of layout.branches) {
+    const anyDone = b.talks.some((t) => status(t) === "watched");
+    edges.push({ key: `gate-${b.index}`, d: `M${L.trunkX},${b.centerY} H${L.gateX - GATE_R}`, cls: lit(anyDone, true) });
+
+    // Group the branch by tier; each step between two tiers forks and merges
+    // through one junction on the branch's center line, so links never cross.
+    const byTier = TIERS.map((_, i) => b.talks.filter((t) => TIER_INDEX[t.difficulty] === i)).filter((g) => g.length);
+    byTier.forEach((group, gi) => {
+      const prev = gi > 0 ? byTier[gi - 1] : null;
+      if (!prev) {
+        for (const t of group) {
+          const st = status(t);
+          edges.push({
+            key: `entry-${t.key}`,
+            d: elbow(L.gateX + GATE_R, b.centerY, t.x - t.r, t.y),
+            cls: `${lit(st === "watched", st !== "locked")} ${selected === t.youtubeId ? styles.edgeFocus : ""}`,
+          });
+        }
+        return;
+      }
+      const hubX = (prev[0].x + group[0].x) / 2;
+      const prevDone = prev.some((p) => status(p) === "watched");
+      for (const p of prev) {
+        edges.push({
+          key: `in-${p.key}`,
+          d: elbow(p.x + p.r, p.y, hubX, b.centerY),
+          cls: `${lit(status(p) === "watched", false)} ${selected === p.youtubeId ? styles.edgeFocus : ""}`,
+        });
+      }
+      for (const t of group) {
+        edges.push({
+          key: `out-${t.key}`,
+          d: elbow(hubX, b.centerY, t.x - t.r, t.y),
+          cls: `${lit(prevDone && status(t) === "watched", prevDone)} ${selected === t.youtubeId ? styles.edgeFocus : ""}`,
+        });
+      }
+    });
+
+    // The run to the capstone lights up only once the whole branch is watched.
+    const leaves = branchLeaves(b);
+    const capHub = leaves[0].x + 120;
+    const branchDone = b.talks.every((t) => status(t) === "watched");
+    for (const t of leaves) {
+      edges.push({ key: `cap-${t.key}`, d: elbow(t.x + t.r, t.y, capHub, b.centerY), cls: lit(branchDone, false) });
     }
-    for (const pid of t.parents) {
+    edges.push({ key: `cap-${b.index}`, d: `M${capHub},${b.centerY} H${L.capX - L.capR}`, cls: lit(branchDone, false) });
+  }
+  // Cross-branch prerequisites ("after" links) draw as dashed links.
+  for (const t of layout.talks) {
+    for (const pid of t.after) {
       const p = layout.byYoutubeId.get(pid);
       if (!p) continue;
       const parentDone = status(p) === "watched";
-      const cls = parentDone && st === "watched" ? styles.edgeDone : parentDone ? styles.edgeOpen : styles.edgeLocked;
-      const cross = p.branchIndex !== t.branchIndex ? styles.edgeCross : "";
       const f = selected === pid || selected === t.youtubeId ? styles.edgeFocus : "";
       edges.push({
         key: `${pid}->${t.key}`,
-        d: edgePath(p.x + LAYOUT.cardW, p.y + LAYOUT.cardH / 2, tx, ty),
-        cls: `${cls} ${cross} ${f}`,
+        d: elbow(p.x + p.r, p.y, t.x - t.r, t.y),
+        cls: `${lit(parentDone && status(t) === "watched", parentDone)} ${styles.edgeCross} ${f}`,
       });
     }
   }
+  // Lit edges draw last so they sit on top of locked ones.
+  const rankEdge = (e: Edge) => (e.cls.includes(styles.edgeDone) ? 2 : e.cls.includes(styles.edgeOpen) ? 1 : 0);
+  edges.sort((a, b) => rankEdge(a) - rankEdge(b));
 
   const selectedTalk = selected ? (layout.byYoutubeId.get(selected) ?? null) : null;
+  const hoveredTalk = hovered && hovered !== selected ? (layout.byYoutubeId.get(hovered) ?? null) : null;
 
   // ---- talk card placement, next to its node ----
   const popRef = useRef<HTMLDivElement>(null);
@@ -465,25 +531,25 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
   let popLeft = 0;
   let anchorTop = 0;
   if (selectedTalk) {
-    const right = view.x + (selectedTalk.x + LAYOUT.cardW) * view.k + 14;
-    const left = view.x + selectedTalk.x * view.k - 14 - POP_W;
+    const right = view.x + (selectedTalk.x + selectedTalk.r) * view.k + 16;
+    const left = view.x + (selectedTalk.x - selectedTalk.r) * view.k - 16 - POP_W;
     popLeft = right + POP_W <= width - 8 ? right : Math.max(8, left);
-    anchorTop = view.y + selectedTalk.y * view.k;
+    anchorTop = view.y + (selectedTalk.y - selectedTalk.r) * view.k;
   }
   useLayoutEffect(() => {
     if (!selectedTalk || !popRef.current) return;
     const h = popRef.current.offsetHeight;
-    setPopTop(clamp(anchorTop - 12, 8, Math.max(8, height - h - 8)));
+    setPopTop(clamp(anchorTop - 24, 8, Math.max(8, height - h - 8)));
   }, [selectedTalk, anchorTop, height]);
 
   // Keep the selected node on screen (e.g. after "Next talk").
   useEffect(() => {
     if (!selectedTalk || width === 0) return;
     const v = viewRef.current;
-    const x0 = v.x + selectedTalk.x * v.k;
-    const y0 = v.y + selectedTalk.y * v.k;
-    const x1 = x0 + LAYOUT.cardW * v.k;
-    const y1 = y0 + LAYOUT.cardH * v.k;
+    const x0 = v.x + (selectedTalk.x - selectedTalk.r) * v.k;
+    const y0 = v.y + (selectedTalk.y - selectedTalk.r) * v.k;
+    const x1 = v.x + (selectedTalk.x + selectedTalk.r) * v.k;
+    const y1 = v.y + (selectedTalk.y + selectedTalk.r) * v.k;
     if (x0 >= 0 && x1 <= width && y0 >= STRIP && y1 <= height) {
       if (viewportRef.current) {
         const r = viewportRef.current.getBoundingClientRect();
@@ -493,16 +559,12 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
       }
       return;
     }
-    setView({
-      k: v.k,
-      x: width / 2 - (selectedTalk.x + LAYOUT.cardW / 2) * v.k,
-      y: (height + STRIP) / 2 - (selectedTalk.y + LAYOUT.cardH / 2) * v.k,
-    });
+    setView({ k: v.k, x: width / 2 - selectedTalk.x * v.k, y: (height + STRIP) / 2 - selectedTalk.y * v.k });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTalk?.youtubeId]);
 
   // ---- minimap (only once zoomed or panned away from the fitted view) ----
-  const MINI_W = 200;
+  const MINI_W = 190;
   const miniH = (layout.height / layout.width) * MINI_W;
   const miniDrag = useRef(false);
   function miniMove(e: React.PointerEvent<SVGSVGElement>) {
@@ -511,6 +573,8 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
     const wy = ((e.clientY - rect.top) / rect.height) * layout.height;
     setView((v) => ({ ...v, x: width / 2 - wx * v.k, y: (height + STRIP) / 2 - wy * v.k }));
   }
+
+  const statusWord = (st: TalkStatus) => (st === "watched" ? "Watched" : st === "ready" ? "Ready to watch" : "Locked");
 
   return (
     <section className={styles.board} aria-label={`${field.name} skill tree`}>
@@ -525,19 +589,24 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
         onPointerCancel={onPointerUp}
         onKeyDown={onKeyDown}
         data-fitted={fitted}
+        data-searching={q ? "true" : undefined}
       >
         <div
           className={styles.world}
-          style={{ width: layout.width, height: layout.height, transform: `translate(${view.x}px, ${view.y}px) scale(${view.k})` }}
+          style={
+            {
+              width: layout.width,
+              height: layout.height,
+              transform: `translate(${view.x}px, ${view.y}px) scale(${view.k})`,
+              "--k": view.k,
+            } as React.CSSProperties
+          }
         >
-          {layout.branches.map((b) => (
-            <div key={`lane-${b.index}`} className={styles.lane} style={{ top: b.y, height: b.height, width: layout.width }} />
-          ))}
           {TIERS.map((tier, i) => (
             <div
               key={tier.level}
               className={`${styles.column} ${TIER_CLASS[i]}`}
-              style={{ left: LAYOUT.tierX[i] - 14, width: LAYOUT.cardW + 28, height: layout.height }}
+              style={{ left: L.tierX[i] - COLUMN_W / 2, width: COLUMN_W, height: layout.height }}
             />
           ))}
 
@@ -547,25 +616,69 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
             ))}
           </svg>
 
+          {/* field emblem */}
+          <div
+            className={styles.root}
+            style={{ left: L.rootX - L.rootR, top: layout.rootY - L.rootR, width: L.rootR * 2, height: L.rootR * 2 }}
+            aria-hidden="true"
+          >
+            <span className={styles.rootSlot} />
+          </div>
+          <div className={styles.rootName} style={{ left: L.rootX - 70, top: layout.rootY + L.rootR + 8, width: 140 }}>
+            {field.name}
+          </div>
+
           {layout.branches.map((b) => {
             const done = b.talks.filter((t) => status(t) === "watched").length;
+            const frac = done / b.talks.length;
+            const circ = 2 * Math.PI * (L.capR - 3);
             return (
-              <button
-                key={b.index}
-                type="button"
-                className={styles.branch}
-                style={{ top: b.y + 4, height: b.height - 8, width: LAYOUT.labelW }}
-                onClick={() => focusBranch(b.index)}
-                title="Zoom to this branch"
-              >
-                <span className={styles.branchName}>{b.name}</span>
-                <span className={styles.branchMeta}>
-                  <span className={styles.branchMeter}>
-                    <i style={{ width: `${(done / b.talks.length) * 100}%` }} />
+              <div key={b.index}>
+                <button
+                  type="button"
+                  className={styles.gate}
+                  data-lit={done > 0}
+                  style={{ left: L.gateX - GATE_R, top: b.centerY - GATE_R, width: GATE_R * 2, height: GATE_R * 2 }}
+                  onClick={() => focusBranch(b.index)}
+                  aria-label={`Zoom to ${b.name}`}
+                  title={b.name}
+                />
+                <button
+                  type="button"
+                  className={styles.cap}
+                  data-done={done === b.talks.length}
+                  style={{ left: L.capX - L.capR, top: b.centerY - L.capR, width: L.capR * 2, height: L.capR * 2 }}
+                  onClick={() => focusBranch(b.index)}
+                  aria-label={`${b.name}: ${done} of ${b.talks.length} watched. Zoom to this branch.`}
+                >
+                  <svg viewBox={`0 0 ${L.capR * 2} ${L.capR * 2}`} aria-hidden="true">
+                    <circle cx={L.capR} cy={L.capR} r={L.capR - 3} className={styles.capTrack} />
+                    {done > 0 ? (
+                      <circle
+                        cx={L.capR}
+                        cy={L.capR}
+                        r={L.capR - 3}
+                        className={styles.capFill}
+                        strokeDasharray={`${circ * frac} ${circ}`}
+                        transform={`rotate(-90 ${L.capR} ${L.capR})`}
+                      />
+                    ) : null}
+                  </svg>
+                  <span className={styles.capSlot} />
+                </button>
+                <button
+                  type="button"
+                  className={styles.branchLabel}
+                  style={{ left: L.labelX, top: b.centerY }}
+                  onClick={() => focusBranch(b.index)}
+                  tabIndex={-1}
+                >
+                  <span className={styles.branchName}>{b.name}</span>
+                  <span className={styles.branchCount}>
+                    {done}/{b.talks.length} watched
                   </span>
-                  {done}/{b.talks.length}
-                </span>
-              </button>
+                </button>
+              </div>
             );
           })}
 
@@ -579,28 +692,45 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
                 className={`${styles.node} ${TIER_CLASS[ti]}`}
                 data-status={st}
                 data-selected={selected === t.youtubeId}
-                style={{ left: t.x, top: t.y, width: LAYOUT.cardW, height: LAYOUT.cardH }}
+                data-match={q ? matches(t) : undefined}
+                style={{ left: t.x - t.r, top: t.y - t.r, width: t.r * 2, height: t.r * 2 }}
                 onClick={() => {
                   if (suppressClick.current) return;
                   setSelected(selected === t.youtubeId ? null : t.youtubeId);
                 }}
-                title={t.title}
-                aria-label={`${t.title}. ${TIERS[ti].name}. ${st === "watched" ? "Watched" : st === "ready" ? "Ready to watch" : "Locked"}.`}
+                onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(t.youtubeId)}
+                onPointerLeave={() => setHovered((h) => (h === t.youtubeId ? null : h))}
+                onFocus={() => setHovered(t.youtubeId)}
+                onBlur={() => setHovered((h) => (h === t.youtubeId ? null : h))}
+                aria-label={`${t.title}. ${TIERS[ti].name}. ${statusWord(st)}.`}
               >
-                <StatusGem status={st} numeral={TIERS[ti].numeral} />
-                <span className={styles.nodeTitle}>{t.title}</span>
+                <span className={styles.slot} />
               </button>
             );
           })}
+
+          {showNames
+            ? layout.talks.map((t) => (
+                <span
+                  key={`name-${t.key}`}
+                  className={styles.nodeName}
+                  data-status={status(t)}
+                  data-match={q ? matches(t) : undefined}
+                  style={{ left: t.x + t.r + 7, top: t.y, width: Math.min(168, L.capX - L.capR - 10 - (t.x + t.r + 7)) }}
+                  aria-hidden="true"
+                >
+                  {t.title}
+                </span>
+              ))
+            : null}
         </div>
 
         {/* tier headers: pinned to the top, follow the camera sideways */}
         <div className={styles.strip} data-overlay>
           {TIERS.map((tier, i) => {
-            const left = view.x + LAYOUT.tierX[i] * view.k;
-            const w = LAYOUT.cardW * view.k;
+            const center = view.x + L.tierX[i] * view.k;
             return (
-              <div key={tier.level} className={`${styles.tierHead} ${TIER_CLASS[i]}`} style={{ left, width: w }}>
+              <div key={tier.level} className={`${styles.tierHead} ${TIER_CLASS[i]}`} style={{ left: center - 100, width: 200 }}>
                 <span className={styles.tierName}>{tier.name}</span>
                 <a className={styles.tierMore} href={`/search?track=${field.track}&difficulty=${tier.level}`} rel="nofollow">
                   {field.rated[tier.level].toLocaleString()} rated talks →
@@ -608,11 +738,24 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
               </div>
             );
           })}
-          <div className={styles.branchHead} style={{ left: view.x, width: LAYOUT.labelW * view.k }}>
-            Branch
-          </div>
         </div>
 
+        {hoveredTalk ? (
+          <div
+            className={`${styles.tip} ${TIER_CLASS[TIER_INDEX[hoveredTalk.difficulty]]}`}
+            style={{
+              left: clamp(view.x + hoveredTalk.x * view.k, 130, Math.max(130, width - 130)),
+              top: view.y + (hoveredTalk.y - hoveredTalk.r) * view.k - 10,
+            }}
+            aria-hidden="true"
+          >
+            <span className={styles.tipTier}>
+              {TIERS[TIER_INDEX[hoveredTalk.difficulty]].name} · {statusWord(status(hoveredTalk))}
+            </span>
+            <span className={styles.tipTitle}>{hoveredTalk.title}</span>
+            {hoveredTalk.speakers.length ? <span className={styles.tipMeta}>{hoveredTalk.speakers.join(", ")}</span> : null}
+          </div>
+        ) : null}
 
         {!fitted ? (
           <div className={styles.minimap} data-overlay>
@@ -632,12 +775,11 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
             >
               <rect width={layout.width} height={layout.height} className={styles.miniBg} />
               {layout.talks.map((t) => (
-                <rect
+                <circle
                   key={t.key}
-                  x={t.x}
-                  y={t.y}
-                  width={LAYOUT.cardW}
-                  height={LAYOUT.cardH}
+                  cx={t.x}
+                  cy={t.y}
+                  r={t.r * 1.3}
                   className={`${styles.miniNode} ${TIER_CLASS[TIER_INDEX[t.difficulty]]}`}
                   data-status={status(t)}
                 />
@@ -674,9 +816,22 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
         ) : null}
       </div>
       <div className={styles.hint} ref={hintRef}>
-        <Legend />
-        <span className={styles.hintText}>Drag to move · Ctrl + scroll or pinch to zoom · click a branch to zoom in</span>
-        <div className={styles.controls}>
+        <IconLegend />
+        <div className={styles.options}>
+          <label className={styles.namesToggle}>
+            <input type="checkbox" checked={showNames} onChange={(e) => setShowNames(e.target.checked)} />
+            Show talk names
+          </label>
+          <input
+            type="search"
+            className={styles.find}
+            placeholder="Find a talk or speaker"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label="Find a talk in this tree"
+          />
+        </div>
+        <div className={styles.controls} title="Drag to move. Ctrl + scroll or pinch to zoom.">
           <button type="button" onClick={() => zoomAt(1.2, width / 2, height / 2)} aria-label="Zoom in">
             +
           </button>
@@ -793,6 +948,27 @@ function Legend() {
       <span className={styles.legendState}>
         <StatusGem status="locked" numeral="" small /> locked
       </span>
+    </span>
+  );
+}
+
+function IconLegend() {
+  return (
+    <span className={styles.legend}>
+      {TIERS.map((tier, i) => (
+        <span key={tier.level} className={TIER_CLASS[i]}>
+          <i className={styles.sw} />
+          {tier.name}
+        </span>
+      ))}
+      {(["ready", "watched", "locked"] as const).map((st) => (
+        <span key={st} className={styles.legendState}>
+          <i className={styles.legendNode} data-status={st}>
+            <span className={styles.slot} />
+          </i>
+          {st}
+        </span>
+      ))}
     </span>
   );
 }
