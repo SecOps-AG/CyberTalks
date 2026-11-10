@@ -58,19 +58,18 @@ export const RANKS = [
   { name: "Elite", minSeconds: 10 * 3600 },
 ] as const;
 
+/**
+ * Compact grid: a branch label column, then one column per tier. Sized so a
+ * whole field fits a laptop screen at close to 1:1.
+ */
 export const LAYOUT = {
-  cardW: 268,
-  cardH: 92,
-  gap: 16,
-  lanePad: 26,
-  laneGap: 14,
-  top: 24,
-  rootX: 36,
-  rootSize: 168,
-  hubX: 252,
-  hubW: 214,
-  hubH: 76,
-  tierX: [540, 880, 1220, 1560],
+  labelW: 196,
+  cardW: 292,
+  cardH: 44,
+  gap: 4,
+  lanePad: 6,
+  laneGap: 4,
+  tierX: [236, 574, 912, 1250],
 } as const;
 
 export type PlacedTalk = SkillTalk & {
@@ -94,7 +93,6 @@ export type PlacedBranch = {
 export type FieldLayout = {
   width: number;
   height: number;
-  rootY: number;
   branches: PlacedBranch[];
   talks: PlacedTalk[];
   byYoutubeId: Map<string, PlacedTalk>;
@@ -104,7 +102,7 @@ export function layoutField(field: SkillField): FieldLayout {
   const L = LAYOUT;
   const branches: PlacedBranch[] = [];
   const all: PlacedTalk[] = [];
-  let y = L.top;
+  let y = 0;
 
   field.branches.forEach((branch, branchIndex) => {
     const columns: SkillTalk[][] = [[], [], [], []];
@@ -141,11 +139,9 @@ export function layoutField(field: SkillField): FieldLayout {
     y += height + L.laneGap;
   });
 
-  const height = Math.max(y + L.top, L.rootSize + L.top * 2);
   return {
-    width: L.tierX[3] + L.cardW + 60,
-    height,
-    rootY: height / 2,
+    width: L.tierX[3] + L.cardW + 8,
+    height: Math.max(0, y - L.laneGap),
     branches,
     talks: all,
     byYoutubeId: new Map(all.map((t) => [t.youtubeId, t])),
