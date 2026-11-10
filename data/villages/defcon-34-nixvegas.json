@@ -1,0 +1,32 @@
+{
+  "villageSlug": "nixvegas",
+  "villageName": "NixVegas",
+  "eventSlug": "defcon-34",
+  "conference": "defcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLWYT61JV2AkA",
+  "description": "NixVegas talks from DEF CON 34.",
+  "talks": [
+    {
+      "youtubeId": "nmieNyXyM_k",
+      "slug": "nixvegas-compiling-the-world-a-binary-dataset-built-from-nixpkgs",
+      "title": "Compiling the World - A Binary Dataset Built from nixpkgs",
+      "speakers": [
+        "Chris Connelly"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "open-source",
+        "machine-learning",
+        "infrastructure",
+        "reverse-engineering",
+        "linux",
+        "building"
+      ],
+      "teaser": "Presents a dataset of tens of millions of x86_64 functions, paired with source code, built from tens of thousands of nixpkgs packages.",
+      "summary": "The talk starts from a practical problem: reverse engineering binaries is slow, and machine learning for binary analysis needs real-world training data where each compiled function is linked to its source. Existing datasets fall into two camps. Some pair source with binaries but are small, C and C++ only programs. Others are large and realistic but have no source alignment. The speaker, from MIT Lincoln Laboratory, chose nixpkgs for its package coverage, reproducible builds, and instrumentable build environments.\n\nThe middle of the talk walks through the pipeline. Packages are enumerated, filtered by the language GitHub reports for their repositories, and rebuilt with a debug overlay that keeps debug information and line tables and turns off link-time optimization. The ELF objects are then disassembled with Binary Ninja, and each function is recorded with its disassembly, control-flow graph, decompiled output, and matching source. A local small language model writes a short summary per function. Running this on a shared HPC cluster brought its own problems: gated internet access, a store path that could not live in the default location, Lustre's weakness with small files, SQLite locking on a distributed filesystem, and job coordination through Slurm and Dask.\n\nThe result is roughly 50 million functions. The scope is currently x86_64 Linux at one optimization level, with plans to add other architectures, optimization settings, and older package versions. The code is public, and a dataset release on Hugging Face is planned once licensing is settled. The takeaway for practitioners is that Nix's reproducibility makes large, labeled binary corpora feasible to build.",
+      "durationSeconds": 1633,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    }
+  ]
+}

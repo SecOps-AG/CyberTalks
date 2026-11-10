@@ -1,0 +1,271 @@
+{
+  "villageSlug": "crypto-privacy-village",
+  "villageName": "Crypto Privacy Village",
+  "eventSlug": "defcon-34",
+  "conference": "defcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLVS1K7Z1n4Yc",
+  "description": "Crypto Privacy Village talks from DEF CON 34.",
+  "talks": [
+    {
+      "youtubeId": "VcoWZE2Y6gU",
+      "slug": "cpv-relearning-the-lessons-from-the-year-of-the-data-breach-anth",
+      "title": "2026 is the New 2016 - Relearning the Lessons from the 'Year of the Data Breach'",
+      "speakers": [
+        "Anthony Hendricks"
+      ],
+      "track": "policy",
+      "topics": [
+        "privacy",
+        "ransomware",
+        "supply",
+        "risk",
+        "lessons-learned"
+      ],
+      "teaser": "Revisits the 2016 wave of mega breaches and connects it to today's vendor compromises, ransomware, and breach-law trends, with practical fixes.",
+      "summary": "The talk opens with the claim that 2026 is starting to look like 2016, a year remembered for a flood of very large data breaches. The speaker, a cybersecurity attorney, sets out current trends: breach counts hit a record last year, much of the growth came from vendor compromises, reused or leaked old credentials, and patches for flaws that were years old. He walks through examples of a ransomware attack on a software vendor that forced many banks to notify customers about a breach they did not suffer themselves, and a French finance ministry incident that began with an old password.\n\nThe middle section returns to 2016, when Yahoo, LinkedIn and others disclosed breaches that were either years old or far larger than first reported. He explains how the sector-by-sector federal approach and the patchwork of state notification laws shaped what companies were required to disclose, and why a disclosure that was silent in 2012 would have been mandatory later. He also covers the rise of class actions over smaller breaches, where settlement terms paid victims little while attorney fees were not capped, and how these costs feed into higher insurance premiums.\n\nFor practitioners, the closing argument is that generic training does not change behavior, so training should be tailored to job role and paired with a security culture. Password managers need to be explained rather than simply mandated, and organizations need written patch and security policies, since many lack them. The talk ends with six takeaways, and the speaker stresses that people are both the main risk and the main defense.",
+      "durationSeconds": 1815,
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "ogGdclHPIa4",
+      "slug": "cpv-crypto-is-fine-the-code-is-not-real-world-cryptographic-fail",
+      "title": "Crypto Is Fine - The Code Is Not - Real World Cryptographic Failures",
+      "speakers": [
+        "Diptendu Kar"
+      ],
+      "track": "appsec",
+      "topics": [
+        "vulnerability-research",
+        "appsec",
+        "cryptography",
+        "code",
+        "attack"
+      ],
+      "teaser": "Shows how missing checks around signature verification, ECDH public keys, and JWT algorithm selection break cryptography in real CVEs, with live demos.",
+      "summary": "The talk argues that cryptographic failures in real software usually come from the code around the primitives, not the math. Drawing on OWASP A04:2025 and GitHub Security Advisories current to January 2026, the speaker finds that two weakness classes, signature verification flaws (CWE-347) and algorithm choice problems (CWE-327), account for over half of the A04 findings.\n\nThe middle section walks through three real CVEs, each reduced to one missing check. In an ECDSA library, verification never confirmed that the r and s values were in range, so submitting zeros produced a signature that passed. A JavaScript secp256k1 package skipped the on-curve test for compressed public keys, enabling an invalid curve attack against a static server key. The attacker recovers the secret by combining results from several small-order points with the Chinese remainder theorem, demonstrated on a scaled-down key. In a Python JWT library, a block list of known key strings failed to stop an attacker from forcing an HMAC check that uses the server's public key as the secret, which allowed forging an admin token.\n\nThe closing section turns these into a review checklist: identify which cryptographic inputs an attacker controls, check the specification's range, format, and curve requirements before the operation, never let the token choose the algorithm, and prefer allow lists over block lists. The speaker notes that similar bugs appeared in advisories dated 2026, so the lesson is to avoid writing your own primitives while still validating everything that comes from someone else's library.",
+      "durationSeconds": 1812,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "DZ8TPpQsM1Q",
+      "slug": "cpv-s-ding-r-cheng-e-lee",
+      "title": "Cove - Compositional and Verifiable Confidential Workflows",
+      "speakers": [
+        "Stephanie Ding",
+        "Robin Cheng",
+        "Erika Lee"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "trust",
+        "ai",
+        "cloud",
+        "framework",
+        "model"
+      ],
+      "teaser": "Presents Cove, an open-source framework that chains attested enclave computations into multi-party workflows where private inputs stay hidden and the results can be verified.",
+      "summary": "The talk starts from a multi-party computation problem: several parties hold secrets, such as a private prompt, a proprietary model, or an auditor's benchmark data, and want a joint result without revealing them. Trusted execution environments can stand in for a neutral third party, but remote attestation only proves which code is running, not what that code does. Private code therefore leaves a trust gap, and the speakers argue that it can be closed by attesting a separate audit of that code inside its own enclave.\n\nThe speakers then introduce Cove, which describes a workflow as a graph of enclave nodes with declared artifacts, owners, and dependencies. Owners release their secrets only after reviewing and approving that exact workflow. Downstream nodes can require upstream certificates as preconditions before they run, and the chain can be checked by anyone holding the workflow and the vendor's attestation roots. Examples include confidential inference, bilateral benchmarks of AI models, and auditing the auditor, with a public or open-weight model as the stopping point.\n\nTo measure cost, the team ran the framework on Intel TDX through Phala Cloud's dstack. Reported overhead was about 1.1 times for CPU-bound compilation, about 2.1 times for attested GPU inference during a benchmark, and about 1.16 to 1.33 times for a 120-billion-parameter model under load. The main takeaway is that a small set of reusable primitives can replace bespoke enclave protocols.",
+      "durationSeconds": 1610,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Iq3oz24JiVs",
+      "slug": "cpv-forget-fips-an-analysis-of-russian-and-chinese-crypto-standa",
+      "title": "Forget FIPS - An Analysis of Russian and Chinese Cryptographic Standards",
+      "speakers": [
+        "1nfocalypse"
+      ],
+      "track": "policy",
+      "topics": [
+        "cryptography",
+        "standards",
+        "state",
+        "trust",
+        "vulnerability-research"
+      ],
+      "teaser": "Surveys the Russian GOST and Chinese ShangMi and ZUC cryptographic standards, comparing their designs, published cryptanalysis, and the national priorities they reflect.",
+      "summary": "The talk surveys the cryptographic standards published by Russia and China, which are less familiar to Western practitioners even though they protect very large user populations. It starts with the Russian GOST family: the Magma block cipher, the Kuznyechik cipher, the Streebog hash, and the GOST R 34.10 signature scheme. For each, the speaker covers the structure, the published attacks, and how the standard came about, including Magma's long secrecy and the standardization of Kuznyechik.\n\nA recurring theme is the S-box. Researchers in 2015 argued that the Kuznyechik and Streebog S-boxes, described as randomly generated, have a hidden algebraic substructure, and later work showed how to build comparable S-boxes through heuristic optimization. The Chinese half covers SM4 block cipher, SM3 hash, SM2 signatures and key exchange, which requires point validation, the pairing-based SM9 scheme, and the ZUC-256 stream cipher used in 4G and 5G. The speaker compares the public evaluations of each and notes that the main results are academic rather than practical, though some claims are contested.\n\nThe closing argument is that standards reflect national priorities. Russian designs tend to be conservative and resemble Western designs, while Chinese designs are more experimental, and both countries put heavy weight on backward compatibility. The takeaway for practitioners is that constant choice and transparency matter as much as raw cipher strength, and the speaker shares reference scripts for checking the curve and S-box properties.",
+      "durationSeconds": 2344,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "Xj7hppSm-s8",
+      "slug": "cpv-digging-up-treasure-in-gold-bugs-past-panel",
+      "title": "Digging up Treasure in Gold Bugs Past",
+      "speakers": [
+        "Steven Barker",
+        "Kevin Hewlin",
+        "George",
+        "Roberto",
+        "Cooper"
+      ],
+      "track": "community",
+      "topics": [
+        "challenge",
+        "village",
+        "panel",
+        "cryptography",
+        "steganography"
+      ],
+      "teaser": "Gold Bug puzzle writers and members of last year's winning team discuss how the contest is built, how to start, and how to approach puzzles with no obvious entry point.",
+      "summary": "This panel brings together the people who write Gold Bug, the puzzle contest run by the Crypto Privacy Village, and members of Shagworm, the team that won last year. The contest is a chain of puzzles whose answers feed a final meta puzzle, mixing classical ciphers, steganography and deliberate misdirection. The organizers say some frustration is intended, and they describe how hints are released through Mastodon and Discord, with private team threads for groups that get stuck.\n\nThe middle of the session walks through standout puzzles from last year's treasure-hunt theme. A dice-shaking puzzle turned out to be Morse code hidden behind distracting numbers. A flower puzzle led to a Gromark-style cipher, and a rum-bottle song needed code to test many mappings. A color-filter puzzle layered Braille across RGB channels. The winners describe how a wrong starting point and a misread hint slowed the meta, which was finally cracked by plotting a route across the map and reading the first letters of the cities. They also admit to a wrong file version going live.\n\nThe closing segment covers this year's art-show theme, where most puzzles are physical pieces on display at the village. The practical takeaways are to first work out where the information is hiding, to treat odd details as potential clues, and to expect to get stuck and use hints when needed.",
+      "durationSeconds": 3073,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "8XfVRfUP91Q",
+      "slug": "cpv-inside-the-guts-of-ransomware-ashley-munoz",
+      "title": "Inside the Guts of Ransomware",
+      "speakers": [
+        "Ashley Munoz"
+      ],
+      "track": "malware",
+      "topics": [
+        "ransomware",
+        "malware-analysis",
+        "reverse-engineering",
+        "incident-response",
+        "windows"
+      ],
+      "teaser": "Shows how malware analysts identify AES, RSA and ChaCha20 in ransomware using FindCrypt, cipher constants and Windows crypto API breakpoints.",
+      "summary": "Ashley Munoz, an incident response specialist at Kaspersky's Global Emergency Response Team, opens with a practical reason to care about cipher identification: if responders can tell which algorithm a ransomware family used, they may find that a decryptor already exists for a victim. She reviews the basics first, covering symmetric versus asymmetric ciphers, AES block modes such as ECB and CBC, and substitution boxes whose published values make cipher constants recognizable.\n\nThe middle of the talk is hands-on. Using the FindCrypt plugin in Ghidra, she locates AES lookup-table constants in a sample. To separate ChaCha20 from Salsa20, she points to the \"expand 32-byte k\" string and the order of its words. For RSA and ECC, she sets breakpoints on the Windows CryptGenKey call in a debugger, dumps memory, and reads the algorithm ID value, then matches it against Microsoft's documented table, which in her example resolved to 256-bit AES.\n\nHer takeaways are that AES still dominates ransomware file encryption, RSA commonly wraps per-file keys, and hybrid designs trade speed against attacker control. She recommends extracting encryption headers or footers, tracing random number generation, watching for reused constants or seeds across versions, and keeping an internal database of crypto signatures. She closes with a 2024 incident in Mexico, where a strain that used BitLocker to encrypt a server turned out to have a weakness that let the team build a decryptor.",
+      "durationSeconds": 1670,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "mp4lJ6eI61Q",
+      "slug": "cpv-quantum-ready-or-not-what-1-000-codebases-reveal-about-crypt",
+      "title": "Quantum Ready or - Not - What 1,000 Codebases Reveal About Cryptographic Risk",
+      "speakers": [
+        "Zulfikar Ramzan"
+      ],
+      "track": "appsec",
+      "topics": [
+        "open-source",
+        "code",
+        "vulnerabilities",
+        "risk",
+        "threat"
+      ],
+      "teaser": "Surveys popular open-source repositories for cryptographic usage and estimates how much of it would fail under a quantum attack.",
+      "summary": "The talk opens with the quantum threat to public-key cryptography. It covers how Shor's algorithm breaks factoring and discrete logarithms, how Grover's search weakens symmetric keys, and why \"harvest now, decrypt later\" and \"trust now, forge later\" matter today. Using Mosca's inequality, the speaker argues that data with long shelf lives makes migration urgent even while large quantum machines remain out of reach.\n\nThe research team scanned a set of popular open-source projects with static rules that built a cryptographic bill of materials. They counted only first-party code to avoid inflating results and filtered false positives. The transcript says the sample was cut from a planned 1,000 repositories to 100 because of cloud costs. About 85,000 cryptographic usages were found, roughly a third of them classical public-key. Post-quantum algorithms made up about 0.04 percent of usages, though around a fifth of repositories had started some placeholder work. Estimates of quantum-critical usage ranged from 35 to 44 percent, depending on whether regex rules or an LLM did the classification.\n\nThe main takeaway is that migration is a graph problem rather than a grep problem. Teams need to find where cryptography lives, map the data and systems it protects, prioritize, mitigate, and then re-measure. The speaker also warns that broken hashes such as MD5 and SHA-1 stayed in use for years after their weaknesses were known, so quantum-vulnerable code may follow the same pattern.",
+      "durationSeconds": 1668,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "6WOJHLblUq8",
+      "slug": "cpv-the-agent-long-con-tricking-agents-out-of-their-data-patrick",
+      "title": "The Agent Long Con - Tricking Agents Out of Their Data",
+      "speakers": [
+        "Patrick Walsh"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "attack",
+        "machine-learning",
+        "privacy",
+        "defensive-security"
+      ],
+      "teaser": "Shows how an attacker can slowly poison an OpenClaw-style AI agent's memory through repeated emails until it forwards the victim's mail out.",
+      "summary": "The talk opens with a podcast remark about giving an always-on OpenClaw agent access to email, calendar and chat, and asks why such agents are mostly unhacked. The speaker built a test instance and tried one-shot prompt injections: spoofed authority, goal hijacking, fake policy and adversarial poems. Nearly all of them failed. Newer frontier models and layered defenses such as content wrapping, scrubbing and tool sandboxing account for much of the change, and the speaker notes that vendors' published injection detection rates have risen sharply.\n\nThe real progress came through memory. Injected text landed in daily memory files, a dreaming feature promoted it into long-term memory, and a heartbeat file was also altered. Repeated emails framing the attacker's address as an internal channel eventually made it trusted, and later messages asked the agent to update its summary script. The agent then forwarded every incoming email to the attacker. The speaker calls this prompt laundering, because untrusted text gains trust simply by moving into memory.\n\nThe takeaways are practical. Review memory files and scripts regularly, make as much of the agent's state read-only as possible, and purge poisoned content from transcripts before it gets promoted. Default-on memory and learning features in hosted assistants deserve the same scrutiny. The speaker also argues that data sent to frontier providers is not private, since logs may be retained and a breach would be hard to scope.",
+      "durationSeconds": 2432,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "zIlohW9owd0",
+      "slug": "cpv-the-national-fight-against-alprs",
+      "title": "The National Fight Against ALPRs",
+      "speakers": [
+        "Freddy Martinez",
+        "Sarah"
+      ],
+      "track": "privacy",
+      "topics": [
+        "surveillance",
+        "privacy",
+        "alpr",
+        "public-records",
+        "community"
+      ],
+      "teaser": "Traces how automatic license plate reader networks spread and how local communities have pushed cities to cancel their contracts.",
+      "summary": "The talk looks at the national campaign against automatic license plate readers (ALPRs), drawing on years of research into the technology and its history of failed attempts at regulation. The speakers argue that the core recognition pipeline is simple and cheap to build, so vendors compete on add-on features and data sharing. Because their value is tied to how many plates they collect, restricting data sharing is commercially unattractive to them.\n\nDrawing on about four years of public records requests and audit log analysis, the speakers describe networks that are nearly impossible to monitor, a vendor that reactivated cameras after a city tried to switch them off, and audit reason fields that were narrowed to vague categories. They contend that policy rules and technical feature limits have repeatedly failed to keep data contained, so the remedy they advocate is turning the cameras off. They also explain how city purchasing processes, decision-makers and transparency ordinances can be mapped and used as leverage.\n\nThe closing section covers organizing: coalitions that cross ideological lines, community literacy about contracts, and framing objections around procurement integrity and liability rather than purely ideological terms. Contract cancellations are the measure of success. The talk ends by encouraging attendees to support local groups, since these campaigns are won one city at a time.",
+      "durationSeconds": 3870,
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "fof6FlLO6_Y",
+      "slug": "cpv-where-standard-cybersecurity-advice-falls-short-yael-grauer",
+      "title": "Trust the Basics, But Know Their Limits - Where Cybersecurity Advice Falls Short",
+      "speakers": [
+        "Yael Grauer"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "social",
+        "defensive-security",
+        "trust",
+        "lessons-learned"
+      ],
+      "teaser": "Examines where common security advice such as password managers, MFA, credit freezes and VPNs falls short, and what still helps when it does.",
+      "summary": "The talk starts from a simple premise: standard security advice is worth following, but following every tip does not make someone safe. The speaker goes through the usual recommendations and where each one stops working. A password manager does little if it stores weak passwords, shared accounts stay shared, or an attacker controls the email account used for resets. Multifactor authentication can be defeated by phishing sites that relay one-time codes or by SIM swapping, and hardware keys and passkeys are not offered everywhere. Credit freezes block new accounts but do nothing against scams where the victim authorizes the payment. Patching covers known flaws, not zero-days or social engineering, and a VPN mostly moves trust from an ISP to the provider, which may keep logs.\n\nThe middle of the talk covers privacy and awareness measures. Removing personal data from people-search sites reduces exposure, but public records and leaked data remain available to a determined investigator. Phishing awareness training often misses targeted lures and relies on outdated warning signs. The speaker describes a recurring pattern: no single control covers everything, technical measures cannot fix human judgment, and fatigue or social pressure can override skepticism. Trusted people, enough sleep and habits that slow down unusual requests are offered as practical counterweights.\n\nThe closing argument is that people should understand the limits of their defenses instead of blaming themselves after a scam. Technology companies and policymakers should carry more of the burden, through vetting advertisers and passing a federal privacy law.",
+      "durationSeconds": 1690,
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "9nCDZyJCkMg",
+      "slug": "cryptoprivacy-youre-probably-using-fpe-wrong",
+      "title": "You're Probably Using FPE Wrong",
+      "speakers": [
+        "Leslie Gutschow"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "encryption",
+        "architecture",
+        "practical",
+        "lessons-learned"
+      ],
+      "teaser": "Explains how NIST FF1 format-preserving encryption works and where production deployments go wrong with domains, tweaks, keys, and validation.",
+      "summary": "The talk opens with an auditor's quiz: two columns, one plaintext and one format-preserving ciphertext, and the point that placing them side by side leaks everything. The speaker frames the technique as a fit for mainframe, banking, and healthcare systems where field length and character set cannot change. The core parameters are the alphabet, radix, domain, key, and tweak, and the FF1 Feistel rounds are sketched. Only FF1 is NIST-approved, and open-source FF3-1 code is described as unsafe for production.\n\nThe middle of the talk covers rollout failures. Small domains such as states, genders, or PINs are easy to brute-force once an oracle can validate guesses, so encrypting low-entropy fields gains little. Determinism enables joins and analytics but exposes frequency patterns, and a tweak does not add entropy. Other problems include codebooks built from plaintext beside ciphertext, vendors that encode characters differently, and no authentication, so a wrong key returns plausible output silently. Key rotation changes ciphertext too, so keys and configuration must travel with the data.\n\nThe speaker suggests widening the alphabet to alphanumeric so encrypted values are visibly distinct, which also makes wrong-key decryption easier to spot. FPE fits large domains such as card and Social Security numbers in locked schemas. Where schemas can change, authenticated encryption, tokenization, or masking are often better.",
+      "durationSeconds": 916,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "FcrfpNzQyxw",
+      "slug": "cpv-iding-quantum-attack-surface-in-critical-infrastructure",
+      "title": "Step Zero -Identifying Quantum Attack Surface in Critical Infrastructure",
+      "speakers": [
+        "K Rosseini",
+        "A Friedman"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "cbom",
+        "quantum-readiness",
+        "infrastructure",
+        "risk",
+        "open-source"
+      ],
+      "teaser": "Shows how to locate RSA and ECC inside financial infrastructure and build a Cryptographic Bill of Materials inventory ahead of quantum migration.",
+      "summary": "The talk opens with the case for post-quantum readiness in critical infrastructure. The speakers argue that the main obstacle is not the math or the standards but finding where RSA and ECC sit inside banking APIs, certificate hierarchies, SWIFT authentication, vendor software, and legacy hardware. They cite a study of about 32,000 TLS handshakes where traffic-layer migration looked partial while identity-layer adoption showed none. They also stress that harvest-now, decrypt-later and harvest-now, forge-later collection is already happening, so the exposure exists before any cryptographically relevant quantum computer does.\n\nThe middle section introduces the Cryptographic Bill of Materials, a structured, JSON-based extension of the SBOM model that records algorithms, key sizes, roles, and the relationships between components. The speakers describe a maturity path from a flat algorithm list toward interoperable, machine-processable inventories. Discovery approaches are compared: network traffic capture, source and build analysis, and binary analysis. A live demo ran an open-source CBOM generator against an IoT firmware image. The output flagged an Ed25519 key used for package signing and an MD5 hash applied to a password file, and it noted a private key that is only generated at boot, which the tool cannot see.\n\nThe closing section covers prioritization. Assets are weighed by data shelf life, whether they protect confidentiality or signatures, system criticality, replaceability, and vendor maturity. The speakers recommend discovering, ranking, and swapping cryptography in a repeating loop, aiming first for crypto-agility so changes can happen quickly later. Their takeaway is that organizations should answer where their cryptography lives with evidence from inventories, not assumptions.",
+      "durationSeconds": 2342,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    }
+  ]
+}
