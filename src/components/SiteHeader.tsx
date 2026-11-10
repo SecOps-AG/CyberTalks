@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import { HUBS } from "@/lib/hubs";
 
 type NavItem = { href: string; label: string; highlight?: boolean };
@@ -62,7 +61,7 @@ function TreeIcon() {
 
 function navItemClass(item: NavItem, active: boolean) {
   const base =
-    "flex items-center gap-1.5 rounded-sm px-2 py-1 transition max-[599px]:min-h-11 max-[599px]:px-3.5";
+    "flex items-center gap-1.5 rounded-sm px-2 py-1 transition max-[599px]:min-h-8 max-[599px]:gap-1 max-[599px]:px-1";
   if (item.highlight) {
     return `${base} border border-cyan/55 bg-cyan/10 text-cyan hover:bg-cyan/20${
       active ? " bg-cyan/20" : ""
@@ -78,31 +77,9 @@ function openPalette() {
 
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
-  // Phones (<600px) fold the nav into a menu under the header.
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => setMenuOpen(false), [pathname]);
-
-  useEffect(() => {
-    if (!menuOpen) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
-    };
-    const wide = window.matchMedia("(min-width: 600px)");
-    const onWide = () => {
-      if (wide.matches) setMenuOpen(false);
-    };
-    document.addEventListener("keydown", onKey);
-    wide.addEventListener("change", onWide);
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      wide.removeEventListener("change", onWide);
-    };
-  }, [menuOpen]);
-
   return (
     <header className="sticky top-0 z-40 border-b border-acid/20 bg-void/90 backdrop-blur">
-      <div className="relative mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1.5 px-4 py-2.5 max-[599px]:flex-nowrap sm:py-3 max-[599px]:gap-x-3 sm:px-6">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1.5 px-4 py-2.5 max-[599px]:gap-y-2 sm:py-3 sm:px-6">
         <Link
           href="/"
           aria-label="Cyber Talks home"
@@ -124,59 +101,26 @@ export function SiteHeader() {
             </span>
           </span>
         </Link>
-        <button
-          type="button"
-          onClick={() => setMenuOpen((open) => !open)}
-          aria-label="Menu"
-          aria-expanded={menuOpen}
-          aria-controls="site-nav"
-          className={`hidden h-10 w-10 shrink-0 place-items-center rounded-[3px] border transition max-[599px]:grid ${
-            menuOpen ? "border-acid bg-acid/15 text-acid" : "border-acid/35 text-mint/80"
-          }`}
-        >
-          <svg
-            aria-hidden="true"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-          >
-            {menuOpen ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
-          </svg>
-        </button>
-        {menuOpen ? (
-          <button
-            type="button"
-            tabIndex={-1}
-            aria-hidden="true"
-            onClick={() => setMenuOpen(false)}
-            className="absolute left-0 top-full hidden h-screen w-full bg-void/75 max-[599px]:block"
-          />
-        ) : null}
-        <div
-          className={`flex flex-wrap items-end gap-x-3 gap-y-1.5 max-[599px]:absolute max-[599px]:inset-x-0 max-[599px]:top-full max-[599px]:max-h-[calc(100dvh-4rem)] max-[599px]:overflow-y-auto max-[599px]:border-b max-[599px]:border-acid/30 max-[599px]:bg-void max-[599px]:px-4 max-[599px]:pb-5 max-[599px]:pt-3 ${
-            menuOpen ? "" : "max-[599px]:hidden"
-          }`}
-        >
+        {/* Phones (<600px): the nav is its own full-width row under the logo. */}
+        <div className="flex flex-wrap items-end gap-x-3 gap-y-1.5 max-[599px]:w-full">
           <nav
-            id="site-nav"
             aria-label="Primary"
-            className="flex flex-wrap items-end gap-x-3 gap-y-1.5 text-[11px] uppercase tracking-[0.14em] text-mint/80 max-[599px]:w-full max-[599px]:flex-col max-[599px]:items-stretch max-[599px]:gap-y-3.5 max-[599px]:text-xs"
+            className="flex flex-wrap items-end gap-x-3 gap-y-1.5 text-[11px] uppercase tracking-[0.14em] text-mint/80 max-[599px]:w-full max-[599px]:gap-1.5 max-[599px]:text-[10px] max-[599px]:tracking-[0.06em]"
           >
             {NAV_GROUPS.map((group) => (
-              <div key={group.label} className="flex shrink-0 flex-col gap-1 max-[599px]:gap-1.5">
+              <div
+                key={group.label}
+                className="flex shrink-0 flex-col gap-1 max-[599px]:grow max-[599px]:first:w-full"
+              >
                 <span
-                  className={`pl-0.5 text-[9px] tracking-[0.28em] max-[639px]:hidden max-[599px]:!block max-[599px]:text-[10px] ${
+                  className={`hidden pl-0.5 text-[9px] tracking-[0.28em] sm:block ${
                     group.accent ? "text-cyan/75" : "text-mint/55"
                   }`}
                 >
                   {group.label}
                 </span>
                 <div
-                  className={`flex items-center gap-0.5 rounded-[3px] border p-[3px] max-[599px]:flex-wrap max-[599px]:gap-1 max-[599px]:p-1.5 ${
+                  className={`flex items-center gap-0.5 rounded-[3px] border p-[3px] max-[599px]:justify-around ${
                     group.accent ? "border-cyan/35 bg-cyan/[0.04]" : "border-acid/20 bg-acid/[0.03]"
                   }`}
                 >
@@ -187,7 +131,6 @@ export function SiteHeader() {
                         key={item.href}
                         href={item.href}
                         aria-current={active ? "page" : undefined}
-                        onClick={() => setMenuOpen(false)}
                         className={navItemClass(item, active)}
                       >
                         {item.highlight ? <TreeIcon /> : null}
