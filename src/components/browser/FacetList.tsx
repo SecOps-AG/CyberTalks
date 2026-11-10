@@ -10,7 +10,7 @@ const SEARCHABLE_AT = 12;
  * A counted, checkbox-style facet. Long lists collapse to the top few and grow
  * a filter box, so even a long village list stays one short block.
  *
- * `compact` keeps the full count-sorted list in a ~5-row box with its own
+ * `compact` keeps the full count-sorted list in a ~15-row box with its own
  * scrollbar so a long conference list cannot stretch the filter rail.
  *
  * `bare` drops the heading for hosts that title the section themselves
@@ -76,7 +76,7 @@ export function FacetList<T extends string | number>({
 
       <div
         className={`scroll-list space-y-0.5 overflow-y-auto pr-1 ${
-          compact ? "max-h-36" : "max-h-72"
+          compact ? "max-h-96" : "max-h-72"
         }`}
       >
         {visible.map((option) => {
