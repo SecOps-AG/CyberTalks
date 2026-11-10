@@ -27,6 +27,7 @@ export default async function BsidesHubPage() {
 
   return (
     <TalkBrowser
+      pushFilters
       talks={talks}
       hide={["conferences", "villages"]}
       topicLabels={topicLabels()}

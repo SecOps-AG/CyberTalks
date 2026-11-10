@@ -60,7 +60,8 @@ function TreeIcon() {
 }
 
 function navItemClass(item: NavItem, active: boolean) {
-  const base = "flex items-center gap-1.5 rounded-sm px-2 py-1 transition";
+  const base =
+    "flex items-center gap-1.5 rounded-sm px-2 py-1 transition max-[599px]:min-h-8 max-[599px]:gap-1 max-[599px]:px-1";
   if (item.highlight) {
     return `${base} border border-cyan/55 bg-cyan/10 text-cyan hover:bg-cyan/20${
       active ? " bg-cyan/20" : ""
@@ -78,7 +79,7 @@ export function SiteHeader() {
   const pathname = usePathname() ?? "/";
   return (
     <header className="sticky top-0 z-40 border-b border-acid/20 bg-void/90 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1.5 px-4 py-2.5 max-[599px]:flex-nowrap sm:py-3 max-[599px]:gap-x-3 sm:px-6">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1.5 px-4 py-2.5 max-[599px]:gap-y-2 sm:py-3 sm:px-6">
         <Link
           href="/"
           aria-label="Cyber Talks home"
@@ -100,13 +101,17 @@ export function SiteHeader() {
             </span>
           </span>
         </Link>
-        <div className="flex flex-wrap items-end gap-x-3 gap-y-1.5 max-[599px]:min-w-0 max-[599px]:items-center">
+        {/* Phones (<600px): the nav is its own full-width row under the logo. */}
+        <div className="flex flex-wrap items-end gap-x-3 gap-y-1.5 max-[599px]:w-full">
           <nav
             aria-label="Primary"
-            className="push-nav flex flex-wrap items-end gap-x-3 gap-y-1.5 text-[11px] uppercase tracking-[0.14em] text-mint/80 max-[599px]:flex-nowrap max-[599px]:items-center max-[599px]:gap-x-2 max-[599px]:overflow-x-auto max-[599px]:min-w-0 max-[599px]:whitespace-nowrap max-[599px]:py-1"
+            className="flex flex-wrap items-end gap-x-3 gap-y-1.5 text-[11px] uppercase tracking-[0.14em] text-mint/80 max-[599px]:w-full max-[599px]:gap-1.5 max-[599px]:text-[10px] max-[599px]:tracking-[0.06em]"
           >
             {NAV_GROUPS.map((group) => (
-              <div key={group.label} className="flex shrink-0 flex-col gap-1">
+              <div
+                key={group.label}
+                className="flex shrink-0 flex-col gap-1 max-[599px]:grow max-[599px]:first:w-full"
+              >
                 <span
                   className={`hidden pl-0.5 text-[9px] tracking-[0.28em] sm:block ${
                     group.accent ? "text-cyan/75" : "text-mint/55"
@@ -115,7 +120,7 @@ export function SiteHeader() {
                   {group.label}
                 </span>
                 <div
-                  className={`flex items-center gap-0.5 rounded-[3px] border p-[3px] ${
+                  className={`flex items-center gap-0.5 rounded-[3px] border p-[3px] max-[599px]:justify-around ${
                     group.accent ? "border-cyan/35 bg-cyan/[0.04]" : "border-acid/20 bg-acid/[0.03]"
                   }`}
                 >

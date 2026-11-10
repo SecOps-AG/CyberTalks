@@ -55,6 +55,7 @@ export default async function TopicPage({ params }: Props) {
       </header>
 
       <TalkBrowser
+        pushFilters
         talks={initial.talks}
         listing={{ kind: "topic", key: topic }}
         initialFacets={initial.facets}

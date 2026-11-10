@@ -42,6 +42,7 @@ export default async function EventPage({ params }: Props) {
     <section>
       <SectionHeading title={`All ${event.shortName} talks`} />
       <TalkBrowser
+        pushFilters
         talks={talks}
         hide={isDefconEvent ? ["years"] : ["years", "villages"]}
         topicLabels={topicLabels()}

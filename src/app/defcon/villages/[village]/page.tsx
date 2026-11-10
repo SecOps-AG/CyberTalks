@@ -56,6 +56,7 @@ export default async function DefconVillageSeriesPage({ params }: Props) {
       </header>
 
       <TalkBrowser
+        pushFilters
         talks={talks}
         hide={["villages", "conferences"]}
         topicLabels={topicLabels()}
