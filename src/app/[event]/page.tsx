@@ -6,6 +6,7 @@ import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import routes from "@/generated/page-routes.json";
 import { inDefconVillage, villageEditionPath } from "@/lib/hubs";
 import { canonicalUrl } from "@/lib/canonical";
+import { DC34_EVENT_SLUG, DC34_VILLAGE_LABEL } from "@/lib/dc34";
 import { loadEventPage } from "@/lib/page-runtime";
 import { topicLabels } from "@/lib/topic-labels";
 
@@ -34,6 +35,22 @@ export default async function EventPage({ params }: Props) {
   const { event, editions, talks } = page;
   const defconEditions = editions.filter(inDefconVillage);
   const isDefconEvent = defconEditions.length > 0;
+  // DEF CON 34 leads with its filterable talk list; the village cards follow.
+  const isDc34 = event.slug === DC34_EVENT_SLUG;
+
+  const browser = (
+    <section>
+      <SectionHeading title={`All ${event.shortName} talks`} />
+      <TalkBrowser
+        talks={talks}
+        hide={isDefconEvent ? ["years"] : ["years", "villages"]}
+        topicLabels={topicLabels()}
+        emptyHint={`No ${event.name} talks match these filters.`}
+        villageLabel={isDc34 ? DC34_VILLAGE_LABEL : undefined}
+        notYouTubeFilter={isDc34}
+      />
+    </section>
+  );
 
   return (
     <div className="space-y-10">
@@ -49,6 +66,8 @@ export default async function EventPage({ params }: Props) {
           · {talks.length} talks
         </p>
       </header>
+
+      {isDc34 ? browser : null}
 
       {isDefconEvent ? (
       <section>
@@ -98,15 +117,7 @@ export default async function EventPage({ params }: Props) {
       </section>
       ) : null}
 
-      <section>
-        <SectionHeading title={`All ${event.shortName} talks`} />
-        <TalkBrowser
-          talks={talks}
-          hide={isDefconEvent ? ["years"] : ["years", "villages"]}
-          topicLabels={topicLabels()}
-          emptyHint={`No ${event.name} talks match these filters.`}
-        />
-      </section>
+      {isDc34 ? null : browser}
     </div>
   );
 }

@@ -4,7 +4,7 @@
  */
 import { inDefconVillage } from "./hubs";
 import { conferenceLabel, DIFFICULTIES, difficultyLabel, normalizeDifficulty } from "./labels";
-import { hasRepo, hasSlides } from "./materials";
+import { hasRepo, hasSlides, isYouTubeId } from "./materials";
 import type { Difficulty, SearchEntry, Talk, TalkIndexEntry, TalkSummaryEntry } from "./types";
 
 export const PAGE_SIZE = 24;
@@ -74,6 +74,8 @@ export type Filters = {
   hasSlides: boolean;
   /** Auto-band repository only. */
   hasRepo: boolean;
+  /** Media-archive recordings only: ids that are not YouTube videos. */
+  notYouTube: boolean;
   sort: SortKey;
   page: number;
 };
@@ -91,6 +93,7 @@ export const EMPTY_FILTERS: Filters = {
   includeExtras: false,
   hasSlides: false,
   hasRepo: false,
+  notYouTube: false,
   sort: "relevance",
   page: 1,
 };
@@ -234,6 +237,7 @@ function matchesDimension(
     return false;
   if (filters.hasSlides && !entry.hasSlides) return false;
   if (filters.hasRepo && !entry.hasRepo) return false;
+  if (filters.notYouTube && isYouTubeId(entry.youtubeId)) return false;
   // Topics are ANDed: each selected topic narrows further.
   if (
     skip !== "topics" &&
@@ -496,7 +500,8 @@ export function countActive(filters: Filters): number {
     filters.difficulties.length +
     (filters.includeExtras ? 1 : 0) +
     (filters.hasSlides ? 1 : 0) +
-    (filters.hasRepo ? 1 : 0)
+    (filters.hasRepo ? 1 : 0) +
+    (filters.notYouTube ? 1 : 0)
   );
 }
 
@@ -579,6 +584,7 @@ export function filtersFromParams(params: URLSearchParams): Filters {
     includeExtras: params.get("extras") === "1" || params.get("extras") === "true",
     hasSlides: params.get("slides") === "1",
     hasRepo: params.get("repo") === "1",
+    notYouTube: params.get("notyoutube") === "1",
     sort: SORT_KEYS.includes(sort as SortKey) ? (sort as SortKey) : "relevance",
     page: Number.isFinite(page) && page > 0 ? page : 1,
   };
@@ -597,6 +603,7 @@ export function filtersToQuery(filters: Filters): string {
   if (filters.includeExtras) params.set("extras", "1");
   if (filters.hasSlides) params.set("slides", "1");
   if (filters.hasRepo) params.set("repo", "1");
+  if (filters.notYouTube) params.set("notyoutube", "1");
   if (filters.sort !== "relevance") params.set("sort", filters.sort);
   if (filters.page > 1) params.set("page", String(filters.page));
   return params.toString();

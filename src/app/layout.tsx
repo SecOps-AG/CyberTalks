@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { IBM_Plex_Mono, Orbitron } from "next/font/google";
+import { SiteBanner } from "@/components/SiteBanner";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CommandPaletteProvider } from "@/components/CommandPaletteProvider";
@@ -49,6 +50,7 @@ export default function RootLayout({
         <PushPage>
           <div className="relative z-10 flex min-h-screen flex-col">
             <SiteHeader />
+            <SiteBanner />
             <main
               id="content"
               className="mx-auto w-full max-w-7xl flex-1 px-4 pb-16 pt-8 max-[599px]:pt-3 sm:px-6"
