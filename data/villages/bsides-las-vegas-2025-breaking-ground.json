@@ -1,0 +1,450 @@
+{
+  "villageSlug": "breaking-ground",
+  "villageName": "Breaking Ground",
+  "eventSlug": "bsides-las-vegas-2025",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLjpIlpOLoRNTfoi3t-2-Evbd31g0xMvOw",
+  "description": "Breaking Ground talks from BSides Las Vegas 2025.",
+  "talks": [
+    {
+      "youtubeId": "tH5olbwAJoU",
+      "slug": "no-ip-no-problem-exfiltrating-data-behind-iap-2",
+      "title": "No IP, No Problem: Exfiltrating Data Behind IAP",
+      "speakers": [
+        "Ariel Kalman"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "identity",
+        "web",
+        "detection",
+        "vulnerabilities"
+      ],
+      "teaser": "Shows how a permissive Google Cloud IAP setting lets an attacker smuggle secrets out through CORS preflight responses.",
+      "summary": "The talk introduces Google Cloud's Identity-Aware Proxy, which sits in front of an application and blocks unauthenticated requests unless the caller has a valid identity and the right role. The speaker starts with two common misconfigurations: granting access to the all-users or all-authenticated-users member types, which effectively disables the gate, and leaving one endpoint out of IAP protection so it can be reached directly while the rest stays locked.\n\nThe central section covers CORS and preflight OPTIONS requests, which browsers send without credentials by design. It then examines an IAP setting called allow HTTP options that lets unauthenticated preflight requests reach the backend. Because the backend's response to such a request can be shaped by whoever deploys the app, an insider with a deploy-only role can encode a secret into a response header. An outside machine with no token then sends an OPTIONS request and reads the secret back. Repeating this with new versions, the speaker moved about 15 megabytes in one day during testing.\n\nFor defenders, the only visible step is the repeated deployment of new App Engine versions, which shows up as a sharp spike in create-version events at a fixed interval. The speaker notes that the App Engine Deployer role is commonly given to developers, which makes it a broader risk. Google acknowledged the issue and chose to update its documentation instead of changing the behavior for now. Practitioners should audit all-users bindings, verify IAP coverage on every endpoint, and review whether the preflight setting is needed.",
+      "durationSeconds": 1322,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "rkb1OUyG5Ts",
+      "slug": "the-protocol-behind-the-curtain-what-mcp-really-exposes",
+      "title": "The Protocol Behind the Curtain: What MCP Really Exposes",
+      "speakers": [
+        "Srajan Gupta",
+        "Vinay Kumar"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "attack",
+        "vulnerabilities",
+        "tool",
+        "open-source",
+        "detection"
+      ],
+      "teaser": "Walks through MCP attack paths such as tool poisoning, line jumping and version drift, with demos and a drift-tracking tool.",
+      "summary": "The talk opens with why the Model Context Protocol matters: it lets AI agents discover and call external tools and services, but its design rests on assumptions that often fail in practice. The speakers walk through the host, client and server components and the stages where a server is set up, used and updated. They cite third-party research suggesting that many public servers allow command injection or can be pushed into fetching arbitrary URLs.\n\nAttacks are demonstrated at each stage. Tool poisoning hides instructions in tool descriptions, and the line jumping variant uses one malicious server to steer calls made to a separate, benign server within the same host. Tool squatting imitates a trusted server name. Version drift shows that a server can change its tools after approval with no notification to the user. An indirect injection demo has an agent fetch a forum post that tells it to read local configuration files. The speakers then present Drift Cop, a GitHub-hosted tool that fingerprints tool definitions, flags risk changes and requires human approval before they are accepted.\n\nThe closing advice is to vet servers, disable unused ones and monitor tool-call activity. Data from public sources should never be allowed to reach private resources, and least privilege should apply to every tool. The Q&A touched on authentication support and detection rules that chain outbound calls with local file access, while platform-level defenses against injection were acknowledged as unresolved.",
+      "durationSeconds": 2109,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "TN-HewAJDgY",
+      "slug": "the-two-types-of-fool",
+      "title": "The Two Types of Fool",
+      "speakers": [
+        "Casey John Ellis"
+      ],
+      "track": "community",
+      "topics": [
+        "lessons-learned",
+        "learning",
+        "team",
+        "management",
+        "bug-bounty"
+      ],
+      "teaser": "Argues that security needs knowledge sharing across generations, and offers practical ways to pass on hard-won experience.",
+      "summary": "Casey Ellis, founder of Bugcrowd, opens with a reflection built over the past year. He introduces the talk's central idea, drawn from a book: there are two kinds of fool, one who assumes the old is automatically good and one who assumes the new is automatically better. Neither is entirely right. He illustrates the middle ground with former early bounty hunters who now run their own companies, building on what they were taught while bringing fresh approaches.\n\nThe middle section argues that knowledge sharing across generations is urgent. Ellis points out that older technology still underpins the internet, that hybrid conflict and fast deployment outpace defenders, and that cheap attack tools lower the bar for disruption. He covers humility and knowing one's strengths, balancing curiosity with ego, and gratitude as a force multiplier that still allows people to push for change. He also describes mentoring, public-good work and the value of community in policy and entrepreneurship.\n\nHe closes by addressing three groups: younger practitioners, who bring essential skills and will inherit today's problems; middle-career people, who connect others; and senior practitioners, who should stay engaged and listen rather than dictate. He ends with a personal warning about burnout after a serious heart condition, urging people to check on peers who are overworking.",
+      "durationSeconds": 1600,
+      "publishedAt": "2025-12-08",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "jzMzluaPCEM",
+      "slug": "the-scene-is-dead",
+      "title": "The Scene is Dead",
+      "speakers": [
+        "Allison Nixon"
+      ],
+      "track": "community",
+      "topics": [
+        "threat",
+        "social",
+        "lessons-learned",
+        "learning"
+      ],
+      "teaser": "Traces how the hacker underground shifted from curious tinkering to exploitation, and what the industry should do about it.",
+      "summary": "Allison Nixon opens with memories of early computing, when breaking systems was a playful form of curiosity, and contrasts that with the criminal underground she has tracked since 2011. She argues that the scene has changed: the Bitcoin price surge drew people chasing fast money rather than technical interest, and the pandemic brought in newcomers who were drawn to violent content. She describes how violent sexual extortion communities overlap with fraud, and how some offenders had studied security or sought industry jobs.\n\nThe middle of the talk turns to practical concerns for the field. Nixon suggests that offense types differ in how realistic rehabilitation is, that the industry's familiar joke about getting arrested to land a security job is misleading, and that trust and background checks matter because security staff hold access to sensitive personal data. She also points to shifting terminology in criminal communities and to the absence of ethics material in university security courses. A short video of offenders' own statements illustrates her points.\n\nShe closes with a call to action: build better off-ramps, engage young people before they drift into harmful communities, and make legitimate learning paths easier to find than underground forums. The question-and-answer session covers how parents and educators can talk to teenagers, how the industry should teach responsible disclosure, and how experienced practitioners can help.",
+      "durationSeconds": 2602,
+      "publishedAt": "2025-12-08",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "RxAbrMWkyU4",
+      "slug": "the-age-of-zygote-injection",
+      "title": "The Age of Zygote Injection",
+      "speakers": [
+        "Tricta"
+      ],
+      "track": "mobile",
+      "topics": [
+        "android",
+        "mobile",
+        "attack",
+        "framework",
+        "exploiting"
+      ],
+      "teaser": "Shows how injecting code into Android's Zygote process lets an analyst hook apps and bypass runtime protections.",
+      "summary": "The talk introduces Zygote, the first process Android starts, which forks every application and applies SELinux restrictions during specialization. The speaker explains the pieces that matter for injection: the Android Runtime with its interpreter and ahead-of-time compiled code, the native bridge that loads inside Zygote, and two hooking approaches, PLT hooks and inline hooks on function prologues.\n\nA proof-of-concept Magisk module swaps the native bridge entry at boot so a loader lands in Zygote. Hooks on the fork and specialization functions then run before and after SELinux policy is applied, so code executes inside each app as it launches. The demo rewrites a DEX method that returned true so it returns false, and replaces a string returned by a native library. A follow-on project bundles bypasses for root and debugger checks so an app that crashes on launch can be instrumented.\n\nThe main takeaway is that Zygote injection can be a stealthier alternative to Frida or debugger-based instrumentation, because it sidesteps many of the detections those tools trigger. In the Q&A, the speaker said the hooks bypassed dynamic checks, while Play Protect's checks focus on signatures and static patching. Static methods in DEX code were still unsupported.",
+      "durationSeconds": 2483,
+      "publishedAt": "2025-12-08",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "0c-KH_37Qds",
+      "slug": "rusty-pearls-postgres-rce-on-cloud-databases-2",
+      "title": "Rusty pearls: Postgres RCE on cloud databases",
+      "speakers": [
+        "Coby Abrams",
+        "Tal Peleg"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "cloud",
+        "exploitation",
+        "vulnerabilities",
+        "database"
+      ],
+      "teaser": "Shows how a trusted Postgres language extension lets a low-privilege user run code on cloud-hosted databases.",
+      "summary": "The talk covers CVE-2024-10979, a PostgreSQL flaw found by Varonis Threat Labs researchers while they examined what an administrative user on a managed cloud database could reach. Managed services such as AWS RDS give customers an admin role that is not a true superuser, so the question was whether that boundary could be crossed. The speakers explain how trusted procedural languages are meant to restrict access to the underlying host.\n\nThe core issue is that the trusted PL/Perl language let a user change process environment variables through a Perl internal hash, something only untrusted languages should allow. PL/Rust compiles functions by invoking cargo, so the altered variables could redirect the build to a chosen binary and inject shell commands through a wrapper script. The researchers describe how they searched open-source extension code for process-launching calls, and why PostgreSQL's process API kept the changed environment from reaching child processes. A short test on a live RDS instance was heavily constrained, and AWS's incident response team responded quickly.\n\nThe takeaways are practical: keep minor versions patched, restrict who can create functions and extensions, and use an allow list for loadable extensions. The speakers also argue that managed database backends deserve responsible community research, and that researchers should coordinate with the provider before testing on production cloud services.",
+      "durationSeconds": 1134,
+      "publishedAt": "2025-12-08",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "XXxCkqbjJwg",
+      "slug": "detecting-deobfuscating-and-preventing-obfuscated-script-executi",
+      "title": "Detecting, Deobfuscating, and Preventing Obfuscated Script Execution with Tree-sitter",
+      "speakers": [
+        "David McDonald"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "malware-analysis",
+        "threat-detection",
+        "defensive-security",
+        "tool",
+        "windows"
+      ],
+      "teaser": "Shows how tree-sitter syntax queries can detect and unwrap obfuscated PowerShell before it runs, via a custom AMSI provider.",
+      "summary": "The talk starts with why attackers obfuscate scripts in PowerShell, Python and JavaScript: to slow reverse engineering and to get past signature scanners. It reviews existing approaches, such as dynamic deobfuscators that run scripts in a PowerShell environment, and explains why they are heavyweight, hard to run at enterprise scale, and fragile on broken code.\n\nThe core method parses scripts into syntax trees with tree-sitter and applies small, repeatable transformations: joining split strings, resolving format strings, undoing type casts, and unpacking Base64 and gzip blobs. Each rule can store inferred values that later rules use, and the loop runs until no more changes apply. On several hundred clean management scripts run through obfuscation, the speaker reported that tree-sitter queries found far more obfuscated files than YARA rules did, 616 hits against 86. The speaker also built a custom AMSI provider DLL in Rust that scans script buffers, logs payloads, blocks suspicious content, and flags unusual variable names by entropy.\n\nIn a live demo, the provider unwrapped a gzip-compressed download and exposed strings hidden in a rootkit's AMSI bypass. The speaker noted limits: the engine is not feature complete, and it does not yet follow imported modules across a session. The takeaway for practitioners is that syntax-aware rules can strengthen existing signature engines such as YARA rather than replace them.",
+      "durationSeconds": 2319,
+      "publishedAt": "2025-12-08",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "cyuyFxjzacM",
+      "slug": "my-friend-ben-solid-employee-dprk-agent",
+      "title": "My friend Ben: solid employee, DPRK agent",
+      "speakers": [
+        "Chris Merkel"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "threat",
+        "detection",
+        "hunting",
+        "identity",
+        "risk"
+      ],
+      "teaser": "Traces a North Korean remote IT worker scheme from pandemic-era hiring to detection signals and process-based fixes.",
+      "summary": "The talk is a radio-style story in three acts. It begins with how contractor layering, overlapping jobs and slow performance management during and after the pandemic made remote roles easier to fill with people who were not who they claimed to be.\n\nThe middle follows a composite case built around a remote engineer whose name came from a stolen identity. Warning signs included long video sessions, a camera kept off, a work history that did not match records, and a laptop shipped to an address tied to a laptop farm. The team used VPN and remote-access tool detections, KVM-over-IP devices, impossible travel and local network peers to build a picture, then located the device with property records and Wi-Fi-based geolocation, noting privacy limits. Response, the speaker says, is a business and risk decision involving HR, legal and privacy teams.\n\nThe closing argument is that the fix is mostly process rather than technology. Suggested steps include strong in-person identity checks, scrutiny of contractor hiring and address changes for shipped laptops, hardware security keys for high-risk offshore contractors, and early watch for remote-access tools in a new hire's first weeks. Document verification services alone are not enough, since forged identities can be bought cheaply.",
+      "durationSeconds": 2580,
+      "publishedAt": "2025-12-08",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "XJTcLru7Sq4",
+      "slug": "poison-in-the-wires-interactive-network-visualization-of-data-at",
+      "title": "Poison in the Wires: Interactive Network Visualization of Data Attacks",
+      "speakers": [
+        "Anya Vesna"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "open-source",
+        "tool",
+        "visualization"
+      ],
+      "teaser": "Shows how poisoned training data changes graph-based views of a dataset, using an open-source browser tool called GraphLeak.",
+      "summary": "Anya Vesna opens with a primer on machine learning and data poisoning, describing it as manipulation of training data that pushes a model toward unwanted behavior. She explains how poisoned data can enter through insider access to private datasets or through public sources that other models reuse. Chatbot incidents are used to show how quickly tampered input can shape output.\n\nThe middle section treats training data as a network of nodes and edges. The speaker presents GraphLeak, an open-source tool she built to be simpler to run in a browser. Users load node and edge files, choose which nodes or edges to poison, and compare clean and altered graphs side by side. Basic statistics and a rough risk rating accompany each comparison, with about ten percent poisoned points cited as the level where changes become noticeable. A live demo showed how deleting or adding nodes shifted the risk rating.\n\nTo close, the speaker argued that before-and-after comparisons, similar to a diff, can reveal tampering, and that provenance tracking helps. Suggested defenses include access control for private data and sanitization or rate limiting for public sources. Future work includes more statistical analysis and cycle detection. In the Q&A, she noted that judging whether new input is poisoned depends heavily on context, so guardrails around inputs matter.",
+      "durationSeconds": 1242,
+      "publishedAt": "2025-12-08",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "XgaLwiZ4cxI",
+      "slug": "shedding-light-on-web-isolation-technologies-and-their-bypass-te",
+      "title": "Shedding Light on Web Isolation Technologies and Their Bypass Techniques: C2 Communication via Outlook Using SMTP and IMAP",
+      "speakers": [
+        "Terada Yu"
+      ],
+      "track": "red-team",
+      "topics": [
+        "attack",
+        "web",
+        "network",
+        "detection",
+        "tool"
+      ],
+      "teaser": "Shows how a command channel built on Outlook automation over SMTP and IMAP can get past web isolation controls.",
+      "summary": "Web isolation products run browsing in a remote environment and send users only rendered images, so endpoints need little outbound HTTP or HTTPS. That makes the model attractive to banks and government bodies, but the speaker argues that email protocols are often left open. He reviews how malware families such as Ocean Map, which used IMAP, Agent Tesla, and Emotet have used email for command channels, data theft, and spam, and notes that most common C2 frameworks do not support IMAP or SMTP.\n\nThe core of the talk is a custom tool that drives Outlook through COM from PowerShell. The implant watches the inbox for commands, runs them locally, and returns results by email, so no direct connection to an attacker server is needed. In a demonstration, HTTP and HTTPS were blocked by the Windows host firewall and the channel still worked. The speaker also covers low traffic volume, Outlook's normal disk writes that make the activity blend in, and hiding commands inside images.\n\nFor defenders, the speaker suggests restricting programmatic access to Outlook, limiting email to approved domains where business needs allow, and using mail security filtering, while noting the tradeoffs of each. He mentions existing detection rules from Elastic, Splunk, and CrowdStrike, and a Sigma rule he wrote that flags outlook.exe started by the service host process with an embedding argument rather than by Explorer. The takeaway is that web-only egress controls leave mail protocols as a blind spot that needs monitoring.",
+      "durationSeconds": 2405,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "HkDQIunmW9s",
+      "slug": "stealing-browser-cookies-bypassing-the-newest-chrome-security-me",
+      "title": "Stealing Browser Cookies: Bypassing the newest Chrome security measures",
+      "speakers": [
+        "Rafael Felix"
+      ],
+      "track": "red-team",
+      "topics": [
+        "web",
+        "windows",
+        "reverse-engineering",
+        "identity",
+        "malware-analysis"
+      ],
+      "teaser": "Explains how major browsers protect stored cookies and saved logins, and how Chrome's app-bound encryption can be bypassed on Windows.",
+      "summary": "Rafael Felix opens with the scale of infostealer malware and why stolen session cookies have become a routine route into accounts. He points to recent data on stolen credentials and explains that browser vendors have responded by hardening how cookies and saved logins are stored on disk.\n\nThe core of the talk walks through how each browser family protects its data. For Chromium browsers on Windows, he traces the move from DPAPI to AES-256-GCM and then to Application-Bound Encryption, which hands key decryption to a privileged elevation service. He shows how the key blob is parsed after disassembling that service, then covers macOS keychain-derived keys and Linux keyring or fallback keys. He notes that Firefox leaves cookies in plain text while encrypting saved passwords, and describes the binary cookie format used by Safari.\n\nThe talk closes with Device Bound Session Cookies, which tie short-lived cookies to a key held in a TPM, and brainstorms possible weak points such as TPM key extraction, memory access during registration, and malware present at enrolment. A live demo runs an open-source Rust tool that exports cookies, credentials and other data from installed browsers. The takeaway for practitioners is that app-bound protection raises the bar for extraction on Windows without fully stopping it, and that DBSC is the next layer to watch.",
+      "durationSeconds": 2726,
+      "publishedAt": "2025-12-08",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "-wIUiU4fQnM",
+      "slug": "closing-ceremonies-8",
+      "title": "Closing Ceremonies",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "village",
+        "community",
+        "challenge",
+        "charity"
+      ],
+      "teaser": "Wraps up the event with thanks to staff, charity totals, raffle results, and a call to return next year.",
+      "summary": "The closing session of Besides Las Vegas 2025 opened with attendance figures: about 555 submissions, 218 speakers and 245 sessions across nine talk tracks and six training rooms. The host recalled keynotes on financial resilience, the security underground and community, including one returning speaker who first presented as a proving-ground talk. A historic donation bucket from the event's early days was shown on stage.\n\nThanks went to the staff, volunteers and sponsors. Safety operations reported staffing rising from 45 to 96 percent and offered mental health support. The Pros versus Joes capture-the-flag team named the winning team in its red-versus-blue range, and the crypto challenge designer reported that three groups finished her choose-your-own-adventure puzzle book. Banquet and production staff received awards, and the raffle and silent auction raised more than $8,880 for the supported charities, EFF and Valid, which the organizers planned to round up to $5,000 each.\n\nThe board president asked attendees about the extended two-and-a-half-day format and encouraged them to network, submit detailed call-for-papers proposals and support community members facing harder times. The closing message urged people to find others they can help grow and to let those people set their own path.",
+      "durationSeconds": 2493,
+      "publishedAt": "2025-12-08",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "4WH4R398IaE",
+      "slug": "laser-beams-and-light-streams-building-affordable-light-based-ha-2",
+      "title": "Laser Beams & Light Streams: Building Affordable Light-Based Hardware Security Tooling",
+      "speakers": [
+        "Larry Trowell"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "embedded",
+        "open-source",
+        "tool",
+        "attack",
+        "building"
+      ],
+      "teaser": "Shows how low-cost, mostly 3D-printed and off-the-shelf parts can build laser fault injection and chip imaging rigs.",
+      "summary": "The talk starts from the cost barrier in hardware fault injection. Commercial laser fault injection rigs often run well into six figures, which the presenters argue has led people to assume the technique is out of reach outside well-funded labs. They break a working setup into three parts: an imaging system, a positioning stage and a laser source.\n\nThe speakers describe a home-built rig using a 3D-printed flexure microscope stage, standard optics and a cheap low-power laser module, with a total cost under 500 dollars. They show it glitching a small test microcontroller so that a calculation is skipped or altered, and they explain why a longer, lower-power pulse can still induce a fault within a single clock cycle. They then reuse the same hardware for infrared imaging through the back of a die. In one case this revealed that a chip they expected to be an FTDI part had a different die than its markings suggested, a practical example of supply-chain verification. The final section covers laser logic state imaging, which maps SRAM cells by modulating supply voltage and measuring the reflected laser. A convolutional neural network trained on a published dataset reads bit values from the resulting images, and the speakers report about 96 percent accuracy on a test set.\n\nThe takeaways are that affordable tooling can reproduce parts of lab-grade hardware attacks, that open-sourcing designs lowers the barrier to research and verification, and that laser safety is a real hazard that needs proper eye protection. The speakers also note that other groups released similar open designs around the same period.",
+      "durationSeconds": 4234,
+      "publishedAt": "2025-12-08",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "-5-uosSfwyg",
+      "slug": "inside-the-open-source-kill-chain-how-llms-helped-catch-lazarus",
+      "title": "Inside the Open-Source Kill Chain: How LLMs Helped Catch Lazarus and Stop a Crypto Backdoor",
+      "speakers": [
+        "Mackenzie Jackson"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply-chain",
+        "open-source",
+        "vulnerability-research",
+        "malware-analysis",
+        "ai"
+      ],
+      "teaser": "Shows how LLMs uncover undisclosed open-source vulnerabilities and malicious packages, including a Lazarus backdoor in a Ripple SDK.",
+      "summary": "Mackenzie Jackson opens with the scale of open-source risk: most of an application's code comes from packages maintained by volunteers, so a compromise or hidden flaw can reach very large numbers of downstream users. Existing defenses depend on CVE disclosure, which is slow and often skipped, so maintainers can quietly fix serious bugs without anyone outside the project being told.\n\nThe middle of the talk describes a project that scans changelogs from millions of packages with language models. The models standardise inconsistent entries and flag security-related changes that keyword rules would miss. The pipeline reported hundreds of undisclosed vulnerabilities, most of which never received a CVE. A second pipeline pairs traditional scanners with an LLM that ranks their noisy output for human review. Examples include an account takeover of a widely used parsing library, a Lazarus payload hidden with whitespace in a typosquatted package, and a backdoor in an official Ripple SDK that could have exposed wallet keys at exchanges. A heavily obfuscated package hid its payload behind invisible Unicode characters and chained Base64 links.\n\nThe closing takeaway is that LLMs work best as triage and context layers alongside detectors, not as standalone scanners. The speaker noted that the data and a wrapper tool that blocks known malicious installs are free to use, and the Q&A covered model choice, maintainer responsiveness and falling costs.",
+      "durationSeconds": 2832,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "qYhI3r2uyRk",
+      "slug": "vulnerabilities-beyond-cves-cyber-resilience-and-the-next-financ",
+      "title": "Vulnerabilities Beyond CVEs: Cyber Resilience and the Next Financial Crisis",
+      "speakers": [
+        "Stacey Schreft"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "vulnerabilities",
+        "management",
+        "infrastructure",
+        "threat"
+      ],
+      "teaser": "Draws parallels between the 2008 financial crisis and fragility in IT systems, from leverage to third-party dependence.",
+      "summary": "The talk argues that structural weaknesses, rather than individual flaws like CVEs, determine whether a disruption grows into a wider failure. Drawing on work studying financial stability, the speaker separates shocks, which are unpredictable events, from vulnerabilities, which are always present and can be measured and reduced. The framing borrows from medicine: chronic conditions such as high blood pressure raise susceptibility, while a newly disclosed bug resembles an infection that can be treated once known.\n\nThe core of the talk is four vulnerabilities: leverage, liquidity, linkages, and leadership. Each is traced through the 2008 crisis, including the mortgage-backed securities boom and Lehman Brothers' collapse, and then mapped onto IT operations. Examples include a technology provider to banks taken offline by malware, which measurably cut its customers' payment volumes and strained other banks, the Equifax breach linked to slow patching, the Colonial Pipeline ransomware incident, and the CrowdStrike outage and SolarWinds compromise as illustrations of how failures spread through supply chains.\n\nTo close, the speaker reviews post-2008 reforms such as stress tests, living wills, higher capital and liquidity buffers, and central clearing, and suggests comparable practices for cyber resilience: redundancy, cyber stress testing, shared responsibility with vendors, and third-party risk management. The takeaway is to ask whether an organization is managing these underlying weaknesses, not only patching known CVEs. The audience questions touched on small businesses and the pull of short-term incentives.",
+      "durationSeconds": 2899,
+      "publishedAt": "2025-12-08",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "vnGY4pD8Suc",
+      "slug": "what-should-cve-be-when-it-grows-up",
+      "title": "What Should CVE Be When It Grows Up",
+      "speakers": [
+        "Chris Butera",
+        "Madison Oliver",
+        "Jerry Gamblin",
+        "Tod Beardsley"
+      ],
+      "track": "policy",
+      "topics": [
+        "panel",
+        "vulnerabilities",
+        "open-source",
+        "discussion",
+        "infrastructure"
+      ],
+      "teaser": "Panelists debate the funding, governance and data quality problems facing the CVE program and its users.",
+      "summary": "The panel opened with the pressures on the CVE Program: funding worries after a contract delay earlier this year, a slowdown in NVD enrichment, and questions about governance, transparency and international participation. A representative of the sponsoring agency said the program remains funded and is treated as a public good, and described how the agency relies on CVE records for its own operations, such as tracking exploited flaws. Board members explained how the board is structured, with long-serving volunteers nominated by peers, and acknowledged that it could better reflect the global community of producers and consumers.\n\nThe discussion then turned to data quality. Panelists said that with NVD no longer adding enrichment such as CPE, CVSS scores and CWE mappings, the burden has shifted to CNAs, and that patch links and CPE appear in only a small share of published records. They described the program's move from a growth era, when the number of CNAs rose from about two dozen to over 460, to a quality focus on completeness, accuracy and timeliness. Comparisons with safety-regulated industries sparked debate over regulation, with some arguing that planned EU notification rules could make CVE the standard notification body.\n\nThe closing advice centered on consumer leverage: check whether records are complete, ask vendors for better data during contract renewals, brief policy teams, and join a forthcoming consumer working group. The main takeaway was that defenders can shape the program's next form by demanding better data and getting involved.",
+      "durationSeconds": 2588,
+      "publishedAt": "2025-12-08",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "o_twWkLWIpg",
+      "slug": "breaking-the-guest-list-hacking-invitation-systems-for-fun-and-p",
+      "title": "Breaking the Guest List: Hacking Invitation Systems for Fun and Profit",
+      "speakers": [
+        "Ali Kabeel"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "web",
+        "vulnerabilities",
+        "privacy",
+        "identity"
+      ],
+      "teaser": "Walks through invitation flow bugs on Facebook and Snapchat that let attackers regain access or add unwanted users.",
+      "summary": "Ali Kabeel explains that business logic flaws arise when developers and attackers see an application differently. Invitation systems are a useful case because they appear everywhere, from social groups to B2B seat management, and the same mistakes keep recurring. Predictable tokens, unchecked identifiers in invite links, and reliance on the interface for enforcement are the recurring themes.\n\nThe talk walks through three case studies. A Facebook invite could re-friend someone after they had been removed, and blocking did not help because invites did not expire and were not single use. A later Facebook group flow let an email invite be hidden by loading its link without accepting, so an attacker could hold a persistent, distributable invitation. Each fix was bypassed, including by moving an email between accounts and reaching a removed feature through a still-live API. On Snapchat Business Manager, creating an invite and assigning its role were separate requests, so an attacker could leave a user in a broken state. Joining without confirmation then allowed a forged request from a web page to add victims to an organization.\n\nThe takeaways are to bind invitations to a user attribute, make them single use and expiring, allow revocation, keep related operations atomic, define valid start and end states, require confirmation, and retire old API versions. Fixing the interface alone does not secure the server behavior.",
+      "durationSeconds": 2252,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "XGhabe4Fc2s",
+      "slug": "creating-the-torment-nexus-using-machine-learning-to-defeat-mach",
+      "title": "Creating the Torment Nexus: Using Machine Learning to Defeat Machine Learning",
+      "speakers": [
+        "Noah Grosh"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "malware-analysis",
+        "detection",
+        "attack"
+      ],
+      "teaser": "Shows how small edits to a malware file's features can lower an ML detector's malicious score without changing behavior.",
+      "summary": "The talk opens with an analogy to adversarial noise, which can make an image classifier misread a picture, and asks whether machine learning tools used in cyber defense face the same weakness. The speaker focuses on EMBER, an open model trained on features extracted from Windows executables with a feature extractor. The model returns a percentage chance that a file is malicious.\n\nUsing SHAP explanations, the speaker finds that the model leans heavily on header fields such as the compile timestamp, debug table size and OS version. Changing these fields does not alter what the program does. Editing a few of them on a known malware sample lowers the score substantially, and a search method called particle swarm optimization, run over seven features, pushes the score close to zero. The speaker reports similar results on about a dozen other samples, and a noticeable drop on VirusTotal as a side effect. The modified file still runs.\n\nProposed mitigations include removing inputs that carry no meaningful signal and building features from control flow, which describe what a program actually does rather than incidental properties. The takeaway is that AI products in security should be scrutinized before deployment, especially as vendors rush to add AI to everything.",
+      "durationSeconds": 779,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "SxXlQm_t1ro",
+      "slug": "the-un-rightful-heir-my-dmsa-is-your-new-domain-admin",
+      "title": "The (Un)Rightful Heir: My dMSA Is Your New Domain Admin",
+      "speakers": [
+        "Yuval Gordon"
+      ],
+      "track": "red-team",
+      "topics": [
+        "windows",
+        "identity",
+        "vulnerability-research",
+        "attack",
+        "detection"
+      ],
+      "teaser": "Shows how a delegated managed service account in Active Directory can be abused to inherit domain admin privileges.",
+      "summary": "The talk looks at delegated managed service accounts (dMSA), a feature Microsoft added to Active Directory in 2025 to replace legacy service accounts. The speaker explains why legacy accounts remain common: some services cannot use managed accounts, and migrating existing ones is laborious. Microsoft's dMSA migration promises to move a legacy account with little effort, but its documentation says nothing about how group privileges carry over.\n\nThe speaker walks through how a migration links the new account to the old one, and how the domain controller merges the group memberships of both accounts into the ticket. That merge means a dMSA can inherit another account's privileges. Starting a migration normally requires domain admin rights, but the underlying attribute changes can be made by anyone who controls a dMSA. A dMSA can also be created in any organizational unit where a low-privileged user has rights. In a demo, a weak user created a dMSA, linked it to the Administrator account, authenticated as it, and added members to Domain Admins. The speaker also found that the previous keys field exposed the linked account's password hash, which allowed credential dumping, including the krbtgt account.\n\nMicrosoft accepted the report as a vulnerability but rated it moderate and said a fix is planned. For defenders, the speaker recommended auditing dMSA creation and linking with a system ACL, and watching for TGT requests logged with blank caller details. The main takeaway is to monitor dMSA creation and link events now, while waiting for the patch.",
+      "durationSeconds": 1795,
+      "publishedAt": "2025-12-08",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "LPSSzknt2fg",
+      "slug": "prompt-hardener",
+      "title": "Prompt Hardener",
+      "speakers": [
+        "Junki Yuasa",
+        "Yoshiki Kitamura"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "open-source",
+        "application",
+        "defensive-security",
+        "tool"
+      ],
+      "teaser": "Shows an open-source tool that automatically evaluates and hardens LLM system prompts against injection attacks.",
+      "summary": "The talk opens with the rapid spread of generative AI in business applications, where easy API access lets developers add AI features quickly and widens the attack surface. A real case showed a crafted prompt in a text-to-SQL library leading to arbitrary Python execution on a server. The presenters stress that no single control is enough, so prompt hardening sits alongside keeping secrets out of prompts, runtime output checks and least-privilege access.\n\nThe core of the talk is Prompt Hardener, an open-source tool that uses an LLM to evaluate and rewrite a system prompt in repeated feedback loops until scores pass a threshold. It applies four techniques: spotlighting, which marks untrusted input by replacing spaces with a special Unicode character; random sequence enclosure, which wraps instructions in unpredictable tags; instruction defense, which defines responses to detected attacks; and role consistency, which keeps user-supplied text in the user role. Attack testing uses payloads grouped by the OWASP Top 10 for LLM applications. Two demos, a comment summarizer and an internal FAQ bot, showed the command-line and web interfaces.\n\nBenchmarking with a separate red-teaming tool across 258 payloads per prompt raised the defense rate of the FAQ bot from about 67 percent to 94 percent, using an older GPT-3.5 model. Some categories, such as over-reliance, improved little. The takeaway is that changing the system prompt alone can meaningfully strengthen defenses without changing the model, though it is not a complete fix. Future work targets agent-based applications and newer hardening research.",
+      "durationSeconds": 1553,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "LU63MbIRtSU",
+      "slug": "who-scans-the-scanner-exploiting-trend-micro-mobile-security",
+      "title": "Who Scans the Scanner? Exploiting Trend Micro Mobile Security",
+      "speakers": [],
+      "track": "mobile",
+      "topics": [
+        "mobile",
+        "vulnerability-research",
+        "exploitation"
+      ],
+      "teaser": "Covers exploitation of Trend Micro Mobile Security, asking who checks the security scanner itself.",
+      "summary": null,
+      "durationSeconds": 2244,
+      "difficulty": "advanced"
+    }
+  ]
+}

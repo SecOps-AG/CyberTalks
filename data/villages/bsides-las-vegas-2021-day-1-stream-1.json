@@ -1,0 +1,222 @@
+{
+  "villageSlug": "day-1-stream-1",
+  "villageName": "Day 1 Stream 1",
+  "eventSlug": "bsides-las-vegas-2021",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLjpIlpOLoRNQ_kBGtFqD8kQBivbIUv53c",
+  "description": "Day 1 Stream 1 talks from BSides Las Vegas 2021.",
+  "talks": [
+    {
+      "youtubeId": "g1f0bI7cV2Q",
+      "slug": "keynote-konrad-koerding",
+      "title": "Keynote",
+      "speakers": [
+        "Konrad Koerding"
+      ],
+      "track": "community",
+      "topics": [
+        "discussion",
+        "learning",
+        "lessons-learned"
+      ],
+      "teaser": "Keynote from Konrad Koerding to open day one of BSides Las Vegas 2021.",
+      "summary": null,
+      "durationSeconds": 3010,
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "oLXtP-GWzMY",
+      "slug": "ghost-dma-attack-and-the-sedefus-conundrum",
+      "title": "Ghost DMA Attack & The SeDeFuS Conundrum",
+      "speakers": [
+        "Raghudeep Kannavara",
+        "Alan Sheng"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "embedded",
+        "attack",
+        "device",
+        "trust",
+        "kernel"
+      ],
+      "teaser": "Shows how malicious firmware on a PCIe subsystem can reach host memory through DMA without physical access.",
+      "summary": "Two Intel security engineers begin with the familiar problem of DMA attacks, where a device plugged into a port reads or writes main memory without operating system oversight. They explain how the IOMMU, enabled through VT-d, translates device addresses to block such access. The talk then frames a tension between security, debuggability and usability, since disabling VT-d for debugging or for third-party subsystem support opens a path that defenders often overlook.\n\nThe central idea is a ghost DMA attack that needs no physical access. A malicious third-party app or firmware, planted through a weak update channel or social engineering, reprograms a platform subsystem's DMA engine to reach arbitrary host memory once VT-d is off. The app can check for the DMAR table in ACPI data or simply brute-force the attempt. Impact ranges from denial of service to code injection and data theft, and the implant can persist in device firmware rather than on disk.\n\nA recorded demo on an older, end-of-life Intel platform showed a Windows tool instructing a subsystem microcontroller to dump host memory, with the results checked against a kernel debugger. Mitigations discussed include enabling DMA remapping in drivers, verifying firmware updates, separating privileges for third-party code, and enabling kernel DMA protection. The speakers stress that vendors must establish trust in partner firmware and that implementation flaws undermine good design, and they call for more research into this attack surface.",
+      "durationSeconds": 2512,
+      "publishedAt": "2021-08-13",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "PoNi32RFo_U",
+      "slug": "lets-chat-about-soc-2s-baby",
+      "title": "Let's Chat About SOC 2s, Baby",
+      "speakers": [
+        "Wendy Knox Everette"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "management",
+        "privacy",
+        "cloud",
+        "team"
+      ],
+      "teaser": "Explains what SOC 2 audits check, how to prepare for a first audit, and how evidence and scope shape the result.",
+      "summary": "Wendy Knox Everette, a senior security advisor who helps startups build security programs, introduces SOC 2 as a voluntary audit that lets software and cloud providers show customers they maintain a baseline of security controls. She walks through the five trust services criteria, noting that security is the only mandatory one, and explains how confidentiality and privacy differ. She separates formal audits, which require a licensed CPA firm, from informal assessments, and points out that audits do not test technical flaws such as injection bugs, so a penetration test is still needed.\n\nThe middle of the talk covers building a custom control set and the areas auditors tend to examine: access control, change management that works in agile and CI/CD pipelines, patching timelines, risk registers, and recurring internal reviews. Evidence should come from systems that record who acted and when, and logs must be retained for the whole audit period. A Type 1 audit checks whether controls are designed correctly at a point in time, while a Type 2 audit samples items across a longer window, so starting with Type 1 is usually wise.\n\nThe closing section covers audit scope, which should follow wherever customer data lives, and choosing a firm that understands cloud technology and will work with your own control wording. Wendy suggests tracking evidence requests in Jira or spreadsheets rather than buying expensive governance software. The main takeaway is that a SOC 2 report reflects documented, repeatable processes rather than proof that a system is unhackable.",
+      "durationSeconds": 2770,
+      "publishedAt": "2021-08-13",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "NNj99O6v5UY",
+      "slug": "knock-knock-whos-there-betta-betta-who-betta-check-your-access-c",
+      "title": "Knock knock. Who's there? Betta! Betta who? Betta check your access control edge devices",
+      "speakers": [
+        "Vincenzo Ciancaglini",
+        "Philippe Z Lin"
+      ],
+      "track": "hardware",
+      "topics": [
+        "iot",
+        "device",
+        "trust",
+        "vulnerabilities",
+        "network"
+      ],
+      "teaser": "Shows how unauthenticated APIs and unencrypted traffic let attackers abuse edge access control cameras and door relays.",
+      "summary": "The talk examines edge computing, where devices such as access control cameras make identity decisions and drive door hardware on premises instead of sending data to a distant cloud. The presenters argue that these devices carry more responsibility than typical IoT cameras, yet look nearly identical to them, so buyers often underestimate the risk. They selected four access control products from major vendors and examined their network traffic, APIs, hardware and actuator links.\n\nThe findings were mostly basic weaknesses rather than new bug classes. Several management APIs used unencrypted HTTP and accepted a reusable session token tied to a device serial number, which let the team create users, promote one to administrator, and swap enrolled face data for their own. One cloud service exposed guest lists, deleted-user records and employee photos. A device that polls its server received the full user database, including credentials, to anyone on the same network. Without certificate pinning, a fake server could be set up in a few dozen lines. In another system, a relay opened doors through an unauthenticated TCP command reachable from the network, and exposed cabling could trigger the lock directly.\n\nThe takeaways centre on encrypting traffic, verifying server certificates, authenticating APIs, isolating device networks, protecting cables and keeping Android-based firmware patched. Auditing for unusual activity also matters. The researchers disclosed the flaws through a coordinated process, and vendor responses varied. Their message was that edge devices need the same security basics as any other networked system.",
+      "durationSeconds": 2849,
+      "publishedAt": "2021-08-13",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "2azZy3-t-84",
+      "slug": "revenge-on-the-worms-towards-deception-against-automated-adversa",
+      "title": "Revenge on the Worms! Towards Deception Against Automated Adversaries",
+      "speakers": [
+        "Andy Applebaum",
+        "Ron Alford"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "attack",
+        "automation",
+        "defensive-security"
+      ],
+      "teaser": "Explores how deception could slow or misdirect automated planners that chain attack actions across enterprise networks.",
+      "summary": "The talk starts from the concern that attackers will use AI and machine learning to scale intrusions, though public evidence of this is still thin. The speakers point to MITRE's open-source Caldera project as proof that automated lateral movement is already practical, and ask how defenders could deceive or disrupt automated adversaries rather than human ones.\n\nRon Alford explains automated planning, where actions defined by preconditions and effects are sequenced toward a goal. Planners are theoretically hard but usually solve practical problems quickly. The team took the Caldera enterprise domain, written in PDDL, and measured how long two planners, Fast Downward and Probe, took to produce a plan after the network was altered. Changes included fake users, cached credentials, admin rights and added hosts or networks. Results differed by planner: a small disconnected network roughly doubled Fast Downward's solve time, while a medium one stopped Probe from finishing at all. Some changes that barely altered the topology slowed Probe but not Fast Downward.\n\nThe main takeaway is that no single deception reliably slowed both planners, so a mix of modifications is likely a better bet, though adding whole networks costs more effort. Deceptions that work on humans, such as flooding an adversary with objects, may not transfer. A small live Caldera test showed that one planted fake credential added nine actions and about six minutes to a run. Future work covers more planners, online planners and detection against simple automated adversaries. The work is preliminary and simulation-based.",
+      "durationSeconds": 2794,
+      "publishedAt": "2021-08-13",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "0JbfJ6SyqyM",
+      "slug": "the-power-of-guardrails-how-to-slash-your-risk-of-xss-in-half",
+      "title": "The power of guardrails: How to slash your risk of XSS in half",
+      "speakers": [
+        "Colleen Dai",
+        "Grayson Hardaway"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "web",
+        "vulnerabilities",
+        "open-source",
+        "defensive-security"
+      ],
+      "teaser": "Shows how secure coding guardrails and static analysis rules could have prevented many real-world XSS bugs in open source code.",
+      "summary": "Colleen Dai and Grayson Hardaway from R2C open with the problem that application security teams often face a hundred or more developers per security engineer, so chasing individual bugs through testing and bounties does not scale. They argue for secure guardrails: frameworks and enforced coding patterns that make the safe choice the easy one and remove whole bug classes. They point to practices at several large companies as support for this approach.\n\nTo test the idea, the team focused on cross-site scripting, chosen for its impact and for the concrete, framework-specific mitigations it has. They wrote Semgrep rules covering Java and JSP, Python Flask and Django, JavaScript, Express, React, Go, and Ruby on Rails, then gathered roughly 140 real XSS fix commits from open source repositories. The rules were run against each fix's parent commit, and the results were triaged by hand. The rules flagged about 59 percent of the cases. Most misses involved HTML assembled inside JavaScript template strings, and dangerouslySetInnerHTML accounted for a large share of the React findings.\n\nThe speakers' takeaways include restricting dangerous output sinks, since a few simple checks covered much of the client-side risk, and recognizing that some technologies such as JSP provide no escaping by default. Their suggested process is to choose one vulnerability class, define safe patterns with alternatives, train developers, and enforce the patterns automatically through CI or pre-commit hooks. The rules and policies were released publicly.",
+      "durationSeconds": 3037,
+      "publishedAt": "2021-08-13",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "O6UpZkYK-RU",
+      "slug": "you-dont-have-to-be-crazy-to-work-here-an-honest-talk-about-ment",
+      "title": "You Don't Have to Be Crazy to Work Here: An Honest Talk About Mental Health",
+      "speakers": [
+        "Douglas Brush"
+      ],
+      "track": "community",
+      "topics": [
+        "mental-health",
+        "management",
+        "team",
+        "lessons-learned"
+      ],
+      "teaser": "Offers a candid personal account of burnout and anxiety in security work, plus practical self-care steps.",
+      "summary": "Douglas Brush opens by framing mental health as a real problem in information security, where constant pressure to be right and always-on incident response wear people down. He cites a 2019 study of security professionals that reported high stress, long working weeks and rare time off, and he argues that stigma keeps people from seeking help. He also gives a content warning and a reminder that the talk is general information, not medical advice.\n\nThe middle of the talk is a personal history. Brush describes panic attacks as a teenager, a business that burned him out, a car accident that left him with back injuries, and a period of severe depression that he measured with a life-events stress inventory. He explains how stress and major life changes can trigger physical and mental health problems, and he describes how alcohol and other coping habits played a role in his struggles.\n\nFor the close, he argues that mental illness should be treated like any other illness, that caring for staff does not conflict with business results, and that people should watch their language and call out stigma. He recommends exercise, sleep, small routines, limiting doomscrolling, taking leave and cutting back on drinking, and he separates real self-care from the fake kind. The takeaway is to take your own wellbeing seriously and to be kind to others and yourself.",
+      "durationSeconds": 2663,
+      "publishedAt": "2021-08-13",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "GRoB5mCBiRI",
+      "slug": "search-engine-deoptimization-with-gootloader",
+      "title": "Search engine deoptimization with Gootloader",
+      "speakers": [
+        "Andrew Brandt",
+        "Gabor Szappanos"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "web",
+        "attack",
+        "threat",
+        "windows"
+      ],
+      "teaser": "Traces how poisoned search results and compromised WordPress sites deliver the Gootloader malware chain to Windows users.",
+      "summary": "The talk looks at Gootloader, a web-based distribution campaign that uses manipulated search results to push follow-on malware such as Gootkit and banking trojans. The speakers explain the preparation stage first: attackers compromise many WordPress sites and inject code that filters visitors by country, referrer and repeat address. Poisoned search terms, mostly business words like contracts, agreements and downloads, are tuned per language, and the top-ranked result swaps the page for a fake forum thread that offers a file named after the query.\n\nThe middle of the talk follows the infection chain. A heavily obfuscated JavaScript dropper fetches a second-stage installer, which checks whether the host is joined to a Windows domain before storing payloads and a PowerShell loader in the registry and an autorun value. The loader then uses process hollowing to run the final payload inside a legitimate, signed Windows binary, so very little is written to the file system. The speakers also describe a one-line remote shell injected into compromised sites and telemetry that points to roughly 90 to 100 compromised servers, with likely many more.\n\nFor defenders, the talk argues that end users have few practical protections: script blockers, recognising the recurring fake forum layout, typing addresses directly and showing file extensions all help but depend on user behaviour. The speakers place much of the responsibility on search providers to detect this kind of manipulation, and they point to behaviour-based endpoint detection as the most realistic control against the fileless persistence.",
+      "durationSeconds": 3247,
+      "publishedAt": "2021-08-13",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "SaxDfX2tjT0",
+      "slug": "latest-threats-and-vulnerabilities-to-mission-critical-sap-appli",
+      "title": "Latest Threats and Vulnerabilities to Mission-Critical SAP Applications",
+      "speakers": [
+        "JP Perez-Etchegoyen"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "intelligence",
+        "vulnerabilities",
+        "incident-response",
+        "application"
+      ],
+      "teaser": "Surveys recent exploitation of SAP vulnerabilities, attacker timelines, and post-exploitation activity in ERP systems.",
+      "summary": "The talk starts with why SAP and other ERP platforms matter. They run finance, procurement, HR and sales processes, so downtime or data theft quickly becomes a business problem. The speaker argues these systems sit in a security gap, since security, operations and compliance teams each see only part of them, and patching has often lagged far behind other enterprise assets.\n\nThe middle of the talk presents observed activity from a threat intelligence network and from incident response work. Over roughly six months, the researchers confirmed several hundred exploitation attempts, with more than a hundred attackers logging in interactively. Three examples are covered: a Java-based portal flaw that allowed automatic creation of an administrator account, a critical flaw exploited months before any public exploit appeared, and default or privileged accounts with weak passwords. In the worst cases, exploitation followed a patch release within 72 hours. A recorded demo showed attacker sessions browsing configuration settings and business data.\n\nThe closing takeaways are practical. Teams should treat SAP like other critical servers, prioritize fast patching for severe notes, check which systems are exposed, and address misconfigurations as well as CVEs. The speaker pointed to a report released with SAP that lists timelines, techniques and indicators of compromise for defenders to check their own logs.",
+      "durationSeconds": 3035,
+      "publishedAt": "2021-08-13",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "4Mpc7DBPkYk",
+      "slug": "static-detection-of-novel-malware-using-transfer-learning-with-d",
+      "title": "Static Detection of Novel Malware Using Transfer Learning with Deep Neural Networks",
+      "speakers": [
+        "Emily Rexer",
+        "Henry Reed"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "machine-learning",
+        "detection",
+        "open-source"
+      ],
+      "teaser": "Shows how converting Windows executables into images and applying transfer learning can flag malware never seen before.",
+      "summary": "Signature matching and heuristic detection struggle with custom malware that has never been seen before. The speakers describe an alternative in which Windows executables are turned into grayscale images and fed to an image-recognition network that has been pretrained and then retrained for malicious-versus-benign classification. Because nothing in the file is executed, the approach counts as static detection, and it avoids the lengthy feature engineering that typical machine learning pipelines require.\n\nThe work starts from an Intel and Microsoft method whose dataset is proprietary, so the team rebuilt a comparable collection. Malicious samples came from a public malware repository, while benign files were gathered from fresh Windows 10, Windows Server 2019 and Cygwin installations, in sets of roughly 10,000 and 15,000 per class. The team swapped the original table-based image sizing for a simple square-root layout with nearest-neighbor scaling, which performed better in their tests. DenseNet-201 gave the highest accuracy, about 96.5 percent. Accuracy dropped on samples from certain advanced threat groups, and file-size imbalance between classes was offered as a likely cause.\n\nThe main bottleneck identified was the scarcity of legally shareable benign binaries, which makes reproducing results hard. The presenters plan to release code, conversion tools and trained models under a permissive license, and they outlined future directions such as one-shot learning and multi-class labeling by malware family. Closing questions stressed that closed-source vendors rarely explain their methods, so independent testing on held-out malware matters.",
+      "durationSeconds": 3007,
+      "publishedAt": "2021-08-13",
+      "difficulty": "intermediate"
+    }
+  ]
+}

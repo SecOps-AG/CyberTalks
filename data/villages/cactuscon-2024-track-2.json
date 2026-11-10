@@ -1,0 +1,240 @@
+{
+  "villageSlug": "track-2",
+  "villageName": "Track 2",
+  "eventSlug": "cactuscon-2024",
+  "conference": "cactuscon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PL4umh_7S4rRuSJzTjiOOYTdSnHX2LGQJ0",
+  "description": "Track 2 talks from CactusCon 12 2024.",
+  "talks": [
+    {
+      "youtubeId": "2qE5X5beEys",
+      "slug": "its-phishing-season-an-overview-of-phishing-kits",
+      "title": "It's Phishing Season: An Overview of Phishing Kits",
+      "speakers": [
+        "Rebecca T"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "phishing",
+        "threat",
+        "defensive-security",
+        "attack"
+      ],
+      "teaser": "Explains how phishing kits are built and sold as services, how criminals evade detection, and how to defend against them.",
+      "summary": "The talk looks at phishing kits and phishing-as-a-service, the packaged tools criminals use to stand up fake sites and run campaigns. The speaker, a financial fraud analyst, points out that providers and authorities often take these sites offline only after victims have already suffered financial harm, and that this activity runs continuously rather than in seasons.\n\nThe planned outline covers the typical structure of a phishing kit, how fraudsters increasingly use these kits, real examples seen in the wild, and the evasion methods used to hide activity. The clearer parts of the talk point to practical research resources: checking whether a domain was recently registered, following threat intelligence communities such as AlienVault for reporting on phishing trends, and using the MITRE ATT&CK spearphishing via service entry to document and map these attacks.\n\nThe closing Q&A added practical guidance. Anyone receiving a message about a refund or payment should verify it through a separate channel rather than replying to the sender or number. For organizations, password managers should be vetted closely and limited to accounts that really need them. For older or less technical relatives who keep clicking suspicious links, the speaker suggested parental-style controls and ongoing education alongside gentle guidance.",
+      "durationSeconds": 470,
+      "publishedAt": "2024-02-16",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "u9iaSIRS6OY",
+      "slug": "breaking-in-to-the-iron-fortress-how-i-hack-ibm-mainframes",
+      "title": "Breaking in to the Iron Fortress - How I hack IBM mainframes",
+      "speakers": [
+        "Philip Young"
+      ],
+      "track": "red-team",
+      "topics": [
+        "mainframe",
+        "exploitation",
+        "network",
+        "vulnerabilities",
+        "infrastructure"
+      ],
+      "teaser": "Walks through a mainframe penetration test from SNA scanning to privilege escalation and data exfiltration.",
+      "summary": "Philip Young, who leads mainframe penetration testing at NetSPI, walks through how he tests IBM mainframes from first contact to data theft. He explains why public breach details are scarce and gives newcomers a primer on the platform: batch-driven job control, the TSO shell, Rexx scripting, and access checks handled by security products such as RACF.\n\nThe middle of the talk follows the attack path. Scanning begins at the TN3270 gateway, where Nmap scripts enumerate SNA application IDs and users before a password spray. He shows a web server compromise on a Tomcat-based system, and describes trusted nodes in Network Job Entry that can let an attacker run jobs as other users without credentials. Once inside, he covers enumeration of datasets, memory-resident control blocks and Unix, then privilege escalation through APF-authorized programs and a buffer overflow class once thought impossible. He also shows how to find outbound ports the mainframe can reach, using a Java port checker to avoid slow timeouts.\n\nHe ends with data exfiltration, where EBCDIC and ASCII translation and binary transfer modes make common tools behave unexpectedly. The practical takeaways are to review trust relationships, default credentials, world-readable datasets and outbound egress, and to test mainframes only with permission and specialist care.",
+      "durationSeconds": 3330,
+      "publishedAt": "2024-02-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "O2Wx7mQHR2I",
+      "slug": "reverse-engineering-go-malware-a-bianlian-story",
+      "title": "Reverse Engineering Go Malware: A BianLian Story",
+      "speakers": [
+        "Danny Quist"
+      ],
+      "track": "malware",
+      "topics": [
+        "reverse-engineering",
+        "malware-analysis",
+        "ransomware",
+        "tool",
+        "practical"
+      ],
+      "teaser": "Shows how to reverse Go-based BianLian ransomware binaries, restoring symbols and separating author code from library code.",
+      "summary": "Reversing Go malware is hard for reasons that standard tools were not built around. Most reverse engineering tooling assumes C or C++, and a Go binary carries a large amount of standard library and runtime code, so the real task is separating the author's logic from library code. The speaker, a malware reverse engineer, uses BianLian, a ransomware group whose toolchain is written in Go, as a case study. He begins with a small test program to show how Go's internal symbol tables look in disassemblers.\n\nNext the talk covers the group's encryptor, a command-and-control implant that tunnels traffic through a SOCKS proxy, and a proxy forwarder. Recovering the Go symbol table restored function names and imports, which made the code readable. Build metadata such as version control revisions and build paths helped link samples together. After the group's encryption key was exposed, its later builds used string obfuscation, and the speaker used the imrit fuzzy function-matching tool to compare new samples against a corpus of roughly 300 known BianLian binaries. Matching recovered most of the functions and library identities even where strings were hidden.\n\nThe talk also traces how the group's operations shifted, from data theft and encryption to data-theft-only extortion and reliance on affiliates. The closing points for practitioners are to restore Go metadata before analysis, separate library code from author code early, and use binary diffing against a known corpus when obfuscation removes readable strings.",
+      "durationSeconds": 2860,
+      "publishedAt": "2024-02-17",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "fVc9kEWNaBc",
+      "slug": "60-minutes-hack-this-aws-account",
+      "title": "60 minutes: Hack this AWS account",
+      "speakers": [
+        "John Poulin"
+      ],
+      "track": "red-team",
+      "topics": [
+        "cloud",
+        "exploitation",
+        "automation",
+        "identity",
+        "open-source"
+      ],
+      "teaser": "Walks through a time-boxed AWS red team workflow covering recon, privilege escalation, exfiltration and persistence with common tools.",
+      "summary": "The talk asks what an attacker can accomplish against an AWS account when they hold temporary credentials that expire after an hour and access may be cut sooner. The speaker structures the work around a standard penetration testing methodology, moving from information gathering through vulnerability analysis, exploitation and post-exploitation, and skips reporting for time.\n\nMuch of the session is about automation. Open-source tools such as Cloud Fox, Principal Mapper, Prowler and Pacu are used to list permissions, map role trust, find internet-facing ports, and locate secrets, CloudFormation stacks, pipeline code, container images and public EBS snapshots. Privilege escalation ideas include assuming overly trusted roles, launching instances with powerful roles, and abusing SSRF against the instance metadata service. The speaker notes that S3 object reads are not logged by default, while scanning and enumeration generate heavy CloudTrail activity.\n\nFor persistence, the speaker covers role juggling to extend session lifetime, federation tokens that outlive revoked access keys, and malicious instance user data. The closing advice is to build a time-boxed operation around a prioritized checklist, let each step feed the next, and expect defenders to see the noise these tools create.",
+      "durationSeconds": 3066,
+      "publishedAt": "2024-02-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "J3iAV0SkuNw",
+      "slug": "the-story-of-a-never-ending-scam-when-natalie-hamilton-reemerged",
+      "title": "The Story of a Never Ending Scam: When Natalie Hamilton Reemerged with Vengeance and a Power Drill",
+      "speakers": [
+        "Or Katz"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "phishing",
+        "infrastructure",
+        "threat",
+        "intelligence",
+        "detection"
+      ],
+      "teaser": "Traces a long-running phishing scam whose redirect network and reused templates kept it alive across thousands of domains.",
+      "summary": "Or Katz, a researcher at Akamai, follows a phishing persona called Natalie Hamilton, who appeared again and again in a fake quiz-and-prize scheme first seen in late 2022. Each version used the same text with new images and offers, including a power drill. The lure promised a valuable prize if the victim paid a small shipping fee, which exposed card details, and the operators leaned on well-known shorteners and cloud hosting so the links looked trustworthy to reputation checks.\n\nThe middle of the talk covers the infrastructure. Redirects varied by geography, some regions were blocked outright, and links that relied on browser-only fragments failed when scanned by simple non-browser tools. Landing pages rotated domains and generated random URLs per victim, so taking down one page did not stop the flow. Tracing a routing domain back to a marketing firm's website template led to about 11,000 associated domains, roughly 1,900 active redirectors spread across more than 20 hosting providers, and 25 impersonated brands. Traffic estimates suggested a campaign worth seven figures.\n\nKatz argues that defenders are measured by detections and takedowns, while attackers measure engagement, time to detection and campaign persistence. The practical takeaway is that defenders need to act faster, prioritise high-traffic malicious sites, and deal with the redirect layer rather than only the landing pages. He also notes that hosting providers and law enforcement often require more evidence than defenders can easily gather.",
+      "durationSeconds": 3028,
+      "publishedAt": "2024-02-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "mvMWuLXhZlo",
+      "slug": "novel-detection-technique-of-process-injection-using-network-ano",
+      "title": "Novel Detection Technique of Process Injection using Network Anomalies",
+      "speakers": [
+        "Ofir Shen"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "threat-detection",
+        "network",
+        "detection",
+        "incident-response",
+        "malware-analysis"
+      ],
+      "teaser": "Shows how baselining each process's network behavior can expose injected code that host-based tools miss.",
+      "summary": "The talk opens with why process injection persists and why host-based detection struggles. Techniques such as remote thread creation, API hooking, process hollowing and newer variants can be hidden by evasion methods, and a threat hunter cannot assume every customer runs a capable endpoint product. The speaker argues that a process's network behavior is harder to disguise than its host artifacts.\n\nThe method builds a baseline of how each process communicates across many customer networks. Destination ports are grouped into port classes, and only processes seen in at least three networks are kept. Support and confidence measures borrowed from data mining describe how often each process uses each group, and a sliding window compares daily traffic against that history. Common false positives, such as proxies, DNS changes and configured gateway ports, are handled with allow lists and by checking whether the behavior is already normal elsewhere in the network.\n\nIn one customer onboarding, five legitimate Windows processes began using SMB, a protocol they had never used before. Investigating scheduled tasks, services and commands led to a script that spread via EternalBlue, tunneled DNS, ran a PowerShell downloader and deployed a Monero miner, which the speaker tied to the WannaMine campaign. Osquery was then used to hunt for the indicators across the network. The takeaway is that outbound network baselines can reveal injected code that host tools miss, and similar logic can apply to services or Sysmon network events.",
+      "durationSeconds": 2672,
+      "publishedAt": "2024-02-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "eWOI4Shye6M",
+      "slug": "validating-identity-in-a-world-of-deepfakes",
+      "title": "Validating Identity in a World of Deepfakes",
+      "speakers": [
+        "Andrew Sanford"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "identity",
+        "social",
+        "ai",
+        "risk",
+        "management"
+      ],
+      "teaser": "Examines how organizations can verify employee identity when voice, video and other impersonation methods can be convincingly faked.",
+      "summary": "The talk starts from a 2023 incident in which attackers reportedly used a deepfaked voice of an IT staffer to persuade an employee on a phone call, after a fake login portal had already captured credentials. It also points to a reported case in which live video-call impersonation was used to move a large sum of money at a financial firm in Hong Kong. The central question is how an organization can confirm that a person is who they claim to be when voices, faces, IDs, phone numbers and email accounts can all be spoofed.\n\nThe speaker builds a simple threat model focused on impersonating existing employees. It covers how attackers collect voice and image samples, how generative tools make lookalike sites and writing-style mimicry easier, and how existing processes such as password resets or conditional access can be bypassed. Rather than trying to block public content, the talk argues for layered validation across employee guidance and internal processes. It then walks through eleven methods, including in-person checks, video calls paired with ID review, device and IP matching against logs, calls to emergency contacts, personal email requests, PGP-signed messages, certificate-based device MFA and hardware keys. Each method is weighed for reliability, cost and effort, and placed on a maturity chart against the impact of an impersonation.\n\nTwo worked scenarios show how the methods combine: a suspicious call with a head of HR, and a late-night password reset request from a devops engineer where log review and a follow-up chat exposed an unmanaged device. The takeaways are that no single control is sufficient, that stacking layers raises the cost for attackers, that a culture where staff can pause and question requests matters, and that high-value transfers should need more than one approver. The speaker closes by calling for ongoing community discussion as these practices mature.",
+      "durationSeconds": 3244,
+      "publishedAt": "2024-02-18",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "jz1LU70yCHg",
+      "slug": "iaes-guarding-the-university-of-arizonas-heartbeat-the-watchful",
+      "title": "IAES: Guarding the University of Arizona's Heartbeat – The Watchful Eye on Critical Infrastructure",
+      "speakers": [
+        "Michael Galde"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "infrastructure",
+        "network",
+        "monitoring",
+        "detection"
+      ],
+      "teaser": "Shows how a university built passive OT network monitoring to help facilities staff baseline and understand industrial protocol traffic.",
+      "summary": "Michael Galde, an assistant professor at the University of Arizona, describes a research project that began when the university's facilities department asked for help. Facilities runs its own network carrying power generation, water treatment, chiller and building automation devices. The facilities engineers knew their equipment well but had little visibility into what those devices were saying to each other, and central IT had no practical way to read industrial protocols.\n\nHe explains why OT networks differ from IT. Controllers are long-lived, cannot host agents or antivirus, and are hard to patch without planned downtime. Protocols such as Modbus, DNP3 and BACnet were built without encryption or authentication, and few have seen security-focused revisions. He uses the Stuxnet episode and the 2015 Ukraine grid attack as examples of how industrial environments get hit. He also notes that many industrial controllers are reachable from the internet with weak or no authentication.\n\nThe project's answer is a passive monitor fed from a mirror port on the single uplink between each industrial segment and the enterprise network. Captured traffic is decoded with Wireshark dissectors and turned into logs for Wazuh, ELK or Splunk. Over about 30 days the system builds a baseline, then flags new connections and unexpected talkers, which facilities staff can review or escalate. The takeaways are to segment OT networks, watch their boundaries, and translate protocol data into terms operators can act on. The project was described as still in development.",
+      "durationSeconds": 3272,
+      "publishedAt": "2024-02-18",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "vsQOcTrV4EQ",
+      "slug": "every-contact-leaves-a-trace",
+      "title": "Every Contact Leaves a Trace",
+      "speakers": [
+        "Ken Westin"
+      ],
+      "track": "osint",
+      "topics": [
+        "open-source",
+        "intelligence",
+        "privacy",
+        "device",
+        "lessons-learned"
+      ],
+      "teaser": "Traces how stolen-device recovery and photo metadata uncovered organized crime, and how the same methods threaten privacy.",
+      "summary": "Ken Westin opens with the idea that a crime almost always leaves something behind, and that modern life produces a steady stream of records, from Wi-Fi connections and carrier logs to images and breached data that no one fully controls. He describes how his work began with a USB tool that reported on the devices it ran from, which he built to help a company block data theft and then turned toward recovering stolen equipment.\n\nThe middle of the talk walks through the cases. A device agent helped recover gear for a university, a thermal camera maker and a school district, and a laptop tracker that captured webcam photos and Wi-Fi-based location led to a fencing operation and a Russian crime group. Later work covered phone tracking, where photos carried better GPS data than the carrier-style location polls, and a search engine for camera serial numbers stored in EXIF metadata, built by mining billions of photos from Flickr and other sites. Other examples included a photographer's own posts giving away his location, and a staged smart home test that showed how default Wi-Fi passwords exposed cameras.\n\nHe closes by arguing that the same techniques serve stalkers, authoritarian governments and commercial spyware vendors, so investigators need to think hard about who receives the data. He recommends reducing your own digital footprint, handing evidence to law enforcement rather than acting alone, and relying on community collaboration when an investigation stalls.",
+      "durationSeconds": 3110,
+      "publishedAt": "2024-02-18",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Vpk47W1W5v8",
+      "slug": "the-registry-hives-you-may-be-msix-ing",
+      "title": "The Registry Hives you may be MSIX-ing",
+      "speakers": [
+        "Mari DeGrazia"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "windows",
+        "incident-response",
+        "digital-forensics",
+        "application",
+        "tool"
+      ],
+      "teaser": "Shows where MSIX-packaged apps keep per-application registry hives that traditional forensic checks often miss.",
+      "summary": "The talk starts from a gap in typical Windows forensics: examiners tend to rely on a few registry hives, such as NTUSER.DAT and UsrClass.dat, to reconstruct what a user opened, browsed, or connected to. Apps packaged with MSIX store their state in per-application hives under the local packages folder, so those traces can sit outside the usual locations.\n\nThe speaker demonstrates this with Notepad, where open and save dialog history and folder traversal are written to a per-app user hive rather than the main one. A test using a folder on an external device showed the browsing evidence missing from the standard shellbag search but present in the app's hive. Similar behaviour appears with WinSCP session and directory history, and with the Microsoft Remote Desktop app, which keeps connection history in XML jump list files, cached session thumbnails, and ETL logs that record computer names rather than IP addresses. Practical steps cover collecting hives with KAPE, parsing them with RegRipper and Registry Explorer, and decoding thumbnails.\n\nThe main takeaway is that examiners should check package folders and per-application hives alongside the traditional locations, or evidence of data access, exfiltration, and lateral movement can be missed. Audience questions touched on overlap between apps and whether deleted keys could be recovered, which the speaker said he had not yet seen in cases.",
+      "durationSeconds": 2978,
+      "publishedAt": "2024-02-18",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "tk1sx8JMfow",
+      "slug": "building-a-backyard-ti-platform-that-works-for-you",
+      "title": "Building a Backyard TI Platform that Works for You",
+      "speakers": [
+        "Larry Suto"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "open-source",
+        "threat-detection",
+        "building"
+      ],
+      "teaser": "Shows how to stand up a self-hosted MISP threat intelligence platform and connect it to SIEM and endpoint tools.",
+      "summary": "Building a threat intelligence program is hard to start, and commercial platforms are expensive. The speaker proposes a self-hosted alternative built on MISP, an open-source platform for recording, correlating and sharing security events and indicators. He introduces its core ideas: events as incident records, attributes and objects holding indicators, tags and taxonomies such as TLP, galaxies that add ATT&CK techniques and malware context, and sharing groups between instances.\n\nThe deployment is quick, using a Docker Compose setup where the base URL is the main setting to change. Post-install steps include changing the default admin password, syncing galaxies, and enabling the TLP taxonomy. The talk builds an event by hand from a public malware campaign report, adding techniques and payload hashes, then covers bulk imports, feed caching, and decay models that expire stale data.\n\nAutomation comes through the MISP API using PyMISP, with Jupyter notebooks for searching and format conversion. Integrations shown include Elastic, Microsoft Sentinel through STIX conversion with compatibility caveats, Defender, and CrowdStrike indicator uploads. The takeaway is that a few containers can support practical detection workflows, and the speaker planned to publish scripts on GitHub.",
+      "durationSeconds": 2769,
+      "publishedAt": "2024-02-17",
+      "difficulty": "intermediate"
+    }
+  ]
+}

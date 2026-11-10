@@ -1,0 +1,157 @@
+{
+  "villageSlug": "track-3-saturday",
+  "villageName": "Track 3 Saturday",
+  "eventSlug": "cactuscon-2022",
+  "conference": "cactuscon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PL4umh_7S4rRsCaU0MIbpqZY0gKp-uUHNe",
+  "description": "Track 3 Saturday talks from CactusCon 10 2022.",
+  "talks": [
+    {
+      "youtubeId": "K0smp8Gevgs",
+      "slug": "how-nefilim-dropper-uses-polymorphism",
+      "title": "How Nefilim Dropper uses Polymorphism",
+      "speakers": [
+        "Mark Embrich"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "ransomware",
+        "windows",
+        "threat-detection",
+        "incident-response"
+      ],
+      "teaser": "Walks through a VBScript dropper that randomizes array decoding to produce many different file hashes for one payload.",
+      "summary": "The talk examines a Nefilim malware dropper written in VBScript. The script hides its payload in large arrays of numbers and buries the code under many comments, so it looks harmless at first glance. The speaker strips out the noise, separates the data assignments from the logic, and finds the decoder function that turns those arrays back into a portable executable.\n\nThe decoder includes a random step applied at a few fixed positions, so each run writes a file with a different hash while the behaviour stays the same. The speaker estimates how many distinct variants are possible and shows that the import hash stays constant across the dropped samples, which makes it a more durable pivot than the file hash. The rest of the script is reviewed as well: checks for disk size, core count, memory and running analysis tools, a marker file used to avoid reinfection, a fake error message, and a rundll32 launch of the dropped DLL.\n\nFor incident responders, the talk points to the dropped DLL, the marker file and rundll32 executing unusual files from temp. Detection teams are encouraged to look at script-driven process ancestry and WMI queries used for environment checks. The behaviour is mapped to ATT&CK techniques such as user execution, WMI and signed binary proxy execution. The takeaway is that blocking by known hash alone misses this kind of polymorphic dropper.",
+      "durationSeconds": 2230,
+      "publishedAt": "2022-02-05",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "b5lD3XgOYzw",
+      "slug": "nits-among-your-bits-a-dive-into-lockbit-ransomware-operations",
+      "title": "Nits Among Your Bits: A Dive into LockBit Ransomware Operations",
+      "speakers": [
+        "Oleg Skulkin"
+      ],
+      "track": "malware",
+      "topics": [
+        "ransomware",
+        "incident-response",
+        "threat",
+        "attack",
+        "detection"
+      ],
+      "teaser": "Walks through LockBit ransomware affiliate tactics, from initial access and credential theft to data theft and encryption.",
+      "summary": "Oleg Skulkin, head of a DFIR team at Group-IB, examines how LockBit affiliates operate inside victim networks, from first foothold to encryption. He starts with the ransomware-as-a-service model, the group's activity since 2019, and the LockBit 2.0 update from mid-2021, noting that affiliates have carried out a large number of attacks in a short time.\n\nThe middle of the talk covers the intrusion lifecycle. Initial access usually comes through compromised VPN credentials or exposed RDP accounts, with some exploitation of public-facing applications. Affiliates then disable antivirus and use rootkit-detection tools to evade defenses, wipe staging folders and clear event logs, and dump credentials with Mimikatz and similar utilities. Reconnaissance relies on network scanners, credential checkers, BloodHound and SharpHound. Lateral movement uses RDP, PsExec, Cobalt Strike and SSH into Linux hosts, and Cobalt Strike beacons are often left on a few servers for redundant access. Data is staged with tools such as FileZilla and WinSCP, and the custom StealBit tool automates exfiltration with configurable limits and exclusions.\n\nThe closing section covers deployment. Affiliates copy the encryptor over RDP, run it through PsExec, or push it via Group Policy scheduled tasks. LockBit 2.0 removes shadow copies, encrypts files with AES-128 in CBC mode, can reach network shares, and may stop services and disable Windows Defender. For responders, the practical takeaway is to hunt for these tools, commands and leftover beacons across many hosts, and to tune detections to the affiliate behaviors described.",
+      "durationSeconds": 2435,
+      "publishedAt": "2022-02-05",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "J_nRpf1NsiI",
+      "slug": "network-forensics-analysis",
+      "title": "Network Forensics Analysis",
+      "speakers": [
+        "Rami Al-Talhi"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "network",
+        "incident-response",
+        "threat-detection",
+        "malware-analysis"
+      ],
+      "teaser": "Shows how Wireshark plus JA3, JARM and SSH fingerprints can expose APT activity hidden in encrypted packet captures.",
+      "summary": "The talk opens by defining network forensics as the monitoring and analysis of network traffic for information gathering, legal evidence or detection. The speaker argues that advanced persistent threat groups often avoid leaving files behind, which makes packet captures a valuable source. The overview covers common tooling: Wireshark and its command-line version, tcpdump for fast capture handling, Zeek for protocol metadata, Snort and Suricata for signature matching, and NetworkMiner for pulling files out of a capture.\n\nThe middle of the talk focuses on encryption, the main obstacle to investigators. Fingerprinting is presented as a workaround. JA3 and JA3S hash parameters from TLS client and server hellos, JARM actively probes servers to group them by their TLS configuration, and SSH handshake data reveals client software and operating system. RDP sessions can also leak usernames in cleartext fields. The speaker stresses limitations: attackers can reorder ciphers and extensions to change hashes, and shared hashes cause false positives. Large captures are handled by slicing with editcap, splitting and merging files, then scanning the result with signatures. Case studies show malware resolving command-and-control domains through a public DNS-over-HTTPS service and retrieving a base64-encoded binary over ordinary HTTPS, so the traffic looks like normal web activity.\n\nThe takeaway is to maintain an asset inventory and traffic baselines, combine network data with host telemetry, and treat fingerprints as context rather than proof.",
+      "durationSeconds": 2773,
+      "publishedAt": "2022-02-05",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "iXkBUJTVDeA",
+      "slug": "packet-sifter-and-leveraging-tshark-for-network-traffic-analysis",
+      "title": "Packet Sifter and Leveraging TShark for Network Traffic Analysis",
+      "speakers": [
+        "Ross Burke"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "network",
+        "security-operations",
+        "incident-response",
+        "open-source",
+        "tool"
+      ],
+      "teaser": "Shows how to triage large packet captures from the command line using TShark and the PacketSifter script.",
+      "summary": "Ross Burke opens with a common frustration for SOC analysts: Wireshark becomes slow and unwieldy when a packet capture grows to gigabytes. He presents TShark, the command-line counterpart to Wireshark, as a faster way to reach the same protocol analysis. He walks through basic usage, including reading a capture with name resolution turned off, applying display filters, writing filtered results to a new file, and printing protocol hierarchy statistics. He also shows field extraction, which pulls specific values such as HTTP user agents, and how standard Unix tools like sort and uniq can aggregate those values to surface rare entries.\n\nThe middle of the talk introduces PacketSifter, a bash script he built on top of TShark. It generates protocol statistics and traffic breakdowns in 30-second intervals, splits a capture into smaller files by protocol, and extracts HTTP and SMB objects into an archive. When API keys are configured, it hashes extracted files for VirusTotal lookups and checks resolved IP addresses against AbuseIPDB for confidence scores and geolocation.\n\nIn the live demo, he runs the tool against a sample capture and reviews the output files. He points to a raw IP address used as an HTTP host header, a suspicious domain that resembles a legitimate update service, and a file with an image extension that matched a known malware family in VirusTotal. His takeaway is that scripted triage can quickly surface indicators worth investigating, while analysts should still verify crowd-sourced reputation data before acting on it.",
+      "durationSeconds": 2583,
+      "publishedAt": "2022-02-05",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "gMfvDkN4mOo",
+      "slug": "human-intelligence-versus-artificial-intelligence-ransomware",
+      "title": "Human Intelligence Versus Artificial Intelligence: Ransomware",
+      "speakers": [
+        "Bryce Webster-Jacobsen"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "ransomware",
+        "intelligence",
+        "incident-response",
+        "ai",
+        "threat"
+      ],
+      "teaser": "Explains how human negotiators and dark web intelligence complement automated tools when responding to ransomware incidents.",
+      "summary": "Bryce Webster-Jacobsen, director of intelligence operations at GroupSense and a ransomware negotiator, frames the debate over artificial versus human intelligence in ransomware response as a false choice. He argues that automated detection is strong at spotting signals such as command-and-control traffic, lateral movement and privilege escalation, while people are needed to tune those tools and to judge what they produce. He also notes that human behavior, such as falling for phishing or reusing credentials, sits at the start of many attacks.\n\nThe talk walks through the ransomware incident lifecycle, from initial access through data theft, backup destruction and encryption. For initial access, he describes monitoring dark web sales of access and vetting claims, which requires language skills, credible forum reputations and skepticism toward scammers. The negotiation stage is where he sees people outperform automation: timelines stretch over days, insurance and leadership shape options, groups rebrand, and strategy has to change as new information arrives.\n\nHe closes with a case of a small family business without cyber insurance, where negotiators presented as the victim and appealed to the operator's sense of a real business being harmed, alongside a more businesslike approach. The takeaway for practitioners is to combine automated monitoring with experienced human judgment, bringing in outside expertise early and treating negotiation as an ongoing reassessment.",
+      "durationSeconds": 1882,
+      "publishedAt": "2022-02-05",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "pvdw9miFtZ0",
+      "slug": "active-defense-scenarios-a-quarterly-intelligence-driven-purple",
+      "title": "Active Defense Scenarios: A Quarterly Intelligence Driven Purple Team Exercise",
+      "speakers": [
+        "Robert Moody",
+        "Robin Williams"
+      ],
+      "track": "purple-team",
+      "topics": [
+        "intelligence",
+        "threat",
+        "detection",
+        "attack",
+        "team",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how intelligence-led purple team exercises turn adversary TTPs into scenarios for testing and hardening security controls.",
+      "summary": "The talk opens with a run of recent attacks and campaigns to make the case for \"active defense\": an intelligence-led, cross-team exercise that checks how ready an organization is to face a specific adversary. The presenters argue that a test should start from threats that matter to the business, its suppliers and its peers, and that a topic is only worth using if there is enough data to build a threat model and test against it.\n\nThe middle of the talk walks through the phases of a mission. Planning comes first, followed by threat hunting for the adversary's known indicators to confirm the environment is clean before testing begins. Control validation then replays the adversary's techniques, mapped to the MITRE ATT&CK framework, against endpoint, email, network and other controls. Hardening follows, with control owners writing new detections, often in the vendor-neutral Sigma format, and the same test is then run again under identical conditions. An example built around the Turla group shows before-and-after detection coverage by tactic.\n\nThe closing section covers reporting and lessons learned. The presenters recommend a one-page executive summary, a consistent style guide, reports tailored to each audience, credit for every contributing team, and a post-mission debrief. Their after-action approach separates observed facts from opinion. The practical takeaway is to run the cycle repeatedly, track how long each phase takes, and use the results to improve the next mission.",
+      "durationSeconds": 3259,
+      "publishedAt": "2022-02-05",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "yP4PCn54hgM",
+      "slug": "building-a-ransomware-incident-response-plan",
+      "title": "Building a Ransomware Incident Response Plan",
+      "speakers": [
+        "Allan Liska"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "ransomware",
+        "incident-response",
+        "security-operations",
+        "lessons-learned"
+      ],
+      "teaser": "Lays out how organizations can prepare for a ransomware attack and handle the first stages of response, from logging to recovery and testing.",
+      "summary": "The talk opens with the growing scale of ransomware and the point that many organizations feel prepared until an attack hits. It then breaks a typical intrusion into stages: initial access through purchased footholds, credential reuse, third-party compromise or exploited flaws, followed by lateral movement, data theft and encryption. A standard incident response plan usually assumes a few machines fail, so ransomware needs its own supplement covering whole-network outages.\n\nThe core of the talk covers preparation and early response. Preparation means choosing which logs to keep, such as PowerShell, endpoint and DNS data, deciding who beyond the security team must be involved, including legal, insurance, communications and HR, and setting up an out-of-band channel before an incident. During response, the speaker recommends confirming the actor, containing spread by segmenting or cutting network access, protecting backups and servers first, and finding the entry point so it cannot be reused. Recovery means hunting for persistence and rebuilding segments in isolation before reconnecting them.\n\nThe talk closes with lessons learned: reviewing how the attacker got in, tuning alerting and configuration before buying new tools, keeping the plan written and current, and testing it through tabletop exercises. Staff wellbeing during long hours and consistent messaging to vendors and customers also get attention.",
+      "durationSeconds": 3095,
+      "publishedAt": "2022-02-05",
+      "difficulty": "intermediate"
+    }
+  ]
+}

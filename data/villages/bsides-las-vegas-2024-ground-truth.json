@@ -1,0 +1,303 @@
+{
+  "villageSlug": "ground-truth",
+  "villageName": "Ground Truth",
+  "eventSlug": "bsides-las-vegas-2024",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLjpIlpOLoRNTQFzPF4ToMcoC_EH4n__87",
+  "description": "Ground Truth talks from BSides Las Vegas 2024.",
+  "talks": [
+    {
+      "youtubeId": "pvv8ikFAHeg",
+      "slug": "devising-and-detecting-spear-phishing",
+      "title": "Devising and detecting spear phishing",
+      "speakers": [
+        "Fred Heiding",
+        "Simon Lermen"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "phishing",
+        "ai",
+        "social",
+        "threat-detection",
+        "privacy"
+      ],
+      "teaser": "Shows how large language models can automate spear phishing campaigns and how personalized spam filters can counter them.",
+      "summary": "The talk looks at how large language models can automate the stages of a spear phishing campaign: finding targets, gathering information about them, writing emails, sending them and tracking who clicks. The speakers built a Python tool that runs iterative web searches on a named person, builds a profile from public sources, and pairs it with a synthetic sender and a chosen persuasion technique. In a study of about 200 participants, early pilot results put the automated emails' click rates in a range comparable to emails written by human experts, at a fraction of the cost.\n\nThe second half focuses on defense. Because spam filters already catch much mass phishing, the speakers argued that the real gain lies in personalization. They proposed filters that flag the persuasion styles a particular user tends to fall for, such as social proof or authority, and a digital footprint cleaner that highlights exposed details an attacker would find most useful. For detection, they asked several chat models whether an email's intent looked suspicious instead of asking directly whether it was phishing, and found that some models caught most attack emails with few false alarms on legitimate ones.\n\nThe main takeaway is that convincing phishing is becoming cheap to run at scale, so organizations should weigh the economics of defense and consider how prompt framing and user-level risk profiles can improve detection. The talk closed with a live demonstration of the information-gathering step on a volunteer, and the speakers noted that a fuller white paper was forthcoming.",
+      "durationSeconds": 3353,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "UGSXmSVg8mg",
+      "slug": "what-do-we-learn-when-we-scan-the-internet-every-hour",
+      "title": "What Do We Learn When We Scan the Internet every hour?",
+      "speakers": [
+        "Ariana Mirian"
+      ],
+      "track": "recon",
+      "topics": [
+        "network",
+        "infrastructure",
+        "intelligence",
+        "measurement"
+      ],
+      "teaser": "Shows how quickly internet-wide scan results go stale, with uptime varying by port, protocol and network.",
+      "summary": "Internet-wide scanning probes hosts on specific port and protocol pairs to collect publicly served data, and research built on that data assumes the hosts stay reachable. The speaker noticed hosts that answered, disappeared, and returned hours later, which raised the question of how often scans need to run. To study this, the team scanned about six million hosts that had any of the 40 most common ports open, repeating the scan every 45 minutes for roughly a week. Server capacity limited the size of the experiment.\n\nLifespans were defined as contiguous runs of successful scans and plotted as cumulative distribution curves. Common pairs such as HTTP on port 80 and SSH on port 22 had similar medians, yet SSH hosts stayed up longer in the tail of the distribution. Email protocols remained online for nearly the whole experiment, which the speaker linked to what those services are designed to do. Behavior also varied by network: the same protocol looked very different across a content delivery network, a cloud provider and a residential ISP. Redefining a host by certificate fingerprint instead of full body hash lengthened measured HTTPS lifespans, because page content changed on each visit.\n\nThe main takeaways are that uptime is not uniform across ports, protocols and networks, so scan frequency should match the target. Researchers also need to state what counts as the same host, since that choice changes results. Repeated measurement matters because the network keeps changing.",
+      "durationSeconds": 1330,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "dwduByVd-8s",
+      "slug": "navigating-the-changing-cyber-landscape-trends-costs-and-risk-mi",
+      "title": "Navigating the Changing Cyber Landscape: Trends, Costs, and Risk Mitigation Strategies",
+      "speakers": [
+        "Wendy Hou-Neely"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "ransomware",
+        "privacy",
+        "supply",
+        "incident-response",
+        "lessons-learned"
+      ],
+      "teaser": "Presents cyber insurance claims data on incident costs, ransomware payment trends, and privacy and business interruption exposure.",
+      "summary": "The speaker, who builds cyber risk models for an insurance broker, frames the talk around how cyber losses and claims have changed since 2017. The data drew on loss databases, public company filings, and the broker's own claims and reinsurance portfolios. The record losses of 2023 were attributed partly to zero-day exploitation and widespread events such as the Microsoft Exchange and CrowdStrike incidents.\n\nThe middle of the talk covered costs and timelines. Breach response costs were around a million dollars for a typical event, with legal and data recovery costs carrying long tails, and analysis often took more than a month. Privacy litigation was rising, including pixel tracking and biometric-law cases. Ransomware claims grew in frequency, while the share of victims paying fell to roughly a fifth in 2023 by the speaker's data. Business interruption from third-party and software failures was highlighted, since policy wording decides whether system or contingent outages are covered.\n\nFor practitioners, the advice was to involve the insurer early, use counsel and specialist negotiators before any payment, prepare incident checklists in advance, and reduce stored data and supplier exposure. Questionnaire analysis suggested that weak directory configuration correlated with claims, and a short list of baseline controls was presented as a threshold for obtaining coverage.",
+      "durationSeconds": 2676,
+      "publishedAt": "2024-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "7KOoLo7oynk",
+      "slug": "zero-rules-alert-contextualizer-and-correlator",
+      "title": "ZERO-RULES Alert Contextualizer & Correlator",
+      "speakers": [
+        "Ezz Tahoun"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "security-operations",
+        "machine-learning",
+        "incident-response",
+        "threat-detection",
+        "intelligence"
+      ],
+      "teaser": "Shows how open-source language and graph models can group SOC alerts into ATT&CK-mapped attack campaigns.",
+      "summary": "The talk starts from the problem that multi-stage intrusions are split across many alerts and log sources, while analysts still depend on playbooks, lookups and individual judgment. Correlation rules are costly to maintain, and ATT&CK technique tags on detection content are inconsistent because they were written by many authors for different purposes.\n\nThe speaker proposes a pipeline. A language model, configured for low randomness so its output is repeatable, assigns one ATT&CK technique to each unique alert description, producing a consistent mapping that can be attached to events in the SIEM. Entity attributes such as business unit, owner or patch date are added alongside. Events are then clustered by similarity with simple methods such as DBSCAN or k-means, using a graph structure to encode domain knowledge like related ports, subnets or sub-organizations. Clusters are chained with a Markov-style state model to approximate attack flows. Tests on a few thousand alerts produced clusters the team found worth investigating, although the reference labels used for evaluation were themselves incomplete.\n\nThe main takeaways are to start with a simple, explainable model rather than a black-box language model for correlation, and to use language models mainly for one-time enrichment. Where historical tickets can be trusted, a supervised classifier can show analysts past relevant cases. The speaker also suggested measuring analysts by their contributions to detections and playbooks rather than only by time to close.",
+      "durationSeconds": 3227,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "CNCM57DzWqU",
+      "slug": "incubated-machine-learning-exploits-backdooring-ml-pipelines-usi",
+      "title": "Incubated Machine Learning Exploits: Backdooring ML Pipelines Using Input-Handling Bugs",
+      "speakers": [
+        "Suha Sabi Hussain"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "vulnerabilities",
+        "attack",
+        "supply"
+      ],
+      "teaser": "Shows how input-handling bugs in ML model file parsers can be chained into backdoors that carry through into deployed pipelines.",
+      "summary": "The talk introduces incubated ML exploits, a class of hybrid attack that pairs a classic system security flaw, specifically an input-handling bug, with a model backdoor. The speaker argues that ML security is often split between model research and system security, which leaves gaps where the two interact. Model files are parsed by many different tools, so a parser that reads a file differently from the reference implementation becomes an attack surface.\n\nMuch of the talk walks through examples organized by a language-theoretic taxonomy of input-handling bug classes. Examples include pickle deserialization that runs code during loading, bypasses of restricted unpicklers, and parser differentials in TorchScript and safetensors, where duplicate JSON keys let external parsers accept backdoored weights. Polyglot files that validate as two formats can hide a malicious model beside a benign one, and custom ONNX runtime operators offer another route into the architecture.\n\nThe closing guidance covers validating model integrity, keeping metadata well parsed, avoiding custom operators, separating weights from architecture, and using versioned formats with checksums and magic bytes. Practitioners should threat-model each pipeline stage, since impact depends on which component trusts which parser. The speaker frames machine learning as something that changes a system's overall security posture rather than a simple add-on.",
+      "durationSeconds": 2109,
+      "publishedAt": "2024-09-04",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "LAmaIOGlQHg",
+      "slug": "seek-out-new-protocols-and-boldly-go-where-no-one-has-gone-befor",
+      "title": "Seek out new protocols, and boldly go where no one has gone before",
+      "speakers": [
+        "Douglas McKee"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "reverse-engineering",
+        "network",
+        "iot",
+        "detection",
+        "infrastructure"
+      ],
+      "teaser": "Presents a method for reversing a proprietary protocol from packet captures, then applies it to attack and detection.",
+      "summary": "The talk argues that proprietary protocols get too little scrutiny from both attackers and defenders, especially in critical infrastructure and medical devices, where protocols are often decades old and hard to patch. Douglas McKee lays out an eight-step process for dissecting such protocols and covers four of the steps: simplifying scope, embedded networking, enumerating patterns, and application reverse engineering.\n\nWorking through a capture from a medical monitoring protocol, he groups a few hundred packets by payload length and destination port, which reduces them to a handful of representative packet types, and checks that the grouping holds across several captures. He points out that IP addresses and port numbers are often repeated inside payloads, and shows a field that increments by fixed steps and decodes to a timestamp. He then inspects the server side in a disassembler, where leftover debug strings helped reveal a reporting interval. On the offensive side, he shows that padding bytes can carry hidden data and that replaying modified packets can falsify readings. On the defensive side, he uses an AI-assisted STRIDE tool and attack trees to find choke points, and converts a Scapy layer into a Spicy parser so Zeek can log the decoded fields.\n\nThe main takeaway is to document findings in reusable code, since the same parser can serve testing, logging and baselining. He also notes that vendor fixes in regulated industries can be slow because changes may require recertification and replacing deployed devices.",
+      "durationSeconds": 2484,
+      "publishedAt": "2024-09-04",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "ubL0-0JlfNs",
+      "slug": "doh-deception-evading-ml-based-tunnel-detection-with-black-box-a",
+      "title": "DoH Deception: Evading ML-Based Tunnel Detection with Black-Box Attack Techniques",
+      "speakers": [
+        "Emanuel Valente"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "machine-learning",
+        "ai",
+        "detection",
+        "network",
+        "attack"
+      ],
+      "teaser": "Shows how black-box adversarial attacks evade machine-learning models that detect DNS-over-HTTPS tunnels.",
+      "summary": "The talk opens with background on DNS tunnelling, which attackers have used since the 1990s to move data and command traffic through DNS, and on DNS over HTTPS, which hides those queries inside HTTPS. Detection has moved toward machine-learning models, with ensemble methods such as gradient boosting currently leading. These models are trained on flow features extracted from packet captures, and the research tool used throughout is DNS2TCP.\n\nThe core of the work is a black-box attack in which the attacker only sees the model's inference output. It uses a zeroth-order optimization method adapted from the ZOO attack. The unconstrained version reached high success but produced impossible values, such as negative durations and enormous packet sizes. To fix this, the speaker added per-feature limits taken from the tunnel tool and a list of features allowed to change. The constrained version succeeded less often, but a single success revealed feature values that could be reproduced by configuring the tunnel tool.\n\nA live demonstration ran a gradient boosting detector against a tunnel on port 443, flagged it as malicious, then adjusted packet size and flow time values until the same traffic was classified as benign. The speaker presented the approach as applicable to other models and suggested it may extend to network intrusion detection systems. Defensive suggestions include adversarial training, avoiding features a user can easily control such as timing, and auxiliary detectors that catch such manipulation.",
+      "durationSeconds": 2490,
+      "publishedAt": "2024-09-04",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "_Zi0LZLiUio",
+      "slug": "phishdefend-a-reinforcement-learning-framework",
+      "title": "PhishDefend: A Reinforcement Learning Framework",
+      "speakers": [
+        "Bobby Filar"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "phishing",
+        "intelligence",
+        "network",
+        "vulnerabilities",
+        "risk"
+      ],
+      "teaser": "Shows how internet measurement studies can expose hack-for-hire phishing, scanner accuracy gaps, and patching friction.",
+      "summary": "The talk argues that internet measurement, the practice of quantifying parts of the internet including its security aspects, can guide better defenses. It is built around three projects. The first examines an underground market offering to break into Gmail accounts for a fee. The researchers posed as buyers and as fictional victims with constructed online footprints and tracked the services. Of 27 services found, five made an attempt, and those relied on highly targeted phishing that adapted when two-factor authentication blocked the first attempt.\n\nThe second project compares an internet-wide scanning engine with nmap. The initial overlap was about 87 percent, and many discrepancies came from hosts that appeared and disappeared between scans. A head-to-head rerun showed each scanner finding services the other missed, and the team tracked down the causes by manual verification. They added a \"pending removal\" status to the data so users can see hosts that are being rechecked before they are dropped, which sharply reduced the apparent false positive rate.\n\nThe third project addresses patching at a large university IT organization. A weekly laundry-list email was easy to ignore, so the team rewrote notices to cover one vulnerability family at a time, with instructions and a spreadsheet of details. Patch rates rose from about 3 percent to 78 percent. Interviews with administrators revealed monotony, exceptions tracked through a forgotten form, and patch cycles that did not match the notices. The takeaway is to measure the human workflow as well as the machines, and to talk with the people who do the work.",
+      "durationSeconds": 3102,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Knk2BLHIV-w",
+      "slug": "how-to-quantify-ics-exposure-on-the-internet-when-the-data-is-ou",
+      "title": "How to quantify ICS exposure on the Internet when the data is out to get you",
+      "speakers": [
+        "Emily Austin"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "infrastructure",
+        "internet",
+        "risk",
+        "detection"
+      ],
+      "teaser": "Shows how to count industrial control devices on the internet while filtering out honeypots, lab setups and false positives.",
+      "summary": "Industrial control system devices that speak automation protocols are often counted across the internet to illustrate how severe the exposure problem is, but raw totals can be misleading. The talk looks at why simply tallying everything that resembles ICS overstates real exposure, since honeypots and personal or lab setups get mixed in with production equipment.\n\nThe method starts from a full IPv4 scan and adds extra detection logic for protocols and web-based control panels that the baseline scanning missed. Known ICS honeypots such as GasPot and Conpot are recognised by differences in their responses and removed from the data. The US dataset narrows from roughly 57,000 exposed devices to about 18,000 after excluding building-automation protocols that sit at the edge of water-sector relevance. Network ownership metadata from DNS and WHOIS revealed little, so the team turned to exposed web interfaces, which often display facility names and let them identify owners for about half of the roughly hundred water-related panels found.\n\nThe main takeaway is that the number of devices matters less than what those devices control. The verifiable systems were often municipal water facilities with no authentication in front of them. The talk closes by noting that accurate counting is harder than it looks, and it touches on manufacturer incentives, regulation, and the limited resources of small utilities.",
+      "durationSeconds": 1253,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "DtCl_ufl8mQ",
+      "slug": "reassessing-50k-vulnerabilities-insights-from-ssvc-evaluations-i",
+      "title": "Reassessing 50k Vulnerabilities: Insights from SSVC Evaluations in Japan's Largest Telco",
+      "speakers": [
+        "Hirofumi Kawauchi"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "vulnerabilities",
+        "risk",
+        "defensive-security",
+        "infrastructure"
+      ],
+      "teaser": "Shows how a large Japanese telecom used SSVC decision trees to narrow 50,000 vulnerabilities to a realistic urgent set.",
+      "summary": "The talk looks at how a major Japanese telecom carrier, serving more than 13 million customers, struggles to triage a steadily growing number of published vulnerabilities across hundreds of services and both open and closed networks. The speaker explains that tuning CVSS scores with temporal and environmental metrics did not change outcomes enough to reduce the workload, because CVSS measures severity but offers no guidance on what action to take.\n\nThe team then adopted Stakeholder-Specific Vulnerability Categorization, a decision-tree framework from Carnegie Mellon University. Their criteria rate exploitation status, exposure from closed management systems up to internet-facing servers, utility based on automatability and value density, and human impact on services. Each combination maps to an action such as immediate, out of cycle, scheduled or deferred. Worked examples show a public web service with a 9.8 CVSS score landing in the immediate group, while a closed-network service with active exploitation landed in out of cycle.\n\nTo test the method, the team reassessed about 50,000 vulnerabilities pulled from their management database, a task that two people completed within days. Only about 8% fell into the immediate category. Nearly all public-facing items were in the urgent tiers, while closed-network items were mostly scheduled or deferred. Some low-severity findings still reached immediate when active exploitation and open exposure outweighed the base score. The main takeaway is that pairing exploitation status and exposure with business impact can produce a workable response queue. Choosing the important parameters and automating system classification remain open work.",
+      "durationSeconds": 1349,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "7_lvvSC4vWY",
+      "slug": "looking-for-smoke-signals-in-financial-statements-for-cyber",
+      "title": "Looking for Smoke Signals in Financial Statements, for Cyber",
+      "speakers": [
+        "Brandon Pinzon"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "intelligence",
+        "threat",
+        "management"
+      ],
+      "teaser": "Shows how public SEC cyber filings can be paired with financial data to spot early warning signals of breach impact.",
+      "summary": "The talk starts from a familiar problem: headline cost estimates for large breaches at companies such as MGM, UnitedHealth and SolarWinds vary widely, and their financial effects are hard to trace. The presenter points out that since December 2023, US public companies have been required to disclose material cyber incidents in SEC Form 8-K filings, which sit alongside annual 10-K reports. Together these documents form a new body of data that financial analysts already know how to read.\n\nUsing MGM as a worked case, the presenter compared the technical threat intelligence usually published after an incident, such as the help desk impersonation and the resulting week-long outage, with the company's financial trends across several years. He described screening filings for cyber terms and reading the surrounding paragraphs for changes in revenue, expenses, debt and operations. He also showed a stock price drop after the filing, reaching a low about 22% below the pre-filing level. Filtering was necessary, since some filings mention cyber only because of a company name.\n\nAudience questions covered disclosure timing, interim updates, how the approach would be tested for false positives, and whether the data could be misused. The presenter said the dataset is still small and predictive testing is not yet complete. For practitioners, the main takeaway is that security leaders can express risk in the financial terms their CFOs use when arguing for budget, and that similar analysis may flag broader signs of organizational stress beyond cyber.",
+      "durationSeconds": 2483,
+      "publishedAt": "2024-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "krpMGiKKAkQ",
+      "slug": "hacking-things-that-think",
+      "title": "Hacking Things That Think",
+      "speakers": [
+        "Matthew Canham"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "social",
+        "ai",
+        "attack",
+        "threat",
+        "framework"
+      ],
+      "teaser": "Presents a cognitive attack taxonomy that links social engineering tactics against humans and AI systems.",
+      "summary": "Matthew Canham opens with a story about a physical intrusion enabled by habituation. Guards gradually stopped questioning a scientist who brought a dog to work every day, and a disguised operative later walked through the same gate. He argues that cognitive security is a third domain alongside physical and cyber security, and that attacks built for people increasingly work against machines too. He cites jailbreak prompts that borrow persuasion principles from social psychology, and visual tricks that mislead both drivers and computer vision.\n\nThe core of the talk is the Cognitive Attack Taxonomy, a growing public catalog of several hundred cognitive vulnerabilities, exploits and tactics that apply to humans, AI and other biological systems. Each entry is tagged by layer, using an extended OSI-style model that adds individual, organizational and legal levels, by scale from tactical to strategic, and by maturity from theoretical to commonly observed. Canham describes using these entries to map likely biases for a target such as a CEO and to tailor phishing content. He also suggests the catalog could support threat modeling and attacker profiling.\n\nThe talk closes by describing how the taxonomy could generate cognitive attack graphs and kill chains for a given target, with an AI model selecting techniques. The main takeaway for practitioners is to treat perception and decision-making as attack surfaces alongside software and networks. Audience discussion touched on whether these biases come from human training data and on dark patterns in consumer protection.",
+      "durationSeconds": 2226,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "s7cdAllAYZ4",
+      "slug": "i-wont-allow-my-child-to-have-a-smartphone-why-smart-parents-mak",
+      "title": "I won't allow my child to have a smartphone: Why Smart parents make not so smart children",
+      "speakers": [
+        "Arun Vishwanath"
+      ],
+      "track": "policy",
+      "topics": [
+        "mobile",
+        "risk",
+        "learning",
+        "social",
+        "privacy"
+      ],
+      "teaser": "Examines how parents decide when to give children smartphones, and where their cautious instincts may not match the evidence.",
+      "summary": "Arun Vishwanath opens by noting that there is no settled scientific answer to when children should get a smartphone, and that the question is really about families rather than organizations. He describes a survey of about a thousand parents across the United States, supported by interviews with school counselors, teachers and psychologists. Parents saw a smartphone as a bigger risk than a home computer because it gives a child independence and reduces supervision. Most parents said they would wait until later, yet most children had a phone by middle school, driven by peer pressure and school communication.\n\nThe middle of the talk tests what parents believe they know. Parents rated their own security knowledge and their ability to protect their children very highly, but a true/false quiz given to the same group produced low scores. The speaker linked this gap to overconfidence, which drives overprotection. He argued that cyberbullying and predation are rarer than parents assume, that restrictions can push children to use phones unsupervised, and that evidence for claims like digital dementia or antisocial effects is weak. He also highlighted possible benefits, including creative problem solving, practical learning and health monitoring.\n\nIn the question round he discussed school phone bans and argued that middle school is a reasonable age to start, provided children are taught safe use. His takeaway for practitioners is to move away from blanket bans and fixed rules toward negotiated screen time and formal education for both parents and students, since banning devices simply shifts responsibility onto families.",
+      "durationSeconds": 2018,
+      "publishedAt": "2024-09-04",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "K5hELUspWq8",
+      "slug": "ai-in-the-human-loop-genai-in-security-service-delivery",
+      "title": "AI in the human loop: GenAI in security service delivery",
+      "speakers": [
+        "Preeti Ravindra"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "security-operations",
+        "machine-learning",
+        "incident-response",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how A/B experiments measure whether LLM tools actually help SOC analysts write incident findings faster and better.",
+      "summary": "Preeti Ravindra examines how large language models perform when placed directly inside security operations workflows. Many SOC teams adopt AI copilots to boost analyst productivity, yet few measure how these tools change outcomes. Earlier benchmarks often ran outside real analyst workflows, and prior studies used narrow, vendor-native incidents, so this work tests across more data sources and tools within normal SLA limits.\n\nThe experiment covered two tasks: drafting key findings for incident reports, and orienting an analyst dropped into an active response. Outputs were generated automatically instead of through repeated prompting. Because analysts collaborate closely, a standard split would leak between groups, so the team used a switchback design that alternated conditions over time. Outputs were scored on editing time, quality, hallucination, contradiction and coverage, using automated checks against investigation ground truth.\n\nQuality and editing time moved together, so better drafts meant less rework. A tuned model lost some general capability and became counterproductive, while base models helped. Missed coverage proved a bigger problem than hallucination, since models often dropped supplied information. The analysis also exposed data gaps where analysts' own findings were absent from model inputs. Practical takeaways include checking whether a task can become simple classification and measuring how much a tool changes workflow and feedback burden.",
+      "durationSeconds": 1053,
+      "publishedAt": "2024-09-04",
+      "difficulty": "intermediate"
+    }
+  ]
+}

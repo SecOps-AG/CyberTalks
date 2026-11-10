@@ -1,0 +1,283 @@
+{
+  "villageSlug": "community-track",
+  "villageName": "Community Stage",
+  "eventSlug": "disobey-2023",
+  "conference": "disobey",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLLvAhAn5sGfikfr8J05Duadf6GPtHXTpd",
+  "description": "Community Stage talks from Disobey 2023.",
+  "talks": [
+    {
+      "youtubeId": "iluhSh4E2r8",
+      "slug": "dont-trust-the-link",
+      "title": "Don't Trust the Link",
+      "speakers": [
+        "Markus Lehtonen"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "phishing",
+        "web",
+        "security-operations",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how links sent by email can leak sensitive data through public URL scanning services.",
+      "summary": "Email security tools and SOC analysts routinely submit suspicious links to URL scanning services to check for phishing. The speaker, who has spent years building and running security operations tooling, points out that the default public scan mode on urlscan.io makes each submitted link, along with its screenshots, redirects and results, searchable by anyone. The risk comes from how links are shared and scanned, since senders often cannot tell that a link carries private information.\n\nThe talk walks through examples found by searching the platform. These include an internal phishing-exercise link, a Microsoft sign-in link that auto-filled a user's email address, a LinkedIn unsubscribe link that could cancel marketing subscriptions when scanned, and secure mail registration and download links that gave access to message contents. A OneDrive share link exposed a tenancy agreement. The underlying issue is that a link works as a single factor of authentication, and optional protections such as second-factor checks or recipient verification are often left off by default.\n\nThe speaker's recommendations include keeping sensitive data out of URLs, requiring out-of-band second factors, using short link expiry, and choosing private scan settings where available. Security managers should also hunt for their organisation's data on such public sources, since a leak elsewhere can still become their problem. Reporting findings to the platform removes entries after review, but the speaker noted that a large amount of data remains exposed.",
+      "durationSeconds": 1547,
+      "publishedAt": "2023-05-05",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "NmMHPT8URog",
+      "slug": "embedded-linux-device-bughunting",
+      "title": "Embedded Linux device bughunting",
+      "speakers": [
+        "Knud"
+      ],
+      "track": "hardware",
+      "topics": [
+        "embedded",
+        "iot",
+        "vulnerability-research",
+        "reverse-engineering",
+        "exploitation"
+      ],
+      "teaser": "Walks through finding and exploiting bugs in Uniview IP cameras, from UART access and firmware unpacking to a stack overflow.",
+      "summary": "This talk follows the path from a Uniview IP camera on the desk to a shell on the device. The speaker argues that the workflow applies to most IoT hardware, and that on-premises cameras are a useful target because they sit inside a building's trust boundary. Work starts with a teardown and a serial console on the board, then firmware from third-party collections is unpacked to find startup scripts and a large monolithic binary. A wrapper around system calls there exposed command injection in the web interface.\n\nAttack surface mapping compared a running device's listeners with an external scan and found more UDP services than expected. An SNMP service exposed a credential through its object tree, and a discovery feature let a temporary password be derived locally from the serial number and date. A small custom protocol service was reversed by renaming variables in a decompiler until a length field was seen feeding a stack copy. Protocol-aware fuzzing and an ARM exploit that used a fixed binary address got past the stack randomisation.\n\nThe speaker closes with an internet survey that found roughly 3,300 reachable devices, and notes that the bugs were reported through a bounty platform and the vendor. Takeaways include testing current firmware rather than old releases, scanning fragile devices carefully, verifying bundled open-source components, and finding custom protocols more rewarding than common web flaws.",
+      "durationSeconds": 3114,
+      "publishedAt": "2023-05-05",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "FGcC0ZirfVY",
+      "slug": "cyber-security-is-everyones-business",
+      "title": "Cyber Security is everyone's business",
+      "speakers": [
+        "Lotta Sandroos"
+      ],
+      "track": "policy",
+      "topics": [
+        "social",
+        "learning",
+        "privacy",
+        "defensive-security"
+      ],
+      "teaser": "Argues that home users need encouraging, targeted security messaging rather than fear-based campaigns.",
+      "summary": "The talk starts from a gap in research: most work on cyber security behaviour looks at organisations, while home users face scams, phishing and hacking with little formal training or support. Drawing on a master's thesis about how security messages are framed, the speaker argues that home users have to be motivated to change their habits, and that communication and education are currently the main tools available.\n\nThe main finding is that awareness messages lean heavily on threat and fear appeals, emphasising severity and vulnerability, while encouragement and self-efficacy receive less attention. Too much fear can leave people passive. The speaker explains this using protection motivation theory and a seatbelt analogy, and presents social marketing as a way to offer a concrete reward for adopting a behaviour, such as a password manager that removes the need to remember passwords. A single generic message also fails, since novices need basics while experienced users need more advanced content.\n\nRecommendations include a less fearful, more encouraging tone, targeted content based on audience analysis, practical rewards in campaigns, more skilled communicators, and dropping the idea that people are the weakest link. In the Q&A, the speaker suggests these ideas could also work in workplaces and mentions game-based practice as a way to build confidence. Who should lead home user education remains an open question.",
+      "durationSeconds": 1911,
+      "publishedAt": "2023-05-17",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "GnX8MirEQfI",
+      "slug": "have-u-been-invited",
+      "title": "Have U Been Invited",
+      "speakers": [
+        "Mikko Kenttälä"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "vulnerabilities",
+        "attack",
+        "application",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how crafted calendar invitation attachments can write and delete files on macOS through Apple Calendar bugs.",
+      "summary": "The talk walks through the speaker's approach to finding macOS vulnerabilities. The method starts with learning how a system is meant to behave, looking for anomalies, and then testing whether those anomalies can be turned into more privilege. Modern macOS defenses, including sandboxing, Gatekeeper, privacy controls and System Integrity Protection, mean a single bug is rarely enough on its own.\n\nThe main case study is Apple Calendar. The speaker looks at the invitation format and the CalDAV sync model, and notes that attachments in an incoming invite are written to disk automatically once the event reaches the app. That behaviour made the calendar a useful place to look for ways to place files on a victim's machine without further interaction.\n\nTwo bug classes were demonstrated. One is an arbitrary file write, where a traversal-style attachment name stores a file outside the directory the app intends. The other is an arbitrary file delete, where a crafted attachment reuses the name of an existing cache file and a later update removes the original, causing the app to crash. The sandbox limited which folders were reachable, though several app-related locations stayed writable. The issues were reported to Apple and fixed in a beta release within about two months. Later steps such as code execution and sandbox escape were left out because those parts are not yet fully fixed.\n\nThe takeaway is that older formats and sync features can hide simple path handling flaws, and that attachments from outside should be treated as untrusted input.",
+      "durationSeconds": 1778,
+      "publishedAt": "2023-05-05",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "4w2s9ICLVcU",
+      "slug": "pwn-abloy-easy",
+      "title": "pwn Abloy Easy",
+      "speakers": [
+        "Idanhurja"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "tool",
+        "exploiting",
+        "development"
+      ],
+      "teaser": "Walks through studying an Abloy lock and building a pick tailored to it.",
+      "summary": null,
+      "durationSeconds": 3201,
+      "publishedAt": "2023-05-05",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "zbK-ezXm5qo",
+      "slug": "dangers-of-service-as-a-principal-in-aws",
+      "title": "Dangers of Service as a Principal in AWS",
+      "speakers": [
+        "Matthew Keogh",
+        "Tom Taylor-MacLean"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "aws",
+        "identity",
+        "trust",
+        "misconfiguration",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how trusting an AWS service principal in resource-based policies can let outside accounts reach a victim's resources.",
+      "summary": "The talk examines a weakness in AWS resource-based policies, which are access rules attached directly to a resource such as a storage bucket or a notification topic rather than to a user or role. The presenters explain how these policies differ from identity policies and note that many services, including S3, SNS and API Gateway, rely on them. They describe a recurring pattern seen in client environments: resource policies that trust an entire AWS service principal without restricting which account is making the call.\n\nThe middle of the talk is a demonstration. An S3 upload event was configured to publish to an SNS topic in one account, and that topic's policy trusted the S3 service in general. The presenters showed that a separate, attacker-controlled account could create the same event configuration and trigger notifications into the original topic. They then walked through a similar case with API Gateway invoking a Lambda function, where a caller from another account could reach a secret the function retrieves and pass arbitrary inputs to it.\n\nTo close, the speakers recommend adding source account conditions to service-principal trust statements, avoiding wildcards, and reviewing policies during design rather than after deployment. They point out that automated tooling for this issue is limited, that console and CLI warnings are inconsistent, and that AWS is aware of the problem and working on a fix.",
+      "durationSeconds": 1491,
+      "publishedAt": "2023-05-05",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "rzsahO9iNTk",
+      "slug": "how-we-caused-a-route-leak-anatomy-of-a-routing-incident",
+      "title": "How we caused a route leak - Anatomy of a routing incident",
+      "speakers": [
+        "Silvan Michael Gebhardt"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "lessons-learned",
+        "networks",
+        "infrastructure"
+      ],
+      "teaser": "Walks through how a routing mistake at a European ISP leaked routes and disrupted traffic for other networks.",
+      "summary": "The speaker, who runs an ISP network across Europe, describes a routing incident in which their network accidentally leaked routes and disrupted traffic for other providers. The talk opens with background on how the company grew from a small network into an IP transit provider that also hosts research sponsorships, and on how customers and upstreams are filtered using route objects and AS sets stored in routing registries.\n\nThe middle of the talk follows the sequence of events. A runaway flow-export daemon on a busy router was killed, and a support ticket from a company that was receiving traffic it should not have revealed that the ISP was announcing routes it had no business passing on. Investigation showed that an AS set contained nested entries that pulled in a chain of networks, and that the filtering had failed in several layers at once. These included a router configuration that had been corrupted and fixed by hand, a missing deny rule that let everything through, and an internet exchange route server that accepted a full table without any plausibility check.\n\nThe takeaway is that prefix filtering based on registry data is fragile, and a single missing line can expose wider parts of the internet. The speaker argues for plausibility checks based on historical peering data and for better automation of filter generation, while noting that such changes are likely to take years to roll out across the internet.",
+      "durationSeconds": 1130,
+      "publishedAt": "2023-05-05",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "4myO1bRm91Y",
+      "slug": "turn-and-face-the-strange-ch-ch-changes-in-ransomware-techniques-2",
+      "title": "Turn and Face the Strange: Ch-Ch-Changes in Ransomware Techniques",
+      "speakers": [
+        "Lindsay Kaye"
+      ],
+      "track": "malware",
+      "topics": [
+        "ransomware",
+        "malware-analysis",
+        "threat",
+        "reverse-engineering",
+        "lessons-learned"
+      ],
+      "teaser": "Traces how ransomware groups changed their deployment, obfuscation, extortion and coding choices, and which changes backfired.",
+      "summary": "The talk looks at how ransomware operators have changed their tools and tactics over the past few years, and which of those changes paid off. The speaker, a malware analyst and reverse engineer on a threat intelligence team, groups the shifts into themes: spreading through built-in administrative features rather than custom tooling, newer languages such as Rust and Go, Arm lockers aimed at network storage devices, and harsher extortion such as contacting victims' clients and printing ransom notes on local printers.\n\nSeveral case studies follow. Play ransomware added return-oriented programming and garbage-code obfuscation a couple of months after its first samples appeared, while the underlying code stayed largely the same. ALPHV's Rust build produced lockers for several platforms and per-victim access tokens that protected negotiation chats. Its morph obfuscation toolkit inflated binary sizes and left name fragments that hinted at original function names. Other groups undermined themselves with encryption flaws, lockers that encrypted running virtual machines, and decryptors that failed on large files. LockBit Black reused leaked builder code, and a false flag claiming Chinese ties fell apart when chat logs showed Russian and a Linux variant matched a known REvil tool.\n\nThe closing advice for defenders is to hunt for the mistakes and artifacts that automation leaves behind. These include custom-written obfuscation, unusual string or mutex names, ransom note phrasing reused across platforms, odd combinations of anti-analysis checks, and flawed crypto implementations. Code overlap between families and watching affiliate forum announcements can also help link new samples to known groups.",
+      "durationSeconds": 1687,
+      "publishedAt": "2023-05-05",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "9E3-h54zAR8",
+      "slug": "techniques-observed-in-security-breaches-and-defending-against-t",
+      "title": "Techniques observed in security breaches and defending against them",
+      "speakers": [
+        "Jouni Mikkola"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "lessons-learned",
+        "defensive-security",
+        "identity",
+        "attack"
+      ],
+      "teaser": "Walks through three real intrusions, mapping observed attacker techniques to the defenses that could have stopped them.",
+      "summary": "The talk walks through three real intrusions the speaker investigated as an incident responder at a Finnish security firm. The attacks are organized using the MITRE ATT&CK framework, and details are kept high level to protect the affected companies. Across the cases, attackers reached publicly exposed remote access servers with stolen working credentials, then moved laterally, often over RDP, using manual work rather than automation. One intrusion began with a spreadsheet listing accounts, passwords and internal server details, and another ended with ransomware that encrypted backups hosted on the same ESXi hypervisors as production servers.\n\nThe common thread was identity. Every case involved valid accounts, excessive privileges such as domain admin or local admin rights on remote access servers, and remotely reachable accounts without multi-factor authentication. Malware appeared in each incident. In the first case, Cobalt Strike and a PowerShell-based remote access trojan were used, and endpoint protection stopped part of the activity before anything serious happened.\n\nFor defense, the speaker stresses enforcing MFA, training users against phishing, and applying least privilege, especially for accounts that can log in remotely. Other recommendations include a tiered administration model that separates tier zero, one and two assets, a local administrator password solution, blocking unneeded inbound ports on endpoints, application allowlisting, and attack surface reduction rules. The speaker notes that the reasoning behind each control was tied to how the specific intrusion would have been stopped.",
+      "durationSeconds": 1509,
+      "publishedAt": "2023-05-05",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "BoO5JEkFXBk",
+      "slug": "hacking-a-magnetic-lock",
+      "title": "Hacking a magnetic lock",
+      "speakers": [
+        "Walter Belgers"
+      ],
+      "track": "hardware",
+      "topics": [
+        "device",
+        "attack",
+        "hardware",
+        "practical",
+        "building"
+      ],
+      "teaser": "Shows how a magnetic lock's sliders can be read, copied and bypassed, including recovering its master key.",
+      "summary": "The talk looks at a Miwa (Anker 3800) cylinder, a lock design from Japan sold in Europe that combines ordinary pins with magnetic sliders. The magnets sit in the key, so the key has to match both the pin depths and the magnet layout. The speaker, a professional lock picker, sets out the threat model: open the lock without damaging it, or copy a key that someone has only briefly held. He describes building a magnetometer to read the magnet layout, then printing replacement keys. Early attempts with hand-built setup keys and tiny magnets failed, and a resin printer produced brittle keys before a filament printer worked.\n\nThe middle of the talk covers other routes into the cylinder. Single-pin picking works but proves surprisingly hard. Bumping opens the lock in a few strikes once the magnets are matched. Impressioning is possible but impractical. The speaker then turns to master keying. By comparing the fixed magnet positions across several cylinders, and by disassembling a half cylinder to reveal the pin heights, he narrows down the master key and then the individual user keys through process of elimination.\n\nThe closing section draws practical lessons. Once a key is available, copying it with a 3D printer is quite easy, while a photo of a key reveals much less than a reading taken from the cylinder itself. Manufacturers try to resist printing by adding movable parts to keys. The speaker recommends testing only on your own cylinders, and notes that the manufacturer shared factory access and sample keys during his research.",
+      "durationSeconds": 3328,
+      "publishedAt": "2023-05-05",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "JwohQQIasuQ",
+      "slug": "hacking-the-audit-interview",
+      "title": "Hacking the audit interview",
+      "speakers": [
+        "Lea Viljanen"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "interview",
+        "social",
+        "trust",
+        "lessons-learned",
+        "practical"
+      ],
+      "teaser": "Explains the psychological levers that shape how security audit interviews unfold and what evidence they produce.",
+      "summary": "Lea Viljanen opens by framing security audits and assessments as fact-finding exercises that depend heavily on talking to people. Newer application security standards include architecture and threat modeling items that cannot be checked by technical testing alone, so the auditor's interview is there to collect evidence of how an organisation actually works. She stresses that the talk is about human psychology rather than technical methods.\n\nThe middle of the talk covers levers an auditor can use to get people talking. These include letting interviewees talk about their own work, giving honest recognition of their expertise, finding common ground while being wary of copying body language, and holding interviews somewhere relaxed, such as the interviewee's home, or at an uncomfortable time to test how they handle it. She then flips the view to the audited person, describing how they can keep the conversation impersonal, avoid volunteering information, or push so much detail that the session runs out of time. She also discusses why people lie to protect themselves, the role of psychological safety and blame culture in an organisation, and the difference between honest misremembering and deliberate lying.\n\nHer closing point is that interviews alone rarely settle anything. Claims are followed up by requests for pipeline definitions, tool reports, tickets and meeting minutes, and when evidence cannot be produced the gap is recorded as a finding or left open for later. For practitioners, the takeaway is to build interview questions around verifiable evidence, to expect defensiveness when people fear blame, and to understand how the same dynamics can help or hinder either side of an audit.",
+      "durationSeconds": 3321,
+      "publishedAt": "2023-05-05",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "0XZkEJLzCuc",
+      "slug": "iec62443-4-2-wtf-operational-technology-device-security",
+      "title": "IEC62443-4-2-wtf? Operational Technology Device Security",
+      "speakers": [
+        "Lauri Paatero"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "device",
+        "iot",
+        "risk",
+        "management",
+        "infrastructure"
+      ],
+      "teaser": "Explains the IEC 62443-4-2 device security standard, its security levels, and its shortcomings for industrial devices.",
+      "summary": "The talk opens by framing operational technology, where availability matters most. Outages in factories, elevators, power grids or refineries can cost money or cause physical harm. The speaker then walks through typical OT network layers, from field devices with analog or serial links up to plant networks, and explains how VPNs, vendor laptops and removable media can bring outside risk into otherwise isolated sites.\n\nThe core of the talk is the IEC 62443-4-2 component standard. The speaker describes its security levels, from SL1, which protects against accidental misuse, up to SL4, the highest level aimed at nation-state attackers. Most device requirements are functional, so they can be verified by checking that a feature such as TLS exists, but they say nothing about implementation bugs. The development process requirements, including threat modeling, reviews and traceability, are described as heavy and hard to apply at lower levels, and the speaker notes the standard gives little guidance on developer feedback or security culture.\n\nThe closing section questions whether certification delivers real security. Certification bodies interpret the standard differently, the standard is not revised as threats change, and buyers often cannot tell a secure device from an insecure one. The speaker concludes that compliance and security both matter but are different goals, that teams need motivation and feedback to build secure products, and that security-minded engineers inside companies can still improve devices within these constraints.",
+      "durationSeconds": 1702,
+      "publishedAt": "2023-05-17",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "hJPJ2DpQdjE",
+      "slug": "beginner-experiences-in-reverse-engineering-a-ble-protocol",
+      "title": "Beginner experiences in reverse engineering a BLE protocol",
+      "speakers": [
+        "Eero \"rambo\" af Heurlin"
+      ],
+      "track": "wireless",
+      "topics": [
+        "reverse-engineering",
+        "device",
+        "iot",
+        "lessons-learned",
+        "learning"
+      ],
+      "teaser": "Follows a beginner's attempt to reverse engineer the Bluetooth Low Energy protocol behind an LED helmet light.",
+      "summary": "The speaker, a self-described beginner, wanted to control the RGB lighting on an electroluminescent helmet decoration without the vendor's phone app. After the company declined to publish its protocol, the speaker set out to capture and analyze the Bluetooth Low Energy traffic instead.\n\nThe capture setup relied on the Mirage tool, which needs specific low-cost development boards whose radio chip has a known hardware quirk. The speaker built a three-module rig with serial adapters, since the initial connection negotiation can start on any of three channels and a single module gives a poor chance of catching it. The early captures were mostly binary noise. Reading the GATT documentation helped identify which packets carried payloads, and these turned out to be a simple ASCII serial-style protocol. Replaying and modifying commands revealed pattern numbers and valid color values, which the speaker scripted in Python with the Bleak library.\n\nBecause the device stops advertising after a disconnect and needs a reboot to reconnect, the speaker wrote a background service to keep the connection alive, plus a command-line front end that accepts colors in ordinary HSV ranges. A live demo showed pattern and brightness changes, though camera problems limited what the audience could see. The main takeaways were that the hardware cost roughly fifty euros, that small embedded protocols are approachable for newcomers, and that keeping detailed notes makes the work repeatable.",
+      "durationSeconds": 1139,
+      "publishedAt": "2023-05-05",
+      "difficulty": "intermediate"
+    }
+  ]
+}

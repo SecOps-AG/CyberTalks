@@ -1,0 +1,613 @@
+{
+  "villageSlug": "talks",
+  "villageName": "Talks",
+  "eventSlug": "disobey-2026",
+  "conference": "disobey",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLLvAhAn5sGfjSq2aCUc2ytoGJvaRfph9j",
+  "description": "Talks from Disobey 2026.",
+  "talks": [
+    {
+      "youtubeId": "mgbIZtcbd_w",
+      "slug": "a-lifetime-of-disobedience",
+      "title": "A Lifetime of Disobedience",
+      "speakers": [
+        "Joe Grand"
+      ],
+      "track": "community",
+      "topics": [
+        "hack",
+        "hardware",
+        "lessons-learned",
+        "learning"
+      ],
+      "teaser": "Traces a hardware hacker's path from teenage pranks and early hacker groups to disclosure, consulting, and ethical boundaries.",
+      "summary": "The keynote argues that disobedience is central to hacking, comparing it to a tool that can build or harm depending on how it is used. The speaker ties this to first principles and to the roots of hacker culture, citing early zines, bulletin boards and the hacker manifesto of the 1980s. From a hardware perspective, he describes operating a chip outside its published limits, such as higher voltage or clock speed, as a core technique, and he contrasts that with vendors who treat such research as criminal.\n\nThe middle of the talk traces his own path. As a teenager he pulled pranks and got into trouble, which pushed him toward more constructive work. He describes a hacker group that published vulnerabilities, clashed with vendors over disclosure, and testified before the United States government. He recounts leaving a consulting firm when money started shaping its members' ethics, then working on a television engineering show and designing electronic badges for a large hacker conference. Recent years brought cryptocurrency wallet recovery work, which he found valuable but repetitive, prompting him to set boundaries to avoid burnout and exploitation.\n\nHe closes with examples of ingenuity under constraint, such as improvised tools made in prisons and skate-built multitools, and argues that people can make their own paths. His takeaway is to try the uncomfortable step, question rules that fail people, and keep hacker history recorded and shared.",
+      "durationSeconds": 3032,
+      "publishedAt": "2026-03-12",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "QJN7IvN6cvk",
+      "slug": "data-honeytokens-for-the-cloud-era",
+      "title": "Data Honeytokens for the Cloud Era",
+      "speakers": [
+        "Petrus Vasenius"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "cloud",
+        "threat-detection",
+        "defensive-security",
+        "deception"
+      ],
+      "teaser": "Shows how decoy data planted in cloud analytics stores can expose insiders and stolen sessions through monitored alerts.",
+      "summary": "Many organisations rely on perimeter and identity controls, which can miss an insider or attacker who already holds a valid session and quietly exports data from analytics platforms. The talk proposes placing decoy data assets alongside real ones, so that any access to them becomes a high-confidence signal. It opens with an illustrative story of an employee who takes a planted spreadsheet and gets caught, and frames the threat around insiders, compromised sessions and automated tools that have gone beyond their purpose.\n\nThe speaker explains how to make decoys believable: realistic naming, valid headers, matching timestamps, an embedded identifier, and placement next to genuine project data so that access is inherited from parent folders. Decoys are deployed with infrastructure as code into Azure storage and Fabric or Synapse, registered with Microsoft Purview for classification and lineage, and monitored with Sentinel rules covering blob reads, copies and SQL queries. A recorded demo shows alerts firing when two decoys are downloaded. The tuning section covers common sources of noise, such as engineers, backup agents and scanners.\n\nThe closing guidance covers keeping decoys out of ETL pipelines and making sure they hold no sensitive data. The speaker argues that this approach can cut detection time from months to minutes. The advice is to validate the threat model first, then start with one decoy in a non-production container and one alert, and to report the results to management.",
+      "durationSeconds": 2546,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "qnZwbSbbOdY",
+      "slug": "eus-active-war-against-data-privacy",
+      "title": "EU's active war against data-privacy",
+      "speakers": [
+        "Markus Hölsä"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "trust",
+        "intelligence",
+        "device",
+        "state"
+      ],
+      "teaser": "Traces how EU chat control and high-level group proposals could erode end-to-end encryption and user privacy.",
+      "summary": "The talk opens with the EU's internal security strategy and a high-level group tasked with easing law enforcement access to digital data, covering encryption, missing data retention duties and internet-based messaging services. It then moves to tightened anti-money-laundering rules, including caps on anonymous cash and limits on anonymous crypto payments, and questions how these fit with fundamental privacy rights.\n\nThe core of the talk is the child sexual abuse regulation, known as chat control. The speaker traces its shift from voluntary scanning of unencrypted services to a proposal for mandatory scanning that would reach end-to-end encrypted messages through client-side tools and court-issued detection orders. He points to secrecy around the high-level group's meetings, funding and lobbying by child-safety organizations and a former Europol official who moved to a privacy software firm, and a Commission ad campaign aimed at countries opposing the proposal, which drew a data protection reprimand. Europol's push for broader data access is presented as evidence of mission creep.\n\nThe final part covers Council negotiations, where Germany's opposition in late 2025 is described as a turning point, followed by a compromise text that dropped mandatory scanning but kept age verification and other measures. The speaker urges listeners to contact their representatives and warns that voluntary scanning could later become compulsory. His main takeaway is that once scanning capability exists, it is hard to confine its use to the original purpose.",
+      "durationSeconds": 2592,
+      "publishedAt": "2026-03-12",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "oWMDBJGUAl0",
+      "slug": "ic-vulnerabilities",
+      "title": "IC vulnerabilities",
+      "speakers": [
+        "Jarno Niemelä"
+      ],
+      "track": "red-team",
+      "topics": [
+        "windows",
+        "vulnerability-research",
+        "vulnerabilities",
+        "exploitation",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how misconfigured file permissions in Windows software let a low-privileged user escalate to admin rights.",
+      "summary": "The talk covers a class of Windows vulnerabilities that traditional scanners tend to miss: flaws unique to one organization or even a single host. The speaker argues that AI agents will increasingly find these host-specific weaknesses, and that vendors often ignore issues that affect only a few customers. The findings come from analyzing customer data, which showed thousands of such problems.\n\nThe core pattern is an executable that a standard user can write to but that a higher-privileged process runs anyway. The speaker walks through where this shows up: application data and temp folders, custom install paths on drive roots, and installers that create Program Files directories on other drives without proper permissions. Code signatures are rarely verified before execution, and intermediaries such as services, scheduled tasks and command shells can launch whatever is in place. Permissions also break through backup restores, upgrades from older Windows versions, admin scripts and optimizer tools. Even reverting a vendor's permission fix can reintroduce a flaw when inherited permissions are left on.\n\nFor defenders, the takeaways are to reinstall affected software, check permissions with icacls, and stop running daily work as local admin or using domain admin credentials for maintenance. Vendors should enforce secure permissions every time their software starts, not only at install.",
+      "durationSeconds": 2279,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "1g3_FT7Z-7c",
+      "slug": "from-chaos-to-clarity-designing-appsec-from-first-principles",
+      "title": "From Chaos to Clarity: Designing AppSec from First Principles",
+      "speakers": [
+        "Mikael Nilsson"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "framework",
+        "automation",
+        "lessons-learned",
+        "management"
+      ],
+      "teaser": "Walks through turning scattered AppSec work into a plan using DevSecOps maturity models and developer-friendly automation.",
+      "summary": "The talk opens with why application security programs feel chaotic. A flood of acronyms, vendor promises of silver bullets, and overlapping compliance checklists make it hard to decide what to do next. The speaker, a product security lead at a data and analytics software company, proposes building on a few working principles: question how time is spent, look at security work from the developer's side, and favor fast feedback, automation and added context over handing developers growing piles of findings.\n\nThe middle section compares frameworks and maturity models, including ISO 27001, SAMM, BSIMM, ASVS and the Zero Trust maturity model. The speaker settles on DSOMM because it is prescriptive about CI/CD and DevOps practices. Experiences from the speaker's organization cover pipeline security gates, automated dependency updates, trunk-based development, and the cost of deferring tests or code review. A live demo of the DSOMM tool shows how to filter by maturity level, follow dependency trees, and map controls to ISO 27001 and other standards through OpenCRE.\n\nThe closing part offers a starter approach: assess context and resources, set target maturity levels, work through the model as a progression, make progress visible to teams, and iterate in short cycles. The main takeaway is that good-enough controls, built into developer workflows and automated where possible, are more useful than a perfect plan that never ships.",
+      "durationSeconds": 2899,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "qnqwIRAY9jw",
+      "slug": "one-breach-to-crack-em-all-insights-from-password-breaches",
+      "title": "One Breach to Crack 'Em All! Insights from Password Breaches",
+      "speakers": [
+        "Jarkko Vesiluoma"
+      ],
+      "track": "red-team",
+      "topics": [
+        "identity",
+        "attack",
+        "risk",
+        "lessons-learned",
+        "defensive-security"
+      ],
+      "teaser": "Analyzes millions of breached Finnish and Swedish passwords to reveal reuse patterns, cracking shortcuts and advice for defenders.",
+      "summary": "The talk asks what leaked password data can teach both attackers and defenders. The speaker gathered about two terabytes of breach dumps, filtered them down to Swedish and Finnish credentials tied to roughly 240,000 domains, and loaded the results into a database for analysis with Python scripts. The corpus covered around 4.8 million passwords in total.\n\nThe findings focused on how people build passwords. About a quarter of them are exactly eight characters long, and most fall between six and nine characters. Over 40 percent contain recognizable dictionary words, and many follow predictable habits such as a trailing digit, a keyboard walk or a year. Around 4 percent used their email address as the password, and roughly 3 percent were reused across services. The speaker showed that dictionary attacks with rules crack a large share quickly, mask attacks cover many of the remaining patterns, and brute force is a last resort. Hash-speed benchmarks on a single consumer GPU illustrated how the hash type changes how long cracking takes.\n\nFor defenders, the recommendations were to reject known-breached or weak passwords at registration and login, require longer passwords or passphrases, enforce multi-factor authentication, rate-limit logins, and detect credential stuffing across services. The speaker also recommended password managers and unique credentials for every service. The talk closed by noting that passwords often reveal personal details, emotions and occasionally internal company information.",
+      "durationSeconds": 1720,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "sawSiXeQVRE",
+      "slug": "linux-hardening-it-doesnt-have-to-be-hard",
+      "title": "Linux Hardening: It Doesn't Have To Be Hard",
+      "speakers": [
+        "Esa Jääskelä"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "linux",
+        "defensive-security",
+        "system",
+        "container",
+        "practical"
+      ],
+      "teaser": "Walks through practical Linux hardening steps covering interfaces, users, files, processes, containers and supply chain.",
+      "summary": "The talk starts from the observation that mainstream Linux distributions are tuned for convenience rather than security, and that a hardened base matters even when the applications on top are well protected. The speaker, an embedded systems engineer, frames hardening as a documented process and stresses backups and a non-production test environment before changing anything.\n\nThe middle of the talk moves through the system layer by layer. Remote interfaces come first: find open ports from outside and inside the machine, disable what is not needed, and tighten SSH with strong keys and restricted users. Firewalling follows, with tools such as nftables, UFW and firewalld. For accounts, the speaker covers limiting root logins, scoping sudo rights to least privilege and avoiding shell escapes. PAM is presented as a way to enforce password policy, centralise accounts and add second factors such as one-time codes or hardware keys. Filesystem topics include ownership, avoiding world-writable files, set-UID binaries and mount options such as nosuid, noexec and read-only. Mandatory access control, systemd service sandboxing, container confinement, cgroup resource limits and package sourcing are also covered.\n\nThe closing section looks at supply chain risk from manually downloaded binaries, language package managers and unofficial repositories, and recommends automatic updates, signed packages and internal mirrors. Real examples include a sudo privilege escalation, a shell escape through apt and a socket left writable by everyone. The suggested starting point is a risk assessment, followed by auditing with tools such as Lynis and OpenSCAP and checking that services still work after each change.",
+      "durationSeconds": 2580,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "z6KIEEknKjM",
+      "slug": "releasing-your-inner-tiber-in-regulated-adversary-simulations",
+      "title": "Releasing Your Inner TIBER in Regulated Adversary Simulations",
+      "speakers": [
+        "Marko Buuri"
+      ],
+      "track": "adversary-emulation",
+      "topics": [
+        "intelligence",
+        "threat",
+        "framework",
+        "team",
+        "risk"
+      ],
+      "teaser": "Walks through how TIBER threat-led red team tests are run in financial firms, from threat intelligence to execution.",
+      "summary": "The talk introduces TIBER, short for threat intelligence-based ethical red teaming, a framework used across the European financial sector, and explains why it exists. It traces the roots to the advanced persistent threat breaches that pushed companies toward zero trust architecture and more formal red teaming. European national central banks then drafted the framework as voluntary best practice, and the DORA regulation later made threat-led penetration tests mandatory for the largest entities, with national authorities selecting which firms must test.\n\nA project has three phases: preparation, testing and closure, with testing split into threat intelligence work of about four to six weeks and a red team phase of roughly three months. Scope is built around critical business functions and their supporting IT assets, and analysts match those assets against threat actor groups to write at least three attack narratives. A worked example of a financially motivated group targeting bank ATM networks shows the sophistication expected. During execution, testers use leg-ups to bypass noisy initial access, reuse access when a scenario is burned, and switch to purple teaming when detection occurs.\n\nThe speaker closes with lessons for testers and control teams: focus on coverage over personal pride, tailor off-the-shelf tooling to strong controls, and communicate plainly with non-technical stakeholders. For newcomers, gaining enterprise IT experience before becoming a tester is recommended, since testers need to understand how these technologies run before they can test them.",
+      "durationSeconds": 2772,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "CWX_aax6z1A",
+      "slug": "exclusion-is-a-vulnerability-patching-the-gender-gap-in-tech",
+      "title": "Exclusion Is a Vulnerability: Patching the Gender Gap in Tech",
+      "speakers": [
+        "Willem"
+      ],
+      "track": "community",
+      "topics": [
+        "team",
+        "management",
+        "risk",
+        "bug-bounty",
+        "trust"
+      ],
+      "teaser": "Argues that gender bias in tech hiring and teams creates security risk, and proposes controls to measure and reduce it.",
+      "summary": "The talk treats exclusion in tech as a systemic weakness rather than a question of individual character. Using European statistics, it notes that women make up roughly a fifth of the EU's roughly 10 million ICT workers, with wide differences between countries. It measures this against the Digital Decade goals of 20 million ICT workers and at least a quarter of them women by 2030.\n\nThe middle section looks at where bias enters. Hiring filters are affected by name-based callbacks and stereotyped job roles, and interview panels tend to favour candidates who resemble the panel. Everyday microaggressions and role assumptions add friction over time. The speaker cites an open-source study in which code contributions were accepted more often when author names and genders were hidden, and suggests bug bounty triage may face a similar effect, though no study was found on that point. Attrition figures, consultancy claims linking diversity to performance, and a 2016 World Bank estimate of lost GDP are presented as the cost to businesses and security, including blind spots and biased AI systems.\n\nThe closing part offers practical controls: apply merit-based criteria consistently rather than only when convenient, use structured interviews with clear promotion criteria, mentor and sponsor talent, and take exit interviews seriously to understand why people leave. The main takeaway is to make bias visible and measure it, since unexamined bias persists and weakens the teams that depend on the talent it pushes out.",
+      "durationSeconds": 1793,
+      "publishedAt": "2026-03-12",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "lCTOTLmPRLM",
+      "slug": "from-zero-to-hero-with-z-os",
+      "title": "From Zero to Hero With z/OS",
+      "speakers": [
+        "Jack Fitzsimons"
+      ],
+      "track": "red-team",
+      "topics": [
+        "introduction",
+        "attack",
+        "identity",
+        "exploitation",
+        "mainframe"
+      ],
+      "teaser": "Introduces z/OS mainframes and shows how assessors probe RACF, CICS and FTP for weak access controls.",
+      "summary": "The talk opens by arguing that mainframes still run much of banking, payments and government, and that security teams often overlook them. It then sets out the core z/OS concepts an assessor needs: RACF as the external security manager, its access levels and classes, datasets, job control, Unix System Services and the CICS transaction system.\n\nThe middle section covers the offensive side. The speaker walks through reconnaissance with Nmap and NSE scripts, account enumeration against TSO, and the risk of unprotected FTP, which can submit jobs straight to the internal reader. A live demo shows a 3270 terminal application being manipulated by editing hidden fields so that a purchase the user was not allowed to make goes through. A second scenario follows a read-only audit account that searches job libraries for stored credentials, then uses a higher-privileged account to download the RACF database backup and crack its password hashes offline. Weak settings such as short usernames, short passwords and disabled case sensitivity make this easier.\n\nThe closing part points to learning resources, including an emulator, a Python-based deliberately vulnerable mainframe simulator and a CICS test application. The main takeaway is that mainframe access controls deserve the same scrutiny as directory services, and that default settings, shared passwords between Windows and mainframe accounts and forgotten FTP configurations are good places to start.",
+      "durationSeconds": 2695,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "_69bi3vC5CY",
+      "slug": "admin-rights-are-not-human-rights",
+      "title": "Admin Rights are not Human Rights",
+      "speakers": [
+        "Sami Laiho"
+      ],
+      "track": "red-team",
+      "topics": [
+        "windows",
+        "defensive-security",
+        "identity",
+        "management",
+        "practical"
+      ],
+      "teaser": "Shows how removing local admin rights blocks common Windows attacks and how to make the case to users.",
+      "summary": "The talk argues that reactive defenses such as anti-malware can no longer keep pace with the volume of new malware, so proactive controls matter more. The speaker places inventory and application control at the foundation, since you cannot protect what you have not catalogued, and notes that application control is undermined whenever users hold administrator rights.\n\nThe core of the session is a live demonstration on a Windows 10 LTSC machine. Starting from installation media, the presenter gets past the login by retrieving a BitLocker recovery key that default cloud settings let users fetch for their own devices, then swaps a system binary for a command prompt and reaches an administrator through a safe-mode trick. He then creates a scheduled task that adds a domain administrator account, and shows how admin rights allow file protections to be overridden and other user sessions to be taken over.\n\nThe closing section makes the business case. Customer figures are shown for fewer support tickets and reinstallations after standard users were introduced, and the speaker suggests that non-admin machines stay faster and last longer. The takeaway is to present least privilege in terms of users' productivity rather than as a security rule, because a control that blocks people's work tends to lose the argument.",
+      "durationSeconds": 2831,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "g-ovnSRvaWY",
+      "slug": "waves-of-chaos-from-rogue-signals-to-the-supervillain-scenario",
+      "title": "Waves of Chaos: From Rogue Signals to The Supervillain Scenario",
+      "speakers": [
+        "Tom Van de Wiele"
+      ],
+      "track": "policy",
+      "topics": [
+        "infrastructure",
+        "risk",
+        "social",
+        "lessons-learned",
+        "trust"
+      ],
+      "teaser": "Explores how cheap wireless and cyber pranks could become critical infrastructure attacks and how defenders can test them.",
+      "summary": "The talk opens with an 1810 London prank in which a writer flooded a Westminster street with fake orders and requests. The speaker uses it to argue that society runs on a few fragile assumptions, and he breaks down why the hoax worked: it scales, it can be anonymous, it is cheap, and it targets something that cannot be fully fixed. He then asks whether the same logic can be applied electronically to cause disruption at scale.\n\nHe walks through examples that make the threat concrete. These include wireless distress buttons and smoke generators that can be triggered by replaying captured radio traffic, inexpensive software-defined radio kits, spoofed SYN floods that could cut a company off from the cloud services it depends on, and consumer drones that now rely on fiber-optic links or onboard vision. He notes that few European countries offer a 24/7 emergency line for critical infrastructure, that bug bounty rewards are weak, and that public-sector pay lags behind the private sector, leaving defenders thin. Belgium's approach to legal hacking disclosure is presented as one option to consider.\n\nHe closes by arguing that exercises such as Cyber Europe and Locked Shields rarely test corner cases like duplicated failover databases or autonomous AI-driven attacks. He calls on the audience to propose scenarios worth testing in labs before a real incident forces the issue.",
+      "durationSeconds": 2771,
+      "publishedAt": "2026-03-12",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Z2eckgWz8PY",
+      "slug": "one-request-to-kill-them-all-amplification-data-landmines-and-pa",
+      "title": "One Request to Kill Them All: Amplification, Data Landmines and Parser Killers",
+      "speakers": [
+        "Patrik Jokela"
+      ],
+      "track": "appsec",
+      "topics": [
+        "vulnerabilities",
+        "attack",
+        "web",
+        "application",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how small application quirks, from verbose errors to regex backtracking, let one request overload a server.",
+      "summary": "Application-level denial of service works by exploiting the quirks and misconfigurations of an application rather than flooding it with traffic. A single well-crafted request costs an attacker very little, yet can tie up server resources, and it is harder to detect than a volume spike. The talk groups these cases into three families: response size amplification, data landmines and parser killers.\n\nThe cases covered include a 5G router that returned a large response to a stream of commas and rebooted under a few parallel requests; a login form that echoed the submitted email several times, with HTML-encoded characters multiplying the response size; and a GraphQL endpoint whose verbose validation errors repeated a long operation name up to a hundred times. Other examples are stored API keys with no count or length limits, all returned by one fetch, a messaging parser that accepted malformed input and generated many error messages, and an email regex that backtracked heavily until response delays grew enough to fail. Where possible the findings were reported to the vendors before full outages were triggered, with further testing moved to staging.\n\nThe practical takeaways are to enforce length and count limits on all user input, avoid verbose error messages, paginate results, apply complexity limits to regular expressions, and add timeouts and circuit breakers. The speaker also suggested asking which request in the application is the most expensive to serve. GraphQL was only touched on, and the speaker noted it deserves a dedicated talk.",
+      "durationSeconds": 2014,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "DQ4dnXibaoM",
+      "slug": "are-passkeys-as-secure-as-you-think",
+      "title": "Are passkeys as secure as you think?",
+      "speakers": [
+        "Fabian Bader"
+      ],
+      "track": "red-team",
+      "topics": [
+        "identity",
+        "attack",
+        "device",
+        "trust",
+        "practical"
+      ],
+      "teaser": "Examines where passkeys resist phishing and where synced keys, attestation and cross-device login can still fail.",
+      "summary": "The talk starts by explaining what passkeys are: FIDO2 WebAuthn discoverable credentials that replace shared secrets with a private key held in a secure element. Sign-in is unlocked by a PIN or biometric, and origin binding ties each credential to its website, which is why passkeys resist phishing. The speaker separates synced passkeys, backed up by platform or third-party vendors, from device-bound keys such as hardware security keys, and notes that the cloud-synced option makes recovery easy but moves trust to the vendor.\n\nThe middle section covers attestation and the attacks against the chain. Authenticator model identifiers (AAGUIDs) can be spoofed by modifying open-source software, and attestation is only checked at registration and is not offered for synced passkeys. Downgrade to weaker fallback methods, malicious browser extensions and token theft were shown as practical routes around the protocol. Weak PIN policies on security keys, a published side-channel attack on a hardware key chip that exposed attestation material on older firmware, and a Bluetooth proximity relay against cross-device QR sign-in were presented as more specific risks. Synced third-party password managers were shown storing private keys in plaintext export form and, in the services tested, without MFA on the vault.\n\nThe closing part lists mitigations. In Entra, conditional access and authentication strengths can enforce passkey-only sign-in and restrict fallback access, and admins can be required to use device-bound keys with attestation enforced and AAGUIDs allowed or blocked. For users, Apple Advanced Data Protection and Google Advanced Protection reduce exposure, and two registered security keys are recommended. The takeaway is that passkeys still beat passwords with TOTP, and the initial sign-in is resistant to phishing, but synced keys and cross-device flows deserve a deliberate threat model.",
+      "durationSeconds": 2555,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "e_vQ3ZTubTg",
+      "slug": "how-playing-d-and-d-at-work-can-improve-your-incident-response",
+      "title": "How playing D&D at work can improve your incident response?",
+      "speakers": [
+        "Hans Metsoja"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "lessons-learned",
+        "team",
+        "learning"
+      ],
+      "teaser": "Explains how tabletop simulations help teams practice incident response decision-making and communication without a real breach.",
+      "summary": "The speaker describes a company that redesigned its incident response procedures and then needed a way to train staff and check whether the written processes actually worked. Classroom sessions, videos and technical labs each trade off usefulness against reuse, so the team turned to tabletop exercises: in-person, role-based games where players respond to injected information and practise communication and decisions rather than technical fixes.\n\nBuilding the first game took several weeks of mapping possible player actions into a decision tree, with a game master controlling time and the flow of information. Players could only act on information formally passed between teams, business operations continued as normal, and the scenarios were deliberately hard to win. Across 13 sessions in five locations with more than 160 participants, recurring problems included unclear moments to declare an incident, miscommunication between teams, reluctance to involve legal or communications, and engineers who focused on patching rather than reporting.\n\nTeams that had played before communicated better and felt more prepared than first-time players, although all groups rated their own performance similarly. The speaker's practical advice was to keep scenarios few and well built, plan mechanics that speed up and slow down game time, keep the environment fictional enough to control, playtest with different groups, and enforce turn-taking. The main takeaway is that clear communication matters more than knowing every technical detail.",
+      "durationSeconds": 1792,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "KHUKtaqUrBo",
+      "slug": "squarephish-2-0",
+      "title": "SquarePhish 2.0",
+      "speakers": [
+        "Nevada Romsdahl",
+        "Kam Talebzadeh"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "phishing",
+        "identity",
+        "attack",
+        "detection",
+        "tool"
+      ],
+      "teaser": "Shows how QR code lures and device code flow capture Microsoft tokens and convert them into primary refresh tokens.",
+      "summary": "The talk revisits device code phishing, where an attacker starts a Microsoft device code sign-in and the victim completes it on a legitimate login page, yielding post-authentication tokens that arrive after MFA. The speakers explain why earlier approaches struggled with the flow's 15-minute expiry and with getting consent for SMS lures, and why QR codes hide the malicious link and shift scanning to a phone outside corporate controls.\n\nThey present SquarePhish 2.0, a rewrite from Python command line to Go with a web portal for managing campaigns, configuration and captured tokens. The first email carries a QR code that does not expire and only triggers the server; a second email, sent once the victim is already engaged, carries the device code, which keeps the window tight. The update defaults to the authentication broker client ID, automates device registration and converts a refresh token into a primary refresh token, which gives single sign-on access. A new option applies a technique from Dennis Kneep that enters the code automatically for federated users. A live demo walks through the full chain, from inbox to a browser signed in with the PRT.\n\nFor defenders, the talk recommends hunting for the broker client ID in device code logs, allow-listing rare legitimate uses, and blocking device code flow through conditional access. Location limits, compliant or hybrid-joined device requirements and impossible travel alerts are also suggested.",
+      "durationSeconds": 1388,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "x0tYgKgDuxI",
+      "slug": "this-conference-was-not-built-for-you",
+      "title": "This conference was not built for you",
+      "speakers": [
+        "Chantal Stekelenburg"
+      ],
+      "track": "community",
+      "topics": [
+        "discussion",
+        "team",
+        "management",
+        "lessons-learned"
+      ],
+      "teaser": "Argues that conference and hiring choices quietly decide who feels invited into security, and suggests concrete fixes.",
+      "summary": "Chantal Stekelenburg opens by asking who conferences are really built for. She argues that gender inclusion in cybersecurity is often treated as already solved, even though women make up roughly 20 percent of the workforce. She traces the gap back to childhood messages about toys and praise, unequal steering toward technical education, and few visible role models. Her focus is the stage before a call for papers opens, when people quietly decide whether they belong.\n\nShe then examines the assumptions behind a common claim that a lineup lacked diverse submissions. Equal access to time, money, employer support and caregiving is not a given, and neither is equal confidence, a safe path to visibility, or equal access to the network that hears about a call early. She points to dark, high-contrast conference branding and speaker pages dominated by white men as signals that shape who applies. Her practical fixes include inclusive wording in calls and job posts, directly inviting people to speak, offering coaching, flexible timing for parents, and blind first-round review followed by a check on lineup balance.\n\nShe closes by framing inclusion as an operational problem. Using the AirTag stalking episode, she argues that homogeneous teams produce narrow threat models, and that diverse perspectives add the friction and disagreement security depends on.",
+      "durationSeconds": 1824,
+      "publishedAt": "2026-03-12",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "ncB7PM70-Qo",
+      "slug": "committing-css-crimes-for-fun-and-profit",
+      "title": "Committing CSS Crimes for fun and profit",
+      "speakers": [
+        "Lyra Rebane"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "appsec",
+        "vulnerability-research",
+        "privacy",
+        "exploitation"
+      ],
+      "teaser": "Shows how CSS alone can spoof webmail interfaces, bypass email sanitizers, and exfiltrate data through SVG filters.",
+      "summary": "The talk traces how users of a social media site pushed inline styling into \"CSS crimes\": posts that behave like games, operating systems and animations using only HTML and CSS. The speaker then asks whether styles in an email can escape the mail client and affect the page around it.\n\nThe middle section examines several webmail providers in turn. A regex-based sanitizer at one provider missed whitespace variants inside CSS escape sequences, which let a background image load and leaked the reader's IP address and browser headers. Another provider's string-based filter ignored quote context and comments, enabling CSS injection that could drive a hidden multi-step action in a demo. A parser-based sanitizer at FastMail was sounder, but an off-by-one error in selector splitting still allowed injected selectors and rules. Each finding was reported to the vendor, with fix times and bounties described.\n\nThe final part covers SVG filters, which cannot export their computed pixel data directly. The speaker shows click-checking attacks that detect hover states and chain logic inside filters, demonstrated against a Google Docs flow and a Google Pay widget that leaked digits. The last technique encodes data into a QR code generated entirely inside an SVG filter, so a victim only needs to scan it. The takeaway is that string-based sanitizers are fragile, and that strict content security policies and parser-based filtering matter.",
+      "durationSeconds": 2284,
+      "publishedAt": "2026-03-12",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "IBEAjl1ulH8",
+      "slug": "carf-hacking-the-android-settings-app",
+      "title": "CARF - Hacking the Android Settings App",
+      "speakers": [
+        "Anton Helin"
+      ],
+      "track": "mobile",
+      "topics": [
+        "android",
+        "mobile",
+        "vulnerability-research",
+        "exploitation",
+        "application"
+      ],
+      "teaser": "Explains how a validation bypass in the Android Settings app lets a crafted link reach sensitive screens.",
+      "summary": "The talk looks at a cross-application request forgery bug in the Android Settings app, which the speaker names CARF. Android apps talk to each other through intents, and an exported component can be launched by other apps, including through a web link that the browser converts into an intent. The speaker starts with the framework basics: the manifest, the exported flag, intent filters and how deep links hand URLs to apps.\n\nThe investigation then walks through a network settings screen in the Settings app. Its base class validates the requested fragment name when the screen launches, but the handler for re-delivered intents takes a different path, where a null result from the converter skips validation entirely. Intent selectors can carry a valid action past the intent filter while a bogus action reaches the converter. This lets an attacker reach fragments that were meant to be restricted. The most serious one found was a private space deletion screen, which runs its delete routine as soon as it is created, with no confirmation step. A factory reset confirmation was also reachable but crashed because required resources were not loaded.\n\nGoogle rated the issue high severity and paid a bounty of $8,000 after a 90-day disclosure window. Chrome rejects selectors, while Firefox accepts them, and the default HTML viewer reached from Gmail also works, though those routes need more taps. The takeaways are that intent filters are not access control, every code path that handles intents needs the same checks, and exported components in privileged system apps deserve close review.",
+      "durationSeconds": 2061,
+      "publishedAt": "2026-03-12",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "nk_1-5D5Avw",
+      "slug": "analyzing-adversary-botnets-for-offensive-cyber-operations",
+      "title": "Analyzing Adversary Botnets for Offensive Cyber Operations",
+      "speakers": [
+        "Joseph Slowik"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "infrastructure",
+        "network",
+        "intelligence",
+        "attack"
+      ],
+      "teaser": "Explores how state-directed actors use compromised routers and IoT devices as proxy networks to hide command and control.",
+      "summary": "The talk examines the \"neutral web\": routers, network storage, smart TVs and VPN appliances that belong to neither attacker nor victim but get taken over as stepping stones. It starts with classic botnets such as Mirai, mostly used to rent out denial-of-service capacity for extortion, then moves to state-linked cases. These include disruption campaigns against Estonia and Georgia in 2007 and 2008, a 2012 wave against US banks, and Ukraine-related activity. Such operations were largely disruptive rather than destructive, and their origin was hard to pin down.\n\nThe middle section covers newer proxy networks, often called operational relay box networks. Instead of one layer of compromised devices, they add several hops between controller and victim, hiding where traffic starts and keeping command channels resilient. The speaker cites VPNFilter and Cyclops Blink, linked to GRU-associated actors, and China-linked KV botnet activity tied to Volt Typhoon. Takedowns often fail or are followed by rebuilding, and blocking single addresses does little against rotating nodes.\n\nThe closing part weighs responses: enforcing multi-factor authentication, patching edge devices, tracking infrastructure as a shifting network, and disrupting controllers. Each option raises legal, ethical and jurisdictional questions, especially when it would mean acting on devices owned by unrelated people abroad. The speaker argues for cross-border cooperation and for device owners to keep exposed equipment patched.",
+      "durationSeconds": 2577,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "zIbj9nf670k",
+      "slug": "beyond-the-green-checkmark-security-in-and-of-your-ci-pipeline",
+      "title": "Beyond the Green Checkmark: Security IN and OF Your CI Pipeline",
+      "speakers": [
+        "Derek Fisher"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "devops",
+        "build",
+        "supply",
+        "appsec",
+        "secrets"
+      ],
+      "teaser": "Explains how to cut scanner noise and harden CI pipelines against poisoned builds, stolen secrets and unpinned dependencies.",
+      "summary": "The talk starts from a familiar problem: security scanners wired into CI pipelines with default settings produce a flood of low-value findings, and developers learn to ignore them. Checks that report problems without failing a build add little real enforcement, so the security gates end up as theater.\n\nOn the code side, the speaker recommends differential scanning on pull requests so only new issues are reported, with tuned high-confidence rules for blocking gates and broader scheduled scans for the full backlog. Code quality findings are kept apart from security findings, generated code and minified files are excluded, and triage decisions are codified in configuration. Runtime validation with DAST and IAST, EPSS alongside CVSS, and policy as code using OPA with Rego, Checkov or Trivy catch misconfigurations before deployment, while manual code review covers logic flaws and intentional backdoors that tools miss.\n\nFor the pipeline itself, the talk covers poisoned pipeline execution in direct, indirect and public pull request forms, along with dependency confusion, typosquatting and mutable tags. Suggested defenses include centralized reusable workflows, two-person approval for CI changes, ephemeral runners, network segmentation, short-lived OIDC credentials, commit-hash pinning, SLSA provenance, and full-history secret scanning with rotation. The closing point is that tooling alone does not change culture, so developers need ownership of security findings.",
+      "durationSeconds": 2860,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Ni76kbhdLlo",
+      "slug": "behind-closed-doors-physical-red-team-tactics",
+      "title": "Behind Closed Doors: Physical Red Team Tactics",
+      "speakers": [
+        "Firat Acar",
+        "Moritz Thomas"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "social",
+        "attack",
+        "lessons-learned",
+        "practical",
+        "defensive-security"
+      ],
+      "teaser": "Walks through real physical intrusions where red teamers used pretexts, cloning and a rogue Raspberry Pi to breach client sites.",
+      "summary": "The talk opens by separating penetration testing from red teaming, where stealth matters and a physical breach can serve as the initial foothold without the customer's blue team knowing. The methodology has three phases: reconnaissance from a distance and on site, then covert or overt entry, then objectives and persistence. The speakers use this structure to walk through several engagements.\n\nAt an industrial plant, satellite imagery and fence sensors ruled out climbing in, so the team posed as replacement cleaning staff during a pandemic-era staffing gap. A Raspberry Pi implant that was never tested failed the night before because of an incompatible LTE modem, and the fix took most of the night. At a mountain facility, a pretext for a new-joiner tour was cut short when HR could not verify it. A later night visit with the client's white team reached a control room, where an unlocked interface and cleartext admin credentials helped them attach a transparent bridge to a printer's network port and get past network access control. Their presence triggered an alarm and they had to leave. Other cases covered tailgating at a revolving door that failed, a smoke-break story that got a visitor inside, voice phishing with spoofed caller ID, and badge cloning of MIFARE Classic cards that still used default keys.\n\nThe takeaways are aimed at both staff and red teamers. Staff should verify visitors and any phone contact through known channels before acting, and should be willing to challenge unusual requests. Red teamers should prepare backup pretexts, avoid overplaying a story, and know when to step back.",
+      "durationSeconds": 2785,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "bs66u1RO038",
+      "slug": "safety-is-not-an-option-part-is",
+      "title": "Safety is not an option, Part-IS",
+      "speakers": [
+        "Ben Nagel"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "management",
+        "trust",
+        "infrastructure",
+        "incident-response"
+      ],
+      "teaser": "Explains the EASA Part-IS aviation information security regulation, how it ties to safety, and how audits are run.",
+      "summary": "The talk introduces Part-IS, the European Union Aviation Safety Agency's horizontal regulation for information security in aviation. The speaker frames it as a safety regulation first, so the question is how an information security failure could lead to an unacceptable safety outcome. Recent incidents are used as examples, including a baggage system outage at several European airports and widespread GPS spoofing over the Baltic region. The regulation draws heavily on ISO 27001 concepts with a safety twist, and the first compliance date for airlines and operators was 22 February 2026.\n\nThe middle section walks through the key elements. Organizations need named responsibilities, documented policies and procedures, and an inventory of safety-critical ground systems such as weight and balance tooling. Risk assessments link information security threats to failure conditions through a bow-tie view. Incident reporting timelines are still being negotiated, and the speaker argues that three months is too short for fixes that require recertification. The talk also covers overlaps with NIST 2 and aviation security, and the difficulty small operators face in meeting the requirements.\n\nThe final section covers who can audit. Auditors must come from entities qualified under EASA or national authorities, with strict conflict-of-interest rules and auditor skills spanning information security and aviation safety. Audits review the information security management manual, the risk register and staff interviews, and findings are graded by level, where a level one finding would stop operations. The speaker closes by noting that the operating-effectiveness phase is still undefined, and that auditors can feed back to regulators to help shape it.",
+      "durationSeconds": 1805,
+      "publishedAt": "2026-03-12",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "nrq7iQp9Yz8",
+      "slug": "take-a-risk",
+      "title": "Take a Risk",
+      "speakers": [
+        "Ville Rantamäki"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "management",
+        "defensive-security",
+        "lessons-learned"
+      ],
+      "teaser": "Explains how to frame information security risks in business terms so management can assess and fund them.",
+      "summary": "The talk argues that information security risk management is often skipped or done at a level that neither management nor security teams can use. Done well, it shapes budget requests and gives leaders a common yardstick for comparing cyber issues with financial, safety and other business risks. The speaker places risk work across three levels: organisation, business process and information system.\n\nNext comes a look at how security risk functions are organised, from a central risk team that treats security as one category among equals to separate IT registers that rarely reach executives. A very short risk register suggests the exercise is a formality, while a very long list of scanner findings usually has no link to business impact. Sample risks show the difference: a vague one scored by gut feel, a hyper-technical one scored from a CVSS number, and a rewritten version that names the event, its financial or operational effect, a likelihood, a control and a named owner. The talk then covers the four treatment options: avoid, transfer, reduce and accept.\n\nThe closing section argues that accepted risks still need monitoring and reassessment, that acceptance authority should scale with risk score, and that zero risk is unattainable at any sensible budget. The speaker's three takeaways are to define impact rather than vulnerabilities, to think in business terms, and to accept that some risk is acceptable.",
+      "durationSeconds": 1874,
+      "publishedAt": "2026-03-12",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "s1n1LiXBLCY",
+      "slug": "no-more-speedruns-better-security-training-with-what-you-have",
+      "title": "No more speedruns: Better security training (with what you have)",
+      "speakers": [
+        "Susanna Haavisto"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "phishing",
+        "learning",
+        "social",
+        "lessons-learned",
+        "management"
+      ],
+      "teaser": "Argues that awareness training should build real skills and habits instead of just ticking compliance boxes.",
+      "summary": "Susanna Haavisto argues that many security awareness programs are designed to satisfy compliance rather than to teach, so employees rush through them the way speedrunners rush through games. She links this to human risk, noting that social engineering exploits everyday emotions and that the people running training often handle it alongside other duties with little budget.\n\nThe core of the talk is a model of behavior change: people need the ability to act, the motivation to do so, and a trigger that prompts the action. Haavisto suggests tailoring material to each role and to personal life, using real incidents, including an organization's own breach told without blame, and asking staff what they worry about or are curious about to build ownership. She also recommends having team members teach concepts to one another and recognizing people who report suspicious messages.\n\nFor scheduling, she proposes replacing long annual sessions with a steady drip of two- to three-minute microtrainings, roughly thirty or more a year, timed to relevant seasons. Her example takes a one-hour password module and splits it into a simulation, a short lesson, a chat tip and a small reward for reporting. The takeaway is to put people at the center of training design and keep material short and recurring.",
+      "durationSeconds": 1885,
+      "publishedAt": "2026-03-12",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "7PCKYSREZvU",
+      "slug": "big-case-handling-ncsc-fi",
+      "title": "Big case handling @ NCSC-FI",
+      "speakers": [
+        "Matias Mesiä"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "management",
+        "lessons-learned",
+        "vulnerabilities"
+      ],
+      "teaser": "Explains how Finland's national cyber security center runs its large incident cases, from coordination to lessons learned.",
+      "summary": "The talk looks at how the National Cyber Security Center Finland handles its largest cases, which are run as operations under a major incident management process. It covers how many such operations ran in 2024 and 2025 and the range of cases involved, from long-running data breaches and submarine cable failures to one-day events such as a faulty security update. The speaker argues that cases should be started early, before the scope is clear, because breaches often grow from day one.\n\nThe middle of the talk is a tabletop-style exercise. The audience plays a duty officer facing a critical remote code execution flaw in a VPN device, with about 300 vulnerable organizations in Finland, and must rank which to contact first. The speaker then uses the Helsinki data breach as an example, where an outdated Cisco ASA VPN was the entry point, and notes that hundreds of similar end-of-life devices were still exposed weeks later. Reasons given for slow patching include lapsed licenses and remote-work dependence.\n\nThe closing section lists practical lessons: name a case coordinator and a documenter before an incident, keep the process short enough that people will actually start it, and plan communications for when normal tools such as email or chat are down. A misdirected data-leak notification is described as an example of how a process can fail in several places at once. The talk ends with advice to patch, monitor, keep logs, and share indicators with the national center.",
+      "durationSeconds": 2533,
+      "publishedAt": "2026-03-12",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "IeGaoJ-e-AE",
+      "slug": "inside-the-hackers-playbook-how-we-stopped-a-20m-ransomware-payo",
+      "title": "Inside the Hacker's Playbook - How We Stopped a €20M Ransomware Payout",
+      "speakers": [
+        "Joseph Carson"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "ransomware",
+        "lessons-learned",
+        "attack",
+        "defensive-security"
+      ],
+      "teaser": "Traces a real ransomware intrusion from stolen credentials to recovery, with a live replay of the attacker's steps.",
+      "summary": "The talk follows an incident response case in which a CryLock ransomware attack halted an organization's operations on a Sunday morning. The attackers pressured the IT manager directly, and the response was hampered by gaps the speaker describes: an incident response plan stored on the encrypted server, no out-of-band communication channel, and backups on the same flat network as production.\n\nThe investigation rebuilt the timeline from scattered evidence. The first successful logon came seven months before encryption, followed by logons from VPN and Tor exit addresses and another about two weeks before the attack. The intruders worked in sessions of four to eight minutes, short enough to avoid endpoint protection re-enabling itself. Along the way the investigators found a file of passwords on an accountant's desktop, browser-stored credentials, local administrator rights, a nightly backup job running under a domain administrator account, and a sticky keys backdoor. Credential dumping and remote access led to the domain controller, and the speaker estimated roughly four hours from domain admin access to deployment. The talk also included a demonstration of the attack chain on real systems.\n\nThe organization avoided paying the ransom because a legacy server left over from a hardware migration still held a year-old copy of data, though rebuilding took about two and a half months and more than twenty analysts. The total cost was around one million euros. The takeaways are to rehearse response plans, keep out-of-band communications ready, isolate backups, enforce unique strong passwords with multi-factor authentication, limit admin rights, manage browser and endpoint settings, and make sure someone watches the alerts.",
+      "durationSeconds": 2848,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "RDhdxmwX17g",
+      "slug": "a-new-era-of-threats-lessons-from-agentic-ai-malware",
+      "title": "A New Era of Threats: Lessons from Agentic AI Malware",
+      "speakers": [
+        "Candid Wuest"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "malware-analysis",
+        "threat",
+        "detection",
+        "attack"
+      ],
+      "teaser": "Separates hype from reality on AI-powered malware, testing LLM-driven loaders against common endpoint products.",
+      "summary": "The talk takes aim at media claims that AI is now driving malware development, separating hype from what has actually been observed. The speaker, a long-time antivirus analyst, explains that generating basic malware with a language model is easy, but the output is often broken, limited by model safeguards, and still caught by behavior-based products. Several publicly reported cases are examined, including an information stealer that queried a hosted model for commands and a ransomware prototype that turned out to be a student project.\n\nThe middle section walks through a proof of concept in which a loader repeatedly asks a model for PowerShell, runs the result, and feeds the output back into the next request, with a separate planning agent coordinating subtasks. Tested against Microsoft Defender, CrowdStrike and SentinelOne, the obfuscated outputs bypassed some products but were flagged by others. The speaker notes frequent errors, the need to review about one in five outputs, difficulty knowing when to stop, and noisy outbound traffic that exposes the activity. Other routes covered include poisoning agent skill files and indirect prompt injection against enterprise assistants.\n\nThe closing takeaway is that AI-driven malware is possible but not groundbreaking, and is unreliable, resource-heavy and dependent on external services. Attackers will likely keep favoring valid credentials and living off the land. For defenders, behavior-based detection and faster patching remain the priority, as AI accelerates vulnerability discovery. Attribution also becomes harder, because generated code no longer points to a specific group.",
+      "durationSeconds": 2729,
+      "publishedAt": "2026-03-12",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "2PAue8Lotqc",
+      "slug": "closing-ceremony-8",
+      "title": "Closing Ceremony",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "village",
+        "challenge",
+        "badge",
+        "community",
+        "hardware"
+      ],
+      "teaser": "Recaps the Disobey 2026 closing ceremony, with awards for the badge hack, CTF results, and thanks to volunteers.",
+      "summary": "The closing ceremony of Disobey 2026 opened with thanks to the main sponsor and partners, followed by attendance figures. The organizers reported 2,458 attendees over two days, a new record, and more than 100 volunteers. Because the official after-party had been dropped, attendees were encouraged to host their own gatherings elsewhere.\n\nMost of the program was awards. A badge team recognized attendees who got Doom running on the conference badge after installing updated firmware. A best hardware mod prize went to a builder who fit a text adventure and a capture-the-flag game into the badge's limited flash and memory. A try-harder prize honored persistence across many competitions, and a Hacker House award went to the winner of its on-site challenge. Capture-the-flag statistics were also shared: 327 players, 141 teams, 52 challenges, and about 1.21 terabytes of traffic, with prizes presented to the top teams.\n\nThe ceremony closed with remarks on community and friendship, volunteers invited onto the stage, and a request that attendees complete the feedback survey so the organizers could plan the next edition.",
+      "durationSeconds": 2264,
+      "publishedAt": "2026-03-12",
+      "difficulty": "beginner"
+    }
+  ]
+}

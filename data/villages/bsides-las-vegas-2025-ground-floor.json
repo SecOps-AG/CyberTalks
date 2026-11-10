@@ -1,0 +1,350 @@
+{
+  "villageSlug": "ground-floor",
+  "villageName": "Ground Floor",
+  "eventSlug": "bsides-las-vegas-2025",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLjpIlpOLoRNQEfhYEBUK45b0MPDTKa4WM",
+  "description": "Ground Floor talks from BSides Las Vegas 2025.",
+  "talks": [
+    {
+      "youtubeId": "v9CcGjlbrwQ",
+      "slug": "avoiding-credential-chaos-authenticating-with-no-secrets",
+      "title": "Avoiding Credential Chaos: Authenticating With No Secrets",
+      "speakers": [
+        "Chitra Dharmarajan",
+        "Steve Jarvis"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "identity",
+        "kubernetes",
+        "trust",
+        "practical"
+      ],
+      "teaser": "Shows how Kubernetes workloads and CI pipelines can authenticate across clouds without storing static secrets.",
+      "summary": "The talk starts from a typical company where staff use passwords, engineers use SSH keys, CI pipelines hold cloud keys, and services share static API tokens and pre-shared secrets. The speakers argue that each of these is a liability and that the goal is to remove as many static credentials as possible, and to rotate any that must remain as part of routine deployments. They work through four areas: passkeys replacing passwords for staff logins, short-lived cloud roles with session-based shell access instead of long-lived SSH keys, GitHub acting as an OIDC identity provider so workflows need no stored cloud credentials, and short-lived access tokens issued by an identity provider in place of a fixed API token.\n\nFor service-to-service traffic, they cover mutual TLS with a root certificate authority held in an HSM, and a lighter option that wraps a pre-shared key in an encrypted token so the key never crosses the wire. The middle of the session is a live demo of cross-cloud access from Azure to AWS. Trust broke because the Kubernetes cluster issuer ID changed on redeployment, and a wrong role annotation and an incorrect issuer URL format caused further failures. The speakers fixed these in Terraform and Kubernetes manifests, and used a stable Cognito issuer so trust no longer depends on each cluster's identity.\n\nThe takeaways are to avoid static secrets where possible, to protect and rotate the ones that must stay, and to treat rotation as everyday operations rather than an incident response task. The final fix was still being built when the session closed.",
+      "durationSeconds": 2540,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ofok7dW2txE",
+      "slug": "hardening-containers-with-seccomp-hands-on-profiles-pitfalls-and",
+      "title": "Hardening Containers with Seccomp: Hands-On Profiles, Pitfalls, and Real Exploits",
+      "speakers": [
+        "Ben Hirschberg"
+      ],
+      "track": "cloud",
+      "topics": [
+        "kubernetes",
+        "container",
+        "linux",
+        "sandbox",
+        "exploit"
+      ],
+      "teaser": "Shows how seccomp syscall filters can contain a live container exploit and how to generate profiles from observed behavior.",
+      "summary": "Seccomp is a Linux kernel feature for filtering system calls, dating back about two decades. The speaker traces its origins to sandboxing browsers, then to container runtimes that adopted a simpler JSON profile format. Docker applies a default profile, while Kubernetes initially left seccomp off, so most clusters rarely use it. The main obstacle is that developers often cannot say which system calls their applications need.\n\nA live comparison showed an unconfined NGINX container able to create namespaces and access the kernel keyring, while a container with the default profile was blocked from both and kept serving traffic. The main case study targets a server-side template injection flaw in a change-detection application that leads to code execution and theft of a Kubernetes service account token. An eBPF-based node agent recorded the syscalls the workload made, and those were converted into an application profile and applied to the deployment. When the exploit was replayed, it failed partway through because it needed a call the profile did not allow.\n\nThe closing discussion covered trade-offs. Profiles are blunt, can break functionality if observed behavior is incomplete, and may record malicious activity during learning, so generating them in staging and reviewing them in version control was advised. Alternatives such as AppArmor, SELinux and Landlock are harder to fit into containers. The speaker also argued that seccomp can extend the patching window for known CVEs, though its effect on any given vulnerability is not guaranteed.",
+      "durationSeconds": 2943,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "pygszi2DZDg",
+      "slug": "exes-and-oauths-they-haunt-me-in-depth-analysis-of-oauth-oidc-mi",
+      "title": "eXes & Oauths They Haunt Me: In-Depth Analysis of OAuth OIDC Misconfigurations & Token Replay Attacks",
+      "speakers": [
+        "Darryl G. Baker"
+      ],
+      "track": "cloud",
+      "topics": [
+        "identity",
+        "web",
+        "vulnerabilities",
+        "attack",
+        "application"
+      ],
+      "teaser": "Explains how misconfigured OAuth and OIDC implementations expose bearer tokens to replay, with a live token replay demo.",
+      "summary": "The talk opens by separating OAuth 2.0 from OIDC. OAuth is a delegation framework that issues bearer tokens for resource access without verifying who the user is, while OIDC adds an identity layer through an ID token, typically a JWT. The speaker argues that most real-world compromises come from implementation mistakes rather than flaws in the protocols, and touches on the backend-for-front-end pattern used in modern web apps.\n\nThe middle of the talk covers common weaknesses. A missing state parameter leaves the authorization flow open to cross-site request forgery, and loose redirect URI validation lets an attacker send the authorization code or token to a server they control. Discovery document tampering and JWT checks that skip audience, issuer, expiration or nonce validation are also highlighted. A live demo then shows a bearer token returned in a redirect URI being copied to a different machine and used to reach a protected route, because there was no token binding and the token never expired. A Node.js pitfall is also described, where decoding a token is mistaken for verifying it.\n\nFor defenders, the talk recommends short-lived tokens, validating audience and issuer on resource servers, enforcing nonces, supporting revocation and introspection, and logging with anomaly detection. The main takeaway is that the frameworks are sound but unforgiving of small configuration gaps, so applications need continuous testing and monitoring. The Q&A touched on passkeys, which share some visibility problems, and on the risks of trusting third-party MCP servers with credentials.",
+      "durationSeconds": 2919,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "x1lqNZNMbvU",
+      "slug": "hacking-secure-coding-into-education",
+      "title": "Hacking Secure Coding Into Education",
+      "speakers": [
+        "Or Sahar",
+        "Yariv Tal"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "learning",
+        "open-source",
+        "developer",
+        "vulnerabilities"
+      ],
+      "teaser": "Shows how secure coding was taught to high school and university students, with free open workshops and videos.",
+      "summary": "The speakers, both former developers who moved into security, argue that insecure code keeps appearing because developers are rarely taught otherwise. They point to SQL injection, first described decades ago, which still drives major breaches, and to other recurring flaws such as cross-site scripting, path traversal and insecure file upload. Their starting point is that security tooling usually arrives after code is already written, so the fix belongs earlier, in education.\n\nAn early effort to persuade universities and schools to change their course materials stalled, so they went into classrooms directly. A high school teacher invited them to run a workshop, students spread the word, and a university later asked them for a full semester course that they had to write as the term went on. Their developer workshops are built around coding tasks that deliberately contain common traps, followed by a hacking phase in which participants attack their own solutions. A short console demo showed a quiz's input checks being bypassed, and the speakers showed how the first proposed fixes also failed.\n\nThey close by pointing to a public GitHub repository holding the workshops and course materials, and a YouTube channel with recorded lessons that is being redone with better visuals. They also mention a small path-handling library for Python and Java. The practical takeaway is to teach secure coding early, reuse the free materials, and send feedback to improve them.",
+      "durationSeconds": 1516,
+      "publishedAt": "2025-12-08",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "ytA9FF5FhzE",
+      "slug": "xss-is-dead-browser-security-features-that-eliminate-bug-classes",
+      "title": "XSS is dead – Browser Security Features that Eliminate Bug Classes",
+      "speakers": [
+        "Javan Rasokat"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "web",
+        "defensive-security",
+        "vulnerabilities"
+      ],
+      "teaser": "Shows how browser-native features like CSP, Trusted Types and Sec-Fetch-Metadata can block whole classes of web flaws.",
+      "summary": "The talk starts from the view that application security often stays stuck in a reactive cycle, fixing individual bugs as bounty reports and pentests surface them. Cross-site scripting still ranks near the top of the most rewarded findings despite being an old flaw. The speaker argues for layered, browser-enforced defenses so that a missed output encoding step does not automatically become exploitable.\n\nThe middle walks through concrete browser features. HttpOnly cookies keep injected script from reading session tokens. Sec-Fetch-Metadata headers reveal whether a request is cross-site, so a reverse proxy can reject risky cross-site requests. A strict Content Security Policy is presented as the strongest XSS control, and the recommended rollout begins in report-only mode, reviewing violations and tightening the policy gradually. Trusted Types is shown policing dangerous DOM sinks, with a sanitizing wrapper around a library such as DOMPurify and a polyfill for browsers lacking support. A case study describes measuring header adoption across many services at the proxy layer, producing a per-service scorecard.\n\nThe closing takeaways urge moving from reactive patching to secure-by-default configuration, automating CSP hashes and nonces in build pipelines, and tracking coverage across an estate. In audience Q&A the speaker noted that few tools generate CSPs well, pointing to a Firefox add-on and Google's CSP evaluator while acknowledging that custom CI scripts are often needed.",
+      "durationSeconds": 1343,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "VWOVwcmeW78",
+      "slug": "turbo-tactical-exploitation-22-tips-for-tricky-targets",
+      "title": "Turbo Tactical Exploitation: 22 Tips for Tricky Targets",
+      "speakers": [
+        "HD Moore"
+      ],
+      "track": "red-team",
+      "topics": [
+        "recon",
+        "attack",
+        "network",
+        "exploitation",
+        "tool"
+      ],
+      "teaser": "Rapid-fire pentest tips covering recon, pivoting through management tools, and finding and exfiltrating data quickly.",
+      "summary": "This rapid-fire session collects penetration testing tricks, organized around the flow of an engagement: learning about a target from the outside, getting past the network edge, moving inward to valuable systems, and extracting data. The speaker treats every assessment as a race against other attackers and the clock, so the emphasis is on finding useful targets fast, spotting pivot points, and finding the easiest route past hardened defenses.\n\nEarly tips focus on outside reconnaissance. Public TXT records list the third-party services a company uses, and DNS zone files can be downloaded from the source instead of queried through lookup sites that reveal your interest. Certificate transparency logs can be watched in real time for newly registered domains. Split-horizon DNS and open resolvers may expose internal names and allow latency-based probing of private networks. Inside a network, the speaker suggests testing developers' public SSH keys against servers to learn which accounts have access, and points to VPN appliances, exposed remote desktop, and IPv6 misconfigurations as common entry points.\n\nFor the later stages, the speaker argues that management platforms, such as network monitoring and configuration tools, hold device credentials and can reconfigure firewalls, so segmentation offers little protection against them. Old, unusual, or out-of-band systems such as serial console servers, IPMI, NFS mount services, iSCSI, and backup replication platforms are often weakly protected and worth targeting. The main takeaway is that neglected assets and credential-holding tools often matter more than the data stores they guard.",
+      "durationSeconds": 1217,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "GlifmYpwiK8",
+      "slug": "infiltrating-like-a-ninja-unveiling-detection-gaps-in-physical-s",
+      "title": "Infiltrating Like a Ninja: Unveiling Detection Gaps in Physical Security Across Japan and the U.S.",
+      "speakers": [
+        "You Nakatsuru",
+        "Fumiya Imai",
+        "Viet Luu"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "social",
+        "engineering",
+        "defensive-security",
+        "practical",
+        "lessons-learned"
+      ],
+      "teaser": "Compares physical intrusion defenses in Japan and the U.S., showing how social engineering exploits culture and staff habits.",
+      "summary": "The talk opens with a social engineering demonstration in which the audience follows a presenter's spoken directions without any real reason to. The speakers, red team members from Sophos and their Japanese colleagues, then frame physical intrusion as a real threat, pointing to ATM jackpotting and state-linked actors that used USB-based devices. They walk through a common physical testing toolkit: a wireless drop device hidden inside a building, a badge cloner, and long-range readers for capturing credentials.\n\nThe core of the talk compares technology, process and people in the two countries. Large corporate sites in Japan have security gates and cameras that are about as strong as those in the United States, so the gap is not in hardware. The difference lies in process and culture. In the U.S., staff are trained to challenge unfamiliar people and verify visitors, a habit reinforced by higher crime levels and regular awareness training. In Japan, a cultural emphasis on harmony and a low perceived threat level make staff less likely to question strangers. A cartoon example of a guest pass issued without any verification illustrates how procedural gaps can appear.\n\nThe closing message is that both countries are vulnerable to social engineering, based on the team's research. For defenders, the recommendation is to make greeting and verifying visitors a standard, formal process with clear criteria for challenging strangers. For testers, the reminder is that social engineering remains one of the most reliable methods when technical controls hold.",
+      "durationSeconds": 1183,
+      "publishedAt": "2025-12-08",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "CY-ozd548tc",
+      "slug": "we-fight-for-the-users-session",
+      "title": "We Fight for the User's… Session",
+      "speakers": [
+        "Mark Hoopes"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "identity",
+        "trust",
+        "application",
+        "defensive-security"
+      ],
+      "teaser": "Surveys cookie theft and browser defenses, then evaluates Google's Device Bound Session Credentials and its impact on session security.",
+      "summary": "Mark Hoopes traces the history of browser cookies and the attacks aimed at them, framing session tokens as something that needs active defense. He walks through the main routes to theft: network interception, script injection, cross-site request forgery and misuse after a token is already stolen. For each, he reviews the protections available, including the secure and HttpOnly flags, HSTS and its preload list, SameSite defaults and frame-ancestors.\n\nThe middle section covers the pushback developers give when these flags are proposed. He argues that HttpOnly is often unnecessary for single page applications, since the browser attaches cookies to API calls without scripts reading them. He suggests mapping session lifetimes on a timeline so stakeholders see how long a stolen token remains usable, and cautions that JWTs with fixed expiry keep working after logout unless the server tracks revocation.\n\nThe final part covers Google's proposed Device Bound Session Credentials. He traces the earlier token binding effort that stalled because application code could not easily reach TLS key material, then describes how DBSC ties a session to a key held in the device's TPM, with short-lived cookies the browser refreshes itself. He notes current limits, including HTTPS requirements, Chrome-only flags and difficult debugging, and argues that framework support will decide adoption and that the approach could undercut infostealer-driven session theft.",
+      "durationSeconds": 2512,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "r-xfIPDRxxQ",
+      "slug": "a-cheat-code-for-security-programs",
+      "title": "A Cheat Code for Security Programs",
+      "speakers": [
+        "Ochaun Marshall"
+      ],
+      "track": "appsec",
+      "topics": [
+        "application",
+        "framework",
+        "development",
+        "risk",
+        "team"
+      ],
+      "teaser": "Frames product security as a holistic program that shifts left, right, up and down across the whole stack.",
+      "summary": "Ochaun Marshall, a product security engineer at Google Cloud, opens by separating product security from application and platform security. He argues that a well-built app running on a weak platform is still exposed, so the product that users actually receive should drive security priorities. Systems should be ranked by whether they handle sensitive data or affect user trust, rather than treated as an undifferentiated pile of servers.\n\nThe core of the talk is a four-direction framework. Shifting left moves threat modeling, threat intelligence and security reviews into design and build. Shifting right carries product-aware red teaming and monitoring into production, and findings are filed as engineering bugs rather than reports that sit in a document queue. Shifting up brings escalation and leadership support so security does not depend on heroics. Shifting down covers the full stack, from the application through the kernel to firmware.\n\nThe closing advice is to make security boring: automate common checks, place them inside developer workflows, avoid slow scans in fast pipelines, and treat security as a shared responsibility. In the Q&A, the speaker discussed risk frameworks, getting leadership buy-in by focusing on revenue-heavy products, and resolving disagreements over severity. Attendees leave with a way to pitch a product security program inside their own organization.",
+      "durationSeconds": 2032,
+      "publishedAt": "2025-12-08",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "q6D2SG4BNtU",
+      "slug": "beyond-the-breach-why-your-tabletop-exercise-should-be-your-wors",
+      "title": "Beyond the Breach: Why Your Tabletop Exercise Should be Your Worst Nightmare",
+      "speakers": [
+        "Madison Rocha"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "risk",
+        "lessons-learned",
+        "team",
+        "defensive-security"
+      ],
+      "teaser": "Explains how tabletop exercises test incident response plans and how to build harder scenarios that expose gaps.",
+      "summary": "The talk argues that tabletop exercises, structured discussions built around a scenario, let teams find gaps in incident response, disaster recovery and business continuity plans before a real incident. The speaker, a consultant with an offensive background who has written exercises for government and private clients, stresses that IT is central but that legal, communications, HR, executive leadership and finance also need a seat, since each handles regulators, press, staff and costs during an event.\n\nThe middle covers scenario design. Organizations should first identify their crown jewels, since a leaked client list matters far more to a bank than to a local bakery. Scenarios should be layered, ambiguous and tailored, sometimes informed by open-source research on the company or its vendors. Complexity has to be balanced so participants are challenged without being paralyzed. Losing a drill is the goal, because gaps found in a tabletop are far cheaper than gaps found mid-breach. Warning signs include unclear roles and shouting matches, and a missing network map or outdated contact list can derail the response.\n\nThe close covers follow-up. A lessons-learned session should capture what went well, and a remediation plan should assign owners, measurable actions and deadlines. The after-action report should be compared with earlier ones to confirm progress. Sessions of four to five hours work best, and scenarios should change each year to avoid fatigue. The takeaway is that tabletops should be an ongoing practice, not a compliance checkbox.",
+      "durationSeconds": 2437,
+      "publishedAt": "2025-12-08",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "WZZrqGFdCj8",
+      "slug": "dont-be-llame-the-basics-of-attacking-llms-in-your-red-team-exer",
+      "title": "Don't be LLaMe - The basics of attacking LLMs in your Red Team exercises",
+      "speakers": [
+        "Brent Harrell",
+        "Alex Bernier"
+      ],
+      "track": "red-team",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "attack",
+        "exploiting",
+        "application"
+      ],
+      "teaser": "Explains how LLM applications and agents create red team attack paths, from prompt injection through RAG poisoning to data exfiltration.",
+      "summary": "The talk starts from a gap the speakers see in red team practice: discussions of generative AI often focus on safety and ethics, or stop at the model itself, when the security risk sits in the applications and agents built around it. Brent Harrell gives a short, math-free overview of how large language models work. Neural networks produce probabilistic predictions, text is processed as tokens, and an attention mechanism weighs surrounding context inside a limited window. Because a bare model only generates text, its impact depends on the tools it can call and the data sources it can read.\n\nThe second half, led by Alex Bernier, covers attack paths. Prompt injection and jailbreaking are presented as entry points, with techniques such as hiding instructions in invisible Unicode characters, obfuscating requests through other languages or encodings, persona setting, storytelling pretexts, and confusing the model across a conversation. The more useful material concerns impact. Instructions planted in documents read by a retrieval-augmented knowledge base can lead to data exfiltration through rendered markdown images, poisoned answers that steer users toward malicious downloads, or access to content the attacker could not open directly. Real engagement examples include a helpdesk bot that performed password and MFA device resets, and a code-generation tool that was coerced into writing a web shell.\n\nThe takeaway for practitioners is to treat an LLM-backed application like a user or service account. Map what it can read and do, check whether its permissions exceed those of the people who use it, and identify any writable data source that feeds its context. LLM features should be on the list of targets during engagements, since they can open paths to credential access, collection, lateral movement and privilege escalation.",
+      "durationSeconds": 2557,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "CYsULyjMd2I",
+      "slug": "casting-light-on-shadow-cloud-deployments-2",
+      "title": "Casting Light on Shadow Cloud Deployments",
+      "speakers": [
+        "Chapin Bryce",
+        "Brittney Argirakis"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "incident-response",
+        "open-source",
+        "tool",
+        "infrastructure"
+      ],
+      "teaser": "Shows how responders can quickly scope exposed cloud resources using Luminaut, an open-source triage scanner.",
+      "summary": "The talk starts from a familiar pattern: cloud resources launched as proofs of concept, test copies or quick experiments that never receive logging, documentation or security review, then end up publicly reachable. Both speakers work in incident response, and they argue that such shadow deployments are a common starting point for attacks, from cryptojacking to exposed databases. The gap they describe is triage. Perimeter and pentesting tools do not answer the questions responders face when they need to scope an exposure quickly.\n\nThe speakers introduce Luminaut, an open-source scanner built for that first stage of an investigation. It enumerates public IP addresses in AWS and Google Cloud, gathers attached resources such as security groups and load balancers, and checks what is actually reachable using Nmap, WhatWeb and Shodan. It then pulls CloudTrail or GCP audit log events to build a timeline of when resources were created, changed or attached, which helps bound the exposure window. A live demo showed output in terminal, HTML, JSON and CSV formats, and the tool requires only read-only cloud roles.\n\nThe speakers were candid about limits. Shodan results can be stale, so findings need validating against live data. Azure is not yet supported, GCP allow listing is still in progress, and IAM privilege escalation is not covered. In audience questions, they said they had not seen attackers pivot from cloud into on-premises networks, though one case involved a Jenkins pivot across clouds. The takeaway: inventory public cloud resources early, anchor findings to a timeline, and check tool output before it goes into a report.",
+      "durationSeconds": 1188,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "GZ1O20OI5WY",
+      "slug": "thinking-outside-the-soc-structured-analytics-for-the-overloaded",
+      "title": "Thinking Outside the SOC: Structured Analytics for the Overloaded Cyber Analyst",
+      "speakers": [
+        "Alina Thai",
+        "Haily Beem"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "intelligence",
+        "threat",
+        "incident-response",
+        "risk",
+        "defensive-security"
+      ],
+      "teaser": "Shows how structured analytic techniques can reduce cognitive bias in SOC, CTI and incident response work.",
+      "summary": "The talk opens with a 2 AM incident in which a SOC alert about suspicious PowerShell grows into credential dumping, lateral movement and possible exfiltration. The speakers argue that threat intel, DFIR and hunting analysts all work under pressure and are prone to cognitive biases such as anchoring and confirmation bias, and that structured analytic techniques offer repeatable checks against them.\n\nThe presenters walk through key assumptions check, indicators and warnings, alternative futures analysis and analysis of competing hypotheses, the last scoring evidence against several hypotheses in a matrix. They link these methods to the intelligence cycle, MITRE ATT&CK and the Diamond Model, such as using competing hypotheses to test actor attribution. Three scenarios follow: a North Korean IT worker insider threat, a scenario-based estimate of Iranian cyber retaliation against US critical infrastructure, and a ransomware case where Scattered Spider and a Black Basta affiliate are weighed against each other.\n\nThe closing point is that these techniques do not remove uncertainty or time pressure, but a few hours of structured work can produce a documented rationale for leadership and sharpen where hunts should focus. In the Q&A, the presenters explained that likelihood figures in the scenario work are analyst judgement rather than calculated values, and that outputs can be a matrix or a short intel product with indicators for hunt teams.",
+      "durationSeconds": 2480,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "1dXvTg5bw-U",
+      "slug": "russian-nesting-dolls-turla-got-into-the-isi-who-was-into-an-ind",
+      "title": "Russian Nesting Dolls: Turla got into the ISI who was into an Indian Embassy, & how we found them",
+      "speakers": [
+        "Danny Adamitis"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "intelligence",
+        "network",
+        "infrastructure",
+        "attack"
+      ],
+      "teaser": "Traces how Turla moved through Pakistani-linked command servers to reach government networks across the region.",
+      "summary": "The talk starts with a 2021 finding: a shortcut file tied to a previously unseen malware family, Reverse RAT, which could copy and spread across removable media. Pivoting from its command-and-control servers, the researchers used network flow data and detection rules to map infrastructure associated with SideCopy, a regional group linked to Pakistan. That mapping showed a server running a Hak5 hardware device banner on port 8080 that drew connections from several Indian government bodies, which pointed to physical access or a hardware implant in those networks.\n\nThe investigation then followed Turla, a Russian state-linked group, as it appeared on SideCopy servers. Beaconing from an Afghan government address was seen in 2023, and remote desktop sessions from a Pakistani address lined up in time with Turla activity on the same server, suggesting Turla had reached an operator's workstation. Across roughly two years the team saw signs of compromise on 33 command servers, a documented case the speaker described as rare among nation-state actors.\n\nThe closing section lists open questions: how the hardware devices were placed, why Turla deployed its own tools in Afghan networks but apparently not in Indian ones, and what drove the choice of targets. The takeaway for practitioners is that hijacking another group's access can persist unnoticed for years, that network telemetry can expose patterns, and that attribution during incident response often takes far longer than stakeholders expect.",
+      "durationSeconds": 2241,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "-K_CVUwQW2c",
+      "slug": "securing-frontends-at-scale-paving-our-way-to-the-post-xss-world",
+      "title": "Securing Frontends at Scale: Paving our Way to the Post-XSS World",
+      "speakers": [
+        "Aaron Shim"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "web",
+        "vulnerabilities",
+        "defensive-security",
+        "code"
+      ],
+      "teaser": "Shows how Google layers secure frameworks, build-time checks, CSP and Trusted Types to remove XSS classes at scale.",
+      "summary": "Cross-site scripting remains a large share of the web bugs Google receives through its bug bounty program. The speaker, who works on web security mitigations across hundreds of Google web apps, explains the core problem: templates and DOM APIs blur the line between data and code, and a single careless change can reintroduce an injection that is hard to find and remove later.\n\nThe talk then walks through defenses in layers. Context-aware templating and frameworks that sanitize by default make the safe choice the easy one, with Angular's sanitizer and its explicitly named bypass function used as an example of a deliberate warning sign. Build-time conformance checks flag risky APIs such as innerHTML during development, and an ESLint-based open-source project called safety-web brings some of these checks to outside teams. Wrapper types checked by TypeScript help track which markup is safe as data moves from storage through formatting to the browser.\n\nFor runtime protection, the speaker recommends nonce- or hash-based Content Security Policy with strict-dynamic, plus Trusted Types to block unsafe DOM sinks. The closing idea is to lock dangerous DOM APIs down by default and offer safe replacement platform APIs, an approach called perfect types. Practitioners should take away that developer experience is central to making these protections stick.",
+      "durationSeconds": 1415,
+      "publishedAt": "2025-12-08",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "goERQMqAv50",
+      "slug": "monday",
+      "title": "Monday",
+      "speakers": [],
+      "track": "red-team",
+      "topics": [
+        "attack",
+        "network",
+        "cloud",
+        "identity",
+        "ai"
+      ],
+      "teaser": "Covers internal network pivots, secretless cloud auth, secure coding teaching, cloud exposure triage, LLM red teaming and OAuth flaws.",
+      "summary": "This recording is a run of Monday afternoon sessions from the BSides Las Vegas Ground Floor stage rather than a single talk. It opens with a fast tour of network reconnaissance and pivoting: certificate transparency logs that reveal new domains as they are registered, split DNS leaks that expose internal names, reused SSH public keys used to test server access, VPN appliances as common entry points, and IPv6 exposures that bypass expected firewalls. The same section covers pivot points through management platforms, legacy systems, out-of-band management, IPMI hash retrieval, and backup systems.\n\nLater sessions shift to cloud identity and exposure. One presenter walks through replacing static secrets with passkeys, short-lived role assumption, OIDC workload federation between clouds, and mutual TLS, with a live demo of cross-cloud access failing and being fixed. Another introduces Luminot, a tool for quickly listing public cloud resources, checking what is reachable, and building an exposure timeline during incident response. A separate session describes teaching secure coding in schools and universities through hands-on exercises that deliberately include traps. A red team segment covers prompt injection, indirect injection through poisoned documents, and data exfiltration from LLM applications, and a final session explains common OAuth and OIDC mistakes such as missing state checks, weak token validation, and long-lived bearer tokens that can be replayed.\n\nThe practical takeaways are to minimise shared secrets, favour short-lived credentials, inventory exposed services continuously, validate every claim in an identity token, and treat any data source connected to an LLM as part of the attack surface.",
+      "durationSeconds": 28035,
+      "publishedAt": "2025-08-05",
+      "difficulty": "intermediate"
+    }
+  ]
+}

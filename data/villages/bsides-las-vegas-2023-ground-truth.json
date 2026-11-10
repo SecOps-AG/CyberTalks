@@ -1,0 +1,260 @@
+{
+  "villageSlug": "ground-truth",
+  "villageName": "Ground Truth",
+  "eventSlug": "bsides-las-vegas-2023",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLjpIlpOLoRNRgCikGsZuxn98_jgYrd9Tq",
+  "description": "Ground Truth talks from BSides Las Vegas 2023.",
+  "talks": [
+    {
+      "youtubeId": "gIo3a488E0g",
+      "slug": "f-your-ml-model",
+      "title": "F Your ML Model",
+      "speakers": [
+        "Colt Blackmore"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "automation",
+        "security-operations",
+        "intelligence"
+      ],
+      "teaser": "Explores AI planning and mathematical optimization as alternatives to machine learning for security operations problems.",
+      "summary": "The talk opens with the speaker's first encounter with machine learning, then argues that it is not the right tool for every problem. Many hard problems are better served by other methods from the wider AI field, and the speaker questions why security rarely uses them.\n\nThe core of the talk covers AI planning, which represents states and actions with logic to reach a goal. The speaker walks through a game-AI planner from the shooter F.E.A.R. and then builds a small planner that responds to account takeover risk, such as forcing password resets, ending sessions and alerting, in the style of a security orchestration platform. Next comes mathematical optimization: a planning problem is recast as an objective function with constraints, and the speaker notes that a neural network is also a function being optimized. A weapon-target assignment model, implemented in Python with an algebraic modeling library and an open-source solver, is then mapped onto security controls and attacks to show how trade-offs could guide where teams spend effort. The talk closes with logic programming, where relations are used to derive a planning graph, which the speaker acknowledges is a somewhat hacky approach.\n\nThe takeaway for practitioners is to translate a security problem into different representations and then choose the solving method that fits its constraints, rather than defaulting to machine learning. The demonstrations are conceptual and the code is illustrative.",
+      "durationSeconds": 3346,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "RSBi1_YlJfg",
+      "slug": "how-to-prioritize-red-team-findings-presenting-crtfss-common-red",
+      "title": "How to prioritize Red Team Findings? Presenting CRTFSS: Common Red Team Findings Score System",
+      "speakers": [
+        "Guillermo Buendia"
+      ],
+      "track": "purple-team",
+      "topics": [
+        "risk",
+        "intelligence",
+        "framework",
+        "defensive-security",
+        "detection"
+      ],
+      "teaser": "Introduces a scoring method that ranks red team findings by threat frequency, exploitability and remediation complexity.",
+      "summary": "Red team assessments often produce more findings than defenders can remediate, and building detections for each one takes time. Existing approaches are a poor fit: some depend on CVE identifiers, which many red team findings lack, and others prioritize techniques in general rather than the specific findings from a given engagement. The speaker presents CRTFSS, a scoring method that rates each finding using how often real-world threat actors use the mapped MITRE ATT&CK technique, how hard the technique is to execute, and how hard it is for the blue team to remediate or detect.\n\nThe process starts by gathering trend data on frequently observed techniques from threat intelligence. The speaker's implementation uses MITRE's top attack techniques dataset, though any source can be substituted. Each finding is mapped to its ATT&CK ID, frequency is looked up, exploitability and remediation complexity are assigned from reference tables, and the resulting severity is converted into a score for ranking. A worked example follows a fictional firm's simulated assessment, covering phishing, a keylogger, credential dumping, lateral movement and cloud-based exfiltration, and shows how the findings are ordered.\n\nThe method is meant for findings from internal or external red teams that were actually demonstrated, not for theoretical issues, and it does not calculate risk. The speaker notes that one technique can appear in several findings and that no single detection covers every variant of a technique. The main takeaway is to use current, real-world intelligence so that limited defensive resources go to the most critical findings first.",
+      "durationSeconds": 1142,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "aqlZKOaIDL0",
+      "slug": "regular-expressions-are-good-actually",
+      "title": "Regular expressions are good, actually",
+      "speakers": [
+        "Rob King"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "vulnerabilities",
+        "detection",
+        "building"
+      ],
+      "teaser": "Explains how regex engines work internally and which design choices create ReDoS and streaming-match risks.",
+      "summary": "Rob King opens with the history of regular expressions, tracing their origins in 1950s automata theory through early Unix tools and the efficient evaluation method Ken Thompson introduced. He separates formal regular expressions from common extensions such as back references and lookaround, explaining that those extensions need memory beyond the current state and therefore break the formal model.\n\nThe middle of the talk turns to security problems in mainstream engines. A live demonstration shows a backtracking Python pattern slowing sharply as the input grows, while a Go version finishes in microseconds, illustrating ReDoS. King also covers memory allocation at match time, weak support for streaming and simultaneous matching, incomplete handling of binary data, and unsafe compilation or serialization of patterns. He compares Python, JavaScript, Go, Rust, RE2 and Hyperscan against design criteria he proposes: linear-time matching, preallocated memory, per-thread state, streaming input, binary and text support, and portability.\n\nThe closing section explains how a Thompson-style simulation keeps resource use bounded, and how UTF-8's self-synchronizing design lets an engine match raw bytes. King suggests formally checking compiled patterns before loading them and points to reading material for anyone wanting to build an engine. The takeaway is that regex engine design choices directly affect the security of tools that depend on them.",
+      "durationSeconds": 2521,
+      "publishedAt": "2023-10-25",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "bdPMEnXxsG4",
+      "slug": "double-entry-accounting-for-security",
+      "title": "Double Entry Accounting for Security",
+      "speakers": [
+        "Sounil Yu"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "management",
+        "detection",
+        "framework",
+        "security-operations"
+      ],
+      "teaser": "Applies double-entry accounting ideas to security, pairing asset inventories with event logs so gaps in visibility become visible.",
+      "summary": "The talk asks whether double-entry accounting, the bookkeeping method that underpins modern finance, can help security programs notice when their picture of the environment is incomplete. The speaker argues that a single source of truth is a myth and splits the idea of truth into three parts borrowed from sworn testimony. Checking whether a claim is false is easy; recognizing that something is missing is far harder.\n\nThe core model divides security data into two ledgers that stay separate but must reconcile. One ledger is structural awareness, the inventory and state of assets such as a CMDB. The other is situational awareness, the events and logs that show what happened. When a state change appears with no matching log entry, that mismatch reveals a visibility gap. The team can then investigate or accept the gap, much as a small petty cash fund may not justify precise tracking. Event-based systems struggle to rebuild state and polling misses transient events, so the ledgers should check each other rather than replace one another.\n\nFor practitioners, the message is to identify places where two independent records already exist and compare them, and to set realistic tolerances instead of demanding zero errors, as finance does with small variances. The Q&A extended the idea to forecasting against license entitlements and seasonal patterns, and to materiality, which the speaker said the community has not yet defined for cyber.",
+      "durationSeconds": 1430,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "D9t4zG399zw",
+      "slug": "overcoming-barriers-in-security-dsls-with-babbelphish",
+      "title": "Overcoming Barriers in Security DSLs with BabbelPhish",
+      "speakers": [
+        "Bobby Filar"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "detection",
+        "tool",
+        "open-source"
+      ],
+      "teaser": "Shows how an LLM translates plain English into Sublime's MQL detection query language for email security.",
+      "summary": "Bobby Filar, head of data science at the email security company Sublime Security, opens with the onboarding problem. Detection-as-code platforms rely on query languages with unfamiliar syntax, and new detection engineers often spend weeks learning several of them. He argues that experienced analysts already reason through a checklist of questions about a suspicious email, and each answer maps to a piece of detection logic that could be written as a query.\n\nHe then presents BabbelPhish, an open-source project that uses a fine-tuned GPT-3 model to convert natural language requests into MQL. The team built a training set of about 3,000 examples by mining its documentation, public rule repositories, a community Slack channel, and annotations supplied by detection engineers, then published the set on Hugging Face. The model was chosen for low cost, fast inference, and reproducibility. Benchmarks reported a correct answer in roughly 98 percent of cases within three attempts, and generated queries were checked with the MQL interpreter for syntax. A VS Code extension offers completion-style suggestions, and a recorded demo showed English questions turning into queries.\n\nFilar closes with limitations and next steps. Planned user studies will compare the tool against built-in autocomplete on task completion and context switching. Future work includes tighter tokenization through the product's own interpreter, fill-in-the-middle prompting, vector stores of common snippets, and explanations of existing rules. He stresses that natural language should be an optional entry point to a query language rather than something forced on experienced users.",
+      "durationSeconds": 1292,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "B-0vrx-5wr4",
+      "slug": "building-your-own-ai-platform-and-tools-using-chatgpt",
+      "title": "Building Your Own AI Platform and Tools Using ChatGPT",
+      "speakers": [
+        "Peter Halberg"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "attack",
+        "model",
+        "tool"
+      ],
+      "teaser": "Shows prompt crafting tricks against ChatGPT and walks through a basic machine learning pipeline for red team tooling.",
+      "summary": "The talk opens with the speaker's experience pushing ChatGPT past its safety behavior, drawing a comparison to earlier elicitation work. It covers a range of prompt techniques for getting around refusals, including role-play framing, format and length constraints, regenerating responses, open-ended questions, and chaining follow-up questions so that each request looks harmless on its own.\n\nThe second half turns to building a small machine learning model for red team tasks. The workflow starts with defining an objective, then choosing a model type, gathering and cleaning data, generating synthetic examples, engineering features, and training with hyperparameter search. The demonstrations use scikit-learn on a laptop, including a question-answer classifier, a service version detector trained on packet capture features, and a rough attack severity predictor built on a very small dataset.\n\nThe speaker stresses that data preparation takes most of the effort and that the process is iterative, with results guiding the addition of data and features. The practical takeaway is how generative AI tools can speed up research and tooling work, along with the caveat that outputs need checking and that the demos were early experiments.",
+      "durationSeconds": 2892,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "P941-MzxDMw",
+      "slug": "security-data-science-teams-a-guide-to-prestige-classes",
+      "title": "Security Data Science Teams: A Guide to Prestige Classes",
+      "speakers": [
+        "Erick Galinkin"
+      ],
+      "track": "community",
+      "topics": [
+        "machine-learning",
+        "team",
+        "security-operations",
+        "learning",
+        "management"
+      ],
+      "teaser": "Untangles the overlapping job titles in security data science and explains how to build a balanced team.",
+      "summary": "Erick Galinkin opens by arguing that security data science is not an entry-level specialty. He uses a role-playing game metaphor: you need prerequisite experience and skills before you can move into the specialized class. A malware classifier that scored near-perfectly on its test set, but mostly keyed on system language and compiler, shows why domain knowledge matters alongside statistical skill.\n\nThe middle of the talk covers the job titles that have multiplied across the industry, including data scientist, ML engineer, data engineer, data analyst and MLOps engineer. Galinkin notes that these roles overlap unevenly and that many organizations collapse them under one title, which he jokingly suggests dropping. He describes the work of a security data team as presenting findings to stakeholders, building task-specific data models, and making large volumes of alerts usable for analysts. He also walks through the model lifecycle, stressing that models drift and need ongoing testing and monitoring. Team building, he says, should combine complementary strengths, much like a party in a game, with visualization and infrastructure gaps covered deliberately.\n\nIn the audience questions, he explained one way to use language models for analysts: lookups of indicators of compromise and vulnerabilities go to trusted structured data sources instead of the model, which reduces hallucination. He recommended probability, statistics and information theory as foundations, and noted that decision trees often suit tabular security data better than neural networks. His takeaway for practitioners working with data science teams is to state clearly what inputs the team has and what outputs the security side needs.",
+      "durationSeconds": 3060,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "rC0c7cZOHrw",
+      "slug": "system-dynamics-in-risk-management-a-primer",
+      "title": "System Dynamics in Risk Management: A Primer",
+      "speakers": [
+        "Stephanie Losi"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "management",
+        "system",
+        "learning",
+        "introduction"
+      ],
+      "teaser": "Introduces systems thinking and causal loop diagrams for mapping feedback loops, delays and leverage points in security risk.",
+      "summary": "The talk introduces system dynamics, a sub-discipline of systems thinking, to information security and risk management audiences. It explains how a system can be described as stocks, flows and feedback loops, with balancing loops constraining behaviour and reinforcing loops driving compounding growth or decline. Leverage points, where a small change produces large effects, are presented as usually non-obvious.\n\nThe middle of the session builds a causal loop diagram step by step using a security example that links vulnerabilities, attacks, damage, security budget and defenses. Attendees are shown how to assign positive or negative relationships to each pair of factors, then trace a change around the loop to tell balancing loops from reinforcing ones, with an odd-number-of-negative-signs check as a cross-check. Delays and oscillations are illustrated with an ordering example, and the speaker argues that reacting too quickly to early signals can amplify swings. A stock-and-flow simulation of attacker and defender success is then shown, along with a public climate model whose slider interface is offered as an example of executive-facing output.\n\nThe closing advice covers setting model boundaries, interviewing the full range of stakeholders rather than only managers, versioning models as processes change, and documenting the reasoning behind each assumption. Practitioners are encouraged to weigh which leverage points are politically feasible in the short term and which need longer effort. Modeling tools and an introductory textbook were suggested for further study.",
+      "durationSeconds": 2708,
+      "publishedAt": "2023-10-12",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "q5Vx5r7lupw",
+      "slug": "training-the-human-firewall-2",
+      "title": "Training The Human Firewall",
+      "speakers": [
+        "Reanna Schultz"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "phishing",
+        "risk",
+        "defensive-security",
+        "social",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how a three-campaign phishing study measured why users click, and what that means for training programs.",
+      "summary": "The talk opens with a problem: phishing remains a leading attack, and awareness programs often see click rates level off at a low point that can look like success. The speaker, drawing on her graduate research, argues that training works better when it starts from how employees think and act. She introduces the idea of user architecture, built from how users view threats and how their departments shape their daily email habits.\n\nTo test this, more than 100 participants with computer science and security backgrounds received three phishing campaigns of rising difficulty: a mass lure, a spear phishing message using scare and trust tactics, and a spoof with few obvious warning signs. The lures were sent through a free open-source phishing platform, and clicks were recorded. Many participants clicked the mass lure, the scare-based spear phish and the spoof, citing habits like clicking before analyzing, curiosity and reliance on antivirus. Click rates varied widely across the campaigns, which the speaker read as a sign of gaps in education rather than a finished program.\n\nFor practitioners, the talk recommends setting realistic click goals, since a rate near one to three percent may mean users have plateaued. Mixing in outlier threats, including spoofing and current real-world campaigns, keeps training challenging. Reporting data from service desks, the security operations center and blocked threats can guide exercise design. Recognizing users who report suspicious mail helps offset frustration with constant testing.",
+      "durationSeconds": 1673,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "0gzJKGRzafQ",
+      "slug": "cyber-risk-how-does-cyber-events-become-so-costly",
+      "title": "Cyber risk: How does cyber events become so costly?",
+      "speakers": [
+        "Wendy Hou-Neely"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "ransomware",
+        "privacy",
+        "management",
+        "cyber-insurance"
+      ],
+      "teaser": "Breaks down how cyber incidents generate costs beyond ransom payments, from fines and business interruption to recovery and liability.",
+      "summary": "The talk examines why cyber incidents become so expensive, using incident and claims data gathered by an insurance broker. Sources include public breach disclosures, regulatory filings and a private claims dataset covering roughly 2017 to 2023. The data leans toward US organizations, and recent years are incomplete because reporting lags. Incident counts climb around 2020, and the industries most affected shift over time, with healthcare, financial services and public administration appearing often.\n\nThe middle section breaks costs into categories. Privacy breaches bring legal counsel, forensics, notification and call-center work, plus regulatory fines that can be large even without an attack, since compliance failures drive many GDPR penalties. Business interruption is often underestimated: lost income, extra expenses such as temporary staff and cloud capacity, and long recovery when blueprints or test records are destroyed. For ransomware, the payment is only part of the bill. In one sample of claims, payments and business interruption each made up about 30 percent of costs. Technology errors and omissions and fraud losses add further exposure.\n\nPrevention comes last. Correlating self-assessment answers with claims, the speaker found that security configuration management, account monitoring and multifactor authentication carried the strongest signal, and that partial rollout of those controls gave weaker results. Industries with low adoption showed higher claim rates. The practical takeaway is to focus on the few controls that most reduce claim frequency, since insurers often require them before offering coverage.",
+      "durationSeconds": 2546,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "XptZO7PodIY",
+      "slug": "cognitive-security-and-social-engineering-a-systems-based-approa",
+      "title": "Cognitive Security and Social Engineering: A Systems-Based Approach",
+      "speakers": [
+        "Matthew Canham",
+        "Dr. Ben D. Sawyer"
+      ],
+      "track": "social-engineering",
+      "topics": [
+        "social",
+        "ai",
+        "threat",
+        "framework"
+      ],
+      "teaser": "Presents cognitive security as a layered systems problem spanning human manipulation, AI agents and physical infrastructure.",
+      "summary": "Matthew Canham and Ben Sawyer open by proposing a working definition of cognitive security, treating it as the protection of cognitive systems, which can be people, groups or automated decision-makers. They illustrate the idea with a thought experiment in which a discount campaign nudges many people to use power at the same time, pushing up peak demand on a grid. The point they stress is that influence over human behavior can produce physical effects, and that defenders watching for conventional indicators may never see the cause.\n\nThe middle of the talk lays out a model. They describe an induced covert effect, where an action in one domain travels through another and hides its origin from the target. They map human layers onto an extended OSI stack, with layer eight as social engineering, layer nine as organizational rules and layer ten as governmental policy. Tactical, operational and strategic levels describe how single engagements combine into campaigns and nation-state efforts. Sawyer then turns to AI, covering digital twins that act on a person's behalf, along with data poisoning, feedback manipulation and prompt-level tampering as new attack surfaces.\n\nThe closing takeaway is that organizations adopting language models inherit a shared vulnerability that is hard to see and can scale across many customers. In the question period, the speakers agreed that anthropology and other social sciences could help define the field. Listeners are pointed toward the cognitive security community for further discussion.",
+      "durationSeconds": 2622,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "-NKwo8p1m00",
+      "slug": "playing-games-with-cybercriminals",
+      "title": "Playing Games with Cybercriminals",
+      "speakers": [
+        "Jonathan Lusthaus"
+      ],
+      "track": "policy",
+      "topics": [
+        "threat",
+        "risk",
+        "economics",
+        "social"
+      ],
+      "teaser": "Examines whether economic interventions that erode trust can disrupt cybercrime markets better than arrests and takedowns.",
+      "summary": "The talk begins with a concern that conventional policing of cybercrime, built on arrests, marketplace takedowns and botnet dismantling, may only shift activity elsewhere through displacement. It asks whether softer, economics-based levers could make criminal markets less efficient instead. The speaker, a sociologist working with experimental economists, uses the classic lemons problem of information asymmetry as a starting point.\n\nAn online experiment placed 392 paid participants into 56 small markets, each with four sellers and three buyers trading over 20 rounds. Sellers chose output, advertised quality, which could be misrepresented, and prices, while buyers saw average ratings and seller history. Against a control, three interventions were tested separately and together: a Sybil-style attack where a share of purchases never arrived, a defamation attack that randomised a share of ratings, and a combination. The Sybil-style attack cut seller profits sharply, especially in later rounds, and increased buyer inactivity, while the combined version performed about the same. The defamation attack showed little measurable effect.\n\nThe findings are presented as an early first step rather than settled answers. Limits include a narrow design, the difficulty of moving the approach from lab to field, since interception has no simple online equivalent, and the cost of building long-term undercover identities. Audience questions raised targeting high-value sellers, the closed trust networks used by some ransomware groups, and displacement. The practical takeaway is that softer economic interventions may be worth testing, with law enforcement and industry input on implementation.",
+      "durationSeconds": 2879,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    }
+  ]
+}

@@ -1,0 +1,904 @@
+{
+  "villageSlug": "talks",
+  "villageName": "Talks",
+  "eventSlug": "lascon-2024",
+  "conference": "lascon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLLWzQe8KOh5noZTPVWSKovYtfQTvkgwpo",
+  "description": "Talks from LASCON 2024.",
+  "talks": [
+    {
+      "youtubeId": "8klwm1Tr4d8",
+      "slug": "the-hidden-risks-of-software-re-use-owasp-top-10-oss-risks",
+      "title": "The Hidden Risks of Software re-use: OWASP Top 10 OSS Risks",
+      "speakers": [
+        "James Scott"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply-chain",
+        "open-source",
+        "risk",
+        "owasp",
+        "trust",
+        "vulnerabilities"
+      ],
+      "teaser": "Covers ten open source risks beyond known vulnerabilities, from compromised packages to untracked and oversized dependencies.",
+      "summary": "The talk argues that open source security reaches well past license compliance and tracking known vulnerabilities. The speaker points out that most code in large organizations is open source, and that severity scores alone miss whether a flaw is reachable in a given application. Gaps in vulnerability data are highlighted, including a claim that roughly 80 percent of known vulnerabilities had public exploits before a CVE was published, which leaves reactive patching always behind attackers.\n\nThe middle section walks through a list of less obvious risks. Compromised legitimate packages, illustrated by the XZ Utils backdoor, and name confusion, including typosquatting and a dependency confusion case involving a PyTorch nightly build, are presented as easy and scalable attack paths. Other items cover unmaintained projects, breaking changes and weak test coverage that make upgrades hard, untracked and rebundled code, unapproved runtime behaviour such as calls to a domain that changed hands, and both undersized and oversized dependencies. Lock files and internal registries help only when every install path actually uses them.\n\nFor practitioners, the suggested steps include pinning versions and using reproducible installs in CI, reserving important package names on public registries, vetting packages before adoption and avoiding very new releases for a while, and monitoring sensitive API calls such as file, process and network activity. Copying small pieces of code can sometimes reduce exposure more than depending on them. The speaker suggests an internal platform team as a practical place to start.",
+      "durationSeconds": 3039,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "7oxHBwioRAw",
+      "slug": "applying-generative-ai-to-cve-remediation",
+      "title": "Applying generative AI to CVE remediation",
+      "speakers": [
+        "Lucas Duarte",
+        "Anton Aleksandrov"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "vulnerabilities",
+        "ai",
+        "automation",
+        "container",
+        "cloud"
+      ],
+      "teaser": "Shows how a serverless pipeline uses Amazon Bedrock to open pull requests that patch vulnerable container dependencies.",
+      "summary": "The speakers, both AWS solution architects, start from the strain that CVE handling places on engineering teams. Finding, triaging and fixing vulnerabilities is largely manual, and the workload grows as applications and their dependencies multiply. They set out to automate the most repetitive part of that cycle without changing how teams already build and ship software.\n\nThe solution is event driven and serverless. When a container image is pushed to a registry, Amazon Inspector scans it, and the findings flow through EventBridge into DynamoDB. A small task then combines the CVE data, the current requirements file and a template built from earlier manual patches, and asks a Llama model on Amazon Bedrock to produce updated dependency versions. The output is a pull request the developer can review and merge, after which the image is rescanned. The speakers argue that well-built prompts and retrieved context let a smaller, cheaper model perform well on a narrow task.\n\nThe talk then looks at extending the pipeline with NVIDIA Morpheus, an open-source security analysis framework running on Kubernetes. It adds source code and SBOM inputs and checks whether a flagged vulnerability is actually exploitable, helping teams separate urgent fixes from ones that can wait. The main takeaways are to patch proactively, keep a human approval step, and treat the approach as a starting point. The code and a published write-up are available for teams to adapt.",
+      "durationSeconds": 2806,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "3QpwTrUzGlY",
+      "slug": "hacker-numerology",
+      "title": "Hacker Numerology",
+      "speakers": [
+        "HD Moore"
+      ],
+      "track": "recon",
+      "topics": [
+        "identity",
+        "network",
+        "vulnerabilities",
+        "privacy",
+        "intelligence"
+      ],
+      "teaser": "Shows how short, sequential identifiers leak details about systems, people and networks, and how to reason from a few samples.",
+      "summary": "HD Moore opens with the German tank problem, where a few captured serial numbers let analysts estimate wartime production far better than intelligence estimates did. He argues that identifiers now sit on nearly everything, from receipts, driver's licenses and car VINs to medical records and hardware serials, and that short, densely packed values often reveal far more than their owners expect once you collect a handful of them.\n\nThe middle of the talk walks through real examples. Sequential IDs in lab results and pharmacy prescriptions exposed other patients' records, discarded receipts showed how busy a restaurant was, and Dell service tags encoded purchase dates that could be read from management interfaces. Moore shows how timestamps and MAC addresses hide inside UUIDs and cookies, and how sampling IPv4 and IPv6 space exposes network layout, misplaced devices and unexpected open services. He also describes using a PlayStation discovery protocol to collect device identifiers at scale.\n\nThe takeaway is practical. Developers should avoid predictable identifiers for objects and records, and should enforce authorization on every lookup rather than trusting that a number is hard to guess. Defenders should also treat their own identifier schemes, and the metadata they expose, as potential intelligence sources that an outsider can measure over time.",
+      "durationSeconds": 3000,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "gP2gBn5S_yw",
+      "slug": "maturing-your-application-security-program-2",
+      "title": "Maturing Your Application Security Program",
+      "speakers": [
+        "Tanya Janca"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "application",
+        "management",
+        "lessons-learned",
+        "team",
+        "trust"
+      ],
+      "teaser": "Lays out three common AppSec program models, why they stall, and practical next steps to mature each one.",
+      "summary": "Tanya Janca opens by noting that many teams asking what comes next for their application security work find formal maturity frameworks such as SAMM, BSIMM, NIST and DSOMM out of reach. Drawing on close to 400 AppSec teams she has consulted with, she argues that programs should start smaller and build up from where they actually are.\n\nShe walks through three program types she sees often. The first relies on penetration testing a handful of critical applications and fixing findings at the end, which leaves coverage thin, costs high, and gives developers little help. The second is tool-heavy: teams hold SAST and DAST licences but roll them out only partly, report large backlogs, and do little to engage developers. The third has every tool and plenty of staff, yet heavy governance and friction leave developers and security at odds and slow every release.\n\nFor each model she gives concrete steps. Early on these include free scanners, a basic secure coding guideline, consolidating code into one place, threat modelling, and a simple way to report incidents. Later steps include balancing hires between testers and collaborative AppSec staff, reviewing tools every two years, finishing rollouts, and turning guidelines into developer-friendly standards. Her closing takeaways centre on building trust with developers, automating routine scans, and using the data a program already produces.",
+      "durationSeconds": 2551,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "MxoYI4dUyyo",
+      "slug": "owasp-masvs-and-threats-to-mobile-apps",
+      "title": "OWASP MASVS and Threats to Mobile Apps",
+      "speakers": [
+        "Daniel Shugrue"
+      ],
+      "track": "mobile",
+      "topics": [
+        "mobile",
+        "application",
+        "reverse-engineering",
+        "threat",
+        "attack"
+      ],
+      "teaser": "Shows how OWASP's MASVS resilience controls map to real-world reverse engineering attacks against mobile apps.",
+      "summary": "The talk starts from the scale of the app ecosystem: millions of mobile, web client and desktop apps run entirely on users' devices, where anyone can inspect, modify and replay the traffic between the app and its backend. The speaker introduces OWASP's Mobile Application Security Verification Standard (MASVS), which groups requirements into control areas, and focuses on the resilience group. That group covers platform integrity, code integrity, obfuscation and resistance to dynamic analysis such as debuggers and instrumentation toolkits.\n\nThe middle of the talk presents attack data aggregated from roughly 250 customers, spanning banking, gaming and medical device apps. Measured per app rather than per user instance, about 65 percent of apps were attacked in a four-week window in early 2024, and the share has grown over recent years. Rooting and jailbreaking make up most detected attacks, and Android sees more of them than iOS. App popularity correlated only weakly with attack frequency, and some detections came from users who simply wanted to change how an app behaved, such as altering device settings to reduce consumable costs.\n\nThe closing section covers defence. Protections are typically applied at build time, monitoring shows which guards fire, and responses range from blocking the app to forcing step-up authentication or disabling a feature. The speaker warns that these protections can break automated functional testing, and that resilience should complement static and dynamic security testing and secure storage rather than replace them. The audience discussed whether obfuscation amounts to security through obscurity, with the view that it raises the cost of static analysis even though determined attackers can eventually defeat it.",
+      "durationSeconds": 3153,
+      "publishedAt": "2024-11-11",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "vcRsGlrsFjs",
+      "slug": "safeguarding-machine-learning-systems-a-comprehensive-security-p",
+      "title": "Safeguarding Machine Learning Systems: A Comprehensive Security Plan",
+      "speakers": [
+        "Viswanath S Chirravuri"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "machine-learning",
+        "ai",
+        "risk",
+        "privacy",
+        "framework"
+      ],
+      "teaser": "Outlines a five-area plan for securing machine learning systems, spanning attacks, data, models, platforms and people.",
+      "summary": "The talk opens by comparing the current state of machine learning security with where web application security stood two decades ago, when injection flaws were poorly understood and tooling was immature. The speaker walks through the engineering side of an ML system: preparing data, choosing an algorithm, training to reduce prediction error, evaluating the model, deploying it as a file behind an API, and operating and updating it.\n\nThe middle section surveys attacks against these systems. These include evasion of classifiers such as spam filters, model extraction through repeated queries, backdoors and poisoned training data carried in pre-trained models from public hubs, and malware hidden in model files. Prompt injection, including indirect injection through uploaded documents, is covered as a newer category. A chatbot case in which a company was held to a promise its bot had made is used to show the business impact. The speaker proposes a framework with five areas: data, model, platform, compliance and human security. Each area has stated goals, requirements and guidance, and the speaker points to an open-source project that collects policies and tool lists.\n\nThe closing part covers privacy-preserving techniques, including differential privacy, federated learning, homomorphic encryption with its performance cost, secure multi-party computation and synthetic data. The talk ends with a phased roadmap: draft policy and run red teaming in the first three months, raise developer awareness, then evaluate privacy techniques and threat model ML systems over the following months before automating. Practical takeaway: understand the system thoroughly before threat modeling it, and use hands-on labs to learn the attacks.",
+      "durationSeconds": 3054,
+      "publishedAt": "2024-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "qryff5FVJ-0",
+      "slug": "fortifying-the-startup-supply-chain-secure-and-cost-effective-st",
+      "title": "Fortifying the Startup Supply Chain: Secure and Cost-Effective Strategies that Won't Break the Bank",
+      "speakers": [
+        "Akanksha Pathak"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply-chain",
+        "open-source",
+        "vulnerabilities",
+        "risk",
+        "trust"
+      ],
+      "teaser": "Shows startups how to secure their software supply chain using free tools, SBOMs, and low-cost vendor controls.",
+      "summary": "The talk looks at how startups with small budgets and small teams can begin a supply chain security program. The speaker argues that attackers often reach larger targets through smaller suppliers, and that one flawed shared component can spread across many organisations. Examples include the Log4j flaw, a recent firewall-migration tool vulnerability, and new US and European rules that push for software bills of materials and vendor transparency.\n\nThe middle of the session walks through a practical sequence. Begin with an inventory of the technology vendors use and the data they handle, then write security and SBOM obligations into vendor contracts. Generate SBOMs in CycloneDX or SPDX format using existing scanners or free generators, and store them in tamper-resistant storage with cryptographic checks. Match listed components against vulnerability databases, either through a homegrown script or through Dependency-Track, and run this in CI/CD pipelines rather than by hand. The speaker also covers signing artifacts with Sigstore, the SLSA framework for build maturity, and recording source and service details, with audit logs for SBOM changes. Legacy systems may be handled manually at first.\n\nThe question period adds practical judgement. Vulnerabilities attach to specific versions, so a minor-version fix is often safer than a major upgrade, and a finding can sometimes be contained rather than patched. The main lesson is that an SBOM only pays off when it feeds ongoing vulnerability tracking and someone acts on the results.",
+      "durationSeconds": 3240,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ijW9XdCmRso",
+      "slug": "effective-threat-modeling-for-better-software-security",
+      "title": "Effective threat modeling for better software security",
+      "speakers": [
+        "Karen Lu"
+      ],
+      "track": "appsec",
+      "topics": [
+        "threat",
+        "risk",
+        "development",
+        "team",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how an engineering organization makes threat modeling earlier, lighter and more scalable using security champions.",
+      "summary": "Karen Lu, a software security architect at Thales, argues that threat modeling matters more as products grow more complex, rely on wider supply chains and ship on faster agile and DevOps cycles. Demand has risen while teams still have limited people. The talk treats threat modeling as a structured record of assets, objectives, threats and planned mitigations, rather than a how-to guide.\n\nShe walks through a simple identity-and-access example with a relying party and an identity provider. Two ways to find threats are covered: the STRIDE categories and the confidentiality, integrity and availability properties. She points to knowledge bases such as MITRE ATT&CK and OWASP material, and notes that open-source and commercial tools each have trade-offs. One anecdote shows an early risk assessment of a requested feature leading a product owner to drop it, avoiding the cost of building and testing it.\n\nFor scale, she describes training security champions inside engineering teams to lead sessions, with architects reviewing only when needed. Other practices include short threat discussions in regular team meetings, opening sessions with quick prompts about what worries people most, linking threat artifacts to task trackers and user stories, and separating inherent threats that need ongoing controls and detection from accidental ones. Her takeaways are to start early, revisit models throughout a product's life, and pick methods suited to each context.",
+      "durationSeconds": 2973,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5Smt1hVv244",
+      "slug": "interesting-vulnerabilities-from-public-pentest-reports",
+      "title": "Interesting Vulnerabilities from Public Pentest Reports",
+      "speakers": [
+        "Abraham Aranguren"
+      ],
+      "track": "appsec",
+      "topics": [
+        "vulnerabilities",
+        "mobile",
+        "web",
+        "cloud",
+        "lessons-learned",
+        "network"
+      ],
+      "teaser": "Walks through real flaws from public pentest reports across mobile, web, VPN, and cloud applications.",
+      "summary": "The talk looks at security flaws found in public penetration test reports, which are free to read and often cover projects used by people at risk. It opens with mobile findings from a Hong Kong COVID-19 contact tracing app. These include an Android task hijacking flaw, vaccination records saved to a removable SD card, a settings toggle that could be switched off without re-authentication, and a TLS hostname check that was bypassed for the health system's domain, allowing traffic interception. A cleartext messaging protocol in a Bluetooth chat project is also covered, along with the Android and iOS settings developers must change to allow it.\n\nThe middle section moves to web, backend and cloud issues. A Python web application accepted a user ID in the request body, letting an attacker modify another account and take it over through password reset. An open-source project shipped a default JWT signing secret, so anyone could forge admin tokens. A compressed payload sent to an OpenTelemetry collector exhausted server memory, and a single spoofed UDP packet disrupted a VPN meant to help users in restrictive countries. Overly broad AWS administrator permissions also spread across accounts. The talk ends with an Electron prototype pollution demo that defeated a link safety check.\n\nThe takeaways are practical: grant the minimum permissions needed, never trust identifiers or roles supplied by the client, generate secrets per installation, limit decompression sizes, and handle malformed network input without crashing. The speaker also stresses that business logic flaws like these are usually missed by automated scanners and need manual review.",
+      "durationSeconds": 2869,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "nYEhR-HgbM4",
+      "slug": "dont-make-this-mistake-painful-learnings-of-applying-ai-in-secur-4",
+      "title": "Don’t Make This Mistake: Painful Learnings of Applying AI in Security",
+      "speakers": [
+        "Eitan Worcel"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "appsec",
+        "vulnerabilities",
+        "lessons-learned",
+        "automation"
+      ],
+      "teaser": "Shows where generative AI fails at fixing code vulnerabilities and how a hybrid approach can work more reliably.",
+      "summary": "The talk starts from a familiar problem: static analysis scans can return tens of thousands of findings, and triaging and fixing each one takes hours of developer time, so backlogs keep growing. The speaker frames the goal as automatically remediating first-party code so teams can keep shipping features while shortening the time between discovery and fix, at scale.\n\nEarly attempts used general-purpose chat models, prompted with a vulnerability description and the affected line. Results depended heavily on the prompt and the code. In a comparison across two intentionally vulnerable web applications and two commercial scanners, under a third of suggested fixes solved the problem cleanly, while many broke application logic, patched the wrong place, or deleted code. A live demo was disrupted by poor network connectivity. One SQL injection fix looked correct but broke the query because a numeric identifier was wrapped in quotes, and spotting that error required senior expertise. Reviewing thousands of model outputs one by one was shown to be too slow.\n\nThe alternative presented was a hybrid model. Deterministic, rule-based rewrites based on the code's syntax tree handle the transformation, while the model is limited to narrow sub-tasks such as locating user input or adding a null check. This gives repeatable output that is easier to review and scale, though each pattern takes effort to build. The takeaways: treat AI as a copilot rather than an autopilot, scope prompts tightly, validate every change, and expect developers to lose trust if bad fixes keep arriving. A tip on requesting machine-readable output was also shared.",
+      "durationSeconds": 2931,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "-q2bLwC2wCI",
+      "slug": "no-laughing-matter-the-owasp-top-10-for-llms-in-code-examples",
+      "title": "No Laughing Matter: The OWASP Top 10 for LLMs in Code Examples",
+      "speakers": [
+        "Jacob Berry"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "owasp",
+        "appsec",
+        "vulnerabilities",
+        "machine-learning"
+      ],
+      "teaser": "Walks through OWASP's LLM top 10 risks with pseudo-code examples covering prompt injection, data disclosure and excessive agency.",
+      "summary": "The talk maps several risks from the OWASP Top 10 for large language model applications onto a typical enterprise architecture: a front end, middleware that calls the model, and retrieval augmented generation backed by a vector store. Before getting into specific risks, the speaker explains how these pieces fit together so that developers new to LLM apps can follow the examples.\n\nThe middle of the talk focuses on prompt injection and sensitive information disclosure. Using a LangChain vulnerability that allowed user input to run arbitrary Python as an example, the speaker shows how unsanitized input passed into a shell-capable call can execute commands on the host with the application's permissions. Suggested fixes include input filtering, pattern-based detection libraries and parameterization. For disclosure, he covers retrieval that lacks access filtering, filtering source documents before they are embedded, keyword-based classification, least-privilege service accounts and anonymization of training data. He also covers excessive agency, where an agent acts on model output without checks, and recommends a human-in-the-loop confirmation step before any action is taken.\n\nThe closing argument is that these weaknesses look familiar to application security teams: validate input, enforce access control and apply least privilege. The question period touched on encoded secrets, permissions in enterprise search, and whether fine-tuning or retrieval suits factual data. The main takeaway is that LLM applications need the same security discipline as other software, applied with new terminology.",
+      "durationSeconds": 1939,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "8izhoGvLM-A",
+      "slug": "how-will-the-advent-of-new-ai-powered-tools-affect-appsec-practi",
+      "title": "How will the advent of new AI-powered tools affect AppSec practices - and how can AppSec reap the best of it?",
+      "speakers": [
+        "Chris Lindsey"
+      ],
+      "track": "appsec",
+      "topics": [
+        "ai",
+        "appsec",
+        "developer",
+        "vulnerabilities",
+        "automation"
+      ],
+      "teaser": "Surveys how AI tools could reshape AppSec workflows, from developer productivity to vulnerability prioritization and QA.",
+      "summary": "Chris Lindsey, an application security evangelist, opens by asking how AI-powered tools will change AppSec work and how teams can benefit from them. He describes AI as a way to connect scattered security data and surface patterns people miss. He cites a proof of concept at a large company where unsanctioned \"shadow AI\" use was far higher than leaders estimated, with AI features often hidden inside browser extensions and everyday IDEs. He also covers AI-assisted red teaming, such as automated attack exploration layered on DAST and plugins that link dependency versions to known vulnerabilities.\n\nThe middle of the talk looks at developer-facing uses. These include explaining scanner findings, suggesting fixes, helping junior staff learn, ranking risk through ASPM-style aggregation, and speeding up unit tests and QA automation. He warns that model output can be wrong or hallucinate, that generated code can add flaws that scanners miss, and that proprietary source code should not go into public chatbots. For models pulled from public hubs, he recommends sandbox testing before use and least-privilege access for any model connected to databases or file systems.\n\nHe closes by urging security teams to build working relationships with developers and QA. He suggests QA enforce a rule that releases must not add new vulnerabilities, and he argues that AI tools will keep evolving, so teams should engage with them now while keeping humans in the review loop.",
+      "durationSeconds": 2552,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "fztxlEajwa8",
+      "slug": "modern-appsec-vs-genai-application-is-your-appsec-ready-2",
+      "title": "Modern Appsec vs. GenAI Application: Is Your Appsec Ready?",
+      "speakers": [
+        "Balachandra Shanabhag"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "appsec",
+        "application",
+        "vulnerabilities",
+        "risk",
+        "code"
+      ],
+      "teaser": "Maps the OWASP LLM Top 10 risks and AI-generated code issues against existing application security controls.",
+      "summary": "The talk starts from the rapid spread of generative AI features and AI code assistants in software teams, and asks whether a mature application security program is equipped for the new risks. The speaker sketches a generic GenAI application stack, from the hosting infrastructure and foundation model up through retrieval-augmented generation, plugins and agents, which gives the audience a shared map of where risk sits.\n\nNext, the speaker walks the OWASP Top 10 for LLM applications against that stack and rates each item by how much existing controls already cover it. Prompt injection and insecure output handling mostly map to familiar input validation, privilege separation and web defenses, though with LLM-specific adjustments. Training and retrieval data poisoning, hallucination-driven over-reliance and excessive agency are presented as areas needing new controls, such as data provenance checks and human review of autonomous actions. Denial of service, supply chain and sensitive data disclosure are treated as extensions of current practice at larger scale.\n\nThe second half covers code produced by AI assistants, which can carry insecure patterns learned from old public code, outdated libraries, licensing problems, hallucinated or typosquatted packages, and misconfigurations. The recommended response combines AI usage governance, mandatory peer review, modern software composition analysis, developer training, monitoring of assistant use, and thorough testing of generated code. The practical takeaway is that most existing appsec controls still apply, while data handling, agent autonomy and generated-code governance need deliberate additions.",
+      "durationSeconds": 3121,
+      "publishedAt": "2024-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "wtAJogbtrPw",
+      "slug": "5-must-know-open-source-identity-management-tools-for-cloud-nati",
+      "title": "5 Must-Know Open Source Identity Management Tools For Cloud Native Stacks",
+      "speakers": [
+        "John Walker"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "identity",
+        "open-source",
+        "devops",
+        "management"
+      ],
+      "teaser": "Walks through open source tools that apply DevOps practices to identity controls in AWS and Azure environments.",
+      "summary": "The talk starts from the view that identity ties together most security domains, and that cloud environments often expose weak identity administration. Much of the risk comes from over-broad credentials and provisioning that is manual, hard to repeat and hard to reason about. The speaker argues for treating the identity layer as part of each application's threat model and managing it with the same version-controlled, automated practices used for software delivery.\n\nUsing attack trees, the speaker maps how an attacker could reach sensitive data in a containerized application. The example shows that stolen cloud credentials and over-permissioned database access can bypass application defenses entirely. The AWS tools covered include a utility that migrates existing accounts into Terraform, Parliament, which runs unit-test style checks against IAM policies, and IAM Live, which reveals the permissions an application actually uses. The Azure tools include utilities that enumerate service principals and managed identities, a set of conditional access policies deployed in stages, a database of Azure permissions with risk classifications, and a tool that maps identities to Microsoft's Enterprise Access Model.\n\nThe takeaway is that tools only help when paired with threat modeling, sensible review processes and policy tests written as code. Invariants, such as limiting a key to one bucket or restricting a database user to expected network ranges, can then fail a build when they are broken. The speaker presents the approach as work in progress rather than a finished recipe.",
+      "durationSeconds": 2740,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "GKKvqokbb1A",
+      "slug": "three-categories-of-rogue-ai-and-how-to-mitigate-your-risk",
+      "title": "Three Categories of Rogue AI and How to Mitigate your Risk",
+      "speakers": [
+        "Josiah Hagen"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "risk",
+        "threat",
+        "trust",
+        "defensive-security"
+      ],
+      "teaser": "Sorts rogue AI behavior into accidental, subverted and malicious groups, with defenses drawn from OWASP guidance and zero trust.",
+      "summary": "The speaker, a researcher at an AI lab, frames rogue AI as agentic systems whose behavior drifts from the goals of their operators. He starts with how agentic workflows let models call tools, spawn sub-agents and act with growing independence, and points to the OWASP Top 10 for LLM applications, where excessive agency is the closest fit for this problem.\n\nThe core of the talk sorts rogue behavior into three groups. Accidental cases include an internal assistant that exposed salary data from an HR system it was never meant to reach, runaway resource use from agents looping or spawning other agents, and an agent given shell access that altered a machine until it no longer booted. Subverted cases cover jailbreaks run on stolen access, indirect prompt injection that spread through email assistants in a research demonstration, and models absorbing poisoned information. The malicious category, which the speaker says is only starting to appear, covers agents used for data theft, fraud and automated attack chains.\n\nFor defense, the speaker recommends first mapping each system's boundary, including its models, parameters, memory and guardrails, then layering controls in an OSI-style model from hardware through network to tools. Practical steps include limiting permissions, rate limiting, requiring human approval for new resources, monitoring for non-human behavior, and inspecting inputs and outputs in both directions. The talk closes by tying these measures to a zero trust maturity model and noting that unsanctioned AI use weakens governance from the start.",
+      "durationSeconds": 2363,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "bJGvLSJi-sk",
+      "slug": "api-security-what-i-would-do-with-30-minutes-a-week",
+      "title": "API Security: What I would do with 30 minutes a week",
+      "speakers": [
+        "Himanshu Dwivedi",
+        "Elena"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "security-operations",
+        "defensive-security",
+        "management",
+        "web"
+      ],
+      "teaser": "Presents ten low-effort API security checks that a small team could run within about half an hour a week.",
+      "summary": "The talk starts from a practical limit: an API security program may get only about 30 minutes a week. The speakers argue that teams tend to fix whatever is urgent instead of building a steady routine, so they present a short, prioritised list of basic measures rather than a strategic overview. They note that many recent API-layer breaches came from simple gaps, such as an endpoint that was locked down one day and open the next, rather than from sophisticated attacks.\n\nThe core is a ranked set of checks. First, review which APIs became reachable overnight and scan the open ones for personal data with a basic PII tool. Next come secrets left in code repositories or publicly shared Postman collections, and retiring unused endpoints that have gone untouched for long periods. Authentication and encryption follow: move off basic auth and old TLS versions, and score APIs against those baselines. Later items cover watching for sudden traffic surges, filtering low-reputation source addresses, flagging unusually large data downloads, removing rarely needed methods such as DELETE, and keeping regular testing for object-level authorization and SSRF.\n\nThe closing argument is that a security operations team, not only application security engineers, should own the daily routine, since they already work with alerts and telemetry. Measuring results with simple metrics keeps the work from being ignored. In the Q&A, the speakers acknowledged that operations staff often lack API vocabulary, so reports need to be simplified and someone has to build them. The main takeaway is to start with a daily report of APIs that changed from closed to open.",
+      "durationSeconds": 2601,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "qP_iJtfO5Ls",
+      "slug": "words-be-hard-how-security-can-speak-business-lingo",
+      "title": "Words Be Hard: How Security Can Speak Business Lingo",
+      "speakers": [
+        "Sean Poris"
+      ],
+      "track": "policy",
+      "topics": [
+        "management",
+        "risk",
+        "team",
+        "trust",
+        "ai"
+      ],
+      "teaser": "Shows security practitioners how to frame findings in business terms, using empathy, active listening and influence with stakeholders.",
+      "summary": "Sean Poris opens with the gap that often separates security teams from the business: when security is seen as the \"Department of No,\" stakeholders stop listening. He recommends a more collaborative stance, starting proposals by asking what the team is trying to achieve before raising risks.\n\nThe middle of the session covers business context. Sean suggests learning a company's culture through all-hands meetings, tracking the KPIs stakeholders are measured on, and timing requests around budget cycles, peak seasons and strategic planning, so remediation lands in quieter periods. He then covers empathy, active listening, and positional versus personal influence. A worked example compares the cost of a likely breach with a business opportunity to make a prioritisation case. A second example rewrites an SSRF finding for a product manager using a plain-language analogy, with generative AI suggested as a drafting aid for that kind of translation.\n\nThe closing portion focuses on relationships: joining launch celebrations and sprint planning, working through security champions embedded in development teams, and keeping rapport going when teams are remote. The takeaway is that clear, business-framed communication and sustained trust let security shape decisions rather than block them.",
+      "durationSeconds": 3002,
+      "publishedAt": "2024-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "p97_XAJDqzw",
+      "slug": "are-you-ready-for-the-digital-aipocalypse",
+      "title": "Are you ready for the digital AIpocalypse?",
+      "speakers": [
+        "Mano Paul"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "owasp",
+        "attack",
+        "model",
+        "vulnerabilities"
+      ],
+      "teaser": "Surveys major AI attack classes from the OWASP ML and LLM Top 10, with a live adversarial-noise demo against an image classifier.",
+      "summary": "Mano Paul opens by arguing that people do not share a common definition of AI, which makes it hard to defend. He separates narrow, general and super intelligence, notes that most corporate AI is predictive rather than generative, and points to heavy overlap between the OWASP ML Top 10 and LLM Top 10.\n\nNext he walks through attack categories. Data poisoning corrupts training data so a model misclassifies, illustrated with a medical dosing example. Prompt injection, both direct and indirect, can make an LLM application ignore its instructions or take actions it was never meant to take, tied to excessive agency. Model inversion can infer sensitive attributes such as age from outputs, while model poisoning alters training parameters, often through an insider or a weak supply chain. Model evasion adds crafted perturbations to inputs, and a live demo applies that noise to a tiger shark photo for an image classifier.\n\nHe closes with practical notes: traditional controls such as access control to models and datasets still apply, and teams need ongoing monitoring for drift, performance metrics and prompt logs that someone actually reviews. For newcomers he suggests starting with Python and notebooks, since understanding how to break software helps when building it.",
+      "durationSeconds": 3023,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "0qSGRZpXeoE",
+      "slug": "my-infosec-journey-led-me-to-create-my-own-incident-response-too",
+      "title": "My InfoSec journey led me to create my own incident response tools, what .....",
+      "speakers": [
+        "Michael Gough"
+      ],
+      "track": "community",
+      "topics": [
+        "incident-response",
+        "tool",
+        "building",
+        "lessons-learned",
+        "learning"
+      ],
+      "teaser": "Traces how one responder's career path led to building incident response utilities, and the gaps those tools were meant to fill.",
+      "summary": "Michael Gough walks through the career path that led him to write his own incident response utilities. He starts with an early batch-file script for checking trojans at a bank, then covers consulting work, benchmark projects, and a detour into family law reform that he says sharpened his public speaking. Later stops include a gaming-industry engagement against a persistent intrusion group, where commercial endpoint tools missed in-memory malware and file-system snapshots left blind spots.\n\nThe middle of the talk covers the tools that grew out of those failures. Standalone, dependency-free local utilities were built to collect artifacts from hosts and feed them into a SIEM, and a static file analyzer was added for triaging suspicious binaries. He describes testing endpoint products against malware samples and finding that many missed them, and he explains how a Windows firewall rule could silence an endpoint agent. He also argues that properly configured Windows logging gave far more useful detail than endpoint tooling, and that logs can rule out false leads as well as confirm intrusions.\n\nHe closes with practical guidance for anyone building tools: keep dependencies minimal, think about how analysts will read the output, since CSV and JSON formats matter, map findings to MITRE ATT&CK, and document and share your work. The overall message is to turn your own problem-solving into reusable tools or write-ups that others can build on.",
+      "durationSeconds": 3359,
+      "publishedAt": "2024-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "kKGcd2QlYr4",
+      "slug": "a-fun-story-about-a-software-supply-chain-calamity-the-ua-parser",
+      "title": "A Fun Story About A Software Supply Chain Calamity: the UA-Parser Saga",
+      "speakers": [
+        "Andy Lewis"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply-chain",
+        "open-source",
+        "trust",
+        "lessons-learned",
+        "risk"
+      ],
+      "teaser": "Walks through the UA-Parser npm compromise and what it reveals about risk in open-source dependencies.",
+      "summary": "The talk tells the story of the UA-Parser-JS compromise, an npm library used to detect browser and device details from user agent strings. With millions of users and thousands of dependent projects, a hijacked release reached a large share of the Node ecosystem. The speaker walks through the timeline, from the maintainer's warning that the bad versions could not be unpublished to the malicious code that followed and the cleanup that replaced it with a few clean commits.\n\nThe middle of the talk compares this incident to other supply chain cases, including Log4j, the XZ Utils backdoor that nearly reached major Linux distributions, and the 3CX trojan, which abused a Windows trust weakness that accepts partially signed packages. Each case supports a set of practical controls: diffing new releases against earlier versions, building a baseline of normal package behavior such as network calls, system commands and virtualization checks, verifying built artifacts rather than source alone, scanning for leaked secrets, and tracing transitive dependencies.\n\nThe closing advice is that a software bill of materials only pays off if teams can use it to answer questions quickly when the next vulnerability lands. The speaker also argues for private package repositories that stage and review third-party code before developers pull it in. The session ends with audience questions about tracking transitive dependencies and responding to unexpected script activity on a host.",
+      "durationSeconds": 3034,
+      "publishedAt": "2024-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "g_a_UtH1ItE",
+      "slug": "scan-your-infrastructure-as-code-like-code",
+      "title": "Scan your infrastructure as code like Code!",
+      "speakers": [
+        "Neal Brown"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "infrastructure",
+        "aws",
+        "devops",
+        "tool"
+      ],
+      "teaser": "Shows how Checkov scans Terraform code for cloud misconfigurations before deployment, with CI and pre-commit integration.",
+      "summary": "The talk argues that cloud infrastructure defined as code deserves the same static scanning that application code already gets. Misconfigurations such as publicly readable storage buckets, unencrypted volumes and databases protected only by a password are a common source of breaches, and the speaker stresses that catching them before code is committed costs far less than fixing them after a deployment goes live.\n\nThe speaker focuses on Terraform and demonstrates Checkov, an open-source scanner under the Apache 2.0 license that also covers other formats such as Helm, Kubernetes manifests and Dockerfiles. Running it on a directory requires no configuration, and findings point to the exact file, line and resource. He shows how to suppress a single check with an inline comment when a resource has a valid reason to differ, how to create a baseline so legacy findings are set aside while new ones still appear, and how to export command-line options into a config file. He also covers pre-commit hooks and CI pipelines, where failed checks can block a commit or merge, and briefly mentions the commercial offering built on the same project and HashiCorp Sentinel for policy as code.\n\nThe main takeaway is to start with a few high-impact checks, such as open SSH and RDP ports, public storage and database access, and missing encryption, and to run them as early as possible. Stylistic checks can be tuned deliberately through skips or baselines rather than ignored, so the scanner stays trusted by the developers who rely on it.",
+      "durationSeconds": 2530,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "RFPdC1T_rvI",
+      "slug": "the-modern-threat-landscape",
+      "title": "The Modern Threat Landscape",
+      "speakers": [
+        "Mike Klepper"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "intelligence",
+        "ai",
+        "risk",
+        "social"
+      ],
+      "teaser": "Surveys attacker motivations, dark web risks, deepfakes, and AI-enabled threats, with mitigation ideas for defenders.",
+      "summary": "Mike Klepper opens by framing threat actors as rational agents who pursue value, whether monetary, social, or political. He argues that knowing what an attacker wants gives defenders a more accurate picture of their risk. He points to cybercrime-as-a-service platforms that lower the barrier to entry, the very low odds of prosecution, and geopolitically motivated attacks. He also notes that attackers increasingly target credentials and identities, and edge appliances that cannot run endpoint agents.\n\nThe middle section covers the dark web, which hosts both legitimate sites and criminal marketplaces. Klepper explains that stolen credentials are traded and resold for long periods, and that password reuse keeps them useful. He recommends monitoring for exposed credentials and, after a malware infection, resetting sessions and every other secret the device could reach. He then covers deepfakes: cloned voices used in virtual kidnapping scams, a political robocall, face-swapped video calls that led to large fraudulent transfers, and synthetic explicit content used for extortion.\n\nThe closing section looks at AI on both sides. Attackers use it for profiling, phishing, influence operations and faster malware development, while organizations face bias, workforce and third-party risks from their own adoption. Suggested mitigations include clear policy, user training, content watermarking, delays and verification steps for high-risk requests, and treating AI vendors as part of third-party risk management.",
+      "durationSeconds": 2677,
+      "publishedAt": "2024-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "zMVPqinvOx0",
+      "slug": "untapped-territory-strengthening-defenses-against-ci-cd-security",
+      "title": "Untapped Territory: Strengthening Defenses Against CI/CD Security Threats",
+      "speakers": [
+        "Farshad Abasi"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "build",
+        "owasp",
+        "lessons-learned",
+        "identity",
+        "secrets-management",
+        "supply-chain"
+      ],
+      "teaser": "Walks through the OWASP top CI/CD risks with real breach examples and practical controls for hardening build pipelines.",
+      "summary": "The talk argues that CI/CD pipelines are an under-protected entry point into software systems. The speaker traces how development moved from waterfall to agile and then to DevOps, with automation widening what needs guarding. Several real incidents anchor the discussion, including SolarWinds, Codecov, Travis CI, a compromised PHP git server, dependency confusion and the Deep Source breach.\n\nThe core walks through the OWASP top 10 pipeline risks one at a time, describing how each is exploited and what damage follows. Examples cover missing review gates, build credentials with more access than needed, poisoned pipelines through direct edits or tampered scripts, and secrets leaking into logs. Suggested defenses include avoiding self-hosted git servers without hardening, resolving packages from internal repositories first, withholding secrets from fork pull requests, scoping permissions per pipeline step, limiting third-party tool access, centralizing tamper-resistant logs, and checking artifact integrity continuously.\n\nThe speaker closes by previewing an OWASP pipeline verification standard, modeled on ASVS, that aims to offer checkable controls. Key takeaways include reviewing past incidents with your team, layering controls, assuming compromise will eventually happen, and treating pipeline security as ongoing work. The Q&A extended the scope to developer workstations, especially for remote staff.",
+      "durationSeconds": 2904,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Ao9iqf3NSPY",
+      "slug": "cracking-the-code-how-cybersecurity-startups-secure-funding",
+      "title": "Cracking the Code: How Cybersecurity Startups Secure Funding",
+      "speakers": [
+        "Roger Thornton"
+      ],
+      "track": "policy",
+      "topics": [
+        "innovation",
+        "lessons-learned",
+        "management",
+        "risk",
+        "venture-capital"
+      ],
+      "teaser": "Explains how venture capital works for security startups and which funding pitfalls founders should avoid.",
+      "summary": "Roger Thornton, a partner at an early-stage venture firm that invests only in cybersecurity companies, opens by making the case that startups matter in security. He argues that the field is shaped by a persistent adversary, so many small companies pursuing different approaches tend to produce better results than large firms working through lengthy internal processes. He also shares figures suggesting that most venture-backed security companies never return investors' money, with only a minority succeeding even among top-tier firms.\n\nThe middle of the talk covers how venture capital works: how the firm screens companies, the common reasons it passes on deals, and why its strategy is to be the first institutional investor in a round. Thornton then walks through lessons from his own experience. He stresses that founders should have worked at a software company first, should validate demand through customers or a working demo before raising, and should be careful with bootstrapping, incubators, and a crowded cap table that can discourage later investors.\n\nHe closes by identifying market risk as the one founders should avoid, and by emphasizing the value of a strong technical co-founder and a team that can recruit others. The session ended with a question-and-answer period covering accelerators, bootstrapping and founder vesting.",
+      "durationSeconds": 3776,
+      "publishedAt": "2024-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "zXwYJO3uWbA",
+      "slug": "perspectives-on-application-security-and-ai",
+      "title": "Perspectives on Application Security and AI",
+      "speakers": [
+        "James Wickett"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "application",
+        "code",
+        "machine-learning",
+        "development"
+      ],
+      "teaser": "Surveys where application security and AI overlap, with prompting techniques, open-source tools and lessons from analyzing code changes.",
+      "summary": "The speaker opens by arguing that AI will reshape security the way cloud and infrastructure-as-code reshaped operations and gave rise to DevOps. He describes how security tooling has piled up pattern rules and scanner output, and how developers have been left batching commits behind slow pipelines.\n\nThe middle of the talk covers lessons from building a contextual code-change analysis product. Rather than sending everything through one model, the team matched models to tasks, combined deterministic checks with probabilistic ones, added retrieval for domain knowledge, and built a test suite to keep results consistent. Each change was analyzed alongside its context, such as the author, touched functions, dependencies, scanner findings and past bounties. He demonstrated prompt approaches, including a structured prompt framework, an open-source prompt-chaining tool and a community threat-modeling bot, and said the results were mixed.\n\nHe closes with where small teams could start: enriching findings so developers understand them, summarizing unfamiliar code for security reviewers, and supporting threat modeling. He stressed keeping a human in the loop by being specific about what was analyzed and letting engineers decide, and noted that AI still struggles with high-volume event data.",
+      "durationSeconds": 2637,
+      "publishedAt": "2024-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "G8JovvZP0LA",
+      "slug": "shadowray-first-known-attack-campaign-targeting-ai-workloads-act",
+      "title": "ShadowRay: First Known Attack Campaign Targeting AI Workloads Actively Exploited In The Wild",
+      "speakers": [
+        "Mic McCully"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "open-source",
+        "vulnerabilities",
+        "attack",
+        "infrastructure"
+      ],
+      "teaser": "Shows how a disputed Ray vulnerability was actively exploited in the wild against exposed AI workloads.",
+      "summary": "The talk introduces \"shadow vulnerabilities,\" flaws in open-source libraries that are disputed or documented only as intended behavior, so they never receive a CVE that scanners can flag. The speaker argues that these issues matter especially for AI, where fast adoption, expensive GPU compute, and sensitive data make the underlying infrastructure an attractive target.\n\nThe central case study is Ray, a distributed framework used to run AI workloads. A disputed issue meant its jobs dashboard and REST API listened on all interfaces by default and accepted job submissions without authentication. Internet-wide scanning turned up thousands of exposed servers, some of which had been reachable for close to a year. Because submitted jobs were echoed in the console, the team could follow attacker activity, which included reverse shells, crypto miners, and rival miners competing to shut each other down. Exposed hosts also leaked credentials such as SSH keys, cloud keys, and API tokens. The researchers reproduced the same techniques to show how far a compromised cluster could reach.\n\nThe discussion covered how hard it is to get developers and businesses to act on documentation-only risks, and why relying on maintainers to add controls is not enough. The speaker described runtime approaches, such as profiling libraries against their expected behavior and flagging unsafe configurations, to catch problems that have no published CVE. The practical takeaway is to treat default settings of AI tooling as untrusted, check what is reachable from the network, and watch for libraries that unexpectedly spawn processes or open connections.",
+      "durationSeconds": 2297,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "xDkZ1_Qi3MY",
+      "slug": "ai-under-the-hood-unmasking-hidden-threats-2",
+      "title": "AI Under the Hood: Unmasking Hidden Threats",
+      "speakers": [
+        "Nuray Baltaci Akhuseyinoglu"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "threat",
+        "risk",
+        "machine-learning",
+        "framework"
+      ],
+      "teaser": "Presents a consolidated set of threat modeling questions for AI and ML applications, distilled from fourteen existing frameworks.",
+      "summary": "The talk starts from the idea that AI systems need security testing suited to their risk, size and application, much as a heavy truck's brakes differ from a small car's. It covers adversarial inputs, such as altered stop signs that can fool self-driving perception models, and data poisoning, where manipulated training images cause a classifier to mislabel objects. It also explains why AI security is hard to test: there are no predefined test cases, and models are usually tested as a whole rather than in parts.\n\nThe middle section describes a process for securing AI applications: inventory the components, rank them by criticality, threat model them, and then verify them. The main focus is a threat modeling library called Guardrail. The team reviewed 14 published AI threat resources and extracted more than 400 threats, then removed duplicates and items that were not AI-specific. The remaining threats were turned into questions, grouped into a baseline set plus add-on sets for continuous learning and applications that use user data, and refined through expert interviews.\n\nThe talk closes with the scope split between manual threat modeling, which is the focus, and automated adversarial robustness testing, which was left out for now. Future work includes systematising adversarial attacks, reviewing testing tools, and looking for CVEs tied to adversarial attacks. For practitioners, the takeaways are to first ask whether AI is needed at all, to weigh build versus buy with their risk appetite in mind, and to use a shared question set when analysing AI-specific threats.",
+      "durationSeconds": 1471,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "U9TFw3_mLks",
+      "slug": "dissecting-ddos-attacks",
+      "title": "Dissecting DDOS Attacks",
+      "speakers": [
+        "Mark Spears"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "attack",
+        "incident-response",
+        "web",
+        "risk",
+        "lessons-learned"
+      ],
+      "teaser": "Walks through anonymized real-world DDoS attack data and shows how to analyze, stop and prevent such attacks.",
+      "summary": "The talk opens by framing denial-of-service as an attempt to exhaust bandwidth, connections or application resources. It separates single-source attacks, distributed floods and amplification, and explains why small attacks can still take a server offline while large ones drive up cloud costs. The speaker, who works on incident response and web application firewall deployments, then covers who launches these attacks: nation-state actors, ransomware crews probing for weak VPNs, and disgruntled staff or competitors renting botnet time from dark-web services.\n\nUsing several anonymized case studies, the talk walks through attack timelines and the telemetry behind them. Rate-limiting rules and managed challenges stopped one flood within minutes, while a repeat attack exposed gaps in default configuration. A ransom-driven campaign of millions of requests was mostly blocked by provider rules, yet the attackers kept changing tactics. In a smokescreen case, a large flood masked credential stuffing against login and password-reset APIs, and that activity only surfaced once the default page traffic was filtered out. Analysis relied on country, network block, user agent and JA3/JA4 TLS fingerprints to separate hostile traffic from legitimate traffic.\n\nThe closing advice is practical: deploy a WAF with logging, prevent origin bypass, tune rate and geo rules, reduce exposed services, and move VPN load off the firewall. The speaker also urged teams to run tabletop exercises, write continuity plans, and put cost estimates in front of executives and boards so that risk decisions are made deliberately rather than left to insurance.",
+      "durationSeconds": 2938,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "-Lw7hVs53Ec",
+      "slug": "how-to-shift-left-and-find-critical-authorization-vulnerabilitie",
+      "title": "How to shift-left and find critical authorization vulnerabilities throughout your CI/CD Pipeline?",
+      "speakers": [
+        "Ankush Jain",
+        "Ankita Gupta"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "vulnerabilities",
+        "devops",
+        "application",
+        "web",
+        "detection"
+      ],
+      "teaser": "Shows how to catch broken authorization flaws in CI/CD pipelines using staging tests for IDOR, roles, permissions and plans.",
+      "summary": "The talk covers broken authorization, where a logged-in user reaches data or actions meant for another user or a higher role. The speakers note that these flaws rank among the most critical and common bug bounty findings and are hard to detect at scale. They cite a recent GitLab CODEOWNERS bypass as an example and frame the work around defining policies, monitoring them, and testing that code enforces them.\n\nThe middle covers a staged approach. During API design, teams should list resources, roles and permissions, then keep access policies separate from implementation so tooling can flag endpoints lacking a policy before merge. In staging, automated tests can create objects under a victim account and try to read or change them from an attacker account, which catches object-level flaws. The speakers extend this to role, permission and plan checks, comparing a documented access table against live responses. For permissions, they recommend starting from a user with no rights and adding them one at a time. They also flag token automation as a practical obstacle when logins involve SSO, one-time passwords or magic links.\n\nThe closing part covers production monitoring for access spikes and brute-force patterns, and a combined setup where a dynamic scanner in staging sends malicious requests while runtime alerts flag successful exploits. The main takeaway is to build an authorization matrix early, automate checks for every role and plan, and fail the pipeline whenever a restricted call succeeds.",
+      "durationSeconds": 2113,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "6qVH6n6Yaqs",
+      "slug": "cvss-v4-a-better-version-of-an-imperfect-solution-2",
+      "title": "CVSS v4 – A Better Version of an Imperfect Solution",
+      "speakers": [
+        "Mário Teixeira"
+      ],
+      "track": "policy",
+      "topics": [
+        "vulnerabilities",
+        "risk",
+        "open-source",
+        "management",
+        "trust"
+      ],
+      "teaser": "Explains what changed in CVSS version 4 and where its scoring still falls short for prioritizing open source vulnerabilities.",
+      "summary": "The talk opens with the problem of working through a large backlog of vulnerabilities. CVSS, maintained by FIRST and tied to MITRE's CVE program, has become the common severity scale, and the speaker explains why a newer version was needed. Version 4 separates attack requirements from attack complexity, lets impact be assigned to the vulnerable system or a downstream system, renames the temporal group to threat metrics, and adds a supplemental group. Side-by-side examples, a router ARP spoofing case and a web application code execution case, show how v4 can produce different numbers from v3.1, and the audience's guesses are compared with the results.\n\nThe middle section looks at why scores still fall short in practice. Severity is often mistaken for risk, adoption lags among providers and consumers, and many teams rely only on the base group. Limited context pushes people toward worst-case assumptions and score inflation, bug bounty incentives push scores upward, and open source dependencies make it hard to know how a library is really used. Because scoring depends on both providers and consumers, coordination and agreement become problems too.\n\nThe closing part suggests practical steps: use the threat and environmental groups, automate threat intelligence and asset data where possible, publish fuller information in advisories, and take part in the CVSS special interest group. The speaker leaves open questions about whether v4 is actually more accurate, and the Q&A covers calculators and how long adoption may take.",
+      "durationSeconds": 3125,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "oxMUBkPuERw",
+      "slug": "true-or-false-ai-will-take-your-cybersecurity-job",
+      "title": "True or False? - AI Will Take Your Cybersecurity Job",
+      "speakers": [
+        "Marcus Carey"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "learning",
+        "innovation",
+        "security-operations"
+      ],
+      "teaser": "Weighs which cybersecurity roles AI may replace and which it can augment, with demos of AI-assisted analyst workflows.",
+      "summary": "Marcus Carey opens by dropping slides for a live, demo-driven session and asks whether AI will take cybersecurity jobs. His answer is that the bigger risk comes from people who do not learn to use AI well. He argues that professionals who ignore the technology will fall behind colleagues who work with it.\n\nThe middle of the talk centres on a security operations example. Carey describes how an analyst triaging a ticket often checks several lookup sites by hand, and he argues that a model connected to those services through an API can gather the same data in about a minute, leaving the analyst to make the judgement calls. He then walks through techniques in Claude and ChatGPT: asking the model how to write better prompts, saving reusable instructions in project settings, loading policy documents and source code into large context windows, and having the model match a person's writing tone. He also shows a custom GPT and a voice interaction.\n\nThe closing section covers limits. Carey stresses that models hallucinate, so outputs need checking and human judgement, and he notes that data handling depends on vendor enterprise or private options and on what a client permits. His takeaway is to treat AI as a capable but inexperienced assistant, keep building your own expertise, and use these tools to advance your career.",
+      "durationSeconds": 3209,
+      "publishedAt": "2024-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "tGDcalI0lnY",
+      "slug": "sbom-shelter-in-the-dependency-storm-building-resilience-brick-b",
+      "title": "SBOM Shelter in the Dependency Storm: Building Resilience Brick by Brick",
+      "speakers": [
+        "Josh Sokol"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "supply-chain",
+        "open-source",
+        "risk",
+        "build",
+        "lessons-learned"
+      ],
+      "teaser": "Traces how one open source project moved from untracked dependencies to automated SBOM generation in its CI/CD pipeline.",
+      "summary": "Josh Sokol, the creator of the open source governance and risk tool SimpleRisk, walks through how his project went from scattered, hand-tracked dependencies to automated software bill of materials (SBOM) generation. He starts with the project's early history, when the codebase held a few third-party libraries stored in several folders. By 2021 the sprawl had grown: multiple copies of jQuery, including one several years old, and no clear record of where each component lived or which license applied.\n\nThe middle of the talk covers the steps taken to regain control. The team first listed each component with its location, version and license, then moved PHP packages into Composer and JavaScript packages into Yarn. Dependabot added vulnerability alerts and pull requests for updates. In the CI/CD pipeline, GitHub workflows check licenses against an approved list, and CycloneDX tools generate an SBOM for each pull request, stored as a build artifact and merged into one file. Dependency-Track ingests the results to flag known vulnerabilities. Sokol also stresses pinning exact versions to avoid surprise breaking changes, and keeping vendored code in its own directory.\n\nThe closing takeaways are to move in small steps, to treat dependency updates as changes that need testing, and to expect customers and government buyers to ask for SBOMs. Sokol presents the SBOM as a practical way to show transparency and leadership to customers.",
+      "durationSeconds": 2603,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "hfUHqtFNSNE",
+      "slug": "having-aspm-your-way-how-to-avoid-the-trough-of-disillusionment",
+      "title": "Having ASPM your Way: How to Avoid the Trough of Disillusionment",
+      "speakers": [
+        "Matt Tesauro"
+      ],
+      "track": "appsec",
+      "topics": [
+        "appsec",
+        "management",
+        "lessons-learned",
+        "automation",
+        "vulnerabilities"
+      ],
+      "teaser": "Weighs whether ASPM is a genuinely new discipline and shows how to pull its useful ideas into an existing AppSec program.",
+      "summary": "The speaker, a long-time AppSec practitioner, questions whether application security posture management (ASPM) is a genuinely new discipline. He compares analyst and vendor definitions with core AppSec ideas he has applied for years, such as visibility, risk assessment, prioritization and automation, and finds little beyond a new label. He also notes how crowded the vendor market has become, with many products claiming the term.\n\nHe then turns to the practical value he sees. The main benefit, in his view, is budget: leaders respond to the buzz, so practitioners can use it to argue for funding. He lays out first principles: favor broad coverage over deep testing, collect metrics early so trends can be shown, build a complete application inventory as a single source of truth, and confirm an owner for every application. He also stresses empathy with development teams, including rotating roles so people understand the work involved. He walks through a pipeline that grows from an internal intake-triage-test-deliver process into event-driven scans that feed a central findings platform. He shares a case where testing volume rose sharply over two years through small, repeated improvements.\n\nHe closes with takeaways: automate repetitive work, treat people as the scarcest resource, start with tools you can run without heavy dependence on other teams, and select only the parts of the ASPM market that fit your own context.",
+      "durationSeconds": 2924,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "-nni9AeiYFQ",
+      "slug": "integrating-security-into-devops",
+      "title": "Integrating Security into DevOps",
+      "speakers": [
+        "Aaron Harrison"
+      ],
+      "track": "appsec",
+      "topics": [
+        "devops",
+        "application",
+        "team",
+        "management",
+        "developer",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how security coaches and shared team metrics can help development and security ship code together.",
+      "summary": "The talk starts with the familiar waterfall handoff, where security review arrives at the end of a release and stalls it. The speaker argues that the root cause is misaligned incentives: development is rewarded for speed, while operations and security are rewarded for stability and caution. He cites survey responses in which developers said security work was often deprioritized, skills were thin, and collaboration was poor, and he argues that buying tools alone will not close that gap.\n\nThe middle section proposes a security coach model. Coaches come from inside each development squad, are trained in a baseline of security knowledge, connect peers through communities of practice, and are recognized in their performance plans. A hotel company case study shows shared metrics, with half of targets owned jointly by the teams. A second example moves security requirements into the idea phase of a change review, so problems surface before late-stage deployment. Requirements are then written as backlog stories with priorities, and scanner findings are returned to developers inside their normal workflow.\n\nThe closing takeaways are that security is everyone's responsibility, that clear language and secure defaults make the right choice easy, and that controls belong in development tools rather than in separate manual steps. Attendees are urged to map friction points between teams, agree on response expectations for high-priority findings, and align rewards. The Q&A covers how coaches earn authority, how to prioritize security work against features, and how to fund training on a limited budget.",
+      "durationSeconds": 2308,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "YR9zABLhScQ",
+      "slug": "defending-ai-infrastructures-new-attack-surface",
+      "title": "Defending AI Infrastructure's New Attack Surface",
+      "speakers": [
+        "Gabe Schuyler"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "infrastructure",
+        "cloud",
+        "defensive-security",
+        "risk"
+      ],
+      "teaser": "Surveys the security risks AI adoption adds to cloud infrastructure, from exposed databases and leaked keys to malicious models.",
+      "summary": "Gabe Schuyler opens by noting that organizations are adopting AI faster than they can secure it, and that many of the problems he describes are older infrastructure failures rather than flaws unique to models. He points to familiar issues such as open databases and storage buckets, weak authentication on orchestration and notebook environments, and default settings that ship without access controls. Incidents cited include exposed training data, a misconfigured vendor storage bucket, and a biometric database holding the fingerprints and faces of a million people.\n\nNewer exposures include API keys leaked into public code repositories, resource hijacking of exposed notebooks for cryptomining, malicious models found in public model hubs, cross-tenant data leakage, data residency concerns when staff paste proprietary code into hosted services, and prompt-based attacks such as hidden instructions and plugin or agent abuse with excessive permissions. He notes that some risks, like training data poisoning and jailbreaks, appear more overhyped than actually observed.\n\nHe closes with practical defenses: strong authentication in front of control planes and notebooks, rate limiting, logging and monitoring of workloads, secret scanning in CI/CD, mirrored and vetted container images, least privilege for agents, posture management tools to inventory exposed assets, and a sanctioned internal AI platform backed by policy and education. The main takeaway is that asset visibility, access control and logging still apply to AI systems.",
+      "durationSeconds": 3041,
+      "publishedAt": "2024-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "UdcfSQdmfeo",
+      "slug": "stop-paying-me-to-secure-your-aws-account",
+      "title": "Stop Paying Me to Secure your AWS Account",
+      "speakers": [
+        "Boyd Hemphill"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "aws",
+        "identity",
+        "management",
+        "lessons-learned"
+      ],
+      "teaser": "Walks small teams through hardening a new AWS account, from root access and MFA to billing alerts and IAM groups.",
+      "summary": "Boyd Hemphill, a fractional engineering executive who cleans up AWS accounts for small and mid-sized companies, argues that securing a cloud account is ordinary work that leaders must budget time for. He points to the AWS Well-Architected security pillar as the reference material and stresses writing down decisions, including decisions not to act. He explains regions and availability zones as a basis for later choices, and advises against defaulting new workloads to us-east-1, where new services tend to launch first.\n\nThe middle of the talk is a checklist for a new account. Set a billing alert sized to the business so a hijacked account shows up quickly, and send it to a shared inbox and chat channel rather than one person. Use Cost Explorer to find waste; one development database instance that ran around the clock was scheduled to switch off overnight, cutting its cost by about 60 percent. CloudTrail should be searched to trace which person made which API call. The root account should get a long password kept offline, MFA, and an alert on any root login, with a separate administrator user doing daily work. MFA for IAM users needs a custom policy, roles replace long-lived access keys for applications, and Secrets Manager with namespaced names keeps secrets manageable.\n\nThe closing message is that most AWS problems are people problems. He recommends a small set of groups such as administrators, developers and senior developers, attaching policies to groups rather than individual users because each group has a ten-policy limit, and announcing changes before enforcing them. When bringing in an outside consultant, he advises asking for documentation and knowledge transfer so the client can maintain the account afterward.",
+      "durationSeconds": 2926,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Tjan5WV6YhE",
+      "slug": "config-comedy-baseline-scans-gone-wild",
+      "title": "Config Comedy: Baseline Scans Gone Wild",
+      "speakers": [
+        "Petr Sidopulos"
+      ],
+      "track": "purple-team",
+      "topics": [
+        "compliance",
+        "windows",
+        "linux",
+        "risk",
+        "management"
+      ],
+      "teaser": "Explains how to tame CIS benchmark compliance scans across mixed OS versions and turn deviations into a documented baseline.",
+      "summary": "The talk opens with a common frustration: compliance scans against CIS benchmarks often report weak pass rates. Default platform settings are rarely hardened, and the benchmarks are long, change IDs between versions, and are hard to tailor. The speaker illustrates this with a Windows impersonation privilege example, where an IIS-specific group setting can make a scan pass even on a compromised host. Scanner customization and the CIS-CAT workbench are also covered as poor fits for enterprise scale.\n\nThe middle of the session presents a practical method. Settings are compared across versions of the same platform, since most overlap, so one abstract baseline can be maintained and adapted per release. Each line item is sorted as matching the default, accepted as-is, a documented deviation, or deferred with a plan. Tagging these outcomes in the scan template lets reports explain results instead of only listing failures, and a failing accepted setting then signals drift rather than a policy question.\n\nThe closing advice is to start by knowing your assets, prioritising crown-jewel systems or the most common platform, and getting leadership agreement on the baseline. Version-controlled infrastructure as code is favoured over golden images or spreadsheets for keeping that baseline current. When tooling falls short, sampling and manual verification can still satisfy auditors.",
+      "durationSeconds": 2094,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "LSOEPKELbFg",
+      "slug": "ai-supply-chain-security-invent-backward-then-forward",
+      "title": "AI Supply Chain Security - Invent Backward then Forward",
+      "speakers": [
+        "Rob Mixer"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "supply-chain",
+        "attack",
+        "risk"
+      ],
+      "teaser": "Explains how AI models pulled from public hubs can carry hidden code, and how teams can reduce that risk.",
+      "summary": "The talk opens with the Trojan Horse and argues that the old ruse was not unique, since an earlier Egyptian general used a similar trick with baskets. The speaker distills the pattern into a few traits: a valuable offer, easy access for the target, a hidden payload, and a trigger that needs little effort. He applies those traits to AI development, where engineers search public model hubs for prebuilt models that look polished and legitimate.\n\nThe middle covers Python pickling, which can run code when a serialized model is loaded, so a model pulled from a hub can execute on a laptop or in CI. TensorFlow features such as Keras Lambda layers and file access during graph execution can be misused in similar ways. Hugging Face flags unsafe pickle imports in its interface, but developers often never see that warning when frameworks fetch models by name.\n\nThe close walks through a wider threat model, including poisoned data sets and tampered storage. Suggested defenses include proxying model downloads through an artifact repository with threat intelligence, enforcing approved pipelines for writing artifacts, adding integrity checks or signatures outside the repository, and scanning model source for unsafe loaders. The speaker frames the remaining exposure as a business risk decision.",
+      "durationSeconds": 2529,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "R9eGqggiCrY",
+      "slug": "the-golden-xcompass-the-compass-you-need-to-navigate-through-the",
+      "title": "The Golden xCOMPASS: The Compass You Need to Navigate through the App-Privacy Universe",
+      "speakers": [
+        "Rahmadi Trimananda"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "application",
+        "framework",
+        "open-source",
+        "development",
+        "risk"
+      ],
+      "teaser": "Shows how a yes-or-no questionnaire surfaces missing privacy requirements and maps them to principles early in app design.",
+      "summary": "The talk starts from the gap between security and privacy. A data breach is not automatically a privacy failure, and data collected lawfully can still create privacy problems. The speaker argues that privacy threat modeling is slow and expert-heavy, usually happens late in the software development lifecycle, and is hard for developers who lack training in privacy law such as CCPA, GDPR and COPPA.\n\nTo address this, the speaker presents xCOMPASS, an open-source framework built around a lightweight questionnaire of yes-or-no questions. Answers feed simple formulas that flag missing privacy requirements, which are then linked to the Fair Information Practice Principles, to LINDDUN privacy threat categories, and to mitigation strategies such as de-identification. The walkthrough covers questions about personal data in code, databases and logs, biometric and sensor data, children's data, access control, data minimization and disposal. Compound questions show follow-up prompts when an answer needs more review.\n\nIn the audience Q&A, the speaker explained that xCOMPASS produces a checklist of requirements rather than threat scenarios like STRIDE output, and that it overlaps with the NIST privacy guidance while being far shorter. The practical takeaway is to bring these questions into design reviews early, and optionally into CI/CD, so privacy requirements are handled before code is hard to change.",
+      "durationSeconds": 1902,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "DMUwA37bJfs",
+      "slug": "when-the-attackers-lose-case-studies-in-api-security-strategies",
+      "title": "When the attackers lose, case studies in API security strategies",
+      "speakers": [
+        "Jason Kent"
+      ],
+      "track": "appsec",
+      "topics": [
+        "application",
+        "threat-detection",
+        "attack",
+        "identity",
+        "lessons-learned"
+      ],
+      "teaser": "Walks through real API abuse cases involving fraud, bots and account takeover, and how defenders spotted and stopped them.",
+      "summary": "The talk is a collection of real API abuse cases in which attackers were thwarted, continuing an earlier discussion about counting events in login and API traffic. One retailer's inventory endpoint was queried repeatedly to track a scarce item, and a deceptive reply claiming stock was available led to an arrest. Other cases include a public airline Wi-Fi purchase endpoint used to test stolen debit cards, and a gift card balance lookup that let a bot walk through card numbers at scale.\n\nFurther examples cover account aggregators, where one compromised credential exposes many linked bank accounts, and a funds-transfer API that granted ordinary users administrative rights, letting attackers siphon small amounts for a long time. Bots that resell shoes and repeatedly poll shipment tracking endpoints, along with fake free-trial server signups used to validate cards, round out the cases. Common signals include traffic from cloud or hosting address ranges, stale user agents, unusual per-account volume and odd sequences of calls, which analysis can surface by pivoting on fields such as IP address and phone number.\n\nThe practical takeaways are to expire long-lived keys, require step-up authentication for money movement, tie tokens to user accounts, verify new email addresses, and rely on IP reputation and behavior analysis, since CAPTCHA often cannot sit in front of an API. The talk also argues that the industry needs a standard API signal that tells other institutions when an account has been compromised.",
+      "durationSeconds": 2426,
+      "publishedAt": "2024-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "gX9lCoXKH2w",
+      "slug": "cyber-resilience-and-your-organization",
+      "title": "Cyber Resilience and Your Organization",
+      "speakers": [
+        "Theresa Lanowitz"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "incident-response",
+        "management",
+        "ai",
+        "cloud"
+      ],
+      "teaser": "Presents survey data on barriers to cyber resilience, from budgeting and incident response to supply chain visibility.",
+      "summary": "The talk looks at why cyber resilience, meaning an organization's ability to keep its whole IT estate running and recover it after a disaster, human error or attack, has become harder to achieve. The speaker describes estates that mix mainframes, client-server systems, web and mobile apps, cloud, IoT devices and third-party software. Resilience is framed as a leadership and business concern that reaches beyond the security team to development, operations, finance, facilities and suppliers.\n\nThe middle of the talk draws on a vendor-neutral survey of around 150 senior executives in 18 countries and seven industries. Many respondents said innovation outweighs the added risk it brings, and most said their estates had become too complex to know which controls to apply. Only about a third had a formal incident response plan. Security was often described as siloed, underfunded, reactive and added late to projects. Per-project security spending had risen, largely in response to breaches, new regulations and cyber insurance requirements. Ransomware topped the list of attack concerns, followed by business email compromise and deepfake-enabled fraud, while denial-of-service attacks were seen as hard to defend against.\n\nThe closing advice is practical. Readers should check whether governance teams understand resilience, add a security budget line and security input to every project from ideation onward, align security spending with business objectives, bring in outside expertise where needed, and use metrics to make the case to leadership.",
+      "durationSeconds": 2698,
+      "publishedAt": "2024-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "XPK27mlx0RI",
+      "slug": "avoiding-the-paranoia-5-seasons-of-devsecops-lessons",
+      "title": "Avoiding the Paranoia: 5 Seasons of DevSecOps Lessons",
+      "speakers": [
+        "Colin Bell",
+        "Rob Cuddy"
+      ],
+      "track": "community",
+      "topics": [
+        "lessons-learned",
+        "interview",
+        "devops",
+        "supply-chain",
+        "ransomware"
+      ],
+      "teaser": "Shares lessons from five seasons of podcast interviews on people, process and buy-in for DevSecOps.",
+      "summary": "The speakers, who host the Application Paranoia podcast, look back on five seasons of conversations with security practitioners, thought leaders and a sports radio host. They describe how the show began during the pandemic and moved away from promoting their own product toward broader industry themes, as events like SolarWinds and hospital ransomware attacks pushed security into the news.\n\nRecurring lessons from the guests come first. Strong fundamentals matter more than newer practices such as API security or software bills of materials, and a bill of materials is only useful once teams know what to do with it. Buy-in depends on context, so security should be framed in terms developers and business leaders understand and treated as part of quality. Users should be seen as partners rather than the weak link, and measuring staff by how long they are away from their chat tool backfires. The Log4j lesson was that finding every hidden copy of a component mattered as much as patching it.\n\nThe speakers close by pointing to mentoring and clear career paths for the next generation, noting that the same themes keep returning as the threat landscape changes. Listeners are invited to suggest guests and are pointed to episodes on ransomware, supply chain and election security.",
+      "durationSeconds": 3023,
+      "publishedAt": "2024-11-06",
+      "difficulty": "beginner"
+    }
+  ]
+}

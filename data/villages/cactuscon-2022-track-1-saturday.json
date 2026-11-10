@@ -1,0 +1,155 @@
+{
+  "villageSlug": "track-1-saturday",
+  "villageName": "Track 1 Saturday",
+  "eventSlug": "cactuscon-2022",
+  "conference": "cactuscon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PL4umh_7S4rRv86B6B5CrGRrjUH-0PnJTu",
+  "description": "Track 1 Saturday talks from CactusCon 10 2022.",
+  "talks": [
+    {
+      "youtubeId": "ADWjaDhYR8k",
+      "slug": "reversing-dlls",
+      "title": "Reversing DLLs",
+      "speakers": [
+        "Joe Giron"
+      ],
+      "track": "malware",
+      "topics": [
+        "reverse-engineering",
+        "windows",
+        "malware-analysis",
+        "exploiting",
+        "tool"
+      ],
+      "teaser": "Walks through reverse engineering Windows DLLs, from loading and exports to tracing a vendor library's download routine.",
+      "summary": "Joe Giron opens by explaining why DLLs matter before anyone reverses them. He traces the move from DOS-era programs that were statically compiled to dynamic linking, which let Windows split functionality into separate libraries. He then covers how DLLs load and run: the entry point and its attach and detach events, exports referenced by name or ordinal, the COM-related exports he finds messy, and the Windows search order that decides which file actually gets loaded.\n\nThe middle of the talk covers how these mechanisms get abused and manipulated. He discusses KnownDLLs, search order hijacking to sideload DLLs into trusted or elevated programs, manifest redirection, hooks, shared memory sections, AppInit_DLLs, and remote-thread injection. On the tooling side, he compares IDA and Ghidra for disassembly, uses x64dbg for debugging, and uses a small loader program to call exports without knowing their arguments.\n\nFor the case studies, he examines a CPU-Z DLL whose export fills a structure through GetNativeSystemInfo, a McAfee helper that defers file deletion with MoveFileEx, and an ASUS library whose download routine he traced back to InternetCrackUrl and InternetReadFile. By feeding it a URL and a destination, he got it to save a file. The takeaway is that when documentation is missing, tracing imports backward from known Windows APIs and probing inputs can reveal what a DLL does. The talk closes with a short Q&A.",
+      "durationSeconds": 3445,
+      "publishedAt": "2022-02-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "7-5HSfxebNQ",
+      "slug": "chasing-your-tail-with-a-raspberry-pi-2",
+      "title": "Chasing your Tail with a Raspberry Pi",
+      "speakers": [
+        "Matt Edmondson"
+      ],
+      "track": "wireless",
+      "topics": [
+        "privacy",
+        "detection",
+        "device",
+        "tool",
+        "open-source"
+      ],
+      "teaser": "Shows how a low-cost Raspberry Pi setup can flag wireless devices that keep appearing while you travel.",
+      "summary": "The talk starts with a request from a contact who worried that he was being followed after meeting a confidential informant, and who wanted a way to check for that. The speaker explains why the idea seemed worth building, and also weighs whether the design could be misused for stalking. He concludes that it was built only to flag repeat followers and that the approach is useful to share.\n\nThe core of the build is a passive monitor. A Raspberry Pi runs Kismet with an external Wi-Fi adapter, a Bluetooth adapter, a battery pack and a small touch screen, logging nearby devices to a database without connecting to them. A Python script compares devices seen in the last minute against rolling lists from the previous 5 to 20 minutes and raises an alert when one reappears. Field testing showed that many phones randomize their MAC addresses, so the script also tracks the network names each device probes for. An ignore list lets the user exclude devices already around them before a drive.\n\nThe speaker closes with a live demonstration and a list of next steps, including more radios, GPS logging, tire pressure sensors and AirTag-style detection. The code was released on GitHub. The main takeaway is that cheap, passive monitoring can support counter-surveillance, but it needs comfort with Linux and careful interpretation of what the data shows.",
+      "durationSeconds": 2335,
+      "publishedAt": "2022-02-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "uDCRWrG4CQA",
+      "slug": "keynote-22",
+      "title": "Keynote",
+      "speakers": [
+        "Charles Shirer"
+      ],
+      "track": "community",
+      "topics": [
+        "learning",
+        "journey",
+        "web",
+        "lessons-learned"
+      ],
+      "teaser": "Traces a speaker's search for a security passion, from wireless and hardware work to web and browser hacking.",
+      "summary": "Charles Shirer opens the keynote by describing his own search for a field to commit to in security. He recounts trying wireless testing, hardware hacking and ARM assembly, and finding that none of them held his interest for long. Web application testing, which built on his earlier experience making websites, became the area where his enthusiasm stayed strong.\n\nFrom there the talk follows his path through programming languages, comparing frameworks and weighing Go and Rust for web work. He describes how advice from community members helped him move into browser exploitation, using the BeEF framework and reading browser security articles, and how a new interest in crypto security grew out of decentralized apps and browser wallet extensions. He also mentions an encoder he was building to speed up payload encoding during web attacks.\n\nThe closing section is a message for anyone who has not yet found their passion or who feels they have lost it. He argues that curiosity and persistence matter more than an early specialty, and he points listeners to podcasts and resources he uses for crypto and security learning. The practical takeaway is that a practitioner can change direction several times and still build useful skills along the way.",
+      "durationSeconds": 1850,
+      "publishedAt": "2022-02-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "WfVQ5giy0xE",
+      "slug": "forensic-artifacts-in-free-tiers-of-azure-gcp-and-aws",
+      "title": "Forensic Artifacts in Free Tiers of Azure, GCP, and AWS",
+      "speakers": [
+        "Kyle Nordby"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "cloud",
+        "incident-response",
+        "monitoring",
+        "practical"
+      ],
+      "teaser": "Examines which forensic artifacts cloud free tiers leave behind after simulated compromises of Azure, GCP and AWS instances.",
+      "summary": "The talk covers a common gap: teams spin up cloud resources for demos or projects on free tiers, with default settings and little monitoring, and security only gets involved after something looks wrong. The speaker built a database and virtual machines on each of the three major providers, then emulated two threats by hand, a cryptocurrency miner and an intruder who used cached credentials to reach the database and create a new account.\n\nFor each provider, the speaker reviewed what was recorded. Windows endpoint logs gave the clearest view of the initial access and the persistence. Cloud-side logging varied: GCP produced useful audit and request metadata out of the box, Azure's logs showed the source of single-factor logins, and AWS recorded little unless optional monitoring was enabled beforehand. Monitoring switched on after an intrusion usually covered only the last few minutes, and deleting an instance removed its logs. Detection of the miner and beaconing traffic failed on all three.\n\nThe practical takeaways are to turn on logging and default security options across every subscription before deployment, take disk snapshots quickly after a suspected compromise, and assume free-tier logs are limited. The speaker noted that automated collection for these gaps mostly comes from paid services, and proposed a shared catalogue of artifacts to check.",
+      "durationSeconds": 2690,
+      "publishedAt": "2022-02-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "O8JF_Y65vc0",
+      "slug": "offensive-debugging-net-poops-of-gold",
+      "title": "Offensive Debugging: .NET Poops of Gold",
+      "speakers": [
+        "Leron Gray"
+      ],
+      "track": "red-team",
+      "topics": [
+        "reverse-engineering",
+        "memory",
+        "windows",
+        "tool",
+        "identity"
+      ],
+      "teaser": "Shows how debugging .NET memory dumps can recover secrets and encryption keys, with a tool that automates object extraction.",
+      "summary": "The talk treats offensive forensics as using memory forensics to locate credentials and other valuable data that open up further attack paths during red team and penetration tests. The speaker argues that debugging work sits behind many offensive tools, and he lays out an attacker's mindset: inventory what is available, define the end goal, and connect the two.\n\nThe middle of the talk focuses on analyzing .NET memory dumps with WinDbg and its managed-code extension, alongside decompilers for reading the target application's source. Using a sample Azure Key Vault client, the speaker lists heap statistics, filters object types, and follows object references to reach secret values. The encryption key was not visible as readable text, so he traces the AES-GCM implementation in the framework source to its internal key blob structure, searches memory for that header, and recovers the raw key. He applies the same approach to a PowerShell session dump, where command history objects expose previously run commands.\n\nThe closing section demonstrates Turd Shovel, a Python command-line tool that loads a dump through ClrMD, filters object types, dumps objects as JSON, and extracts raw memory bytes without manual clicking. The main takeaway is that plain string searches miss structured binary secrets such as keys, and that workstation and server dumps can still yield valuable credentials. Large dumps are costly to query, so selective searches work best.",
+      "durationSeconds": 3070,
+      "publishedAt": "2022-02-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "6y2tKr5DXDw",
+      "slug": "how-not-to-suck-at-cfps-real-world-feedback-from-the-review-boar",
+      "title": "How not to suck at CFPs: Real-World Feedback from the Review Board",
+      "speakers": [
+        "Kevin Tyers",
+        "Haley Mills",
+        "Jamie Winterton",
+        "Alex Hoffman"
+      ],
+      "track": "community",
+      "topics": [
+        "panel",
+        "discussion",
+        "lessons-learned",
+        "learning",
+        "practical"
+      ],
+      "teaser": "Panelists review real conference submissions and explain what makes a security talk proposal stand out or fall flat.",
+      "summary": "A review board for a security conference walks through its call for papers and explains what makes a proposal succeed or fail. The panel opens with submission statistics from the year: about 111 proposals from 95 speakers, mostly introductory, with some intermediate and advanced entries and a set of workshops. The panelists note that proposers often struggle to know what reviewers want.\n\nTo avoid singling out real submissions, the panel invents example abstracts and critiques them. Weak examples are vague, run only a few sentences, omit the speaker's credentials, or read like a product pitch full of buzzwords. Others are off-topic for a security audience, try to cover five subjects in a 20-minute slot, or repackage a familiar talk with new terminology. The panel recommends submitting only one or two well-developed talks, writing an outline, and choosing a title that is neither too long nor too short. They then examine a highly ranked real submission that was specific, concise, relevant, shared source code, and fit its time slot.\n\nThe closing advice is to know the audience, tailor any analogies to security, and use the notes field for detail that does not belong in the public pitch. Proposers should have a colleague read the draft, state clearly when a talk is a follow-up, and seek feedback from local groups before the window closes. Panelists stress that rejection rarely reflects poor quality, since slots are limited.",
+      "durationSeconds": 2495,
+      "publishedAt": "2022-02-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "dY0LG83s4SY",
+      "slug": "closing-ceremonies-10",
+      "title": "Closing Ceremonies",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "village",
+        "challenge",
+        "interview",
+        "lessons-learned"
+      ],
+      "teaser": "Closes the tenth CactusCon with volunteer shout-outs, CTF results, finances and prize giveaways.",
+      "summary": "This closing ceremony wraps up the tenth CactusCon, a community-run security conference held in Mesa, Arizona in February 2022. The organizer opens by thanking the volunteers and team leads behind the event, covering roles in streaming, art, registration, badges, day-of operations, and the capture-the-flag and career villages. Attendance is given as roughly 500 people in person and about 785 online, with thousands of messages exchanged on Discord.\n\nThe middle section covers sponsors, individual community donors and the venue. Donations reached roughly ninety thousand dollars, with about half spent on audiovisual equipment for the hybrid format and the rest going to the venue, merchandise, travel support and operations. A reserve carries over to fund the next year's booking, and the organizers now pay the venue balance gradually rather than relying on sponsor income arriving in time. The capture-the-flag team then presented its results, describing a scavenger hunt with hidden wireless access points, a Rubik's cube challenge tied to a QR code, and separate online and in-person scoreboards. The career village recap followed, covering mock interviews, resume reviews and career path discussions.\n\nThe ceremony ends with prize giveaways, including signed copies of a ransomware book and training vouchers, and an open question period about what the event should add. Organizers said dates for the following year were still being negotiated with the convention center, and attendees were invited to continue the evening at the hotel.",
+      "durationSeconds": 2896,
+      "publishedAt": "2022-02-06",
+      "difficulty": "beginner"
+    }
+  ]
+}

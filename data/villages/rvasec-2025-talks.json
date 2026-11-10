@@ -1,0 +1,587 @@
+{
+  "villageSlug": "talks",
+  "villageName": "Talks",
+  "eventSlug": "rvasec-2025",
+  "conference": "rvasec",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLyK0rk0vIZ0dRpFVCSqj-u5vwLfJeOCUN",
+  "description": "Talks from RVAsec 14 (2025).",
+  "talks": [
+    {
+      "youtubeId": "KYGCTwJ-tCM",
+      "slug": "keynote-23",
+      "title": "Keynote",
+      "speakers": [
+        "Bruce Potter"
+      ],
+      "track": "policy",
+      "topics": [
+        "lessons-learned",
+        "ransomware",
+        "ai",
+        "risk",
+        "trust"
+      ],
+      "teaser": "Reflects on three decades of security mistakes, linking early internet history to ransomware, federal policy and AI risk.",
+      "summary": "Bruce Potter opens with his path into security, starting in Fairbanks, Alaska, and his work with an Alaskan internet provider that brought connectivity to remote communities in the mid-1990s. He describes how his team delivered DSL over alarm circuits to get around a telephone company, and argues that early security work often happens without a clear playbook, with plenty of mistakes along the way.\n\nThe middle of the talk draws comparisons between gold rush economics and digital bearer assets such as cryptocurrency. He points out that ransomware is paid in untraceable currency and that private victims lack a institutional backstop comparable to police response for physical crime. He questions where federal responsibility for private-sector cyber harm sits. He then reviews how evaluation frameworks such as the Orange Book and Common Criteria fell behind continuously updated software, and criticizes checkbox penetration tests and SOC 2 reports. He also covers AI as a third wave of development and raises concern about synthetic media and about assessing models at a single point in time.\n\nHe closes by urging listeners to learn from past mistakes, using MFA push fatigue as an example of a convenience feature that enabled breaches. The practical takeaway is to anticipate how systems will change and to build resilience rather than rely on point-in-time snapshots of security.",
+      "durationSeconds": 3582,
+      "publishedAt": "2025-06-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "0Iptpo-gnv4",
+      "slug": "large-language-models-for-hackers",
+      "title": "Large Language Models for Hackers",
+      "speakers": [
+        "Morgan Stuart"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "attack",
+        "tool",
+        "framework"
+      ],
+      "teaser": "Walks through running open-weight LLMs locally and the risks they introduce, including poisoning, prompt injection and agentic tool use.",
+      "summary": "Morgan Stuart, a data scientist with a security background, gives a practical introduction to running open-weight large language models on local hardware, so that data stays on the operator's own systems. The talk begins with how these models work at a basic level: they process tokens, generate text one step at a time, and keep no memory between runs. It then covers where model weights come from, why pickle-based files are a supply chain concern while safetensors and GGUF are safer choices, and how quantization can change model behavior. Stuart ties these points to NIST's adversarial machine learning and generative AI guidance.\n\nThe middle section focuses on attack surfaces. Stuart shows how poisoning a tiny fraction of pre-training data can plant a trigger that makes a model output junk, and how instructions hidden in retrieved content can cause an assistant to report false figures. He also explains that anything placed in the context can be extracted, and that constrained or structured generation makes outputs more reliable without making them correct.\n\nThe final part builds on these pieces with retrieval over Wikipedia, tool calling, and agent loops in which the model chooses a tool while the host program runs it. A live demo has an agent use an nmap scanning tool and an exploit database lookup against a small device on a local network. The talk closes with the Model Context Protocol, which exposes tools through servers, and warns that self-documenting tool interfaces could be valuable to attackers. The takeaway is to treat these systems as software with real risks, verify their outputs, and experiment with them in your own practice.",
+      "durationSeconds": 3040,
+      "publishedAt": "2025-06-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "1iT5CfDrBgU",
+      "slug": "unlocking-macos-internals-a-beginners-guide-to-apples-open-sourc",
+      "title": "Unlocking macOS Internals: A Beginner's Guide to Apple's Open Source",
+      "speakers": [
+        "Olivia Gallucci"
+      ],
+      "track": "malware",
+      "topics": [
+        "open-source",
+        "reverse-engineering",
+        "vulnerability-research",
+        "kernel",
+        "learning"
+      ],
+      "teaser": "Walks through finding, building and reversing Apple's open source macOS components as a starting point for internals research.",
+      "summary": "This talk is an orientation to macOS internals for people new to the area. It explains that macOS and iOS share the Darwin base, including the XNU kernel, system libraries and launch daemons, so Apple's public source code is a useful entry point even though Apple withholds some frameworks and licenses parts of its crypto library under restrictive terms.\n\nThe speaker covers the practical hurdles of locating that code. Apple moved releases from its download site to GitHub repositories in 2024, tags have to be mapped to OS versions through release metadata or the distribution manifests inside installer packages, and shipped binaries are stripped of symbols, so developer debug kits and the iOS simulator serve as alternatives. A set of tools is introduced, including strings, nm, class-dump, disassemblers and debuggers such as Ghidra, IDA, Binary Ninja and LLDB, along with dynamic instrumentation with Frida. Building the open source components is presented as difficult because of missing files and environment mismatches, so reading build scripts and headers is often more productive.\n\nTo show the workflow, the talk walks through binary diffing of a historical syslogd patch, where a single changed function pointed to a heap overflow fix. The takeaway is to treat the public source as a map, match functions and call patterns against binaries, and diff updates to find what changed, since partial source is still valuable for research.",
+      "durationSeconds": 2171,
+      "publishedAt": "2025-06-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5wf1ge2pCg4",
+      "slug": "what-the-scope-sh-my-consultant",
+      "title": "What the Scope? Sh** my Consultant",
+      "speakers": [
+        "Luke McOmie",
+        "Qasim Ijaz"
+      ],
+      "track": "policy",
+      "topics": [
+        "management",
+        "risk",
+        "lessons-learned",
+        "team",
+        "trust"
+      ],
+      "teaser": "Real stories about scoping, disabled controls, and vendor frustrations show how clients and pentesters can work together better.",
+      "summary": "Luke McOmie and Qasim Ijaz, both veteran offensive security practitioners, open with the frustrations that build up around penetration tests. They describe scopes that exclude most of a network, decisions made by executives or lawyers rather than the staff who run the systems, and requests to switch off endpoint tools before testing. Each complaint is paired with the view from the other side of the table.\n\nThe middle of the session collects real stories. One covers a red team that got a payload executed through a print request in an office, and another describes a client whose controls blocked attacks but went unrecognised because testers were told to disable them. The speakers argue for testing with defenses running, for reports that explain how access was gained and how to reproduce it, and for prioritised findings instead of hundreds of scanner results. They also cover MFA that can be bypassed through phishing and one-time code capture, a network outage caused by aging hub hardware during a test, ownership of zero-day discoveries, vague statements of work, and yearly provider changes that erase accumulated knowledge.\n\nThe takeaways are to treat the engagement as a partnership, share context and budget early, log WAF and MFA activity to a SIM, and keep a consistent provider with occasional independent checks. The talk is a candid, humorous reminder that testing only helps when both sides communicate.",
+      "durationSeconds": 2961,
+      "publishedAt": "2025-06-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "6sRgnWgUUzw",
+      "slug": "why-there-is-no-casino-night-at-rvasec-this-year-sorry",
+      "title": "Why There is No Casino Night at RVAsec This Year (Sorry)",
+      "speakers": [
+        "Ben Haynes"
+      ],
+      "track": "community",
+      "topics": [
+        "game-theory",
+        "lessons-learned",
+        "social",
+        "learning"
+      ],
+      "teaser": "Uses game theory and loophole-hunting to explain how a conference casino night was played and gamed.",
+      "summary": "Ben Haynes opens with a light tour of the RVAsec afterparties over the years, from bars and live bands to a magician and then two casino nights, and explains that he approaches a game by asking what the goal is, what he can know that others do not, where he stands in the system, and where the rules have gaps.\n\nThe middle of the talk walks through his approach at the tables. Because the organizers never explained the rules, he questioned staff until he understood the raffle, where prize tickets scaled with winnings, and noticed that a large win could matter more than a small one. He avoided games that are pure chance, chose blackjack where skill matters, and picked a dealer who treated him warmly. Analogies to Candyland, Guess Who and a trivia line-up show how turn order and risk tolerance can shift outcomes.\n\nIn the second year he changed tactics and rode a late surge, but another table reported far larger totals written on paper, which he found implausible. He closes with takeaways: learn the rules before trying to break them, choose or monitor your environment, and change strategy when you fall behind. He suggests the same thinking applies to networking, job applications and other systems, and the session ends with audience questions about the dealers and the trivia format.",
+      "durationSeconds": 2500,
+      "publishedAt": "2025-06-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "92jEgubz-EQ",
+      "slug": "ciso-of-2030-a-sequel-of-ciso-of-2025",
+      "title": "CISO Of 2030 (a sequel of CISO of 2025)",
+      "speakers": [
+        "Dan Holden"
+      ],
+      "track": "policy",
+      "topics": [
+        "management",
+        "risk",
+        "trust",
+        "lessons-learned"
+      ],
+      "teaser": "Looks ahead at how the CISO role may shift toward business-focused risk communication, quantification, and board accountability.",
+      "summary": "This talk is a follow-up to a 2019 presentation on what the CISO role would look like about six years later. The speaker, who now works as a CISO, revisits the predictions from that earlier talk and assesses which ones held up. He argues that the role has moved toward business language and board-level discussion, that CISOs are now held accountable rather than simply replaced, and that breach disclosure rules and litigation have raised the stakes.\n\nThe middle of the talk covers what is driving change. He discusses moving away from vulnerability counts and framework scorecards toward quantified risk, using attacker sophistication to test whether controls hold up against realistic threats, and treating third-party risk and customer questionnaires as real drivers of security investment. He also covers reporting lines, which increasingly point to the board, and argues that DevOps practices, identity, and policies such as restricting personal device access can reduce risk and cost.\n\nHe closes by urging security leaders to frame their work as enabling business decisions rather than as fear, to show how controls perform against real-world threats, and to build trust over time as a lasting asset. The takeaway for practitioners is to shift conversations with executives from technical detail toward business impact and measurable risk.",
+      "durationSeconds": 2870,
+      "publishedAt": "2025-06-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "9AKCykrJGaw",
+      "slug": "cybersecurity-is-ready-for-local-models",
+      "title": "Cybersecurity is Ready for Local Models",
+      "speakers": [
+        "Michael Roytman"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "machine-learning",
+        "risk",
+        "vulnerabilities",
+        "intelligence",
+        "building"
+      ],
+      "teaser": "Argues that enterprises should train risk models on their own data and shows how local models can outperform global vulnerability scoring.",
+      "summary": "Michael Roytman, a data scientist who has built decision-support models for security vendors, opens by arguing that most enterprises are not generic. He points out that vulnerability scores such as CVSS and EPSS are global models: they score the same CVE identically in every environment, even though what matters is what is actually running on a given network.\n\nThe middle of the talk compares remediation strategies by efficiency and coverage against known exploitation data. Using public and vendor exploitation telemetry, he shows that CVSS-based cutoffs demand heavy remediation work for modest risk reduction, and that EPSS performs better. A model trained on exploitation telemetry improves further. A simulated enterprise-specific model that uses local prevalence, where one vulnerability appears across many assets, comes much closer to realistic results. He also notes that some vulnerabilities remain hard to predict and that remediation effort varies widely between systems.\n\nHe closes by urging teams to feed scan results, configuration data, endpoint telemetry, past incidents and ticketing history back into their own risk models rather than relying on vendor scores alone. The practical takeaway is to measure any scoring strategy against your own environment using efficiency and coverage curves. He acknowledges that data engineering is the hard part, but argues that building such models in-house is increasingly achievable.",
+      "durationSeconds": 2120,
+      "publishedAt": "2025-06-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "9q0D87_zqps",
+      "slug": "running-a-proper-purple-team",
+      "title": "Running a proper Purple Team",
+      "speakers": [
+        "Travis Altman"
+      ],
+      "track": "purple-team",
+      "topics": [
+        "detection",
+        "incident-response",
+        "defensive-security",
+        "team",
+        "lessons-learned"
+      ],
+      "teaser": "Explains how to turn purple teaming from a concept into a working service, including roles, exercise types and reporting.",
+      "summary": "The talk looks at how to move purple teaming from an idea into a working service. The speaker frames the goal as collaboration between offensive and defensive staff rather than a contest. The benefits covered include closer work between the SOC and attackers, validation of security controls, fresher offensive tradecraft, better detection and response, and a more mature security posture. A coordinator role keeps the cycle of threat intelligence, offensive scenarios, detection work and response moving.\n\nThe middle section covers practical trade-offs. Large teams gain throughput, dedicated intelligence staff and tooling, but struggle with prioritisation and slower reporting. Smaller teams are more nimble but run exercises less often. The speaker contrasts simulation, which is automated and suits checking a specific rule or procedure, with emulation, which works toward an objective across a set of techniques. Announced exercises focus on technology and detection, while unannounced ones test people and incident response playbooks. The boundaries between pentesting, red teaming and purple teaming blur in practice.\n\nThe closing part covers planning and reporting. Each exercise needs an objective, a stated detection hypothesis, an attack plan, a rules outcome table and an activity log. Useful metrics include rules tested, validated and enhanced, plus time to detect, respond and contain. Endpoints are recommended as the starting point, and a five-level maturity model helps teams plan improvements. The main takeaways are to start small, iterate, and celebrate wins across the organisation.",
+      "durationSeconds": 2702,
+      "publishedAt": "2025-06-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "BIXaShyiNpM",
+      "slug": "defending-entra-id-and-office-365-using-the-prism-of-graphrunner",
+      "title": "Defending Entra ID and Office 365 Using the Prism of GraphRunner",
+      "speakers": [
+        "John Stoner"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "identity",
+        "cloud",
+        "threat-detection",
+        "defensive-security",
+        "attack"
+      ],
+      "teaser": "Shows how the GraphRunner toolkit maps to Entra ID and Office 365 attack stages and the logs that reveal them.",
+      "summary": "The talk looks at how an attacker can use the Microsoft Graph API against Microsoft Entra ID and Office 365 tenants, and which log sources expose that activity. The speaker uses GraphRunner, an open-source red team toolkit released by Black Hills Information Security, to run a simulated attack chain and then examines what each step leaves behind.\n\nThe chain starts with initial access, where a device-code phishing login or a reused refresh token gives a foothold. It moves through reconnaissance of users, groups, applications and open mailboxes, then persistence through a malicious application that a user is tricked into consenting to, followed by collection from mail, SharePoint and OneDrive and a cleanup stage. For each step, the talk compares interactive and non-interactive sign-in logs, Graph activity logs, audit logs and Office 365 mailbox events, and notes where failed attempts or token refreshes stay invisible unless specific settings are enabled.\n\nPractitioners should turn on Entra ID sign-in and audit logging, and collect non-interactive sign-ins and Graph activity, then tune out polling noise and legitimate Microsoft traffic. Restricting users' ability to create apps and groups shrinks the default attack surface, and teams should practice revoking refresh tokens with current Microsoft Graph PowerShell tooling before they need it. Example detection rules were prototyped in YARA-L as a starting point for hunting.",
+      "durationSeconds": 2925,
+      "publishedAt": "2025-06-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Gac_3qMk_Zw",
+      "slug": "internal-domain-name-collision-2-0-2",
+      "title": "Internal Domain Name Collision 2.0",
+      "speakers": [],
+      "track": "recon",
+      "topics": [
+        "network",
+        "infrastructure",
+        "attack",
+        "vulnerabilities"
+      ],
+      "teaser": "Revisits internal domain name collisions, where private DNS names overlap with public ones and create security risk.",
+      "summary": null,
+      "durationSeconds": 3025,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "J4y8GqnaRMM",
+      "slug": "oh-hotel-no-how-a-helpless-hooligan-helped-a-homie-from-homeless",
+      "title": "Oh Hotel No! How a Helpless Hooligan Helped a Homie From Homelessness",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "lessons-learned",
+        "social",
+        "learning"
+      ],
+      "teaser": "Tells the story of one person helping a friend move out of homelessness.",
+      "summary": null,
+      "durationSeconds": 1639,
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "JYYP-uZmo1U",
+      "slug": "hacker-hipster-hustler-humanist-establishing-the-governments-rol",
+      "title": "Hacker, Hipster, Hustler, Humanist: Establishing the Government's Role in Public Interest Cybersecurity",
+      "speakers": [
+        "Christopher Cruz"
+      ],
+      "track": "policy",
+      "topics": [
+        "infrastructure",
+        "risk",
+        "framework",
+        "trust",
+        "management",
+        "lessons-learned"
+      ],
+      "teaser": "Presents a government view of public interest cybersecurity and a layered framework for delivering it to communities.",
+      "summary": "The talk argues that government bodies should treat cybersecurity as a public good rather than only a technical or commercial service. The presenter, who runs a cyber program at a state fusion center, starts by defining public interest technology and public interest cybersecurity. They explain why the popular hacker, hipster, hustler and humanist team model fits poorly in public institutions, and point to neglect of public-sector needs, a heavy load of overlapping standards, and real-world effects such as fuel shortages during a pipeline outage and 911 centers hit by ransomware.\n\nTo move from principles to practice, the presenter proposes a layered \"civic security stack\" with application, policy, coordination, execution and infrastructure layers, modeled loosely on software stacks. Examples from their state program include quarterly intelligence sharing meetings, vulnerability scanning offered to local governments, a template incident response plan, a tabletop exercise kit, and sector-specific guidance. Mapping incidents to FEMA community lifelines is presented as a clearer way to show leaders and emergency managers what an outage means for residents.\n\nThe closing section argues that resilience and continuity planning matter as much as prevention, and that threat intelligence should be taught and applied by smaller organizations rather than simply pushed to them. Audience questions covered risk frameworks, public-private intelligence sharing, and lessons from a major endpoint outage. The takeaway for practitioners is to build partnerships, use public-sector guidance, and follow a documented path when reporting problems to government.",
+      "durationSeconds": 3063,
+      "publishedAt": "2025-06-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "LxwyQV8sIdA",
+      "slug": "attacking-and-defending-servicenow",
+      "title": "Attacking & Defending ServiceNow",
+      "speakers": [
+        "Nicholas Popovich",
+        "Mike Bailey"
+      ],
+      "track": "red-team",
+      "topics": [
+        "attack",
+        "infrastructure",
+        "detection",
+        "defensive-security",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how misconfigured ServiceNow deployments enable privilege escalation and code execution, and how defenders can detect them.",
+      "summary": "The talk looks at ServiceNow, a cloud platform that often holds privileged connections into an enterprise, and how weak permissions and configuration can give an attacker a route inside. The presenters say their own red team work from 2021 uncovered many of these paths before public write-ups existed, and they frame the material as useful to both offense and defense.\n\nMuch of the content covers gaining a foothold and escalating from there. Low-privilege accounts could reach internal table and endpoint paths that the user interface does not expose, and a global text search endpoint returned sensitive material such as tickets and pasted credentials. Searching for base64-encoded forms of common account names surfaced basic authentication headers. Legacy login pages without single sign-on were reachable directly. The middle server, which runs on a host in the network and performs privileged tasks, was then driven through an internal command queue to run commands on a domain controller and, with uploaded files, to start a command-and-control session. The presenters also showed how to delete the queue records afterward.\n\nFor the lab, they described building a small Active Directory environment with open-source range tooling on modest hardware, plus a free ServiceNow developer instance that had waitlist delays. The takeaways for practitioners: restrict service accounts to web-services-only access, apply least privilege to the middle server, validate it deliberately, and monitor the command queue and global search activity to catch this kind of abuse.",
+      "durationSeconds": 2967,
+      "publishedAt": "2025-06-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "SLmo7DuH6vU",
+      "slug": "the-importance-of-an-incident-response-plan",
+      "title": "The Importance of an Incident Response Plan",
+      "speakers": [
+        "Stacy Aitken"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "risk",
+        "management",
+        "lessons-learned",
+        "defensive-security"
+      ],
+      "teaser": "Explains why an incident response plan matters and what it should cover, from communication chains to insurance and compliance needs.",
+      "summary": "The talk starts by separating an incident response policy, which states intent, from an incident response plan, which spells out the concrete steps to follow when something goes wrong. The speaker argues that many organizations still lack a plan, even though nearly every job now touches digital systems. Physical security, badge access and cameras now run on the same networks, so disaster planning has to cover them too.\n\nThe middle of the talk covers what a usable plan contains: an escalation chain that says who gets called first, including legal and insurance contacts, internal and external communication paths for when systems are down, reporting obligations, and industry-specific requirements tied to compliance frameworks. She recommends keeping a short printed or desktop version alongside the full document, and testing the plan with drills and tabletop exercises. Examples from her work include backup power that lasted only minutes and off-site data copies held too close to the primary site.\n\nShe closes by noting that insurers increasingly ask to see incident response documentation, and that claims can be denied over missing paperwork. The plan should be reviewed regularly, updated after each incident, and tailored to the organization's industry rather than copied from a template.",
+      "durationSeconds": 3221,
+      "publishedAt": "2025-06-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "Vi5_0_Ihn1E",
+      "slug": "ai-whos-watching-whom",
+      "title": "AI: Who's watching whom?",
+      "speakers": [
+        "Kyle King"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "threat",
+        "phishing",
+        "defensive-security",
+        "risk"
+      ],
+      "teaser": "Explores how generative AI lowers the bar for phishing, deepfakes and faster attacks, and how defenders can respond.",
+      "summary": "The session starts by treating generative AI as a fast-spreading technology, comparing how quickly consumers adopted recent AI tools with earlier shifts such as the internet and smartphones. It argues that employees are already experimenting with these tools at work, often outside any corporate oversight, so the question for organizations is how to use AI safely rather than whether it will be used at all.\n\nThe middle section covers the threat side. Phishing lures that once gave themselves away through poor spelling can now be polished and personalized, and voice cloning and deepfakes make help desk and executive impersonation more believable. The talk also points to attackers using AI to act on newly disclosed vulnerabilities in internet-facing devices sooner than patching cycles allow, to info-stealer malware harvesting tokens and passwords, and to sprawling cloud and SaaS environments where many tools do not share data. Staffing shortages, change freezes and budget limits are presented as reasons defenders fall behind. Employees pasting sensitive material into public AI services is highlighted as a data leakage risk that many organizations cannot see.\n\nThe closing portion looks at AI on the defensive side: assistants built into security products that help analyze logs, tune policies, clean up unused rules and generate audit reports. It describes a path from human-approved suggestions toward more automated responses. For practitioners, the takeaways are to improve visibility across tools, train users on safe use of generative AI, add input controls before building internal models, and use AI to ease limited staffing.",
+      "durationSeconds": 2890,
+      "publishedAt": "2025-06-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "YfjHCt4SzQc",
+      "slug": "linux-kernel-exploitation-for-beginners",
+      "title": "Linux Kernel Exploitation for Beginners",
+      "speakers": [
+        "Kevin Massey"
+      ],
+      "track": "red-team",
+      "topics": [
+        "linux",
+        "kernel",
+        "exploitation",
+        "memory",
+        "learning"
+      ],
+      "teaser": "Walks through a kernel CTF challenge, from initial recon and source review to heap leaks and kernel ROP.",
+      "summary": "The talk aims to lower the barrier to Linux kernel exploitation by using kernel-focused capture-the-flag challenges as an entry point. It explains why the kernel is an attractive target, given its privileged context and large attack surface, and why CTF challenges are easier to start with: a predictable memory state, a prebuilt kernel image, a root filesystem, and source code for the vulnerability.\n\nThe speaker then walks through a challenge's layout. This covers unpacking the initramfs, reading the init scripts and the kernel module, and reviewing a simple module that exposes allocate, free, read and write commands with user-controlled sizes that are never checked. That gives an out-of-bounds heap read and write. A proof of concept leaks neighbouring objects, and the speaker shows how to change the environment for debugging, such as disabling KASLR and kernel pointer restriction and using GEF's kernel extensions to inspect slab caches. The TTY struct is presented as a useful target because it provides a magic value and kernel and heap pointers.\n\nThe talk covers leaking heap and kernel pointers, then using fixed offsets from a stable kernel leak to locate functions. It explains SMEP and SMAP and how kernel ROP chains reuse existing code snippets to get around them. The planned live demo did not happen, and the session ran out of time before the ROP chain was built. Practitioners can take away that small CTF modules are a practical way to learn kernel heap behaviour and mitigation bypasses.",
+      "durationSeconds": 2306,
+      "publishedAt": "2025-06-28",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "Z06IMo9OGqI",
+      "slug": "how-to-win-budgets-and-influence-stakeholders-articulate-cyber-v",
+      "title": "How to Win Budgets & Influence Stakeholders: Articulate Cyber Value",
+      "speakers": [
+        "Jeremy Dorrough"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "management",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how security staff can frame costs and returns in financial terms to win budgets from non-technical stakeholders.",
+      "summary": "Jeremy Dorrough opens by describing the budget problem: security tools are expensive, budgets are limited, and leadership wants a clear justification for every dollar. He argues that practitioners often cannot explain the return on their tooling, and that purchases tend to follow hype cycles, internal politics, or end-of-year spending rules rather than measured value. A comparison with a small garage weighing a managed security service makes the point that spending should match the risk actually being reduced.\n\nThe middle of the talk covers why common tools fall short in budget discussions. Risk frameworks, heat maps, and color-coded scoring describe program health but do not justify a specific purchase. Dorrough recommends speaking the language of finance: understanding capital versus operating expense, payment terms, the full cost including implementation and operations, and framing benefits as productivity gains, avoided outage costs, or personal liability for leaders. He walks through an annual loss expectancy style return-on-investment model and notes that estimates only need to be directionally accurate. He also points to public breach datasets, the Verizon DBIR and IBM's cost of a data breach report, along with risk quantification vendors and calibration training.\n\nHe closes by urging practitioners to do their own homework on the problem before engaging vendors, to compare alternatives, and to use penetration test and tabletop results as evidence. Residual risk will always remain, so the goal is defensible, data-backed decisions rather than appeals to fear. Audience questions touched on budgeting for penetration tests and quantifying subjective risk.",
+      "durationSeconds": 2664,
+      "publishedAt": "2025-06-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "dKw8xAb3mzk",
+      "slug": "spf-shadowing-give-old-services-a-chance-to-shine",
+      "title": "SPF Shadowing: Give old services a chance to shine",
+      "speakers": [
+        "Caleb Crable"
+      ],
+      "track": "red-team",
+      "topics": [
+        "phishing",
+        "attack",
+        "infrastructure",
+        "vulnerabilities",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how permissive SPF records on vendor subdomains let attackers spoof email, and how to find them.",
+      "summary": "Caleb Crable opens with a short primer on Sender Policy Framework, the DNS text record that tells receiving mail servers which hosts may send mail for a domain. He argues that it is widely left unconfigured, or set to permissive qualifiers such as soft fail or neutral, which weakens the DMARC and DKIM checks that depend on it. He suggests that a fail-all policy, or a null record on domains that never send mail, should be the default.\n\nThe middle of the talk turns to what red teams can exploit. Caleb looks past root domains to the many subdomains that vendors assign to customers, such as login pages, and notes that many have no SPF record at all. He describes finding email infrastructure with permissive records, and a test in which a message was delivered under another company's sending service rather than the intended host. He also presents a small script he is building to query public data sources for domains with weak or missing SPF records, and shows it running with mixed results.\n\nFor practitioners, the takeaway is to audit SPF on every hostname and subdomain, including those tied to third-party vendors, and to test before sending. Caleb recommends reporting weak SPF records as findings in penetration tests. He notes that he disclosed one vendor's issue about three months before the talk and that it still had not been fixed when he last checked.",
+      "durationSeconds": 1938,
+      "publishedAt": "2025-06-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "lanajiMYubc",
+      "slug": "the-lazy-pentesters-guide-to-coasting-through-internals",
+      "title": "The Lazy Pentester's Guide to Coasting Through Internals",
+      "speakers": [
+        "Matthew Fisher"
+      ],
+      "track": "red-team",
+      "topics": [
+        "attack",
+        "network",
+        "windows",
+        "identity",
+        "practical"
+      ],
+      "teaser": "Walks through fast, low-effort internal network tactics for harvesting credentials and escalating toward domain admin.",
+      "summary": "Matthew Fisher, a security consultant with years of internal testing behind him, presents a shortcut-oriented approach to internal penetration tests. He frames the talk as an 80% solution rather than a comprehensive methodology or a set of new techniques. His central argument is that broad enumeration produces overwhelming output, so testers should prioritize collecting credentials and ask whether each action expands their network access.\n\nThe middle of the talk covers the credential sources he relies on most. Poisoning name resolution with Responder and abusing IPv6 DNS through mitm6 can yield NTLM challenge-response hashes that are cracked offline or relayed to hosts without SMB signing. Null sessions and statistically likely usernames help build a validated user list for slow, policy-aware password spraying. He also walks through default or unauthenticated printer and web interfaces, MS17-010 on legacy hosts, LSA secrets and LSASS dumps, PowerShell history, share mining, ADCS template abuse, Kerberoasting of old service accounts, and reusing recovered passwords across accounts.\n\nHe closes by condensing the approach into a workflow that starts unauthenticated and builds outward, reusing each new local admin or domain credential to repeat collection. He also notes that AI tools can help draft report text if sensitive data stays out of prompts and outputs are checked. The takeaway for practitioners is that prioritizing credentials and privilege paths can reach domain admin quickly, and that recurring findings point to client gaps such as missing LAPS, uneven EDR coverage, unmanaged IPv6 and weak service account policy.",
+      "durationSeconds": 3004,
+      "publishedAt": "2025-06-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "mazUwaoDJYw",
+      "slug": "leveraging-ai-in-surveillance-for-public-safety-amid-privacy-con",
+      "title": "Leveraging AI in Surveillance for Public Safety Amid Privacy Concerns",
+      "speakers": [
+        "Vennard Wright"
+      ],
+      "track": "privacy",
+      "topics": [
+        "ai",
+        "privacy",
+        "machine-learning",
+        "detection",
+        "risk"
+      ],
+      "teaser": "Explores how camera-based AI is used for public safety and where its privacy, bias and legal risks lie.",
+      "summary": "The talk opens with the speaker's reason for building a system that watches existing surveillance camera feeds for firearms and alerts police. The motivation came from a 2023 school bus incident in which an attack was averted only because a gun jammed. The approach described combines visual analysis with thermal and radar inputs, fused by a neural network into a single event so that one situation does not generate several separate alerts.\n\nThe middle of the talk surveys other public safety uses, including predictive policing, gunshot localization, behavior-based anomaly detection and facial recognition. Several deployments were described as cancelled or pulled after pilots, and false positives were discussed, such as a camera tripod read as a weapon. The speaker also covered bias in how training images are labeled, the possibility of misidentification, data sharing with little legal restriction, and the absence of a federal standard governing these systems.\n\nFor governance, the speaker recommended building privacy in from the start, processing data at the edge, limiting how long footage is kept, and getting public consent. Human review of alerts and confidence thresholds before any action were presented as safeguards, along with publishing accuracy and error rates. The practical takeaway is that accuracy claims and legal limits remain open questions that practitioners and the public still need to shape.",
+      "durationSeconds": 3042,
+      "publishedAt": "2025-06-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "onAENjWTZIw",
+      "slug": "vendor-management-how-to-make-better-vendor-management-decisions",
+      "title": "Vendor Management - How to Make Better Vendor Management Decisions",
+      "speakers": [
+        "Jon Waldman"
+      ],
+      "track": "policy",
+      "topics": [
+        "risk",
+        "management",
+        "supply",
+        "trust"
+      ],
+      "teaser": "Shows how to tier vendors, score their risk, review SOC 2 reports and contracts, and compare providers before choosing one.",
+      "summary": "The talk covers vendor management, which the speaker notes goes by many names, including third-party risk management and supply chain management, and frames it as a business decision rather than a checkbox exercise. Vendor risk is placed within a broader hierarchy that runs from IT assets to vendors and business processes. Each vendor is scored on four factors: how sensitive the data it handles is, how much access it has to customer information, how many services it supplies, and how critical it is to operations.\n\nVendors are sorted into tiers, and most organizations have only a handful of truly critical ones. Review depth scales with tier. Higher tiers get fuller checks of SOC 2 Type 2 reports, continuity and incident response plans, insurance, and contracts, with the goal of spotting red flags. Contracts deserve close reading for termination rights, breach notification duties, and data ownership, since older agreements often lack modern language. Risk responses are described as accepting, resolving, changing, or transferring risk, while cyber insurance is treated as recovery, not risk reduction.\n\nThe talk closes with practical steps: document accepted risks, revisit critical contracts every year, map where data lives using data flow diagrams, and ask vendors how they use AI with customer data. Fourth-party risk is hard to manage directly, so the advice is to check whether vendors manage their own critical suppliers and to review public SOC reports for supplier names.",
+      "durationSeconds": 2493,
+      "publishedAt": "2025-06-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "tAVuqGsG0-c",
+      "slug": "the-security-professionals-guide-to-the-linux-desktop",
+      "title": "The Security Professional's Guide To The Linux Desktop",
+      "speakers": [
+        "Paul Asadoorian"
+      ],
+      "track": "community",
+      "topics": [
+        "linux",
+        "open-source",
+        "lessons-learned",
+        "tool",
+        "vulnerabilities"
+      ],
+      "teaser": "Argues that security professionals benefit from using Linux as their daily desktop, with myth-busting and practical tips.",
+      "summary": "Paul Asadoorian makes the case that security professionals should consider Linux as their everyday desktop operating system. He opens with the pressures pushing people away from Windows, including Windows 10 reaching end of support and Windows 11's hardware and account requirements, and notes that Linux can still run on much older machines.\n\nThe middle of the talk works through common objections. He covers office documents through cloud suites and LibreOffice-style alternatives, Microsoft Edge on Linux, audio and video editing, video conferencing, virtualization with KVM, NVIDIA drivers, printing, and gaming through Proton. He admits that many problems he hit turned out to be hardware faults or user error rather than the operating system. He recommends sticking with the distribution a tool's developers suggest, and using containers, virtual environments and packaged tools to avoid breaking the system. He also argues that running Linux daily keeps skills sharp, since real update failures teach release-note reading and dependency handling. As an example, he describes tracking which distributions shipped updated GRUB after a set of bootloader vulnerabilities.\n\nHe closes by urging listeners to give Linux a try, keep a spare system for when updates fail, and treat their desktop as a place to learn.",
+      "durationSeconds": 2958,
+      "publishedAt": "2025-06-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "tEtHY8vimng",
+      "slug": "data-breach-management-and-legal-issues-for-it-professionals",
+      "title": "Data Breach Management and Legal Issues for IT Professionals",
+      "speakers": [
+        "Bobby Turnage Jr."
+      ],
+      "track": "policy",
+      "topics": [
+        "incident-response",
+        "risk",
+        "management",
+        "lessons-learned",
+        "privacy"
+      ],
+      "teaser": "Explains the legal and practical considerations an organization faces when managing a data breach and how to prepare.",
+      "summary": "The talk looks at data breach response from the viewpoint of an attorney with in-house technology experience who now advises clients on data security and privacy. It argues that breaches involve more than consumer records, pointing to employee information, confidential business material, and data held for or by third parties. It also walks through the harms an organization can face, including contract claims, call center load, and lost operations, and explains that notification duties depend on where affected people live and which industry rules apply.\n\nThe middle section follows the response itself. Technical containment, legal analysis, and communications run in parallel and should be coordinated through a single hub, with a small initial team and consistent base messaging. Engaging forensic experts through counsel can help protect their discussions under privilege, while written communications should stay factual because they may later be read in court. The speaker cautions against over-scoping the investigation and notes that breach investigations often run from about a week to a couple of months, with faster generally better.\n\nPreparation comes last. Organizations should keep logs, notify their insurer promptly, consider combined notification and call center vendors, and hold an after-action review. Contracts with vendors can shift breach costs, and tabletop exercises with a written response plan help staff stay calm. The talk ends by separating privacy, which governs collection and use of data, from security, which governs safeguards, since the two are often conflated.",
+      "durationSeconds": 2914,
+      "publishedAt": "2025-06-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "wJQAt6DMYhw",
+      "slug": "its-not-all-ninjas-and-anonymous-masks",
+      "title": "It's Not All Ninjas and Anonymous Masks",
+      "speakers": [
+        "David Young"
+      ],
+      "track": "community",
+      "topics": [
+        "team",
+        "management",
+        "lessons-learned",
+        "risk",
+        "learning"
+      ],
+      "teaser": "Describes day-to-day security work on internal teams and as a consultant, from scoping to reporting.",
+      "summary": "The talk gives a candid look at what working in security is like day to day, drawing on years on internal teams at healthcare, finance and utility organizations and later as a consultant. It sets out the range of roles, from penetration testing and compliance to incident response and management, and notes that meetings, scoping and documentation take up much of the job. The speaker argues that time pressure and getting stuck on a problem are common hazards, and suggests timeboxing work and documenting as you go.\n\nThe middle of the talk covers tooling and communication. Open-source and commercial tools each have trade-offs, and endpoint detection and insurance requirements can block tools or demand admin rights, which pushes teams toward separate test laptops, virtual machines or advance notice to the monitoring team. Reporting gets significant attention: findings should explain business impact in terms non-technical stakeholders understand, and clients should receive a way to retest fixes themselves. Stories from past engagements illustrate how a test can accidentally disrupt systems and why collaboration between red and blue teams helps.\n\nThe closing section compares internal and consulting work, including travel, follow-through on remediation and how each setting shapes a practitioner's approach. The main takeaway is that the role rewards communication, patience and continuous learning as much as technical skill, and that people should choose a specialty they genuinely enjoy.",
+      "durationSeconds": 3225,
+      "publishedAt": "2025-06-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "yJ8u94yiaMQ",
+      "slug": "following-the-json-path-a-road-paved-in-rce",
+      "title": "Following The JSON Path: A Road Paved in RCE",
+      "speakers": [
+        "Nick Copi"
+      ],
+      "track": "appsec",
+      "topics": [
+        "vulnerability-research",
+        "open-source",
+        "vulnerabilities",
+        "web",
+        "exploitation",
+        "supply-chain"
+      ],
+      "teaser": "Shows how JavaScript JSON path libraries allow sandbox escapes and remote code execution across widely used products.",
+      "summary": "The talk begins with a bug bounty target: an Express API that takes a JSON object and a JSON path, then evaluates filter expressions on the server. Nick Copi asks whether those expressions can be abused to run arbitrary JavaScript, and walks through how JSON path queries are parsed into syntax trees and evaluated.\n\nHe examines two popular npm libraries. The older one used a restricted static evaluator, but its checks on function constructors could be sidestepped with prototype tricks to reach code execution. The newer one ran expressions in Node's VM module, which is not a security boundary, so default settings were exploitable too. To gauge reach, he scraped npm and GitHub dependents and looked for downstream products that passed untrusted paths into these libraries.\n\nThe search surfaced remote code execution in a badge-generating service, fixed quickly with a CVE, and in a mock API server that stayed unpatched after the project was abandoned. Other findings included XSS in undisclosed applications and a client-side XSS in CyberChef that escaped its web worker, also unfixed. The talk also covers a later critical CVE in the newer library and a bypass of its fix through array-to-string coercion. The takeaways: treat libraries as in scope, avoid evaluating untrusted paths, and never rely on VM-based sandboxes.",
+      "durationSeconds": 3020,
+      "publishedAt": "2025-06-28",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "z--EZAmgH_o",
+      "slug": "look-ma-no-ida-malware-analysis-without-reverse-engineering",
+      "title": "Look Ma, No IDA! Malware Analysis Without Reverse Engineering",
+      "speakers": [
+        "Christina Johns"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "reverse-engineering",
+        "detection",
+        "intelligence",
+        "learning"
+      ],
+      "teaser": "Shows how malware triage can progress through scripts, static tools, sandboxes, and YARA before any disassembly.",
+      "summary": "The talk challenges the idea that malware analysis must start with reverse engineering. The speaker argues that disassembly is the most conclusive method but also the slowest, and that many goals, such as naming a malware family or pulling indicators across a network, do not require it. Because many common threats use scripting languages rather than compiled code, assembly is often the wrong starting point.\n\nThe middle section covers foundations that responders and intel analysts often already have: knowing what each tool reports and where it fails, picking one scripting language, and reading basic file properties such as signers, section names, and entropy. It then shows how familiar work, like EDR telemetry or sandbox output, leads naturally into malware analysis. Tools covered include YARA, FLOSS for strings, CyberChef recipes, and AssemblyLine. Three case studies follow: an obfuscated JavaScript file, a .NET sample tied to AsyncRAT through configuration extraction and code comparison, and corroboration across online databases and sandboxes.\n\nThe closing points stress caution. Sandboxes can miss commands a remote access trojan receives later, or behavior gated behind arguments and anti-analysis checks, and capability tools report behaviors without explaining intent. Analysts should record which tool or rule supports each conclusion. A disassembler becomes necessary when anti-analysis blocks progress or attribution depends on software design.",
+      "durationSeconds": 2661,
+      "publishedAt": "2025-06-28",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "SgkhjtvN09c",
+      "slug": "key-management-and-basic-key-usage-for-encryption-101",
+      "title": "Key Management and Basic Key Usage for Encryption 101",
+      "speakers": [
+        "Alain Petit"
+      ],
+      "track": "appsec",
+      "topics": [
+        "management",
+        "risk",
+        "trust",
+        "learning"
+      ],
+      "teaser": "Explains how key types, life cycle stages and key handling decide whether encryption claims in vendor products hold up.",
+      "summary": "Alain Petit, an enterprise security architect, opens with the point that a vendor's claim of strong encryption says little on its own. He argues that the questions that matter concern how the keys behind that encryption are created, stored, shared and retired. He uses a house lock and door key as a running analogy, comparing symmetric keys, which both lock and unlock, with asymmetric key pairs, where one key encrypts and a separate private key decrypts. He explains why asymmetric keys are typically used to exchange a symmetric key rather than bulk data, since they are slower.\n\nThe middle of the talk walks through the key life cycle: generation, distribution, storage, use, rotation, archival and destruction. Each stage is tied to a house-key comparison, such as keys left in a door, spares hidden under a mat, or a lock whose keys are unaccounted for. Key points include generating keys with enough randomness that they cannot be guessed, limiting access to only the people and services that need a key, storing keys in hardware security modules or vaults, and not reusing one key for several purposes. He notes that regular rotation limits the damage from a lost key, and that archived keys may leave remnants even after deletion.\n\nHe closes with a takeaway for anyone evaluating a product or reviewing code: a hardcoded key in a configuration file is effectively exposed. Practitioners should ask vendors or developers how keys are generated, who can access them, how often they rotate, and how they are retired, rather than stopping at the name of the algorithm.",
+      "durationSeconds": 2282,
+      "publishedAt": "2025-06-28",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "qkAQzGNhn0U",
+      "slug": "using-volatility-3-to-combat-modern-malware",
+      "title": "Using Volatility 3 to Combat Modern Malware",
+      "speakers": [
+        "Andrew Case"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "malware-analysis",
+        "incident-response",
+        "windows",
+        "threat-detection",
+        "open-source"
+      ],
+      "teaser": "Shows how Volatility 3 plugins detect process hollowing, code injection, and other memory-only malware that evades EDR tools.",
+      "summary": "The talk makes the case for memory forensics. Many serious intrusions, including nation-state campaigns and well-built ransomware, keep their key payloads only in RAM, where disk and network tools miss them. It introduces Volatility 3, a full rewrite of the open-source memory analysis framework, and explains the checks that compare memory region permissions, file backing and loaded-module lists to flag code that was not loaded through legitimate APIs.\n\nThe middle section walks through injection techniques. Classic remote DLL injection, raw shellcode and reflective DLL loading stand out when memory regions are compared against the loaded-module lists. Process hollowing, where a legitimate service process is started in a suspended state and its image is replaced, is caught by comparing kernel and user-mode image base addresses, checking for regions with no backing file, and inspecting thread start addresses. The talk also covers cloned processes that split API calls to evade EDRs, process ghosting that runs from deleted files, and a plugin that flags suspended threads. Examples include Stuxnet and Cobalt Strike samples.\n\nThe closing point is operational. The speaker ran the suspended-thread check across a set of several hundred Windows memory samples and reported no false positives. Practitioners should capture memory before terminating a suspicious process, because killing it can erase evidence and remove a file-backed payload. The new plugins are meant to fit into production triage across many samples.",
+      "durationSeconds": 2766,
+      "publishedAt": "2025-06-28",
+      "difficulty": "advanced"
+    }
+  ]
+}

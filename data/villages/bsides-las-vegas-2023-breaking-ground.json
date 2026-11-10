@@ -1,0 +1,379 @@
+{
+  "villageSlug": "breaking-ground",
+  "villageName": "Breaking Ground",
+  "eventSlug": "bsides-las-vegas-2023",
+  "conference": "bsides",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLjpIlpOLoRNQH-brlnTm9p5NKN8HPwhjw",
+  "description": "Breaking Ground talks from BSides Las Vegas 2023.",
+  "talks": [
+    {
+      "youtubeId": "yV6EQi-Htog",
+      "slug": "mainframe-hacking-for-cics-and-giggles-2",
+      "title": "Mainframe Hacking for CICS and Giggles",
+      "speakers": [
+        "Jay Smith",
+        "Jan Nunez"
+      ],
+      "track": "red-team",
+      "topics": [
+        "mainframe",
+        "application",
+        "tool",
+        "attack",
+        "network"
+      ],
+      "teaser": "Shows how intercepting 3270 terminal traffic can bypass field protections in CICS mainframe applications.",
+      "summary": "The talk starts from the point that mainframes still run banking, airline, government and insurance workloads, so their security matters even though they are often dismissed as legacy. The presenters explain why testing them is hard: few learning resources exist, the community is guarded toward outsiders, and commercial emulation and tooling are expensive or scarce. They walk through CICS as the online transaction layer, with regions and four-character transaction IDs, and show that 3270 traffic carried over TN3270 can be read in a packet analyzer.\n\nThe middle section focuses on the 3270 data stream. The researchers found that the start field orders and field attribute bits decide whether a field is protected, numeric-only or hidden, so changing those bits in transit changes what the application enforces. They built a proxy tool that sits between the terminal emulator and the mainframe, and demonstrated it against an intentionally vulnerable CICS application running in a free MVS 3.8 environment. The demo covered brute forcing a supervisor code, unlocking a protected price field, revealing a hidden approval field, cycling through attention keys to find hidden screens, and using the logging views to document each step.\n\nThe closing part offers defensive guidance: enforce authorization per transaction with a system such as RACF, never rely on hidden fields to protect data, and do not treat unused function keys as safe places for hidden functions. The presenters also assessed the mainframe intrusion detection options and found them limited. The takeaway is that mainframe applications deserve the same testing as web systems, and that open-source resources now make learning this area practical.",
+      "durationSeconds": 2625,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "QHywh-C-zTU",
+      "slug": "generative-ai-the-three-concerns-problem-and-a-tale-of-three-cis",
+      "title": "Generative AI: The Three Concerns Problem and A Tale of Three CISOs",
+      "speakers": [
+        "Sounil Yu"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "risk",
+        "management",
+        "trust",
+        "identity"
+      ],
+      "teaser": "Frames generative AI risks through finance and AI-safety analogies, proposing new roles and guardrails for security leaders.",
+      "summary": "Sounil Yu frames generative AI around three concerns: employees using it, developers building with it, and attackers weaponizing it. He argues that large language models mostly generate new output rather than reproducing training data, which he sees as a common misconception about intellectual property leaks. He proposes that security leaders could act as a CFO for intellectual property, and borrows accounting ideas such as impairment, liabilities and double-entry checks as possible security practices.\n\nOn the developer side, he points out that typical LLM application architectures pass unsanitized user input through many components, breaking the long-standing rule of never trusting user input. He cites existing taxonomies and frameworks as starting points, then suggests security teams take on a chief AI safety officer role, setting bounded inputs, thresholds, kill switches and clear system owners. For attackers, he highlights faster vulnerability discovery and deepfakes, which he treats as a data identity and content authenticity problem rather than an authentication one.\n\nHe closes by arguing that systems built to be distributed, immutable and ephemeral carry fewer security burdens, so the security leader's role could eventually shrink. The question period covered hallucinated citations, data compliance, the veracity of model output and spotting overconfident analysts.",
+      "durationSeconds": 3042,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "JHtdB6VzUsg",
+      "slug": "an-everything-is-on-fireside-chat",
+      "title": "An Everything Is On Fireside Chat",
+      "speakers": [
+        "Jen Easterly"
+      ],
+      "track": "policy",
+      "topics": [
+        "interview",
+        "vulnerabilities",
+        "ai",
+        "risk",
+        "infrastructure"
+      ],
+      "teaser": "A government cyber agency leader covers secure by design, vulnerability disclosure and AI trust with hackers.",
+      "summary": "Keren Elazari moderates a fireside chat at BSides Las Vegas with Jen Easterly, director of the US Cybersecurity and Infrastructure Security Agency. Easterly explains that CISA works as a voluntary partner rather than a regulator, intelligence collector or law enforcement body. Its mission centers on reducing risk to the critical infrastructure that people rely on every day, from water and health care to communications and banking. The conversation frames the hacker community as a group the agency wants to hear from and recruit.\n\nA large part of the discussion covers secure by design, a set of principles written in business language so that senior leaders own security outcomes instead of pushing that burden onto small businesses and app developers. Easterly describes the feedback sessions planned at DEF CON and the agency's known exploited vulnerabilities catalog, which gives organizations a prioritized list of flaws already being abused in the wild. They also discuss coordinated vulnerability disclosure and the value of legal protections for good-faith security research.\n\nThe talk then turns to AI, where Easterly argues that trust in these systems is still in its early days. She outlines three CISA priorities: using AI for cyber defense, assuring AI systems through testing and audit, and addressing physical and cyber threats to critical infrastructure. She stresses transparency and resilience, planning on the assumption that bad things will happen and building the ability to recover. The session closes on workforce, with hiring efforts and an invitation for attendees to join the agency or send feedback.",
+      "durationSeconds": 1820,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "9yabNN3dFZY",
+      "slug": "the-dark-playground-of-ci-cd-attack-delivery-by-github-actions",
+      "title": "The Dark Playground of CI/CD: Attack Delivery by GitHub Actions",
+      "speakers": [
+        "Yusuke Kubo",
+        "Kiyohito Yamamoto"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "attack",
+        "build",
+        "devops",
+        "threat",
+        "open-source"
+      ],
+      "teaser": "Shows how GitHub Actions custom actions and self-hosted runners can be abused for code delivery and command-and-control.",
+      "summary": "Two offensive security researchers from a Japanese telecommunications company examine how GitHub Actions, the CI/CD automation feature built into GitHub, can become an attack surface. Build pipelines are convenient for developers, but the same runner and custom action mechanisms can give an attacker code execution inside a trusted workflow. The speakers separate techniques already seen in the wild from ones their own research found.\n\nThe middle of the talk covers the attack techniques they developed. A JavaScript custom action runs through the runner's bundled Node engine, and by swapping that binary for a Windows script host, a JScript payload runs in its place. Wrapping the steps in a composite action lets the malicious action run without a visible setup step. A JavaScript variant abuses a Node module that opens processes and injects DLLs. They also described a command-and-control channel built on the runner application itself, which polls GitHub for jobs, so its traffic to a legitimate domain blends into normal activity. A short demo showed a remote connection set up this way. The talk also reviewed free-jacking of compute resources, malicious pull requests against public repositories that use self-hosted runners, and theft of repository secrets.\n\nFor defenders, the speakers said that code review of actions and their publishers matters, and that antivirus is easy to evade with small edits, so detecting the behavior of the attack is more useful. In the Q&A, the speakers confirmed that secret theft works on both self-hosted and GitHub-hosted runners. The practical takeaway is to treat CI runners as untrusted execution environments.",
+      "durationSeconds": 1452,
+      "publishedAt": "2023-10-25",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "M8njU2bbA3U",
+      "slug": "wolves-in-windows-clothing-weaponizing-trusted-services-for-stea",
+      "title": "Wolves in Windows Clothing: Weaponizing Trusted Services for Stealthy Malware",
+      "speakers": [
+        "Michael Bargury"
+      ],
+      "track": "red-team",
+      "topics": [
+        "attack",
+        "windows",
+        "cloud",
+        "threat",
+        "tool"
+      ],
+      "teaser": "Shows how the Power Automate agent built into Windows 11 can be repurposed as a trusted remote execution and C2 channel.",
+      "summary": "The talk starts from a common position: an attacker already has code running on a Windows machine and must still deliver payloads, control the host, move data out, avoid defenses, and persist. The speaker argues that much of this is routine engineering rather than exploitation, and that robotic process automation (RPA) products already handle it with components that endpoint tools trust by default. The RPA stack described has three parts: a local agent on each endpoint, a controller that receives work over outbound connections, and a cloud portal for management. The Power Automate agent ships with Windows 11.\n\nThe middle of the talk walks through enrolling a machine into an attacker-controlled cloud tenant, with a silent registration command that the speaker showed working without admin rights. Once enrolled, cloud-hosted flows can be queued to the machine and run in attended or unattended sessions, with results reported back. Demonstrations covered file exfiltration through the cloud channel, script execution, and no-code flows for file encryption, log cleanup, and browser token theft. A script that launched a known credential-dumping tool was flagged by endpoint protection, which pushed the work toward built-in no-code actions that avoided that detection.\n\nThe closing guidance focuses on detection and hardening. Defenders should watch the agent's command-line and PowerShell executables for unfamiliar tenant IDs, keep an inventory of the organization's own tenant IDs, and review registry-based settings. Older agent versions remain exposed without a formal CVE, and some organizations loosen the tenant restrictions, so business-built automations need governance. A companion open-source command-line tool was released so red teams can test these ideas.",
+      "durationSeconds": 2335,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "oh4GYF3aFSg",
+      "slug": "breaking-business-as-usual-attacking-android-enterprise-solution",
+      "title": "Breaking Business as Usual: Attacking Android Enterprise Solutions",
+      "speakers": [
+        "Priyank Nigam"
+      ],
+      "track": "mobile",
+      "topics": [
+        "android",
+        "mobile",
+        "management",
+        "privacy",
+        "vulnerability-research"
+      ],
+      "teaser": "Examines how personal apps, rootkits and misconfigured management policies can break the work profile boundary on Android.",
+      "summary": "The talk looks at Android Enterprise in bring-your-own-device setups, where an employer manages a separate work profile on a personal phone. It frames the ecosystem around three stakeholders: IT administrators, enterprise mobility management providers, and work app developers. It then examines where the boundary between work and personal data can fail.\n\nSeveral weaknesses are demonstrated. Personal apps can reach work app data through inter-process communication and shared storage, and both profiles share one certificate store, so a root certificate added for one affects the other. Device logs and connected app settings also cross the divide. The management app can be instrumented at runtime to change its policies, and the speaker showed a way to bypass the work profile lock state and to disable a mandatory app. Several of these issues were reported to Google, whose responses varied.\n\nFor administrators, the main takeaways are to whitelist work apps and check compliance regularly, avoid enforcing only a work-profile password, and harden management apps against tampering. Settings such as USB debugging, root detection, and security patch level were not enabled by default across major management products, so they need explicit configuration. The talk ends with a cheat sheet of recommended work profile settings.",
+      "durationSeconds": 2185,
+      "publishedAt": "2023-10-25",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "Z8h00vaVA04",
+      "slug": "all-you-need-is-guest-beyond-enumeration",
+      "title": "All You Need is Guest: Beyond Enumeration",
+      "speakers": [
+        "Michael Bargury"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "identity",
+        "attack",
+        "tool",
+        "vulnerabilities"
+      ],
+      "teaser": "Shows how Azure AD guest accounts can reach corporate SQL data and shared connections, and how to harden them.",
+      "summary": "Azure Active Directory guest accounts are commonly invited into corporate tenants so outside partners and contractors can collaborate, and they are often treated as low risk. Michael Bargury argues that this assumption breaks down in practice. He shows how a guest can join a host tenant through ordinary business-user invitation flows and then reach low-code applications built on the Power Platform. Those applications store \"connections\" that wrap a user's credentials, and the sharing controls let business users share them widely, so a guest can view data behind SQL servers and file storage they were never explicitly granted.\n\nThe talk walks through the obstacles along the way: a missing license, a data loss prevention policy that the speaker describes as an allow and deny list for connectors rather than real DLP, and an internal token exchange. He explains how an API gateway injects stored tokens into requests, and how a public Microsoft client identity can be used to obtain the token needed to query it. He presents PowerGuest, a tool that enumerates the connections a guest can reach, dumps the data behind them, and offers an interactive interface for running queries. One step was withheld pending a fix from Microsoft.\n\nFor defenders, the takeaway is that guest access should not be assumed harmless, and that business-built applications are part of the shared responsibility model rather than the vendor's problem alone. The speaker recommends hardening Azure AD and Office 365 guest settings, reviewing who shares connections and what data they expose, and adding detection logic where configuration changes are not possible.",
+      "durationSeconds": 2804,
+      "publishedAt": "2023-10-25",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "lIzCm-57ff4",
+      "slug": "how-we-found-pii-in-exposed-rds-snapshots",
+      "title": "How we found PII in exposed RDS Snapshots",
+      "speakers": [],
+      "track": "cloud",
+      "topics": [
+        "aws",
+        "cloud",
+        "privacy",
+        "vulnerability-research"
+      ],
+      "teaser": "Covers finding personally identifiable information in exposed RDS snapshots.",
+      "summary": null,
+      "durationSeconds": 2040,
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ZbpDnBjUD94",
+      "slug": "emulation-powerpc-and-transition",
+      "title": "Emulation, PowerPC, and Transition",
+      "speakers": [
+        "Erin Cornelius"
+      ],
+      "track": "hardware",
+      "topics": [
+        "embedded",
+        "reverse-engineering",
+        "framework",
+        "hardware",
+        "tool"
+      ],
+      "teaser": "Follows a reverse engineer building a bare-metal PowerPC emulator to test and analyze an engine controller's firmware.",
+      "summary": "The talk starts with why full-system emulation helps with reverse engineering and debugging bare-metal embedded systems, where hardware debuggers can be slow or limited. It explains that PowerPC remains common in automotive and aerospace equipment, and that open-source emulators of the time lacked support for newer PowerPC features such as variable-length encoding and vendor-specific floating point and vector instructions. The work sat inside a DARPA program on binary lifting, patching and assurance, where the team had to test tools against a real engine controller.\n\nThe middle of the talk covers building the framework in Python on top of the vivisect toolkit. Peripherals were added in stages, beginning with a watchdog timer, system integration and clock setup, then flash memory, interrupts, DMA and several analog and bus peripherals. Firmware was extracted from a physical board so the emulator's behavior could be checked against hardware. One flash-related problem left the emulated image marked as bad, which showed how a small state mismatch can derail an entire run. A demo showed the emulator executing firmware while it transmitted messages, and a remote GDB server allowed a debugger to attach.\n\nPersonal history about the speaker's transition is woven through the technical timeline. The closing takeaway is that building your own tool can deepen your understanding of a target and suit how you approach problems. The framework is moving toward a generic bare-metal emulator, with the remaining work mostly refinement.",
+      "durationSeconds": 2822,
+      "publishedAt": "2023-10-25",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "YJsosnB3V5w",
+      "slug": "beyond-the-perimeter-uncovering-the-hidden-threat-of-data-exfilt",
+      "title": "Beyond the Perimeter Uncovering the Hidden Threat of Data Exfiltration in Google Cloud Platform",
+      "speakers": [
+        "Or Aspir"
+      ],
+      "track": "cloud",
+      "topics": [
+        "cloud",
+        "threat-detection",
+        "incident-response",
+        "infrastructure"
+      ],
+      "teaser": "Maps five data exfiltration methods in Google Cloud Storage, BigQuery and Cloud SQL to the audit logs that expose them.",
+      "summary": "The talk opens with how an attacker gets initial access to a Google Cloud Platform environment, such as through leaked service account keys, a compromised user or machine, or a malicious insider. It then explains the audit log categories GCP offers, including admin activity, data access, system event and policy denied logs, and notes that some are off by default.\n\nThe core section walks through exfiltration paths in three services. In Cloud Storage, direct object downloads are hard to tell apart from metadata reads, and public buckets generate no data access logs. A storage transfer job can copy objects into another organisation using the service's own identity, so the destination writes and job creation may go unseen in the source project. In BigQuery, queries from an outside organisation can appear without query text, and in Cloud SQL an export to a bucket needs only API permissions and yields a dump that is not encrypted by default.\n\nThe closing advice is to route audit logs to longer-retention storage, enable data access logging, and keep an inventory of resources and identities so that resources in outside organisations stand out. Learning what each log looks like helps reveal visibility gaps. In answer to a question, the speaker also pointed to organisation policies and posture-management tools for prevention.",
+      "durationSeconds": 1841,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "8sXyRv21jPY",
+      "slug": "from-firmware-to-exploit",
+      "title": "From firmware to exploit",
+      "speakers": [],
+      "track": "hardware",
+      "topics": [
+        "embedded",
+        "device",
+        "reverse-engineering",
+        "exploitation",
+        "hardware"
+      ],
+      "teaser": "Covers the path from device firmware to a working exploit.",
+      "summary": null,
+      "durationSeconds": 1514,
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "_xdu43tGdXs",
+      "slug": "the-ever-shifting-habits-of-cloud-focused-malware-campaigns",
+      "title": "The Ever-shifting Habits of Cloud-focused Malware Campaigns",
+      "speakers": [
+        "Matt Muir"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "cloud",
+        "intelligence",
+        "linux",
+        "attack"
+      ],
+      "teaser": "Analyzes cloud-focused malware campaigns that move beyond cryptojacking into credential theft, AWS persistence and botnet deployment.",
+      "summary": "The talk traces how malware aimed at cloud environments has changed, moving beyond cryptojacking toward serverless functions and containers as cloud adoption grows. The speaker, a threat researcher, walks through two campaigns analyzed over the past year, continuing an earlier talk on similar families.\n\nThe first campaign is Legion, a Python tool sold through a Telegram group. It scans for misconfigured web servers, pulls application secrets from exposed environment files, and tests the mail services those secrets unlock. When it recovers AWS keys, it creates a hidden IAM user with administrator-level permissions and uses Amazon's email service to send test messages. The analysis also covers a bundled PHP exploit and Discord used for campaign reporting. The second campaign is DCOT, a malware-as-a-service group targeting Linux servers. Its execution chains use Go binaries, a modified UPX header that breaks standard unpacking, and shell scripts compiled into executables, along with a scanner, an SSH brute forcer, and a miner.\n\nThe session closes with audience questions, including one on Kubernetes; the speaker had not seen Kubernetes-specific campaigns, though serverless-focused malware had appeared. Practitioners should note that exposed configuration files and leaked cloud keys remain a common entry point, and that untagged new IAM users and unexpected Discord webhook traffic are useful signals.",
+      "durationSeconds": 2429,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "1bfaieDqXNA",
+      "slug": "closing-ceremony-5",
+      "title": "Closing Ceremony",
+      "speakers": [],
+      "track": "community",
+      "topics": [
+        "village",
+        "discussion",
+        "learning",
+        "charity"
+      ],
+      "teaser": "Wraps up the 2023 BSides Las Vegas with volunteer thanks, a charity auction for the EFF and calls for next year's participation.",
+      "summary": "This closing ceremony for the 2023 BSides Las Vegas opens with the organizers reviewing the event's scale, including more than 400 submissions across ten tracks. They highlight the Proving Ground mentorship program, which pairs first-time speakers with mentors for six months so they can present on a national stage, and they ask attendees to recruit new voices for the coming year.\n\nThe middle of the ceremony covers the people and causes behind the event. The organizers introduce the team that runs Pros vs Joe's, a two-day offensive and defensive capture-the-flag game where a red team plays an advanced persistent threat against newcomers defending their environments. They recognize sponsors, volunteers, and a new career-focused track, and they describe charity support for the EFF and the Cognitive Security Institute. A live silent auction and raffle then followed, with donated badges, books, hardware, artwork, and collectibles, and all proceeds went to the EFF. A guitar built by one of the founders brought in about $1,500 for the same cause.\n\nThe closing remarks come from the board president, who frames BSides as a rejection of gatekeeping and asks attendees to share knowledge, submit to the call for papers, and return next year. For practitioners, the practical takeaways are to mentor newcomers, sponsor or volunteer for community events, and bring new speakers into the program.",
+      "durationSeconds": 2650,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "RPoKJnkuhs4",
+      "slug": "google-workspace-forensics-insights-from-real-world-hunts-and-ir",
+      "title": "Google Workspace Forensics – Insights from Real-World Hunts & IR",
+      "speakers": [
+        "Ariel Szarf",
+        "Doron Karmi"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "threat-detection",
+        "cloud",
+        "security-operations"
+      ],
+      "teaser": "Shows how to read Google Workspace logs and hunt for Google Drive data exfiltration through a real investigation.",
+      "summary": "The speakers, both cloud researchers, open with why Google Workspace draws attackers: a collaboration suite used by millions of paying businesses, with logs split by service and typically kept for six months. They explain why the raw records are hard to work with. Each entry nests a list of events, and each event carries its own list of typed parameters. Useful fields are also absent, including user agent and file paths, and IP addresses can look inconsistent when a connected app acts on a user's behalf.\n\nTo make the data usable, they flatten nested events into one row each, strip the type annotations so only parameter names and values remain, and tag actions taken by third-party apps. A case then follows an external account that produced an unusual burst of Drive downloads at a single timestamp. The talk lists Drive event names that can signal exfiltration, such as viewing, emailing as an attachment, printing and copying, and shows how a visibility change to \"anyone with a link\" appears as paired events. Because the API needs permissions and reflects only current state, they rebuild historical file paths by chaining folder-creation records. The account turned out to belong to an admin who had been phished.\n\nThe final part covers a visibility gap: users without a paid license produce no private-drive log records, which would let an admin revoke a license, copy shared-drive files privately, download them, and restore the license with little trace. Hunters should look for license revoke and assign events close together, and for copy events lacking matching pairs. The advice is to learn the limits of the logs before an incident, make them readable, and then monitor proactively for exfiltration.",
+      "durationSeconds": 1314,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "EfP1l39SwEQ",
+      "slug": "unveiling-the-hidden-discovering-rdp-vulnerabilities-using-pdf-f",
+      "title": "Unveiling the Hidden: Discovering RDP Vulnerabilities using PDF Files",
+      "speakers": [
+        "Dor Dali"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "network",
+        "open-source",
+        "vulnerabilities",
+        "exploiting"
+      ],
+      "teaser": "Shows how reading public RDP Gateway protocol specifications exposed remote code execution, an authentication bypass and other CVEs.",
+      "summary": "The talk examines how RDP, the Windows remote desktop protocol, can be studied without the usual reverse engineering toolkit. The speaker, a security researcher at a secure access vendor, first explains the RDP Gateway role, which carries remote sessions from the internet into an internal network over a TLS tunnel and then forwards them to a target host. Instead of starting with a debugger or disassembler, the research relied on Microsoft's publicly released protocol specifications, open-source client implementations, and packet captures.\n\nFollowing the specification's rules for message formatting, the researcher found two server message types that were sent without the required null terminator. Sending them crashed a client, and further analysis traced the fault to an off-by-one flaw that could lead to remote code execution on the RDP client. A second line of work looked at the authentication cookie used to set up the UDP side channel. The documented structure contained the username, target server and port, and the signed encoding was recognizable as ASN.1 CMS. Substituting a self-signed certificate got past verification, which allowed log forgery, server-side request forgery into internal UDP services, and amplified denial-of-service traffic, since the gateway sends several packets per connection. Other findings included use of an outdated TLS version over UDP and one further issue not yet disclosed.\n\nThe main takeaway is that widely deployed protocols can still hide serious flaws, and that closed source does not mean unexaminable. Researchers were encouraged to start with the documentation, and defenders were urged to read it to understand their exposure. The affected behavior was described as present since Windows Server 2008, so patching was the key recommendation.",
+      "durationSeconds": 1009,
+      "publishedAt": "2023-10-25",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "MIx4la_U610",
+      "slug": "hiding-in-plain-sight-the-untold-story-of-hidden-vulnerabilities",
+      "title": "Hiding in Plain Sight - The Untold Story of Hidden Vulnerabilities",
+      "speakers": [
+        "Yotam Perkal"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "vulnerabilities",
+        "vulnerability-research",
+        "open-source",
+        "tool",
+        "risk"
+      ],
+      "teaser": "Benchmarks commercial and open-source SCA scanners and shows how non-package-manager installs in Docker images hide vulnerabilities.",
+      "summary": "Vulnerability scanners and software composition analysis tools are widely used to flag vulnerable components, but their results often differ widely. Every scanner must first inventory the software in an environment, then match that inventory against security advisories, so a weakness in either step produces wrong answers.\n\nThe research benchmarked four commercial and two open-source scanners against twenty popular Docker Hub images. Agreement between tools was low, and even the best recall missed roughly one in ten known vulnerabilities. Root causes included uneven support for package formats and runtimes, ignored OS advisory context, and inconsistent vulnerability data. The central case was software placed into images outside the package manager through commands such as RUN with curl or wget, plus COPY, ADD and FROM. Examples included a MongoDB server, a Go binary and build helpers that scanners could not see. A live demo against two Apache httpd versions showed actively exploited path traversal flaws that the tested scanners missed, followed by live exploitation of each.\n\nFor image builders, these install patterns create blind spots and should be avoided or documented where possible. For practitioners, scanner output should not be taken at face value; tools should be evaluated against the languages and environments actually used, and extra controls such as pipeline checks should look for components installed outside package managers.",
+      "durationSeconds": 2915,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "N3mtSm-jEnA",
+      "slug": "and-together-we-crossed-the-river",
+      "title": "And Together We Crossed the River…",
+      "speakers": [
+        "Josh Corman"
+      ],
+      "track": "policy",
+      "topics": [
+        "healthcare",
+        "iot",
+        "risk",
+        "community",
+        "lessons-learned"
+      ],
+      "teaser": "Recounts how a small volunteer group shifted medical device and healthcare policy, and what remains unresolved.",
+      "summary": "Josh Corman opens with a reflection on the decade since his 2013 talk \"I Am the Cavalry,\" which asked technically skilled people to take responsibility for connected devices that affect human life. He describes the climate of that era, when security research was being criminalized and trust between hackers and government was strained, and how a group of volunteers chose to work with regulators, lawmakers and device makers rather than publicly attacking individual vendors.\n\nThe middle of the talk walks through the results. The group's work on cars, medical devices and hospitals produced safety frameworks, helped win good-faith research protections in US law, and contributed to federal requirements that FDA-approved devices be patchable and have a disclosure program. Corman links hospital ransomware to measurable excess deaths, and explains how critical infrastructure can be ranked by how quickly a disruption could cause loss of life, with food, water and emergency care singled out as under-defended.\n\nHe closes by acknowledging that the effort has not clearly succeeded, and that rural hospital closures continue. He asks whether the initiative should end, change focus, or become a training pipeline that mentors new contributors. The takeaway for practitioners is a call to bring policy-literate technical work to the sectors that are most exposed and least resourced.",
+      "durationSeconds": 3509,
+      "publishedAt": "2023-10-25",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "YtHpc84gnjU",
+      "slug": "authentication-proxy-attacks-detection-response-and-hunting-3",
+      "title": "Authentication Proxy Attacks: Detection, Response and Hunting",
+      "speakers": [
+        "Chris Merkel"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "detection",
+        "incident-response",
+        "identity",
+        "hunting",
+        "attack"
+      ],
+      "teaser": "Explains how reverse-proxy phishing kits steal MFA session tokens and how defenders can detect, respond to and hunt for them.",
+      "summary": "The talk examines reverse-proxy phishing kits that sit between a victim and a real login page, relay the multi-factor prompt, and capture the resulting session token. The speaker explains why a technique documented for years has become widely used by commodity cybercrime services, and how attackers have added redirect chains and filtering to slip past scanners. Delivery methods include abused encrypted-message portals that look trustworthy to recipients.\n\nDetection depends on correlating weak signals, since impossible travel and new-IP logins are noisy when consumer VPNs and proxies are common. Useful signals include authentication method changes, new device registrations and mailbox rules created after a sign-in. For response, the talk stresses that a soft password reset does not invalidate a stolen session token in Azure, so a hard reset and token revocation are needed. Teams should also review conditional access policies, whose ordering mistakes can look correct on screen.\n\nFor hunting, the speaker suggests searching for lookalike authentication domains, default proxy-kit TLS fingerprints, Microsoft login page elements served from non-Microsoft sources, and corporate brand colors on unauthorized pages. He closes by urging defenders to run their own simulations, since a basic proxy setup can be launched in a Docker container, and to avoid placing the burden of spotting these attacks on users.",
+      "durationSeconds": 2752,
+      "publishedAt": "2023-10-25",
+      "difficulty": "intermediate"
+    }
+  ]
+}

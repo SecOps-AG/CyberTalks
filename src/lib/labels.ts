@@ -10,6 +10,14 @@ const CONFERENCE_LABELS: Record<string, string> = {
   rsa: "RSAC",
   troopers: "TROOPERS",
   bsides: "BSides",
+  shmoocon: "ShmooCon",
+  hope: "HOPE",
+  "hack-lu": "hack.lu",
+  cactuscon: "CactusCon",
+  lascon: "LASCON",
+  rvasec: "RVAsec",
+  "objective-by-the-sea": "Objective by the Sea",
+  disobey: "Disobey",
 };
 
 /** Homepage hero: name these families, in this order, when they have talks. */

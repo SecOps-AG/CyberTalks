@@ -1,0 +1,218 @@
+{
+  "villageSlug": "track-3-friday",
+  "villageName": "Track 3 Friday",
+  "eventSlug": "cactuscon-2022",
+  "conference": "cactuscon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PL4umh_7S4rRtncuj-qu3KJr6h5sKPZHu6",
+  "description": "Track 3 Friday talks from CactusCon 10 2022.",
+  "talks": [
+    {
+      "youtubeId": "2P9s8qBn1bo",
+      "slug": "atomic-operator-atomic-red-team-python-execution-framework",
+      "title": "atomic-operator: Atomic Red Team Python Execution Framework",
+      "speakers": [
+        "Josh Rickard"
+      ],
+      "track": "adversary-emulation",
+      "topics": [
+        "threat-detection",
+        "framework",
+        "open-source",
+        "tool",
+        "attack"
+      ],
+      "teaser": "Shows how the atomic-operator Python framework runs Atomic Red Team tests to check detection coverage across operating systems.",
+      "summary": "The talk introduces atomic-operator, an open-source Python execution framework built on the Atomic Red Team project from Red Canary. The speaker begins with background on MITRE ATT&CK, describing it as a flexible blueprint of tactics and techniques that teams should adapt to their own environments rather than follow literally. He explains that Atomic Red Team supplies test definitions for individual techniques, which are useful for preparing defenses and for learning how attacks work.\n\nThe middle of the talk covers the gap between those YAML definitions and actual execution, which atomic-operator fills. It runs tests on Windows, Linux and macOS, either locally or remotely over PowerShell remoting or SSH. The command-line tool can download the atomics repository, select tests, check and run prerequisites, run cleanup commands and pass input arguments. A Python package interface allows the same logic to be built into other automation. The demo walks through installing the package, running techniques, skipping tests that do not match the current operating system, reviewing logs, and running tests against a remote CentOS host.\n\nThe talk closes with the configuration file, which groups hosts into inventories with their own credentials and input values for repeatable runs across environments. The speaker explains that he built the tool to test security products such as EDR and SIEM platforms and to generate alerts for detection engineering. The main takeaway for practitioners is that scripted, repeatable test runs can show which techniques their defenses catch and where coverage is missing.",
+      "durationSeconds": 3599,
+      "publishedAt": "2022-02-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5KtzfoMX7tw",
+      "slug": "operationalized-purple-teaming",
+      "title": "Operationalized Purple Teaming",
+      "speakers": [
+        "Jorge Orchilles"
+      ],
+      "track": "purple-team",
+      "topics": [
+        "threat-detection",
+        "intelligence",
+        "attack",
+        "framework",
+        "team"
+      ],
+      "teaser": "Walks through turning threat intelligence into repeatable purple team exercises, from ISO-based emulation to detection engineering.",
+      "summary": "The talk picks up after a first purple team exercise and asks what a security program should do next. The speaker argues that purple teaming should become an ongoing process rather than a scheduled event, with cyber threat intelligence, red team and blue team working together as a virtual group. When new threat reporting appears, members from each function analyze it, pull out procedure-level behaviors, map them to MITRE ATT&CK, and check whether the behavior has already been tested.\n\nAs a worked example, the speaker uses a public ransomware intrusion report describing a phishing email that linked to a OneDrive-hosted archive containing an ISO with a shortcut and a DLL. The notable new element was the ISO container, which can bypass mark-of-the-web controls because ISO files do not support the alternate data streams that carry that flag. The red team reproduced the behavior by packaging a DLL and shortcut into an ISO and running it on a test endpoint. The blue team then walked through detection options, starting from a Sigma rule and checking whether the needed logs existed across proxy, email, EDR and Sysmon sources.\n\nThe talk closes by recommending that results feed back into the program. Tabletop expectations are documented, detections are turned into alerts with a response process, and the new test is contributed to Atomic Red Team. The speaker also suggested tracking progress with a purple team maturity model so stakeholders can see improvements in detection and coverage over time.",
+      "durationSeconds": 3003,
+      "publishedAt": "2022-02-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "uSOzC-o0kr8",
+      "slug": "javascript-obfuscation-its-all-about-the-p-a-c-k-e-r-s",
+      "title": "JavaScript Obfuscation - It’s All About the P-a-c-k-e-r-s",
+      "speakers": [
+        "Or Katz"
+      ],
+      "track": "malware",
+      "topics": [
+        "malware-analysis",
+        "detection",
+        "machine-learning",
+        "web"
+      ],
+      "teaser": "Shows how structural signatures for JavaScript packers can flag obfuscated scripts at scale without rendering the pages.",
+      "summary": "Or Katz opens with why obfuscated JavaScript is common in phishing pages, Magecart skimmers, supply chain injections and malware droppers, and why hash- and text-based detection struggles against it. His goals were a method that works on the raw file, runs quickly across very large volumes, and avoids rendering pages. He focused on the most widely used JavaScript packers, on the bet that a small set of them accounts for most obfuscated code in the wild.\n\nThe core technique parses scripts into abstract syntax trees and matches the structure of a packer's decoding routine rather than its variable names, which change easily. He built signatures for five packers, four of which share a pattern of splitting or encrypting a payload and decoding it at runtime. He tested them on a large, noisy phishing set, a curated malware set and a benign set drawn from popular sites. Detections on benign sites were reviewed by hand and found to be legitimate obfuscation, often from third-party scripts shared across many domains. To cut false positives, he suppressed hashes seen widely on popular domains, and he trained a simple decision tree on features such as identifier counts and array lengths to separate malicious from benign obfuscated files.\n\nThe main takeaway is that obfuscation alone does not mean malicious, so a packer match is a statistical signal that works best combined with reputation and features. Planned next steps include releasing the code, adding more packers, generating signatures automatically and improving the datasets.",
+      "durationSeconds": 2211,
+      "publishedAt": "2022-02-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "PHdvrpntC1g",
+      "slug": "hunting-phish-kits-2",
+      "title": "Hunting Phish Kits",
+      "speakers": [
+        "Josh Rickard"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "phishing",
+        "intelligence",
+        "incident-response",
+        "automation",
+        "open-source"
+      ],
+      "teaser": "Shows how phishing kits are built, collected from the web, and used to track attackers and share intelligence.",
+      "summary": "Josh Rickard opens with his background in digital forensics and his years fighting phishing at scale, including an internal reporting tool that grew to millions of installs. He frames the problem as a shared one: most organizations run similar defenses, and a standard process of user reporting, header and link extraction, lookups and mailbox cleanup still leaves gaps.\n\nThe core of the talk is phishing kits, which are packaged web applications an attacker can unzip onto a server and configure with a small edit. Rickard walks through their typical contents: image folders, .htaccess and robots.txt files that filter bots and scanners, anti-bot PHP scripts, crude card validation, and logs that sometimes reveal the testers' own IP addresses. He shows how kits change across versions and groups, and how decoding obfuscated code can expose the email addresses where captured credentials are sent, sometimes exposing the kit builders themselves.\n\nHe argues that defenders should retrieve a kit as soon as a phishing message is reported, record its names, versions, hosting and collection addresses, and share indicators publicly so others can build detections. He points to tools he created for posting suspicious URLs to Twitter and for scraping kit repositories, and encourages collaboration over waiting for vendors to solve the problem.",
+      "durationSeconds": 3172,
+      "publishedAt": "2022-02-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "m9vCuGFUeqw",
+      "slug": "hunting-phish-kits-3",
+      "title": "Hunting Phish Kits",
+      "speakers": [],
+      "track": "social-engineering",
+      "topics": [
+        "phishing",
+        "intelligence",
+        "automation",
+        "incident-response"
+      ],
+      "teaser": "Explains how to operationalize phishing response, starting with centralized reporting and building toward automated indicator extraction.",
+      "summary": "This closing question-and-answer segment follows a talk on hunting phishing kits and focuses on putting that work into practice. The main advice is to start small: first make sure user-reported phishing messages land in one central place, then build a repeatable process around them before moving on to automation.\n\nOnce reporting is centralized, the next step is automating the extraction of indicators and the inspection of email headers across the environment. The speaker notes that many organizations have no way to collect or act on reported messages at all. Gathering deeper evidence on the campaigns is the phase after that, since it helps teams prepare for future attacks and understand who is targeting them, along with their motives and tactics.\n\nThe discussion also touched on how attitudes have shifted. Years ago, getting leadership to prioritize phishing was an uphill fight. Today leadership is generally more aware and supportive. The takeaway is to automate incrementally, because phishing remains a primary infection vector and should be taken seriously.",
+      "durationSeconds": 256,
+      "publishedAt": "2022-02-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "pAlnxcFOqKk",
+      "slug": "ready-set-secure-all-the-covid-vaccines",
+      "title": "Ready...Set...Secure all the COVID vaccines!",
+      "speakers": [
+        "Daniel Bardenstein",
+        "Lance Cleghorn"
+      ],
+      "track": "policy",
+      "topics": [
+        "supply-chain",
+        "bug-bounty",
+        "lessons-learned",
+        "infrastructure",
+        "threat"
+      ],
+      "teaser": "Recounts how a small government security team hardened COVID-19 vaccine development, distribution and supply chains in months.",
+      "summary": "The talk describes the security work behind Operation Warp Speed, the effort to develop and deliver COVID-19 vaccines quickly. A small team of mostly government security staff was asked to protect the development, manufacturing and distribution chain across hundreds of organizations. The scope was large, the data flows were tangled, and most engagement with companies was voluntary, so the team had to persuade rather than mandate.\n\nThe team built a short, prioritized maturity questionnaire, mapped public assets and shadow IT, and demonstrated real exploitability for some findings to get leaders to act. They tracked remote access zero-days and the SolarWinds compromise, leaned on the volunteer CTI League, and ran crowdsourced bug bounties against vaccine-related applications before launch. They also flagged operational technology in manufacturing and cold storage, advising organizations not to converge OT with IT before they are ready.\n\nThe team counts the project as a success: no major compromise, and trial data integrity held, partly because many independent copies of the data existed. Key takeaways for practitioners include engaging the crowd, knowing which government contacts to call, keeping a rapid response plan that works with limited people, and raising the baseline for small suppliers.",
+      "durationSeconds": 3506,
+      "publishedAt": "2022-02-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ONS_XY0wLPA",
+      "slug": "tag-management-system-the-agile-way-to-add-vulnerabilities-on-yo",
+      "title": "Tag Management System: the Agile Way to Add Vulnerabilities on your Website",
+      "speakers": [
+        "Alexandre Mercier"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "application",
+        "vulnerabilities",
+        "risk",
+        "management",
+        "team"
+      ],
+      "teaser": "Explains how marketing tag managers slip unreviewed third-party scripts into live sites and how security teams can add guardrails.",
+      "summary": "The talk looks at a gap in web application security: third-party scripts that marketing teams add to live sites through tag managers such as Google Tag Manager. These tags let non-developers insert analytics, A/B testing, pop-ups and other code without going through the normal development cycle or code review, so the speaker argues they often escape security checks entirely.\n\nThe speaker, who moved from a marketing background into security engineering, walks through how these systems work and what can go wrong. Risks covered include security misconfiguration, unvetted scripts that can introduce cross-site scripting, tags that are not sandboxed, and domain hijacking of a trusted vendor. A live demo shows a custom HTML tag that carries arbitrary JavaScript, and a newspaper incident illustrates how a third-party script can take over page content. Because tag managers cannot easily tell malicious code from legitimate analytics, the talk stresses that marketing staff are themselves a target for social engineering.\n\nFor practitioners, the talk recommends speaking to marketing in their own terms, such as bounce rate and conversion impact, and inventorying which tools and data are collected. Suggested controls include restricting custom HTML, requiring approval steps, using subresource integrity and Content Security Policy where feasible, and setting data-layer rules that block tags on sensitive pages such as checkout. The closing message is that security should cover the tag manager lifecycle and that protecting users is a shared responsibility between developers and marketing.",
+      "durationSeconds": 1065,
+      "publishedAt": "2022-02-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "VukLmDw0Sgk",
+      "slug": "tag-management-system-the-agile-way-to-add-vulerabilities",
+      "title": "Tag Management System: the Agile Way to Add Vulerabilities",
+      "speakers": [
+        "cyber flamingo"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "application",
+        "vulnerability",
+        "management",
+        "lessons-learned"
+      ],
+      "teaser": "Explains how tag management systems add client-side risk to websites and how security can work with marketing teams.",
+      "summary": "The live Q&A follows a talk on tag management systems such as Google Tag Manager, which let marketing staff add and change scripts on a live website without a developer release. The speaker described running this kind of setup in a previous marketing role, noting that the convenience also opens doors to security problems on the front end. The talk grew partly out of cleaning up such issues and partly out of wanting others to recognise the risk early.\n\nThe discussion then turned to the tension between marketing deadlines and security review. Campaigns that launch within a day leave little time to assess every tool, so the speaker suggested splitting checks into what can be vetted before launch and what has to be watched once a script is live. The idea of shifting left was extended beyond software development to other parts of an organisation, such as marketing operations.\n\nFor practical mitigations, the speaker proposed three steps. First, audit the tag manager account itself, including who holds access and whether any permissions were delegated to outside agencies. Second, take stock of what actually runs on the website. Third, use in-browser checks that report which resources a page loads, an area that is less mature than supply chain tooling on the server side. The closing advice was to treat marketers as partners, learn their work, and approach them with curiosity rather than as adversaries.",
+      "durationSeconds": 474,
+      "publishedAt": "2022-02-05",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "f4kPxj9jzqU",
+      "slug": "threat-hunting-becoming-the-predator-and-no-longer-the-prey",
+      "title": "Threat Hunting: Becoming the Predator and No Longer the Prey",
+      "speakers": [
+        "Christian Taillon"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "hunting",
+        "threat-detection",
+        "security-operations",
+        "intelligence",
+        "defensive-security"
+      ],
+      "teaser": "Lays out a repeatable process for building a threat hunting program that finds evasive adversaries.",
+      "summary": "Christian Taillon opens by arguing that threat hunting is a term stretched across many activities, from reviewing alerts to buying managed services. He offers a working definition: a proactive search for existing compromises that have slipped past security controls, driven by data and measured by results. He positions hunting beside the SOC rather than above it. Where analysts triage alerts that tools raise, hunters start from hypotheses, intelligence and historical data, and aim to reach a clear conclusion about a defined scope.\n\nThe middle of the talk builds a framework around five themes, borrowed loosely from Sun Tzu: mindset, the current threat landscape, the organization's own terrain and weaknesses, leadership, and disciplined execution. He separates tactical indicators from operational intelligence about techniques, and argues that intelligence remains useful when applied to older logs rather than only the last day. Two examples illustrate the point. The SUNBURST campaign hunts combined known indicators with behaviors such as token abuse. The Log4j hunt showed how evolving obfuscation defeated signature-based detection, so hunters searched web, proxy and network logs directly.\n\nFor practitioners, the closing advice is to pick a MITRE ATT&CK technique, confirm telemetry and detection coverage, execute it safely with published red team tests, then tune the resulting search. Teams should record outcomes so progress can be measured. Taillon cautions against duplicating SOC work and recommends finishing a few conclusive hunts over many incomplete ones.",
+      "durationSeconds": 3420,
+      "publishedAt": "2022-02-04",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "HQhgEribBBE",
+      "slug": "threat-hunting-becoming-the-predator-and-no-longer-the-prey-2",
+      "title": "Threat Hunting: Becoming the Predator and No Longer the Prey",
+      "speakers": [
+        "Christian"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "hunting",
+        "threat-detection",
+        "intelligence",
+        "automation",
+        "social"
+      ],
+      "teaser": "Explains how to start threat hunts from an adversary, automate data triage, and extend hunting to social media.",
+      "summary": "This live question-and-answer segment follows a threat hunting talk and expands on its main ideas. The speaker favors starting hunts from a specific adversary, ideally one already targeting the same sector or comparable organizations, since limited analyst time benefits from intelligence-driven priorities. Hunters then narrow that actor's habits into concrete behaviors to search for. Mapping techniques to the MITRE ATT&CK framework works in both directions, letting observed activity suggest which adversary might be involved.\n\nMuch of the discussion covered terminology and automation. The speaker argues that teams should agree on what threat hunting means, because roles and tools often describe it differently, and distinguishes internal hunts built on organizational logs from external hunts driven by threat intelligence. On automation, hunters can script the filtering, parsing and summarizing of large data sets, run searches overnight and feed tuned results back into alerts. Even so, a hit may be legitimate administrator activity, such as changes to shadow copies, so human review stays essential before any containment step.\n\nThe closing section covered social media hunting, a practice the speaker picked up during a major sporting event. Tools that follow hashtags, trends and keywords helped surface physical threats needing escalation, fake streaming and ticket scams, and attacks aimed at partner organizations through honeypot sites. Domain squatting checks were also noted as a use case. The speaker described this as a separate topic still being explored, and closed by hoping attendees can apply the ideas.",
+      "durationSeconds": 646,
+      "publishedAt": "2022-02-05",
+      "difficulty": "beginner"
+    }
+  ]
+}
