@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { getSavedState, markWatched, unmarkWatched } from "@/lib/saved";
 import { thumbnailSrc } from "@/lib/materials";
 import { formatDuration } from "@/lib/search";
@@ -873,7 +873,10 @@ function TalkDetails({
           </button>
         ) : null}
       </div>
-      <div className={styles.thumb}>
+      <ThumbFrame
+        href={st === "locked" ? null : `/talks/${talk.slug}`}
+        label={`Play ${talk.title}`}
+      >
         <img
           src={thumbnailSrc(talk.youtubeId, "mq")}
           alt=""
@@ -895,7 +898,7 @@ function TalkDetails({
             Watch a talk that leads here to open it
           </span>
         ) : null}
-      </div>
+      </ThumbFrame>
       <p className={styles.chips}>
         <span className={styles.tierChip} style={{ color: TIER_COLOR[tierIndex] }}>
           Tier {tier.numeral} · {tier.name}
@@ -951,6 +954,16 @@ function TalkDetails({
         {toast}
       </p>
     </div>
+  );
+}
+
+/** The pop-up thumbnail: a link to the talk page unless the talk is still locked. */
+function ThumbFrame({ href, label, children }: { href: string | null; label: string; children: ReactNode }) {
+  if (!href) return <div className={styles.thumb}>{children}</div>;
+  return (
+    <Link href={href} className={`${styles.thumb} ${styles.thumbLink}`} aria-label={label}>
+      {children}
+    </Link>
   );
 }
 
