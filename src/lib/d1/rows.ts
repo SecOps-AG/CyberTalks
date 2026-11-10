@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { hasRepo, hasSlides, isDead, materialLabel } from "../materials";
-import { buildIndexEntry, slugifySpeaker } from "../search";
+import { buildIndexEntry } from "../search";
+import { speakerCredits } from "../speaker-credits";
 import type { Talk } from "../types";
 
 export type SpeakerLink = { slug: string; name: string };
@@ -55,15 +56,7 @@ export function topicList(talk: Talk): string[] {
 }
 
 export function speakerLinks(talk: Talk): SpeakerLink[] {
-  const seen = new Set<string>();
-  const links: SpeakerLink[] = [];
-  for (const name of talk.speakers) {
-    const slug = slugifySpeaker(name);
-    if (!slug || seen.has(slug)) continue;
-    seen.add(slug);
-    links.push({ slug, name });
-  }
-  return links;
+  return speakerCredits(talk);
 }
 
 export function contentHash(

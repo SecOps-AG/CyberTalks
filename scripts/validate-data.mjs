@@ -45,6 +45,8 @@ const TALK_FIELDS = new Set([
   "mediaUrl",
   "thumbnail",
   "enrichmentGaps",
+  "year",
+  "eventLabel",
 ]);
 
 const VILLAGE_FIELDS = new Set([
@@ -293,6 +295,12 @@ for (const file of files) {
 
     if (talk.durationSeconds != null && !Number.isFinite(talk.durationSeconds)) {
       error(at, "durationSeconds must be a number");
+    }
+    if (talk.year != null && !(Number.isInteger(talk.year) && talk.year >= 1990 && talk.year <= 2100)) {
+      error(at, `year "${talk.year}" must be a four digit year`);
+    }
+    if (talk.eventLabel != null && (typeof talk.eventLabel !== "string" || !talk.eventLabel.trim())) {
+      error(at, "eventLabel must be a non-empty string");
     }
     if (talk.language != null && !LANGUAGE.test(talk.language)) {
       error(at, `language "${talk.language}" must be a BCP 47 tag like "en" or "pt-BR"`);

@@ -65,6 +65,14 @@ export type StoredTalk = {
   /** ISO timestamp the view count was read. */
   viewCountFetchedAt?: string;
   difficulty?: Difficulty;
+  /**
+   * Year the talk was given, when it differs from its event's year. Set only for
+   * channel uploads whose event year is the upload year (see
+   * scripts/fix-event-titles.mjs). Omitted on correctly dated talks.
+   */
+  year?: number;
+  /** Edition name for titles and snippets, e.g. "Black Hat USA 2001". */
+  eventLabel?: string;
 };
 
 /** One village at one event — the unit one ingest run produces. */

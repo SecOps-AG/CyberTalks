@@ -28,7 +28,7 @@ import {
 import { buildSearchIndex, type IndexSource } from "../../src/lib/search-index/build";
 import { asSql, statementToSql, type D1Like, type SqlClient, type Statement } from "../../src/lib/d1/sql";
 import { relatedForAll, relatedTalks } from "../../src/lib/related";
-import { slugifySpeaker } from "../../src/lib/search";
+import { speakerCredits } from "../../src/lib/speaker-credits";
 import type { Talk } from "../../src/lib/types";
 
 const PREVIEW_CONFIG = "wrangler.d1-preview.jsonc";
@@ -303,9 +303,8 @@ async function checkSample(db: SqlClient, talks: Talk[]): Promise<void> {
     if (expectedRelated.join("|") !== actualRelated.join("|")) {
       throw new Error(`Related talks mismatch for ${disk.id}.`);
     }
-    const name = disk.speakers.find((speaker) => speaker.trim());
-    if (!name) continue;
-    const slug = slugifySpeaker(name);
+    const slug = speakerCredits(disk)[0]?.slug;
+    if (!slug) continue;
     const fromDisk = getSpeaker(slug);
     const fromDb = await readSpeakerRecord(db, slug);
     if (!fromDisk || !fromDb || fromDisk.name !== fromDb.speaker.name) {

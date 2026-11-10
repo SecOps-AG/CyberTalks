@@ -45,13 +45,12 @@ async function generateShards() {
     const event = events.find((e) => e.slug === eventSlug);
     if (!event) continue;
 
-    const year = event.year;
-    if (!shards.has(year)) {
-      shards.set(year, []);
-    }
-
-    const yearShards = shards.get(year);
     for (const talk of edition.talks) {
+      const year = talk.year ?? event.year;
+      if (!shards.has(year)) {
+        shards.set(year, []);
+      }
+      const yearShards = shards.get(year);
       const talkId = `${eventSlug}-${edition.villageSlug}-${talk.youtubeId}`;
       const summary =
         typeof talk.summary === "string" ? talk.summary : talk.summary?.overview || null;

@@ -156,7 +156,7 @@ function buildIndexEntry({
     teaser: talk.teaser,
     speakers: talk.speakers,
     youtubeId: talk.youtubeId,
-    year: event.year,
+    year: talk.year ?? event.year,
     eventSlug: event.slug,
     conference: edition.conference,
     eventShortName: event.shortName,
@@ -167,7 +167,10 @@ function buildIndexEntry({
     topics,
     durationSeconds: talk.durationSeconds,
     kind: deriveKind(talk, edition.villageSlug),
-    dateLabel: dateLabel(event.dates, event.year),
+    dateLabel:
+      talk.year != null && talk.year !== event.year
+        ? String(talk.year)
+        : dateLabel(event.dates, event.year),
     locationLabel: locationLabel(event.location),
     language: talk.language ?? edition.language,
     viewCount: talk.viewCount ?? viewCount,
@@ -329,6 +332,12 @@ function generateShards() {
     (taxonomy.tracks || []).map((t) => [t.slug, t]),
   );
   const topicAliases = taxonomy.topicAliases || {};
+  // Spelling merges (kubernete -> kubernetes), applied after the taxonomy aliases.
+  const topicMerges = readJson(path.join(DATA_DIR, "topic-merges.json")).merges || {};
+  const canonicalTopic = (topic) => {
+    const aliased = topicAliases[topic] ?? topic;
+    return Object.hasOwn(topicMerges, aliased) ? topicMerges[aliased] : aliased;
+  };
 
   const viewCountsFile = path.join(DATA_DIR, "view-counts.json");
   const viewCounts = fs.existsSync(viewCountsFile)
@@ -352,14 +361,11 @@ function generateShards() {
       continue;
     }
 
-    const year = event.year;
-    if (!shards.has(year)) shards.set(year, []);
-    const yearShards = shards.get(year);
-
     for (const talk of edition.talks) {
-      const topics = (talk.topics || []).map(
-        (topic) => topicAliases[topic] ?? topic,
-      );
+      const year = talk.year ?? event.year;
+      if (!shards.has(year)) shards.set(year, []);
+      const yearShards = shards.get(year);
+      const topics = [...new Set((talk.topics || []).map(canonicalTopic))];
       const views = viewCounts[talk.youtubeId];
       yearShards.push(
         buildIndexEntry({

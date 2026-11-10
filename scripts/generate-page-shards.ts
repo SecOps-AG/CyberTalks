@@ -189,7 +189,7 @@ export function writePageShards(): string {
       editions,
       villages: getDefconVillages(),
       tracks: getTracks(),
-      talkSlugs: talks.map((talk) => talk.slug),
+      talks,
       speakers: getSpeakers().map((speaker) => ({
         slug: speaker.slug,
         talkCount: speaker.talkCount,
@@ -206,6 +206,7 @@ export function writePageShards(): string {
     talks.map((talk) => ({
       title: talk.title,
       eventName: talk.eventName,
+      eventLabel: talk.eventLabel,
       year: talk.year,
       villageName: talk.villageName,
       speakers: talk.speakers,

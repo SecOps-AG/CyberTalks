@@ -134,7 +134,12 @@ export function TalkBrowser({
   // every downstream memo would recompute on the urgent render *and* again on
   // the deferred one; keeping it separate means typing recomputes nothing until
   // the deferred value catches up.
-  const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
+  // A list made only of clips or interviews starts with extras on, so the server
+  // HTML shows those talks instead of an empty state.
+  const [filters, setFilters] = useState<Filters>(() => ({
+    ...EMPTY_FILTERS,
+    includeExtras: !remoteIndex && talksProp.length > 0 && talksProp.every((t) => t.kind !== "talk"),
+  }));
   const [draftQuery, setDraftQuery] = useState("");
   const [ready, setReady] = useState(false);
   const [summaries, setSummaries] = useState<Map<string, string>>(new Map());
@@ -898,7 +903,8 @@ export function TalkBrowser({
               {shownTotal !== universe ? (
                 <span className="text-mint/30"> / {universe}</span>
               ) : null}
-              {catalogLoading || listingPending ? (
+              {/* Not in the server HTML: `ready` only flips after mount, so crawlers see a plain count. */}
+              {ready && (catalogLoading || listingPending) ? (
                 <span className="text-mint/30"> · loading…</span>
               ) : null}
             </p>
@@ -997,7 +1003,7 @@ export function TalkBrowser({
           count={stagedCount}
           activeCount={activeCount}
           stagedActive={staged ? countActive({ ...staged, q: "" }) : 0}
-          loading={catalogLoading}
+          loading={ready && catalogLoading}
           sections={pushSections()}
           extras={
             hasExtras && staged ? (

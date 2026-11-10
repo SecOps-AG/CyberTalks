@@ -1,7 +1,12 @@
 import { canonicalUrl } from "./canonical";
 import { isYouTubeId, thumbnailSrc } from "./materials";
 import { siteUrl } from "./site-url";
+import { speakerCredits } from "./speaker-credits";
+import { talkDescription } from "./talk-description";
+import { topicLabels } from "./topic-labels";
 import type { Talk } from "./types";
+
+export { talkDescription };
 
 type JsonLd = Record<string, unknown>;
 
@@ -47,13 +52,6 @@ export function homeJsonLd(): JsonLd[] {
   ];
 }
 
-/** The teaser we wrote for the talk, or a plain who/where line when it has none. */
-export function talkDescription(
-  talk: Pick<Talk, "teaser" | "speakers" | "villageName" | "eventName">,
-): string {
-  return talk.teaser || `${talk.speakers.join(", ")} — ${talk.villageName}, ${talk.eventName}.`;
-}
-
 /** "PT1H2M3S" for a positive whole number of seconds, otherwise undefined. */
 export function isoDuration(seconds: number | undefined): string | undefined {
   if (typeof seconds !== "number" || !Number.isFinite(seconds) || seconds <= 0) return undefined;
@@ -76,22 +74,28 @@ type TalkLd = Pick<
   | "speakers"
   | "villageName"
   | "eventName"
+  | "year"
+  | "conference"
+  | "eventSlug"
   | "youtubeId"
   | "mediaUrl"
   | "durationSeconds"
   | "publishedAt"
   | "language"
   | "topics"
->;
+> &
+  Partial<Pick<Talk, "summary" | "eventLabel" | "trackName">>;
 
 /**
  * VideoObject when the page has a player (YouTube or the media archive),
- * CreativeWork when it does not. The description is always the teaser.
+ * CreativeWork when it does not. The description is the same text as the
+ * page's meta description (see talkDescription).
  */
 export function talkJsonLd(talk: TalkLd): JsonLd {
   const url = canonicalUrl(`/talks/${encodeURIComponent(talk.slug)}`);
   const youtube = isYouTubeId(talk.youtubeId);
   const video = youtube || Boolean(talk.mediaUrl);
+  const credits = speakerCredits(talk);
 
   const common: JsonLd = {
     "@context": "https://schema.org",
@@ -100,9 +104,9 @@ export function talkJsonLd(talk: TalkLd): JsonLd {
     url,
     mainEntityOfPage: url,
     name: talk.title,
-    description: talkDescription(talk),
-    ...(talk.speakers.length
-      ? { creator: talk.speakers.map((name) => ({ "@type": "Person", name })) }
+    description: talkDescription(talk, topicLabels()),
+    ...(credits.length
+      ? { creator: credits.map(({ name }) => ({ "@type": "Person", name })) }
       : {}),
     ...(talk.topics.length ? { keywords: talk.topics.join(", ") } : {}),
     ...(talk.language ? { inLanguage: talk.language } : {}),

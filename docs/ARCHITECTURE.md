@@ -55,6 +55,7 @@ bounded by `data/taxonomy.json`.
 data/
   events.json                        DEF CONs: slug, name, year, dates, location
   taxonomy.json                      track vocabulary + topic display labels
+  topic-merges.json                  topic spelling variants -> canonical topic (301)
   villages/
     defcon-33-recon-village.json     one village at one event, with its talks
     defcon-33-adversary-village.json
@@ -69,6 +70,25 @@ villages are ingested at once.
 Stored talks hold only authored fields. Event name, year, village name, YouTube
 URL, and track display name are joined in at load time, so the same fact is never
 stored twice and cannot drift.
+
+Two optional per-talk fields exist for YouTube-channel imports, where the event
+row carries the channel's upload year: `year` (the year the talk was given) and
+`eventLabel` (the edition name, e.g. "Black Hat USA 2001"). They are set only on
+talks whose title was just the event label; `scripts/fix-event-titles.mjs` writes
+them and is safe to re-run.
+
+## Search indexing rules
+
+- Topic pages need 3 talks to be indexable (`topic-indexability.ts`). Spelling
+  variants listed in `data/topic-merges.json` are folded into one canonical topic
+  when talks are loaded, and `/topics/<variant>` answers 301 from the middleware.
+- Speaker pages need 2 talks. A credit that reads like a title, an event, or a
+  label (`speakerHeuristics.ts`) gets no speaker page at all.
+- A talk without a written summary stays indexable only for the priority
+  conferences (DEF CON, Black Hat, BSides, RSAC, TROOPERS). A teaser is not a
+  summary. See `indexability.ts`.
+- The sitemap is built from the same functions, so it never lists a page that
+  carries `noindex`.
 
 ## Rendering and scale
 

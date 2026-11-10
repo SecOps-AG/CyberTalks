@@ -1,5 +1,5 @@
 import { inDefconVillage } from "../hubs";
-import { slugifySpeaker } from "../search";
+import { speakerCredits } from "../speaker-credits";
 import type { Speaker, Talk } from "../types";
 
 /**
@@ -17,20 +17,16 @@ export function speakerFromTalks(slug: string, talks: Talk[]): Speaker | null {
   const coSpeakers = new Set<string>();
 
   for (const talk of talks) {
-    let credited = false;
-    for (const name of talk.speakers) {
-      if (slugifySpeaker(name) !== slug) continue;
-      credited = true;
-      spellings.set(name, (spellings.get(name) ?? 0) + 1);
-      talkCount += 1;
-    }
-    if (!credited) continue;
+    const credits = speakerCredits(talk);
+    const credit = credits.find((item) => item.slug === slug);
+    if (!credit) continue;
+    spellings.set(credit.name, (spellings.get(credit.name) ?? 0) + 1);
+    talkCount += 1;
 
     years.add(talk.year);
     if (inDefconVillage(talk)) villages.add(talk.villageSlug);
-    for (const name of talk.speakers) {
-      const other = slugifySpeaker(name);
-      if (other && other !== slug) coSpeakers.add(other);
+    for (const other of credits) {
+      if (other.slug !== slug) coSpeakers.add(other.slug);
     }
   }
 

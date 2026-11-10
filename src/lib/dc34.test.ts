@@ -44,7 +44,7 @@ describe("DEF CON 34 page route", () => {
       editions: [],
       villages: [],
       tracks: [],
-      talkSlugs: [],
+      talks: [],
       speakers: [],
       topics: [],
     });

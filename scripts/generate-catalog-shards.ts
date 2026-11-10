@@ -24,7 +24,8 @@ import {
 import { getSpeakers, getStats, getTalks } from "../src/lib/data";
 import { relatedForAll, relatedTalks } from "../src/lib/related";
 import { writePageShards } from "./generate-page-shards";
-import { buildIndexEntry, slugifySpeaker } from "../src/lib/search";
+import { buildIndexEntry } from "../src/lib/search";
+import { speakerCredits } from "../src/lib/speaker-credits";
 import type { Speaker, Talk, TalkIndexEntry } from "../src/lib/types";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -144,12 +145,9 @@ function main() {
   const speakerBySlug = new Map(speakers.map((speaker) => [speaker.slug, speaker]));
   const talksBySpeaker = new Map<string, TalkIndexEntry[]>();
   for (let index = 0; index < talks.length; index++) {
-    const seenOnTalk = new Set<string>();
-    for (const name of talks[index].speakers) {
-      const slug = slugifySpeaker(name);
-      // getTalksForSpeaker returns each talk once, even if the name repeats.
-      if (!slug || !speakerBySlug.has(slug) || seenOnTalk.has(slug)) continue;
-      seenOnTalk.add(slug);
+    // Each talk is listed once per credited speaker; credits that get no page are skipped.
+    for (const { slug } of speakerCredits(talks[index])) {
+      if (!speakerBySlug.has(slug)) continue;
       const list = talksBySpeaker.get(slug);
       if (list) list.push(entries[index]);
       else talksBySpeaker.set(slug, [entries[index]]);
