@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { canonicalUrl } from "./canonical";
+import { initialBrowse, INITIAL_FACET_LIMIT, PAGE_SIZE } from "./search";
 import { siteUrl } from "./site-url";
 import {
   CATALOG_CACHE_CONTROL,
@@ -13,9 +14,12 @@ import { chunkList, sitemapIndexXml, sitemapPaths, sitemapUrlset, SITEMAP_URL_LI
 import { summaryYearsToLoad } from "./summary-years";
 import {
   TOPIC_FILTER_LIMIT,
+  TOPIC_FEATURED,
   TOPIC_INDEX_MIN,
+  TOPIC_PAGE_SIZE,
   topicIndexView,
   topicIsIndexable,
+  topicPageValue,
   topicQueryValue,
   topicRobots,
   type TopicEntry,
@@ -69,6 +73,111 @@ describe("topic indexability", () => {
     assert.equal(view.totalMatches, many.length);
     assert.equal(view.truncated, true);
     assert.equal(view.featured.length, 0);
+  });
+});
+
+describe("topic index paging", () => {
+  const vocabulary: TopicEntry[] = [
+    ...Array.from({ length: TOPIC_PAGE_SIZE * 2 + 5 }, (_, index) => ({
+      topic: `hub-${String(index).padStart(4, "0")}`,
+      label: `Hub ${index}`,
+      count: 3 + (index % 7),
+    })),
+    ...Array.from({ length: 300 }, (_, index) => ({
+      topic: `thin-${String(index).padStart(4, "0")}`,
+      label: `Thin ${index}`,
+      count: 1 + (index % 2),
+    })),
+  ].sort((a, b) => b.count - a.count || a.topic.localeCompare(b.topic));
+  const hubTotal = TOPIC_PAGE_SIZE * 2 + 5;
+
+  it("lists one page of hubs and keeps the full hub count", () => {
+    const first = topicIndexView(vocabulary, "", 1);
+    assert.equal(first.listed.length, TOPIC_PAGE_SIZE);
+    assert.equal(first.hubCount, hubTotal);
+    assert.equal(first.totalMatches, hubTotal);
+    assert.equal(first.totalPages, 3);
+    assert.equal(first.from, 1);
+    assert.equal(first.to, TOPIC_PAGE_SIZE);
+    assert.equal(first.featured.length, TOPIC_FEATURED);
+    assert.ok(first.listed.every((entry) => entry.count >= TOPIC_INDEX_MIN));
+  });
+
+  it("pages through every hub once, in order, with no thin topics", () => {
+    const seen: string[] = [];
+    for (let page = 1; page <= 3; page += 1) {
+      seen.push(...topicIndexView(vocabulary, "", page).listed.map((entry) => entry.topic));
+    }
+    assert.equal(seen.length, hubTotal);
+    assert.equal(new Set(seen).size, hubTotal);
+    assert.deepEqual(seen, [...seen].sort());
+  });
+
+  it("shows the featured strip on the first page only and clamps a page past the end", () => {
+    const later = topicIndexView(vocabulary, "", 2);
+    assert.equal(later.featured.length, 0);
+    assert.equal(later.from, TOPIC_PAGE_SIZE + 1);
+    const last = topicIndexView(vocabulary, "", 3);
+    assert.equal(last.listed.length, 5);
+    assert.equal(last.to, hubTotal);
+    assert.equal(topicIndexView(vocabulary, "", 99).page, 3);
+  });
+
+  it("ignores the page number while a query is active and still searches the long tail", () => {
+    const view = topicIndexView(vocabulary, "thin", 3);
+    assert.equal(view.page, 1);
+    assert.equal(view.totalPages, 1);
+    assert.equal(view.totalMatches, 300);
+    assert.equal(view.listed.length, TOPIC_FILTER_LIMIT);
+    assert.equal(view.truncated, true);
+    assert.equal(view.hubCount, hubTotal);
+  });
+
+  it("reads ?page= defensively", () => {
+    assert.equal(topicPageValue(undefined), 1);
+    assert.equal(topicPageValue("3"), 3);
+    assert.equal(topicPageValue(["4", "5"]), 4);
+    assert.equal(topicPageValue("0"), 1);
+    assert.equal(topicPageValue("-2"), 1);
+    assert.equal(topicPageValue("2abc"), 1);
+    assert.equal(topicPageValue("99999999999"), 1);
+  });
+});
+
+describe("listing page first load", () => {
+  const baseTalk = {
+    teaser: "Teaser text that would otherwise be repeated for every talk.",
+    youtubeId: "abc",
+    eventSlug: "defcon-32",
+    conference: "defcon",
+    eventShortName: "DC32",
+    villageSlug: "main",
+    villageName: "Main",
+    track: "t",
+    trackName: "Track",
+    kind: "talk" as const,
+  };
+  const talks = Array.from({ length: 300 }, (_, index) => ({
+    ...baseTalk,
+    id: `talk-${index}`,
+    slug: `talk-${index}`,
+    title: `Talk ${index}`,
+    speakers: [`Speaker ${index}`, "Shared Speaker"],
+    year: 2000 + (index % 20),
+    topics: ["focus", ...Array.from({ length: 60 }, (_, topic) => `t${(index + topic) % 150}`)],
+  }));
+
+  it("sends one page of talks and a bounded facet set", () => {
+    const first = initialBrowse(talks);
+    assert.equal(first.talks.length, PAGE_SIZE);
+    assert.equal(first.total, talks.length);
+    assert.equal(first.facets.years.length, 20);
+    assert.equal(first.facets.topics.length, INITIAL_FACET_LIMIT);
+    assert.equal(first.facets.speakers.length, INITIAL_FACET_LIMIT);
+    assert.equal(first.facets.topics[0].value, "focus");
+    assert.equal(first.facets.topics[0].count, talks.length);
+    assert.equal(first.facets.speakers[0].label, "Shared Speaker");
+    assert.ok(JSON.stringify(first).length < JSON.stringify(talks).length / 4);
   });
 });
 

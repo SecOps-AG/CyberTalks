@@ -169,11 +169,20 @@ export const loadSpeaker = cache(async (slug: string): Promise<CatalogSpeaker | 
   return assets ? loadSpeakerFromAssets(assets, slug) : loadSpeakerFromDisk(slug);
 });
 
+/** A D1 binding that has not been synced yet has no tables: read the catalog instead. */
+function isUnsyncedDb(error: unknown): boolean {
+  return error instanceof Error && /no such table/i.test(error.message);
+}
+
 export const loadTopic = cache(async (topic: string): Promise<TalkIndexEntry[] | null> => {
   const db = await talksSql();
   if (db) {
-    const talks = await readTopicTalks(db, topic);
-    return talks.length > 0 ? talks : null;
+    try {
+      const talks = await readTopicTalks(db, topic);
+      return talks.length > 0 ? talks : null;
+    } catch (error) {
+      if (!isUnsyncedDb(error)) throw error;
+    }
   }
   const assets = requireAssets();
   return assets ? loadTopicFromAssets(assets, topic) : loadTopicFromDisk(topic);

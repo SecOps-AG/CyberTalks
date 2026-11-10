@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Pagination } from "@/components/browser/Pagination";
 import { TOPIC_FILTER_LIMIT, TOPIC_INDEX_MIN, type TopicIndexView } from "@/lib/topic-indexability";
 
 function topicHref(topic: string): string {
@@ -65,6 +66,9 @@ export function TopicIndex({ view }: { view: TopicIndexView }) {
         ) : (
           <p className="mb-3 text-[12px] text-mint/45">
             Hubs have {TOPIC_INDEX_MIN} or more talks. The filter searches every topic.
+            {view.totalPages > 1
+              ? ` Showing ${view.from.toLocaleString("en-US")}–${view.to.toLocaleString("en-US")}.`
+              : null}
           </p>
         )}
         {view.listed.length === 0 ? (
@@ -84,6 +88,11 @@ export function TopicIndex({ view }: { view: TopicIndexView }) {
             ))}
           </ul>
         )}
+        {!query && view.totalPages > 1 ? (
+          <div className="mt-6">
+            <Pagination page={view.page} totalPages={view.totalPages} hrefBase="/topics" />
+          </div>
+        ) : null}
       </section>
     </div>
   );
