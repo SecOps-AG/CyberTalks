@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/JsonLd";
 import { SectionHeading } from "@/components/SectionHeading";
 import { TalkCard } from "@/components/TalkCard";
 import { TalkSummaryPanel } from "@/components/TalkSummary";
@@ -12,6 +13,7 @@ import { WatchedMarker } from "@/components/WatchedMarker";
 import titleIndex from "@/generated/talk-titles.json";
 import { loadTalk } from "@/lib/catalog-runtime";
 import { canonicalUrl } from "@/lib/canonical";
+import { talkDescription, talkJsonLd } from "@/lib/json-ld";
 import { isDefconVillageTalk, villageEditionPath, villageSeriesPath } from "@/lib/hubs";
 import { difficultyLabel, normalizeDifficulty } from "@/lib/labels";
 import { isYouTubeId, publicMaterialBands, thumbnailSrc } from "@/lib/materials";
@@ -46,19 +48,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     titleIndex as TitleIndex,
   );
-  const description =
-    talk.teaser ||
-    `${talk.speakers.join(", ")} — ${talk.villageName}, ${talk.eventName}.`;
+  const description = talkDescription(talk);
+  const talkUrl = canonicalUrl(`/talks/${encodeURIComponent(slug)}`);
   const thumb = thumbnailSrc(talk.youtubeId);
   const thumbnailUrl = thumb.startsWith("/") ? `${siteUrl()}${thumb}` : thumb;
 
   return {
     title,
     description,
-    alternates: { canonical: canonicalUrl(`/talks/${encodeURIComponent(slug)}`) },
+    alternates: { canonical: talkUrl },
     openGraph: {
       title,
       description,
+      url: talkUrl,
+      siteName: "Cyber Talks",
       type: "video.other",
       images: [
         {
@@ -92,6 +95,7 @@ export default async function TalkPage({ params }: Props) {
 
   return (
     <article className="space-y-8">
+      <JsonLd data={talkJsonLd(talk)} />
       <nav aria-label="Breadcrumb" className="eyebrow flex flex-wrap items-center gap-2">
         <Link href={`/${talk.eventSlug}`} className="hover:text-acid">
           {talk.eventName}

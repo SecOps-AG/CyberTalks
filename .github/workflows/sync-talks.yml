@@ -55,3 +55,10 @@ jobs:
           else
             npx tsx scripts/d1/sync.ts --remote --since "${{ github.event.before }}"
           fi
+      # The upsert above is what makes new talk pages live. Best effort: the
+      # script skips quietly until the IndexNow key file is served, and never
+      # fails this job.
+      - name: Ping IndexNow for new and changed talks
+        if: success() && github.event_name == 'push'
+        continue-on-error: true
+        run: npx tsx scripts/indexnow.ts --since "${{ github.event.before }}"

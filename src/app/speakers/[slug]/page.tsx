@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/JsonLd";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import { loadSpeaker } from "@/lib/catalog-runtime";
-import { canonicalUrl } from "@/lib/canonical";
+import { speakerJsonLd } from "@/lib/json-ld";
+import { pageMetadata } from "@/lib/page-meta";
 import { initialBrowsePage } from "@/lib/search";
 import { topicLabels } from "@/lib/topic-labels";
 
@@ -21,11 +23,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const record = await loadSpeaker(slug);
   const speaker = record?.speaker;
   if (!speaker) return { title: "Speaker not found", robots: { index: false, follow: false } };
-  return {
+  return pageMetadata({
     title: speaker.name,
     description: `Every talk by ${speaker.name} on Cyber Talks.`,
-    alternates: { canonical: canonicalUrl(`/speakers/${encodeURIComponent(speaker.slug)}`) },
-  };
+    path: `/speakers/${encodeURIComponent(speaker.slug)}`,
+  });
 }
 
 export default async function SpeakerPage({ params }: Props) {
@@ -37,6 +39,7 @@ export default async function SpeakerPage({ params }: Props) {
 
   return (
     <div className="space-y-8">
+      <JsonLd data={speakerJsonLd(speaker)} />
       <header className="space-y-3">
         <p className="eyebrow">
           <Link href="/speakers" className="hover:text-acid">
