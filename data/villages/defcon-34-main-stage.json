@@ -23,7 +23,8 @@
       ],
       "teaser": "Bruce Schneier examines how artificial intelligence systems hack human institutions, tax codes, financial markets, and legal frameworks.",
       "summary": "Cryptographer and security technologist Bruce Schneier delivers a keynote exploring the multifaceted dynamics of artificial intelligence and security on the Main Stage at DEF CON 34 [00:07]. Schneier structures his analysis around three key axes: humans hacking AI models, humans using AI as an offensive capability, and autonomous AI systems discovering and exploiting systemic vulnerabilities across both technological and human institutions [08:41].\n\nSchneier broadens the traditional concept of hacking beyond software, illustrating how AI systems will systematically uncover and exploit loopholes within tax codes, financial regulations, and democratic processes [17:28]. He explores the \"genie problem,\" where autonomous optimization algorithms inadvertently subvert human intent to satisfy poorly constrained objectives [08:44], proposing that legislative bodies and watchdog groups use AI for predictive red-teaming to discover loopholes in draft bills prior to passage [27:04]. The lecture examines the security realities of \"instant software,\" where generative models dynamically synthesize transient code on demand, requiring fundamental shifts in automated vulnerability analysis and trust models [36:11].\n\n(AI summary — Gemini Flash)",
-      "durationSeconds": 2674
+      "durationSeconds": 2674,
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "PcK-TDmzshc",
@@ -45,7 +46,8 @@
       ],
       "teaser": "Cybertiger, Colonel Panic, and The Wrew introduce low-cost counter-surveillance hardware built around the ESP32 to detect tracking devices.",
       "summary": "Surveillance and Counter-Surveillance Techniques\n\nThis talk examines surveillance methods and counter-surveillance strategies. Topics include how to identify surveillance activities and techniques for protecting privacy and security against observation and tracking.\n\n(AI summary — Claude Haiku)",
-      "durationSeconds": 2667
+      "durationSeconds": 2667,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "WyPmt8CE5L4",
@@ -64,7 +66,8 @@
       ],
       "teaser": "Bill Swearingen explores whether adversarial patterns printed on everyday clothing can effectively fool commercial and municipal facial recognition algorithms.",
       "summary": "This DEF CON talk covers norecognition: could a pattern on clothing fool facial recognition?.\n\n(AI summary — Claude Haiku)",
-      "durationSeconds": 2779
+      "durationSeconds": 2779,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "656058JxTM0",
@@ -83,7 +86,8 @@
       ],
       "teaser": "Cliff Stoll reflects on the 40th anniversary of tracking down an international KGB cyber espionage ring originating from a 75-cent accounting error.",
       "summary": "In this historic and captivating keynote from the DEF CON 34 Main Stage, astronomer, author, and cybersecurity pioneer Cliff Stoll takes the stage to reflect on the 40th anniversary of his legendary investigation chronicled in \"The Cuckoo's Egg.\" Opening at 00:04 to an electrifying standing ovation, Cliff recounts how an innocent 75-cent accounting discrepancy in 1986 at the Lawrence Berkeley Laboratory unraveled a sophisticated international cyber espionage ring selling stolen Western military secrets to the Soviet KGB.\n\nAt 14:00, Cliff explores the scientific mindset and the gritty realities of research, humorously sharing how amateur curiosity and sheer stubbornness triumph when an investigator is underfunded and bewildered. At 28:01, he recounts working alongside early federal investigator Mike Gibbons, navigating an indifferent intelligence bureaucracy that had never previously encountered network-borne espionage.\n\nAt 42:03, Cliff delivers an impassioned critique of sanitizing corporate jargon like \"threat actors,\" urging the audience to maintain personal responsibility and human empathy. He concludes at 56:02 by looking ahead to the future of technology, inspiring attendees to embrace playful curiosity, question dogmas, and celebrate the timeless human spark of hacking. (AI summary — Gemini Flash)",
-      "durationSeconds": 3426
+      "durationSeconds": 3426,
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "yGlZAL_M2SU",
@@ -235,7 +239,8 @@
       "teaser": "Maps passkey attack surface across authenticators, cross-device transport, browsers, relying parties and cloud sync, with a Burp extension to test them.",
       "summary": "The talk starts from the premise that the WebAuthn ceremony is cryptographically sound, but that real passkey deployments rarely rely on it alone. Passkeys usually sit beside weaker sign-in methods, and the login depends on many parts: the authenticator, the transport between devices, the browser, the relying party server, cloud sync, and account recovery. The speaker organizes the scattered research into one map of these components and treats each attack as a stop that still works after a correct ceremony.\n\nAlong the way, the talk covers management interfaces exposed by the CTAP cross-device protocol, relay attacks on the QR-code hybrid flow, and client-side tricks such as redirecting ceremonies through malicious extensions or XSS. Most of the time is spent on the server side, where tampering with client data, origin, relying party ID, signatures, algorithms and credential IDs can be tested. A cited study found all 103 live relying parties vulnerable to at least one server-side attack. The speaker also shows Passkey Editor, a Burp extension that decodes vendor-specific encodings and applies preset attacks, demonstrated against WebAuthn.io and GitHub.\n\nThe closing sections cover cloud sync, where weak account protection can undermine a passkey, and the interpersonal threat of a partner or family member with access to a shared device. The practical takeaway is that server-side checks form a finite checklist to run quickly, leaving time for business-logic testing. The tool is available for testing passkey deployments.",
       "durationSeconds": 2138,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "8ewe-9hf-tA",
@@ -363,7 +368,8 @@
       "teaser": "Shows how a roughly $45 FPGA can impersonate a discrete SPI TPM on Windows 11 and sit between a real TPM and the motherboard, challenging hardware trust assumptions.",
       "summary": "The talk opens with what a hardware root of trust is for: verifying boot code, measuring what ran, storing keys, and attesting platform state. The speakers separate external root-of-trust chips, which sit on the motherboard, from internal ones built into the processor package. They argue that an external chip is the easier target, and they describe NVIDIA DPU boards that use a Microchip external root of trust. One board had a test-bypass pin that could be reached with a fine wire under the package, which they said they had not fully tested on the target hardware.\n\nFor the second part, they set out to build a cheap stand-in for a discrete SPI TPM. Microcontrollers were too slow to answer the bus in time, so they moved to small FPGA boards. A low-cost Tang Nano board first ran as a minimal TPM that reported only static PCR values, and Windows accepted it. A later version sat between a real TPM and a motherboard with a logic analyzer, and it forced PCR extends to a fixed value while passing every other command through. Windows still rejected the setup for BitLocker because it checks the TCG event log. Most of the Verilog was written with an AI assistant, which the speakers presented as the main change in who can attempt this work.\n\nThe closing takeaway is that the required hardware costs tens to a few hundred dollars. Attackers could use this to spoof hardware identity, fake PCR state for measured boot, or probe attestation. The speakers note that early boot measurements are harder to forge, and that anti-cheat systems detected their test setup. They say the code, gateware, prompts, and data are being released for others to reproduce.",
       "durationSeconds": 2930,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "tYireGDxRM0",
@@ -425,7 +431,8 @@
       "teaser": "Shows how a Belgian eID signing browser extension let any website read smart card data, leak PIN tokens and reach drive-by code execution.",
       "summary": "The talk examines Connective's signing browser extension, used by many Belgian banks and government bodies, and the native host it relays to. The speaker explains the trust chain: a web page messages the extension, which forwards the request to the native host without recording where it came from. The only gate is an activation token, and because that token carries no origin binding, it can be replayed by any site.\n\nUsing a virtual eID and a virtual Maestro card built on an ESP32 board, the researcher showed that any page or iframe could read the full contents of a card. The host also returned a PIN token that held the PIN encrypted with a key included in the same token and an IV hardcoded in the binary. That allowed decryption and reuse for about five minutes, so an attacker could phish a PIN once and then authenticate or sign as the victim. The native host also validated library paths by searching for \"DLL\" as a substring, so a file with a double extension passed the check and could be downloaded and loaded as a polyglot, giving code execution from an ordinary-looking download.\n\nThe vendor first rated the problems medium severity and fixed them months later, after follow-up and a national agency's involvement. The practical takeaways are that extension store reviews focus on malware rather than vulnerabilities, native hosts should be treated as untrusted attack surface, and extension developers must validate input that arrives from web content.",
       "durationSeconds": 2054,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "mS0nN0KssvM",
@@ -467,7 +474,8 @@
       "teaser": "Shows how a use-after-free in the NVIDIA Linux kernel module lets an unprivileged container user escape to root on the host.",
       "summary": "The talk starts from a Pwn2Own NVIDIA category target, the NVIDIA Container Toolkit, and the question of whether a malicious container can run code on the host. The researchers mapped the attack surface: the Go management code, the GPU kernel driver, and the RISC-V GSP firmware. They focused on the open-source Linux kernel module, because containers on one host share a kernel, and found a use-after-free there. The vulnerability itself is not detailed, and NVIDIA had already patched it.\n\nThe middle section covers how they made the bug reliable. A freed object can be reclaimed by an allocation whose contents are copied back to user space through the ioctl buffer, which leaks whatever gets written into it. To win the race, they used the read-write semaphore's writer-preference behavior and reordered lock acquisitions so the timing became deterministic. They then corrupted a linked-list node to get an arbitrary unlink, overwrote a memory-mapping structure's start and size fields, and mapped all of physical memory into user space.\n\nA recorded demo shows the exploit run inside a container and return a root shell on the host. The speaker said an AI coding agent wrote much of the final physical-memory exploitation. The takeaway is that a single driver bug can break container isolation when containers share the host kernel, and that GPU driver code deserves the same scrutiny as core kernel code.",
       "durationSeconds": 2205,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "5VejXSMacwc",
@@ -487,7 +495,8 @@
       "teaser": "Traces unauthenticated RCE and privilege escalation bugs in GNU telnetd and Samba, showing how decades-old Linux services still hide critical flaws.",
       "summary": "The talk looks at legacy Linux network services that get less attention than newer technology. The speaker starts with an unauthenticated remote code execution flaw in GNU telnetd, disclosed earlier this year after about eleven years. The daemon passes client-supplied environment variables into the command line of the login program, and because those values are not sanitized, an attacker can inject options that skip authentication and return a root shell.\n\nThe research then follows the same attack surface to a local privilege escalation. Login trusts a credentials directory variable and a flag file inside it, so a low-privilege user can reach root through telnetd even after the first patch. Turning to Samba, the speaker reports two more unauthenticated RCEs. One comes from a printing interface that places a job name into a shell command. The other comes from a password validation RPC call that reaches a command without escaping. Each issue is shown in a live demo.\n\nThe takeaway is that narrow patches fix individual instances but leave the flawed design behind them in place. Practitioners should ask whether a service runs shell commands, sanitizes input, or accepts environment variables from unauthenticated clients, and should not assume that popularity means it has been audited. Printers, routers and other unmanaged devices may still run these daemons unpatched.",
       "durationSeconds": 2089,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "I5PMONQ7VUw",
@@ -636,7 +645,8 @@
       "teaser": "Explains how DEF CON Franklin volunteers and a regional managed security provider network aim to bring basic cybersecurity to under-resourced American water utilities.",
       "summary": "The talk introduces the Water Watch Center, a new entity meant to deliver cybersecurity at scale to American water utilities. The speakers note that about 150,000 utilities want to do security properly but have no staff or budget, and they cannot easily raise rates to pay for it. The proposed structure is meant to act like a nervous system: the National Rural Water Association serves as the hub, while five managed security service providers, one per CISA region with a plan to reach ten, handle day-to-day work and share anonymized data upward.\n\nA volunteer named David describes helping a small town public works department with four employees and no in-house IT. The engagement started with a full assessment and asset inventory, then moved to coordinating with the town's outside vendors and fitting controls to a budget that began at zero. He found that basic hygiene, such as multifactor authentication on public-facing systems, landed best when explained through patient, listening-first conversations. Josh Corman argues that losing water quickly disables hospitals, and describes a parallel effort to engineer resilience for a dozen hospital towns.\n\nIn questions, the speakers argued that free vendor products often carry hidden staffing costs, and that some security appliances themselves have exploited vulnerabilities, so technology is not always the answer. The main takeaway is that these utilities lack people more than tools, and that sustained federal funding for the rural water association is needed to keep the model running.",
       "durationSeconds": 1411,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "z3VjvBwZYaU",
@@ -874,7 +884,8 @@
       "teaser": "Introduces a six-type taxonomy of Python class pollution, an automated static analysis tool, and dozens of zero-day exploits found across popular packages.",
       "summary": "The talk opens with Python's object model, where everything is an object linked by references and dunder attributes. Dynamic reflection such as getattr and setattr lets attacker-supplied keys walk that graph, so a recursive updater can reach classes, modules and secrets far beyond the object it was meant to touch. The speakers trace the history from a 2023 blog post to a 2024 PyTorch Lightning CVE, arguing that those were only the visible part.\n\nThe core contribution is a taxonomy built from two get primitives and three set primitives, yielding six pollution types, of which only one was previously known. The team then built Pyrl, which applies a new static analysis called operational taint analysis. Run across more than 600,000 GitHub and PyPI packages, it produced 886 alerts, and the researchers report 47 exploitable zero-days in projects including Azure CLI, Taipy and ComfyUI.\n\nCase studies show how these flaws become serious. In Django Unicorn, an unauthenticated state-update API allowed denial of service, cross-site scripting through BeautifulSoup's sanitization table, forged signing secrets, and remote code execution. A second case, in TypeY, started from a weak constrained primitive and needed a race condition to reach eval. The takeaway for developers is to restrict which attributes can be traversed and to validate the final target before any assignment.",
       "durationSeconds": 2301,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "-E7G928BWzY",
@@ -936,7 +947,8 @@
       "teaser": "Shows how invisible Unicode characters defeat uniqueness checks on Active Directory SPNs and UPNs, enabling Kerberos downgrade, denial of service and domain takeover.",
       "summary": "The talk starts from a persistence technique that uses invisible Unicode characters to create Active Directory accounts that look like duplicates. The speaker found that the directory ignores some of these characters in LDAP filters, so a query without the character still returns the object. That behavior led to a question about whether uniqueness checks on other attributes could be sidestepped in the same way.\n\nService principal names and user principal names must be unique across the forest, but the speaker showed that the check can be bypassed with unfilterable characters. A duplicate host-class SPN lets an attacker deny service to a share, and an explicit duplicate makes the domain controller fail Kerberos so clients silently fall back to NTLM. A second chain abuses the Kerberos change-password flow. A low-privileged user spoofs a UPN that matches a domain admin's account name, obtains a ticket that the domain controller accepts, and resets the admin's password. The speaker reported both issues to Microsoft, which patched them in March and April.\n\nFor defenders, the recommendation is to patch domain controllers first. If patching is delayed, the talk suggests alerting on SPN or UPN changes that collide with existing values, and correlating them with password reset events. The speaker also stressed least privilege, MFA and behavioral detection for tier-zero accounts. A tool that automates the attack flow was announced for testing.",
       "durationSeconds": 1945,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "OQNgr3xyylI",
@@ -1021,7 +1033,8 @@
       "teaser": "Traces how the FirewallFalcon VPN and SSH management toolkit was weaponized to backdoor its own operators and enable man-in-the-middle interception.",
       "summary": "The talk starts with underground VPN resale operations that advertise cheap or free access through Telegram, and with FirewallFalcon Manager, an open-source server management tool promoted in those channels. The speaker, who runs a honeypot network, noticed the tool's install traffic and its community links, then looked at the operator's activity and at the reseller product built on top of it.\n\nBehind the installer, the research found an SSH configuration exposed to the internet with root access, a secret in a companion project, and a proxy binary that added a rogue root certificate and a hosts-file entry so traffic could be decrypted in transit. Git history of the repository showed an earlier version with a layered install script that hid an encrypted binary and reported the host's details to an attacker-run Telegram bot. That version also created a backdoor user. A DNS component embedded a privileged key, which allowed querying records for roughly 650 installed machines across several regions. Many of those hosts looked compromised, with open ports, misconfigurations, and certificates belonging to unrelated organizations.\n\nThe takeaway is that people who deploy hacker tooling can be targeted by that tooling. Operators of rented or stolen servers should treat such scripts as hostile, check certificates and DNS on their hosts, and review repository history and binaries before trusting them. The speaker noted that the project later moved to another code host and that the operation's current status was unclear at the time of the talk.",
       "durationSeconds": 1673,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "qWFiwb8-WOM",
@@ -1063,7 +1076,8 @@
       "teaser": "Reverse-engineers a Sea-Doo jetski's diagnostic protocol and one-wire key interface to build an open-source, programmable replacement key.",
       "summary": "A friend bought a 2000 Sea-Doo jetski without its key, and the official dealer tooling cost more than the machine itself. With no public documentation, the speaker began by reverse-engineering the diagnostic software's CAN protocol, which uses KWP2000 with authenticated security levels. Checking the adapter path, the speaker wrote a compatible adapter DLL for cheap CAN hardware. The bus turned out not to be the route for this model, though. The real programming access is a one-wire interface on the key post, handled by a separate electronic module.\n\nLogic analysis of the key handshake showed a one-wire token protocol. The speaker found firmware for the programmer inside the software bundle, which targets a Motorola HC08 microcontroller. A download command in the adapter firmware dumped the module's EEPROM without writing anything, and a checksum brute force over the dump located the key IDs. The data also exposed the VIN, engine hours and the number of enrolled keys. Using this, the team built a key that got the engine running on the bench, and later a Flipper Zero app that reads the module and emulates saved keys.\n\nFor a portable solution, the speaker designed a small ATtiny circuit that charges capacitors from the one-wire signal alone, with cycle-precise handwritten assembly. It was mounted on a small PCB in a printed enclosure. The main takeaway is how a proprietary immobilizer can be understood from its wire-level behavior, and how a cheap programmable replacement becomes possible without the paid tools.",
       "durationSeconds": 1094,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "wwEAdInptxg",
@@ -1149,7 +1163,8 @@
       "teaser": "Shows how a keystroke-injection implant planted on a USB port can be triggered remotely over a LoRa Meshtastic mesh, without internet or Wi-Fi.",
       "summary": "The talk opens with a building-infiltration scenario: an attacker gets brief physical access, plants a device, and needs a way to trigger it later. The speaker reviews the limits of existing USB keystroke-injection tools. Prerecorded payloads are fire-and-forget, and their Wi-Fi command channels are useless on air-gapped networks. The proposed alternative is a device that receives text commands over long-range LoRa radio and relays them through the Meshtastic mesh, so no internet or Wi-Fi is needed.\n\nThe middle of the talk covers the build. The project, M.I.A., re-implements the Meshtastic protocol on a radio library instead of the stock firmware. Most of the difficulty was getting LoRa radio parameters exactly right, decoding protobuf field structure, and fixing AES counter-mode nonce handling. The speaker also noted a key-size discrepancy on the default channel. Commands use a text prefix that the device parses into keystrokes. A live demo sent a command from a stock node that made the target machine open a website.\n\nThe speaker closes by listing limits: physical access is still required, range depends heavily on obstacles, and mesh traffic is hard to detect. For defenders, the suggestions were controlling which USB devices may connect and scanning for unexpected radio activity with software-defined radios. The firmware, hardware design and tooling are promised as open source.",
       "durationSeconds": 1247,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "0H1AIW9gslw",
@@ -1211,7 +1226,7 @@
         "ai"
       ],
       "teaser": "Shows how a single crafted browser link can launch Electron desktop apps and chain them across processes into full remote code execution.",
-      "summary": "The talk starts from the spread of custom URI schemes in AI and agentic desktop apps, which let a browser link install plugins or MCP servers and import configuration in one click. Earlier Electron research assumed an attacker already controlled the renderer. This work instead models an attacker who begins outside the app, with only a link, and follows the input through the main, utility and renderer processes until it reaches a dangerous sink.\n\nThe researchers organize these bugs along three axes: where the payload comes from (the URI itself, a second payload fetched from an attacker server during processing, or a file dropped to disk and loaded later), how it moves across processes over IPC, and which sinks it reaches, such as command execution, dynamic evaluation or module loading. To find such chains they built Proton, a fuzzing framework that uses an LLM to map taint flows and then fuzzes each segment separately before composing them. Across 589 applications they report 18 zero-days, 17 of them remote code execution, with 11 CVEs assigned and a bounty from Vercel.\n\nThe \"tea time\" section walks through several cases: a terminal app that concatenated URL fields into a shell command, a mail client whose unsanitized HTML was reachable through a file-protocol origin quirk, an EPUB reader where disabled context isolation allowed prototype pollution to reach privileged objects, and a local server with path traversal. For users, the takeaway is to avoid trusting external links and to be careful with always-allow prompts. For developers, the key lessons are to keep untrusted input away from shell and eval sinks and to enable context isolation.",
+      "summary": "The talk starts from the spread of custom URI schemes in AI and agentic desktop apps, which let a browser link install plugins or MCP servers and import configuration in one click. Earlier Electron research assumed an attacker already controlled the renderer. This work instead models an attacker who begins outside the app, with only a link, and follows the input through the main, utility and renderer processes until it reaches a dangerous sink.\n\nThe researchers organize these bugs along three axes: where the payload comes from (the URI itself, a second payload fetched from an attacker server during processing, or a file dropped to disk and loaded later), how it moves across processes over IPC, and which sinks it reaches, such as command execution, dynamic evaluation or module loading. To find such chains they built Proton, a fuzzing framework that uses an LLM to map taint flows and then fuzzes each segment separately before composing them. Across 589 applications they report 18 zero-days, 17 of them remote code execution, with 11 CVEs assigned and a vendor bounty paid.\n\nThe \"tea time\" section walks through several cases: a terminal app that concatenated URL fields into a shell command, a mail client whose unsanitized HTML was reachable through a file-protocol origin quirk, an EPUB reader where disabled context isolation allowed prototype pollution to reach privileged objects, and a local server with path traversal. For users, the takeaway is to avoid trusting external links and to be careful with always-allow prompts. For developers, the key lessons are to keep untrusted input away from shell and eval sinks and to enable context isolation.",
       "durationSeconds": 2906,
       "publishedAt": "2026-11-06",
       "difficulty": "advanced"
@@ -1341,7 +1356,8 @@
       "teaser": "Shows how an outsider can reach BGP routers that are not direct peers, using looking glass command injection, VPN tunnel injection, and malformed-attribute parser bugs.",
       "summary": "The talk starts from a common assumption: a BGP router only accepts updates from configured peers, and GTSM's TTL check confirms that the peer is one hop away. The speaker argues that this adjacency boundary is the weak point, since most hardening work such as RPKI and BGPsec focuses on route validation. The question is whether an attacker without a peering session can get inside that boundary.\n\nThe attack path has three stages. First, looking glass web tools that pass user input into a router shell can give command execution on an edge router, and the speaker reports that several such tools are still vulnerable. Second, tunnel injection through a misconfigured VPN endpoint lets an off-path attacker appear adjacent to a target, and a use-after-free in FRR's attribute caching leads to remote code execution. Third, differences between FRR, BIRD and other daemons are abused: oversized or malformed optional attributes, and mismatched prefix limits, make one implementation re-emit or reject updates in a way that causes repeated session resets in another. A recorded demo shows a victim session dropping after the chain runs.\n\nThe speaker estimates exposure from PeeringDB data, counting roughly 300 networks running vulnerable looking glass software. The reach is still small compared with the total number of networks, and large default-free routers complicate any wide outage. The practical takeaways are to treat looking glasses as privileged systems, validate attribute lengths strictly, and avoid assuming that a peer list alone protects a router.",
       "durationSeconds": 2255,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "xst4WQewHTo",
@@ -1361,7 +1377,8 @@
       "teaser": "Shows how to run an SSH server, interactive shells and unsigned binaries on a jailed iPhone by reimplementing fork() and code-signing checks in user space.",
       "summary": "The talk starts from a practical problem. On a stock iPhone, the sandbox blocks fork() and code signing blocks unsigned code, so researchers who want a shell with job control are left with full-system emulation or the hunt for scarce jailbreak bugs. The speaker sets out to get around both limits without exploiting a vulnerability, using only standard APIs.\n\nThe approach rebuilds what a POSIX shell depends on inside an ordinary app. Each virtual process is a group of threads with its own file descriptor and signal tables. The fork replacement duplicates a per-process heap and the writable data of loaded libraries, rewrites stale pointers, and copies stack frames onto a new thread, using setjmp and longjmp to hop onto a temporary stack. A custom linker loads unsigned binaries without executable permissions, and an emulator runs them, with calls into signed code handed back to the host CPU.\n\nThe demo connects over SSH to a phone running the app, opens a shell where ifconfig and vim work, and then runs a public kernel race exploit delivered as an unsigned binary, which gains access to a folder that was previously blocked. The main takeaway is that the platform's process and signing checks can be reproduced in user space, at a real speed cost, since the naive fork took seconds.",
       "durationSeconds": 3075,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "U-tyM7Keayw",
@@ -1468,7 +1485,8 @@
       "teaser": "Shows how an open-source, deliberately vulnerable CubeSat platform lets researchers practice radio attacks on CCSDS space packets.",
       "summary": "Romel Marin opens with the gap that motivated the project. Space protocol documentation is easy to find, but there is no legal satellite to practice radio attacks against, and the number of active spacecraft keeps growing. He covers the basics a newcomer needs: a satellite as a computer in orbit, telemetry, telecommands and payload data, the link between space and ground segments, and the CCSDS standards with the Space Packet Protocol structure.\n\nThe core of the talk is PWNSAT, an open-source platform of intentionally vulnerable hardware. He describes its three versions, ending with a CubeSat built from a flight computer that runs Linux, a LoRa radio board and a power board, plus a plug-and-play ground station application. The demonstrations use a cheap RTL-SDR receiver to capture unencrypted downlink traffic and decode the packets. He then brute-forces application process identifiers over the Space Packet Protocol, much as directory scanning works against web applications, injects captured data back into the link, and fuzzes the firmware to trigger a denial of service.\n\nThe takeaway is that the downlink in these demos carries no cryptography, so anyone designing or assessing a space link should treat the radio path as an attack surface. He publishes the scripts, firmware, PCB designs and step-by-step walkthroughs on GitHub, along with about 34 documented vulnerabilities. He stresses that the tools are meant for lab hardware like his, not for real spacecraft.",
       "durationSeconds": 1506,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "OTw-ZzevjVo",
@@ -1509,7 +1527,8 @@
       "teaser": "Explains how the DEF CON 34 badge was designed and built, how attendees can attack it, and how its partly open-source Baochip-1x chip can be inspected.",
       "summary": "The talk opens with the badge's conference mode, where attendees swap light patterns through a lightly encrypted exchange. Traits follow simple genetic rules, with some dominant and some recessive. After the event, the core module can be removed and used as a FIDO2 security token that shows the relying party on screen. It also works as a TOTP generator and an offline password store.\n\nThe speaker's motivation is that supply chains scale well, so hardware trust needs more than black-box chips. He describes infrared imaging, which can reveal a chip's transistors when the silicon is exposed. The badge's Baochip-1x is a custom chip he designed, and its CPUs, cryptographic accelerators, and the Rust-based boot and operating system are published as open source. He also covers the manufacturing effort: custom two-tone laminate, stainless steel finishes for the advanced badges, and automated test rigs that reached about 7,000 units a week with a yield above 98 percent.\n\nFor hackers, the badge includes flags to capture, and early solvers were already named. The BIO coprocessor, an open version of the Raspberry Pi PIO block, can be debugged at the waveform level through open RTL simulation. The speaker expects open hardware to show bugs after release and recommends firmware updates, with bare chips planned for wider distribution later.",
       "durationSeconds": 1392,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "IqdgD-DEnv0",
@@ -1615,7 +1634,8 @@
       "teaser": "Shows how liveness biometric checks in banking KYC apps were bypassed using deepfake video injected into Android camera pipelines.",
       "summary": "The talk examines the liveness checks that banks and fintech apps use during facial identity verification. The presenters tested seven top-tier apps built on four KYC SDKs over about six months, and report that every app but one could be bypassed. They argue that a few public photos are enough to build a convincing synthetic identity video cheaply, and they describe physical spoofing with masks, printed faces and other props, which worked only some of the time.\n\nThe core of the talk walks through injection points from the application layer down to the Android camera server. Before any injection, the team had to defeat root, emulator and debugger checks, sometimes by flipping return values or by exploiting debug-only flags left in release builds. Frame injection then fed recorded or deepfake frames at whichever layer the app trusted. The lowest layer, the camera server, was invisible to the app itself and fed frames to every application on the phone, and it was the only route that worked against the one hardened app that resisted the earlier techniques.\n\nThe takeaway for practitioners is that client-side liveness and anti-tampering checks should not be the sole gate for identity decisions. The speakers recommend moving verification logic to the server side and note the dilemma CISOs face when tuning thresholds, since loosening them enables fraud and tightening them locks out legitimate users.",
       "durationSeconds": 3087,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "Vg5Sr7exsmM",
@@ -1635,7 +1655,8 @@
       "teaser": "Shows how ASN.1-generated decoders in 5G phone basebands skip specification rules, so one altered byte can crash a modem before authentication.",
       "summary": "The talk looks at the baseband modem in a 5G phone, a separate processor that handles radio messages from cell towers. The speakers focus on the window before the phone authenticates to a network, when a rogue base station can send a crafted radio setup message that the modem decodes and acts on, with no user interaction.\n\nThe core argument is that code generated from ASN.1 schemas only enforces what the schema expresses. Presence conditions and cross-field dependencies that exist only in 3GPP specification prose are lost, so a structurally valid message can break the standard. Some implementations also accept integer values above the allowed maximum because the encoding has spare bit patterns. The researchers describe a pipeline that extracts these rules from the specification, uses a language model to turn them into testable constraints, and mutates valid messages to violate them. They report crashes in basebands from several chipset vendors and show a live over-the-air demonstration.\n\nFor defenders, the practical lesson is to validate decoded values before the baseband uses them, not to trust the decoder alone. The speakers also argue that machine-readable rules in the standards would let tooling enforce them. The same gap may appear in other ASN.1-based systems, including LTE and some automotive and aviation protocols.",
       "durationSeconds": 2557,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "3MoS3Ngv2UY",
@@ -1722,7 +1743,8 @@
       "teaser": "Demonstrates how the AIS maritime safety network can carry hidden messages inside ordinary-looking ship traffic, and how defenders might detect them.",
       "summary": "The talk opens with a disclaimer about jurisdiction and unauthorized transmission, then explains the Automatic Identification System, a maritime safety network built for openness. AIS messages carry no cryptographic sender authentication, so receivers cannot verify who transmitted them, yet aggregated AIS data still informs shipping, commodity and financial decisions. The speakers argue that this trust gap could be used to carry covert traffic.\n\nThey present Evil AIS, a research framework with nine encoding methods and a combined variant. It hides payload bits in the low-order bits of position reports that already exist, then recovers them with differential steganography: a receiver XORs two near-identical reports to extract the difference. In a controlled setup, the team showed a message split across 16 shards that could be rebuilt from any 12, using parity similar to RAID 5. Other demos covered a binary dead drop and a trigger that fires a downstream action from a few bits, which they tied to systems that consume AIS as input.\n\nFor defenders, the takeaways are to validate checksums, flag anomalous raw AIS traffic, build baselines from historical data, and triangulate where suspicious transmissions originate. The speakers note that the protocol dates to the 1990s and is unlikely to change soon, so monitoring has to start now.",
       "durationSeconds": 1403,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "JK5BQTcNzf8",
@@ -1743,7 +1765,8 @@
       "teaser": "Coast Guard cyber operators describe boarding shadow fleet tankers and the insecure IT and OT systems they found aboard.",
       "summary": "The talk looks at the United States-led crackdown on dark fleet tankers, vessels that carry sanctioned oil under false flags, shell-company ownership, and rotating registrations. Coast Guard Cyber Command's cyber protection teams join the physical boardings of these ships. Their job is to establish a secure cyber posture on vessels they have never seen, across both IT and OT systems, while protecting the boarding team and the crew. The speakers note that equipment, power and connectivity had to be planned for austere conditions at sea.\n\nThe middle of the talk covers what the teams found. Flat networks put crew Wi-Fi, admin workstations and bridge systems in one broadcast domain. Satellite links fed unauthenticated wireless access points, and USB drives and hand-made Ethernet cables bridged supposed air gaps to engineering systems. Many machines ran unsupported Windows versions with pirated software and old worms still active. Remote access tools were used to wipe disks. Navigation data was also manipulated: AIS antennas were wrapped to attenuate their signal, NMEA sentences were injected, and LRIT satellite terminal firmware had been altered. The team also recovered forged port stamp software.\n\nThe takeaway is that the line between physical and digital risk has largely disappeared. Legacy marine electronics that trust unauthenticated serial data need monitoring and segmentation, and the speakers urge security researchers to help secure them before a maritime accident is traced to something as simple as an unsegmented cable.",
       "durationSeconds": 1235,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "F3qbfHMibm4",
@@ -1763,7 +1786,8 @@
       "teaser": "Traces physical tracking tech from Cold War beacons to AirTags, tests a Meshtastic LoRa locator, and covers countermeasures and a budget DIY build.",
       "summary": "The talk starts with a survival-planning question: how would you navigate back to base in a grid-down scenario where GPS satellites are gone? That led the speaker's team to explore LoRa mesh radio as an off-grid tracker. Before the prototype, the speaker surveys the history of physical tracking, from IFF transponders and early ground-based navigation to today's AirTags, Tile trackers, cheap OBD-II and GPS units, and LoRa asset systems already used in warehouses. The case against commercial trackers rests on corporate server logging and their failure without cellular or Bluetooth coverage.\n\nThe middle section covers defenses and the team's build attempts. Phone alerts and the third-party AirGuard app catch some unwanted trackers, while physical sweeps, SDR scanning near 925 MHz, thermal imaging and nonlinear junction detectors cover the higher end, though the last are costly. The two-antenna timing approach failed, and a room of ESP-NOW receivers using weighted-centroid math kept placing the target in the middle. Body interference and the need to recalibrate for each room made the design messy.\n\nThe closing points are practical. LoRa can reach hundreds of meters in dense urban areas and kilometers in ideal conditions, which suits kids, dogs, backcountry use and subterranean sites. The speaker notes that red teams already use LoRa for persistence, and that a low-duty-cycle beacon is hard to detect. The takeaway is that cheap off-grid tracking is feasible, and that defenders need to plan for it.",
       "durationSeconds": 1080,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "CHC87L6UQvc",
@@ -1827,7 +1851,8 @@
       "teaser": "Shows how the text-messaging link that carries air traffic control instructions to airliners can be impersonated with cheap software-defined radio gear.",
       "summary": "The talk looks at CPDLC, the data link that lets air traffic controllers send text clearances such as climb, descend or turn to commercial aircraft. The speakers note that the protocol has no cryptography or authentication, and that aviation standards and industry have long treated concerns about such radio systems as overblown. To test this, they built a bench with certified avionics and a VHF antenna, then connected it to a live test ground station, so the experiments ran against a real network rather than a simulation.\n\nThe middle section walks through the protocol stack, from the data link layer up through link setup, routing and transport to the application. The speakers describe a stateless disconnect frame that, sent to a broadcast address, drops every nearby aircraft from its ground station, which they say needs only a few bytes over the air. Using a fake ground station, they could take over a session, advertise routes so an aircraft would accept them, and send arbitrary controller messages. Undocumented parameters and checksums, some turning out to be MD4, made the reverse engineering slow.\n\nThe closing part covers disclosure to manufacturers, regulators, airlines and pilot groups, with mixed responses and slow engagement from the FAA. The practical takeaways are that complexity does not provide security, that monitoring for unexpected messages and physical protection of ground stations are feasible now, and that cryptography will take years because the move to IP-based links keeps slipping. The speakers said they would not release code, but the paper would give the details.",
       "durationSeconds": 2515,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "OTH2D0uPXXM",
@@ -1868,7 +1893,8 @@
       "teaser": "Traces how HTTP/2 Rapid Reset research led to MadeYouReset, a flaw where streams close at the protocol layer while server-side request work keeps running.",
       "summary": "The talk treats HTTP/2 weaknesses as failures of request lifetime rather than bugs in one codebase. It begins with the 2023 Rapid Reset disclosure, which is usually explained as a flood of cancelled requests. The speaker argues the real issue is that a stream can be closed at the protocol level while the back end is still computing a response for it. Those closed-but-active requests are called phantom streams.\n\nTracing how a server's HTTP/2 module hands off to its back end showed that the reset event is generally discarded by the rest of the server, so work continues and the finished response is thrown away. Cancellation was tested on Rust's Hyper and related frameworks, and it failed in some paths even where it appeared to work. The MadeYouReset variant forces the server to send the reset itself, for example through a zero-increment window update, which avoids the client-side reset limits added after Rapid Reset. Demonstrations on Pingora and Actix Web showed CPU and memory climbing until the servers crashed.\n\nThe root cause, according to the speaker, is architectural: HTTP/2 was added to servers built around an HTTP/1.1 interface that had no cancellation, and full cancellation across legacy code and external services is impractical. Because phantom streams cannot be eliminated, the proposed mitigation is to limit resets sent by the server as well as by the client. The takeaway for practitioners is to check how protocol features actually integrate with the software beneath them.",
       "durationSeconds": 2353,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "_23BMPCJfYc",
@@ -1888,7 +1914,8 @@
       "teaser": "Shows how a single S3 upload with a directory traversal path lets an attacker run code as root inside an AWS Nitro Enclave without breaking attestation.",
       "summary": "The talk argues that confidential computing platforms such as Nitro Enclaves, SEV-SNP and TDX attest the code an enclave runs, but not the runtime inputs it reads at boot. These include objects in cloud storage, configuration passed in by the host, and KMS key policies that do not require attestation. The speaker presents this as a deployment gap rather than a hardware flaw, and says the attestation measurements stay valid even when those inputs are abused.\n\nThe demonstration starts from one s3:PutObject permission on the enclave's state bucket. The uploaded key contains a directory traversal sequence. Object storage treats it as a literal string, but the enclave's file system resolves it and writes the file into the code directory, replacing a helper module that handles KMS decrypt calls. On the next boot, the replaced code runs as root, collects the parent instance's IAM session credentials, and captures plaintext data keys from KMS. The speaker then uses those keys to decrypt a database and extract signing key shares. The PCR values do not change throughout.\n\nSeveral defenses held in the same assessment, including filtering of environment variable injection, certificate pinning against DNS redirection, and fuzzing of the host RPC channel. The shipped fix validates file names on the download path with an allow list and traversal checks, because signing the boot files would need a verification key baked into the image. The speaker released an open-source scanner, untrust, with about 28 checks for Nitro deployments, and urged teams to treat bootstrap scripts and boot-time inputs as part of their security boundary.",
       "durationSeconds": 2818,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "ewDCTb7OgWQ",
@@ -1909,7 +1936,8 @@
       "teaser": "Presents the 2026 Pwnie Awards ceremony, handing out mock prizes for the year's notable exploits, research, and vendor responses.",
       "summary": "The 2026 Pwnie Awards opened with a host explaining the volunteer, unpaid format of the show and how each category would run. Presenters then walked through nominees for categories including best remote code execution, best privilege escalation, best server-side cloud bug, best mobile bug, best AI security research, most innovative research, most underhyped research, lamest vendor response, and most epic fail. Each nominee got a short, joking description of the bug or research. Examples included a KVM guest-to-host escape on ARM64, a Linux privilege escalation shared by two researchers, a zero-click audio decoding chain on Pixel phones, prompt-injection attacks against AI browsers and operations agents, and a DNS character-handling flaw affecting many implementations. Several winners were absent, so others accepted on their behalf.\n\nThe middle of the show leaned on running jokes about vendors. Microsoft's handling of several disclosed bugs drew the lamest vendor response award, and an AI chatbot prompt-injection that led to an Instagram account takeover took most epic fail. The hosts also noted that many AI-related nominees reflected how quickly new AI products were being probed.\n\nThe show closed with thanks to the volunteers and sponsors, and with a reminder that the awards depend on researchers publishing their work. For a practitioner, the ceremony is a compact snapshot of the year's notable research: zero-click mobile attacks, AI features as an attack surface, and how vendors respond to disclosure.",
       "durationSeconds": 2599,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "tP7gW7KN7Ko",
@@ -1948,7 +1976,8 @@
       "teaser": "Shows how stretching a single x86 instruction past one second can break System Management Mode's core rendezvous and expose dormant firmware CVEs.",
       "summary": "The talk starts with an unusual goal: find the slowest possible x86 machine instruction. The speaker explains System Management Mode, a privileged firmware-level mode that sits below the kernel and is hidden from the operating system and hypervisor. SMM relies on a rendezvous in which every core must enter together. That rendezvous has a timeout of about one second, so if one core stays outside SMM long enough, the others proceed anyway. Defeating it requires one instruction that stalls longer than a second.\n\nThe speaker works through a leaderboard of candidates. Simple arithmetic, square roots, serializing instructions, entropy depletion, model-specific registers and cache write-backs all fall short. Port I/O and then memory-mapped I/O go much further. Misaligned and oversized accesses, wide SIMD registers and a full floating-point state restore push the cost higher still. The final step has other cores hammer the same address with locked accesses to contend for the system bus, reaching roughly 198 billion cycles, or about 49 seconds. A scaled-down version then desynchronized SMM entry across cores in a live demonstration.\n\nThe takeaway is that the rendezvous assumption fails, which would expose a large set of time-of-check to time-of-use SMM vulnerabilities that are mostly unpatched. The impact covers confidential computing in the cloud and firmware persistence on client systems. The speaker argues there is no clean fix. Keeping the timeout leaves the attack open, while removing it lets one stuck core hang the whole platform.",
       "durationSeconds": 1261,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "-8Hk5GdKSfE",
@@ -2122,7 +2151,8 @@
       "teaser": "Shows how passive OS fingerprinting can run on a 20-qubit quantum classifier and be benchmarked against XGBoost on CIC-IDS 2017 packet captures.",
       "summary": "The talk looks at passive operating system fingerprinting, which identifies the OS behind captured network traffic without sending any probes to the target. The speaker uses nPrint to convert packet captures into binary feature columns, then removes identifying fields such as IP addresses so a model cannot simply memorize the answers. The classical baseline is the XGBoost gradient-boosting model from the open-source OSIRIS-ML tool.\n\nThe core experiment swaps that classifier for a hybrid quantum-classical model. Each of 20 binary features is encoded into one of 20 qubits, the qubits are linked in a linear entanglement layout, and the measured outputs feed a small classical neural network that predicts among 12 OS classes. Over 50 training epochs on a simulator, the quantum model reached a weighted F1 of 0.348 against 0.361 for XGBoost on the same features, with accuracy of 42.9% versus 45.85%. It used about 1,228 trainable parameters, compared with more than 33,000 for the baseline.\n\nThe speaker is clear about the limits: the runs used a simulator rather than noisy hardware, some training runs collapsed, and the circuit was small. A classical baseline built on the top 20 features from a much larger set scored about 49%. The takeaway is that quantum machine learning can be applied to security workloads beyond cryptography, and that the method can be reproduced on a modern GPU. Larger circuits, continuous features and real quantum hardware are named as next steps.",
       "durationSeconds": 1029,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "VGYQMAZ3Fxs",
@@ -2164,7 +2194,8 @@
       "teaser": "Shows how an attacker escapes the Python sandbox behind Microsoft Copilot Studio's code interpreter, then defeats the LLM guardrail that screens the code.",
       "summary": "The talk starts with Microsoft Copilot Studio, where agents can run Python through a code interpreter. The presenters treat that interpreter as a target. Behind it sit a Windows container on Azure Service Fabric, a Python sandbox, and a small language model that decides whether each piece of code is safe to run. They picked the smallest model in the settings, expecting it to be the easiest to get past.\n\nEarly probes used module introspection and file-reading helpers to reach sandbox internals and TLS material. The guardrail turned out to be non-deterministic: the same payload sometimes passed and sometimes failed. Its API responses also echoed its security reasoning, which gave the team feedback for refining payloads. Walking Python's method resolution order got around the dunder filters. The team then found a hard-coded administrator credential in a related Dataverse plugin environment that also appeared in the Copilot containers, and it cracked quickly. The haul included certificates, private keys, around 75 environment variables, and application source, along with command execution as a container user.\n\nMicrosoft first rated the reports low severity. The speakers said the escape still worked in some environments after the tickets were marked fixed, and they released their tooling. The takeaways: sandboxing untrusted code is hard, LLM-based guardrails are fallible, and organizations should keep sensitive data out of agent sandboxes.",
       "durationSeconds": 2278,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "IUmESybugkc",
@@ -2184,7 +2215,8 @@
       "teaser": "Shows an automated pipeline that lifts stripped binaries to LLVM bytecode, runs static and symbolic analyzers over them, and uses fuzzing and concolic execution to turn candidate bugs into proofs of concept.",
       "summary": "The talk presents Witchcraft Solver, a pipeline that takes a stripped ELF binary with no source, symbols or harness and searches it for bugs. The speaker opens with a long digression on the limits of formal reasoning and AI claims, then argues that the practical problem is getting from a binary to a candidate vulnerability and then to a working exploit input.\n\nThe pipeline lifts binaries to LLVM bytecode using several open-source lifters. Function boundaries are recovered from exception-handling frame sections instead of relying on IDA. Sink functions come from sanitizer backtraces produced by OSS-Fuzz and ARVO. The bytecode then goes to several symbolic and abstract-interpretation analyzers, and an LLM triages the reports. On FFmpeg, about 26 candidates were flagged, and the triage separated false positives from a few real memory corruptions. A comparison on a libjpeg-turbo bug with no public exploit contrasts coverage-based fuzzing, directed fuzzing and concolic execution on a stripped binary.\n\nThe closing section looks at future work toward machine-checked proofs and at the preservation of vulnerability records, including the revival of the BugTraq mailing list. A demonstration of a type-confusion flaw in the Lean prover makes the point that proof tools also have bugs. The takeaway is that binary-only pipelines can reach real programs, but their output still needs human or formal verification.",
       "durationSeconds": 3427,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "nwst-KcFV_M",
@@ -2204,7 +2236,8 @@
       "teaser": "Opens DEF CON 34 with the founder's welcome, covering how the event is organized, its community norms, this year's agency theme, and milestone anniversaries.",
       "summary": "The founder opens DEF CON 34 by asking first-timers and returning attendees to raise their hands, then explains how the conference works as a set of smaller communities. With roughly 27,000 people present, he describes how villages and hands-on activities such as lock picking or robot hacking split attendees into small groups where they can meet people who share their interests. He says there is no single correct way to attend and encourages people to make a few plans a day and expect many side trips.\n\nHe traces the event's inclusive culture to its early years, when people judged each other by their ideas because there were no photos or video. He explains how the code of conduct was written down, how a safety team was formed, and why a public transparency report was published to earn trust. A disinvitation dispute that went to court is cited as an example of following through on those commitments. This year's theme is agency, which he frames as self-determination and community support during fast, AI-driven change.\n\nHe closes with anniversaries: 20 years of the electronic badge, 30 years of capture the flag, and the first year under new CTF organizers. He also notes that an AI agent won a challenge last year without its operator realizing it, which raises open questions about the future of CTF. The takeaway he gives is to try unfamiliar things, admit mistakes, and look for your community rather than chasing career credentials.",
       "durationSeconds": 935,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "-xZhCfuZNQc",
@@ -2225,7 +2258,8 @@
       "teaser": "Shows how untrusted Python running in a Pyodide WebAssembly sandbox escapes into Node.js or Deno host runtimes through ctypes and reflection.",
       "summary": "This talk examines Pyodide, a CPython interpreter compiled to WebAssembly with Emscripten, which several products use as a sandbox for running untrusted Python. The presenters tested seven products spanning workflow automation, spreadsheets, AI agent frameworks, CI build tooling, and desktop wrappers. In most of them, denylists blocked modules such as os and subprocess, but ctypes stayed importable, and class-hierarchy traversal could recover an import function even when it was not.\n\nWith ctypes, the escaped code can load the Emscripten exports of the process, pull out functions that run scripts, declare their signatures, and execute JavaScript on the host. On Node.js this gives immediate code execution. On Deno the outcome depends on the granted permissions, and one default configuration still reached full remote code execution. In CI, the escaped code runs beside tokens, signing keys, and release artifacts. The team reported seven escapes and four CVEs, and vendor responses varied, from archiving projects to calling the issue the deployer's responsibility.\n\nThe main takeaway is that denylists fail at the architectural level. The presenters recommended blocking ctypes at import, compiling out script-running exports, blocking reflection gadgets, and exporting only the functions an application needs. They also advised layering permissions and containers, and checking whether ctypes is importable, which host runtime is used, and which permissions are granted.",
       "durationSeconds": 2389,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "6X51khqYihk",
@@ -2267,7 +2301,8 @@
       "teaser": "Shows how notification features in first-party Microsoft services can be abused to send custom phishing pretexts from trusted Microsoft addresses.",
       "summary": "The talk starts from last year's research, when custom CSS on the Microsoft sign-in page let a phishing login look genuine. Microsoft has since blocked those CSS techniques. This year the speaker asked whether an attacker could move earlier in the chain and have Microsoft's own mail systems deliver the phishing message.\n\nThe speaker tested several built-in notification features. Azure DevOps work items let an attacker control the subject and much of the body, though default links and boilerplate had to be hidden with injected CSS. Power BI report subscriptions and the SharePoint share-by-email API gave fuller control over content. Weak recipient validation allowed external addresses, and removing licenses let the sender display name match addresses such as billing or HR on Microsoft domains. The most effective case was Entra ID adaptive cards, which render interactive forms inside the mail client. Registering an originator and getting a global provider approved let the speaker collect passwords in the message itself and then relay an MFA prompt to the victim.\n\nMicrosoft's responses were mixed. The Azure DevOps report was ruled out of bounty scope but still fixed, and the speaker reports that the global provider was approved within two days. The main takeaway is that a message with valid SPF, DKIM and DMARC from a Microsoft address does not prove it came from Microsoft's customer or from the sender it claims. Defenders should treat SaaS notification abuse as a real phishing vector and review how external recipients and interactive cards are handled in their tenants.",
       "durationSeconds": 2612,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "UCuoLtom3sI",

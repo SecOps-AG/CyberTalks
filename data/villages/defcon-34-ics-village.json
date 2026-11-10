@@ -45,7 +45,8 @@
       "teaser": "Shows how OT defenders can use the open-source ICSForge tool to safely test whether firewalls and network monitoring sensors catch ICS attack traffic.",
       "summary": "The talk opens with the problem: OT defenders often assume their firewalls, segmentation and network monitoring sensors work against industrial attacks, but proving it usually means risky scanning or sending harmful commands to live controllers. The speaker, an OT security lead, presents ICSForge as a safer way to check these controls, and notes that most breach and adversary simulation tools target IT, while the OT options he found were commercial.\n\nThe middle of the talk walks through the architecture. A sender generates live or pre-built traffic from roughly 600 scenarios mapped to MITRE ATT&CK for ICS, covering ten industrial protocols such as Modbus, DNP3, S7comm, OPC UA, BACnet and GOOSE. A receiver acts as a harmless sinkhole. Operators can check whether a firewall passes the traffic and whether a monitoring sensor raises an alert. Marker modes range from explicit payload tags to stealth traffic that looks like normal device output, and multi-step campaigns can replay attack chains.\n\nThe speaker closes by describing the workflow: traffic that reaches the receiver or goes unalerted marks a gap to fix, and results can be turned into reports for SOC teams and management. He is candid about limits. Traffic is one-way with no device responses, there is no response content detection, and the tool does not replace a penetration test. It is GPL-3 licensed and can run on two lightweight devices such as Raspberry Pis.",
       "durationSeconds": 1187,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "WJz79YGNKXs",
@@ -86,7 +87,8 @@
       "teaser": "Shows how refrigeration controllers from two major vendors were compromised through firmware extraction, emulation and chained flaws.",
       "summary": "The talk looks at the controllers that run compressors, fans and heaters in supermarkets, pharmacies and cold warehouses. The researchers argue that compromising these systems could disrupt food and medicine supply. They chose two widely deployed products, a Danfoss controller and a Copeland (Dixell) controller, with the goal of reaching unauthenticated remote code execution on both.\n\nOn the Danfoss unit, the firmware came from the vendor's public download. The team identified an ARM Linux binary and ran it under emulation. They found a web login that accepted a daily password computed from the device date and hard-coded values, plus an OS command injection in the SMTP settings page. Chaining the two gave code execution. The Copeland firmware was encrypted, so they desoldered the flash chip and dumped it directly. Searching the image for Lua os.execute calls revealed many command injection flaws. An SSH daily password was also derived from embedded keys, the MAC address and the date.\n\nTo show impact, the team built a small refrigerator with a field controller linked over Modbus RTU. Through the compromised controller they changed the displayed temperature and cut cooling, so contents warmed without any visible alarm. They also reported thousands of exposed devices and techniques for tying them to store locations and owners. The vendors shipped firmware fixes after coordinated disclosure. The takeaways: avoid predictable secrets, limit internet exposure and patch regularly, since the retail sector lags other OT domains in security maturity.",
       "durationSeconds": 1348,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "RtM0oQCNgis",
@@ -237,7 +239,8 @@
       "teaser": "Walks through safety limits on OT network threat hunting and how to build testable hypotheses from diagrams, asset lists and firewall rules.",
       "summary": "The speaker, a hunt and incident response researcher at Idaho National Laboratory, opens with why operational technology needs different handling from office IT. Legacy processes are fragile and may not recover from disruption, and downtime or a failed device can cause physical harm, not just financial loss. He also covers site hazards that are easy to overlook, including wildlife, unfamiliar environments, and personal protective equipment that is often missing on site.\n\nHe then turns to how to collect data with minimal impact. Passive monitoring from a span port is the preferred method, with taps used only as a planned outage because breaking a serial link can cause real damage. Active scanning can brick older PLCs, so he advises against it unless the risk is understood. Host agents and memory dumps can also disrupt systems, so hands-on work should be limited and done through the site's own staff and procedures.\n\nThe core of the talk is hypothesis-driven hunting. A useful hypothesis is focused, testable, meaningful and plausible, and it should be revised when site conditions differ from the documentation. Using a sample network diagram, he shows how an HMI in the DMZ suggests a design flaw and leads to checkable claims about firewall rules, transient engineering laptops, and missing OT monitoring. The practical takeaway is to treat documentation as a starting point, verify it against reality, and report results against a list of tested hypotheses.",
       "durationSeconds": 1765,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "A-V8jzZEZ_8",
@@ -260,6 +263,28 @@
       "durationSeconds": 1576,
       "publishedAt": "2026-11-06",
       "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "oMBfwKOECpA",
+      "slug": "ics-exposed-data-centers-bypass-it-security-crank-up-the-heat-s",
+      "title": "Exposed Data Centers - Bypass IT Security, Crank Up the Heat",
+      "speakers": [
+        "Stephen Hilt",
+        "Numaan Huq"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "infrastructure",
+        "open-source",
+        "intelligence",
+        "building-automation"
+      ],
+      "teaser": "Maps US data centers against internet-exposed building automation and industrial control systems found through Shodan, and explains the physical risks.",
+      "summary": "The talk starts from a public list of about 1,200 US data centers that a news outlet had left in a cloud storage bucket. The researchers expanded it with a proximity method they call geostalking, querying Shodan for internet-facing devices near each facility. They focused on building automation such as HVAC and fire systems, and on power-supply controllers. They did not scan or touch the devices themselves, relying only on data Shodan already held.\n\nAfter filtering out honeypots, hosting-provider addresses and banners that did not match their protocols, the set narrowed to about 6,300 high-confidence exposed systems across 1,063 data centers. BACnet made up most of the findings, followed by Niagara Fox. Many devices ran protocols never meant for the open internet, and about 15 percent had a CVSS score of 9.0 or higher. The presenters stressed that location data is approximate and that the results are hypotheses, not verified intrusions. They also sketched an attack path: reconnaissance, initial access, mapping which controls run cooling and power, then disabling alarms or pushing temperatures up to damage hardware.\n\nThe main takeaway is that building automation often sits outside the Purdue model and outside the security team's control, particularly for tenants. Organizations should look for their own exposed controllers, remove unnecessary internet access, and bring OT governance into the same policies that cover IT.",
+      "durationSeconds": 1652,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     }
   ]
 }

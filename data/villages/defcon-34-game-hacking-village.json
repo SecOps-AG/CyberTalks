@@ -24,7 +24,8 @@
       "teaser": "Walks through how Super Smash Bros. Melee tournament cheats were caught using replay files, rollback analysis, and controller legality checks.",
       "summary": "The talk, given by the maintainer of the SLP Enforcer tool, looks at how the Super Smash Bros. Melee community finds players who cheat. It starts with a streamer's public accusation against a player whose character seemed to teleport when hit. Slowed-down footage of the controller overlay showed the stick changing position on nearly every frame, which pointed to an automated device, and the account was banned.\n\nNext came a disputed online match where one player claimed lag. By counting rollbacks in both replay files, the speaker found none in the accused player's copy and a few in the complainant's, so the claim fell apart. The talk then explains community rules for box-style controllers, which must emulate stick travel time and avoid firmware that guesses inputs such as ledge dashes. The SLP Enforcer runs entirely in the browser through WebAssembly, so organizers can drop in replays and get flags within seconds. It was used at Genesis, where players were allowed to finish round one before flagged players were asked to reflash their firmware.\n\nIn the question period, forging replays was called possible but impractical, since online opponents keep matching copies and in-person SD card swaps would be noticed. Live detection was harder because offline venues lack networked infrastructure, and many checks are statistical and need full games. The takeaway is that replay analysis works best with agreed rules, transparent evidence, and organizers who make the final calls.",
       "durationSeconds": 1501,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "b4zm-AMUcdM",
@@ -107,7 +108,8 @@
       "teaser": "Shows a compile-time anti-cheat for Unity DOTS games that relocates sensitive fields such as lives and score across struct boundaries, so memory-scanning cheats break after each build.",
       "summary": "The talk presents a build-time anti-cheat for Unity games built on the DOTS entity-component stack. The speaker starts with how cheaters work: runtime memory scans, array-of-bytes signatures, pointer chains, and static patching. Existing defenses such as kernel watchdogs, bytecode VMs, and control-flow flattening are weighed against those attacks. The central idea is to find components with identical lifetimes and relocate sensitive fields like lives or score into a peer component.\n\nThe implementation runs as a post-processing pass over Common Intermediate Language. It builds its own basic blocks, performs lifetime analysis over initialization and destruction sites, and checks each candidate move against eligibility rules. Field accesses are then rewritten, with component lookups injected where the target is out of scope. Much of the rewriter code was produced by coding agents steered by build output and CIL dumps. In a demo on an open-source breakout game, a memory-scan cheat that set lives worked before the change and found no matches after it. The pass added roughly 400 to 500 milliseconds to a build that takes about a minute, and five trials showed no measurable frame-time change.\n\nThe speaker is candid about limits. Runtime scans still succeed for an attacker willing to rescan after each patch, and networking, renderer, and physics data are out of scope. Agent-written code quality was uneven. The takeaway is that relocation raises attacker cost and downtime rather than stopping cheating, and the work is a proof of concept shared as a Unity pass.",
       "durationSeconds": 2518,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     }
   ]
 }

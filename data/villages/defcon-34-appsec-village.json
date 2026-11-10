@@ -24,7 +24,8 @@
       "teaser": "Shows how a ChatGPT code sandbox was chained into a command-and-control channel using spreadsheet parsing abuse, reasoning injection, and covert signaling over a shared package proxy.",
       "summary": "The talk starts from two assumptions about ChatGPT: a user's private chats should stay private, and code execution in the sandbox is isolated and cannot reach the internet. The speaker set out to break both. A link with a prefilled prompt could trigger the chat without a user decision on some platforms. Inspecting the sandbox's environment variables revealed its components: a Python tool, a file-parsing tool, and a package proxy that used shared, clear-text credentials. Malicious code hidden in a spreadsheet cell ran during parsing, outside the model's view and without a timeout. The speaker then patched the internal Jupyter kernel so that injected text returned through the hidden reasoning channel steered the model into sending sensitive data out.\n\nGetting data out was harder. A scheduled task ran in a sandbox with internet access, but the model refused direct requests to send private information. The package proxy's login rate limits were shared across all sandboxes, so the speaker encoded bits as lockout states on usernames, forming a half-duplex covert channel. Load-balanced proxy nodes initially broke the protocol until the speaker counted the nodes and adjusted it. The combined chain gave a working command-and-control path, shown in a demo that listed, read, and deleted a file in a separate victim sandbox.\n\nThe main takeaways are to treat every downloaded file as untrusted, including ones you only asked the assistant to edit, to be cautious about macros, and not to assume that sandboxing or model-side guardrails block data exfiltration.",
       "durationSeconds": 1778,
-      "publishedAt": "2026-11-06"
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
     }
   ]
 }
