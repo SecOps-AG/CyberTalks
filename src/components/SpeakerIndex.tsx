@@ -1,43 +1,63 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import type { Speaker } from "@/lib/types";
-import { isLikelyPersonSpeaker } from "@/lib/speakerHeuristics";
 import { Pagination } from "@/components/browser/Pagination";
 
 const PAGE_SIZE = 100;
 const REPEAT_CAP = 48;
-const FEATURED_CAP = 72;
 const MIN_QUERY = 2;
 
+export type SpeakerRow = Pick<Speaker, "name" | "slug" | "talkCount">;
+
 /**
- * Search-first speaker directory. Never mounts the full ~27k junk-inflated list:
- * empty state shows featured repeat presenters; results paginate after search.
+ * Search-first speaker directory. The page only ships the frequent presenters
+ * and the person count; the full name list loads the first time the search
+ * field is used.
  */
-export function SpeakerIndex({ speakers }: { speakers: Speaker[] }) {
+export function SpeakerIndex({
+  repeats,
+  personCount,
+}: {
+  repeats: SpeakerRow[];
+  personCount: number;
+}) {
   const [needle, setNeedle] = useState("");
   const [page, setPage] = useState(1);
+  const [people, setPeople] = useState<SpeakerRow[] | null>(null);
+  const [failed, setFailed] = useState(false);
+  const requested = useRef(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const query = needle.trim().toLowerCase();
   const searching = query.length >= MIN_QUERY;
 
-  const personSpeakers = useMemo(
-    () => speakers.filter((speaker) => isLikelyPersonSpeaker(speaker.name)),
-    [speakers],
-  );
+  const loadPeople = useCallback(() => {
+    if (requested.current) return;
+    requested.current = true;
+    fetch("/api/speakers")
+      .then((response) => {
+        if (!response.ok) throw new Error(`Speakers returned ${response.status}`);
+        return response.json() as Promise<{ speakers?: [string, string, number][] }>;
+      })
+      .then((body) =>
+        setPeople((body.speakers ?? []).map(([name, slug, talkCount]) => ({ name, slug, talkCount }))),
+      )
+      .catch(() => {
+        requested.current = false;
+        setFailed(true);
+      });
+  }, []);
 
-  const featured = useMemo(
-    () =>
-      personSpeakers
-        .filter((speaker) => speaker.talkCount > 1)
-        .slice(0, FEATURED_CAP),
-    [personSpeakers],
-  );
+  // Wider screens focus the field on load. Phones do not: it would open the keyboard.
+  useEffect(() => {
+    if (window.matchMedia("(min-width: 600px)").matches) inputRef.current?.focus();
+  }, []);
 
   const matching = useMemo(() => {
-    if (!searching) return [];
-    return personSpeakers.filter((speaker) => speaker.name.toLowerCase().includes(query));
-  }, [personSpeakers, query, searching]);
+    if (!searching || !people) return [];
+    return people.filter((speaker) => speaker.name.toLowerCase().includes(query));
+  }, [people, query, searching]);
 
   const alphabetical = useMemo(
     () => matching.slice().sort((a, b) => a.name.localeCompare(b.name)),
@@ -58,30 +78,26 @@ export function SpeakerIndex({ speakers }: { speakers: Speaker[] }) {
     if (page > totalPages) setPage(totalPages);
   }, [page, totalPages]);
 
-  const repeats = useMemo(
-    () =>
-      personSpeakers
-        .filter((speaker) => speaker.talkCount > 1)
-        .slice(0, REPEAT_CAP),
-    [personSpeakers],
-  );
-
   return (
     <div className="space-y-8">
       <input
         type="search"
         value={needle}
-        onChange={(event) => setNeedle(event.target.value)}
+        ref={inputRef}
+        onFocus={loadPeople}
+        onChange={(event) => {
+          loadPeople();
+          setNeedle(event.target.value);
+        }}
         placeholder="Search speakers by name…"
         aria-label="Search speakers"
-        className="field max-w-md"
-        autoFocus
+        className="field max-w-md max-[599px]:min-h-12"
       />
 
       {!searching ? (
         <p className="max-w-2xl text-sm text-mint/50">
           Type at least {MIN_QUERY} characters to search{" "}
-          {personSpeakers.length.toLocaleString("en-US")} person names. Company names,
+          {personCount.toLocaleString("en-US")} person names. Company names,
           conference titles, and other non-speaker credits are hidden here until the catalog
           cleanup lands.
         </p>
@@ -107,11 +123,17 @@ export function SpeakerIndex({ speakers }: { speakers: Speaker[] }) {
         </section>
       ) : null}
 
-      {!searching && featured.length === 0 ? (
+      {!searching && repeats.length === 0 ? (
         <p className="text-sm text-mint/50">Search for a speaker name to browse the archive.</p>
       ) : null}
 
-      {searching ? (
+      {searching && !people ? (
+        <p className="text-sm text-mint/50" role="status">
+          {failed ? "Could not load speaker names. Try again." : "Loading speaker names…"}
+        </p>
+      ) : null}
+
+      {searching && people ? (
         <section>
           <h2 className="mb-3 border-b border-acid/15 pb-2 font-display text-xs uppercase tracking-[0.2em] text-cyan">
             {alphabetical.length.toLocaleString("en-US")} matching
@@ -126,7 +148,7 @@ export function SpeakerIndex({ speakers }: { speakers: Speaker[] }) {
                   <li key={speaker.slug}>
                     <Link
                       href={`/speakers/${speaker.slug}`}
-                      className="flex items-baseline justify-between gap-3 border-b border-acid/10 py-1.5 text-[13px] text-mint/80 transition hover:text-acid"
+                      className="flex items-baseline justify-between gap-3 border-b border-acid/10 py-1.5 text-[13px] max-[599px]:py-3 text-mint/80 transition hover:text-acid"
                     >
                       <span className="truncate">{speaker.name}</span>
                       <span className="shrink-0 tabular-nums text-[11px] text-mint/35">

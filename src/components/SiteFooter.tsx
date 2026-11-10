@@ -18,17 +18,17 @@ export function SiteFooter() {
             <span>{stats.villages} villages</span>
             <span>{stats.events} events</span>
           </div>
-          <div className="flex flex-wrap gap-x-5 gap-y-1">
-            <Link href="/" className="hover:text-cyan">
+          <div className="flex flex-wrap gap-x-5 gap-y-1 max-[599px]:gap-y-0">
+            <Link href="/" className="hover:text-cyan max-[599px]:inline-flex max-[599px]:min-h-11 max-[599px]:items-center">
               Browse
             </Link>
-            <Link href="/topics" className="hover:text-cyan">
+            <Link href="/topics" className="hover:text-cyan max-[599px]:inline-flex max-[599px]:min-h-11 max-[599px]:items-center">
               Topics
             </Link>
-            <Link href="/speakers" className="hover:text-cyan">
+            <Link href="/speakers" className="hover:text-cyan max-[599px]:inline-flex max-[599px]:min-h-11 max-[599px]:items-center">
               Speakers
             </Link>
-            <Link href="/api" className="hover:text-cyan">
+            <Link href="/api" className="hover:text-cyan max-[599px]:inline-flex max-[599px]:min-h-11 max-[599px]:items-center">
               API
             </Link>
           </div>

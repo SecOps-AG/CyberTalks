@@ -105,7 +105,7 @@ export function SiteHeader() {
         <div className="flex flex-wrap items-end gap-x-3 gap-y-1.5 max-[599px]:w-full">
           <nav
             aria-label="Primary"
-            className="flex flex-wrap items-end gap-x-3 gap-y-1.5 text-[11px] uppercase tracking-[0.14em] text-mint/80 max-[599px]:w-full max-[599px]:gap-1.5 max-[599px]:text-[10px] max-[599px]:tracking-[0.06em]"
+            className="flex flex-wrap items-end gap-x-3 gap-y-1.5 text-[11px] uppercase tracking-[0.14em] text-mint/80 max-[599px]:w-full max-[599px]:gap-1.5 max-[599px]:text-[11px] max-[599px]:tracking-[0.02em]"
           >
             {NAV_GROUPS.map((group) => (
               <div
@@ -113,7 +113,7 @@ export function SiteHeader() {
                 className="flex shrink-0 flex-col gap-1 max-[599px]:grow max-[599px]:first:w-full"
               >
                 <span
-                  className={`hidden pl-0.5 text-[9px] tracking-[0.28em] sm:block ${
+                  className={`pl-0.5 text-[9px] tracking-[0.28em] max-[599px]:hidden ${
                     group.accent ? "text-cyan/75" : "text-mint/55"
                   }`}
                 >

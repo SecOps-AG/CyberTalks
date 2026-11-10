@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import { loadSpeaker, loadTopic } from "@/lib/catalog-runtime";
 import { talksSql } from "@/lib/d1/binding";
 import { readTrackTalks } from "@/lib/d1/read";
-import { loadTrackPage } from "@/lib/page-runtime";
+import { loadEventPage, loadTrackPage } from "@/lib/page-runtime";
 
 export const dynamic = "force-dynamic";
 
 type Params = { params: Promise<{ kind: string; key: string }> };
 
 /**
- * Full talk list for a topic, track, or speaker page.
+ * Full talk list for a topic, track, speaker, or event page.
  * The HTML document only includes the first page of cards.
  */
 function json(body: unknown, status = 200) {
@@ -43,6 +43,12 @@ export async function GET(_request: Request, { params }: Params) {
     }
     const page = await loadTrackPage(key);
     if (!page) return json({ error: "Not found" }, 404);
+    return json({ talks: page.talks });
+  }
+
+  if (kind === "event") {
+    const page = await loadEventPage(key);
+    if (!page || page.talks.length === 0) return json({ error: "Not found" }, 404);
     return json({ talks: page.talks });
   }
 

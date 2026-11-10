@@ -189,7 +189,7 @@ export default async function TalkPage({ params }: Props) {
       </header>
 
       {youtube ? (
-        <YouTubeEmbed videoId={talk.youtubeId} title={talk.title} />
+        <YouTubeEmbed videoId={talk.youtubeId} title={talk.title} talkId={talk.id} />
       ) : talk.mediaUrl ? (
         <LinkOutPlayer thumbnailSrc={thumbnailSrc(talk.youtubeId)} mediaUrl={talk.mediaUrl} />
       ) : null}

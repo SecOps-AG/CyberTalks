@@ -28,7 +28,7 @@ export function TrackChart({ counts }: { counts: { track: Track; count: number }
               <Link
                 href={`/tracks/${track.slug}`}
                 title={`${track.name}: ${count.toLocaleString("en-US")} talks (${share}%)`}
-                className="group grid grid-cols-[8.5rem_minmax(0,1fr)_3rem] items-center gap-3 rounded-sm px-1.5 py-1 transition hover:bg-acid/5 sm:grid-cols-[10rem_minmax(0,1fr)_3rem]"
+                className="group grid grid-cols-[8.5rem_minmax(0,1fr)_3rem] items-center gap-3 rounded-sm px-1.5 py-1 max-[599px]:py-2 transition hover:bg-acid/5 sm:grid-cols-[10rem_minmax(0,1fr)_3rem]"
               >
                 <span className="truncate text-[11px] uppercase tracking-[0.12em] text-mint/75 group-hover:text-cyan">
                   {track.name}

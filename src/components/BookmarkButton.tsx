@@ -47,7 +47,7 @@ export function BookmarkButton({ talkId, variant = "icon" }: Props) {
       className={`inline-flex items-center gap-1.5 transition ${
         variant === "full"
           ? `chip ${saved ? "!border-acid !text-acid" : ""}`
-          : `rounded p-1 hover:text-acid ${saved ? "text-acid" : "text-mint/40 hover:text-acid/70"}`
+          : `rounded p-1 max-[599px]:p-2 hover:text-acid ${saved ? "text-acid" : "text-mint/40 hover:text-acid/70"}`
       }`}
     >
       <BookmarkIcon saved={saved} />
