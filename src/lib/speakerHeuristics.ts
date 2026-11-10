@@ -1,6 +1,11 @@
 /**
- * Fast client-side filter for junk strings credited as "speakers" in village JSON.
- * Mirrors talk-ingest `scripts/lib/speaker-name-class.mjs` heuristics — keep in sync.
+ * Fast filter for junk strings credited as "speakers" in village JSON.
+ *
+ * The base rules mirror the ingest-side name classifier. The "title-like" rules
+ * further down are site-side additions: a credit that reads like a talk title
+ * (stop words, topic nouns, gerund openers) is not a person and gets no
+ * speaker page. Pure and stateless, so it runs on the server, in the build,
+ * and in the browser.
  */
 export type SpeakerNameLabel = "person" | "org" | "junk" | "unsure";
 
@@ -105,6 +110,195 @@ const YEAR_ONLY_RE = /^(19|20)\d{2}$/;
 const YEAR_IN_NAME_RE = /\b(19|20)\d{2}\b/;
 const PERSON_TOKEN_RE = /^[\p{L}][\p{L}'’.-]*$/u;
 
+/** Words that start or glue a talk title together; names do not contain them. */
+const STOP_WORDS = new Set([
+  "of", "the", "and", "for", "in", "on", "at", "to", "with", "from", "is", "are", "how",
+  "why", "what", "when", "where", "who", "vs", "via", "into", "your", "our", "my", "you",
+  "we", "using", "about", "through", "or", "as", "by", "not", "be", "can", "it", "its",
+  "this", "that", "these", "those", "an", "a", "und", "para", "con", "los", "las", "una", "por",
+]);
+
+/** Topic nouns, role words and series words that appear in titles but not in names. */
+const TITLE_WORDS = new Set([
+  "security", "cybersecurity", "cyber", "hacking", "hacker", "hackers", "hack", "hacks",
+  "attack", "attacks", "attacking", "threat", "threats", "malware", "ransomware", "phishing",
+  "exploit", "exploits", "exploiting", "exploitation", "vulnerability", "vulnerabilities",
+  "cloud", "data", "network", "networks", "networking", "system", "systems", "software",
+  "hardware", "firmware", "kernel", "code", "web", "mobile", "wireless", "iot", "embedded",
+  "device", "devices", "infrastructure", "platform", "framework", "application", "applications",
+  "apps", "app", "api", "dns", "crypto", "cryptography", "encryption", "blockchain", "privacy",
+  "identity", "authentication", "forensics", "intelligence", "analysis", "analytics",
+  "detection", "response", "incident", "risk", "compliance", "policy", "governance",
+  "management", "engineering", "development", "devops", "devsecops", "opsec", "infosec",
+  "appsec", "osint", "automation", "automated", "advanced", "modern", "practical", "ultimate",
+  "accelerated", "innovation", "technology", "technologies", "research", "design",
+  "architecture", "performance", "testing", "fuzzing", "reverse", "defense", "offensive",
+  "trends", "trend", "future", "lessons", "challenge", "challenges", "introduction",
+  "overview", "workshop", "keynote", "panel", "webinar", "webcast", "session", "sessions",
+  "talk", "talks", "interview", "interviews", "welcome", "closing", "ceremony", "ceremonies",
+  "awards", "village", "conference", "summit", "episode", "podcast", "tutorial", "demo",
+  "tools", "tool", "techniques", "strategies", "strategy", "solutions", "services",
+  "service", "enterprise", "business", "industry", "community", "foundation", "project",
+  "projects", "program", "programs", "consultant", "independent", "researcher", "founder",
+  "ceo", "cto", "ciso", "engineer", "developer", "developers", "director", "manager", "team",
+  "presenter", "speaker", "speakers", "internet", "digital", "virtual", "online", "global",
+  "open", "source", "supply", "chain", "zero", "trust", "machine", "learning", "deep",
+  "smart", "critical", "physical", "social", "linux", "windows",
+  "android", "kubernetes", "container", "containers", "aws", "azure", "google",
+  "amazon", "microsoft", "facebook", "twitter", "instagram", "alexa", "ctf", "bounty",
+  "big", "going", "dark", "token", "tokens", "memory", "stack", "protocol", "protocols",
+  "monitoring", "protection", "resilience", "safety", "surveillance", "bypass",
+  "injection", "impersonation", "takeover", "takeovers", "backdoor", "backdooring",
+  "ai", "ml", "uk", "usa", "eu", "tv", "notebook", "notebooks", "teaming", "debate", "mitre", "rootkit", "rootkits", "botnet", "botnets", "honeypot", "honeynet", "fabric",
+]);
+
+/**
+ * Words that open a talk title but are not given names. Checked on the first
+ * word only, so a surname that happens to be an English word is not caught.
+ */
+const LEADING_TITLE_WORDS = new Set([
+  "new", "building", "breaking", "real", "next", "time", "state", "world", "look", "hunting",
+  "approach", "guide", "use", "journey", "information", "model", "models", "multi", "video",
+  "generation", "life", "things", "inside", "sandbox", "computing", "better", "distributed",
+  "human", "impact", "update", "safe", "level", "malicious", "study", "execution", "language",
+  "edition", "quantum", "behind", "practices", "active", "large", "tips", "secrets", "apt",
+  "server", "stop", "product", "report", "low", "center", "breach", "free", "showcase",
+  "private", "teams", "serverless", "fast", "domain", "change", "people", "llm", "standards",
+  "news", "adversary", "generative", "technical", "full", "easy", "discovery", "history",
+  "culture", "sharing", "targeting", "intro", "practice", "reality", "before", "search",
+  "directory", "adversarial", "storage", "transformation", "password", "database", "binary",
+  "hard", "production", "great", "ways", "speed", "after", "root", "context", "compromise",
+  "old", "mentorship", "energy", "national", "keys", "radio", "value", "engine", "experience",
+  "problem", "tales", "corporate", "secret", "confidential", "mode", "health", "reversing",
+  "pipeline", "today", "runtime", "trusted", "privilege", "graph", "matters", "features",
+  "delivery", "forensic", "office", "healthcare", "international", "fault", "flow",
+  "cybercrime", "rules", "client", "create", "hardening", "autonomous", "operational",
+  "measuring", "fix", "start", "games", "flash", "evasion", "tricks", "patterns", "scanning",
+  "three", "targeted", "command", "customer", "deception", "quality", "escalation", "steps",
+  "anatomy", "cases", "vulnerable", "current", "never", "leadership", "log", "mesh", "every",
+  "chains", "passwords", "hijacking", "crisis", "insurance", "class", "show", "link",
+  "solution", "covert", "encrypted", "labs", "operation", "attacker", "channels", "content",
+  "vendor", "third", "race", "email", "executive", "broken", "neural", "novel", "sql",
+  "aware", "leading", "opportunities", "lines", "catch", "hiding", "grade", "events",
+  "firewall", "coding", "functional", "fail", "approaches", "saas", "recent", "avoid", "ask",
+  "explained", "crime", "startup", "expert", "communications", "unified", "manage", "mining",
+  "universal", "capabilities", "migration", "vehicles", "write", "latest", "pandemic",
+  "persistent", "shell", "hype", "escape", "voice", "strategic", "analyst", "warfare",
+  "backdoors", "decentralized", "invisible", "style", "actions", "intelligent", "spoofing",
+  "packet", "pitfalls", "battle", "magic", "insecure", "micro", "sustainable", "resource",
+  "extensions", "movement", "growth", "pentest", "audio", "million", "timing", "functions",
+  "walkthrough", "changes", "avoiding", "logging", "primer", "launch", "files", "prompt",
+  "reactive", "feature", "lifecycle", "exposure", "managed", "dependencies", "paths", "types",
+  "poisoning", "perfect", "informed", "metadata", "patching", "special", "function", "check",
+  "interface", "alert", "professionals", "policies", "robot", "examples", "routing", "request",
+  "internals", "toward", "towards", "bias", "takeaways", "scripting", "component", "silent",
+  "documentation", "enhanced", "crash", "connectivity", "securely", "mission", "planning",
+  "connect", "enterprises", "symbolic", "foundations", "defenders", "learnings", "actionable",
+  "initial", "tradecraft", "computers", "contest", "resources", "pattern", "finance", "false",
+  "engagement", "shells", "offense", "version", "leakage", "idea", "buffer", "trustworthy",
+  "visual", "gaps", "operator", "careers", "deploy", "payload", "reports", "telemetry",
+  "quest", "deterministic", "weapon", "convergence", "massive", "climate", "forget",
+  "syndrome", "streams", "compute", "advances", "studio", "controlled", "sourcing", "overflow",
+  "default", "structured", "verified", "filtering", "predictive", "records", "impacts",
+  "picking", "manufacturing", "prototype", "containerized", "acceleration", "certified",
+  "audits", "household", "agilely", "pseudorandom", "powitanie", "europejska", "half",
+  "user", "vr", "apache", "voidlink", "linux", "kernel", "open", "private", "public",
+]);
+
+/** Words that close a talk title; a surname is very unlikely to be one of them. */
+const TRAILING_TITLE_WORDS = new Set([
+  "experience", "internals", "numbers", "measures", "wiring", "camel", "insecure", "compliant",
+  "trustworthy", "yourself", "uncle", "set", "features", "practices", "basics", "essentials",
+  "fundamentals", "explained", "revisited", "reloaded", "unleashed", "demystified", "101",
+  "walkthrough", "roadmap", "update", "updates", "review", "recap", "keynote", "showcase",
+  "pitch", "challenge", "competition", "debate", "discussion", "overview", "workshop",
+  "masterclass", "presentation", "recording", "interview", "livestream", "stream", "notebooks",
+  "story", "stories", "lab", "labs", "tracks", "track", "stage", "room", "hall",
+]);
+
+/** Name particles that may be lower case inside a real name. */
+const NAME_PARTICLES = new Set([
+  "de", "del", "della", "di", "da", "dos", "das", "du", "van", "von", "der", "den", "la",
+  "le", "el", "al", "bin", "ibn", "ben", "ter", "ten", "st",
+]);
+
+const GERUND_FIRST_WORD_EXCEPTIONS = new Set([
+  "sterling", "irving", "stirling", "darling", "harding", "manning", "fleming", "browning",
+  "channing", "whiting", "kipling", "ewing", "bunting", "dowling", "sebring",
+]);
+const TITLE_NOUN_SUFFIXES: [string, number][] = [
+  ["tion", 8], ["sion", 8], ["ment", 9], ["ity", 8], ["ness", 7], ["ware", 6],
+  ["ics", 6], ["ogy", 6], ["ysis", 6], ["ability", 8],
+];
+
+/** Mixed phrases and symbols that never occur inside a person's name. */
+const NON_NAME_CHARS_RE = /[\d:,;/\\#@!?=+*_~<>{}[\]()&"“”]|\.{2,}|…/;
+
+function foldKey(value: string): string {
+  return value
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
+}
+
+/**
+ * The name as it should read on a page. Drops a trailing "| Event" credit
+ * ("Matteo Rebeschini | CypherCon 6.0"), a trailing country tag ("[PL]"), and
+ * stray punctuation. It never adds or invents words.
+ */
+export function cleanSpeakerName(raw: string): string {
+  let name = raw.replace(/\s+/g, " ").trim();
+  const pipe = name.search(/\s*[|｜]\s*/);
+  if (pipe > 0) name = name.slice(0, pipe).trim();
+  name = name.replace(/\s*[[(]\s*[A-Za-z]{2,3}\s*[\])]\s*$/, "").trim();
+  name = name.replace(/^[\s"'“”‘’.,;:-]+|[\s"'“”‘’,;:-]+$/g, "").trim();
+  return name;
+}
+
+export type SpeakerPageContext = {
+  title?: string;
+  eventName?: string;
+  villageName?: string;
+  eventLabel?: string;
+};
+
+export type SpeakerVerdict = { ok: boolean; name: string; reason: string };
+
+/** The reason a credited string reads like a title or label, or null when it reads like a name. */
+function titleLikeReason(name: string): string | null {
+  if (NON_NAME_CHARS_RE.test(name)) return "punctuation_or_digits";
+  const tokens = name.split(/\s+/);
+  if (tokens.length > 5) return "too_many_words";
+  if (tokens.length === 5 && !tokens.some((token) => NAME_PARTICLES.has(token.toLowerCase()))) {
+    return "too_many_words";
+  }
+  for (const token of tokens) {
+    const lower = token.toLowerCase().replace(/\.$/, "");
+    if (STOP_WORDS.has(lower) && !(lower === "a" && token === "A")) return "stop_word";
+    if (TITLE_WORDS.has(lower)) return "title_word";
+    if (/^[\p{Lu}]{2,}s$/u.test(token)) return "plural_acronym";
+    if (tokens.length >= 2 && /^\p{Ll}/u.test(token) && !NAME_PARTICLES.has(lower)) return "lowercase_word";
+    if (/\p{L}Con$/u.test(token)) return "event_name";
+  }
+  if (tokens.length >= 2) {
+    const first = tokens[0].toLowerCase();
+    if (LEADING_TITLE_WORDS.has(first)) return "title_opening";
+    if (TRAILING_TITLE_WORDS.has(tokens[tokens.length - 1].toLowerCase())) return "title_closing";
+    if (tokens.some((token) => /['’]s$/i.test(token) && token.length > 3)) return "possessive_phrase";
+    if (first.length >= 5 && first.endsWith("ing") && !GERUND_FIRST_WORD_EXCEPTIONS.has(first)) {
+      return "gerund_opening";
+    }
+    const last = tokens[tokens.length - 1].toLowerCase();
+    for (const [suffix, minLength] of TITLE_NOUN_SUFFIXES) {
+      if (last.length >= minLength && last.endsWith(suffix)) return "title_noun_ending";
+    }
+    const mixedCase = tokens.some((token) => /\p{Ll}/u.test(token));
+    if (mixedCase && tokens.some((token) => /^[\p{Lu}]{4,}$/u.test(token))) return "acronym_in_phrase";
+  }
+  return null;
+}
+
 function normalise(value: string): string {
   return value.replace(/\s+/g, " ").trim();
 }
@@ -152,6 +346,9 @@ export function classifySpeakerNameHeuristic(name: string): {
   }
   if (/^[^a-zA-Z0-9]*$/.test(trimmed)) return { label: "junk", reason: "no_letters" };
 
+  const titleLike = titleLikeReason(trimmed);
+  if (titleLike) return { label: "junk", reason: titleLike };
+
   const tokens = trimmed.split(/\s+/);
   const lastToken = tokens[tokens.length - 1] ?? "";
   if (tokens.length >= 2 && TRAILING_ORG_TOKENS.has(lastToken.toLowerCase())) {
@@ -180,4 +377,31 @@ export function classifySpeakerNameHeuristic(name: string): {
 export function isLikelyPersonSpeaker(name: string): boolean {
   const { label } = classifySpeakerNameHeuristic(name);
   return label === "person";
+}
+
+/**
+ * Whether a credited string gets its own speaker page. `ctx` is the talk it
+ * was credited on: a credit equal to that talk's title, event or village name
+ * is a mis-parsed field, not a person. The returned `name` is the cleaned
+ * display name; it is only meaningful when `ok` is true.
+ */
+export function speakerPageVerdict(raw: string, ctx: SpeakerPageContext = {}): SpeakerVerdict {
+  const name = cleanSpeakerName(raw);
+  if (!name) return { ok: false, name, reason: "empty" };
+
+  const key = foldKey(name);
+  for (const field of [ctx.title, ctx.eventName, ctx.villageName, ctx.eventLabel]) {
+    if (!field) continue;
+    const other = foldKey(field);
+    if (!other) continue;
+    if (key === other) return { ok: false, name, reason: "matches_talk_field" };
+  }
+
+  const { label, reason } = classifySpeakerNameHeuristic(name);
+  if (label !== "person") return { ok: false, name, reason };
+  return { ok: true, name, reason: "person" };
+}
+
+export function isSpeakerPageName(raw: string, ctx: SpeakerPageContext = {}): boolean {
+  return speakerPageVerdict(raw, ctx).ok;
 }

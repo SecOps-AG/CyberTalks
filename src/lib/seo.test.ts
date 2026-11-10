@@ -11,7 +11,6 @@ import {
 } from "./http-cache";
 import { chunkList, sitemapIndexXml, sitemapPaths, sitemapUrlset, SITEMAP_URL_LIMIT } from "./sitemap-build";
 import { summaryYearsToLoad } from "./summary-years";
-import { buildTitleIndex, talkDocumentTitle, type TalkTitleFields } from "./talk-title";
 import {
   TOPIC_FILTER_LIMIT,
   TOPIC_INDEX_MIN,
@@ -28,16 +27,6 @@ const topics: TopicEntry[] = [
   { topic: "hallway", label: "Hallway", count: 2 },
   { topic: "keynote", label: "Keynote", count: 1 },
 ];
-
-function talk(partial: Partial<TalkTitleFields> & Pick<TalkTitleFields, "slug" | "title">): TalkTitleFields {
-  return {
-    eventName: "DEF CON 32",
-    year: 2024,
-    villageName: "Main Stage",
-    speakers: ["Ada"],
-    ...partial,
-  };
-}
 
 describe("topic indexability", () => {
   it("noindexes topics with fewer than 3 talks and keeps larger hubs", () => {
@@ -83,97 +72,27 @@ describe("topic indexability", () => {
   });
 });
 
-describe("talk document titles", () => {
-  const talks = [
-    talk({ slug: "only", title: "Unique talk" }),
-    talk({ slug: "k1", title: "Keynote", eventName: "DEF CON 30", year: 2022 }),
-    talk({ slug: "k2", title: "Keynote", eventName: "Black Hat USA 2024", year: 2024, villageName: "Briefings" }),
-    talk({
-      slug: "h1",
-      title: "Hallway",
-      eventName: "DEF CON 32",
-      year: 2024,
-      villageName: "Recon Village",
-      speakers: ["Ann"],
-    }),
-    talk({
-      slug: "h2",
-      title: "Hallway",
-      eventName: "DEF CON 32",
-      year: 2024,
-      villageName: "Crypto Village",
-      speakers: ["Bea"],
-    }),
-    talk({
-      slug: "p1",
-      title: "Panel",
-      eventName: "DEF CON 23",
-      year: 2015,
-      villageName: "Presentations",
-      speakers: ["Ann"],
-    }),
-    talk({
-      slug: "p2",
-      title: "Panel",
-      eventName: "DEF CON 23",
-      year: 2015,
-      villageName: "Presentations",
-      speakers: ["Bea"],
-    }),
-    talk({
-      slug: "c1",
-      title: "Clip",
-      eventName: "DEF CON 20",
-      year: 2012,
-      villageName: "Extras",
-      speakers: [],
-    }),
-    talk({
-      slug: "c2",
-      title: "Clip",
-      eventName: "DEF CON 20",
-      year: 2012,
-      villageName: "Extras",
-      speakers: [],
-    }),
-  ];
-  const index = buildTitleIndex(talks);
-
-  it("leaves a one-off title alone and disambiguates reused titles with event and year", () => {
-    assert.equal(talkDocumentTitle(talks[0], index), "Unique talk");
-    assert.equal(talkDocumentTitle(talks[1], index), "Keynote — DEF CON 30 (2022)");
-    assert.equal(talkDocumentTitle(talks[2], index), "Keynote — Black Hat USA 2024 (2024)");
-  });
-
-  it("adds village, speakers, then slug only when event and year still collide", () => {
-    assert.equal(
-      talkDocumentTitle(talks[3], index),
-      "Hallway — DEF CON 32 (2024), Recon Village",
-    );
-    assert.equal(
-      talkDocumentTitle(talks[5], index),
-      "Panel — DEF CON 23 (2015), Presentations — Ann",
-    );
-    assert.equal(
-      talkDocumentTitle(talks[7], index),
-      "Clip — DEF CON 20 (2012), Extras — c1",
-    );
-    const titles = talks.map((item) => talkDocumentTitle(item, index));
-    assert.equal(new Set(titles).size, titles.length);
-  });
-});
-
 describe("sitemap paths", () => {
   const paths = sitemapPaths({
     events: [{ slug: "defcon-32" }],
     editions: [{ eventSlug: "defcon-32", villageSlug: "recon" }],
     villages: [{ slug: "recon" }],
     tracks: [{ slug: "malware" }],
-    talkSlugs: ["alpha", "alpha", "beta"],
+    talks: [
+      { slug: "alpha", conference: "defcon", summary: null },
+      { slug: "alpha", conference: "defcon", summary: null },
+      { slug: "beta", conference: "defcon", summary: "A written summary." },
+      { slug: "gamma", conference: "linux-foundation", summary: "A written summary." },
+      { slug: "unsummarised", conference: "linux-foundation", summary: null },
+      { slug: "blank", conference: "proidea", summary: "  " },
+      { slug: "repeat", conference: "linux-foundation", summary: null },
+      { slug: "repeat", conference: "linux-foundation", summary: "Later row, same slug." },
+    ],
     speakers: [
       { slug: "ada", talkCount: 2 },
       { slug: "", talkCount: 4 },
       { slug: "ghost", talkCount: 0 },
+      { slug: "solo", talkCount: 1 },
     ],
     topics: [
       { topic: "ransomware", count: 3 },
@@ -199,6 +118,17 @@ describe("sitemap paths", () => {
     assert.equal(paths.includes("/topics/keynote"), false);
     assert.equal(paths.includes("/saved"), false);
     assert.equal(paths.includes("/speakers/ghost"), false);
+  });
+
+  it("leaves out every page that carries noindex: one-talk speakers and summary-less talks outside the priority conferences", () => {
+    assert.equal(paths.includes("/speakers/solo"), false);
+    assert.ok(paths.includes("/talks/alpha"), "priority conference stays without a summary");
+    assert.ok(paths.includes("/talks/beta"));
+    assert.ok(paths.includes("/talks/gamma"), "a summary keeps a long-tail talk indexable");
+    assert.equal(paths.includes("/talks/unsummarised"), false);
+    assert.equal(paths.includes("/talks/blank"), false);
+    // The first row with a slug is the one the page renders.
+    assert.equal(paths.includes("/talks/repeat"), false);
   });
 
   it("splits url sets under the sitemap limit and builds an index", () => {

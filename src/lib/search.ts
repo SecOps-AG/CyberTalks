@@ -535,7 +535,13 @@ export function initialBrowsePage(talks: TalkIndexEntry[]): {
   talks: TalkIndexEntry[];
   total: number;
 } {
-  const filtered = filterTalks(withHaystack(talks), EMPTY_FILTERS);
+  const searchable = withHaystack(talks);
+  let filtered = filterTalks(searchable, EMPTY_FILTERS);
+  // Extras (clips, interviews, announcements) are hidden by default. A list made
+  // only of extras still has to show them, or the page reads "0 talks".
+  if (filtered.length === 0 && talks.length > 0) {
+    filtered = filterTalks(searchable, { ...EMPTY_FILTERS, includeExtras: true });
+  }
   const sorted = sortTalks(filtered, "relevance", "");
   return {
     talks: paginate(sorted, 1).items.map(stripSearchFields),

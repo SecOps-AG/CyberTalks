@@ -34,7 +34,9 @@ import {
   normalizeMaterials,
   type MaterialLink,
 } from "./materials";
-import { buildIndexEntry, slugifySpeaker } from "./search";
+import { buildIndexEntry } from "./search";
+import { speakerCredits } from "./speaker-credits";
+import { mergeTopics } from "./topic-merges";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const VILLAGE_DIR = path.join(DATA_DIR, "villages");
@@ -194,7 +196,9 @@ const getArchive = memo((): Archive => {
     });
 
     for (const talk of stored.talks) {
-      const canonicalTopics = talk.topics.map((topic) => {
+      // Taxonomy aliases first (and reported), then the spelling merges from
+      // data/topic-merges.json. A talk tagged with two spellings keeps one tag.
+      const canonicalTopics = mergeTopics(talk.topics, (topic) => {
         const canonical = canonicalizeTopic(topic, taxonomy);
         if (canonical !== topic) {
           aliasedTopics.add({ topic, canonical });
@@ -225,11 +229,14 @@ const getArchive = memo((): Archive => {
         conference: stored.conference,
         eventName: event.name,
         eventShortName: event.shortName,
-        year: event.year,
+        year: talk.year ?? event.year,
         youtubeUrl: youtube ? `https://www.youtube.com/watch?v=${talk.youtubeId}` : "",
         trackName: track ? (trackBySlug.get(track)?.name ?? track) : "",
         kind: deriveKind(talk, stored.villageSlug),
-        dateLabel: dateLabel(event.dates, event.year),
+        dateLabel:
+          talk.year != null && talk.year !== event.year
+            ? String(talk.year)
+            : dateLabel(event.dates, event.year),
         locationLabel: locationLabel(event.location),
       });
       sources.push(sourceFile);
@@ -376,8 +383,9 @@ export function getTalksForTrack(track: string): Talk[] {
 
 /**
  * The speaker index, derived from `talk.speakers` — data/ stores names only,
- * so there is no speaker file to keep in sync. Names that slugify to nothing
- * are dropped rather than given an unreachable page.
+ * so there is no speaker file to keep in sync. Credits that read like a talk
+ * title, an event, or a label (see speakerHeuristics) are dropped rather than
+ * given a page, as are names that slugify to nothing.
  */
 export const getSpeakers = memo((): Speaker[] => {
   type Draft = {
@@ -391,9 +399,8 @@ export const getSpeakers = memo((): Speaker[] => {
   const bySlug = new Map<string, Draft>();
 
   for (const talk of getTalks()) {
-    for (const name of talk.speakers) {
-      const slug = slugifySpeaker(name);
-      if (!slug) continue;
+    const credits = speakerCredits(talk);
+    for (const { slug, name } of credits) {
       const record = bySlug.get(slug) ?? {
         slug,
         spellings: new Map(),
@@ -408,10 +415,8 @@ export const getSpeakers = memo((): Speaker[] => {
       if (inDefconVillage(talk)) record.villages.add(talk.villageSlug);
 
       // Add co-speakers (other speakers on this talk)
-      for (const otherName of talk.speakers) {
-        if (otherName === name) continue;
-        const otherSlug = slugifySpeaker(otherName);
-        if (otherSlug) record.coSpeakers.add(otherSlug);
+      for (const other of credits) {
+        if (other.slug !== slug) record.coSpeakers.add(other.slug);
       }
 
       bySlug.set(slug, record);
@@ -441,9 +446,7 @@ export function getSpeaker(slug: string): Speaker | undefined {
 }
 
 export function getTalksForSpeaker(slug: string): Talk[] {
-  return getTalks().filter((talk) =>
-    talk.speakers.some((name) => slugifySpeaker(name) === slug),
-  );
+  return getTalks().filter((talk) => speakerCredits(talk).some((credit) => credit.slug === slug));
 }
 
 export const getStats = memo((): ArchiveStats => {

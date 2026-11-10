@@ -18,9 +18,12 @@ import { talkDescription, talkJsonLd } from "@/lib/json-ld";
 import { isDefconVillageTalk, villageEditionPath, villageSeriesPath } from "@/lib/hubs";
 import { difficultyLabel, normalizeDifficulty } from "@/lib/labels";
 import { isYouTubeId, publicMaterialBands, thumbnailSrc } from "@/lib/materials";
+import { talkRobots } from "@/lib/indexability";
 import { formatDuration, slugifySpeaker } from "@/lib/search";
+import { displaySpeakerName, speakerContext, speakerCredits } from "@/lib/speaker-credits";
+import { speakerPageVerdict } from "@/lib/speakerHeuristics";
 import { siteUrl } from "@/lib/site-url";
-import { talkDocumentTitle, type TitleIndex } from "@/lib/talk-title";
+import { EMPTY_TITLE_INDEX, talkDocumentTitle, type TitleIndex } from "@/lib/talk-title";
 import { topicLabels } from "@/lib/topic-labels";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -42,21 +45,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     {
       title: talk.title,
       eventName: talk.eventName,
+      eventLabel: talk.eventLabel,
       year: talk.year,
       villageName: talk.villageName,
-      speakers: talk.speakers,
+      speakers: speakerCredits(talk).map((credit) => credit.name),
       slug: talk.slug,
     },
-    titleIndex as TitleIndex,
+    (titleIndex as Partial<TitleIndex>).sameTitle ? (titleIndex as TitleIndex) : EMPTY_TITLE_INDEX,
   );
-  const description = talkDescription(talk);
+  const description = talkDescription(talk, topicLabels());
   const talkUrl = canonicalUrl(`/talks/${encodeURIComponent(slug)}`);
   const thumb = thumbnailSrc(talk.youtubeId);
   const thumbnailUrl = thumb.startsWith("/") ? `${siteUrl()}${thumb}` : thumb;
 
   return {
-    title,
+    // The layout template would add " — Cyber Talks"; talkDocumentTitle decides that itself.
+    title: { absolute: title },
     description,
+    robots: talkRobots(talk),
     alternates: { canonical: talkUrl },
     openGraph: {
       title,
@@ -121,8 +127,11 @@ export default async function TalkPage({ params }: Props) {
         </h1>
         {talk.speakers.length > 0 ? (
           <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-mint/85">
-            {talk.speakers.map((speaker, index) => {
-              const slug = slugifySpeaker(speaker);
+            {talk.speakers.map((raw, index) => {
+              const speaker = displaySpeakerName(raw);
+              // Only credits that read like a person get a page to link to.
+              const verdict = speakerPageVerdict(raw, speakerContext(talk));
+              const slug = verdict.ok ? slugifySpeaker(verdict.name) : "";
               return (
                 <span key={`${speaker}-${index}`} className="flex items-center gap-2">
                   {index > 0 ? (

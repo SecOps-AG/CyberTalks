@@ -12,6 +12,9 @@ const baseTalk = {
   speakers: ["Ada Lovelace", "Alan Turing"],
   villageName: "Recon Village",
   eventName: "DEF CON 33",
+  eventSlug: "defcon-33",
+  conference: "defcon",
+  year: 2025,
   youtubeId: "dQw4w9WgXcQ",
   mediaUrl: null,
   durationSeconds: 3725,
@@ -90,9 +93,12 @@ describe("json-ld", () => {
     assert.equal(ld.uploadDate, undefined);
   });
 
-  it("falls back to a who/where line, and omits dates and duration it does not have", () => {
+  it("falls back to a factual line, and omits dates and duration it does not have", () => {
     const ld = talkJsonLd({ ...baseTalk, teaser: undefined, publishedAt: undefined, durationSeconds: undefined });
-    assert.equal(ld.description, "Ada Lovelace, Alan Turing — Recon Village, DEF CON 33.");
+    assert.equal(
+      ld.description,
+      "Ada Lovelace and Alan Turing at DEF CON 33 (Recon Village): OSINT, recon. Watch the video on Cyber Talks.",
+    );
     assert.equal(ld.uploadDate, undefined);
     assert.equal(ld.duration, undefined);
   });

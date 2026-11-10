@@ -1,5 +1,7 @@
 import { HUBS } from "./hubs";
+import { SPEAKER_INDEX_MIN, talkIsIndexable } from "./indexability";
 import { TOPIC_INDEX_MIN } from "./topic-indexability";
+import type { TalkSummary } from "./types";
 
 /** Stay under the 50,000 URL sitemap limit with room for the core pages. */
 export const SITEMAP_URL_LIMIT = 40_000;
@@ -9,7 +11,12 @@ export type SitemapInput = {
   editions: readonly { eventSlug: string; villageSlug: string }[];
   villages: readonly { slug: string }[];
   tracks: readonly { slug: string }[];
-  talkSlugs: readonly string[];
+  /** Archive order. For a repeated slug the first row is the one the page renders. */
+  talks: readonly {
+    slug: string;
+    conference: string;
+    summary?: string | TalkSummary | null;
+  }[];
   speakers: readonly { slug: string; talkCount: number }[];
   topics: readonly { topic: string; count: number }[];
 };
@@ -40,8 +47,10 @@ function segment(value: string): string {
 }
 
 /**
- * Indexable URLs only. Parameterized search, saved talks, and thin topics
- * are left out. Speaker pages are included: each slug is a real talk list.
+ * Indexable URLs only. Parameterized search, saved talks, and thin topics are
+ * left out, and so are the pages that carry `noindex`: speakers with fewer than
+ * SPEAKER_INDEX_MIN talks, and talks with no summary outside the priority
+ * conferences (see indexability.ts).
  */
 export function sitemapPaths(input: SitemapInput): string[] {
   const seen = new Set<string>();
@@ -79,11 +88,18 @@ export function sitemapPaths(input: SitemapInput): string[] {
   const tracks = input.tracks.map((track) => track.slug).sort((a, b) => a.localeCompare(b));
   for (const slug of tracks) add(`/tracks/${segment(slug)}`);
 
-  const talks = input.talkSlugs.slice().sort((a, b) => a.localeCompare(b));
+  const firstBySlug = new Map<string, (typeof input.talks)[number]>();
+  for (const talk of input.talks) {
+    if (!firstBySlug.has(talk.slug)) firstBySlug.set(talk.slug, talk);
+  }
+  const talks = [...firstBySlug.values()]
+    .filter((talk) => talkIsIndexable(talk))
+    .map((talk) => talk.slug)
+    .sort((a, b) => a.localeCompare(b));
   for (const slug of talks) add(`/talks/${segment(slug)}`);
 
   const speakers = input.speakers
-    .filter((speaker) => speaker.slug && speaker.talkCount > 0)
+    .filter((speaker) => speaker.slug && speaker.talkCount >= SPEAKER_INDEX_MIN)
     .map((speaker) => speaker.slug)
     .sort((a, b) => a.localeCompare(b));
   for (const slug of speakers) add(`/speakers/${segment(slug)}`);

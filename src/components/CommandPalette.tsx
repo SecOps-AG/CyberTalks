@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { inDefconVillage, villageSeriesPath } from "@/lib/hubs";
-import { filterTalks, withHaystack, slugifySpeaker, EMPTY_FILTERS } from "@/lib/search";
+import { filterTalks, withHaystack, EMPTY_FILTERS } from "@/lib/search";
+import { speakerCredits } from "@/lib/speaker-credits";
 import type { TalkIndexEntry } from "@/lib/types";
 
 type ResultItem = {
@@ -60,9 +61,8 @@ function buildResults(query: string, talks: TalkIndexEntry[]): ResultItem[] {
   // Speakers
   const speakerMap = new Map<string, string>();
   for (const talk of talks) {
-    for (const speaker of talk.speakers) {
-      const slug = slugifySpeaker(speaker);
-      if (slug && !speakerMap.has(slug)) speakerMap.set(slug, speaker);
+    for (const { slug, name } of speakerCredits(talk)) {
+      if (!speakerMap.has(slug)) speakerMap.set(slug, name);
     }
   }
   for (const [slug, name] of [...speakerMap.entries()].filter(([, n]) => terms.every((term) => n.toLowerCase().includes(term))).slice(0, 3)) {
