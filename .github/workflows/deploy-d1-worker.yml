@@ -2,15 +2,6 @@ name: Deploy cybertalks-d1
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "scripts/d1/deploy-once"
-      - "wrangler.jsonc"
-      - "package.json"
-      - "package-lock.json"
-      - "src/**"
-      - "migrations/d1/**"
 
 concurrency:
   group: deploy-cybertalks-d1
@@ -32,8 +23,6 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Require the one-shot marker
-        run: test -f scripts/d1/deploy-once
       - name: Record the current worker version
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
