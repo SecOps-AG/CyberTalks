@@ -10,6 +10,7 @@ import { MaterialsList } from "@/components/MaterialsList";
 import { YouTubeEmbed } from "@/components/YouTubeEmbed";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import { WatchedMarker } from "@/components/WatchedMarker";
+import { WatchedButton } from "@/components/WatchedButton";
 import titleIndex from "@/generated/talk-titles.json";
 import { loadTalk } from "@/lib/catalog-runtime";
 import { canonicalUrl } from "@/lib/canonical";
@@ -174,6 +175,7 @@ export default async function TalkPage({ params }: Props) {
             </Link>
           ) : null}
           {youtube ? <WatchedMarker talkId={talk.id} youtubeUrl={talk.youtubeUrl} /> : null}
+          <WatchedButton talkId={talk.id} youtubeId={talk.youtubeId || undefined} />
           <BookmarkButton talkId={talk.id} variant="full" />
         </div>
       </header>
