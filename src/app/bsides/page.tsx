@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-meta";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import { loadHubPage } from "@/lib/page-runtime";
 import { topicLabels } from "@/lib/topic-labels";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "BSides",
   description: "Browse BSides talks in the archive.",
-};
+  path: "/bsides",
+});
 
 export default async function BsidesHubPage() {
   const { talks } = await loadHubPage("bsides");

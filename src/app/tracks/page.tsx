@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-meta";
 import Link from "next/link";
 import { loadTrackCounts } from "@/lib/page-runtime";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Tracks",
   description: "Talks grouped by the kind of work they cover — offense, defense, and domain.",
-};
+  path: "/tracks",
+});
 
 const STANCE_ORDER = ["recon", "offense", "both", "defense", "domain"] as const;
 const STANCE_LABEL: Record<string, string> = {

@@ -1,0 +1,122 @@
+{
+  "villageSlug": "cryptocurrency-village",
+  "villageName": "Cryptocurrency Village",
+  "eventSlug": "defcon-34",
+  "conference": "defcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLMEPQXhnEhfE",
+  "description": "Cryptocurrency Village talks from DEF CON 34.",
+  "talks": [
+    {
+      "youtubeId": "8SoOzG5rmrQ",
+      "slug": "ccv-breaking-ciphers-and-0-knowledge-proofs-l-szramowski-d-salaz",
+      "title": "Breaking Ciphers and Zero Knowledge Proofs",
+      "speakers": [
+        "Luke Szramowski",
+        "Diego Salazar",
+        "Rigo Salazar"
+      ],
+      "track": "community",
+      "topics": [
+        "cryptography",
+        "frequency-analysis",
+        "kasiski-method",
+        "vigenere-cipher",
+        "village"
+      ],
+      "teaser": "Walks attendees through breaking classic ciphers by hand, from shift and substitution ciphers to the Vigenère cipher and the Kasiski method.",
+      "summary": "This hands-on workshop from the Cryptocurrency Village has attendees break classic ciphers themselves instead of only reading about them. The session starts with the shift cipher, where there are only 25 useful alphabets and a couple of letters can reveal the shift. Participants work through encrypted messages from a handout, and the presenters use each one to show why the weakness exists.\n\nThe middle section moves to substitution ciphers. The presenters explain why brute force fails against a random alphabet, since the possible keys number roughly 26 factorial, and then show how frequency analysis narrows the search. Useful clues include letter counts compared with English text, short common words, apostrophes followed by an S, and vowel patterns in two-letter words. The recurring point is that human habits leak into implementations, and statistics can shrink a huge key space.\n\nThe session then covers polyalphabetic substitution, using a keyword to shift letters in the Vigenère cipher. It ends by introducing the Kasiski method: find repeated strings, measure the distances between them, and use common factors to estimate the key length. The presenters ran short of time and said the Kasiski walkthrough would continue the next day. The takeaway is that each cipher upgrade fixes one weakness and exposes another, which mirrors how real cryptography is tested and improved.",
+      "durationSeconds": 3186,
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "ZlhFKmdxMp8",
+      "slug": "ccv-hanley-shun-cong-zhang-oscar-skjerven",
+      "title": "Evading LLM Detection",
+      "speakers": [
+        "Hanley Shun",
+        "Cong Zhang",
+        "Oscar Skjerven"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "supply",
+        "malware-analysis",
+        "detection"
+      ],
+      "teaser": "Shows how a crypto exchange built an LLM-based scanner to gate code merges, and how internal testers bypassed it.",
+      "summary": "The speaker, from a crypto exchange's security team, explains why supply chain attacks on npm and PyPI packages need more than signature rules. Their team used an AI model to read suspicious code and reason about intent, which caught obfuscated payloads, including one in a package with billions of weekly downloads. Because the model judges behaviour rather than matching known patterns, it could flag hidden logic that scanners had missed.\n\nThe core of the talk is an internal capture-the-flag exercise in which engineers tried to push malicious code past an LLM check placed in front of a CI build. The first bypasses exploited the model's limits: flooding it with so many files that a tampered file was skipped, hiding a payload inside an image file, and planting prompt-injection text in comments. Each fix required large redesigns, which led the team to a multi-agent setup with an orchestrator and a second verifying agent, plus a separate binary-analysis step. A later bypass used Git submodules that pointed to earlier commits, and the team had to fall back on hardening the build environment with conventional controls.\n\nThe takeaways are practical. LLM scanning avoids maintaining large signature databases, but it brings false positives, inconsistent output, and real cost. The speaker recommends starting with one agent on a narrow focus, combining it with fast tools such as Semgrep, using cheaper models where possible, and keeping model reasoning out of reach of anyone who could exploit it.",
+      "durationSeconds": 1782,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "8V5JYpMzEpo",
+      "slug": "ccv-cryptohack-badge-hacking-do",
+      "title": "Cryptohack Badge Hacking",
+      "speakers": [
+        "Do Truong Giang",
+        "Sadiq",
+        "Arjun Suresh"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "device",
+        "embedded",
+        "attack",
+        "trust"
+      ],
+      "teaser": "Explains how a Cryptohack badge signs crypto transactions on-device and walks through the hardware attack surfaces an attacker with physical access could try.",
+      "summary": "The talk, given by members of the Cryptocurrency Village, explains how a challenge badge was built to work like a hardware wallet at a fraction of the usual price. The companion app holds no secrets and only relays requests. The badge keeps the seed, signs transactions on the device, and shows the destination address on its own screen so a compromised app cannot swap it unnoticed. The design includes a dedicated approve button wired straight to the microcontroller, custom display drawing code, and end-to-end encryption over USB or Bluetooth, with a secure element handling key material.\n\nThe second half turns to the case where an attacker physically holds the badge. The speaker, who described himself as still learning, lists six broad hardware attack classes: flash dumping, fault injection, side-channel analysis, debug port access, secure element attacks, and counterfeit swaps. Fault injection gets the most detail, since the ESP32-C3 microcontroller is not hardened against glitching. Keeping the seed inside the secure element means a flash dump yields only ciphertext and nonces, not anything spendable.\n\nIn the question period, the speakers covered provisioning. A one-time setup flow loads the seed into the secure element and burns eFuses so the provisioning firmware cannot be reflashed. Firmware releases are signed by the organizers, and most of the code is open source, though the secure element driver is under NDA and closed. The session closed with an invitation to try the village's hands-on CTF badges.",
+      "durationSeconds": 1637,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "i4OW7W2Eeko",
+      "slug": "ccv-cryptocurrency-closing-keynote",
+      "title": "Crypto Currency Closing Keynote",
+      "speakers": [
+        "Michael Schloh",
+        "Diego Salazar"
+      ],
+      "track": "community",
+      "topics": [
+        "village",
+        "challenge",
+        "hackathon",
+        "blockchain",
+        "learning"
+      ],
+      "teaser": "Recaps the Cryptocurrency Village's hackathon, CTF, workshops and prizes at DEF CON 34, and previews its plans for Singapore and Bahrain.",
+      "summary": "This closing session for the Cryptocurrency Village and Challenge at DEF CON 34 in Las Vegas opens with the village staff introducing their team and the four major activities: the hackathon, contests, workshops, and capture-the-flag. Smaller offerings included a hardware zoo, a mentoring program, a birds-of-a-feather table session, and a laser tag event that was cancelled. A new build-your-own-node program let attendees keep a server if they got a node running.\n\nThe middle of the talk covers the workshops, including smart contract hacking, badge teardowns, and a hardware wallet experiment that turned badges into wallets using secure elements and drew more than 65 people. An ATM attack session and a web3 security class were also held. The staff then announced the CTF and hackathon winners and the prizes given by sponsors. A sponsor's global CISO reflected on how crypto is merging with traditional finance, and argued that the field needs experts in both blockchain and conventional security.\n\nThe closing part previews the village's plans for future events in Singapore and Bahrain, a residency program for university students, and a public Discord server for follow-up questions. The main takeaway is that the village is a hands-on place to learn blockchain security and meet practitioners, and that the organizers hope to grow it with more academic and industry partners.",
+      "durationSeconds": 2104,
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "xjHdGlX6R9g",
+      "slug": "ccv-web3-security-hacks-scams-and-exploits-philip-werlau-kennash",
+      "title": "Web3 Security - Hacks, Scams, and Exploits",
+      "speakers": [
+        "Philip Werlau",
+        "Kennashka De Silva"
+      ],
+      "track": "threat-intel",
+      "topics": [
+        "threat",
+        "attack",
+        "web",
+        "supply",
+        "vulnerabilities"
+      ],
+      "teaser": "Surveys how Web3 users, dApp frontends, and smart contracts get compromised, then walks through the forensics of the $1.5 billion Bybit theft.",
+      "summary": "The talk opens with the scale of crypto theft, citing about $3.4 billion stolen in 2025 with North Korea attributed to a large share, and frames Web3 as three layers that can each fail: the user's client, the web frontend that builds transactions, and the on-chain code. The client section covers weak wallet randomness that exposed hardware wallet keys, private keys leaked in published scripts, seed-phrase phishing, clipboard hijacking, address poisoning, and approval drainers. Blind signing, where users approve transaction data they cannot read, is presented as the common thread. The frontend section covers fake airdrop lures, hijacked DNS and cloud storage, and compromised developer machines and libraries. A co-presenter explains MEV, including sandwich attacks and why private mempools help.\n\nThe smart contract section covers reentrancy, price oracle manipulation amplified by flash loans, governance attacks, access control mistakes, cross-chain replay, and bridge failures. The speakers stress that upgradeable proxies let defenders patch code but also let attackers who hold upgrade keys strip protections.\n\nThe closing case study is the Bybit theft. An attacker compromised a developer at the multisig provider Safe, injected JavaScript that targeted one exchange's signers, and swapped a routine cold-to-hot transfer for a transaction that upgraded the wallet and removed its signature requirements. Takeaways include clear signing on hardware wallets, subresource integrity for scripts, independent transaction simulation, avoiding upgrade paths that allow delegate calls, and treating privileged staff access as an attack surface.",
+      "durationSeconds": 2775,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    }
+  ]
+}

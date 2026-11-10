@@ -1,0 +1,293 @@
+{
+  "villageSlug": "bug-bounty-village",
+  "villageName": "Bug Bounty Village",
+  "eventSlug": "defcon-34",
+  "conference": "defcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLGjyN9SQOS1M",
+  "description": "Bug Bounty Village talks from DEF CON 34.",
+  "talks": [
+    {
+      "youtubeId": "IFMOtEqqF1A",
+      "slug": "bugbounty-how-cache-poisoning-led-to-critical-acct-takeover-in-t",
+      "title": "How Cache Poisoning Escalated to Critical Account Takeover in TikToks Web Infrastructure",
+      "speakers": [
+        "Glendon Chong"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "appsec",
+        "bug-bounty",
+        "identity",
+        "vulnerabilities"
+      ],
+      "teaser": "Walks through three TikTok bug bounty reports where web cache poisoning on an OAuth login endpoint led to account takeovers.",
+      "summary": "The talk, given by a member of TikTok's vulnerability management team, challenges the view that web cache poisoning has little real impact. It starts with caching basics such as cache keys and time to live, and explains why earlier reports that exposed only public data or relied on short-lived entries were often closed as low severity.\n\nThe core of the talk is three submissions from one researcher against a single OAuth login endpoint. The first abused a redirect loop: the server kept answering with a 302 that carried the OAuth code, the cache stored it, and the attacker could use the code for a zero-click takeover. The team's fix blocked specific paths, and the second report used a malformed state value on an invalid language path to get a cached redirect, creating a one-click variant. The third used path traversal to get around the new rules, and a cached 404 leaked the code through a secondary header. The speaker notes that the mobile OAuth flow had received less scrutiny than web and was the only one affected by the first issue.\n\nThe takeaways are practical. Responses that contain user-specific data need cache keys tied to the session, and sensitive endpoints should send no-cache directives even when that costs server load. Caching rules must cover 302 and 404 responses, not only 200s. OAuth state parameters should be checked against a strict allowlist, and teams should fix root causes and test every platform, since a resolved report can still have bypasses.",
+      "durationSeconds": 1263,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "0pJet2AADxM",
+      "slug": "bugbounty-ai-nightmare-hacking-at-0-hour",
+      "title": "AI Nightmare - Hacking at 0 Hour",
+      "speakers": [
+        "Pedro Paniago"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "bug-bounty",
+        "vulnerabilities",
+        "exploitation",
+        "defensive-security"
+      ],
+      "teaser": "Walks through a bug bounty hunter's experiment wiring AI into his manual methodology, with the results, limits and practical tips it produced.",
+      "summary": "The speaker, a bug bounty hunter, starts from a view common in his community: AI can only find low-severity issues. Early in 2026 he tested that belief by building a Claude Code setup around his manual methodology, adding the program scope, test accounts and written instructions the model could follow. During a two-week live hacking event in Belgium, the setup produced a set of validated, unduplicated reports and a top placement, with no manual hunting on his side.\n\nHe then expanded the system with MCP servers, extra skills, sub-agents for triage and memory management. Examples included a sandbox escape in gVisor that gave access to the host, an account takeover chain across tenants built on an invitation flow, and an authorization flaw in a GraphQL gateway tied to agent creation. He also described failure modes: the model drifting out of scope, treating intended behavior as a bug, and overrating impact without business context.\n\nHis practical advice covered running tools in a sandbox, treating recon as context, mixing models, keeping notes, maintaining backups and controlling token cost. He argued that the time from patch to exploit is shrinking, so the human work moves toward managing context and verifying output. He suggested that organizations run AI code review and external attack surface monitoring, and that defenders need the same tools as attackers.",
+      "durationSeconds": 1490,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "CJQ3SJnK-Pw",
+      "slug": "bugbounty-finding-prompt-injection-vulns-via-mutated-prompt-gen",
+      "title": "Auto Discovery of Prompt Injection Vulnerabilities via Mutated Prompt Gen",
+      "speakers": [
+        "Bogdan Steele",
+        "Arnav Garg"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "bug-bounty",
+        "exploitation",
+        "vulnerability-research"
+      ],
+      "teaser": "Presents MPG, a framework that mutates confirmed indirect prompt injection payloads to measure how many variants still bypass an AI assistant's safeguards.",
+      "summary": "The talk opens with indirect prompt injection, where an attacker hides instructions in a web page or document that an AI assistant reads and then follows on the user's behalf. The speakers walk through ways such an injection can leak data: tricking a user into clicking a link, or getting the browser to fetch a rendered image whose query string carries sensitive content. They cover HTML, script and markdown routes, including reference-style markdown, and explain why regex filters struggle because lenient markdown parsers accept malformed syntax.\n\nThe middle of the talk argues that fixing one reported payload says little about whether the fix generalizes. The speakers present MPG, a mutation framework that splits a payload into benign carrier text and injection tokens, applies different mutation operators to each, and explores the resulting variant tree breadth-first. Testing runs through a Playwright browser harness against a live production deployment. A subtree viability score estimates how broadly a bypass spreads. In their internal set, the success rate rose from 35 percent for the original seeds to 54 percent once mutations were included.\n\nThe closing point is practical. Teams can use the approach after an incident to check whether a patch holds, or before release as a gate. A high viability score suggests the safeguard needs an architectural change, while a low score suggests a targeted filter may be enough.",
+      "durationSeconds": 1597,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "fWajRG0n8ak",
+      "slug": "bugbounty-cache-key-injection-smuggling-poison-through-the-door",
+      "title": "Cache Key Injection - Smuggling Poison Through the Door",
+      "speakers": [
+        "Alex Brumen"
+      ],
+      "track": "appsec",
+      "topics": [
+        "web",
+        "attack",
+        "vulnerabilities",
+        "bug-bounty",
+        "infrastructure"
+      ],
+      "teaser": "Explains how attacker-influenced cache key components cause collisions that poison responses in Nginx-based caching setups.",
+      "summary": "The talk opens with a primer on how reverse proxies such as Nginx build a cache key from request fragments like scheme, host, path, query and selected headers. Most cache poisoning research targets unkeyed inputs, but this talk focuses on the key itself. When a configuration folds a header or cookie into the key, an attacker who controls that value can shift text between fragments and produce the same key with a different meaning.\n\nThe talk walks through several impacts. In one case, a path blocked by an access rule never reaches the cache, so splitting the key lets an unprivileged request reuse a response cached from a local admin request. Another case stores an error page under a homepage key, causing denial of service for ordinary users. Cache deception without user interaction is also shown, along with stored XSS built from host header reflection and identical responses on ports 80 and 443. The speaker notes that a CDN layer can be bypassed to reach the origin cache directly.\n\nFor defenders, the takeaway is to detect injection by probing fragment boundaries and to harden keys by hashing each fragment separately before combining them into one final hash. The speaker reports that Varnish resisted these attacks, and argues that this area still deserves much more research.",
+      "durationSeconds": 1428,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "XLGIsG0sKr4",
+      "slug": "bugbounty-running-a-bug-bounty-program-on-a-bug-bounty-platform",
+      "title": "Eating Our Dogfood - Running a Bug Bounty Program on a Bug Bounty Platform",
+      "speakers": [
+        "Shrimant More",
+        "Martzen Haagsma"
+      ],
+      "track": "appsec",
+      "topics": [
+        "bug-bounty",
+        "appsec",
+        "ai",
+        "vulnerabilities",
+        "automation"
+      ],
+      "teaser": "Shows how HackerOne runs its own bug bounty program on its own platform, and what three disclosed reports revealed about the product.",
+      "summary": "The speakers explain why HackerOne reports its vulnerabilities through its own product: the team that triages reports feels the same friction that customers feel. They say the gap between finding a bug and fixing it keeps growing, and that the biggest delays come at handoffs, especially between triage and engineering. By keeping triagers and engineers in one shared Slack thread for each report, they say the share of reports validated within a 24-hour target rose from about 62 percent to about 97 percent, using the same team.\n\nThe middle of the talk covers automation they tested on their own program. A routing agent assigns reports to owning teams only when its confidence clears a threshold of about 90 percent, and it posts every other report to a shared channel so low-confidence cases stay visible. Another agent replays reproduction steps and reruns them after a patch. Two case studies follow. In the first, an unvalidated sort parameter let a researcher inject Painless scripts into a shared Elasticsearch cluster; it was fixed in about seven days, and no customer data was accessed. In the second, an asynchronous PDF export ran with background-worker permissions and could email internal triage notes to a requester who lacked access. The fix made exports run under the requester's own permissions.\n\nThe closing lessons are to automate intake rather than judgment, to ask where else an unvalidated input reaches the same component, to check permissions in background jobs, and to share disclosed reports while respecting researchers' choices about disclosure.",
+      "durationSeconds": 1411,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "A-zCzJZqGj0",
+      "slug": "bugbounty-bug-hunters-guide-to-sig-malleability-replay-attacks",
+      "title": "Hunting for Cryptographic Ghosts - Bug Hunters Guide to Signature Malleability",
+      "speakers": [
+        "S Simsek",
+        "A Aydogan"
+      ],
+      "track": "appsec",
+      "topics": [
+        "bug-bounty",
+        "vulnerability-research",
+        "attack",
+        "ai",
+        "code"
+      ],
+      "teaser": "Shows how ECDSA signature malleability lets an attacker flip the recovery byte v to create a second valid signature, enabling replay, and how to scan live Ethereum transactions for it.",
+      "summary": "The session opens with a short primer on symmetric and asymmetric cryptography, then uses a casino roulette analogy to explain why digital signatures let a bettor check that a result was fixed before the spin. It then breaks down the parts of an elliptic-curve signature, the r and s values and the recovery value v, which is commonly 27 or 28 on Ethereum.\n\nThe core point is that because the recovery byte can be flipped, someone who sees a valid signature on a public chain can produce a second signature that still verifies for the same signer. Replaying that signature can execute the same transfer twice. The presenters tie this to large past bridge incidents, including Poly Network and Wormhole. They describe an open-source scanner they built that checked about 150 live transactions, found 83 with signatures, and flagged four as vulnerable to this manipulation.\n\nThe last part tested whether large language models write safe wallet code. In the presenters' prompts, several models produced vulnerable Solidity for a simple transfer contract, and nudging the prompt with signature details raised the vulnerable rate. The practical takeaway is to review signature handling, including v normalization and replay protection, rather than trusting generated code or assuming a signature cannot be altered.",
+      "durationSeconds": 1060,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "iOSaQX-uoNw",
+      "slug": "bugbounty-orchestration-framework-that-only-reports-what-it-can",
+      "title": "Killing AI Slop - A Multi Model Framework That Only Reports Findings It Can Prove",
+      "speakers": [
+        "Amaan Pathan"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "bug-bounty",
+        "machine-learning",
+        "web",
+        "vulnerabilities"
+      ],
+      "teaser": "Shows a multi-agent bug hunting workflow that maps an application, routes candidate findings to specialized agents, and reports only issues it can reproduce.",
+      "summary": "AI-generated vulnerability reports often fall apart under testing. They can cite endpoints that do not exist, exploit paths that cannot be reached, or flag behavior the application intends. The talk presents a pipeline that treats a finding as unconfirmed until it reproduces against the target. The first phase crawls the application with a headless browser, logs in with the supplied credentials, clicks through features, and collects endpoints, parameters and requests from pages and JavaScript files. The results are stored as a graph in a vector database, so agents can query how a user reaches a given function.\n\nA threat-modeling step asks static and application-specific questions and turns the answers into threat classes. A router then spawns persona agents, each defined in a markdown file with an objective, inputs and a procedure for one vulnerability category. A validation council replays each candidate, checks it against scope, tests client-side issues in a real browser, and retries requests without session tokens. Confirmed findings are then checked for chaining, such as an access control flaw combined with stored XSS, to see whether the impact rises.\n\nThe main takeaway is that model output needs application context and an evidence gate before anything is reported. The speaker explains the goal as removing false positives, and says lighter models were used for routine steps because heavier models were slow. The talk is an overview with demo screenshots rather than a measured benchmark, so it does not quantify how many findings were filtered out.",
+      "durationSeconds": 1371,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "NHZC2O0UaLY",
+      "slug": "bugbounty-make-money-hacking-ai",
+      "title": "Make Money Hacking AI",
+      "speakers": [
+        "Joey Melo",
+        "Edward Morris"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "bug-bounty",
+        "exploitation",
+        "vulnerabilities",
+        "lessons-learned"
+      ],
+      "teaser": "Shows how two researchers earned bounty and competition payouts by attacking AI chatbots and coding agents, from token-based jailbreak contests to a prompt-injection chain that led to code execution.",
+      "summary": "The talk treats AI systems as targets rather than tools, and argues that people can earn real money by breaking them through competitions, public bug bounty programs, private programs and contract work. The speakers begin with a multi-level capture-the-flag style contest in which the goal was to make a chatbot reveal a hidden phrase. Early levels fell to short, token-light tricks that exploited how the model interpreted identifier-like inputs. Later levels stacked an input filter, a separate model that screened prompts, and a sandwich defense inside the system prompt. The speakers mapped these layers by black-box probing and then bypassed them with long, staged prompts.\n\nThe middle section covers larger jailbreak competitions with prompts that worked across several vendors' models, and a prompt-injection case against an AI coding IDE. Instructions were hidden in markdown comments that the agent read but the developer did not see. An allowlist that approved commands by their leading word let a command substitution run a remote script without the confirmation prompt that would normally appear. The speakers split methodology into security testing, such as enumerating tools and connectors, finding exfiltration paths, extracting system prompts and checking classic web bugs, and safety testing, which relies on jailbreak technique families.\n\nThey close with approximate earnings from the past year, note that private programs pay most, and discuss a chatbot with no tools whose wrong refund advice a court held the airline responsible for. The practical takeaway is to start with competitions and public programs, and to expect the hardest work to be convincing vendors that hallucinations are reportable risk.",
+      "durationSeconds": 1627,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "gWNif2IaMDU",
+      "slug": "bugbounty-the-future-of-bug-bounty-program-manager-perspective-p",
+      "title": "The Future of Bug Bounty - Program Manager Perspective",
+      "speakers": [
+        "Kat",
+        "Jay",
+        "Sachin",
+        "Austin Sturm"
+      ],
+      "track": "policy",
+      "topics": [
+        "bug-bounty",
+        "ai",
+        "vulnerabilities",
+        "management",
+        "panel"
+      ],
+      "teaser": "Bug bounty program managers describe how AI is reshaping their report volume, triage workload, scope decisions and severity scoring.",
+      "summary": "This panel brings together bug bounty program managers to describe what has changed on the receiving end of the inbox over the past year. The panelists say the challenge has shifted from filtering noise to keeping up with a growing number of valid, more technical reports. AI lowers the barrier to submitting, so reports arrive more often, many are long and hard to reproduce, and some researchers let an AI decide severity without understanding the product. Programs are responding with tiered private programs, lower public payouts, explicit report templates, requests for video proof of concept, and AI-specific scope policies. Several panelists noted that a well-written report no longer signals quality.\n\nThe panel was skeptical that CVSS alone can capture severity, since it misses business context that only the company knows. Some teams use internal severity ranges instead, and others use AI to summarize and prioritize incoming reports while still checking the output by hand. For hackers, the advice was to validate and reproduce findings before submitting, explain real business impact, read the scope documents, and avoid low-value best-practice reports unless they feed a larger chain. Time-of-check versus time-of-use bugs and multi-step chains were called promising, and non-deterministic AI features need prompts, logs and request details.\n\nThe panelists agreed that bug bounty is not dying. One reported more valid high-severity reports and a raised bounty for those cases, while low-severity bugs that AI finds easily may lose value. They urged engineering teams to stay involved in remediation decisions and pointed to informal networks of program managers as a useful resource.",
+      "durationSeconds": 3102,
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "ZEKr7YzIEz8",
+      "slug": "bugbounty-using-rules-to-detect-ai-slop-fr-bug-bounty-k-paxton-f",
+      "title": "Slop Spotting, Using Rules to Detect AI Slop for Bug Bounty",
+      "speakers": [
+        "Katie Paxton-Fear",
+        "Max vonBlankenburg"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "bug-bounty",
+        "ai",
+        "appsec",
+        "vulnerabilities",
+        "open-source"
+      ],
+      "teaser": "Shows how turning bug bounty reports into Semgrep rules can separate real vulnerabilities from AI-generated slop in curl's disclosed reports.",
+      "summary": "Open-source projects are being flooded with AI-generated vulnerability reports. The speakers point to curl, which ended its HackerOne bug bounty in early 2026 after a surge of plausible-looking submissions. These cited real functions and convincing proofs of concept, yet described behaviour the code did not have. Checking each one by hand consumes scarce maintainer time and makes life harder for honest researchers.\n\nThe talk introduces Slop Spotting, a triage method that treats a static analysis rule as a validity test. An LLM turns each report into a Semgrep rule and revises it in a loop until the rule matches the report's proof of concept. The rule is then run against the affected and fixed versions of the code. A rule with matches in the vulnerable version suggests a real issue. A rule that finds nothing, or cannot be written at all, points to hallucinated code or a contextual bug that static analysis cannot see. In a small curl experiment, most genuine reports produced rules that matched only the vulnerable code, while most slop returned zero hits. One overly broad rule produced 38 findings, and reports closed as not-a-vulnerability were hard to classify, since that call depends on a project's risk appetite.\n\nThe speakers stress the limits: the sample was small, Semgrep's C support was weak, and dynamic bugs resist static rules. Their takeaway is a fast yes-or-no signal for triage, and a plea for bounty programmes to publish their outcomes so the community can learn how triage is changing.",
+      "durationSeconds": 1694,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "H5hevHYBMh8",
+      "slug": "bugbounty-cloud-scale-vulns-in-age-of-ai-avattakattu-r-nolette",
+      "title": "The Ripple Effect - Inside Cloud Scale Vulnerabilities in the Age of AI",
+      "speakers": [
+        "Albin Vattakattu",
+        "Ryan Nolette"
+      ],
+      "track": "policy",
+      "topics": [
+        "vulnerabilities",
+        "bug-bounty",
+        "cloud",
+        "ai",
+        "lessons-learned"
+      ],
+      "teaser": "Follows a single cloud vulnerability report from vague first claim through triage, embargoed vendor disclosure, and public release, then proposes three principles for modern disclosure programs.",
+      "summary": "The talk starts with a vague report claiming an AWS service was vulnerable, with no proof of concept. Once the researcher supplied a minimal working proof of concept, incident response, product teams, vulnerability assessment, a campaign team, and application security all became involved. The root cause was a third-party dependency, and a scan found about 50 services, customer-facing and internal, that needed fixing. Teams shipped a temporary mitigation, then the speaker notified the third party and, because the dependency was used widely, briefed critical affected organizations under embargo. Public disclosure came later, with a CVE, the vendor's permanent fix, and security bulletins from affected organizations.\n\nThe second half covers scale. Submissions have grown roughly 200 percent year over year, but only about 31 percent are valid, and AI-related reports have also risen sharply. The speakers presented three principles for modern disclosure programs: reach time to context, so the next person downstream has what they need immediately; use systems to triage, deduplicate, and route reports instead of relying on people alone; and eliminate whole vulnerability classes rather than fixing one instance at a time.\n\nFor researchers, the takeaways are to focus on providers rather than customers, to stop and report if customer data is touched, and to send complete reports with a proof of concept, impact, and follow-up. For defenders, the message is to automate context gathering and routing. The talk ends with an open question: whether AI can reliably triage reports that AI has written.",
+      "durationSeconds": 1285,
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "UeZqS98aVy4",
+      "slug": "bugbounty-testing-api-business-logic",
+      "title": "Testing API Business Logic With AI Agents - What We Got Wrong First",
+      "speakers": [
+        "Samantha Pearlstein"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "bug-bounty",
+        "ai",
+        "application",
+        "vulnerabilities",
+        "web"
+      ],
+      "teaser": "Shows how a team building AI agents to test API business logic learned from its early failures, covering harness design and how to validate flaws.",
+      "summary": "This talk looks at automated testing of business logic flaws in APIs, such as broken object-level authorization and abuse of legitimate workflows. These bugs are hard for conventional scanners to catch because they need an understanding of how an application is meant to behave. The speaker argues that they are becoming more common as AI-generated applications and endpoints multiply. Broad scanners cover a lot of ground but lack depth, and manual testers have depth but cannot scale. Early experiments that pointed a general-purpose model at an application found one or two valid issues and then stopped.\n\nThe central lesson was that a bare model is lazy and needs a surrounding harness. The team built a cycle in which a crawler keeps discovering endpoints, an orchestrator hands them to specialized sub-agents, and findings move into a validation stage. Against a deliberately vulnerable open-source fork, this design gave far more API coverage and more business logic findings than the model alone. Validating these flaws is harder than validating reflected injection, so the team added an adversarial agent whose job is to disprove each finding and cut false positives.\n\nThe closing point is that domain context decides whether something is a flaw at all. A coupon marked as internal is only a problem if someone understands the business, which a deterministic check cannot judge. For practitioners, the takeaway is that agentic testing needs planning, memory, and verification around the model, along with retesting rather than matching identifiers. The talk is candid about what went wrong, which makes it useful for anyone building similar pipelines.",
+      "durationSeconds": 1360,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "r7GBF0dIe5c",
+      "slug": "bugbounty-turning-arbitrary-file-writes-into-rce",
+      "title": "Write Once, Shell Everywhere Turning Arbitrary File Writes into RCE",
+      "speakers": [
+        "Bruno Mendes",
+        "Rafael Silva"
+      ],
+      "track": "appsec",
+      "topics": [
+        "bug-bounty",
+        "exploitation",
+        "web",
+        "application",
+        "vulnerabilities"
+      ],
+      "teaser": "Shows how to turn a black-box arbitrary file write into remote code execution by fingerprinting the runtime and overwriting predictable framework files.",
+      "summary": "Arbitrary file write bugs are often rated medium because proving real impact is hard when a tester cannot drop a web shell or overwrite an obvious configuration file. The talk targets that gap for black-box testing. It treats the write primitive as fully controlled and asks two questions: where to write, and what to write to reach code execution.\n\nThe method starts with the write result itself. Failed writes reveal whether a path exists, whether it is a directory, and whether the writer has permission. Differences in status codes or error handling can expose this even when no error message is returned. Probing paths that are specific to each Linux distribution or language version builds a profile of the target. The speakers recommend benign probes only, since production traffic may be logged or blocked by a WAF. They then covered several concrete routes. A Bash entry point in a containerized job can be overwritten through a file descriptor that points at the running script, padded with no-op bytes so the shell reaches the injected command. In Ruby on Rails, a schema cache file that is loaded with unsafe YAML deserialization leads to a gadget chain that ends in code execution. In Node.js, worker modules in libraries such as Piscina read their worker file from disk each time a worker spawns, so overwriting that predictable path runs attacker code.\n\nThe practical takeaway is to identify the execution context before rating a file write, since the runtime often determines which targets exist. Testers should check framework-known and deterministic paths, watch for files that are loaded as code or cache, and use quiet probes on live systems.",
+      "durationSeconds": 1422,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    }
+  ]
+}

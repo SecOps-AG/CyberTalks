@@ -1,0 +1,117 @@
+{
+  "villageSlug": "packet-hacking-village",
+  "villageName": "Packet Hacking Village",
+  "eventSlug": "defcon-34",
+  "conference": "defcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLWjBF5_lZDm4",
+  "description": "Packet Hacking Village talks from DEF CON 34.",
+  "talks": [
+    {
+      "youtubeId": "lAl2UuU9EX4",
+      "slug": "phv-building-better-backdoors-than-china-khael-kugler",
+      "title": "Building Better Backdoors Than China",
+      "speakers": [
+        "Khael Kugler"
+      ],
+      "track": "red-team",
+      "topics": [
+        "linux",
+        "network",
+        "attack",
+        "command-and-control"
+      ],
+      "teaser": "Shows how a Linux implant can hide a bidirectional command channel inside spoofed TCP responses on any open port, even when firewall rules block outbound traffic.",
+      "summary": "The talk opens with a red-team scenario drawn from collegiate defense competitions, where an attacker loses their usual callback channel after a sysadmin blocks inbound ports and stateful outbound traffic. The speaker surveys familiar persistence options, including user-level backdoors, service-specific backdoors and cloud-hosted beacons, and explains why each one tends to break down under those restrictions.\n\nThe core idea is a proof-of-concept implant called PhantomShell. It attaches a raw packet socket with a BPF filter, watches inbound TCP frames for marker bytes, runs the embedded command, then builds a matching TCP response from scratch using the incoming packet's headers and sequence values. Because the reply resembles the service's own answer, it passes as stateful traffic even when outbound rules are locked down. A live demo against a cloud instance with outbound access disabled produced an interactive shell. The speaker also showed that the extra response can confuse clients such as Firefox, and that an attacker-side sniffer can simply ignore the duplicate packet.\n\nFor defenders, the main takeaways are that local host firewalls do little against raw-socket capture, that socket and process inspection can expose the implant, and that central monitoring for duplicate or spurious TCP responses may be the most practical detection signal. The speaker notes that this is a persistence technique rather than an evasion breakthrough, and that the detection side remains a cat-and-mouse problem.",
+      "durationSeconds": 2242,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "4-0THa-3ujM",
+      "slug": "phv-ghost-followers-using-ai-to-unmask-fake-linkedin-profiles-ha",
+      "title": "Ghost Followers - Using AI to Unmask Fake LinkedIn Profiles at Scale",
+      "speakers": [
+        "Harish Elavia"
+      ],
+      "track": "osint",
+      "topics": [
+        "social",
+        "ai",
+        "machine-learning",
+        "identity",
+        "detection",
+        "open-source"
+      ],
+      "teaser": "Shows how fake LinkedIn profiles can be spotted by combining image forensics, behavioral signals and network graph analysis into one score.",
+      "summary": "The talk opens with the scale problem. LinkedIn has more than a billion profiles, and a fake account can be created in under a second, far faster than manual review can keep up. The speaker describes how fake profiles probe users for work and personal details, so they serve as a route to social engineering as well as phishing.\n\nThe core of the talk covers three signal families. Image forensics looks for GAN-generated headshot artifacts such as mismatched eye reflections, asymmetric accessories, and images reused across profiles, found through reverse image lookup. Behavioral checks flag impossible histories, overlapping jobs, templated profiles copied across many accounts, and LLM-style text. Network analysis asks whether a profile's connections make sense for its stated field. Each family produces a score, and a fusion step combines them into a calibrated verdict. A live demo ran a synthetic profile and a genuine one through the pipeline.\n\nThe speaker stresses that scores are leads rather than verdicts. Low-confidence cases should go to a human reviewer to limit false positives, and the system should never auto-ban or publicly accuse anyone. Takeaways include not relying on a single indicator, calibrating scores, and keeping people in the review loop. During Q&A, email pattern detection was raised as a gap, since fake accounts can use plausible-looking addresses.",
+      "durationSeconds": 1710,
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "_yzFN5PS5cY",
+      "slug": "phv-orchestrating-frontier-models-for-vuln-hunting",
+      "title": "Wiring the Harness Orchestrating Frontier Models for Vuln Hunting at Scale",
+      "speakers": [
+        "Tony Martin",
+        "Arie Haenel"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "vulnerability-research",
+        "embedded",
+        "tool"
+      ],
+      "teaser": "Presents a five-stage harness that pairs frontier models with scoping, retrieval, deduplication and exact-tool checks to cut false positives in LLM vulnerability hunting.",
+      "summary": "Intel's offensive research team set out to scan hundreds of repositories, including firmware, containers and low-level C and C++ code, on a tight budget with early access to a frontier model. The speakers argue that asking a model to \"find vulnerabilities\" mostly relocates the needle, because it produces a large volume of plausible reports that reviewers must investigate one by one. Their answer is to treat the model as one engine inside an engineered system, where scripts, retrieval and deterministic tools handle the mechanical work.\n\nThe talk walks through a five-stage workflow. The first stage scopes the problem using threat models, specifications, diagrams and build artifacts, then compresses reachable code into bounded candidate paths. The second stage gives each path to a model for hunting, with cheaper models used for routine audit checks. Deduplication follows, using scripts and a light model to merge overlapping findings. Verification then re-grounds each claim in the actual sources and uses exact tools such as an SAT solver to reject impossible candidates. Patterns that survive review can be encoded as static rules. The final stage tests claims against emulators or real targets and feeds confirmed results back into scoping. The speakers also cover common anti-patterns, such as hand-chunking code and scanning every function, and report that the frontier model accounted for most of the cost.\n\nThe main takeaway is that a claim must earn its way forward. Practitioners should scope before scanning, route simple tasks to smaller models, ground every claim in source and build evidence, challenge reports before sending them to humans, and save what verification teaches for the next run.",
+      "durationSeconds": 2528,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "GpXBOLCPT9g",
+      "slug": "phv-theres-a-bug-in-my-boot-finding-vulnerabilities-in-u-boot-ja",
+      "title": "There's A Bug in My Boot Finding Vulnerabilities in U Boot",
+      "speakers": [
+        "Jared Stroud"
+      ],
+      "track": "hardware",
+      "topics": [
+        "vulnerability-research",
+        "embedded",
+        "fuzzing",
+        "ai",
+        "code"
+      ],
+      "teaser": "Shows how to find bootloader bugs in U-Boot by mining patch history, writing CodeQL queries, and generating malformed SquashFS images to fuzz a native sandbox build.",
+      "summary": "Bootloaders sit at the base of embedded systems, often lack modern exploit mitigations, and run in routers, medical devices and industrial equipment. Their updates rarely reach deployed hardware, so bugs found early matter. The talk maps U-Boot's attack surface, which centers on file system parsing and its built-in TCP/IP stack, and points to past storage-related CVEs showing recurring off-by-one and integer overflow patterns in symlink and inode handling.\n\nThe speaker explains why conventional approaches are costly. Emulation through QEMU or rehosting struggles with peripherals, and hardware-in-the-loop does not scale. Instead, the work mined U-Boot mailing-list patches for overflow fixes that never received a CVE, then used CodeQL-style queries to search for the same pattern still present elsewhere in the code. Local language models were used to generate malformed SquashFS images, checked with GDB and callgrind to confirm the intended code paths were reached. A fuzzing script then produced 100 random images, one of which crashed U-Boot's sandbox build on an ordinary x86 laptop. The same bug reproduced on a BeagleBone Black, and a related crash appeared in another bootloader.\n\nThe takeaways are practical: mine patch history for bug patterns, use a native sandbox build with sanitizers for file system parsers, and treat LLMs as helpers for crafting structured malformed inputs when paired with a tight harness. The speaker also notes that the attacker-controlled file system threat model limits some findings.",
+      "durationSeconds": 2086,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "VxlqV-vBvy4",
+      "slug": "phv-remote-id-esp32s-and-the-packet-trail-will-hatzer-charles-gr",
+      "title": "Remote ID, ESP32s, and the Packet Trail to Friend or Foe",
+      "speakers": [
+        "Will Hatzer",
+        "Charles Grow"
+      ],
+      "track": "wireless",
+      "topics": [
+        "threat-detection",
+        "networks",
+        "building",
+        "open-source",
+        "device"
+      ],
+      "teaser": "Shows how a Remote ID drone detector built from ESP32 sensors handles weak Wi-Fi and Bluetooth signals without turning them into overconfident alerts.",
+      "summary": "The talk opens with an Android airspace app that failed to pick up the presenters' own DJI drone. Investigating Remote ID showed that this drone did not broadcast it, so the team fell back on Wi-Fi SSIDs and manufacturer OUIs as weaker clues. They built a simulator to test detection against known traffic and found that Remote ID arrives as several separate packets, so partial captures are common.\n\nThe sensor work moved to ESP32 boards. A C5 was dropped because switching to 5 GHz added delays too long for continuous scanning, so the team standardized on ESP32-S3 nodes. Firmware updates over a single USB link failed on one board, which turned out to be a loose pin, and the hardware later moved to a locally fabricated PCB. A nightly AI-assisted search grew the signature list to hundreds of manufacturers. Bluetooth signal strength proved unreliable for triangulation, so the scoring favored agreement across several packets and sensors, with confidence that expires over time.\n\nThe main takeaway is that one packet, one SSID or one OUI should not drive an alert, since those fields can be spoofed and captures are often incomplete. A live demo showed the badges and the Android app detecting a real drone. The presenters also noted that some commercial tools missed certain drone types, and said the hardware and code are planned for public release after the conference.",
+      "durationSeconds": 2746,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    }
+  ]
+}

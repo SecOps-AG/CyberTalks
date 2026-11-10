@@ -1,0 +1,290 @@
+{
+  "villageSlug": "ics-village",
+  "villageName": "ICS Village",
+  "eventSlug": "defcon-34",
+  "conference": "defcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLOyrG_9qOZys",
+  "description": "ICS Village talks from DEF CON 34.",
+  "talks": [
+    {
+      "youtubeId": "-qgmMzfy7Qo",
+      "slug": "ics-5m-icses-what-ironmap-found-when-it-scanned-the-internet-mat",
+      "title": "What IRONMAP Found When It Scanned the Whole Internet",
+      "speakers": [
+        "Matt Caldwell"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "recon",
+        "infrastructure",
+        "vulnerabilities",
+        "device"
+      ],
+      "teaser": "Presents internet-wide statistics on exposed industrial control systems and an unauthenticated look at internet-facing fuel tank gauges.",
+      "summary": "Matt Caldwell presents IRONMAP, a platform his team built to find and profile operational technology reachable from the public internet. The system relies on a distributed scanner, PLCDISCO, that probes industrial ports, grabs banners, and pulls vendor identity and tag data using read-only requests. The talk frames this as an ongoing research project, with millions of hosts probed so far and hundreds of protocol probes implemented.\n\nThe middle of the talk covers the results. EtherNet/IP and Modbus make up much of what was found, many devices answer without authentication, and Siemens S7 on port 102 appears widely. The speaker describes the safety controls: one thread per host, skipping hosts that show network trouble, adaptive backoff, and excluding government and hospital networks. He also explains how honeypots were filtered out using mixed protocol sets and default serial numbers, and how ownership was attributed through WHOIS data, BGP paths and reverse DNS.\n\nThe final section covers automatic tank gauges. The team found 149 internet-facing units, mostly Veeder-Root TLS-350 and TLS-450 systems on TCP port 10001, which exposed fuel volumes, product types, alarm states and delivery history. The speaker argues this reveals physical security and supply chain details about a facility. His recommendations were to restrict exposure behind a firewall or authentication, and to follow CISA advisories.",
+      "durationSeconds": 1829,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "3BMTm_X7R0c",
+      "slug": "ics-icsforge-open-source-ot-ics-security-coverage-validation-pla",
+      "title": "ICSForge - Open Source OT ICS Security Coverage Validation Platform",
+      "speakers": [
+        "Can Kumaz"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "open-source",
+        "detection",
+        "network",
+        "defensive-security"
+      ],
+      "teaser": "Shows how OT defenders can use the open-source ICSForge tool to safely test whether firewalls and network monitoring sensors catch ICS attack traffic.",
+      "summary": "The talk opens with the problem: OT defenders often assume their firewalls, segmentation and network monitoring sensors work against industrial attacks, but proving it usually means risky scanning or sending harmful commands to live controllers. The speaker, an OT security lead, presents ICSForge as a safer way to check these controls, and notes that most breach and adversary simulation tools target IT, while the OT options he found were commercial.\n\nThe middle of the talk walks through the architecture. A sender generates live or pre-built traffic from roughly 600 scenarios mapped to MITRE ATT&CK for ICS, covering ten industrial protocols such as Modbus, DNP3, S7comm, OPC UA, BACnet and GOOSE. A receiver acts as a harmless sinkhole. Operators can check whether a firewall passes the traffic and whether a monitoring sensor raises an alert. Marker modes range from explicit payload tags to stealth traffic that looks like normal device output, and multi-step campaigns can replay attack chains.\n\nThe speaker closes by describing the workflow: traffic that reaches the receiver or goes unalerted marks a gap to fix, and results can be turned into reports for SOC teams and management. He is candid about limits. Traffic is one-way with no device responses, there is no response content detection, and the tool does not replace a penetration test. It is GPL-3 licensed and can run on two lightweight devices such as Raspberry Pis.",
+      "durationSeconds": 1187,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "WJz79YGNKXs",
+      "slug": "ics-intro-to-common-industrial-protocol-exploitation-trevor-flyn",
+      "title": "Intro to Common Industrial Protocol Exploitation",
+      "speakers": [
+        "Trevor Flynn"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "fuzzing",
+        "vulnerability-research",
+        "device",
+        "network"
+      ],
+      "teaser": "Introduces the Common Industrial Protocol and explains how its object model, routing and fuzzing approach can expose bugs in industrial controllers.",
+      "summary": "The talk opens with the history of the Common Industrial Protocol, tracing it from DeviceNet in 1994 through ControlNet to EtherNet/IP, which carries the protocol over standard Ethernet. The speaker explains how explicit request-response messages run over TCP, how implicit data streams run over UDP, and how a message is addressed by service, class, instance and attribute. He also covers the three connection types and routed paths that let a single message hop across several networks, which can make traffic hard for intrusion detection systems to follow.\n\nThe middle of the talk covers security. CIP Security adds device identity, integrity hashing and encryption, but most plants enable only the identity check because older controllers lack the processing power for the rest. The speaker then describes a fuzzing method: probing class and service IDs with GetAttributeList, using the class-level instance to map what exists on a device, and checking which instances respond. He explains that a crash, which he calls a major non-recoverable fault, usually points to a memory boundary error.\n\nHe closes with practical advice. Testing should happen only on lab gear or cyber ranges, never on live plants, and any crash should go to the vendor's security team rather than to public posts. He points beginners to a free vendor configuration tool, an ICS Village GitHub fuzzing project, and cheap used controllers on eBay.",
+      "durationSeconds": 2835,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "d8d3I-N7ZbI",
+      "slug": "ics-is-your-fridge-running-state-of-security-in-refrigeration-am",
+      "title": "Is Your Fridge Running- Then You Better Catch It - State of Security in Refrigeration Systems",
+      "speakers": [
+        "Amir Zaltzman"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "embedded",
+        "vulnerability-research",
+        "hardware",
+        "infrastructure"
+      ],
+      "teaser": "Shows how refrigeration controllers from two major vendors were compromised through firmware extraction, emulation and chained flaws.",
+      "summary": "The talk looks at the controllers that run compressors, fans and heaters in supermarkets, pharmacies and cold warehouses. The researchers argue that compromising these systems could disrupt food and medicine supply. They chose two widely deployed products, a Danfoss controller and a Copeland (Dixell) controller, with the goal of reaching unauthenticated remote code execution on both.\n\nOn the Danfoss unit, the firmware came from the vendor's public download. The team identified an ARM Linux binary and ran it under emulation. They found a web login that accepted a daily password computed from the device date and hard-coded values, plus an OS command injection in the SMTP settings page. Chaining the two gave code execution. The Copeland firmware was encrypted, so they desoldered the flash chip and dumped it directly. Searching the image for Lua os.execute calls revealed many command injection flaws. An SSH daily password was also derived from embedded keys, the MAC address and the date.\n\nTo show impact, the team built a small refrigerator with a field controller linked over Modbus RTU. Through the compromised controller they changed the displayed temperature and cut cooling, so contents warmed without any visible alarm. They also reported thousands of exposed devices and techniques for tying them to store locations and owners. The vendors shipped firmware fixes after coordinated disclosure. The takeaways: avoid predictable secrets, limit internet exposure and patch regularly, since the retail sector lags other OT domains in security maturity.",
+      "durationSeconds": 1348,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "RtM0oQCNgis",
+      "slug": "ics-give-ai-industrial-protocol-tools-watch-what-it-destroys-m-v",
+      "title": "Give an AI Industrial Protocol Tools and Watch What It Destroys",
+      "speakers": [
+        "Malav Vayas",
+        "Asher Davila"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "attack",
+        "detection",
+        "open-source",
+        "ai",
+        "framework"
+      ],
+      "teaser": "Introduces mrhOTshOT, an open-source framework that replays historical ICS attacks across IT and OT protocols, with an LLM agent that composes attack sequences.",
+      "summary": "The speakers start from a familiar problem: after an industrial attack makes the news, defenders can read the incident report but cannot safely replay it. Scanning real OT devices can crash them, and most ICS malware is targeted, so samples are rarely public. What teams can usually test is a command-and-control address, which tells them little about whether their detections would catch the actual behavior.\n\nTo address this, they present mrhOTshOT, an open-source adversarial emulation framework. It covers the full kill chain rather than only the OT payload: an exploitable router as initial access, lateral movement into Windows and engineering systems, and then protocol-native process manipulation. Ten simulated industrial processes run across protocols including IEC 104, Modbus, S7comm, OPC UA and TriStation, each with physics that matches its real process. The demos reproduce Cosmic Energy-style and Stuxnet-style chains, including a case where the operator display shows normal values while the physical process is driven toward failure. Each attack can be exposed through Caldera or an LLM agent that turns a vendor report into a new scenario.\n\nThe practical takeaway is to use the framework to validate firewall rules and detection engines, with Suricata shown as the example, on a monitored lab network. The authors stress that the protocol libraries are deliberately insecure, not meant for production, and that the agentic feature is still in beta.",
+      "durationSeconds": 2509,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "mDFrA5PXSdQ",
+      "slug": "ics-local-language-models-in-ot-basics-and-considerations-vivek",
+      "title": "Local Language Models in OT - Basics and Considerations",
+      "speakers": [
+        "Vivek Ponnada"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ai",
+        "ics",
+        "machine-learning",
+        "model",
+        "infrastructure"
+      ],
+      "teaser": "Lays out the basics of running local language models in OT environments, covering hardware choices, open-weight models, and practical considerations.",
+      "summary": "The speaker, who spent years as a gas turbine controls engineer before moving into OT security, argues that most AI discussion centers on frontier models that plants often cannot use because of regulation, data sensitivity, or isolated networks. Local models, including quantized versions that run on a laptop or desktop, are presented as a way to get value from OT data while keeping it on site. Benefits include privacy and governance, predictable costs, low latency on a local network, and consistent behavior that does not shift when a vendor updates a model.\n\nUse cases covered include drafting policy and compliance mappings, building knowledge bases from old equipment notes, helping sort alarm floods after a process trip, suggesting setpoints for changing conditions, and speeding up slow controls tuning. On hardware, the talk compares consumer NVIDIA cards with limited video memory, unified-memory systems from NVIDIA and Apple, and renting compute to test before buying. Open-weight model families such as Gemma, Qwen, and Mistral are mentioned, with tooling built around llama.cpp-based runtimes, GGUF and MLX formats, and fine-tuning workflows.\n\nThe lessons learned focus on practice. Early setups should stay connected to the internet so dependencies can be downloaded, with air-gapping added later. Users should plan the end goal first rather than follow a fixed flowchart, check every generated command before running it, and compare several models because none suits every task. A demo that analyzed decades-old gas turbine data showed the work dropping from about three hours to under twenty minutes.",
+      "durationSeconds": 1593,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "VcAcv6cVNBM",
+      "slug": "ics-lessons-from-poland-and-beyond-state-of-electric-sector-atta",
+      "title": "Lessons Learned from Poland and Beyond - The State of Electric Sector Attacks in 2025",
+      "speakers": [
+        "Joe Slowik"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "threat",
+        "intelligence",
+        "infrastructure",
+        "attack"
+      ],
+      "teaser": "Reviews the December 2025 attack on Polish generation assets and compares it with Volt Typhoon, Sandworm and hacktivist activity against the electric sector.",
+      "summary": "Joe Slowik frames the talk around the current state of attacks on the electric sector, contrasting the quiet, long-term access linked to Volt Typhoon with more visible but mostly unsuccessful disruption attempts. The main case is a December 2025 operation against combined heat and power and wind generation assets in Poland. Vendors first tied it to Sandworm, but Polish and EU authorities later pointed to Berserk Bear. The intrusion leaned on basics: exposed VPNs without multi-factor authentication, replayed credentials, default passwords, and unpatched flaws, followed by malicious firmware and wiper-style resets on field devices.\n\nNext he places the Polish event in a decade of history, from the 2015 and 2016 Ukraine grid attacks through the 2022 campaign that used malicious project files. Across these cases he sees little zero-day use, little custom OT malware since Industroyer, and outages measured in hours. Hacktivist claims about access to nuclear and power plants are mostly noise, though exposed access can still cause real harm when someone skilled uses it.\n\nHis takeaway is that limited impact should not breed complacency, since attackers need only one success and latent access may serve a later purpose. Defenders can make many threats harder by watching internet-facing access, enforcing credential hygiene, and reducing single points of failure. He also stresses that physical and engineering safeguards keep cyber effects from becoming lasting damage.",
+      "durationSeconds": 1582,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "t5v1QHOeabg",
+      "slug": "ics-nuclear-industrial-control-system-simulation-nicssim-panel",
+      "title": "Nuclear Industrial Control System Simulation (NICSSIM)",
+      "speakers": [
+        "Carmela Gonzales",
+        "Brian G. Rodiles Delgado",
+        "Khadija Taki"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "ai",
+        "framework",
+        "architecture",
+        "defensive-security"
+      ],
+      "teaser": "Presents a software testbed for small modular reactor fleets where supervised AI agents assist cyber analysis while human operators keep final control.",
+      "summary": "The talk starts from the problem that small modular reactors, deployed as distributed energy resources, connect many reactors through digital links and widen the attack surface of nuclear operational technology. The presenters argue that Purdue-model defenses, firewalls and intrusion detection are rigid and cannot reason about a live fleet, and that OT defenders cannot restart services or block traffic freely because of safety concerns.\n\nTo address this, they introduce NICSSIM, a containerized testbed built on ICSSIM and Docker. It simulates reactors, PLCs, HMIs and telemetry with no live infrastructure at risk. A supervisory agent routes operator requests to a read-only vulnerability-analysis agent and a remediation agent, and an independent safety auditor reviews findings before they reach the operator. The live demonstration deployed one- and three-reactor fleets, ran a DDoS scenario, and showed blue and red agent roles, with a human approving any patch before it runs.\n\nThe evaluation covered response success rate, safety-threshold rejection, ISA/IEC 62443 mapping and latency and cost across seven models from four providers. The reported success rate reached 96 percent. Accuracy fell and latency rose as fleet size grew, and the presenters suggest faster models for routine checks and high-reasoning models for standards validation. Their takeaway is to build safe test environments, measure more than accuracy, and treat the human operator as part of the design.",
+      "durationSeconds": 1529,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "-GdyjLjGknA",
+      "slug": "ics-ot-round-table-real-talk-on-how-to-protect-your-ot-spaces-pa",
+      "title": "OT Round table. Real talk on how to protect your OT spaces",
+      "speakers": [
+        "Tom Van Norman",
+        "Dillon Lee"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "panel",
+        "village",
+        "infrastructure",
+        "risk"
+      ],
+      "teaser": "Panelists explain why operational technology resists IT-style patching and offer practical first steps for protecting plants and utilities.",
+      "summary": "The panel opens by defining operational technology as the control systems that drive physical processes, such as valves, pumps, bridges, power generation and water treatment. The speakers argue that these environments cannot be defended the way corporate laptops are. Outages can threaten safety and service, so downtime is scheduled rarely, sometimes only once a year. Many controllers have no agent support, vendors each use their own firmware tools, and a missed maintenance window can push a fix back by years.\n\nThe discussion then turns to recent disruptions at water systems across several US states. The panelists say small municipalities often buy the lowest-bid system with security left out of the contract, and that many operators lack logs to reconstruct what happened. They also challenge common myths: that a site is air-gapped, that it is too small to be targeted, or that IT tools will simply carry over. A screen-lock policy from the IT side that blanked an operator display at a power plant serves as an example of how well-meant changes can cause trouble.\n\nFor practical steps, the speakers recommend starting with an asset inventory, then segmentation, controlled remote access, and monitoring for devices that begin talking to unexpected peers. They stress assigning clear ownership of network gear, building relationships with plant staff, and educating leadership so budgets follow the risk. Their closing message is that OT and IT teams should share a common language and work as one team.",
+      "durationSeconds": 2227,
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "ktEeKVl4JZU",
+      "slug": "ics-threatpatrol-visualizing-the-modern-threat-landscape-viral-m",
+      "title": "ThreatPatrol - Visualising the Modern Threat Landscape",
+      "speakers": [
+        "Viral Maniar"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "threat-intel",
+        "ics",
+        "attack",
+        "detection",
+        "visualization"
+      ],
+      "teaser": "Shows how the open-source ThreatPatrol platform maps ATT&CK, Atomic Red Team tests and ICS techniques to visualize threats against OT networks.",
+      "summary": "The talk opens with the 2021 Colonial Pipeline ransomware incident, where attackers hit the billing systems and operators shut down flow because they no longer trusted their segmentation. The presenter argues that OT risk is bounded by the IT systems and trust relationships around controllers, not only by direct attacks on them. Using the Purdue model, the talk lists common weaknesses that erase the air gap: domain-joined engineering workstations, weakly authenticated historians, shared vendor remote tools, patch systems and jump hosts. Of twelve notable incidents over fifteen years, nine came from IT pivots, two were direct OT attacks and one was hybrid.\n\nThe middle section presents ThreatPatrol, an open-source SaaS platform that links threat intelligence to ATT&CK techniques and Atomic Red Team tests. Demonstrations covered framework version trends, software and actor profiles, emulation kill chains with blast-radius and choke-point views, and Sigma and Wazoo rules for DNP3 authentication spikes. The tool also builds 3D component canvases for grid and solar assets, and a simulated grid showed how spoofed alarms can hide a frequency change from operators.\n\nThe closing advice is mostly ordinary IT hygiene. Keep engineering workstations out of the corporate directory, use one-way replication for historians, time-box and record vendor access with MFA, and remove shared local admin accounts. Any detection on an IT host that can reach OT should be treated as a top-priority alert. The presenter notes that parts of the platform are still being finished.",
+      "durationSeconds": 1722,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "jKWRDg_tqdM",
+      "slug": "ics-threat-hunting-ot-networks-using-hypothesis-based-methods-mi",
+      "title": "Threat Hunting in OT Networks Using Hypothesis Based Methods",
+      "speakers": [
+        "Michael Cardwelll"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "hunting",
+        "network",
+        "incident-response",
+        "lessons-learned"
+      ],
+      "teaser": "Walks through safety limits on OT network threat hunting and how to build testable hypotheses from diagrams, asset lists and firewall rules.",
+      "summary": "The speaker, a hunt and incident response researcher at Idaho National Laboratory, opens with why operational technology needs different handling from office IT. Legacy processes are fragile and may not recover from disruption, and downtime or a failed device can cause physical harm, not just financial loss. He also covers site hazards that are easy to overlook, including wildlife, unfamiliar environments, and personal protective equipment that is often missing on site.\n\nHe then turns to how to collect data with minimal impact. Passive monitoring from a span port is the preferred method, with taps used only as a planned outage because breaking a serial link can cause real damage. Active scanning can brick older PLCs, so he advises against it unless the risk is understood. Host agents and memory dumps can also disrupt systems, so hands-on work should be limited and done through the site's own staff and procedures.\n\nThe core of the talk is hypothesis-driven hunting. A useful hypothesis is focused, testable, meaningful and plausible, and it should be revised when site conditions differ from the documentation. Using a sample network diagram, he shows how an HMI in the DMZ suggests a design flaw and leads to checkable claims about firewall rules, transient engineering laptops, and missing OT monitoring. The practical takeaway is to treat documentation as a starting point, verify it against reality, and report results against a list of tested hypotheses.",
+      "durationSeconds": 1765,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "A-V8jzZEZ_8",
+      "slug": "ics-two-nics-zero-trust-pulling-apart-a-pac",
+      "title": "Two NICs, Zero Trust - Pulling Apart a PAC Buried in Critical Infrastructure",
+      "speakers": [
+        "Adam Bromiley",
+        "Sam Thorn"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "hardware",
+        "reverse-engineering",
+        "vulnerability-research",
+        "network"
+      ],
+      "teaser": "Shows how a hardware-led investigation of Opto 22 programmable automation controllers exposed weak trust boundaries and a route from one OT network segment into another.",
+      "summary": "A utility operator asked the team to look at Opto 22 programmable automation controllers, devices that bridge SCADA networks and plant networks. Because the hardware is fragile and often cannot be scanned or tested in the field, the researchers began with vendor documentation and public firmware images. That review suggested the programming and configuration interfaces had no authentication, so they built a bench setup and split the work into a programming track and a firmware track.\n\nOn the programming side, they captured the vendor's traffic, pulled stored project files off the controller, and rebuilt parts of the transfer in Python. The push path turned out to run a Forth interpreter on the device. They inserted a SOCKS4 proxy written in the controller's scripting language, so the device could forward traffic between its two network interfaces. On the firmware side, they reverse engineered a ColdFire image, found that the integrity check was a chunked CRC with no digital signature, and built a backdoor. They matched the vendor's TCP stack socket functions against an archived copy and ran the implant inside an existing network service.\n\nThe team demonstrated a remote path from the SCADA side into the OT side, and found internet-exposed devices through Shodan and Censys. The vendor responded constructively and is working on firmware signing, authentication for its programming language, and an API on newer lines that can disable legacy functions. The main takeaway is that testing the hardware and its firmware can reveal flaws a network-only penetration test would miss, and that older controllers may offer no way to turn off risky features.",
+      "durationSeconds": 1576,
+      "publishedAt": "2026-11-06",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "oMBfwKOECpA",
+      "slug": "ics-exposed-data-centers-bypass-it-security-crank-up-the-heat-s",
+      "title": "Exposed Data Centers - Bypass IT Security, Crank Up the Heat",
+      "speakers": [
+        "Stephen Hilt",
+        "Numaan Huq"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "infrastructure",
+        "open-source",
+        "intelligence",
+        "building-automation"
+      ],
+      "teaser": "Maps US data centers against internet-exposed building automation and industrial control systems found through Shodan, and explains the physical risks.",
+      "summary": "The talk starts from a public list of about 1,200 US data centers that a news outlet had left in a cloud storage bucket. The researchers expanded it with a proximity method they call geostalking, querying Shodan for internet-facing devices near each facility. They focused on building automation such as HVAC and fire systems, and on power-supply controllers. They did not scan or touch the devices themselves, relying only on data Shodan already held.\n\nAfter filtering out honeypots, hosting-provider addresses and banners that did not match their protocols, the set narrowed to about 6,300 high-confidence exposed systems across 1,063 data centers. BACnet made up most of the findings, followed by Niagara Fox. Many devices ran protocols never meant for the open internet, and about 15 percent had a CVSS score of 9.0 or higher. The presenters stressed that location data is approximate and that the results are hypotheses, not verified intrusions. They also sketched an attack path: reconnaissance, initial access, mapping which controls run cooling and power, then disabling alarms or pushing temperatures up to damage hardware.\n\nThe main takeaway is that building automation often sits outside the Purdue model and outside the security team's control, particularly for tenants. Organizations should look for their own exposed controllers, remove unnecessary internet access, and bring OT governance into the same policies that cover IT.",
+      "durationSeconds": 1652,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "villageSlug": "car-hacking-village",
+  "villageName": "Car Hacking Village",
+  "eventSlug": "defcon-34",
+  "conference": "defcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLf5aN3aEVBjM",
+  "description": "Car Hacking Village talks from DEF CON 34.",
+  "talks": [
+    {
+      "youtubeId": "aEo7z1Nl4aI",
+      "slug": "carhack-free-ip-free-chaos-dhcp-assisted-flooding-auto-ethernet",
+      "title": "Free IP, Free Chaos DHCP Assisted Flooding Auto Ethernet",
+      "speakers": [
+        "Yehyeong Lee"
+      ],
+      "track": "hardware",
+      "topics": [
+        "network",
+        "device",
+        "attack",
+        "vulnerability-research"
+      ],
+      "teaser": "Shows how a rogue DHCP server on a car's OBD Ethernet port can hand an attacker a valid address and enable floods that disrupt vehicle systems.",
+      "summary": "The talk looks at automotive Ethernet, which modern cars use for UDS diagnostics, and at how DHCP support on the diagnostic port can let an outsider obtain a valid address and reach gateway and ECU interfaces. The speaker contrasts this with static addressing, where an attacker would need both the correct target and the source address the device expects. With DHCP, the vehicle simply asks for an address and the attacker's laptop answers.\n\nThe central contribution is a way to measure flooding on Ethernet. Chinese and UN vehicle rules require denial-of-service tests, but they define no metric or threshold for Ethernet, so the speaker proposes packets per second. A sweep in 5,000 pps steps showed the vehicle reacting around 50,000 pps. The sender split the target rate across CPU cores so the rate stayed exact and repeatable. Floods aimed at an unused address had no effect, so the load landed only on the host that owned the assigned IP. On one production vehicle, a stationary flood at 50,000 pps shut off the engine and produced false warnings. A flood during slow driving caused a sudden stop at very low speed. At one million pps the instrument cluster went dark and stayed that way until the unit powered down. An open diagnostic port also answered an ECU reset sent over it.\n\nThe takeaways are to define a packets-per-second threshold for Ethernet denial-of-service testing and to restrict or disable DHCP on diagnostic interfaces, or limit it to authenticated testers. The speaker says the case was disclosed to the manufacturer, with a fix scheduled for November 2026.",
+      "durationSeconds": 1348,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "AAkYvOUCm1A",
+      "slug": "carhack-anatomy-of-a-relay-attack-tool-robbie-galfrin",
+      "title": "Stealing @ Speed of Light - Anatomy of a Relay Attack tool",
+      "speakers": [
+        "Robbie Galfrin"
+      ],
+      "track": "wireless",
+      "topics": [
+        "automotive",
+        "attack",
+        "reverse-engineering",
+        "device",
+        "detection"
+      ],
+      "teaser": "Dissects a commercially sold keyless-entry relay tool, showing how it stretches key fob radio signals across distance to unlock and start a car.",
+      "summary": "The talk opens with how passive keyless entry and start works. The car sends a low-frequency challenge when its owner is nearby, and the key fob answers over UHF with a response computed from a shared secret. The speaker frames the weakness: the system treats proximity as proof of authorization, and a relay can extend the radio link so the fob responds to a car it cannot physically reach.\n\nThe researchers bought an inexpensive relay kit from an online automotive-test vendor and operated it against a 2017 Suzuki model, demonstrating unlock and engine start with the key roughly ten meters away. Using a spectrum analyzer and software-defined radios, they located the tool's internal link near 915 MHz and recorded both the original LF and UHF traffic. Comparing the captures, they concluded the device demodulates the on-off keyed LF signal and retransmits the bits using FSK, reproducing the original frames exactly.\n\nTo close, the speaker outlines defenses. Detection approaches include watching turn-on transients, carrier frequency offset and peak measurements, or the relay hardware's own link. Mitigations include UWB or RSSI-based proximity binding, frequency hopping, sleeping the fob when it is still, and Faraday pouches. The takeaway is that a cheap, widely available tool can defeat the trust assumption built into modern vehicles.",
+      "durationSeconds": 1483,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "jpbFKy5XOd4",
+      "slug": "carhack-the-compiler-nobody-tested-supply-chain-gaps-in-ev-charg",
+      "title": "The Compiler Nobody Satisfactorily Tested - Supply-Chain Gaps in EV Charging Firmware",
+      "speakers": [
+        "Kangwon Lee"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "compiler",
+        "embedded",
+        "device",
+        "trust",
+        "build"
+      ],
+      "teaser": "Examines how unverified compilers can undermine memory safety in EV charger firmware, and proposes a four-step trust chain for evaluating toolchain integrity.",
+      "summary": "The talk opens with the Pwn2Own Automotive 2026 results, where EV chargers drew heavy attention and several winning exploits were plain memory-safety bugs such as out-of-bounds writes. The speaker points out that public disclosures never record which compiler built the affected firmware, and that the bill of materials format in a reference charger design has no field for a toolchain.\n\nThe middle of the talk uses a dead-store example to show that a key wiped with memset in correct C can disappear from the emitted binary, so source review alone misses the problem. The speaker then maps ISO 26262 qualified Rust compilers against chips and operating systems, showing many combinations with no qualified option. ISO 21434 manages tools but does not require compiler qualification, and software-defined vehicles and machine-written code raise the stakes.\n\nFor chargers and roadside units, which fall under fewer standards than cars, the speaker proposes a four-step lens: develop in a memory-safe language, compile with a qualified compiler, verify independently for the exact configuration, and review the binary. The speaker has not yet built the proposed demonstration and offers the blueprint for others to attempt.",
+      "durationSeconds": 1071,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "iESr1DsSrNs",
+      "slug": "carhack-unlocking-vehicles-by-brute-forcing-rolling-code-systems",
+      "title": "Unlocking Vehicles by Brute Forcing Rolling Code Systems",
+      "speakers": [
+        "Danilo Erazo"
+      ],
+      "track": "wireless",
+      "topics": [
+        "reverse-engineering",
+        "vulnerability-research",
+        "attack",
+        "device",
+        "exploitation"
+      ],
+      "teaser": "Shows how a popular aftermarket rolling code key fob system can be reverse engineered, rolled back and brute forced to clone a vehicle key.",
+      "summary": "The talk examines an aftermarket rolling code key fob system used by many vehicles to prevent cloning. The researcher sorts key fob schemes into fixed, learning and rolling designs, then records a fob and decodes its amplitude-keyed radio signal. The frame turns out to hold several counters and a short random value sent in plain text rather than encrypted. Mapping how each counter advances gives the full frame layout.\n\nNext, the talk moves from passive capture to active testing. The random field is only six bits, so guessing it is quick once the layout is known. A rollback weakness in the resynchronization logic lets an attacker move the receiver's counter window back to older values. Combined with brute forcing, demonstrations unlock a car in under a minute, and one sniffed code plus the rollback is enough to clone a fob. Observed responses from the receiver microcontroller are used to reconstruct its validation logic.\n\nThree or four CVEs were assigned in 2026 after coordinated disclosure. The speaker reports similar algorithms in other aftermarket fobs and traces how parts pass through distributors in Latin America whose staff often cannot name the manufacturer. The takeaway for practitioners is that a rolling counter alone is not sufficient: counter window size, resync rules and random-value entropy must be tested directly.",
+      "durationSeconds": 1595,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    }
+  ]
+}

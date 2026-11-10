@@ -1,10 +1,17 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { IBM_Plex_Mono, Orbitron } from "next/font/google";
+import { SiteBanner } from "@/components/SiteBanner";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CommandPaletteProvider } from "@/components/CommandPaletteProvider";
 import { PushPage } from "@/components/push/PushPage";
+import {
+  DEFAULT_OG_IMAGE_ALT,
+  DEFAULT_OG_IMAGE_SIZE,
+  SITE_DESCRIPTION,
+  defaultOgImageUrl,
+} from "@/lib/page-meta";
 import { siteUrl } from "@/lib/site-url";
 import "./globals.css";
 
@@ -28,9 +35,24 @@ export const metadata: Metadata = {
     default: "Cyber Talks",
     template: "%s — Cyber Talks",
   },
-  description:
-    "Cyber Talks: a searchable archive of cybersecurity conference talks from DEF CON, Black Hat, RSAC, and TROOPERS, with YouTube video and written summaries.",
+  description: SITE_DESCRIPTION,
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Cyber Talks",
+    images: [{ url: defaultOgImageUrl(), ...DEFAULT_OG_IMAGE_SIZE, alt: DEFAULT_OG_IMAGE_ALT }],
+  },
+  twitter: { card: "summary_large_image", images: [defaultOgImageUrl()] },
 };
+
+export const viewport: Viewport = { themeColor: "#050805" };
 
 export default function RootLayout({
   children,
@@ -49,6 +71,7 @@ export default function RootLayout({
         <PushPage>
           <div className="relative z-10 flex min-h-screen flex-col">
             <SiteHeader />
+            <SiteBanner />
             <main
               id="content"
               className="mx-auto w-full max-w-7xl flex-1 px-4 pb-16 pt-8 max-[599px]:pt-3 sm:px-6"

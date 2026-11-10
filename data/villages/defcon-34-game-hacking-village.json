@@ -1,0 +1,115 @@
+{
+  "villageSlug": "game-hacking-village",
+  "villageName": "Game Hacking Village",
+  "eventSlug": "defcon-34",
+  "conference": "defcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLStQFo2widyI",
+  "description": "Game Hacking Village talks from DEF CON 34.",
+  "talks": [
+    {
+      "youtubeId": "cUCnwfqxkcI",
+      "slug": "gamehack-catching-cheaters-in-super-smash-bros-melee-altf4",
+      "title": "Catching Cheaters in Super Smash Bros Melee",
+      "speakers": [
+        "AltF4"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "village",
+        "threat-detection",
+        "device",
+        "open-source",
+        "lessons-learned"
+      ],
+      "teaser": "Walks through how Super Smash Bros. Melee tournament cheats were caught using replay files, rollback analysis, and controller legality checks.",
+      "summary": "The talk, given by the maintainer of the SLP Enforcer tool, looks at how the Super Smash Bros. Melee community finds players who cheat. It starts with a streamer's public accusation against a player whose character seemed to teleport when hit. Slowed-down footage of the controller overlay showed the stick changing position on nearly every frame, which pointed to an automated device, and the account was banned.\n\nNext came a disputed online match where one player claimed lag. By counting rollbacks in both replay files, the speaker found none in the accused player's copy and a few in the complainant's, so the claim fell apart. The talk then explains community rules for box-style controllers, which must emulate stick travel time and avoid firmware that guesses inputs such as ledge dashes. The SLP Enforcer runs entirely in the browser through WebAssembly, so organizers can drop in replays and get flags within seconds. It was used at Genesis, where players were allowed to finish round one before flagged players were asked to reflash their firmware.\n\nIn the question period, forging replays was called possible but impractical, since online opponents keep matching copies and in-person SD card swaps would be noticed. Live detection was harder because offline venues lack networked infrastructure, and many checks are statistical and need full games. The takeaway is that replay analysis works best with agreed rules, transparent evidence, and organizers who make the final calls.",
+      "durationSeconds": 1501,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "b4zm-AMUcdM",
+      "slug": "gamehack-rce-on-the-sega-dreamcast-planetweb-browser",
+      "title": "Dreamcast Ex Inferis - RCE on the Sega Dreamcast PlanetWeb Browser",
+      "speakers": [
+        "Christopher Hernandez"
+      ],
+      "track": "red-team",
+      "topics": [
+        "vulnerability-research",
+        "exploitation",
+        "embedded",
+        "device",
+        "memory"
+      ],
+      "teaser": "Shows how a dead backend domain on the 1999 Sega Dreamcast browser becomes a remote code execution chain that ends with DOOM running natively.",
+      "summary": "The speaker, a vulnerability researcher, set out to run code on a Sega Dreamcast through its PlanetWeb browser, a program from the 2000 to 2001 era. The browser depends on a backend service that no longer exists, so whoever controls that domain's DNS answers can direct the console to their own server. The hardware is tightly constrained: an SH4 RISC processor, about 16 MB of RAM shared with video memory and the browser, an old Java runtime with no security manager, no code signing, and plain HTTP. The research started by mapping the attack surface, which included a subscription framework, Java-to-native commands, image parsers, a mail client, and memory card access.\n\nSix unique vulnerabilities turned up, three of them of research interest. A malicious server could offer a package that the browser subscribed to and ran automatically. A stack overflow in the mail client's MIME name handling gave control of execution, but only within roughly 64 KB of space. A native command with an unbounded copy at a fixed address supplied room to stage a much larger payload. Chained over a man-in-the-middle setup, the exploit loads DOOM onto the console, taking about five minutes in an emulator and 10 to 15 minutes on real hardware. The emulator's modem model had to be modified to behave more like the real one, and memory layout had to avoid the browser and its frame buffer.\n\nThe main takeaway is that on older targets most of the effort went into memory layout and working around constraints rather than the bug itself. A confirmed bug is not automatically exploitable, and older systems make a useful training ground. Next steps include faster iteration on real hardware and looking for bugs in Phantasy Star Online.",
+      "durationSeconds": 1657,
+      "publishedAt": "2026-11-06",
+      "difficulty": "expert"
+    },
+    {
+      "youtubeId": "HYpHZMvEkcI",
+      "slug": "gamehack-sh4zam-accelerated-vector-math-on-the-sega-dreamcast",
+      "title": "SH4ZAM - Accelerated Vector Math on the Sega Dreamcast",
+      "speakers": [
+        "Falco Girgis"
+      ],
+      "track": "hardware",
+      "topics": [
+        "embedded",
+        "device",
+        "open-source",
+        "building",
+        "engineering"
+      ],
+      "teaser": "Shows how the Sega Dreamcast's SH4 floating-point hardware is exploited by a hand-optimized math library used in homebrew game ports.",
+      "summary": "The talk starts with the motivation for SH4ZAM: a Dreamcast port of Grand Theft Auto 3 that ran poorly because of slow floating-point math. The speaker explains how the library grew from hand-written SH4 assembly into a standalone project with scalar, trigonometry, vector and matrix APIs, each offered in C and C++ headers. Examples include a hardware reciprocal square root used for fast division and square roots, and a single instruction that computes sine and cosine together, which replaced lookup tables and freed memory in a game that used them.\n\nThe middle section covers the vector and matrix paths. A four-component dot product instruction and a transform instruction that multiplies a vector by a 4x4 matrix held in a register bank give large speedups over a standard C math library. Demos from Star Fox 64, Mario Kart 64 and Diddy Kong Racing show frame-rate and audio gains, including vectorized audio synthesis. A software back end lets the same math code build for non-Dreamcast targets.\n\nThe closing takeaway is that careful use of a console's vector hardware, inline assembly and modern compilers can pay off on old machines. The speaker argues the same lessons apply to other game consoles and to performance-focused math libraries generally. The library is bundled with a community Dreamcast SDK, and the speaker invited questions afterward.",
+      "durationSeconds": 993,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "x8okBCGlWTM",
+      "slug": "gamehack-yes-i-froze-an-snes-for-science-dwangoac",
+      "title": "Yes, I Froze an SNES for Science",
+      "speakers": [
+        "dwangoAC"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "device",
+        "embedded",
+        "reverse-engineering",
+        "lessons-learned"
+      ],
+      "teaser": "Explains how component aging and temperature shift the Super Nintendo's audio clock, and why that complicates deterministic tool-assisted speedrun playback on real hardware.",
+      "summary": "The talk opens with a primer on tool-assisted speedruns, where recorded button presses are replayed on a real console. That only works if the console behaves deterministically. The Super Nintendo has two independent timing sources, a CPU crystal and a ceramic oscillator for the audio chip, and their drift can knock the handshake between processors out of step by a single frame. That changes the random number generator state, so enemies may act differently.\n\nThe speaker then describes a crowdsourced measurement effort. About 158 valid submissions, each backed by screenshots from a flash-cart tool, measured the audio sample rate against its nominal 32 kHz. The average landed near 32,076 Hz, with wide spread between individual consoles. A freezer experiment showed the rate climbing as a console warmed from below freezing to room temperature, and a tone test followed the same curve. Console-to-console variation turned out to matter more than temperature, which undercut the hotplate trick players had used to speed up runs.\n\nThe takeaway is that temperature tricks are not worth the risk for casual play, but unit-specific variance could affect tightly tuned tournament games. Efforts to derive the audio clock from the CPU clock and to tune an emulator to measured values did not give consistent playback, because reset ordering across chips was the real obstacle. The speaker suggested the same clock interplay could make a good source of randomness.",
+      "durationSeconds": 2385,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "n1gt6lfv2YE",
+      "slug": "gamehack-breaking-memory-hacks",
+      "title": "Your Lives are in Another Struct Breaking Memory Hacks with Field Relocation",
+      "speakers": [
+        "Ryan Zamuda"
+      ],
+      "track": "appsec",
+      "topics": [
+        "application",
+        "defensive-security",
+        "building",
+        "innovation",
+        "code"
+      ],
+      "teaser": "Shows a compile-time anti-cheat for Unity DOTS games that relocates sensitive fields such as lives and score across struct boundaries, so memory-scanning cheats break after each build.",
+      "summary": "The talk presents a build-time anti-cheat for Unity games built on the DOTS entity-component stack. The speaker starts with how cheaters work: runtime memory scans, array-of-bytes signatures, pointer chains, and static patching. Existing defenses such as kernel watchdogs, bytecode VMs, and control-flow flattening are weighed against those attacks. The central idea is to find components with identical lifetimes and relocate sensitive fields like lives or score into a peer component.\n\nThe implementation runs as a post-processing pass over Common Intermediate Language. It builds its own basic blocks, performs lifetime analysis over initialization and destruction sites, and checks each candidate move against eligibility rules. Field accesses are then rewritten, with component lookups injected where the target is out of scope. Much of the rewriter code was produced by coding agents steered by build output and CIL dumps. In a demo on an open-source breakout game, a memory-scan cheat that set lives worked before the change and found no matches after it. The pass added roughly 400 to 500 milliseconds to a build that takes about a minute, and five trials showed no measurable frame-time change.\n\nThe speaker is candid about limits. Runtime scans still succeed for an attacker willing to rescan after each patch, and networking, renderer, and physics data are out of scope. Agent-written code quality was uneven. The takeaway is that relocation raises attacker cost and downtime rather than stopping cheating, and the work is a proof of concept shared as a Unity pass.",
+      "durationSeconds": 2518,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    }
+  ]
+}

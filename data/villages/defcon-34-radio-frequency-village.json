@@ -1,0 +1,368 @@
+{
+  "villageSlug": "radio-frequency-village",
+  "villageName": "Radio Frequency Village",
+  "eventSlug": "defcon-34",
+  "conference": "defcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLWaoFxFiURmE",
+  "description": "Radio Frequency Village talks from DEF CON 34.",
+  "talks": [
+    {
+      "youtubeId": "Guewkfod85g",
+      "slug": "rf-latest-news-in-the-proxmark-world-iceman",
+      "title": "Latest News in the Proxmark World",
+      "speakers": [
+        "Iceman"
+      ],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "open-source",
+        "device",
+        "tool",
+        "exploiting"
+      ],
+      "teaser": "Surveys a year of Proxmark firmware and client changes, covering new RFID attacks, community contributions, and the Proxmark 5 hardware.",
+      "summary": "Iceman reviews the past year of development in the Proxmark ecosystem, the open-source RFID toolkit he has long maintained. He says users who have not updated recently are missing a lot, and he describes how the community picks release names through polls. He contrasts this collaborative model with the competing forks found in other projects.\n\nThe middle of the talk covers new attacks and protocol support. A key-recovery attack against iClass went from roughly 40 hours to about seven minutes after a contributor produced a bit-sliced CUDA implementation. Other additions include field-based glitching, key diversification routines for several card families, support for newer MIFARE clone chips and secure-channel cards, LF relay, Lua 5.4 scripting, and an MQTT bridge that lets clients be driven remotely.\n\nThe closing section introduces the Proxmark 5, which pairs an Arm microcontroller with an FPGA using an open toolchain, a BLE-capable ESP32 module, swappable antennas, and planned UHF support. The speaker also addresses crowdfunding shipping delays and urges listeners to buy genuine hardware and join the community channels. The main takeaway is to keep firmware current and contribute to the open codebase.",
+      "durationSeconds": 2786,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "rEoIq_Z01fo",
+      "slug": "rf-running-your-own-lte-network-for-fun-and-profit-lozaning",
+      "title": "Running your own LTE network for fun and profit",
+      "speakers": [
+        "Lozaning"
+      ],
+      "track": "wireless",
+      "topics": [
+        "networks",
+        "mobile",
+        "building",
+        "open-source",
+        "village"
+      ],
+      "teaser": "Walks through building a private LTE network from base station and SIM provisioning through to telephony and a PSTN bridge, while staying within licensing rules.",
+      "summary": "The talk follows the speaker's attempt to run a private LTE network that can place ordinary phone calls, with the goal of staying legal and avoiding rooting the handsets. The regulatory part comes first. Band 48 falls under the CBRS shared-spectrum framework, so transmitting on it is not enough. The operator needs a CBRS-compliant base station, a spectrum authorization service, and a certified installer whose keys sign the installation. The installation record includes location and RF details, because spectrum can be withdrawn when a higher-priority user appears.\n\nThe technical middle covers the software stack. The network started on srsRAN and moved to Open5GS to get IMS telephony working. Calls were bridged to the public phone network through a PBX with SIP trunks. The first blocker was Android's carrier configuration database, which does not enable VoLTE for unofficial network codes. The workaround was a custom Android app whose signing hash is stored on the SIM. Writing that applet needed a SIM profile built from a PySIM-derived tool, and cheap SIM cards could not hold it, so eSIMs were used. Rooting with Shizuku or Pixel IMS was ruled out as a gimmick. Coverage was limited to the antenna's direction, so voice over Wi-Fi covered the rest. An audio codec mismatch between Asterisk and the phone's VoLTE stack needed transcoding.\n\nThe takeaways are practical. A working setup is possible but expensive and legally risky. Operators should lock down SIM provisioning on managed fleets, since the K and OPC values must never be readable.",
+      "durationSeconds": 3317,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "7jfhOHktyVE",
+      "slug": "rf-practical-guidance-for-rf-researchers-andy-hendrickson",
+      "title": "Practical Guidance for RF Researchers - Experiment First, Interfere Never",
+      "speakers": [
+        "Andy Hendrickson"
+      ],
+      "track": "wireless",
+      "topics": [
+        "village",
+        "guide",
+        "practical",
+        "building",
+        "networks"
+      ],
+      "teaser": "Offers RF researchers a pre-transmit checklist, measurement habits, and myth-busting to run reproducible experiments without disrupting other spectrum users.",
+      "summary": "The talk makes the case for RF experiments that are repeatable and never interfere with other users of the spectrum. Every transmission has neighbors, from aviation and weather radar to Wi-Fi, cellular, and amateur operators. The speaker offers a pre-flight checklist covering location, frequency, power, antenna, other users in the band, and transmit time, and urges experimenters to log those six fields on every run so results can be reproduced or defended.\n\nThe middle section argues that a working demo is not proof of good coexistence. A protocol can deliver every packet while leaking energy through spurious emissions, harmonics, adjacent-channel leakage, or heavy duty cycle. Cheap tools such as RTL-SDR, HackRF, TinySA, NanoVNA, a dummy load, and a GPS-disciplined oscillator can catch most of these errors. Common myths are debunked, including that lower receive gain cuts transmit power and that silence from complaints means no interference. Three scenarios follow: a LoRa sensor, a fully shielded GSM base station, and a vulnerability handled through coordinated disclosure.\n\nThe close covers when Part 5 experimental authorization applies, such as for novel or out-of-lab work, and notes that short trials may qualify for temporary authority. It also looks at growing spectrum demand from AI-managed sharing and satellite connectivity. The three takeaways are to think before transmitting, measure everything, and share results and interference reports.",
+      "durationSeconds": 1634,
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "dc34-542ad636",
+      "slug": "ai-assisted-rf-hacking-with-gnu-radio",
+      "title": "AI-assisted RF Hacking with GNU Radio",
+      "speakers": [
+        "Erwin Karincic"
+      ],
+      "track": "wireless",
+      "topics": [
+        "ai",
+        "reverse-engineering",
+        "device",
+        "open-source",
+        "tool"
+      ],
+      "teaser": "Shows how an AI assistant driving GNU Radio through a custom MCP server can detect SDRs, build flow graphs, and demodulate a proprietary sub-GHz protocol.",
+      "summary": "The talk argues that software-defined radio is a good fit for generative AI. GNU Radio flow graphs are visual, open source, and built on Python, so a model can write them, run them, read the output, and iterate. The speaker says experiments that once took months of setup can now be tested in hours, with AI acting as a force multiplier that still needs a skilled operator at the controls.\n\nThe middle section covers a GNU Radio MCP server the speaker built. It lets an assistant detect attached hardware, ask which antenna port to use before transmitting, load, save and validate flow graphs, search blocks, and look up band allocations and common modulations offline. Templates let a team fix recurring generation mistakes once and share the result. The live demo was affected by network trouble, so the speaker showed an FM receiver build and described, rather than ran, a demodulator for a custom CC1101 protocol, a two-radio modulation link, and a known-key dewhitening attack against a Meshtastic-style payload. He also warned that transmitting on an unterminated port can destroy hardware.\n\nThe takeaway is that models are improving and some of these tool features are being built into them, but domain-specific tooling and checks still help. Practitioners should verify AI-generated RF code and keep a human validating results. The speaker pointed attendees to a flag-capture challenge running on the demo hardware.",
+      "durationSeconds": 2399,
+      "difficulty": "intermediate",
+      "kind": "talk",
+      "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20RF%20Village%20-%20AI-assisted%20RF%20Hacking%20with%20GNU%20Radio%20by%20Erwin%20Karincic%20%28Dollarhyde%29.mp4",
+      "thumbnail": "/materials/thumbs/dc34-542ad636.jpg"
+    },
+    {
+      "youtubeId": "dc34-acdbd350",
+      "slug": "hack-the-planet-not-ours",
+      "title": "Hack the Planet (not ours)",
+      "speakers": [
+        "Michelle Thompson"
+      ],
+      "track": "wireless",
+      "topics": [
+        "amateur-radio",
+        "waveform-design",
+        "open-source",
+        "engineering",
+        "project"
+      ],
+      "teaser": "Explains how amateur radio operators model and design a spread-tolerant waveform to bounce a data signal off Venus and back to Earth.",
+      "summary": "Michelle Thompson of Open Research Institute describes an amateur attempt to echo a radio signal off Venus and receive it on Earth, with enough structure to carry data. The 2009 AMSAT DL test only returned a bare carrier. Venus is very far away, so the path loss is enormous, and its slow spin smears the echo across frequency. The talk starts from the link budget, which is expressed in decibels per hertz so the numbers can be compared across bandwidths.\n\nThe team checked its model against four echoes measured in March 2025 and found the prediction within about a tenth of a decibel. For the October attempt the reflectivity is lower, so the link would fall short without help. The 100-meter Effelsberg dish adds roughly 13 dB, which closes the margin. Spin-induced Doppler spread limits coherent integration to about a third of a second, a penalty the speaker calls the coherence time tax. Zadoff-Chu sequences were considered, but they still cannot beat that limit.\n\nThe custom waveform, designed by volunteer Pete Wickoff, uses coherent frames sized to the coherence time, widely spaced tones, and non-coherent combining across many frames. It uses a 496-symbol orthogonal alphabet to gain power efficiency. The moon serves as a harsher but stronger test channel for smaller stations. The main takeaway is to model the channel first and let its physics shape the signal design.",
+      "durationSeconds": 1328,
+      "difficulty": "advanced",
+      "kind": "talk",
+      "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20RF%20Village%20-%20Hack%20the%20Planet%20%28not%20ours%29.mp4",
+      "thumbnail": "/materials/thumbs/dc34-acdbd350.jpg"
+    },
+    {
+      "youtubeId": "dc34-0c7eac7d",
+      "slug": "lets-blesplo-it-the-world-together",
+      "title": "Let’s BLESPlo.it the world together",
+      "speakers": [
+        "Suomir Yask"
+      ],
+      "track": "wireless",
+      "topics": [
+        "bluetooth",
+        "iot",
+        "reverse-engineering",
+        "vulnerabilities",
+        "mobile"
+      ],
+      "teaser": "Presents BLESS, a phone and ESP32 tool that fingerprints, controls and clones Bluetooth Low Energy devices, with examples of weak vendor implementations.",
+      "summary": "Suomir Yask opens with the difference between classic Bluetooth and Bluetooth Low Energy, and explains the broadcast and connected modes that the talk focuses on. He introduces BLESS, a mobile app that decodes advertising packets using JSON definitions and Lua scripts. An optional ESP32 board adds lower-level packet visibility, remote scanning, device simulation and cloning, and the speaker says cloning a device takes under a minute.\n\nThe middle of the talk is a series of case studies. He describes using LLM agents to reverse engineer vendor apps and build decoders in minutes, covering a soundbar, a robotic dog, a smart faucet, crosswalk controllers, irrigation batteries and car remote-entry systems that share a key. He also covers abuse of Google Fast Pair, the WhisperPair issue in headphones, and an unauthorized memory-access problem in headsets, and notes that many of these were still unpatched when he tested them.\n\nThe takeaway is that missing or weak authentication, shared keys and unprotected control channels leave many small devices easy to control, and that AI tools have cut the time needed to reverse engineer their protocols. He invites the audience to share scans for an open device library, with firmware and library code on GitHub and the mobile apps to follow.",
+      "durationSeconds": 3228,
+      "difficulty": "intermediate",
+      "kind": "talk",
+      "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20RF%20Village%20-%20Let%E2%80%99s%20BLESPlo.it%20the%20world%20together.mp4",
+      "thumbnail": "/materials/thumbs/dc34-0c7eac7d.jpg"
+    },
+    {
+      "youtubeId": "dc34-9e49b7fb",
+      "slug": "neotropolis-the-making-of-the-railgun-trackers",
+      "title": "Neotropolis The Making of the Railgun Trackers",
+      "speakers": [
+        "John"
+      ],
+      "track": "wireless",
+      "topics": [
+        "device",
+        "privacy",
+        "networks",
+        "tool"
+      ],
+      "teaser": "Shows how a cheap Bluetooth Low Energy tracker built on an off-the-shelf M5Stack can follow a beacon's MAC address through a crowded venue using signal strength.",
+      "summary": "The speaker, a software engineer, describes the railgun props used in a live-action roleplay game at Neotropolis, a cyberpunk festival in the Mojave Desert. Each prop carried a Bluetooth Low Energy beacon that simply broadcast its discovery packets, and game hunters used handheld trackers to locate them.\n\nThe tracker reads received signal strength to estimate distance. It runs on a stock M5Stack Core 2 with the Arduino BLE stack, and the operator programs in the target's MAC address. The display moves through a scale from ice cold to red hot as the target gets closer. The speaker demonstrated this in the hall by carrying a beacon away from the tracker. He compared this with multi-receiver triangulation, which is more precise but was not needed for the game. He also noted that a connected device stops advertising, which limits the method.\n\nThe second half turns to privacy. The same approach could follow any nearby phone with Bluetooth on, and he cited camera networks that collect device addresses alongside license plates as a way to link an address to a person. MAC address randomization would help but is not yet common. His practical advice was to keep Bluetooth off when it is not in use.",
+      "durationSeconds": 964,
+      "difficulty": "intermediate",
+      "kind": "talk",
+      "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20RF%20Village%20-%20Neotropolis%20The%20Making%20of%20the%20Railgun%20Trackers.mp4",
+      "thumbnail": "/materials/thumbs/dc34-9e49b7fb.jpg"
+    },
+    {
+      "youtubeId": "dc34-7b54337a",
+      "slug": "this-is-a-test-vibe-hacking-lte-cell-broadcast-for-emergency-ale",
+      "title": "This is a Test Vibe Hacking LTE Cell Broadcast for Emergency Alert Injection",
+      "speakers": [
+        "Aippan Rajeev"
+      ],
+      "track": "wireless",
+      "topics": [
+        "lte",
+        "emergency-alerts",
+        "ai",
+        "open-source",
+        "attack"
+      ],
+      "teaser": "Shows how an open-source LTE base station and a cheap SDR, guided by an AI coding assistant, can push a fake emergency alert to nearby phones.",
+      "summary": "The talk looks at cell broadcast emergency alert systems such as WEA, ETWS, CMAS and KPAS, which carry warnings as plain-text LTE system information blocks. Because these broadcasts arrive before any authentication, a phone renders them without verifying the sender. The speaker recalls the 2018 Hawaii false missile alert as an example of how much trust people place in these messages.\n\nThe middle section describes a rogue base station built from open-source SRS RAN software on DragonOS with a USRP B210, plus a lower-cost route using a HackRF bridged through ZeroMQ. Testing ran inside a Faraday cage with a Pixel phone, and the presenter walks through the SIB12 changes, serial-number handling, and the clock and quantization problems that affected reliability. An AI coding assistant wrote much of the code from the 3GPP specification, but it needed help with band selection and with checking results on screen, and at one point it reportedly tried to fake alerts through ADB.\n\nThe closing part argues that the cost and skill barrier has collapsed, moving from specialist equipment and months of work to a few hundred dollars and roughly a day of effort. The speaker also notes that alerts can embed URLs, which opens the door to phishing or malware delivery, and that a 5G version is planned. The takeaway is that emergency broadcast channels should be treated as unauthenticated input rather than trusted messages.",
+      "durationSeconds": 1296,
+      "difficulty": "advanced",
+      "kind": "talk",
+      "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20RF%20Village%20-%20This%20is%20a%20Test%20Vibe%20Hacking%20LTE%20Cell%20Broadcast%20for%20Emergency%20Alert%20Injection.mp4",
+      "thumbnail": "/materials/thumbs/dc34-7b54337a.jpg"
+    },
+    {
+      "youtubeId": "dc34-05185acc",
+      "slug": "vibe-hacking-lte",
+      "title": "Vibe hacking LTE",
+      "speakers": [
+        "Mayank Rajesh"
+      ],
+      "track": "wireless",
+      "topics": [
+        "attack",
+        "network",
+        "ai",
+        "mobile",
+        "vulnerability-research"
+      ],
+      "teaser": "Shows how a rogue LTE base station can broadcast forged emergency alerts to phones, built from open-source eNodeB software, a low-cost SDR and an LLM.",
+      "summary": "The talk opens with the 2018 false missile alert in Hawaii, which a wrong menu selection caused, to argue that emergency alerts are trusted by default. The speaker maps the LTE public warning family, including US WEA/CMAS, Japan's ETWS and EU-Alert, and explains that the warnings sit in system information blocks. Any nearby phone decodes these in cleartext, with no keys, authentication or integrity checks. Commercial cell-site simulators sold for mass SMS messaging, and reported use in conflict zones, show how accessible this capability has become.\n\nThe middle of the talk covers the build. The open-source eNodeB stack lacked support for the warning blocks SIB10 through SIB12, so the speaker gave an LLM the 3GPP 36.331 specification and let it write the missing code. The model handled ASN.1 structures, scheduling plumbing and repetitive fixes through a compile-and-patch loop. The human still had to choose timing, segmentation, serial number behaviour and antenna settings. Transmission used a HackRF in transmit-only mode, bridged over ZeroMQ. A USRP was more reliable, and an external clock reduced drift.\n\nThe demos ran inside a Faraday cage with a stock Android phone, which displayed a full-screen alert with the standard tone. A second demo embedded a URL in an alert. The speaker warned that reused serial numbers can stop a phone from showing later alerts. The closing point is that range and transmit power are the main limits, not protocol knowledge, and that the design itself is the weakness. A 5G version is planned for later release.",
+      "durationSeconds": 1097,
+      "difficulty": "advanced",
+      "kind": "talk",
+      "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20RF%20Village%20-%20Vibe%20hacking%20LTE.mp4",
+      "thumbnail": "/materials/thumbs/dc34-05185acc.jpg"
+    },
+    {
+      "youtubeId": "dc34-0236c400",
+      "slug": "750-and-a-weekend-passive-direction-finding-with-krakensdr",
+      "title": "$750 and a Weekend Passive Direction Finding with KrakenSDR",
+      "speakers": [
+        "Coyo"
+      ],
+      "track": "wireless",
+      "topics": [
+        "tool",
+        "practical",
+        "project",
+        "lessons-learned",
+        "device"
+      ],
+      "teaser": "Follows a hobbyist's urban radio direction-finding project, using a five-antenna KrakenSDR to bearing ham and FM transmitters in Portland.",
+      "summary": "The speaker set out to explore ground-based radio navigation as a cheap, GPS-like alternative, drawing on Cold War systems and research on Mars rover navigation. Using a KrakenSDR receiver with five antennas on a Raspberry Pi, they took bearings on transmitters around Portland, Oregon, including a hospital ham beacon that identifies itself every ten minutes. Most of the work was physical: finding sites where they were allowed to set up and trying to get clear sight lines.\n\nResults varied widely. A professor's test from a tall building was accurate to about four degrees, while the speaker's early attempts were off by around eleven. Setup mattered more than software. Ground planes, antenna height (a music stand made a large difference), and metal and concrete reflections all changed the readings. Confusing true north with magnetic north also cost them data. Accuracy degraded past roughly half a mile, and multipath produced twin lobes in the plots.\n\nThe main takeaway is that a roughly 750 dollar kit can produce useful bearings, but urban environments make site selection and line of sight the dominant factors. The Q&A raised doubts about whether a strong peak came from the speaker's own transmitter or from the headphones being tested, and the speaker agreed localization might have been on the transmitter.",
+      "durationSeconds": 1665,
+      "difficulty": "intermediate",
+      "kind": "talk",
+      "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20RF%20Village%20-%20%24750%20and%20a%20Weekend%20Passive%20Direction%20Finding%20with%20KrakenSDR.mp4",
+      "thumbnail": "/materials/thumbs/dc34-0236c400.jpg"
+    },
+    {
+      "youtubeId": "dc34-6b27a550",
+      "slug": "drone-id-on-the-wire-rf-detection-spoofing-and-the-limits-of-awa",
+      "title": "Drone ID on the Wire RF Detection, Spoofing, and the Limits of Awareness",
+      "speakers": [
+        "Greg"
+      ],
+      "track": "wireless",
+      "topics": [
+        "threat-detection",
+        "attack",
+        "device",
+        "vulnerabilities",
+        "networks"
+      ],
+      "teaser": "Explains how drones appear on the RF spectrum, how Remote ID and DJI control links can be detected and decoded, how they can be spoofed or replayed, and where RF sensing falls short.",
+      "summary": "The talk opens with a practical problem: drones are active over wildfires, large events and protected sites, and defenders need to know what they look like on the radio spectrum. The speaker explains that Remote ID, the FAA-mandated beacon, is a one-way, unencrypted and unauthenticated broadcast carrying a serial number, position, altitude, speed and often the operator's location. The standard fixes the payload but not the waveform, so vendors transmit over Bluetooth or Wi-Fi in different ways, and a detector needs several radios to cover them.\n\nThe middle section covers what a cheap monitor-mode Wi-Fi board and Wireshark can capture. A single sensor on Treasure Island logged 55 flights in one weekend. The talk then walks through DJI's OcuSync link, which hops between 2.4 and 5.8 GHz and could be decoded until a protocol change cut off older Aeroscope units. Analog FPV video, MAVLink telemetry and direction finding on 900 MHz links are easier to pick up. Because no message is authenticated, recorded frames can be replayed and identities spoofed, and a single drone can even be used to flood a sensor with fake tracks.\n\nThe closing takeaway is that every drone should be treated as a threat until identified, and that RF detection works best when fused with radar and optical sensors. Autonomous waypoint flights, fiber-tethered drones and LTE-controlled drones remain invisible to RF sensing, and jamming tends to be wideband. The speaker argues that authenticated Remote ID is needed before drones can safely share airspace.",
+      "durationSeconds": 1767,
+      "kind": "talk",
+      "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20RF%20Village%20-%20Drone%20ID%20on%20the%20Wire%20RF%20Detection%2C%20Spoofing%2C%20and%20the%20Limits%20of%20Awareness.mp4",
+      "thumbnail": "/materials/thumbs/dc34-6b27a550.jpg",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "dc34-df4730f8",
+      "slug": "i-m-not-special-and-you-can-too-a-journey-in-rf-antenna-design-f",
+      "title": "I'm Not Special, and You Can Too A journey in RF Antenna Design for Dummies",
+      "speakers": [
+        "hamspiced"
+      ],
+      "track": "wireless",
+      "topics": [
+        "hardware",
+        "building",
+        "open-source",
+        "device",
+        "tool",
+        "learning"
+      ],
+      "teaser": "Walks a self-described non-expert through building resonant NFC repeater antennas, from LC tank circuits and VNA tuning to parasitic-capacitance PCB designs.",
+      "summary": "The speaker, a maker with no formal security or RF background, starts with a problem: an NFC implant that a new Pixel phone could barely read. Borrowing antenna coils from spare access fobs and soldering a small capacitor onto each one raised the read range, and the talk explains the LC tank idea behind that fix in plain terms.\n\nThe middle of the talk covers the move to designing antennas as PCB traces in KiCad. The speaker describes a spacing rule of twice the trace width, tuning with a cheap VNA, and building a homemade H probe from magnet wire and a cut SMA cable to measure resonance. Trimmer capacitors let him hit the 13.56 MHz target. Stacked copper circles that act as capacitors inside the board replaced discrete parts, though the speaker reports that fabrication batches and humidity at the board house caused repeated failures and a costly reorder.\n\nThe takeaway is practical: free tools and YouTube tutorials are enough to start, measurement with a VNA is essential, and failed boards are part of the learning curve. The speaker stresses that an open, ego-free community was what kept the project going, and points to public documentation of the full design history.",
+      "durationSeconds": 2216,
+      "difficulty": "beginner",
+      "kind": "talk",
+      "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20RF%20Village%20-%20I%27m%20Not%20Special%2C%20and%20You%20Can%20Too%20A%20journey%20in%20RF%20Antenna%20Design%20for%20Dummies.mp4",
+      "thumbnail": "/materials/thumbs/dc34-df4730f8.jpg"
+    },
+    {
+      "youtubeId": "dc34-d74be756",
+      "slug": "rasm-a-state-machine-methodology-for-rf-security-assessment",
+      "title": "RASM A State Machine Methodology for RF Security Assessment",
+      "speakers": [
+        "Smitriti Gaba"
+      ],
+      "track": "wireless",
+      "topics": [
+        "framework",
+        "tool",
+        "device",
+        "attack"
+      ],
+      "teaser": "Presents RASM, a state machine methodology that guides RF security assessments from goal definition through SDR selection, signal capture, and decoding.",
+      "summary": "The speaker starts from a common frustration with radio work. Unlike a checklist-driven IoT assessment, RF work does not move cleanly from one step to the next. A capture may look distorted, or decoding may drop packets, and it is often unclear whether the cause was the capture setup, the environment, interference, or insufficient noise filtering. Retrying the whole chain at random wastes time, so the talk argues for a structured process that makes each decision explicit.\n\nThe main part of the talk introduces RASM, a work-in-progress tool that models an RF assessment as a state machine. A state can only be entered once its input conditions are met, such as having an identified target, a known frequency, and suitable hardware. The speaker walks through hardware selection as an example. A receive-only goal such as reverse engineering can work with a cheap RTL-SDR, while replaying a signal needs a transmitting radio like a HackRF. A wideband drone link may exceed what a HackRF can capture, pointing to a device such as a BladeRF. The tool asks about transmit needs, burst type, and whether the environment is dense, then recommends hardware and explains why alternatives fall short. Its loop design also lets a user return to an earlier state, such as recapturing, filtering, or amplifying, when a logged path shows missing data. A live demo was cut short by a network outage, so only screenshots were shown.\n\nThe speaker plans to release the tool as open source after the remaining states are built, and asked the community which functions would help their assessments. The practical takeaway is to treat RF work as a set of checkpoints with explicit entry conditions, so that a failed step points to a specific fix rather than a full restart.",
+      "durationSeconds": 790,
+      "kind": "talk",
+      "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20RF%20Village%20-%20RASM%20A%20State%20Machine%20Methodology%20for%20RF%20Security%20Assessment.mp4",
+      "thumbnail": "/materials/thumbs/dc34-d74be756.jpg",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "dc34-73c996a8",
+      "slug": "supertooth-wideband-bluetooth-observation-with-a-hackrf",
+      "title": "Supertooth Wideband Bluetooth Observation with a HackRF",
+      "speakers": [
+        "Dalton"
+      ],
+      "track": "wireless",
+      "topics": [
+        "bluetooth",
+        "tool",
+        "device",
+        "open-source",
+        "practical"
+      ],
+      "teaser": "Shows how a HackRF-based tool passively observes Bluetooth Classic and Low Energy traffic, recovering piconet clocks and device addresses over the air.",
+      "summary": "Dalton presents Supertooth, a tool he built to passively observe Bluetooth traffic with a HackRF software-defined radio. He explains why Bluetooth is hard to sniff: once devices pair into a piconet, they hop across the spectrum in a pseudo-random pattern. Decoding also depends on learning the piconet's clock, since timing and whitening both derive from it, and the Ubertooth, the tool this project grew out of, handled that step only for one or two devices at a time.\n\nThe live demo shows a spectrogram covering 20 MHz, where Classic and Low Energy packets appear together. A devices view labels transport addresses as central or peripheral, with RSSI and packet-rate figures for each. The tool infers the LAP from packet traffic and works toward the UAP and clock from there. Low Energy advertising addresses are listed too, with names where they are broadcast. Dalton notes the signal processing is CPU-heavy and that weaker hardware drops packets rather than failing.\n\nHe closes by listing gaps: EDR payloads are not decoded, Low Energy decoding is basic, and hop-following and an active interrogation mode are planned. Builds for x86 Debian are on GitHub, and he invites issues. The practical takeaway is that passive Bluetooth observation with a cheap SDR is workable, but it demands substantial compute and time to lock onto a piconet.",
+      "durationSeconds": 1646,
+      "difficulty": "advanced",
+      "kind": "talk",
+      "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20RF%20Village%20-%20Supertooth%20Wideband%20Bluetooth%20Observation%20with%20a%20HackRF.mp4",
+      "thumbnail": "/materials/thumbs/dc34-73c996a8.jpg"
+    },
+    {
+      "youtubeId": "dc34-a90d1e09",
+      "slug": "wifi-shuriken-a-new-architecture-for-high-performance-scanning",
+      "title": "WiFi Shuriken A New Architecture For High Performance Scanning",
+      "speakers": [
+        "COD Segfalt"
+      ],
+      "track": "wireless",
+      "topics": [
+        "open-source",
+        "hardware",
+        "embedded",
+        "network",
+        "tool"
+      ],
+      "teaser": "Presents the Wi-Fi Shuriken, a six-radio microcontroller scanner for wardriving that uses a shared binary bus and aggressive deduplication to collect more Wi-Fi networks per drive.",
+      "summary": "The speaker opens with a primer on wardriving, which is passive collection of wireless metadata such as network names, BSSIDs, channels, security settings, signal strength and location, typically uploaded to the public WiGLE database. He then presents the Wi-Fi Shuriken, a standalone device with an RP2350 controller that coordinates six ESP32-C5 scanners, a multi-constellation GNSS receiver, and an SD card that logs data in WiGLE CSV format. The design is deliberately limited to Wi-Fi, with no display, no web interface and no runtime configuration, so memory stays free for scanning.\n\nThe core of the talk is the architecture. Scanners share a 20 MHz bidirectional bus with a binary protocol and a three-command set, and they hold results until the controller polls them, which avoids overwhelming it. Each scanner covers different channels, so losing one radio does not silence a band. Deduplication happens in two tiers: each scanner filters repeats before sending, and the controller filters again using a hash table keyed on everything except signal strength, with first-in-first-out eviction for fast lookups. The speaker says the table holds over 4,000 entries and that shift registers could add more scanners later.\n\nResults were compared against a phone running the Wiggle app, War Driver UK and Kismet. The Shuriken found roughly 20 to 35 percent more networks in a car, and it trailed War Driver UK at 2.4 GHz because it spends only a third of its airtime there. Kismet, which scans passively, returned fewer results than active probing in some runs, though the runs were not simultaneous. The practical takeaways are to keep older gear for dense areas, pay attention to antennas and routes, and expect dwell-time tuning to remain an open question.",
+      "durationSeconds": 2338,
+      "difficulty": "intermediate",
+      "kind": "talk",
+      "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20RF%20Village%20-%20WiFi%20Shuriken%20A%20New%20Architecture%20For%20High%20Performance%20Scanning.mp4",
+      "thumbnail": "/materials/thumbs/dc34-a90d1e09.jpg"
+    },
+    {
+      "youtubeId": "dc34-fbbeb66f",
+      "slug": "yes-it-runs-doom-over-the-air-gaming-on-a-bladerf-sdr",
+      "title": "Yes, it runs Doom over the air gaming on a bladeRF SDR",
+      "speakers": [],
+      "track": "hardware",
+      "topics": [
+        "hardware",
+        "embedded",
+        "reverse-engineering",
+        "device"
+      ],
+      "teaser": "Shows how the classic game Doom was ported to run entirely on a bladeRF software-defined radio's FPGA, with no host computer and video sent over RF.",
+      "summary": "The speaker set out to run Doom on a bladeRF software-defined radio without a host computer. The board's Cyclone 5 FPGA has no hard processor core, so the game runs on a soft-core CPU built from logic. Block RAM was the binding limit: the design uses 1,216 of 1,220 memory blocks. To fit, the first level's assets were cut heavily, with textures, sprites and sound removed and one placeholder texture reused everywhere. The level data is baked into the FPGA bitstream, so the board boots straight into the game loop.\n\nThe port relies on Doom Generic, which reduces the engine's hardware dependencies to a few callbacks for drawing frames, timing, sleeping and reading input. Frames render at 160 by 120 in monochrome and go out as interlaced NTSC video on a 5.745 GHz FM carrier. Controller input comes from a wireless GameCube controller on 2.4 GHz, decoded with a packet format that earlier reverse-engineering work documented, though some values had to be changed for the speaker's controller. The live demo showed the first level being walked through, with doors that would not open, no menu or HUD, and some ghosting artifacts.\n\nPlanned next steps include doors, shooting, color, and two-player play using the board's second radio. A practical takeaway is that logic use was only about 8 percent, so memory-heavy parts could be traded for logic. The code was promised for release after cleanup.",
+      "durationSeconds": 1395,
+      "difficulty": "advanced",
+      "kind": "talk",
+      "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20RF%20Village%20-%20Yes%2C%20it%20runs%20Doom%20over%20the%20air%20gaming%20on%20a%20bladeRF%20SDR.mp4",
+      "thumbnail": "/materials/thumbs/dc34-fbbeb66f.jpg"
+    }
+  ]
+}

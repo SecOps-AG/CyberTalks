@@ -92,6 +92,10 @@ export type TalkBrowserProps = {
   resultSize?: number;
   /** Homepage: Enter and "see all results" open the shareable /search page. */
   linkArchiveSearch?: boolean;
+  /** Heading for the village facet. */
+  villageLabel?: string;
+  /** Offer the "Not on YouTube" materials filter (media-archive recordings). */
+  notYouTubeFilter?: boolean;
 };
 
 const SORTS: { value: SortKey; label: string }[] = [
@@ -122,6 +126,8 @@ export function TalkBrowser({
   catalogSize,
   resultSize,
   linkArchiveSearch = false,
+  villageLabel = "Village",
+  notYouTubeFilter = false,
 }: TalkBrowserProps) {
   const router = useRouter();
   // `q` deliberately lives outside `filters`. If a keystroke updated `filters`,
@@ -462,6 +468,17 @@ export function TalkBrowser({
           />
           <span>Has repo</span>
         </label>
+        {notYouTubeFilter ? (
+          <label className="flex cursor-pointer select-none items-center gap-2 text-[12px] text-mint/80 transition hover:text-acid">
+            <input
+              type="checkbox"
+              checked={filters.notYouTube}
+              onChange={(e) => update({ notYouTube: e.target.checked })}
+              className="rounded-sm border border-acid/40 bg-void accent-cyan"
+            />
+            <span>Not on YouTube</span>
+          </label>
+        ) : null}
       </div>
       {/* A page that is all one conference (an event, a village) has nothing to pick. */}
       {!hide.includes("conferences") &&
@@ -500,7 +517,7 @@ export function TalkBrowser({
       ) : null}
       {!hide.includes("villages") ? (
         <FacetList
-          label="Village"
+          label={villageLabel}
           options={facets.villages}
           selected={filters.villages}
           onToggle={(value) => update({ villages: toggleValue(filters.villages, value) })}
@@ -538,7 +555,7 @@ export function TalkBrowser({
       {
         id: "materials",
         label: "Materials",
-        selected: (f.hasSlides ? 1 : 0) + (f.hasRepo ? 1 : 0),
+        selected: (f.hasSlides ? 1 : 0) + (f.hasRepo ? 1 : 0) + (f.notYouTube ? 1 : 0),
         content: (
           <div className="space-y-1">
             <label className="flex min-h-11 cursor-pointer select-none items-center gap-2 text-[13px] text-mint/80">
@@ -559,6 +576,17 @@ export function TalkBrowser({
               />
               <span>Has repo</span>
             </label>
+            {notYouTubeFilter ? (
+              <label className="flex min-h-11 cursor-pointer select-none items-center gap-2 text-[13px] text-mint/80">
+                <input
+                  type="checkbox"
+                  checked={f.notYouTube}
+                  onChange={(e) => stage({ notYouTube: e.target.checked })}
+                  className="rounded-sm border border-acid/40 bg-void accent-cyan"
+                />
+                <span>Not on YouTube</span>
+              </label>
+            ) : null}
           </div>
         ),
       },
@@ -630,12 +658,12 @@ export function TalkBrowser({
     if (!hide.includes("villages") && fc.villages.length > 0) {
       sections.push({
         id: "villages",
-        label: "Village",
+        label: villageLabel,
         selected: f.villages.length,
         content: (
           <FacetList
             bare
-            label="Village"
+            label={villageLabel}
             options={fc.villages}
             selected={f.villages}
             onToggle={(value) => stage({ villages: toggleValue(f.villages, value) })}

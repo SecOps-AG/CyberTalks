@@ -1,0 +1,52 @@
+{
+  "villageSlug": "meacs",
+  "villageName": "MEACS",
+  "eventSlug": "defcon-34",
+  "conference": "defcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLKko02UR7w28",
+  "description": "MEACS talks from DEF CON 34.",
+  "talks": [
+    {
+      "youtubeId": "EQSd8G9eLTA",
+      "slug": "ddef-con-34-meacs-the-autonomous-soc-blueprint",
+      "title": "The Autonomous SOC Blueprint- On-Premise ML & AI",
+      "speakers": [
+        "Ezz Tahoun"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "security-operations",
+        "threat-detection",
+        "incident-response",
+        "machine-learning",
+        "automation"
+      ],
+      "teaser": "Shows how on-prem machine learning can label, group, and chain SOC events into attack flows without dropping any log data.",
+      "summary": "The speaker, a former SOC data scientist, opens with an incident scenario in which investigators reconstruct a breach long after it happened. Alerts from separate tools arrive siloed, brittle correlation rules miss the links between them, and SIEM retention often expires before the full story can be pieced together. He cites the Singapore Health attack, which took more than a year to reconstruct by hand.\n\nThe proposed approach is a three-stage pipeline. First, a classification model tags every event with MITRE ATT&CK techniques instead of relying on hand-written labeling rules. Second, clustering groups similar events, such as repeated network flows from one session, so they can be deduplicated. Third, a Markov-chain style method links the grouped events causally into attack flows. He says a demo over about 10 terabytes ran on a small laptop with negligible compute cost, and that large language models can be added later to write investigation reports.\n\nThe practical takeaway is to keep existing detections and searches, place the enrichment and grouping step between the forwarder and the indexer, and focus on reducing redundancy rather than sampling or filtering. The volume reductions he quotes, from 80 to 99 percent, are his own estimates and were not independently benchmarked in the talk. He points to the open-source Attack Flow Detector project as a starting point.",
+      "durationSeconds": 1926,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "BlK_cHBd97w",
+      "slug": "meacs-dark-art-of-alert-correlation-extracting-attack-chains-fm",
+      "title": "The Dark Art of Alert Correlation- Extracting Attack Chains from Chaos",
+      "speakers": [
+        "Ezz Tahoun"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "security-operations",
+        "threat-detection",
+        "incident-response",
+        "machine-learning",
+        "open-source"
+      ],
+      "teaser": "Shows how MITRE ATT&CK enrichment, clustering and deduplication can group SIEM alerts into attack chains while cutting log volume.",
+      "summary": "The talk opens with a familiar SOC problem: log volumes are enormous, most of the data is audit or telemetry, and the few events that reflect real attacks get lost in the noise. The speaker argues that cost pressure pushes teams to split data between a SIEM and cheaper storage, which adds complexity and makes cross-source correlation harder. Multi-stage intrusions that span months and many endpoints are, in this view, poorly served by brittle correlation rules.\n\nThe proposed approach runs in stages before data reaches the SIEM. A small language model tags each event with a MITRE ATT&CK technique, related records are clustered into groups, and redundant entries are aggregated and deduplicated. Grouped behaviors are then linked into ordered attack flows that show progression through the kill chain. A worked example follows one intruder's reconnaissance and later installation across several data source types, presented as one context instead of scattered alerts.\n\nThe speaker claims volume reductions around 90 percent without losing data, which would cut costs more than moving data to other stores, and presents the work as an open-source tool. Little evaluation detail was given, so the savings figures are unverified in the talk. The practical takeaway is to test whether aggregating redundant records inside your existing SIEM can reduce volume before adding another data platform.",
+      "durationSeconds": 1467,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    }
+  ]
+}

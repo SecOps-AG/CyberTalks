@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-meta";
 import Link from "next/link";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import { loadHubPage } from "@/lib/page-runtime";
 import { topicLabels } from "@/lib/topic-labels";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "DEF CON",
   description: "Browse every DEF CON talk in the archive — villages, tracks, and years.",
-};
+  path: "/defcon",
+});
 
 export default async function DefconHubPage() {
   const { talks, editionCount } = await loadHubPage("defcon");

@@ -66,7 +66,7 @@ const DIFFICULTIES = new Set(["beginner", "intermediate", "advanced", "expert"])
 const LANGUAGE = /^[a-z]{2,3}(?:-[A-Z]{2})?$/;
 const MAX_TEASER = 220;
 
-const TALK_ID = /^(?:[A-Za-z0-9_-]{11}|dc33-[a-f0-9]{8})$/;
+const TALK_ID = /^(?:[A-Za-z0-9_-]{11}|dc3[34]-[a-f0-9]{8})$/;
 const MATERIAL_TYPES = new Set([
   "slides",
   "repo",
@@ -219,7 +219,7 @@ for (const file of files) {
     }
 
     if (!TALK_ID.test(talk.youtubeId ?? "")) {
-      error(at, `youtubeId "${talk.youtubeId}" must be a YouTube id or a dc33- media id`);
+      error(at, `youtubeId "${talk.youtubeId}" must be a YouTube id or a dc33-/dc34- media id`);
     } else if (seenVideoIds.has(talk.youtubeId)) {
       warn(at, `youtubeId already used in ${seenVideoIds.get(talk.youtubeId)} — kitchen may republish across villages`);
     } else {
@@ -307,7 +307,7 @@ for (const file of files) {
     if (talk.kind != null && !["talk", "clip", "interview", "announcement"].includes(talk.kind)) {
       error(at, `kind "${talk.kind}" is not a known kind`);
     }
-    const mediaId = typeof talk.youtubeId === "string" && talk.youtubeId.startsWith("dc33-");
+    const mediaId = typeof talk.youtubeId === "string" && /^dc3[34]-/.test(talk.youtubeId);
     if (mediaId) {
       if (typeof talk.mediaUrl !== "string" || !talk.mediaUrl.startsWith("https://")) {
         error(at, "mediaUrl must be an https URL");
