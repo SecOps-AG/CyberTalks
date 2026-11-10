@@ -46,7 +46,7 @@
       "summary": "The talk argues that cryptographic failures in real software usually come from the code around the primitives, not the math. Drawing on OWASP A04:2025 and GitHub Security Advisories current to January 2026, the speaker finds that two weakness classes, signature verification flaws (CWE-347) and algorithm choice problems (CWE-327), account for over half of the A04 findings.\n\nThe middle section walks through three real CVEs, each reduced to one missing check. In an ECDSA library, verification never confirmed that the r and s values were in range, so submitting zeros produced a signature that passed. A JavaScript secp256k1 package skipped the on-curve test for compressed public keys, enabling an invalid curve attack against a static server key. The attacker recovers the secret by combining results from several small-order points with the Chinese remainder theorem, demonstrated on a scaled-down key. In a Python JWT library, a block list of known key strings failed to stop an attacker from forcing an HMAC check that uses the server's public key as the secret, which allowed forging an admin token.\n\nThe closing section turns these into a review checklist: identify which cryptographic inputs an attacker controls, check the specification's range, format, and curve requirements before the operation, never let the token choose the algorithm, and prefer allow lists over block lists. The speaker notes that similar bugs appeared in advisories dated 2026, so the lesson is to avoid writing your own primitives while still validating everything that comes from someone else's library.",
       "durationSeconds": 1812,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "DZ8TPpQsM1Q",
@@ -70,7 +70,7 @@
       "summary": "The talk starts from a multi-party computation problem: several parties hold secrets, such as a private prompt, a proprietary model, or an auditor's benchmark data, and want a joint result without revealing them. Trusted execution environments can stand in for a neutral third party, but remote attestation only proves which code is running, not what that code does. Private code therefore leaves a trust gap, and the speakers argue that it can be closed by attesting a separate audit of that code inside its own enclave.\n\nThe speakers then introduce Cove, which describes a workflow as a graph of enclave nodes with declared artifacts, owners, and dependencies. Owners release their secrets only after reviewing and approving that exact workflow. Downstream nodes can require upstream certificates as preconditions before they run, and the chain can be checked by anyone holding the workflow and the vendor's attestation roots. Examples include confidential inference, bilateral benchmarks of AI models, and auditing the auditor, with a public or open-weight model as the stopping point.\n\nTo measure cost, the team ran the framework on Intel TDX through Phala Cloud's dstack. Reported overhead was about 1.1 times for CPU-bound compilation, about 2.1 times for attested GPU inference during a benchmark, and about 1.16 to 1.33 times for a 120-billion-parameter model under load. The main takeaway is that a small set of reusable primitives can replace bespoke enclave protocols.",
       "durationSeconds": 1610,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "Iq3oz24JiVs",
@@ -116,7 +116,7 @@
       "summary": "This panel brings together the people who write Gold Bug, the puzzle contest run by the Crypto Privacy Village, and members of Shagworm, the team that won last year. The contest is a chain of puzzles whose answers feed a final meta puzzle, mixing classical ciphers, steganography and deliberate misdirection. The organizers say some frustration is intended, and they describe how hints are released through Mastodon and Discord, with private team threads for groups that get stuck.\n\nThe middle of the session walks through standout puzzles from last year's treasure-hunt theme. A dice-shaking puzzle turned out to be Morse code hidden behind distracting numbers. A flower puzzle led to a Gromark-style cipher, and a rum-bottle song needed code to test many mappings. A color-filter puzzle layered Braille across RGB channels. The winners describe how a wrong starting point and a misread hint slowed the meta, which was finally cracked by plotting a route across the map and reading the first letters of the cities. They also admit to a wrong file version going live.\n\nThe closing segment covers this year's art-show theme, where most puzzles are physical pieces on display at the village. The practical takeaways are to first work out where the information is hiding, to treat odd details as potential clues, and to expect to get stuck and use hints when needed.",
       "durationSeconds": 3073,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "8XfVRfUP91Q",
@@ -179,7 +179,7 @@
       "summary": "The talk opens with a podcast remark about giving an always-on OpenClaw agent access to email, calendar and chat, and asks why such agents are mostly unhacked. The speaker built a test instance and tried one-shot prompt injections: spoofed authority, goal hijacking, fake policy and adversarial poems. Nearly all of them failed. Newer frontier models and layered defenses such as content wrapping, scrubbing and tool sandboxing account for much of the change, and the speaker notes that vendors' published injection detection rates have risen sharply.\n\nThe real progress came through memory. Injected text landed in daily memory files, a dreaming feature promoted it into long-term memory, and a heartbeat file was also altered. Repeated emails framing the attacker's address as an internal channel eventually made it trusted, and later messages asked the agent to update its summary script. The agent then forwarded every incoming email to the attacker. The speaker calls this prompt laundering, because untrusted text gains trust simply by moving into memory.\n\nThe takeaways are practical. Review memory files and scripts regularly, make as much of the agent's state read-only as possible, and purge poisoned content from transcripts before it gets promoted. Default-on memory and learning features in hosted assistants deserve the same scrutiny. The speaker also argues that data sent to frontier providers is not private, since logs may be retained and a breach would be hard to scope.",
       "durationSeconds": 2432,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "zIlohW9owd0",

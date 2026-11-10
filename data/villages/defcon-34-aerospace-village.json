@@ -28,7 +28,7 @@
       "summary": "The Rare Circuits team, who have built the Aerospace Village badges for several years, follow up on last year's Charlie add-on. Charlie adds audio, airband and FM reception, and a black-and-white OLED to a host badge. The team explains that Charlie was an early version of a new add-on standard they call SAO v3. Under that standard, a host badge can recognize an add-on through its name and vendor and product IDs, and an add-on can declare interfaces such as LEDs, sensors or a speaker that accepts streamed audio. Firmware updates through a bootloader are also planned, though the details are still open.\n\nThe middle of the talk covers the display work. Driving a commodity SSD1306 OLED fast over SPI and DMA caused severe screen tearing, because the panel gives no timing feedback. The team found that the charge pump's switching rate follows the controller's internal oscillator. Undocumented hardware test commands force a steady pulse pattern, which allowed pixel-synchronized four-level greyscale. They warned that this only works on genuine SSD1306 parts, since many modules are clones.\n\nThe talk closes with ANSM, an animation state machine that uses script books, loops and random jumps. The UI was prototyped in a simulator before firmware existed. Next steps include a public SAO v3 draft, feedback through a Discord server, open-sourced tools and reference implementations, and dev kits. Developers can reuse the standard, the animation framework and the display timing approach.",
       "durationSeconds": 1534,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "EsWbEw-3wqc",
@@ -50,7 +50,7 @@
       "summary": "Clara Davis, a Cal Poly student, opens with why third-party code matters for satellites, where software often cannot be patched after launch. Many C and C++ dependencies arrive implicitly through build scripts rather than package managers, so they are easy to miss. She describes extending an existing dependency scanner to detect multiple toolchains, adding code-clone detection to find vendored code, and building transitive dependency graphs checked against CVE data. Automated matching sometimes returns unrelated repositories, so results need manual review.\n\nDylan Gururajan then presents a post-compromise attack against CubeSat flight software built on NASA's F Prime running on Linux. Assuming an attacker can uplink and execute user-level code, the injector attaches to the main flight process with ptrace, saves its register state, and triggers a remote mmap to obtain writable memory. It writes a shared object path there, finds libc through the process maps, and redirects execution to dlopen so the library's constructor runs. He demonstrated the chain on a Raspberry Pi, and no kernel bug or file on disk is required.\n\nThe main lesson is that the attack depends on intended Linux behavior, so fixing a single exploit does not solve it. Options such as hiding process metadata, restricting ptrace, or restricting dlopen each carry tradeoffs for mission debugging. The speaker argues that developers should treat the flight process as its own protected boundary. Clara closes by recommending that every space project generate a software bill of materials, since you cannot protect components you do not know you have.",
       "durationSeconds": 1422,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "_60RaLEytkI",
@@ -93,7 +93,7 @@
       "summary": "Albrecht opens with a run of recent incidents: drones grounding firefighting aircraft, a drone striking a super scooper, a police helicopter hit in flight, and drones near passenger jets on approach. He argues the root problem is the same each time, an operator flying where they should not, and that drones remain valuable for deliveries, utility inspection, agriculture and emergency response, so the goal is shared airspace rather than banning drones.\n\nThe middle of the talk walks through detection. Remote ID is a mandated one-way broadcast that can ride on several radio waveforms, so a receiver needs multiple radios, and it relies on consumer Wi-Fi and Bluetooth chips built for phones. He notes that the older DJI message gave far longer range before it was closed off, and that Remote ID has no working authentication, leaving it open to replay. Radar, optical, infrared, acoustic and RF control-link sensing each miss some drones, so he argues for fusing sensors. A look at secondhand listings found many cheap drones without Remote ID. He reviews mitigation options, saying jamming and kinetic action create collateral risk, while cyber takeover works only on some models.\n\nHe closes with enforcement numbers from the FIFA World Cup, including about 700 drones seized and 250 temporary flight restrictions, and explains how the Safer Skies Act extended mitigation authority to trained state and local agencies. His takeaways: detection is far cheaper than defeat, fiber-linked and fully autonomous drones slip past RF-based tools, and a low-cost microcontroller can spoof identities or flood a space with false tracks.",
       "durationSeconds": 1653,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "4L2DknPdgHo",
@@ -135,7 +135,7 @@
       "summary": "The talk introduces AFDX (ARINC 664), the Ethernet-based network Airbus developed for aircraft such as the A380, and compares it with the older ARINC 429 and 629 buses. The presenters explain why standard tooling struggles with it: traffic is unidirectional, travels over defined virtual links, and has meaning encoded in its MAC and IP addresses. Switches do not learn addresses or route packets, so ARP, DHCP and Nmap-style discovery do not behave as they would on a normal network.\n\nTo understand the switch's behaviour, the team wrote brute-force tools that find accepted virtual links and payload sizes, and a fuzzer that changed header fields one at a time. They found that the switch filters almost entirely on the destination address and packet size, and that it enforces the configuration supplied by the operator. They also built a Wireshark dissector and a kernel-level shim that rewrites headers so existing data-loading software can send traffic. The main concern was the 615A data-loading protocol, because a malicious firmware or configuration image could cause serious damage, and older systems rely on CRC rather than signatures or secure boot.\n\nThe speakers reported no new vulnerabilities in the switch, which matched its documented configuration. Their takeaway is that the protocol's segregation and obscurity make conventional attacks hard, but offer no authentication or encryption. They also caution that their findings come from a single airframe, so the switch's prevalence across aircraft remains unconfirmed.",
       "durationSeconds": 1652,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "iuFUS6wHb7g",
@@ -221,7 +221,7 @@
       "summary": "Two aircraft security practitioners give a fast, frank tour of what someone moving from general cybersecurity into aviation should learn. They start with the regulatory frame: operators need an FAA authorization tied to an information security program, and safety management and continuing analysis requirements fold cyber risk into existing safety work. They then sketch the aviation ecosystem, from onboard functional domains and avionics data buses to ground systems that push software loads and pull aircraft data, with aircraft PKI protecting those updates.\n\nNext they walk through the standards that shape the field, including the RTCA and EUROCAE secure design and risk assessment documents, ARINC specifications and ATA Spec 42 for PKI. They point out that when manufacturers reference a standard in their maintenance instructions, it becomes mandatory for operators. They also contrast the US approach with the EASA Part IS framework. Because operational aircraft cannot be pen tested, research happens in labs and on certified or uncertified ground systems.\n\nThe closing section covers the skills that are hard to teach: curiosity, pragmatism, communicating risk to leadership and a structured mindset. The presenters point newcomers to a public IATA compilation of aviation cyber regulations and to the Aerospace Village, and they say a structured training course may follow.",
       "durationSeconds": 1587,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "TEYYQEVRvy8",

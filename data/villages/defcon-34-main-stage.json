@@ -110,7 +110,7 @@
       "summary": "The researchers from UC San Diego began with an unrelated study of Bluetooth credit card skimmers at gas pumps. Their scans kept picking up an unfamiliar device, and an FCC filing identified it as KARR, an aftermarket anti-theft system that dealers install and offer as a paid upgrade. The team then studied six aftermarket Bluetooth systems in total and reported that three had serious flaws.\n\nThe Android app turned out to be a .NET application packed into a compressed assemblies blob, which hid its Bluetooth code from standard APK analysis. The authentication was a challenge-response scheme, but one ingredient, the secret key, was hard-coded and shared by every unit. Access control existed only in the app's interface, because the server simply listed which vehicles a user could see. Even in the disabled no-sale mode, the device still accepted a mode-change command, which let an attacker restore full control. The demo showed door unlocking, immobilizer disabling, and horn and light triggering.\n\nThe vendor later removed the universal key from the app and issued per-vehicle keys, and disabling the unit in no-sale mode now appears to turn it off fully. The team also described a remote starter system whose pairing QR code was built from a public MAC address, and a dealer-linked product they could not fully assess. Their takeaways: aftermarket devices sit outside OEM security reviews, Bluetooth's built-in pairing does not cover vehicle control, and owners with KARR should check for a window sticker and apply the update.",
       "durationSeconds": 2147,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "ltwLEu0otaY",
@@ -132,7 +132,7 @@
       "summary": "This talk closes a multi-year, self-funded research project on Flock Safety surveillance hardware, bought secondhand on eBay. The devices covered are Raven gunshot detectors, Falcon and Sparrow license plate readers, and Picard and Bravo edge compute boxes. The speaker traces the path from physical access over UART and an unauthenticated download mode to weak boot protections, broken mutual TLS, hardcoded keystore secrets, and a root-level log cleanup routine that could be abused for command injection.\n\nThe middle section covers the most significant new finding. Internet-wide scanning data showed live camera feeds and admin services reachable without authentication over a cellular data connection. The speaker expanded the search by checking the network block that owned those addresses, which turned up dozens of listings. Another chain used a three-press button sequence to open a hotspot with a shared default password, then moved from a wireless connection to a root shell. The speaker also described a \"flea market supply chain\" idea: contacting component makers or using vendor tooling can yield SDKs far faster than reverse engineering alone.\n\nThe talk ends with BirdShot, a public toolkit of more than a dozen modules that automates several of these chains, and BirdEye, a harness for running a vision model against camera or webcam input. The takeaways are that surveillance devices often ship with debugging enabled, no secure boot or disk encryption, and an assumption of physical isolation that fails once they reach the internet. The speaker also urged people to inventory the surveillance technology around them.",
       "durationSeconds": 2912,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "9YsizCh9oiA",
@@ -177,7 +177,7 @@
       "summary": "The talk treats local AI inference runtimes such as llama.cpp and Ollama as ordinary native code, where memory management happens outside the language safety that surrounds it. The presenters split their research across three trust boundaries: the JNI bridge used by Android apps, the HTTP server's model lifecycle, and the Go-to-C interface inside Ollama. They stress that the work is about exploiting the runtime itself, not prompt injection.\n\nOn Android, a race between model unload and a benchmark routine leaves a freed context in use. The team reclaims the freed allocation with attacker-chosen contents, redirects a virtual call, and demonstrates code execution inside the host app. In the llama.cpp server, an idle-unload feature can free a model while request handlers still hold a pointer to its vocabulary. They reclaim that chunk remotely across threads and reach an attacker-controlled dereference, but stop short of full remote code execution because they still lack an address leak to defeat ASLR. In Ollama, crafted GGUF tensor shapes make quantization read past a Go-backed buffer. By choosing a conversion path that preserves data, the leaked heap contents survive into the saved model.\n\nThe practical takeaways are to avoid idle unloading on exposed servers, place authenticated TLS proxies in front of them, validate every size read from a model file, and use checked arithmetic. Audit unsafe and cgo boundaries for the same patterns. Vendor responses were uneven, and some upstream patches were closed, so the speakers published their fixes.",
       "durationSeconds": 2756,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "RNVNVLBKBWQ",
@@ -198,7 +198,7 @@
       "summary": "The talk argues that Active Directory Certificate Services is still exploitable despite Microsoft's 2022 strong certificate binding enforcement and the 2024 CVE fix. The presenters introduce five new techniques, numbered ESC18 through ESC22 to extend the public ESC1 to ESC17 scheme. Each was validated on a fully patched Windows Server 2025 enterprise CA with Microsoft's recommended mitigations applied. Every chain starts from an ordinary domain user with no special ACL, GPO, or template rights and ends with extraction of the krbtgt key.\n\nThe techniques target different parts of the post-2022 defences. One abuses certificate policy identifiers that the CA copies from the CSR into issued certificates, linked to security groups through Authentication Mechanism Assurance. Another injects a security extension that the CA passes through unchecked. A third omits the security extension entirely, which makes the KDC fall back to reading the SID from the SAN URL, an undocumented behaviour. A fourth abuses enrollment on behalf of with version 1 templates, whose array signature attribute the CA silently ignores. The last shows that enrollment agent restrictions can appear configured while being absent, because the certutil flag is not recognised on Server 2025. Each technique was demonstrated live.\n\nFor defenders, the recommendations include removing the security extension from the CSR whitelist, enforcing explicit EKUs, disabling the ESS flag where it is not needed, upgrading version 1 templates, restricting enrollment to specific groups, and verifying enrollment agent restrictions in both the GUI and the registry. Suggested detections include event 4887 for security extension object IDs and event 4768 for PKINIT authentication without that extension.",
       "durationSeconds": 2860,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "SQxuyxqVyDI",
@@ -219,7 +219,7 @@
       "summary": "This talk uses the Ethereum phone (dGEN1) as a case study of \"crypto phones\", devices that promise to keep wallet keys in hardware-backed storage. The speaker frames the trade-off between browser wallets, which are convenient but exposed to any privileged attacker, and hardware wallets, which are secure but awkward to use. Airdrop incentives make these phones attractive targets. Because root access is not available, the research starts with the MediaTek download mode, where the authentication fuses were found unblown, so a modified preloader could be loaded over USB.\n\nThe middle of the talk covers the boot chain. The speaker describes a technique called Loader-of-the-Loader, which patches each later stage in memory so that flash is never written and a failed attempt can be retried. The chain reaches the secure-world hypervisor, ARM trusted firmware and a little kernel, where the image-loading path was replaced and signature checks were bypassed. On the Android side, the screen-lock check runs in a software gatekeeper that reports itself as hardware-backed. Its inputs sit in the password file, so the PIN can be brute-forced offline. The wallet's signing key is a P256 key that controls an on-chain smart account, and the speaker verified that the recovered key matches that account.\n\nThe final part looks at the airdrop claim, which relies on a hash of the IMEI and serial number. The speaker showed that two identifiers printed on the retail box were enough to claim rewards for a sealed, unactivated device. The practical lesson is that hardware-backed claims need real secure-element verification, and identifiers printed on packaging should never serve as secrets.",
       "durationSeconds": 1435,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "6U7cWKZzQBc",
@@ -305,7 +305,7 @@
       "summary": "The talk asks whether an autonomous system can invent new HTTP desync attack techniques and then use them against live websites. Desync research was chosen because each candidate can be proven on a real target instead of remaining a theory. The pipeline has four stages: generating hypotheses from fragments of RFC text, testing candidate triggers across roughly 30,000 bug bounty sites using plain code rather than AI, weaponizing confirmed hits, and feeding each discovery back in to seed further discoveries.\n\nThe generator produced about 30,000 unique vectors from 138 RFCs, and several of them caused desync on production systems, including banks and an airport. Early attempts showed that coding agents struggled to build working exploits, so success checks were moved into deterministic code and each stage received only evidence from the previous one. A technique that omits one byte from a second request removed the race condition behind stacked responses. Later cascades produced a zero-day in Apache Traffic Server and a proposed class called shared parser confusion, where servers reuse response-processing code for requests.\n\nThe main takeaway is that automated research can surface new issues, but the largest gains came when a human guided the cascade stages. Evaluation design decides whether results are signal or noise. The speaker suggests choosing topics where automated checking is hard if you want to avoid collisions with AI-driven researchers. The full source code of the system has been published.",
       "durationSeconds": 2457,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "Bbi1cQdmoWo",
@@ -326,7 +326,7 @@
       "summary": "The talk starts with an incident response case. Responders found a service key pointing to a randomly named .sys file whose alternate data stream held its configuration, and first suspected a rootkit. It turned out to be the Boot-Time Removal driver (btr.sys), a Microsoft-signed component that Defender extracts from mpengine.dll only when a remediation needs a reboot. The driver has no IOCTL interface, so its only input is the encrypted configuration stored in that stream.\n\nThe speaker documents the format from scratch. The configuration uses RC4 with a 256-byte key that is identical across 18 driver builds spanning roughly Windows 7 to Windows 11, and its integrity checks use a CRC32 variant without the final XOR. The structure has a global header, a feedback file path, and item headers that map to six action IDs covering file deletion, directory deletion, move/quarantine, and registry key, value and set operations. Two actions are especially useful beyond their intended purpose: a move with an empty destination deletes a file, and a move with a valid destination writes without restriction. The companion tool BTR_CLI builds valid transactions and can run them either at runtime or during early boot, in a window before Defender's user-mode services start. The demo removes Defender binaries and registry keys despite tamper protection, then writes a file into a system directory.\n\nThe main takeaway for defenders is that no exploit or CVE is involved, and Microsoft did not plan a servicing fix after the report. Detection suggestions include Sysmon events for alternate data stream creation, driver loads paired with file deletions, and tightening the Load Driver privilege.",
       "durationSeconds": 2872,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "D6pX0fEKzSc",
@@ -347,7 +347,7 @@
       "summary": "The talk argues that endpoint detection and response products, which shield themselves with Protected Process Light and tamper protection, can be turned against the systems they guard. The speaker reviews how EDRs use user-mode hooks and kernel callbacks, and why older bypasses such as unhooking, direct syscalls, living-off-the-land binaries and vulnerable drivers have become less reliable.\n\nThe focus then moves to SentinelOne. An exposed COM helper's dump method checked only that the caller was an administrator, not who the caller was or where it ran from, so any local admin could dump protected processes. Pairing that with publicly documented techniques for remote COM calls and for mapping a PE into memory, the speaker got a statically linked payload running inside Microsoft Defender, and a demo showed it encrypting files in a folder. A rogue installation path was also described: the site token check ran inside a temporary DLL that could be extracted, and a crafted Base64 JSON value passed it.\n\nThe speaker reported that the same access let the injected code block removal of the EDR and tamper with other protected security products, and that similar behavior was seen on CrowdStrike. The issues were disclosed through HackerOne. The main takeaways are that patching a symptom, such as removing user-mode pages from kernel dumps, does not fix the underlying trust problem, and that unexpected security software on a machine deserves the same scrutiny as malware.",
       "durationSeconds": 1677,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "CCvtrR-xPbk",
@@ -369,7 +369,7 @@
       "summary": "The talk opens with what a hardware root of trust is for: verifying boot code, measuring what ran, storing keys, and attesting platform state. The speakers separate external root-of-trust chips, which sit on the motherboard, from internal ones built into the processor package. They argue that an external chip is the easier target, and they describe NVIDIA DPU boards that use a Microchip external root of trust. One board had a test-bypass pin that could be reached with a fine wire under the package, which they said they had not fully tested on the target hardware.\n\nFor the second part, they set out to build a cheap stand-in for a discrete SPI TPM. Microcontrollers were too slow to answer the bus in time, so they moved to small FPGA boards. A low-cost Tang Nano board first ran as a minimal TPM that reported only static PCR values, and Windows accepted it. A later version sat between a real TPM and a motherboard with a logic analyzer, and it forced PCR extends to a fixed value while passing every other command through. Windows still rejected the setup for BitLocker because it checks the TCG event log. Most of the Verilog was written with an AI assistant, which the speakers presented as the main change in who can attempt this work.\n\nThe closing takeaway is that the required hardware costs tens to a few hundred dollars. Attackers could use this to spoof hardware identity, fake PCR state for measured boot, or probe attestation. The speakers note that early boot measurements are harder to forge, and that anti-cheat systems detected their test setup. They say the code, gateware, prompts, and data are being released for others to reproduce.",
       "durationSeconds": 2930,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "tYireGDxRM0",
@@ -391,7 +391,7 @@
       "summary": "This talk examines whether hardware control-flow integrity on 64-bit ARM Linux and Android, pointer authentication for return addresses and branch target identification for indirect jumps, can be bypassed through the signal return path. The presenter explains that sigreturn restores the saved processor state, including the branch-type field that BTI checks. By crafting a signal frame with that field zeroed, an attacker can land on ordinary code gadgets without a valid landing pad.\n\nBecause forged frames must sit on the stack, the attack needs a bootstrap. The talk introduces CFI-safe stack pivots that begin on a valid landing pad, using a glibc context function and a statically linked unwinder inside Android's Bionic library. Chained frames then loop through gadgets and sigreturn calls. The presenter also shows composition with COOP, which abuses C++ virtual calls, and with C++20 coroutine frames, whose resume pointer can be overwritten. This reduces the need to control the first argument and cuts the memory used by the frames.\n\nA live demo on an Ubuntu server on AWS ARM hardware with BTI and PAC enabled used a heap overflow to scan a 256 KB buffer for a random secret, which the exploit then recovered. The practical takeaway is that BTI and PAC do not close these reuse paths on current Linux systems, and the presenter suggests the issue may be hard to fix.",
       "durationSeconds": 1505,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "ZVmRe8OVZtE",
@@ -412,7 +412,7 @@
       "summary": "The talk starts from a practical question: Bluetooth Low Energy lockers hold millions of parcels, and porch thefts make them look like a safer option. The speaker began by scanning a locker's advertising data and GATT characteristics, then recorded phone-to-locker traffic in Wireshark. Comparing repeated pickups while changing one variable at a time, he mapped a CBOR-style message format, found a timestamp that worked against replay, and identified the packet that opened a slot. Forging that command failed, because the locker and the app perform mutual public-key authentication.\n\nHe then shifted to the phone side. Intercepting the app's traffic and bypassing certificate pinning showed that the open command and session credentials come from Amazon's servers, but the locker still rejected anything it could not verify. Next came the hardware. Documents and leaked maintenance videos from the manufacturer pointed to a board bought cheaply online, whose firmware had no readout protection, but the firmware turned out to be test code, not the production protocol. Physical attacks on the slot locks followed, including key-pattern analysis and custom key fabrication.\n\nThe main takeaway is about persistence across attack surfaces. Each dead end pushed the work toward a different layer, and the talk presents the locker as a case study in why a well-designed cryptographic protocol can still leave the mechanical and manufacturing layers exposed.",
       "durationSeconds": 2675,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "fti-TfOzu5g",
@@ -432,7 +432,7 @@
       "summary": "The talk examines Connective's signing browser extension, used by many Belgian banks and government bodies, and the native host it relays to. The speaker explains the trust chain: a web page messages the extension, which forwards the request to the native host without recording where it came from. The only gate is an activation token, and because that token carries no origin binding, it can be replayed by any site.\n\nUsing a virtual eID and a virtual Maestro card built on an ESP32 board, the researcher showed that any page or iframe could read the full contents of a card. The host also returned a PIN token that held the PIN encrypted with a key included in the same token and an IV hardcoded in the binary. That allowed decryption and reuse for about five minutes, so an attacker could phish a PIN once and then authenticate or sign as the victim. The native host also validated library paths by searching for \"DLL\" as a substring, so a file with a double extension passed the check and could be downloaded and loaded as a polyglot, giving code execution from an ordinary-looking download.\n\nThe vendor first rated the problems medium severity and fixed them months later, after follow-up and a national agency's involvement. The practical takeaways are that extension store reviews focus on malware rather than vulnerabilities, native hosts should be treated as untrusted attack surface, and extension developers must validate input that arrives from web content.",
       "durationSeconds": 2054,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "mS0nN0KssvM",
@@ -475,7 +475,7 @@
       "summary": "The talk starts from a Pwn2Own NVIDIA category target, the NVIDIA Container Toolkit, and the question of whether a malicious container can run code on the host. The researchers mapped the attack surface: the Go management code, the GPU kernel driver, and the RISC-V GSP firmware. They focused on the open-source Linux kernel module, because containers on one host share a kernel, and found a use-after-free there. The vulnerability itself is not detailed, and NVIDIA had already patched it.\n\nThe middle section covers how they made the bug reliable. A freed object can be reclaimed by an allocation whose contents are copied back to user space through the ioctl buffer, which leaks whatever gets written into it. To win the race, they used the read-write semaphore's writer-preference behavior and reordered lock acquisitions so the timing became deterministic. They then corrupted a linked-list node to get an arbitrary unlink, overwrote a memory-mapping structure's start and size fields, and mapped all of physical memory into user space.\n\nA recorded demo shows the exploit run inside a container and return a root shell on the host. The speaker said an AI coding agent wrote much of the final physical-memory exploitation. The takeaway is that a single driver bug can break container isolation when containers share the host kernel, and that GPU driver code deserves the same scrutiny as core kernel code.",
       "durationSeconds": 2205,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "5VejXSMacwc",
@@ -538,7 +538,7 @@
       "summary": "The talk follows earlier research on Diebold Nixdorf ATMs and turns to the software that protects their disks. Diebold uses CryptoPro Secure Disk for BitLocker, a proprietary layer that adds pre-boot authentication, TPM sealing and an obfuscated encryption scheme on top of Windows BitLocker. Because CryptoPro is sold commercially, the researcher could obtain a recent release and rebuild the setup in a virtual environment.\n\nThe middle of the talk covers the analysis. A hidden area of the Linux boot partition holds a layout table that points to an encrypted configuration store, and the researcher reversed the key derivation and cipher used to open it. The TPM secrets were stored in a form that could be read from the offline disk, and the PCR measurements were bound only to a few unencrypted EFI files. The disk-encryption key sits in a further store protected by a key derived from a hardware fingerprint. The flaws that made the attack possible included a fallback that mounts partitions unencrypted when decryption fails, a encryption check that trusts only a four-byte header, and no integrity checks on the store's contents. Two demos showed a rebuilt root filesystem being booted and a live Linux image using a Microsoft-signed shim to get past Secure Boot.\n\nThe talk closes with the disclosure timeline. Nine CVEs were reported to the vendor, and the later version 7.7.4 measures boot state before unsealing the TPM and removes the fallback path. The speaker also released Ragavan, a toolkit that automates extraction, decryption, TPM unsealing and BitLocker recovery. The takeaway for practitioners is that a vendor's security wrapper can add its own attack surface to the supply chain.",
       "durationSeconds": 2165,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "_v3Uu1uS-Ks",
@@ -582,7 +582,7 @@
       "summary": "The talk begins with a fuzzer report against PHP that was filed under a JIT label, yet the bug reproduces with JIT, opcache and all extensions absent. The speakers trace it to a use-after-free in the core engine's concatenation path, where a destructor triggered during a property write leaves a stale reference behind. They show the defect was already publicly reported and that PHP declined to treat it as a security issue.\n\nThe middle of the talk covers turning the crash into a working exploit. A reclaimed object of matching size gives controlled reads and writes, a date-interval technique steers memory access, and the module base is computed from a leaked internal pointer so the system function can be resolved inside the process. The demonstration runs on a distribution build as an unprivileged user with address randomization, PIE and disable_functions enabled. The speakers claim one addition of their own: routing the call through SPL array access rather than calling the function directly. They also say that much of the chain matched earlier public work they found partway through the project.\n\nFor defenders, the takeaway is that disable_functions is not an isolation boundary. Process isolation, least privilege and blocking upload or exec footholds matter more. The root cause has a narrow fix, clearing the destination before destroying the old value, which passed their test runs but had not landed upstream at recording time. Sanitizer output showing this free path is a usable detection signal.",
       "durationSeconds": 2248,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "RVIXI277yxg",
@@ -756,7 +756,7 @@
       "summary": "The talk opens with System Guard Runtime Monitor, a Defender extension built for integrity attestation that has since been disabled and removed from Windows. Its kernel driver, sgrm-agent.sys, routes requests through a single IOCTL dispatcher, and the speaker walks through its routines, including memory mapping and thread freezing. To reach them, a caller must run as a protected process under the broker's service identity and hold the one driver handle the broker opened.\n\nThe attack starts inside a protected process. The speaker revives a 2018 technique that abused a COM interface in WerFault Secure, which later Microsoft patches broke. Sideloading a vulnerable faultrep DLL restores that interface, and a shared section passed through a command-line argument lets a crafted thread context call WriteProcessMemory to plant shellcode in a DLL's code section. That shellcode duplicates the broker's driver handle, freezes every thread of the Defender engine for fifteen minutes, then restores them. A demo shows a test file that Defender normally flags going undetected during that window.\n\nFor defenders, the talk recommends blocking driver downgrades and vulnerable driver loads, and watching for privileged handle requests to protected processes, which a kernel object callback can strip. The freeze routine was removed in later driver builds, and Windows 11 25H2 no longer ships the driver, though the speaker says the chain can be adapted to load it as a service. Source code is public.",
       "durationSeconds": 2412,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "I_-5Jy1OH1A",
@@ -820,7 +820,7 @@
       "summary": "The talk starts from the limits of current real-time phishing proxies. They drop requests during multi-factor challenges, lose visibility once a victim signs in, and allow little interaction after the initial capture. Browser-in-the-middle addresses this by sharing an attacker-controlled remote browser with the victim, so the victim authenticates inside that browser. The speaker also lists gaps in earlier public proofs of concept, including single-victim design, weak stability, limited modularity, and lost sessions after logout, and explains how the new work addresses them.\n\nThe core techniques combine a low-latency streaming layer with dynamic resolution and a replaced cursor, a bidirectional WebSocket channel that can alter page DOM, push JavaScript, or deliver files, and a hardened Firefox kiosk profile. Firefox extensions read cookies and local storage, log keystrokes, rewrite in-flight data, and intercept downloads so a modified file can be sent back. A logout handler clears cookies in the attacker's browser while the victim sees a normal sign-out, so the session stays usable. Live demonstrations cover a Google sign-in, a Drive file swap, a click-fix clipboard delivery, a fake camera prompt, and a fetch-based port scan from the victim's machine.\n\nFor defenders, the speaker points to signals such as unusual WebSocket traffic, sign-ins from distant locations within a short time, and client-side DOM changes. Planned work includes real-time password manager spoofing, Chrome support, and AI-driven phishing flows. The open-source release of the core framework, with its dashboard, base modules, and extensions, was announced for after the talk.",
       "durationSeconds": 2518,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "YKkYyIMfjrg",
@@ -841,7 +841,7 @@
       "summary": "The talk examines an LLM gate that OpenSearch placed in front of its CI pipeline. The gate decides whether a first-time contributor's pull request may trigger a workflow that holds AWS and Docker Hub credentials. The speaker reached it after reporting a pull request target weakness, and the project replied that the model would catch the attack.\n\nThe speaker's early attempts failed. Encoded commands, nested base64 layers, and direct prompt injection were all flagged. Analysis of the gate's prompt showed that its output-format instructions discouraged the model from using tools, so it behaved like a single-shot classifier. Hiding a payload in a large diff also failed, and moving the payload into a binary annotation processor was caught because the model judged the artifact by its origin. The working path used the build file itself. The model trusted dependency namespaces it saw in the repository, so a lookalike namespace on Maven Central, tied to a domain the speaker could buy, passed the gate in a small share of runs. That was enough.\n\nThe project's fix added a warning about dependency changes to the prompt. The main lesson is that the model only sees the diff. It cannot query registries or check domain ownership, and its non-determinism means a low pass rate is still exploitable. An LLM can be one layer of a defense, but it should not be the only gatekeeper.",
       "durationSeconds": 2258,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "4e9vkUiPR9Q",
@@ -862,7 +862,7 @@
       "summary": "The speaker argues that the push to deploy NIST's lattice-based post-quantum standards, ML-KEM and ML-DSA, is opening gaps for ordinary implementation bugs. He says the math is sound, but the code is new, written under migration deadlines, and often lightly audited.\n\nThe talk covers three attack classes. First, length-handling mistakes at the deserialization boundary can overflow a stack buffer during a hybrid TLS 1.3 key exchange, which he presents as a route to code execution before any cryptography runs. Second, constant-time C code that uses a branchless bit test was turned into a secret-dependent branch by Clang optimizations, creating a chosen-ciphertext oracle that leaks partial key material over a local network. Third, on a Cortex-M4 target, a voltage glitch that cuts short coefficient sampling during ML-DSA signing leaks the secret vector, demonstrated with a low-cost ChipWhisperer.\n\nHe argues that hybrid classical-plus-PQC helps against some of these bugs and not others. Practical defenses include memory-safe parsing and fuzzing, constant-time measurement and verification, and verified implementations. The talk ends with a live run of LatticeScope, an open-source timing-leak detector and structure-aware fuzzer, which flags planted bugs and then runs against a real implementation.",
       "durationSeconds": 2642,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "uvLJ0JrLeyE",
@@ -948,7 +948,7 @@
       "summary": "The talk starts from a persistence technique that uses invisible Unicode characters to create Active Directory accounts that look like duplicates. The speaker found that the directory ignores some of these characters in LDAP filters, so a query without the character still returns the object. That behavior led to a question about whether uniqueness checks on other attributes could be sidestepped in the same way.\n\nService principal names and user principal names must be unique across the forest, but the speaker showed that the check can be bypassed with unfilterable characters. A duplicate host-class SPN lets an attacker deny service to a share, and an explicit duplicate makes the domain controller fail Kerberos so clients silently fall back to NTLM. A second chain abuses the Kerberos change-password flow. A low-privileged user spoofs a UPN that matches a domain admin's account name, obtains a ticket that the domain controller accepts, and resets the admin's password. The speaker reported both issues to Microsoft, which patched them in March and April.\n\nFor defenders, the recommendation is to patch domain controllers first. If patching is delayed, the talk suggests alerting on SPN or UPN changes that collide with existing values, and correlating them with password reset events. The speaker also stressed least privilege, MFA and behavioral detection for tier-zero accounts. A tool that automates the attack flow was announced for testing.",
       "durationSeconds": 1945,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "OQNgr3xyylI",
@@ -992,7 +992,7 @@
       "summary": "The talk opens with how an electric vehicle and its charger communicate during DC charging. The speakers, from an embedded security testing team, walk through the control pilot signalling, the power line communication sounding step that pairs a car with its charger, and the network discovery that follows. They then cover the ISO 15118 and older DIN session sequence, from protocol negotiation and pre-charge through current demand loops to welding detection at the end. They note that the network management key is sent in plaintext early in the exchange, so it adds little protection against a man-in-the-middle.\n\nThe core question was whether the vehicle's battery management system believes what the charger reports. To test this, the team built ChargeSploit, a software and hardware toolkit that can simulate a vehicle or charger, sit in the middle of a live session, and manipulate control pilot and proximity pilot signals. Their rig also included a programmable load and an adjustable high-voltage supply for the DC pins. Against a Tesla Model 3, the car measured voltage only during pre-charge and then accepted false voltage and current figures. With a bank of kettles giving roughly 12 to 15 kilowatts of load, the team drained the traction battery, and a phone was charged from a locked car in the demo.\n\nFor practitioners, the takeaway is that the vehicle trusts charger-supplied values once the session is running. The speakers described possible harm beyond unauthorized power: permanent battery damage if discharge goes far below normal limits, and denial of service through a short circuit on the pins. They released a restricted version of the tooling and stressed that the voltages involved are lethal.",
       "durationSeconds": 1913,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "QU_Sv_0MnDw",
@@ -1013,7 +1013,7 @@
       "summary": "The talk opens with a model of AI orchestration platforms. A workflow starts at a trigger such as a webhook, schedule or inbound message, passes through an LLM step, then reaches code nodes that run Python or JavaScript before producing an output. The speaker argues that these products assume anyone who can edit a workflow is trusted to run code on the host.\n\nAcross seven platforms, the speaker reports multiple CVEs and critical findings, grouped into recurring patterns. These include string-based filters that are easy to bypass, a sandbox hardening call that was commented out, eval and exec applied to LLM output, and a sandbox bootstrap ordered after the code it was meant to contain. Some endpoints needed no authentication at all. One demo chained a single prompt injection into an LLM module to reach remote code execution without logging in.\n\nVendor responses ranged from fixes to calling code execution intended behavior, with one project's own documentation teaching the vulnerable pattern. The talk closes with a five-step method for auditing these platforms: map inputs, trace sinks, check execution order, test reachability by low-privilege callers, and check the docs. Defenders are advised to require authentication on execution paths, disable dangerous flags, and assume persistent compromise.",
       "durationSeconds": 2588,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "-BzHAi-3Fgk",
@@ -1077,7 +1077,7 @@
       "summary": "A friend bought a 2000 Sea-Doo jetski without its key, and the official dealer tooling cost more than the machine itself. With no public documentation, the speaker began by reverse-engineering the diagnostic software's CAN protocol, which uses KWP2000 with authenticated security levels. Checking the adapter path, the speaker wrote a compatible adapter DLL for cheap CAN hardware. The bus turned out not to be the route for this model, though. The real programming access is a one-wire interface on the key post, handled by a separate electronic module.\n\nLogic analysis of the key handshake showed a one-wire token protocol. The speaker found firmware for the programmer inside the software bundle, which targets a Motorola HC08 microcontroller. A download command in the adapter firmware dumped the module's EEPROM without writing anything, and a checksum brute force over the dump located the key IDs. The data also exposed the VIN, engine hours and the number of enrolled keys. Using this, the team built a key that got the engine running on the bench, and later a Flipper Zero app that reads the module and emulates saved keys.\n\nFor a portable solution, the speaker designed a small ATtiny circuit that charges capacitors from the one-wire signal alone, with cycle-precise handwritten assembly. It was mounted on a small PCB in a printed enclosure. The main takeaway is how a proprietary immobilizer can be understood from its wire-level behavior, and how a cheap programmable replacement becomes possible without the paid tools.",
       "durationSeconds": 1094,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "wwEAdInptxg",
@@ -1143,7 +1143,7 @@
       "summary": "The talk starts from a 2025 Amnesty International and Google TAG report on an in-the-wild chain of Linux kernel USB bugs used against phones. That report described the vulnerabilities but not how to exploit them. The speakers, from NCC Group, set out to close that gap. They mapped the USB attack surface, noting that desktop distributions enable far more device classes than a typical Android kernel, and explained descriptor hierarchies and class specifications such as HID, UVC and mass storage. They also described their experience building tooling to insert and remove emulated USB devices programmatically.\n\nThe middle section covers two bugs. The first is an information disclosure in the HID raw request path, where a malformed buffer makes a length underflow to a very large value, leaking about 64 KB of kernel memory. The team matched recurring kernel text pointers against known offsets to recover the kernel base, bypassing KASLR. The second is an out-of-bounds write in the UVC driver, triggered by a specific quirk. The speakers turned a min/max check into a way to locate a writable 32-bit value near the frame interval pointer, then used it to overwrite the uevent_helper path so that a script on an attacker-supplied USB stick runs as root.\n\nThe talk closes with a live demonstration on an Ubuntu desktop. A single emulated USB device leaks the kernel base, performs the write and returns a root reverse shell. The takeaway is that USB is a practical attack vector, and that inexpensive hardware and a small amount of custom tooling are enough to build a working exploit. The speakers point listeners to the full written paper for the details they could not cover.",
       "durationSeconds": 2038,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "YtNfvHMD8UI",
@@ -1251,7 +1251,7 @@
       "summary": "The talk examines how Windows Plug and Play can silently fetch a signed vendor driver package when a USB device appears and run its installer code as SYSTEM, without administrator rights. The presenters, from Accenture's offensive security team, opened with a live demo on a fresh Windows 11 machine. They then chained two low-severity flaws from separate vendors: a named pipe exposed by a modem service that let them change the machine's DNS, and a co-installer that trusted configuration files fetched over plain HTTP and allowed path traversal into System32. Hardware was emulated with FaceDancer rather than real devices.\n\nThe second part moved the same install path onto RDP USB redirection. The server builds a device from descriptors the client sends, and a group policy setting decides whether that device is accepted. Where that gate was open, a forged camera identity sent by a standard user session triggered a DLL hijack in a signed camera package, giving SYSTEM code execution with no physical access. The team also described PnP Simulate, a tool for comparing Windows Update discovery with the real installation flow, and noted that many matches never reached automatic installation. Further stages used a vendor service with a hard-coded check and a registry-writing admin service.\n\nThe takeaways were that a valid signature says little about whether every service and installer was reviewed from an attacker's viewpoint, and that low-severity bugs can combine into serious impact. Mitigations mentioned included blocking unneeded USB device classes, disabling RDP USB redirection where it is not needed, and keeping drivers updated. The presenters said proof-of-concept code and tooling would be published.",
       "durationSeconds": 2428,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "SpXkSIknu6g",
@@ -1273,7 +1273,7 @@
       "summary": "The talk asks whether a routine container or model pull, which needs no special privileges, can be turned into an attack. The presenters briefly explain OCI registries: manifests describe blobs named by SHA-256 digest, and clients talk a JSON-over-HTTP distribution protocol. They focus on Ollama and Docker Model Runner because both give registry client access to users who do not have host access.\n\nThe middle covers the findings. A malicious registry can answer an authentication challenge with an arbitrary URL, so the client makes server-side requests to internal services or cloud metadata endpoints. Depending on the response, the client either forwards a token to the attacker or returns the full response to the caller, which makes a read-capable SSRF. In Ollama, exposed servers without authentication could be made to copy host files through crafted manifest paths, and because no hash verification happened, SSH keys, environment variables, and cloud credentials could be exfiltrated. On macOS, Docker Model Runner's inference libraries run as host processes, and a model definition file executed on load gave code execution outside the sandbox.\n\nThe closing section covers vendor responses. Some reports went unanswered for more than 90 days, some earned CVEs, and Apple judged one issue to be working as intended. The speakers said roughly 75,000 Ollama servers were still internet-exposed when they rechecked. The takeaway is that any tool using OCI in some form may offer similar primitives, so pulls from untrusted registries should be treated as untrusted input.",
       "durationSeconds": 1268,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "tCyvlLsLPTU",
@@ -1294,7 +1294,7 @@
       "summary": "Gorenflo starts from the limits of character-based password guessing. Hashcat masks, wordlists, and rules work well until a password breaks the expected pattern, such as several capitalized words in a passphrase, and then attackers fall back to brute force. He argues that people type passwords in predictable chunks, so the unit being modeled matters more than the model itself.\n\nHis tool, tokenov, trains a trigram Markov model on RockYou, but splits passwords into tokens from GPT-2's tokenizer instead of single characters. The talk benchmarks it against John the Ripper, Hashcat, OMEN, and PCFG at fixed candidate budgets. Early CPU-only runs favored tokenov, but he admits the comparison undersold Hashcat's GPU throughput. Under time-boxed tests with best66 and enterprise-style filters (8+ characters, three of four character classes), tokenov came out ahead. He also notes that a much smaller tokenizer trained on password data may work better than the general-purpose one.\n\nHe closes with the practical side: a bootstrap command, generation piped into Hashcat, password scoring by rarity bits, seeding from OSINT wordlists, checkpoint resume, and model files that bundle their tokenizer. His takeaway is that character count stops being a reliable strength measure when a long password reduces to a few tokens. Rules help in most cases, except with very slow hashes. The tool is young research, and he invites others to build their own models.",
       "durationSeconds": 2658,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "hTd1G-2k9z4",
@@ -1314,7 +1314,7 @@
       "summary": "The talk starts with LiteLLM, an open-source AI gateway that holds provider API keys, routes prompts and responses, and connects to tools over MCP. The speaker began by mapping internet-exposed instances and found that roughly one in ten either accepted the default master key or required no authentication at all. That master key also grants admin login and can sign session JWTs, so knowing it exposes much of the deployment.\n\nThe middle of the talk covers three attack paths. A guardrail registration endpoint skipped the forbidden-pattern checks and built-in stripping that the test endpoint applied, so custom code ran with root privileges in the container. A pass-through proxy did not validate target URLs, which allowed SSRF to the cloud metadata service. Because the proxy let callers set arbitrary headers, the attacker could complete the IMDSv2 token handshake and retrieve role credentials. A separate MCP authentication handler returned an unrestricted session whenever any Authorization header was present, letting an unauthenticated caller list and execute connected tools. The speaker also reported honeypot captures in which an attacker chained the MCP bypass with another flaw to deploy a crypto miner. The RCE and MCP issues were patched in earlier releases.\n\nThe closing advice is to treat AI gateways as high-value infrastructure, rotate default keys, disable MCP when it is not needed, and keep these services off reachable networks even internally. The speaker also argues that teams deploying gateways often skip the review applied to other application endpoints.",
       "durationSeconds": 2387,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "qJOG64uEfr8",
@@ -1357,7 +1357,7 @@
       "summary": "The talk starts from a common assumption: a BGP router only accepts updates from configured peers, and GTSM's TTL check confirms that the peer is one hop away. The speaker argues that this adjacency boundary is the weak point, since most hardening work such as RPKI and BGPsec focuses on route validation. The question is whether an attacker without a peering session can get inside that boundary.\n\nThe attack path has three stages. First, looking glass web tools that pass user input into a router shell can give command execution on an edge router, and the speaker reports that several such tools are still vulnerable. Second, tunnel injection through a misconfigured VPN endpoint lets an off-path attacker appear adjacent to a target, and a use-after-free in FRR's attribute caching leads to remote code execution. Third, differences between FRR, BIRD and other daemons are abused: oversized or malformed optional attributes, and mismatched prefix limits, make one implementation re-emit or reject updates in a way that causes repeated session resets in another. A recorded demo shows a victim session dropping after the chain runs.\n\nThe speaker estimates exposure from PeeringDB data, counting roughly 300 networks running vulnerable looking glass software. The reach is still small compared with the total number of networks, and large default-free routers complicate any wide outage. The practical takeaways are to treat looking glasses as privileged systems, validate attribute lengths strictly, and avoid assuming that a peer list alone protects a router.",
       "durationSeconds": 2255,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "xst4WQewHTo",
@@ -1401,7 +1401,7 @@
       "summary": "Samsung Internet on the Galaxy S25 shipped with a V8 build from May 2025 that already had public, fixed bugs, and the proper fix did not land until months later. The speakers explain why an outdated embedded JavaScript engine is an attractive n-day target, then analyze CVE-2025-10891: an integer truncation in Ignition's exception handler table that redirects control flow to an unintended bytecode offset.\n\nThe exploit relies on bytecode smuggling. Constants loaded into the instruction stream are reinterpreted as opcodes once execution jumps into them, and repeated arithmetic that advances feedback slots lets the author place larger payloads in that stream. The chain calls a privileged runtime function to deserialize a WebAssembly module whose optimized machine code is replaced with attacker-chosen instructions, giving code execution in the renderer. The attack was developed on x86 and ported to ARM for the phone.\n\nThe second stage addresses the renderer's limits. Phones only isolate sites where the user logs in, so a patched renderer can be reused for a logged-in service such as Gmail. The authors hook the built-in construct function with a callback that calls a debug evaluation routine, which runs JavaScript without the CSP check, yielding universal XSS. A live demo redirected a victim to Gmail and read the inbox. The takeaway is to keep embedded engines current and not to assume mobile isolation contains a compromised renderer.",
       "durationSeconds": 1797,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "SWQH-wWstOc",
@@ -1423,7 +1423,7 @@
       "summary": "The talk starts with the growing use of AI tooling and the infrastructure behind it: vector stores, model inference servers and GPU container runtimes. The presenters explain why these components became targets, pointing to recent competitions that featured Ollama, Triton and vLLM. Their search focused on vLLM's completions endpoint, which accepts prompt embeddings, decodes them and passes them to torch.load. They had earlier found a bypass of PyTorch's weights_only mode, and they asked whether the same class of bug could return after the fix.\n\nThe middle of the talk walks through a new heap out-of-bounds flaw in the unpickler's tensor rebuild path, which lets a crafted model file declare more elements than its storage holds. The team turned the over-read into an information leak using an error-based technique, then used an out-of-bounds write to overwrite a tensor destructor pointer. On some default Python builds without position-independent executables, the address of the system function was predictable, which removed the need for a separate leak. The same pattern appeared in other products, including ComfyUI, SGLang, NVIDIA Dynamo and OpenLM, where model loading, LoRA or image-embedding inputs reach torch.load.\n\nThe main takeaway is that any API that loads models or tensors from user-supplied input is a deserialization surface, even when the model is described as remote rather than local. Teams should not treat weights_only as a complete safety boundary, should audit where torch.load is reachable, and should keep inference servers on patched versions and off unnecessary optional features.",
       "durationSeconds": 2833,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "7iuetYnfjbU",
@@ -1444,7 +1444,7 @@
       "summary": "The talk looks at AI agent security from a point before the prompt. The speaker argues that agents read project configuration, environment files, and startup parameters before the model handles any task. In headless CI runs no person is present to approve actions, and the workspace is treated as trusted, so the decisions made at load time carry the most weight. Prompt injection and guardrails do not cover this path.\n\nThe main case is Google's Gemini CLI, run as a GitHub action to review pull requests. The speaker walked through its three defenses: a container sandbox, environment sanitization that strips secrets, and a tool allow-list. Each of these runs after a project-level environment file has already been loaded in trusted mode. A proxy setting for the sandbox was then passed to a shell with shell enabled, which allowed command injection on the host. A demonstration showed a fork pull request reaching code execution on the runner host. Google rated the issue CVSS 10.0, patched it, and changed how it handles workspace trust. The speaker also cited a similar pre-trust configuration issue in Claude Code and a changed trust prompt in OpenAI Codex.\n\nThe closing guidance is a simple audit method for any agent. First, list every input the system accepts before work starts, including config files, startup flags, and protocol handshakes. Second, record what authority each input carries. Third, check whether that authority can reach command execution or change policy. If it can, the speaker says defenses applied at prompt time will not help.",
       "durationSeconds": 1149,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "RfY1U3-bWkk",
@@ -1507,7 +1507,7 @@
       "summary": "The talk looks at baseboard management controllers, the always-on secondary computers built into enterprise servers. These devices run their own operating system and network stack, often share a network port with the host, and have been poorly secured since IPMI was criticized in 2013. The speaker explains how they end up exposed, both on the internet and on corporate networks.\n\nThe research team scanned about 15,000 internet-facing and 125,000 internal devices. They found that many systems returned RAKP password hashes without any credentials, and they cracked thousands of them offline. The talk walks through a chain of authentication flaws: handshake state confusion, session privilege relabeling, skipped integrity and encryption checks, a default key in OpenBMC, and a KVM token derived from the clock. Vendor-specific problems are covered too, including a hardcoded Supermicro password and a Dell attempt to block IPMI that only applied to IPv4. Once a controller is compromised, the speaker shows how its access to host memory over internal buses and DMA can reach the host, and how the factory password scheme made default passwords easier to crack.\n\nThe main takeaways are to disable the host-side KCS interface, keep the management NIC on a dedicated network, and treat BMC firmware as part of the trust boundary. The speaker released OOBscan, an open-source IPMI exploitation tool, along with a John the Ripper patch for the new hash format, and noted that most issues remain unpatched.",
       "durationSeconds": 3219,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "Y4DqhkcTEMU",
@@ -1635,7 +1635,7 @@
       "summary": "The talk examines the liveness checks that banks and fintech apps use during facial identity verification. The presenters tested seven top-tier apps built on four KYC SDKs over about six months, and report that every app but one could be bypassed. They argue that a few public photos are enough to build a convincing synthetic identity video cheaply, and they describe physical spoofing with masks, printed faces and other props, which worked only some of the time.\n\nThe core of the talk walks through injection points from the application layer down to the Android camera server. Before any injection, the team had to defeat root, emulator and debugger checks, sometimes by flipping return values or by exploiting debug-only flags left in release builds. Frame injection then fed recorded or deepfake frames at whichever layer the app trusted. The lowest layer, the camera server, was invisible to the app itself and fed frames to every application on the phone, and it was the only route that worked against the one hardened app that resisted the earlier techniques.\n\nThe takeaway for practitioners is that client-side liveness and anti-tampering checks should not be the sole gate for identity decisions. The speakers recommend moving verification logic to the server side and note the dilemma CISOs face when tuning thresholds, since loosening them enables fraud and tightening them locks out legitimate users.",
       "durationSeconds": 3087,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "Vg5Sr7exsmM",
@@ -1678,7 +1678,7 @@
       "summary": "The talk starts from the premise that trusted execution environments protect code and data even against a malicious hypervisor or physical access to RAM. The speakers argue that server TEEs, including Intel SGX for data center parts, TDX, and AMD SEV-SNP, moved to a memory encryption engine that gives up integrity and replay protection, and that the remaining confidentiality is deterministic. They describe building a DDR5 bus interposer from e-commerce parts, with a refurbished logic analyzer standing in for a commercial tool priced around $300,000. Early attempts damaged boards and failed to boot, and the team reports that a working interposer took a lot of manual rewiring.\n\nCaptures showed that writing the same plaintext to memory produces the same ciphertext, which the speakers used as a dictionary-style oracle. They paused an enclave between iterations of an ECDSA signing loop, observed the 5-bit lookup table reads for each nonce chunk, and recovered the nonce and then the platform attestation key during the live demo. They say the key lets an attacker forge attestation for SGX and TDX, with examples including blockchain confidential computing and NVIDIA confidential compute. The vendors treat the issue as out of scope, and a real fix needs new hardware, while software-only randomized encryption is very costly.\n\nThe practical takeaway is that attestation-based trust on server TEEs should not be assumed to hold against an attacker with physical access to the memory bus. Operators who depend on these guarantees should reassess their threat model, and researchers should expect cheap bus-level tooling to be part of the attack surface.",
       "durationSeconds": 1254,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "3TYPzqAzGv8",
@@ -1744,7 +1744,7 @@
       "summary": "The talk opens with a disclaimer about jurisdiction and unauthorized transmission, then explains the Automatic Identification System, a maritime safety network built for openness. AIS messages carry no cryptographic sender authentication, so receivers cannot verify who transmitted them, yet aggregated AIS data still informs shipping, commodity and financial decisions. The speakers argue that this trust gap could be used to carry covert traffic.\n\nThey present Evil AIS, a research framework with nine encoding methods and a combined variant. It hides payload bits in the low-order bits of position reports that already exist, then recovers them with differential steganography: a receiver XORs two near-identical reports to extract the difference. In a controlled setup, the team showed a message split across 16 shards that could be rebuilt from any 12, using parity similar to RAID 5. Other demos covered a binary dead drop and a trigger that fires a downstream action from a few bits, which they tied to systems that consume AIS as input.\n\nFor defenders, the takeaways are to validate checksums, flag anomalous raw AIS traffic, build baselines from historical data, and triangulate where suspicious transmissions originate. The speakers note that the protocol dates to the 1990s and is unlikely to change soon, so monitoring has to start now.",
       "durationSeconds": 1403,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "JK5BQTcNzf8",
@@ -1873,7 +1873,7 @@
       "summary": "Roger Dingledine, one of Tor's original developers, opens with the network's basics: volunteer relays, three-hop circuits, exit policies, and nine directory authorities that publish the hourly consensus. He explains why directory information was later moved onto relays so censors could not block the network by blocking a few addresses. He then ranks threats by how often they occur in practice, putting operational security mistakes first, followed by browser fingerprinting, browser exploits, traffic confirmation and traffic analysis.\n\nThe middle of the talk covers relay operators. The pool has shifted from home computers to university and nonprofit exit relays and then to cloud VPS providers, so a single host can end up carrying a large share of the network. Stories include an early abuse complaint triggered by a Windows installer, spoofed SSH scans that got directory authority addresses blocklisted, a botnet that briefly multiplied users, and a campaign of fake cryptocurrency exchange sites. The talk also covers legal and ethical questions around exit relays, content filtering, and the research safety board that reviews studies of users.\n\nHe closes with open problems: admission control that is less centralized, tracking how many relays the team personally knows, and routing that does not overload Europe. He urges the DEF CON audience to run relays and help build relay capacity in the United States.",
       "durationSeconds": 3025,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "J5omNvJmHn8",
@@ -1977,7 +1977,7 @@
       "summary": "The talk starts with an unusual goal: find the slowest possible x86 machine instruction. The speaker explains System Management Mode, a privileged firmware-level mode that sits below the kernel and is hidden from the operating system and hypervisor. SMM relies on a rendezvous in which every core must enter together. That rendezvous has a timeout of about one second, so if one core stays outside SMM long enough, the others proceed anyway. Defeating it requires one instruction that stalls longer than a second.\n\nThe speaker works through a leaderboard of candidates. Simple arithmetic, square roots, serializing instructions, entropy depletion, model-specific registers and cache write-backs all fall short. Port I/O and then memory-mapped I/O go much further. Misaligned and oversized accesses, wide SIMD registers and a full floating-point state restore push the cost higher still. The final step has other cores hammer the same address with locked accesses to contend for the system bus, reaching roughly 198 billion cycles, or about 49 seconds. A scaled-down version then desynchronized SMM entry across cores in a live demonstration.\n\nThe takeaway is that the rendezvous assumption fails, which would expose a large set of time-of-check to time-of-use SMM vulnerabilities that are mostly unpatched. The impact covers confidential computing in the cloud and firmware persistence on client systems. The speaker argues there is no clean fix. Keeping the timeout leaves the attack open, while removing it lets one stuck core hang the whole platform.",
       "durationSeconds": 1261,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "-8Hk5GdKSfE",
@@ -2021,7 +2021,7 @@
       "summary": "The talk follows an assessor who tested Verifone P400+ payment terminals during yearly PCI assessments. Each year the speaker found a new route to root after the vendor patched the previous one. The first foothold was a command injection in the file manager, triggered by a crafted MP3 filename, which gave a low-privilege shell. A later firmware update path let an archive be extracted in a way that wrote files outside the staging directory before signature checks ran.\n\nThe research continued through an unauthenticated recovery environment, a point-of-sale protocol that allowed file reads and writes, and HTML rendering that passed filenames unsafely to a media player. Further chains abused a privileged broker, a downgrade of a patched component, and a web server started from a writable location. With root, the speaker disabled the kernel's role-based access control, kept a persistent backdoor by recalculating the integrity hash of the protected filesystem, and ran Doom in a chroot.\n\nThe final section showed that plaintext card track data and account numbers appeared in process traces and memory dumps, despite the device's secure-world design. The vendor fixed most issues, but the card data exposure remained for this end-of-sale model. The practical takeaways are to patch terminals regularly, not to rely on certification alone, and to push vendors for more openness about device security.",
       "durationSeconds": 2604,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "XJ2PaRXSHcQ",
@@ -2042,7 +2042,7 @@
       "summary": "Thin clients run full operating systems and hold Wi-Fi keys, 802.1X certificates, admin password hashes and VDI configuration, yet their disk encryption is often tied to the TPM. The speaker examined three vendors: IGEL OS (formerly Eagle), HP ThinPro and Dell ThinOS, across several major versions. Because the TPM releases its key only after the bootloader and kernel load, those early boot stages were the main target.\n\nIGEL had a sound design that seals keys to PCR values, but a boot menu entry and an unsigned configuration partition let the speaker reach a root shell. A missing signature file also dropped the device to a GRUB prompt. HP ThinPro measured only part of the boot chain, so the unseal script could be modified to write out the key. Dell's older ThinOS releases had weaker schemes: an administrator password was obfuscated with a reused XOR key that could be recovered from SPI flash, and a key derived from hardware identifiers was used in place of measurement. ThinOS 9 also wrote crash dumps unencrypted. ThinOS 10 released its key from TPM storage with no policy at all, and a later PCR 7 fix could be sidestepped with another Canonical-signed USB stick.\n\nThe main lesson is that automatically unsealed disk encryption is hard to get right, and TPM-only protection fails when the boot partition is not measured. The speaker urged assessors to read the boot scripts rather than assume encryption is effective. At the time of the talk, the HP issue was reported as unpatched.",
       "durationSeconds": 2441,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "epopJ1Tc4BI",
@@ -2084,7 +2084,7 @@
       "summary": "The talk walks through a full attack chain against mobile banking and digital wallet apps used in a Latin American market, with the testing described as done in an authorized setting. The presenter frames the defenses as four stacked layers: runtime self-protection with root and integrity checks, anti-instrumentation, biometric identity verification with liveness detection, and anti-deepfake controls. The attack moves through them in order, starting with hiding a rooted device using freely available kernel-level modules and integrity-spoofing tools.\n\nThe middle section covers the Frida-based stage. By hooking the biometric SDK's image retrieval call, the researchers swapped the captured frame for a chosen image before the SDK packaged and signed it. Where the SDK added metadata and encoding, they rebuilt the same template on the client so the backend received a consistent payload. The liveness check ran entirely on the phone, so a real face could pass it while a different photo was submitted for matching. They also generated synthetic faces from ID photos with consumer AI tools, reporting that none were flagged by the anti-deepfake controls across their trials.\n\nThe closing part argues that the weakness is architectural: each layer trusts the one before it, and client-side checks cannot carry the decision. Suggested fixes include server-side validation of liveness, cryptographic binding of captured media, and behavioral analysis. The presenter also notes that criminal KYC bypass toolkits are sold online and that the demo videos could not be shown on stage.",
       "durationSeconds": 2536,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "Ik8qLF4iThI",
@@ -2173,7 +2173,7 @@
       "summary": "Shadow stacks, as in Intel CET and ARM GCS, are meant to make return-address corruption a dead end by keeping a hardware-checked second copy of return addresses. The talk asks whether that copy can be written from user space. It starts with how the kernel marks and installs shadow stack pages, and why certain kernel write paths can reach them.\n\nThe speaker then presents three bypasses. The first abuses the /proc/self/mem write path, where a force flag lets a process write to its own shadow stack pages with open() and pwrite(). The second uses userfaultfd: a shadow stack page is discarded with MADV_DONTNEED, and a fault handler supplies a replacement page filled with chosen return addresses, because the copy path skips a check that the move path enforces. The third uses the WRSSQ instruction, and the speaker corrects a widely copied encoding that actually decodes to a different instruction. The techniques were validated on Sapphire Rapids and against CVEs in dnsmasq, libinput and rsync, including a root shell with CET still enabled.\n\nThe first two kernel paths were patched after disclosure, though a fork-and-ptrace variant still works on patched kernels and WRSSQ is a CPU instruction that cannot be patched. The speaker argues that memory management gaps in subsystems written before kernel 6.6 remain a concern, and suggests sealing shadow stack mappings as a mitigation. Practitioners should treat the backward edge as writable on some systems and keep older exploitation techniques in mind.",
       "durationSeconds": 2656,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "ZLgZ2ddoz2Y",
@@ -2281,7 +2281,7 @@
       "summary": "The talk covers consumer GPS trackers sold as child watches and vehicle trackers. The researchers examine three platforms, SETracker, SinoTrack, and TKSTAR/Thinkrace, which they say reach tens of millions of devices across dozens of white-label brands that share the same Chinese backends. They start from a cheap tracker bought online and a companion app, then show that request signing was weak and that the server never checked which command was being sent, so any account holder could issue almost any device command.\n\nAcross the platforms they describe harvesting device IDs and parent emails from sequential user IDs with no rate limiting, then using commands for silent audio monitoring, camera capture, overwriting the SOS recipient, and pushing firmware. On one Android watch they report system-level code execution. For SinoTrack they describe SQL injection reachable through a demo login and commands that could unlock doors or cut fuel. For TKSTAR they describe a publicly downloadable backup archive that exposed source code, hard-coded credentials, and a web shell that had sat on a server for about two years. They say they filed 45 CVEs and got little substantive vendor response.\n\nThe takeaway is that brand variety hides a shared supply chain, so one flaw can affect many products at once. The speakers urge owners to stop using these devices and argue that basic practices, such as removing hard-coded secrets, validating TLS, parameterizing SQL, and hashing passwords, would have blocked most of the findings.",
       "durationSeconds": 2194,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "6NYWwQIXWs0",
@@ -2323,7 +2323,7 @@
       "summary": "The talk opens with a technologist from Liberty in North Korea describing how the state controls information. Domestic phones are rebranded Chinese handsets running a custom Android build with no app store. Apps and files must carry state-issued cryptographic signatures. A background service called TraceViewer takes screenshots every five minutes and on file events, and its companion RedFlag deletes any file or APK that lacks a valid signature. The national network is tiny, reachable through two egress points, and desktops often run an old input method that disables UAC.\n\nThe middle section walks through the signature format and an emulator demo in which an unsigned image is removed on transfer while a camera photo gets signed on the device. Older handsets still allowed boot ROM and fastboot access, but newer models locked these down. Chip-off attempts on two devices failed. A leaked signing tool is shown applying a self-signed block bound to a chosen IMEI. The speaker also covers smuggling through USB drives, micro SD cards, DVD-style players and smart TVs, and how ordinary cleaning utilities are used to hide activity from inspectors.\n\nThe closing part is a call for help. Funding for NGOs has dropped, and the group relies on defector testing for every product. It lists open needs including encrypted messaging, Android exploitation, embedded work, censorship bypass and distribution networks, and invites practitioners to get in touch.",
       "durationSeconds": 3081,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     }
   ]
 }

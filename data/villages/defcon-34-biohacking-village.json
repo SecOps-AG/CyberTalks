@@ -27,7 +27,7 @@
       "summary": "The talk starts from the claim that thawing Arctic permafrost releases ancient microbes and DNA fragments into the air, creating an input stream that almost no one monitors. The speakers trace the route these fragments take: from bubbles at meltwater surfaces and wind-lifted debris, through UV exposure that shells or biofilms can partly resist, to cloud nucleation and a return to the ground in precipitation.\n\nNext comes the hardware. The sampler is a 3D-printed housing with a small fan, a coarse pre-filter, a venturi throat that speeds airflow toward a fine membrane, and a silica desiccant chamber. A microcontroller board reads pressure, CO2-equivalent, humidity, temperature and light sensors. The build cost is put near $69, and the presenters explain that a stronger fan would add turbulence that throws DNA onto the walls. They then outline lab steps: filter removal, lysis, PCR amplification of 16S rDNA, gel checks, sequencing, and taxonomic assignment against reference databases.\n\nThe closing argument is that cheap parts and desktop printing move environmental sampling beyond well-funded institutions, and a distributed set of nodes could serve as an early-warning layer. The presenters point to open materials on GitHub and acknowledge that eDNA monitoring standards do not exist yet. For practitioners, the useful takeaways are the sampler design and the workflow outline. The talk does not present field results or validated detection performance.",
       "durationSeconds": 1486,
       "publishedAt": "2026-11-06",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "RVB4cAwpdzU",
@@ -132,7 +132,7 @@
       "summary": "The talk opens with Marie Mo, a researcher who depends on a pacemaker herself. She began studying her Biotronik device in 2015, after finding no published security research on it. A radiation-induced fail-safe event, and the memory dump the clinic programmer produced during recovery, later became a lead for the wider project, which has since produced several CVEs, papers and student theses.\n\nThe student speakers walk through the ecosystem: a Windows XP programmer, a programming head acting as a radio transceiver, and the implant. From the programmer they traced the DLLs behind its dump routine and patched hard-coded address ranges, reaching the device's full 16 MB space instead of a small default region. Mapping COM vtables to interface names and hooking serial APIs let them rebuild the packet protocol in a custom tool. Firmware analysis then revealed read, write and an indirect-call command, giving arbitrary read and write. One shellcode overwrite crashed the device and had to be recovered with a reset command.\n\nThe weaknesses they list include a von Neumann layout without execute-versus-write separation, no address randomization, and no real authentication, since the device returns its connection identifier to any requester. Attacks needed close range, and the team reported the findings to the vendor, which is working on fixes. The takeaway is that obscurity does not protect implanted devices, though the speakers stress that the benefits still outweigh the risk.",
       "durationSeconds": 1909,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "JcbOqpcY8K0",
@@ -174,7 +174,7 @@
       "summary": "This BioHacking Village panel brings together a former CISO of a medical device maker, the CISO of a Boston hospital, and a division director from the FDA's medical device cybersecurity group. They open with the first 45 minutes after an attack is discovered, describing how the shock of the event gives way to playbooks while teams try to judge whether they face a worst case or something manageable.\n\nThe middle of the discussion covers containment and coordination. The hospital perspective is that isolating connections is increasingly the first move, with decisions made quickly and documented so systems can be reconnected later. The regulator's focus is patient access: whether a manufacturer can keep supplying devices, whether cloud-connected products can stay online, and whether a shortage is forming. The panel also points to breakdowns between IT, emergency management and clinical teams, and to competing priorities such as clinical uptime, forensic preservation and reporting duties.\n\nLooking toward the 72-hour mark, the speakers stress staff fatigue, rotating shifts and basic needs like rest and food as sources of error. They close on the legal balance of public communication, arguing that explaining what others can do to protect themselves matters more than assigning blame. Practitioners should take away the need to settle decision-making authority before an incident, document choices as they happen, and rehearse downtime processes.",
       "durationSeconds": 2620,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "XOto_fLpGac",
@@ -195,7 +195,7 @@
       "summary": "The Northeastern University researchers examine a consumer fertility hormone analyzer that is FDA listed and used at home to track LH, FSH, estrogen and progesterone. They argue that these readings guide real decisions, such as IVF timing, so forged or leaked numbers carry physical and legal consequences. They map the data path across Bluetooth Low Energy, the companion phone app and the vendor cloud, noting that results pass through three trust boundaries where they could be altered.\n\nThe team reported about 20 separate weaknesses across those layers. The headline problem is a rogue peripheral attack. The app matches the device by a substring of its advertised Bluetooth name, so an attacker advertising a matching name receives the user's session token during the normal handshake. In a live demo, they spoofed the analyzer, got the app to connect to a laptop, and injected fake results. Other findings included a login endpoint that issued sessions without checking passwords, a hardcoded API key in the app that allowed reads and writes across many profiles, firmware reachable through an unauthenticated storage bucket, and health data sent to third-party analytics on every session open. All testing used researcher-owned hardware and accounts.\n\nThe proposed fixes are encrypted BLE with authenticated pairing, mutual authentication between app and device, integrity protection on health payloads, removal of embedded secrets, minimizing third-party telemetry, and a published disclosure policy with a software bill of materials. The vendor said it had shipped device and app updates after two patch cycles. For practitioners, the lesson is that connected medical devices need authenticated links, server-side object authorization and scrutiny of bundled tracker SDKs.",
       "durationSeconds": 1316,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "tfWosk8sGmM",

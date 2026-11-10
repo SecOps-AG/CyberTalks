@@ -25,7 +25,7 @@
       "summary": "Matt Caldwell presents IRONMAP, a platform his team built to find and profile operational technology reachable from the public internet. The system relies on a distributed scanner, PLCDISCO, that probes industrial ports, grabs banners, and pulls vendor identity and tag data using read-only requests. The talk frames this as an ongoing research project, with millions of hosts probed so far and hundreds of protocol probes implemented.\n\nThe middle of the talk covers the results. EtherNet/IP and Modbus make up much of what was found, many devices answer without authentication, and Siemens S7 on port 102 appears widely. The speaker describes the safety controls: one thread per host, skipping hosts that show network trouble, adaptive backoff, and excluding government and hospital networks. He also explains how honeypots were filtered out using mixed protocol sets and default serial numbers, and how ownership was attributed through WHOIS data, BGP paths and reverse DNS.\n\nThe final section covers automatic tank gauges. The team found 149 internet-facing units, mostly Veeder-Root TLS-350 and TLS-450 systems on TCP port 10001, which exposed fuel volumes, product types, alarm states and delivery history. The speaker argues this reveals physical security and supply chain details about a facility. His recommendations were to restrict exposure behind a firewall or authentication, and to follow CISA advisories.",
       "durationSeconds": 1829,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "3BMTm_X7R0c",
@@ -46,7 +46,7 @@
       "summary": "The talk opens with the problem: OT defenders often assume their firewalls, segmentation and network monitoring sensors work against industrial attacks, but proving it usually means risky scanning or sending harmful commands to live controllers. The speaker, an OT security lead, presents ICSForge as a safer way to check these controls, and notes that most breach and adversary simulation tools target IT, while the OT options he found were commercial.\n\nThe middle of the talk walks through the architecture. A sender generates live or pre-built traffic from roughly 600 scenarios mapped to MITRE ATT&CK for ICS, covering ten industrial protocols such as Modbus, DNP3, S7comm, OPC UA, BACnet and GOOSE. A receiver acts as a harmless sinkhole. Operators can check whether a firewall passes the traffic and whether a monitoring sensor raises an alert. Marker modes range from explicit payload tags to stealth traffic that looks like normal device output, and multi-step campaigns can replay attack chains.\n\nThe speaker closes by describing the workflow: traffic that reaches the receiver or goes unalerted marks a gap to fix, and results can be turned into reports for SOC teams and management. He is candid about limits. Traffic is one-way with no device responses, there is no response content detection, and the tool does not replace a penetration test. It is GPL-3 licensed and can run on two lightweight devices such as Raspberry Pis.",
       "durationSeconds": 1187,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "WJz79YGNKXs",
@@ -132,7 +132,7 @@
       "summary": "The speaker, who spent years as a gas turbine controls engineer before moving into OT security, argues that most AI discussion centers on frontier models that plants often cannot use because of regulation, data sensitivity, or isolated networks. Local models, including quantized versions that run on a laptop or desktop, are presented as a way to get value from OT data while keeping it on site. Benefits include privacy and governance, predictable costs, low latency on a local network, and consistent behavior that does not shift when a vendor updates a model.\n\nUse cases covered include drafting policy and compliance mappings, building knowledge bases from old equipment notes, helping sort alarm floods after a process trip, suggesting setpoints for changing conditions, and speeding up slow controls tuning. On hardware, the talk compares consumer NVIDIA cards with limited video memory, unified-memory systems from NVIDIA and Apple, and renting compute to test before buying. Open-weight model families such as Gemma, Qwen, and Mistral are mentioned, with tooling built around llama.cpp-based runtimes, GGUF and MLX formats, and fine-tuning workflows.\n\nThe lessons learned focus on practice. Early setups should stay connected to the internet so dependencies can be downloaded, with air-gapping added later. Users should plan the end goal first rather than follow a fixed flowchart, check every generated command before running it, and compare several models because none suits every task. A demo that analyzed decades-old gas turbine data showed the work dropping from about three hours to under twenty minutes.",
       "durationSeconds": 1593,
       "publishedAt": "2026-11-06",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "VcAcv6cVNBM",
@@ -176,7 +176,7 @@
       "summary": "The talk starts from the problem that small modular reactors, deployed as distributed energy resources, connect many reactors through digital links and widen the attack surface of nuclear operational technology. The presenters argue that Purdue-model defenses, firewalls and intrusion detection are rigid and cannot reason about a live fleet, and that OT defenders cannot restart services or block traffic freely because of safety concerns.\n\nTo address this, they introduce NICSSIM, a containerized testbed built on ICSSIM and Docker. It simulates reactors, PLCs, HMIs and telemetry with no live infrastructure at risk. A supervisory agent routes operator requests to a read-only vulnerability-analysis agent and a remediation agent, and an independent safety auditor reviews findings before they reach the operator. The live demonstration deployed one- and three-reactor fleets, ran a DDoS scenario, and showed blue and red agent roles, with a human approving any patch before it runs.\n\nThe evaluation covered response success rate, safety-threshold rejection, ISA/IEC 62443 mapping and latency and cost across seven models from four providers. The reported success rate reached 96 percent. Accuracy fell and latency rose as fleet size grew, and the presenters suggest faster models for routine checks and high-reasoning models for standards validation. Their takeaway is to build safe test environments, measure more than accuracy, and treat the human operator as part of the design.",
       "durationSeconds": 1529,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "-GdyjLjGknA",
@@ -262,7 +262,7 @@
       "summary": "A utility operator asked the team to look at Opto 22 programmable automation controllers, devices that bridge SCADA networks and plant networks. Because the hardware is fragile and often cannot be scanned or tested in the field, the researchers began with vendor documentation and public firmware images. That review suggested the programming and configuration interfaces had no authentication, so they built a bench setup and split the work into a programming track and a firmware track.\n\nOn the programming side, they captured the vendor's traffic, pulled stored project files off the controller, and rebuilt parts of the transfer in Python. The push path turned out to run a Forth interpreter on the device. They inserted a SOCKS4 proxy written in the controller's scripting language, so the device could forward traffic between its two network interfaces. On the firmware side, they reverse engineered a ColdFire image, found that the integrity check was a chunked CRC with no digital signature, and built a backdoor. They matched the vendor's TCP stack socket functions against an archived copy and ran the implant inside an existing network service.\n\nThe team demonstrated a remote path from the SCADA side into the OT side, and found internet-exposed devices through Shodan and Censys. The vendor responded constructively and is working on firmware signing, authentication for its programming language, and an API on newer lines that can disable legacy functions. The main takeaway is that testing the hardware and its firmware can reveal flaws a network-only penetration test would miss, and that older controllers may offer no way to turn off risky features.",
       "durationSeconds": 1576,
       "publishedAt": "2026-11-06",
-      "difficulty": "advanced"
+      "difficulty": "expert"
     },
     {
       "youtubeId": "oMBfwKOECpA",

@@ -261,7 +261,7 @@
       "kind": "talk",
       "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20Voting%20Village%20-%20Tori%20Noble%20-%20What%20Election%20Security%20Researchers%20Need%20to%20Know%20about%20DMCA%20Section%201201.mp4",
       "thumbnail": "/materials/thumbs/dc34-44da1074.jpg",
-      "difficulty": "intermediate"
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "dc34-19032272",
@@ -282,7 +282,7 @@
       "teaser": "Demonstrates a zero-click iOS exploit chain built from 39 patched flaws, and argues that platform compromise undermines internet voting.",
       "summary": "This closing-day Voting Village session paired a live demonstration with a panel on internet voting. The argument: voting software is only one layer of the attack surface, and the mobile operating system beneath it is equally exposed to state-level attackers. The presenter ran a chain built from 39 patched iOS vulnerabilities against an older device. It moved from a compromised web page through several sandbox escapes, one bypassing pointer authentication, to root access. It then gathered keychain items, cloud tokens, Wi-Fi passwords and messaging databases and sent them to a command server. A race condition slowed the run, so the full collection was not finished on stage.\n\nThe panel argued that a flawless voting app cannot be trusted on a compromised phone, since the platform can alter what voters see and record what they do. Code voting would not reliably prevent this, and a platform attacker could block access to a voting site. Speakers also noted that end-to-end verifiable schemes still rely on trusted components, and that dispute resolution after a detected problem is poorly defined. Many states already allow emailed or faxed ballots for overseas voters, which face similar risks.\n\nThe takeaway is that voting security is a systems problem spanning device, network and servers. Anyone assessing remote or mobile voting should model the platform as part of the threat, and be skeptical of claims that device security is solved.",
       "durationSeconds": 2421,
-      "difficulty": "advanced",
+      "difficulty": "intermediate",
       "kind": "talk",
       "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20Voting%20Village%20-%20Brian%20DeMuth%20-%20We%20Pwn%20Your%20Phone%2C%20We%20Pwn%20Your%20Vote%20%28Demo%20and%20Panel%29.mp4",
       "thumbnail": "/materials/thumbs/dc34-19032272.jpg"
@@ -305,7 +305,7 @@
       "teaser": "Examines the Android app and configuration complexity of the Dominion ImageCast X voting machine from a software engineering and architecture perspective.",
       "summary": "This talk steps back from individual vulnerabilities to look at how the ImageCast X voting system is engineered. The speakers work on a classic ICX unit that was bought on eBay and is not encumbered by an NDA or protective order, so it can be discussed openly. The classic model runs Android 4.4.4 while the Prime variant runs Android 5.1.1, and the vendor OS appears to be a modified build of the Android Open Source Project.\n\nUsing the APK exported from the device, the team decompiled the app to smali and estimated a codebase of roughly 200,000 lines of Java. They found separate code paths for the two hardware types, such as EEPROM-backed counters on one and disk storage on the other. The app shells out to bash for some functions, such as audio alerts, and one tune appears to be a hidden easter egg. The election definition is a zip of about 1,400 files that includes a SQLite database with 22 tables, and one record holds a hex-encoded JSON blob.\n\nThe speaker argues that the many configurations and modes, including ballot-marking, DRE with VVPAT, remote-use and full-face ballot modes, create maintenance and deployment problems beyond security. They ask whether single-purpose devices would be a better design. The practical takeaway is that a system's architecture and configuration sprawl deserve scrutiny alongside its certification.",
       "durationSeconds": 1658,
-      "difficulty": "intermediate",
+      "difficulty": "advanced",
       "kind": "talk",
       "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20Voting%20Village%20-%20Drew%20Springall%20-%20Dissecting%20the%20ICX%20Frog.mp4",
       "thumbnail": "/materials/thumbs/dc34-847f6f9d.jpg"
@@ -352,7 +352,7 @@
       "teaser": "Shows how a lone citizen observer used public records requests and scraped election protocols to probe the paper-ballot process in Norway.",
       "summary": "The talk opens with a Norwegian observer who was escorted out of a public hand count by police after photographing it. That episode frames the rest of the talk, which asks how paper-ballot elections can still be watched, questioned and checked. The speaker gives a short primer: votes are counted by hand at each polling station, then transported and scanned for a second count that feeds a closed-source national system.\n\nThe middle section covers four findings. Ballot stamps bought abroad looked nearly identical to genuine ones, and records requests showed many municipalities using stamps that are easy to copy. A transport box was shown being stuffed in seconds, and an unsealed ballot box was reported on election night. The central system's source code was requested under open records law, but only partial files came back, with later versions withheld on national security grounds. Roughly 739 information requests produced more than a thousand protocol PDFs, which were converted to structured data. The analysis flagged seat changes between counts, large gaps between first and second counts, and ballot-stuffing indicators, many of which traced back to a display bug in an emergency release.\n\nThe closing advice is practical. Request in writing that count notes be preserved before election day, since many were discarded. Record who said and ordered what, file complaints quickly because the window is only four days, and observe openly while staying calm. The speaker argues that public scrutiny of election procedures and the software behind them remains rare and is still needed.",
       "durationSeconds": 1711,
-      "difficulty": "beginner",
+      "difficulty": "intermediate",
       "kind": "talk",
       "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20Voting%20Village%20-%20Hallvard%20Nyg%C3%A5rd%20-%20From%20Ballots%20to%20Code%20Independently%20Watching%20Norway%27s%20Election.mp4",
       "thumbnail": "/materials/thumbs/dc34-d5298dab.jpg"
@@ -376,7 +376,7 @@
       "teaser": "Presents a forensic examination of a Dominion voting system used in a live Puerto Rico election, covering its control, cryptography and software failures.",
       "summary": "The talk recounts how a small forensics team came to examine a Dominion voting system from Puerto Rico after a federal request. They imaged the election management system and several machines, then worked in a conservative threat model: a skilled attacker with access to the local network, not an insider or stolen keys. Much of the effort went into decrypting and deobfuscating self-modifying binaries, and the team had to set aside earlier material with broken chain of custody.\n\nThe findings cover four areas. LTE modems were active during operation, so the system was not air-gapped. Passwords were reused, weak or hard-coded, and audit databases shared the attack surface of the main system. Cryptography showed weak entropy, IV reuse, hard-coded material and cleartext key handling. At least twelve high or critical CVEs affected commercial components, with patches available before certification, and the code relied on obfuscation and stored credentials in plain text. The speakers say they found no evidence that votes were altered, but they also could not rule out exploitation with the data they had.\n\nThe recommendations push for a constrained, immutable and air-gapped appliance, open source code with reproducible builds and published hashes, and append-only audit logs. They argue that certification should test deployed configurations and real cryptographic use, not only FIPS-validated modules, and that independent risk-limiting audits against paper records are needed. The talk closes by announcing a nonprofit effort to fund open review of voting software.",
       "durationSeconds": 1698,
-      "difficulty": "intermediate",
+      "difficulty": "advanced",
       "kind": "talk",
       "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20Voting%20Village%20-%20Jason%20Wareham%20and%20Manbir%20Gulati%20-%20There%20and%20Back%20Again.mp4",
       "thumbnail": "/materials/thumbs/dc34-8b9997fc.jpg"
@@ -517,7 +517,7 @@
       "kind": "talk",
       "mediaUrl": "https://media.defcon.org/DEF%20CON%2034/DEF%20CON%2034%20villages%20and%20creators/DEF%20CON%2034%20-%20Voting%20Village%20-%20Philip%20Stark%20-%20Evidence-Based%20Elections%20and%C2%A0Risk-Limiting%20Audits.mp4",
       "thumbnail": "/materials/thumbs/dc34-ff0b1a38.jpg",
-      "difficulty": "beginner"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "dc34-f06a9f96",
