@@ -7,7 +7,7 @@ import { SkillTreeClient } from "./SkillTreeClient";
 export const metadata: Metadata = {
   title: "Skill Tree",
   description:
-    "Learning paths through real conference talks. Pick a field like red team or cloud, then work from beginner talks up to expert ones.",
+    "An experimental guide to what to watch next: conference talks from the archive, sorted by difficulty and topic into suggested paths.",
   alternates: { canonical: canonicalUrl("/skill-tree") },
 };
 

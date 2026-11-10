@@ -30,7 +30,7 @@ type View = { x: number; y: number; k: number };
 const TIER_CLASS = [styles.t1, styles.t2, styles.t3, styles.t4];
 const FIELD_KEY = "cybertalks:skill-tree-field";
 /** Tier header strip height inside the canvas, in screen pixels. */
-const STRIP = 46;
+const STRIP = 36;
 const PAD = 16;
 /** Smallest zoom the first screen may use to fit the whole tree. */
 const MIN_FIT_K = 0.55;
@@ -201,7 +201,8 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
           <div className={styles.titleRow}>
             <h1 className={styles.title}>Skill Tree</h1>
             <p className={styles.lede}>
-              Real conference talks, beginner to expert. Watching one unlocks the talks it leads to.
+              An experiment: talks from the archive, sorted by difficulty and topic into suggested paths. Treat it as
+              a loose guide to what to watch next, not a course.
             </p>
           </div>
         </div>
@@ -265,7 +266,7 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
       </div>
 
       <p className={styles.footnote}>
-        {field.unrated.toLocaleString()} {field.name} talks have no difficulty rating yet, so they are not in the tree.{" "}
+        Only talks with a difficulty rating can be placed, so the tree is a small sample.{" "}
         <a href={`/tracks/${field.track}`} className="link">
           Browse every {field.name} talk
         </a>
@@ -878,13 +879,6 @@ function TreeCanvas({
                   style={{ left: center - 100, width: 200 }}
                 >
                   <span className={styles.tierName}>{tier.name}</span>
-                  <a
-                    className={styles.tierMore}
-                    href={`/search?track=${field.track}&difficulty=${tier.level}`}
-                    rel="nofollow"
-                  >
-                    {field.rated[tier.level].toLocaleString()} rated talks →
-                  </a>
                 </div>
               );
             })}
