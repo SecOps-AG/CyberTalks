@@ -257,56 +257,57 @@
 }
 
 .stage {
-  display: grid;
-  grid-template-columns: 186px minmax(0, 1fr);
+  display: block;
 }
 
-/* field picker, left of the tree */
-.rail {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-height: 0;
-  padding: 12px 10px;
-  border-right: 1px solid rgba(57, 255, 20, 0.16);
+/* field menu across the top of the tree */
+.fieldBar {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(57, 255, 20, 0.16);
   background: rgba(5, 9, 6, 0.92);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  /* take the canvas height, never set it */
-  contain: size;
 }
 
-.railHead {
-  margin: 0 0 2px 4px;
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(125, 255, 106, 0.55);
-}
-
-.rail .fields {
-  flex-direction: column;
+.fieldBar .fields {
   flex-wrap: nowrap;
-  gap: 3px;
+  justify-content: space-between;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
-.rail .fieldTab {
-  justify-content: space-between;
-  width: 100%;
-  padding: 6px 9px;
+.fieldBar .fieldTab {
+  position: relative;
+  flex: none;
+  padding: 6px 7px 8px;
   border-color: transparent;
   background: transparent;
-  font-size: 11px;
-  text-align: left;
+  font-size: 10.5px;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
 }
 
-.rail .fieldTab:hover {
+/* watched share of the field, as a thin line under the name */
+.fieldBar .fieldTab::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  bottom: 3px;
+  height: 2px;
+  background: linear-gradient(90deg, #39ff14 var(--p, 0%), rgba(57, 255, 20, 0.14) var(--p, 0%));
+}
+
+.fieldBar .fieldTab:hover {
   border-color: rgba(57, 255, 20, 0.3);
 }
 
-.rail .fieldTab[aria-selected="true"] {
+.fieldBar .fieldTab[aria-selected="true"] {
   border-color: #39ff14;
   background: rgba(57, 255, 20, 0.12);
+}
+
+.fieldBar .fieldCount {
+  display: none;
 }
 
 .viewport {
@@ -497,7 +498,7 @@
   transition: box-shadow 0.15s;
 }
 
-.cap svg {
+.capRing {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -581,6 +582,44 @@
   box-shadow: 0 0 0 3px #040704, 0 0 0 4px rgba(var(--tier-rgb), 0.28);
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+}
+
+.nodeIcon {
+  width: 66%;
+  height: 66%;
+  stroke-width: 2.1;
+  color: var(--tier);
+}
+
+.nodeIcon[data-empty] {
+  border: 1.5px dashed rgba(var(--tier-rgb), 0.55);
+  border-radius: 50%;
+}
+
+.node[data-status="watched"] .nodeIcon {
+  color: #fff;
+  filter: drop-shadow(0 0 3px rgba(var(--tier-rgb), 0.9));
+}
+
+.node[data-status="locked"] .nodeIcon {
+  color: rgba(170, 190, 175, 0.38);
+}
+
+.rootIcon {
+  width: 50%;
+  height: 50%;
+  color: #39ff14;
+  filter: drop-shadow(0 0 6px rgba(57, 255, 20, 0.6));
+}
+
+.capIcon {
+  width: 46%;
+  height: 46%;
+  color: rgba(0, 240, 255, 0.75);
+}
+
+.cap[data-done="true"] .capIcon {
+  color: #39ff14;
 }
 
 .slot {

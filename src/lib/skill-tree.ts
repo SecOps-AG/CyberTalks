@@ -22,6 +22,8 @@ export type SkillTalk = {
   teaser: string;
   /** youtubeIds of talks elsewhere in the field that also unlock this one. */
   after: string[];
+  /** Line icon name for the node (see app/skill-tree/icons). Empty = blank socket. */
+  icon?: string;
 };
 
 export type SkillBranch = { name: string; talks: SkillTalk[] };
@@ -75,11 +77,11 @@ export const LAYOUT = {
   labelX: 1246,
   width: 1440,
   /** Talk node radius by tier: deeper tiers are a little bigger. */
-  nodeR: [15, 16, 17, 19],
+  nodeR: [16, 17, 18, 20],
   capR: 24,
   /** Vertical step between talks in one tier; they also zigzag sideways by `stagger`. */
-  rowGap: 30,
-  stagger: 19,
+  rowGap: 25,
+  stagger: 27,
   lanePad: 8,
   laneGap: 6,
 } as const;
@@ -106,6 +108,10 @@ export type PlacedBranch = {
 
 export type FieldLayout = {
   width: number;
+  /** Column centers, capstone and label x after horizontal stretch. */
+  tierX: number[];
+  capX: number;
+  labelX: number;
   height: number;
   /** Field emblem center height. */
   rootY: number;
@@ -114,8 +120,17 @@ export type FieldLayout = {
   byYoutubeId: Map<string, PlacedTalk>;
 };
 
-export function layoutField(field: SkillField): FieldLayout {
+/** Width of a field drawn with horizontal stretch `s` (tiers spread out, nodes keep their size). */
+export function stretchedWidth(s: number): number {
   const L = LAYOUT;
+  return L.gateX + (L.capX - L.gateX) * s + (L.width - L.capX);
+}
+
+export function layoutField(field: SkillField, stretch = 1): FieldLayout {
+  const L = LAYOUT;
+  const sx = (x: number) => L.gateX + (x - L.gateX) * stretch;
+  const tierX = L.tierX.map(sx);
+  const capX = sx(L.capX);
   const branches: PlacedBranch[] = [];
   const all: PlacedTalk[] = [];
   const maxR = Math.max(...L.nodeR);
@@ -135,7 +150,7 @@ export function layoutField(field: SkillField): FieldLayout {
           ...talk,
           key: `${branchIndex}:${talk.youtubeId}`,
           branchIndex,
-          x: L.tierX[tier] + (column.length > 1 ? (row % 2 === 0 ? -L.stagger : L.stagger) : 0),
+          x: tierX[tier] + (column.length > 1 ? (row % 2 === 0 ? -L.stagger : L.stagger) : 0),
           y: centerY + (row - (column.length - 1) / 2) * L.rowGap,
           r: L.nodeR[tier],
           parents: [],
@@ -168,7 +183,10 @@ export function layoutField(field: SkillField): FieldLayout {
   }
 
   return {
-    width: L.width,
+    width: stretchedWidth(stretch),
+    tierX,
+    capX,
+    labelX: capX + (L.labelX - L.capX),
     height,
     rootY: height / 2,
     branches,

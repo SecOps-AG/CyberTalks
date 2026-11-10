@@ -7,6 +7,7 @@ import { thumbnailSrc } from "@/lib/materials";
 import { formatDuration } from "@/lib/search";
 import {
   branchLeaves,
+  stretchedWidth,
   hoursMinutes,
   LAYOUT,
   layoutField,
@@ -21,6 +22,7 @@ import {
   type SkillTreeFile,
   type TalkStatus,
 } from "@/lib/skill-tree";
+import { TalkIcon } from "./icons";
 import styles from "./skill-tree.module.css";
 
 type View = { x: number; y: number; k: number };
@@ -37,6 +39,32 @@ const GATE_R = 9;
 /** Width of the faint band behind each tier column, world pixels. */
 const COLUMN_W = 130;
 const MAX_K = 1.6;
+
+/** Emblem icon for each field. */
+const FIELD_ICON: Record<string, string> = {
+  "red-team": "target",
+  "blue-team": "shield",
+  appsec: "code",
+  malware: "skull",
+  cloud: "cloud",
+  "ai-security": "brain",
+  "threat-intel": "flag-world",
+  osint: "eye",
+  "social-engineering": "mask",
+  hardware: "chip",
+  wireless: "radio",
+  "ics-ot": "factory",
+  mobile: "phone",
+  "supply-chain": "package",
+  privacy: "eye-off",
+};
+
+/** A branch shows the icon most of its talks share. */
+function branchIcon(b: { talks: { icon?: string }[] }): string | undefined {
+  const count = new Map<string, number>();
+  for (const t of b.talks) if (t.icon) count.set(t.icon, (count.get(t.icon) ?? 0) + 1);
+  return [...count].sort((x, y) => y[1] - x[1])[0]?.[0];
+}
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
@@ -143,6 +171,8 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
             aria-selected={f.slug === field.slug}
             className={styles.fieldTab}
             onClick={() => chooseField(f.slug)}
+            title={`${p.done} of ${p.total} watched`}
+            style={{ "--p": `${p.total ? (p.done / p.total) * 100 : 0}%` } as React.CSSProperties}
           >
             {f.name}
             <span className={styles.fieldCount}>
@@ -261,7 +291,7 @@ type SharedProps = {
 
 function TreeCanvas({
   field,
-  layout,
+  layout: base,
   status,
   selected,
   setSelected,
@@ -279,6 +309,9 @@ function TreeCanvas({
   const [hovered, setHovered] = useState<string | null>(null);
   const [showNames, setShowNames] = useState(false);
   const [query, setQuery] = useState("");
+  // Spread the tiers out so the tree fills the width the screen has.
+  const [stretch, setStretch] = useState(1);
+  const layout = useMemo(() => (stretch === 1 ? base : layoutField(field, stretch)), [base, field, stretch]);
   const viewRef = useRef(view);
   viewRef.current = view;
 
@@ -291,21 +324,23 @@ function TreeCanvas({
     const topOnPage = el.getBoundingClientRect().top + window.scrollY;
     const below = (hintRef.current?.offsetHeight ?? 44) + 12;
     const room = Math.max(420, window.innerHeight - topOnPage - below);
-    const k = clamp(
-      Math.min((w - PAD * 2) / layout.width, (room - STRIP - PAD * 2) / layout.height, 1.3),
-      MIN_FIT_K,
-      MAX_K,
-    );
-    const h = Math.round(layout.height * k + STRIP + PAD * 2);
+    const kHeight = clamp(Math.min((room - STRIP - PAD * 2) / base.height, 1.3), MIN_FIT_K, MAX_K);
+    const L0 = LAYOUT;
+    const wantW = (w - PAD * 2) / kHeight;
+    const s = clamp((wantW - L0.gateX - (L0.width - L0.capX)) / (L0.capX - L0.gateX), 1, 1.9);
+    const worldW = stretchedWidth(s);
+    const k = clamp(Math.min((w - PAD * 2) / worldW, kHeight), MIN_FIT_K, MAX_K);
+    const h = Math.round(base.height * k + STRIP + PAD * 2);
+    setStretch(Math.round(s * 100) / 100);
     setWidth(w);
     setHeight(h);
     setFitK(k);
     setView({
       k,
-      x: (w - layout.width * k) / 2,
-      y: STRIP + (h - STRIP - layout.height * k) / 2,
+      x: (w - stretchedWidth(Math.round(s * 100) / 100) * k) / 2,
+      y: STRIP + (h - STRIP - base.height * k) / 2,
     });
-  }, [layout]);
+  }, [base]);
 
   useLayoutEffect(() => {
     measure();
@@ -472,7 +507,7 @@ function TreeCanvas({
     if (suppressClick.current) return;
     const b = layout.branches[index];
     const x0 = L.gateX - 30;
-    const x1 = L.width;
+    const x1 = layout.width;
     const k = clamp(Math.min(1.5, (height - STRIP - PAD * 2) / b.height, (width - PAD * 2) / (x1 - x0)), fitK, MAX_K);
     setSelected(null);
     setView({
@@ -527,7 +562,7 @@ function TreeCanvas({
         }
         return;
       }
-      const hubX = (L.tierX[TIER_INDEX[prev[0].difficulty]] + L.tierX[TIER_INDEX[group[0].difficulty]]) / 2;
+      const hubX = (layout.tierX[TIER_INDEX[prev[0].difficulty]] + layout.tierX[TIER_INDEX[group[0].difficulty]]) / 2;
       const prevDone = prev.some((p) => status(p) === "watched");
       for (const p of prev) {
         edges.push({
@@ -547,7 +582,7 @@ function TreeCanvas({
 
     // The run to the capstone lights up only once the whole branch is watched.
     const leaves = branchLeaves(b);
-    const capHub = L.tierX[TIER_INDEX[leaves[0].difficulty]] + 120;
+    const capHub = layout.tierX[TIER_INDEX[leaves[0].difficulty]] + 120;
     const branchDone = b.talks.every((t) => status(t) === "watched");
     for (const t of leaves) {
       edges.push({
@@ -558,7 +593,7 @@ function TreeCanvas({
     }
     edges.push({
       key: `cap-${b.index}`,
-      d: `M${capHub},${b.centerY} H${L.capX - L.capR}`,
+      d: `M${capHub},${b.centerY} H${layout.capX - L.capR}`,
       cls: lit(branchDone, false),
     });
   }
@@ -648,11 +683,8 @@ function TreeCanvas({
 
   return (
     <section className={styles.board} aria-label={`${field.name} skill tree`}>
+      <div className={styles.fieldBar}>{rail}</div>
       <div className={styles.stage}>
-        <div className={styles.rail}>
-          <p className={styles.railHead}>Fields</p>
-          {rail}
-        </div>
         <div
           ref={viewportRef}
           className={styles.viewport}
@@ -682,7 +714,7 @@ function TreeCanvas({
                 key={tier.level}
                 className={`${styles.column} ${TIER_CLASS[i]}`}
                 style={{
-                  left: L.tierX[i] - COLUMN_W / 2,
+                  left: layout.tierX[i] - COLUMN_W / 2,
                   width: COLUMN_W,
                   height: layout.height,
                 }}
@@ -706,7 +738,7 @@ function TreeCanvas({
               }}
               aria-hidden="true"
             >
-              <span className={styles.rootSlot} />
+              <TalkIcon name={FIELD_ICON[field.slug]} className={styles.rootIcon} />
             </div>
             <div
               className={styles.rootName}
@@ -744,7 +776,7 @@ function TreeCanvas({
                     className={styles.cap}
                     data-done={done === b.talks.length}
                     style={{
-                      left: L.capX - L.capR,
+                      left: layout.capX - L.capR,
                       top: b.centerY - L.capR,
                       width: L.capR * 2,
                       height: L.capR * 2,
@@ -752,7 +784,7 @@ function TreeCanvas({
                     onClick={() => focusBranch(b.index)}
                     aria-label={`${b.name}: ${done} of ${b.talks.length} watched. Zoom to this branch.`}
                   >
-                    <svg viewBox={`0 0 ${L.capR * 2} ${L.capR * 2}`} aria-hidden="true">
+                    <svg className={styles.capRing} viewBox={`0 0 ${L.capR * 2} ${L.capR * 2}`} aria-hidden="true">
                       <circle cx={L.capR} cy={L.capR} r={L.capR - 3} className={styles.capTrack} />
                       {done > 0 ? (
                         <circle
@@ -765,12 +797,12 @@ function TreeCanvas({
                         />
                       ) : null}
                     </svg>
-                    <span className={styles.capSlot} />
+                    <TalkIcon name={branchIcon(b)} className={styles.capIcon} />
                   </button>
                   <button
                     type="button"
                     className={styles.branchLabel}
-                    style={{ left: L.labelX, top: b.centerY }}
+                    style={{ left: layout.labelX, top: b.centerY }}
                     onClick={() => focusBranch(b.index)}
                     tabIndex={-1}
                   >
@@ -810,7 +842,7 @@ function TreeCanvas({
                   onBlur={() => setHovered((h) => (h === t.youtubeId ? null : h))}
                   aria-label={`${t.title}. ${TIERS[ti].name}. ${statusWord(st)}.`}
                 >
-                  <span className={styles.slot} />
+                  <TalkIcon name={t.icon} className={styles.nodeIcon} />
                 </button>
               );
             })}
@@ -825,7 +857,7 @@ function TreeCanvas({
                     style={{
                       left: t.x + t.r + 7,
                       top: t.y,
-                      width: Math.min(168, L.capX - L.capR - 10 - (t.x + t.r + 7)),
+                      width: Math.min(168, layout.capX - L.capR - 10 - (t.x + t.r + 7)),
                     }}
                     aria-hidden="true"
                   >
@@ -838,7 +870,7 @@ function TreeCanvas({
           {/* tier headers: pinned to the top, follow the camera sideways */}
           <div className={styles.strip} data-overlay>
             {TIERS.map((tier, i) => {
-              const center = view.x + L.tierX[i] * view.k;
+              const center = view.x + layout.tierX[i] * view.k;
               return (
                 <div
                   key={tier.level}

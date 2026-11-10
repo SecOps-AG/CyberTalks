@@ -15,7 +15,7 @@ import { conferenceLabel, normalizeDifficulty } from "../src/lib/labels";
 import type { SkillTreeFile } from "../src/lib/skill-tree";
 import type { Difficulty, Talk } from "../src/lib/types";
 
-type SourceTalk = string | { youtubeId: string; after?: string[] };
+type SourceTalk = string | { youtubeId: string; after?: string[]; icon?: string };
 type SourceFile = {
   fields: {
     slug: string;
@@ -109,6 +109,7 @@ const out: SkillTreeFile = {
             difficulty,
             teaser: blurbFor(talk),
             after: ref.after ?? [],
+            icon: ref.icon ?? "",
           },
         ];
       }),
