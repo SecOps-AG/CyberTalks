@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-meta";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import { loadHubPage } from "@/lib/page-runtime";
 import { topicLabels } from "@/lib/topic-labels";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Black Hat",
   description: "Browse Black Hat talks in the archive.",
-};
+  path: "/black-hat",
+});
 
 export default async function BlackHatHubPage() {
   const { talks } = await loadHubPage("black-hat");

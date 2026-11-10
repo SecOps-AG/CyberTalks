@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-meta";
 import { SpeakerIndex } from "@/components/SpeakerIndex";
 import { loadSpeakers } from "@/lib/page-runtime";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Speakers",
   description: "Every speaker in the archive, with the talks they gave.",
-};
+  path: "/speakers",
+});
 
 export default async function SpeakersPage() {
   const speakers = await loadSpeakers();

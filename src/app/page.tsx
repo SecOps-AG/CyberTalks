@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/JsonLd";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import { HeroConferences } from "@/components/HeroConferences";
 import { MostWatched } from "@/components/MostWatched";
 import { TrackChart } from "@/components/TrackChart";
-import { canonicalUrl } from "@/lib/canonical";
+import { homeJsonLd } from "@/lib/json-ld";
+import { SITE_DESCRIPTION, pageMetadata } from "@/lib/page-meta";
 import { loadHome } from "@/lib/page-runtime";
 import { topicLabels } from "@/lib/topic-labels";
 
-export const metadata: Metadata = {
-  alternates: { canonical: canonicalUrl("/") },
-};
+export const metadata: Metadata = pageMetadata({ description: SITE_DESCRIPTION, path: "/" });
 
 const EXAMPLES = ["ransomware", "osint", "supply chain", "purple team"];
 
@@ -43,25 +43,28 @@ export default async function HomePage() {
   );
 
   return (
-    <TalkBrowser
-      talks={initialTalks ?? []}
-      remoteIndex
-      pushFilters
-      hide={["villages"]}
-      alwaysShowDifficulties
-      topicLabels={topicLabels()}
-      masthead={masthead}
-      hero
-      footer={
-        <>
-          <MostWatched talks={mostWatched} />
-          <TrackChart counts={trackCounts} />
-        </>
-      }
-      size="lg"
-      examples={EXAMPLES}
-      linkArchiveSearch
-      emptyHint="No talks match these filters."
-    />
+    <>
+      <JsonLd data={homeJsonLd()} />
+      <TalkBrowser
+        talks={initialTalks ?? []}
+        remoteIndex
+        pushFilters
+        hide={["villages"]}
+        alwaysShowDifficulties
+        topicLabels={topicLabels()}
+        masthead={masthead}
+        hero
+        footer={
+          <>
+            <MostWatched talks={mostWatched} />
+            <TrackChart counts={trackCounts} />
+          </>
+        }
+        size="lg"
+        examples={EXAMPLES}
+        linkArchiveSearch
+        emptyHint="No talks match these filters."
+      />
+    </>
   );
 }

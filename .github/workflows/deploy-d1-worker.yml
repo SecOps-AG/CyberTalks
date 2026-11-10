@@ -25,6 +25,8 @@ jobs:
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -48,3 +50,9 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: npx wrangler deployments status
+      # New talk pages are live now. Best effort: the script skips quietly until
+      # the IndexNow key file is served, and never fails this job.
+      - name: Ping IndexNow for new and changed talks
+        if: success() && github.event_name == 'push'
+        continue-on-error: true
+        run: npx tsx scripts/indexnow.ts --since "${{ github.event.before }}"
