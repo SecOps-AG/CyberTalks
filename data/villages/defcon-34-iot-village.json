@@ -1,0 +1,204 @@
+{
+  "villageSlug": "iot-village",
+  "villageName": "IoT Village",
+  "eventSlug": "defcon-34",
+  "conference": "defcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLWv-yc7rxjwE",
+  "description": "IoT Village talks from DEF CON 34.",
+  "talks": [
+    {
+      "youtubeId": "N1hXKLAQh8k",
+      "slug": "iot-anyone-can-hack-iot-beginner-guide-to-ai-augmented-iot-hacki",
+      "title": "Anyone Can Hack IoT Even Easier Now - A Beginner's Guide to AI Augmented IoT Hacking",
+      "speakers": [
+        "Andrew Bellini"
+      ],
+      "track": "hardware",
+      "topics": [
+        "iot",
+        "ai",
+        "reverse-engineering",
+        "embedded",
+        "vulnerability-research"
+      ],
+      "teaser": "Shows how a beginner can use AI agents and a cheap bench rig to find and exploit bugs in consumer IoT firmware, using a router as the example.",
+      "summary": "The speaker revisits his earlier DEF CON talk on IoT hacking and argues the barrier has dropped further now that AI agents can handle much of the groundwork. He lays out a beginner workflow: a kit of about twenty dollars (a multimeter, a USB-to-serial adapter and a flash programmer), then a cheap router or camera running embedded Linux as the target. Firmware can often be downloaded from vendor support pages, or read off the board when it is not.\n\nHe then separates the tasks AI does well from those that still need a person. Models are strong at reading scripts, logs and decompiled code, but they misjudge real-world severity and tend to chase privilege escalation on single-user root systems. Soldering and probing remain manual. He presents Wairz, an open-source MCP server he built that unpacks firmware in Docker and gives an agent reverse engineering, taint analysis, emulation and fuzzing tools. He also describes a fleet of Raspberry Pis that lets agents reach serial consoles, power relays, Wi-Fi access points, BLE, a rooted Android phone and SPI or JTAG interfaces.\n\nAs a test, an agent picked a cheap router, recovered its UART password, traced a custom web server to an unsanitized system call and a stack overflow, and built a working exploit that the speaker verified by hand. That yielded three CVEs. He closes with cautions about hallucinations, data handling and authorization, and points to a free UART course and a hands-on workshop.",
+      "durationSeconds": 2406,
+      "publishedAt": "2026-11-06"
+    },
+    {
+      "youtubeId": "ZEXgmmg17gU",
+      "slug": "iot-beyond-your-bookshelf-hackable-ereaders-katie-paxton-fear",
+      "title": "Beyond Your Bookshelf - Hackable eReaders",
+      "speakers": [
+        "Katie Paxton-Fear"
+      ],
+      "track": "hardware",
+      "topics": [
+        "iot",
+        "device",
+        "embedded",
+        "linux",
+        "exploiting"
+      ],
+      "teaser": "Explores how e-readers from Kindle, Kobo, Android and low-cost ESP32 makers can be jailbroken, customized and reflashed with community firmware.",
+      "summary": "The talk argues that e-ink readers, usually treated as single-purpose appliances, are an open platform that many owners never explore. The speaker surveys the main ecosystems: Kindles locked to Amazon accounts, Kobos that accept launchers and patches, Android-based e-ink tablets with old and rarely patched forks, and cheap ESP32-based readers. She explains how Amazon closed the older Calibre plugin route for stripping DRM from purchased books.\n\nThe middle section walks through Kindle jailbreaks at a high level. Winterbreak abuses a web view that loads from a replaceable folder while the device is in airplane mode, then runs a shell script that swaps Amazon's signing keys. An older route for devices with special offers uses a WebKit flaw from 2012 to gain arbitrary memory read and write. A fake update package provides persistence, after which package managers and open readers such as CoReader can be installed.\n\nThe bulk of the ESP32 discussion covers constraints. These devices have roughly 400 KB of RAM, so heap fragmentation from TLS libraries matters, and EPUBs are cached to the SD card in pieces. Sharing the frame buffer lets Wi-Fi and Bluetooth run, and e-ink refresh behaviour shapes how images are drawn. The takeaway is that developer-mode hardware makes a practical, low-cost introduction to embedded programming, and that regional firmware locks should be checked before buying.",
+      "durationSeconds": 2360,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "Cu_YegMECgU",
+      "slug": "iot-dr-strangepwn-how-i-learned-to-stop-worrying-and-love-the-ll",
+      "title": "Dr - Strangepwn - How I Learned to Stop Worrying and Love the LLM",
+      "speakers": [
+        "Larry Pesce"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "iot",
+        "embedded",
+        "vulnerability-research",
+        "framework"
+      ],
+      "teaser": "Shows how an AI agent driven by an IoT pentest playbook found and chained flaws in a webcam, and what humans must still validate.",
+      "summary": "Pentesting embedded and IoT devices is methodical but repetitive, and the attack surface keeps widening faster than individual testers can learn new protocols. The speaker, a long-time embedded tester, describes building Plan R, an IoT-focused MCP server that connects AI agents to real pentesting tools. Instead of fixed scripts, it runs stages for reconnaissance, analysis and exploitation, guided by a playbook that encodes methodology and leaves room for the agent to choose its next path. Instrumentation such as serial consoles, USB relays and extra radios widens what the agent can observe.\n\nThe centerpiece is a case study of a low-cost wireless webcam from a white-box vendor. The agent worked through network scanning and serial access, found a bootloader that was not locked, and used a decades-old directory traversal flaw to read the whole filesystem. From there it found predictable authentication tokens, unfiltered input, denial-of-service paths and hardcoded cloud credentials. The run was not clean: the agent hallucinated some crashes and needed correction, and the vendor patched the device over the air before the demo.\n\nThe main takeaway is that the human role shifts rather than disappears. Testers should validate every finding, write proofs of concept themselves, and handle vendor communication, while the agent handles heavy lifting such as protocol analysis and binary review. Playbooks are the real asset, so practitioners should document both successes and failures and tailor playbooks per device class.",
+      "durationSeconds": 2535,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "TtS4ae6FqhA",
+      "slug": "iot-workshop-in-iot-firmware-archaeology",
+      "title": "Raiders of the Lost Firmware - A Hands On Workshop in IoT Firmware Archaeology",
+      "speakers": [
+        "Simone Bossi",
+        "Luca Borzacchiello"
+      ],
+      "track": "hardware",
+      "topics": [
+        "iot",
+        "reverse-engineering",
+        "vulnerability-research",
+        "open-source",
+        "device"
+      ],
+      "teaser": "Shows how to recover an encrypted IoT camera firmware by reusing the vendor's own decryption routines through targeted function emulation.",
+      "summary": "The talk starts from a common obstacle in IoT research: firmware that is encrypted, so it cannot be inspected. Breaking the cryptography or dumping flash from hardware are both costly and risky, so the presenters describe an alternative they call firmware archaeology. It collects traces a vendor leaves in public places, such as archived web pages, developer documentation and container images, and uses them to work out how the device's protection changed over time.\n\nApplied to a commercial IP camera vendor, the team found an older firmware image that carried both the previous and the newer encryption schemes. They pulled the relevant decryption functions out of the binaries and ran only those routines under QEMU in a minimal setup. This recovered the firmware and the installed applications without reimplementing the vendor's cryptography. The decrypted apps then exposed manifests and interfaces that could be mapped as an attack surface.\n\nThe main takeaways are to map public exposure before reversing, to reuse vendor routines where the context allows, and to keep a person in control when using AI tools, which can take wrong paths or shortcut validation. The speakers reported vulnerabilities that were still under coordinated disclosure, so they did not give details. They said a toolset and a hands-on session would follow.",
+      "durationSeconds": 2121,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "YZrqmS_YDRo",
+      "slug": "iot-lessons-in-industrial-iot-disclosure-and-mitigation",
+      "title": "1 Firmware Flaw, 70 Devices - Lessons in Industrial IoT Disclosure and Mitigation",
+      "speakers": [
+        "Weihan Goh",
+        "ZhengChao Wen"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "iot",
+        "vulnerabilities",
+        "device",
+        "risk",
+        "infrastructure"
+      ],
+      "teaser": "Explains how a firmware flaw exposing LoRaWAN keys over NFC in industrial sensors grew into a fleet-scale disclosure and mitigation problem.",
+      "summary": "The talk covers a firmware flaw in industrial LoRaWAN sensors from one vendor, which the speakers say affects more than 70 models. The work began as a student project in which keys were pulled from one device, and later testing found that many sensors output raw NFC memory in readable form. That exposed the network and application session keys used in ABP activation, plus a device-to-device key. An attacker needed only brief physical contact and an NFC-capable phone, and no physical trace was left. The presenters described the impact: decrypting and forging traffic, a targeted denial of service by manipulating frame counters, and unauthorized commands in the vendor's D2D protocol.\n\nThe middle of the talk follows the disclosure path. After the January report, the vendor acknowledged it within a day, asked for documentation, and mapped the affected product line. A CVE ID was requested and reserved, but it was not yet published at the time of the talk, while the vendor advisory and firmware rollout were already underway. The speakers stressed that disclosure involves researchers, the vendor, a CNA and operators, each on a different timeline, and that field devices that are hard to reach or replace adopt patches slowly.\n\nFor operators, the recommended steps were to move from ABP to OTAA, disable D2D where it is not needed, restrict physical access, and schedule firmware upgrades. The takeaway is that a cooperative vendor makes disclosure smoother, but timing still matters when industrial devices cannot be patched quickly.",
+      "durationSeconds": 1215,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "-pPfRoi017A",
+      "slug": "iot-ot-segmentation-under-operational-constraints",
+      "title": "OT Segmentation Under Operational Constraints",
+      "speakers": [
+        "Tony Turner"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "ics",
+        "network",
+        "defensive-security",
+        "management",
+        "risk"
+      ],
+      "teaser": "Explains how industrial organizations plan, roll out, and sustain OT network segmentation around maintenance limits, legacy systems, vendor control, and operator trust.",
+      "summary": "The talk argues that OT segmentation projects usually fail for operational reasons rather than missing firewall features. Narrow maintenance windows, fragile legacy systems, vendor-managed support contracts, and operators who put uptime and safety first all shape what can be changed. The speaker ranks priorities as safety, then operations, then cyber, then compliance, and warns that an IT-led firewall rollout that causes an outage can cost the project access for months or years.\n\nThe recommended approach starts with observation, not enforcement. Teams capture traffic over a long enough period to see cyclical flows, design zones and conduits, and begin in monitor-only mode at a low-risk canary site. Deep packet inspection can later restrict specific actions such as reads versus writes, but it is best added in stages. Rollback should be planned and pre-approved, with alarm-based triggers that operators can invoke themselves, and the plan should be validated against real process behavior.\n\nThe talk also covers drift. Temporary exceptions for vendor access tend to become permanent, and firewall rules gradually erode toward a flat network. Periodic configuration diffs, treating unapproved security-control changes as incidents, and assigning a durable owner help counter this. In one engagement, a six-week monitor-first period that gave operators better visibility turned them into internal champions for later sites.",
+      "durationSeconds": 1446,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "3u2nADNrQxI",
+      "slug": "iot-uairt-over-the-air-uart",
+      "title": "UAiRT - Over The Air UART",
+      "speakers": [
+        "Metehan Arslan",
+        "Samet Berk Simsek"
+      ],
+      "track": "hardware",
+      "topics": [
+        "embedded",
+        "iot",
+        "supply-chain",
+        "wireless",
+        "open-source",
+        "attack"
+      ],
+      "teaser": "Shows how a cheap ESP32-C3 implant wired into a router's UART and power lines can give remote, persistent serial console access over wireless channels.",
+      "summary": "The talk is a stand-in presentation for an open-source wireless implant project that targets a router's UART debug interface. The presenter argues that a microcontroller costing a few dollars, soldered inside a router, can sit outside the reach of firewalls and network monitoring. Power can come from the router's own rails or from a small lithium cell salvaged from a disposable vape.\n\nThe middle of the talk covers the access paths and the scripting engine. The implant offers a serial console over Bluetooth Low Energy, a Wi-Fi web interface with a raw TCP socket, and a connectionless ESP-NOW transport that uses vendor-specific action frames instead of beacons. Attack scripts are written in JSON, compiled to bytecode, and stored in flash so they run without a live connection. Demonstrated examples include repeatedly sending a key to catch a U-Boot interrupt window, a scripted login brute force, dumping a shadow file when a GPIO input goes high, and a timed voltage glitch during boot.\n\nThe closing section covers impact and defence. Practitioners would care about the detection options: physical inspection and X-ray at receiving, BLE service scanning, and Wireshark filters for ESP-NOW frames. The speaker also lists limits, including the need for one physical visit, per-target tuning of pinout, baud rate and boot timing, and the loss of wireless range inside shielded racks.",
+      "durationSeconds": 1040,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "eLJjw59QKsw",
+      "slug": "iot-the-invisible-surveillance-in-your-walls-pockets-and-lives",
+      "title": "You Can't Opt Out - The Invisible Surveillance in Your Walls, Pockets, and Lives",
+      "speakers": [
+        "Naomi Brockwell"
+      ],
+      "track": "privacy",
+      "topics": [
+        "privacy",
+        "iot",
+        "android",
+        "device",
+        "village"
+      ],
+      "teaser": "Shows how consumer IoT devices, apps and embedded SDKs hid surveillance until researchers took them apart, and why that scrutiny matters for privacy.",
+      "summary": "The talk opens by asking what the connected devices in a typical home are doing with the data they gather, and argues that most owners never check. Naomi Brockwell describes a camera comparison her team ran, where one vendor's claim that footage stayed local did not match how its system behaved. The gap only became public after outside researchers pressed the same questions, and the vendor then rewrote its privacy policy.\n\nThe middle of the talk surveys other cases that surfaced only because someone looked closely. A school bathroom sensor with exposed microphones and an administrator backdoor was found by a student. A family's streaming box turned out to be part of the BadBox 2.0 botnet, with firmware that opened unexpected connections. A popular prayer app carried an analytics SDK that collected nearby Wi-Fi device lists and clipboard contents, and it was traced to a firm working for the US government. A cloud backup product also described its encryption in misleading terms until the company was questioned. The speaker points to data brokers and undocumented code as the reasons this kind of collection stays hidden.\n\nThe talk then argues that privacy supports the checks on power, such as whistleblowers, journalists and opposition parties. It closes with a call for security researchers to tear down devices, publish what they find and back privacy-respecting tools. The Q&A covers smart TV data collection, alternative app stores and how buying choices shape the market.",
+      "durationSeconds": 3507,
+      "publishedAt": "2026-11-06",
+      "difficulty": "beginner"
+    },
+    {
+      "youtubeId": "HthIP5QEnnI",
+      "slug": "iot-weaponization-of-cellular-based-iot-technology",
+      "title": "Weaponization of Cellular Based IoT Technology",
+      "speakers": [
+        "Carlota Bindner",
+        "Deral Heiland"
+      ],
+      "track": "hardware",
+      "topics": [
+        "iot",
+        "hardware",
+        "cellular",
+        "device",
+        "network",
+        "cloud"
+      ],
+      "teaser": "Shows how the cellular modules inside IoT devices can be taken over through their unencrypted UART and USB links to reach backend cloud and private networks.",
+      "summary": "The talk starts from a gap the researchers saw in IoT testing: more devices now carry cellular modules built onto the board, and few teams know how to assess them. They set aside the over-the-air radio link, which is encrypted and FCC-regulated, and aimed at the chip-to-chip connection between the main microcontroller and the module. That link, carried over UART or USB, is usually unencrypted. An attacker who controls it can act as the device toward cloud services and private APN networks while the product keeps working normally.\n\nThe middle section covers access and tooling. They described ways to reach the module's pins, from overlay-guided probing with needles, to lifting and reflowing the module, to cutting traces and rerouting them through a switch box. From there they drove the module with AT commands. Their demos included a cloud storage bucket scanner that pulls objects through the module's HTTP commands, a SOCKS5 proxy that turns network traffic into socket commands, a port scanner with limited UDP support, and PPP over UART. Constraints appeared quickly: modules allow only about seven to ten sockets, and default UART speeds are slow. On USB, a multiplexer in the line let the module enumerate as a network interface, and traffic from a laptop could be routed through it.\n\nThe closing part turned to defence and impact. Suggested measures included tamper switches that wipe keys, potting, disabling unused interfaces, encrypting chip-to-chip traffic, watching cellular data volume for anomalies, segmenting private networks, and threat modeling in product security. The presenters also warned that a hidden implant using an unused side channel could be hard to detect. Proof-of-concept code and a white paper were published.",
+      "durationSeconds": 3104,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    }
+  ]
+}

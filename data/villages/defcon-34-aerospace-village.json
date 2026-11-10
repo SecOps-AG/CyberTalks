@@ -1,0 +1,267 @@
+{
+  "villageSlug": "aerospace-village",
+  "villageName": "Aerospace Village",
+  "eventSlug": "defcon-34",
+  "conference": "defcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLFOdZomVRQKA",
+  "description": "Aerospace Village talks from DEF CON 34.",
+  "talks": [
+    {
+      "youtubeId": "lDrpgYYXGtA",
+      "slug": "aerospace-behind-the-badge-saov3-open-sourcing-aerospace-village",
+      "title": "Behind the Badge - SAOv3 and Open Sourcing the Aerospace Village ISS Badge",
+      "speakers": [
+        "Lily",
+        "Adam",
+        "Robert",
+        "Kevin"
+      ],
+      "track": "hardware",
+      "topics": [
+        "embedded",
+        "open-source",
+        "village",
+        "device",
+        "hardware"
+      ],
+      "teaser": "Presents SAOv3, a draft add-on standard for conference badges, plus open-source OLED animation tooling that removes screen tearing.",
+      "summary": "The Rare Circuits team, who have built the Aerospace Village badges for several years, follow up on last year's Charlie add-on. Charlie adds audio, airband and FM reception, and a black-and-white OLED to a host badge. The team explains that Charlie was an early version of a new add-on standard they call SAO v3. Under that standard, a host badge can recognize an add-on through its name and vendor and product IDs, and an add-on can declare interfaces such as LEDs, sensors or a speaker that accepts streamed audio. Firmware updates through a bootloader are also planned, though the details are still open.\n\nThe middle of the talk covers the display work. Driving a commodity SSD1306 OLED fast over SPI and DMA caused severe screen tearing, because the panel gives no timing feedback. The team found that the charge pump's switching rate follows the controller's internal oscillator. Undocumented hardware test commands force a steady pulse pattern, which allowed pixel-synchronized four-level greyscale. They warned that this only works on genuine SSD1306 parts, since many modules are clones.\n\nThe talk closes with ANSM, an animation state machine that uses script books, loops and random jumps. The UI was prototyped in a simulator before firmware existed. Next steps include a public SAO v3 draft, feedback through a Discord server, open-sourced tools and reference implementations, and dev kits. Developers can reuse the standard, the animation framework and the display timing approach.",
+      "durationSeconds": 1534,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "EsWbEw-3wqc",
+      "slug": "aerospace-aerospace-cybersecurity-student-research-spotlight-cal",
+      "title": "Aerospace Cybersecurity Student Research Spotlight Cal Poly",
+      "speakers": [
+        "Clara Davis",
+        "Dylan Gururajan"
+      ],
+      "track": "red-team",
+      "topics": [
+        "supply-chain",
+        "linux",
+        "space",
+        "attack",
+        "embedded"
+      ],
+      "teaser": "Pairs a ptrace-based process injection chain against CubeSat flight software with a pipeline that maps hidden C and C++ dependencies in satellite code.",
+      "summary": "Clara Davis, a Cal Poly student, opens with why third-party code matters for satellites, where software often cannot be patched after launch. Many C and C++ dependencies arrive implicitly through build scripts rather than package managers, so they are easy to miss. She describes extending an existing dependency scanner to detect multiple toolchains, adding code-clone detection to find vendored code, and building transitive dependency graphs checked against CVE data. Automated matching sometimes returns unrelated repositories, so results need manual review.\n\nDylan Gururajan then presents a post-compromise attack against CubeSat flight software built on NASA's F Prime running on Linux. Assuming an attacker can uplink and execute user-level code, the injector attaches to the main flight process with ptrace, saves its register state, and triggers a remote mmap to obtain writable memory. It writes a shared object path there, finds libc through the process maps, and redirects execution to dlopen so the library's constructor runs. He demonstrated the chain on a Raspberry Pi, and no kernel bug or file on disk is required.\n\nThe main lesson is that the attack depends on intended Linux behavior, so fixing a single exploit does not solve it. Options such as hiding process metadata, restricting ptrace, or restricting dlopen each carry tradeoffs for mission debugging. The speaker argues that developers should treat the flight process as its own protected boundary. Clara closes by recommending that every space project generate a software bill of materials, since you cannot protect components you do not know you have.",
+      "durationSeconds": 1422,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "_60RaLEytkI",
+      "slug": "aerospace-aerospace-cybersecurity-student-research-spotlight-era",
+      "title": "Aerospace Cybersecurity Student Research Spotlight ERAU",
+      "speakers": [
+        "David Sobec",
+        "Jackson Stewart",
+        "Samuil Nikolov"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "aerospace",
+        "threat-detection",
+        "machine-learning",
+        "security-operations"
+      ],
+      "teaser": "Presents two Embry-Riddle student prototypes: an AI log-triage system for aircraft cyber defense and a virtual satellite constellation testbed for security research.",
+      "summary": "This panel from Embry-Riddle's Center for Aerospace Resilient Systems covered two student projects built in the university's simulation labs. The first starts from a practical problem: aircraft logs are usually screened after flights with rule-based matching, which produces many false positives and a heavy analyst workload. The team built an offline language-model pipeline grounded in aviation documents, used it to create an aviation-specific attack framework rather than relying only on MITRE ATT&CK, and reported that it reduced manual review and handled about 2,000 logs per second on commodity hardware.\n\nThe presenters showed a cockpit prototype in Microsoft Flight Simulator. An ECAM alert flags affected systems, while a separate MCDU screen offers a summary and a generated procedure that the pilot can approve or reject. Repeated alerts are consolidated so they do not distract during critical phases of flight, and the team proposed a cyber degraded-law mode, similar to existing flight control fallbacks, for cases where systems must stay offline.\n\nThe second project, SpaceVE, models satellite constellations using virtual machines for flight hardware, NASA's core Flight System framework, GNU Radio links, and a ground-station scheduler. One demo traced an attack from a ground station through attitude control to an imaging satellite, where the corrupted output was only noticed after downlink. The takeaway is that researchers can study cross-domain effects, such as satellite faults reaching aircraft, without access to operational spacecraft.",
+      "durationSeconds": 2043,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "ev9ExJgPkQI",
+      "slug": "aerospace-drones-detectors-and-the-kill-chain-greg-albrecht",
+      "title": "Drones, Detectors, and the Kill Chain",
+      "speakers": [
+        "Greg Albrecht"
+      ],
+      "track": "wireless",
+      "topics": [
+        "detection",
+        "device",
+        "defensive-security",
+        "network",
+        "risk"
+      ],
+      "teaser": "Walks through how drones are detected and mitigated over North American airspace, covering Remote ID, RF control links, legal authority and the gaps in today's counter-drone tools.",
+      "summary": "Albrecht opens with a run of recent incidents: drones grounding firefighting aircraft, a drone striking a super scooper, a police helicopter hit in flight, and drones near passenger jets on approach. He argues the root problem is the same each time, an operator flying where they should not, and that drones remain valuable for deliveries, utility inspection, agriculture and emergency response, so the goal is shared airspace rather than banning drones.\n\nThe middle of the talk walks through detection. Remote ID is a mandated one-way broadcast that can ride on several radio waveforms, so a receiver needs multiple radios, and it relies on consumer Wi-Fi and Bluetooth chips built for phones. He notes that the older DJI message gave far longer range before it was closed off, and that Remote ID has no working authentication, leaving it open to replay. Radar, optical, infrared, acoustic and RF control-link sensing each miss some drones, so he argues for fusing sensors. A look at secondhand listings found many cheap drones without Remote ID. He reviews mitigation options, saying jamming and kinetic action create collateral risk, while cyber takeover works only on some models.\n\nHe closes with enforcement numbers from the FIFA World Cup, including about 700 drones seized and 250 temporary flight restrictions, and explains how the Safer Skies Act extended mitigation authority to trained state and local agencies. His takeaways: detection is far cheaper than defeat, fiber-linked and fully autonomous drones slip past RF-based tools, and a low-cost microcontroller can spoof identities or flood a space with false tracks.",
+      "durationSeconds": 1653,
+      "publishedAt": "2026-11-06"
+    },
+    {
+      "youtubeId": "4L2DknPdgHo",
+      "slug": "aerospace-cleared-for-takeoff-debunking-uncertifiable-cybersecur",
+      "title": "Cleared for Takeoff - Debunking Uncertifiable Cybersecurity",
+      "speakers": [
+        "Katie Fejer"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "embedded",
+        "risk",
+        "trust",
+        "lessons-learned",
+        "certification"
+      ],
+      "teaser": "Explains how an existing function-randomization defense was made certifiable under DO-178C by producing traceable, verifiable evidence without changing what it does.",
+      "summary": "The speaker opens by asking why security tools that protect ground systems are rarely deployed on safety-critical aircraft. Her answer is that the obstacle is not whether the tools work but whether they can produce the objective evidence aviation certification requires. She contrasts the DO-178C assurance model, built when airborne software was largely isolated, with today's connected avionics, satellite links, and AI-accelerated exploit development.\n\nThe core of the talk is a case study on load-time function randomization, which shuffles a program's function layout each time it loads. The randomness comes from a seed, so once the seed is fixed the layout is deterministic. That lets the team frame certification around showing that each transformation preserves the program's intended behavior. The work traced a system-level requirement down through high-level and low-level requirements to code and tests, removed dead code and unused features, and completed structural coverage analysis.\n\nThe lessons are that certification is a systems problem tied to the software it protects, that passing tests is not the same as certification evidence, and that every unused line adds to the burden. Deterministic, well-specified security functions fit the process more easily than adaptive detection or AI-driven components, which make the assurance argument harder. The takeaway is that existing security tools can become certifiable when their purpose is defined, traced, and verified.",
+      "durationSeconds": 1484,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "by8IH3fLmto",
+      "slug": "aerospace-hacking-afdx-primer-for-flight-control-security-a-tier",
+      "title": "Hacking AFDX or Not - A Primer for Flight Control Systems Security",
+      "speakers": [
+        "Andrew Tierney",
+        "Adam Bromiley"
+      ],
+      "track": "ics-ot",
+      "topics": [
+        "network",
+        "embedded",
+        "device",
+        "vulnerability-research"
+      ],
+      "teaser": "Explains how AFDX, the Ethernet-based avionics network used on modern airliners, differs from office networks, and what probing a test-bench airframe revealed.",
+      "summary": "The talk introduces AFDX (ARINC 664), the Ethernet-based network Airbus developed for aircraft such as the A380, and compares it with the older ARINC 429 and 629 buses. The presenters explain why standard tooling struggles with it: traffic is unidirectional, travels over defined virtual links, and has meaning encoded in its MAC and IP addresses. Switches do not learn addresses or route packets, so ARP, DHCP and Nmap-style discovery do not behave as they would on a normal network.\n\nTo understand the switch's behaviour, the team wrote brute-force tools that find accepted virtual links and payload sizes, and a fuzzer that changed header fields one at a time. They found that the switch filters almost entirely on the destination address and packet size, and that it enforces the configuration supplied by the operator. They also built a Wireshark dissector and a kernel-level shim that rewrites headers so existing data-loading software can send traffic. The main concern was the 615A data-loading protocol, because a malicious firmware or configuration image could cause serious damage, and older systems rely on CRC rather than signatures or secure boot.\n\nThe speakers reported no new vulnerabilities in the switch, which matched its documented configuration. Their takeaway is that the protocol's segregation and obscurity make conventional attacks hard, but offer no authentication or encryption. They also caution that their findings come from a single airframe, so the switch's prevalence across aircraft remains unconfirmed.",
+      "durationSeconds": 1652,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "iuFUS6wHb7g",
+      "slug": "aerospace-hacking-airplanes-at-the-ntsb",
+      "title": "Hacking Airplanes at the NTSB",
+      "speakers": [
+        "David Case",
+        "Jonathan Xue"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "incident-response",
+        "reverse-engineering",
+        "hardware",
+        "embedded",
+        "device"
+      ],
+      "teaser": "Shows how NTSB vehicle recorder specialists recover and decode undocumented binary logs from damaged aircraft and submarine devices.",
+      "summary": "Two vehicle recorder specialists from the National Transportation Safety Board's lab explain how their team pulls usable data from accident devices that arrive broken, wet, or with no documentation. They describe the agency as an independent investigator rather than a regulator. They contrast crash-hardened flight recorders, whose manufacturers must help with downloads, with smaller avionics such as engine monitors and handheld GPS units, where no such obligation exists.\n\nThe middle of the talk covers three case studies. In the first, an avionics chip had a readable file system, but its logs were raw binary. An analyst widened a hex editor window until repeated airport identifiers lined up, revealing 2,048-byte records, then wrote a short script to extract time and position and found a GPS rollover bug. In the second, the logs sat outside the file system. The team searched for the destination airport code, found 512-byte blocks holding typed, variable-length messages, and rebuilt engine and flight trends. The third covered an underwater camera whose SD card held encrypted data. After long exchanges with the manufacturer, the team moved the flash chip to a surrogate board and recovered images, though none came from the accident dive.\n\nThe takeaway is a practical workflow: start with the easiest source, such as a CSV file on a card, use string searches and known values as anchors, and expect heavy inference when documentation is missing.",
+      "durationSeconds": 1734,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "JJZCefwprY8",
+      "slug": "aerospace-hacking-conspicuity-making-light-aircraft-fly-into-con",
+      "title": "Hacking Electronic Conspicuity Devices - or - Making Light Aircraft Fly Into Conflict",
+      "speakers": [
+        "Kent Munroe"
+      ],
+      "track": "hardware",
+      "topics": [
+        "aviation",
+        "device",
+        "vulnerabilities",
+        "iot",
+        "network"
+      ],
+      "teaser": "Examines how cheap electronic conspicuity boxes that show nearby light aircraft can be abused over Wi-Fi, from weak defaults to firmware memory flaws.",
+      "summary": "The talk starts with the problem of traffic separation for general aviation. Commercial TCAS is too expensive for light aircraft, so pilots increasingly fit small electronic conspicuity devices that receive ADS-B, relay traffic between aircraft and share a map over a Wi-Fi network. The presenters, who are penetration testers and one of them a pilot, argue these units are useful but were built with security as an afterthought.\n\nThe middle of the talk covers what they found on one popular unit. The manufacturer's install advice left the Wi-Fi passphrase blank, and the network name made the devices easy to locate online. The first hardware version, based on a Raspberry Pi, had an administration web app with several endpoints that allowed unauthenticated remote code execution and root access. Its VPN update script added another path to full control. A later ESP32-based version used a trivial default passphrase, had predictable VPN certificate details tied to the MAC address, and suffered a stack overflow in its web server. The team used that overflow to load their own code into RAM, with a demonstration running on the device. The practical impact they described is altered traffic and position data, or suppressed traffic alerts.\n\nThe closing section covers disclosure. The team reported issues in late 2023, received slow and partial responses from the manufacturer, and got little help from the aviation regulator. Their advice to pilots is to change the passphrase, keep firmware current and avoid leaving devices powered on. They urge manufacturers to treat security as core to safety and point to new EU and UK product security rules that restrict default passwords.",
+      "durationSeconds": 944,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "cvK3_x7rUVg",
+      "slug": "aerospace-racing-px4-memory-safety-and-timing-vulnerabilities-ne",
+      "title": "Racing PX4 - Memory Safety and Timing Vulnerabilities",
+      "speakers": [
+        "Nefeli Georgilas"
+      ],
+      "track": "hardware",
+      "topics": [
+        "vulnerability-research",
+        "memory",
+        "device",
+        "network",
+        "exploit"
+      ],
+      "teaser": "Walks through memory corruption and race-condition flaws in PX4's MAVLink and uORB subsystems that can halt drone missions.",
+      "summary": "This talk examines PX4, an open-source flight stack used in drones ranging from hobby builds to military UAVs. The speaker covers three parts of it: the uORB publish-subscribe middleware, the MAVLink ground-station protocol, and the MAVLink logging subsystem. Using a restaurant-order analogy, the talk shows how a single bug in one topic can spread to other modules and disrupt the whole system.\n\nTwo stack-based overflows, both published in March 2026, are walked through in detail. One comes from an unbounded scanf in the MAVLink log handler, triggered by a crafted directory path sent over MAVLink FTP followed by a log list request. The other is a variable-length stack array in a uORB subscriber that sizes allocations from an unchecked payload length. Each case includes an AddressSanitizer report and suggested fixes such as bounded parsing and fixed-size buffers.\n\nThe main original finding is a race condition in the logger. The stop function deletes a global instance, while the acknowledgment handler only checks that the pointer exists, so stale acknowledgments from an earlier session are accepted in a new one. Repeated start and stop commands sent over UDP cause packet-loss reporting to become unreliable, saturate the queue, and drop commands for key modules. Proposed mitigations include session identifiers, rate limiting on logger toggles, and an active-session check before acknowledgments are processed.",
+      "durationSeconds": 1035,
+      "publishedAt": "2026-11-06",
+      "difficulty": "advanced"
+    },
+    {
+      "youtubeId": "V5xIWgLo4FE",
+      "slug": "aerospace-so-you-want-to-work-in-aircraft-cyber",
+      "title": "So You Want to Work in Aircraft Cyber Heres what you need to know",
+      "speakers": [
+        "Matt Gaffney",
+        "Marcie Wise"
+      ],
+      "track": "community",
+      "topics": [
+        "aviation",
+        "introduction",
+        "guide",
+        "learning",
+        "risk"
+      ],
+      "teaser": "Gives cybersecurity professionals a fast overview of the regulations, standards, aircraft systems and skills needed to move into aviation security.",
+      "summary": "Two aircraft security practitioners give a fast, frank tour of what someone moving from general cybersecurity into aviation should learn. They start with the regulatory frame: operators need an FAA authorization tied to an information security program, and safety management and continuing analysis requirements fold cyber risk into existing safety work. They then sketch the aviation ecosystem, from onboard functional domains and avionics data buses to ground systems that push software loads and pull aircraft data, with aircraft PKI protecting those updates.\n\nNext they walk through the standards that shape the field, including the RTCA and EUROCAE secure design and risk assessment documents, ARINC specifications and ATA Spec 42 for PKI. They point out that when manufacturers reference a standard in their maintenance instructions, it becomes mandatory for operators. They also contrast the US approach with the EASA Part IS framework. Because operational aircraft cannot be pen tested, research happens in labs and on certified or uncertified ground systems.\n\nThe closing section covers the skills that are hard to teach: curiosity, pragmatism, communicating risk to leadership and a structured mindset. The presenters point newcomers to a public IATA compilation of aviation cyber regulations and to the Aerospace Village, and they say a structured training course may follow.",
+      "durationSeconds": 1587,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "TEYYQEVRvy8",
+      "slug": "aerospace-security-analysis-of-oss-used-in-onboard-satellite-sys",
+      "title": "Security Analysis of Open Source Software Used in Onboard Satellite Systems -Rose Idan",
+      "speakers": [
+        "Rose Idan"
+      ],
+      "track": "supply-chain",
+      "topics": [
+        "open-source",
+        "supply",
+        "vulnerabilities",
+        "infrastructure",
+        "code"
+      ],
+      "teaser": "Presents an empirical study of 126 open-source satellite flight software repositories, covering maintenance state, severity, weakness types and affected subsystems.",
+      "summary": "The talk starts from the growing reuse of open-source code in satellites, from university CubeSat teams to national space agencies. Space makes fixing that code hard: there is no physical access, updates carry the risk of losing a spacecraft, bandwidth and contact windows are limited, and missions often run for three to five years on software that may no longer be maintained upstream.\n\nThe researcher collected 126 publicly available onboard satellite repositories and found that most were abandoned or dormant, including code for satellites still in orbit. Thirteen tools covering SBOM generation, dependency analysis, static analysis and secret scanning were run through one pipeline. About 28,000 raw results were filtered down to roughly 2,800 onboard-relevant findings. Over three quarters of these had real impact. Memory-safety and code-quality issues dominated, with injection and insecure design also prominent. Most findings sat in the onboard computer and payload subsystems, and more than 80 percent came from the projects' own code rather than inherited dependencies. Repositories with more findings tended to have fewer updates.\n\nThe practical takeaways are to generate an SBOM, track dependencies, analyze input handling, fuzz flight software before launch, and define a patching procedure that covers the whole mission lifecycle. The speaker said individual findings are not being published while false positives are filtered and affected teams are contacted privately.",
+      "durationSeconds": 1691,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "obfeLSuZtCk",
+      "slug": "aerospace-spacecop-houston-we-have-an-intrusion-brandon-bailey",
+      "title": "SpaceCOP - Houston, We Have an Intrusion",
+      "speakers": [
+        "Brandon Bailey"
+      ],
+      "track": "blue-team",
+      "topics": [
+        "space",
+        "threat-detection",
+        "open-source",
+        "kernel",
+        "intelligence"
+      ],
+      "teaser": "Introduces SpaceCOP, an open-source onboard intrusion detection system for NASA's Core Flight System that turns SPARTA behavioral indicators into spacecraft detections.",
+      "summary": "The talk argues that spacecraft have grown from isolated radios into networked, software-defined systems with a much larger attack surface, yet most operators still rely on ground-side telemetry monitoring. The speaker explains the blind spots: contact windows are intermittent, some attack effects never reach the downlink, and ground systems can be the origin of a compromise. Abuse of native functions, such as commanding a thruster at the wrong time or draining batteries, is presented as a more pressing concern than memory corruption.\n\nThe presenter introduces SpaceCOP, an open-source onboard intrusion detection application for NASA's Core Flight System. It maps behavioral indicators from the SPARTA framework to monitors covering the software bus, file integrity, memory, CPU use, and kernel-level system calls, with a kernel module extension. A small machine-learning component uses autoencoders to flag deviations from a learned baseline. The talk contrasts behavioral indicators with traditional indicators of compromise and notes that a spacecraft fault and a cyber event can look nearly identical.\n\nThe closing section offers practical lessons: establish what normal looks like before defining bad, adapt generic tools such as Snort to space protocols, and make detection mission-aware so responses do not interfere with critical phases. A two-spacecraft cross-link demonstration of threat sharing was shown, and automated response is named as the next step. Policy requirements are cited as a reason operators must add onboard detection now.",
+      "durationSeconds": 1576,
+      "publishedAt": "2026-11-06"
+    }
+  ]
+}

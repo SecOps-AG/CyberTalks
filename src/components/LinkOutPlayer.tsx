@@ -1,6 +1,6 @@
 /**
- * Talks with no YouTube id. The stored frame is the poster; the file opens
- * on the DEF CON media server.
+ * Talks with no YouTube id. The official mp4 plays in place from the DEF CON
+ * media server, with the stored frame as the poster and a link to the file.
  */
 export function LinkOutPlayer({
   thumbnailSrc,
@@ -12,10 +12,13 @@ export function LinkOutPlayer({
   return (
     <div className="panel overflow-hidden">
       <div className="relative aspect-video bg-black">
-        <img
-          src={thumbnailSrc}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
+        <video
+          src={mediaUrl}
+          poster={thumbnailSrc}
+          controls
+          preload="none"
+          playsInline
+          className="absolute inset-0 h-full w-full bg-black object-contain"
         />
       </div>
       <div className="border-t border-acid/20 p-4">
@@ -26,7 +29,7 @@ export function LinkOutPlayer({
           Watch on DEF CON media
         </a>
         <p className="mt-2 text-[12px] leading-relaxed text-mint/55">
-          This recording is not on YouTube. The button opens the file on the DEF CON media server.
+          This recording is not on YouTube. It plays from the DEF CON media server; the button opens the file there.
         </p>
       </div>
     </div>

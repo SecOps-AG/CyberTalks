@@ -1,0 +1,94 @@
+{
+  "villageSlug": "owasp",
+  "villageName": "OWASP",
+  "eventSlug": "defcon-34",
+  "conference": "defcon",
+  "playlistUrl": "https://www.youtube.com/playlist?list=PLRxwWpXtWbQc",
+  "description": "OWASP talks from DEF CON 34.",
+  "talks": [
+    {
+      "youtubeId": "ARZte0Hp8V4",
+      "slug": "owasp-breaking-agentic-workflows",
+      "title": "Breaking Agentic Workflows",
+      "speakers": [
+        "Andra Lezza",
+        "Jon McCoy"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "attack",
+        "appsec",
+        "owasp",
+        "defensive-security"
+      ],
+      "teaser": "Follows one malicious PDF resume through a hiring agent, showing how hidden instructions can hijack model context and move laterally across an enterprise workflow.",
+      "summary": "The talk follows a single untrusted PDF as it becomes model input in a fictional HR hiring pipeline. The speakers frame the problem around agents connected to tools and MCP servers, recent reports of agents escaping sandboxes, and the difference between locally controlled models and cloud models the operator cannot tune. They also set out a shared vocabulary of vulnerabilities, attacks, risks, policies and controls.\n\nThe middle section covers demos. An open-source OWASP scanner, ZeroJail, sends a few hundred prebaked challenges at a model endpoint and reports where it complied, including encoded and layered payloads that some models decode without context. A resume PDF carrying a hidden instruction was then passed to a hiring agent, which recommended hiring the candidate. The walkthrough traces the attack through ingestion, the step where content becomes agent context, and a privileged admin agent whose web background checks can pull in poisoned pages. From there, the next payload could ask the agent to gather data on other candidates and send it out. The talk also covers ablation, which removes guardrails from open models.\n\nThe closing section lays out layered defenses: deterministic checks on size, type and schema, analytical checks for invisible characters and encoded content, OWASP Core Rule Set rules, and guard models placed before and after the model. The speakers suggest scanning model files for poisoned pickles and running a home lab with client-side chat so no central server holds every conversation. Their takeaway is that agent security is still ordinary software security applied at every boundary.",
+      "durationSeconds": 2189,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "b1zfR5pLtME",
+      "slug": "owasp-defend-zee-clankers-owasp-ai-security-verification-standar",
+      "title": "Defend zee clankers - OWASP AI Security Verification Standard AISVS",
+      "speakers": [
+        "Jim Manico"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "owasp",
+        "appsec",
+        "framework",
+        "lightning"
+      ],
+      "teaser": "Introduces the OWASP AI Security Verification Standard, its 12 chapters of testable requirements, and how its three levels map to assurance needs.",
+      "summary": "This lightning talk introduces version 1.0 of the OWASP AI Security Verification Standard (AISVS), an open standard of about 190 numbered, testable requirements. The speakers say it was built in the style of OWASP's ASVS, with a developer audience first and assessors second. Requirements were drafted publicly on GitHub, with many community contributions that the leadership team reviewed line by line. The standard covers the AI lifecycle in 12 chapters, including training data integrity, input validation, model lifecycle and change control, access control, supply chain, runtime behavior, memory and vector stores, agentic orchestration and MCP, adversarial robustness, and monitoring.\n\nThe talk explains the three verification levels. Level one is a baseline for any AI-enabled feature, level two is the recommended target for production systems that handle real user or business data, and level three suits high-assurance settings such as regulated workloads and safety-critical decisions. Teams should choose a level based on the impact of failure. The speakers placed AISVS beside the OWASP LLM Top 10, MITRE ATLAS, and the NIST AI RMF, describing it as the technical verification layer that complements those resources. Governance requirements were deliberately removed. Chapter 9, on agentic high-impact action approval, was presented as the most contentious area, particularly the role of human review.\n\nThe closing guidance was practical. Teams can check design documents against the requirements, use the chapter pages as prompts for AI-assisted gap analysis of their codebases, add the controls to coding-agent instructions, and assess AI products before purchase. Requirement numbers stay stable across 1.x releases so findings remain valid, and the speakers expect substantial revisions in a future 2.0.",
+      "durationSeconds": 2402,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "4f7jtN8q18E",
+      "slug": "owasp-ai-pentesting-is-not-a-vibe-check",
+      "title": "AI Pentesting is not a Vibe Check",
+      "speakers": [
+        "Ads Dawson"
+      ],
+      "track": "ai-security",
+      "topics": [
+        "ai",
+        "appsec",
+        "web",
+        "vulnerabilities",
+        "attack"
+      ],
+      "teaser": "Shows how to pentest AI applications by mapping data inputs, tool calls, and output rendering, with real cases where prompt injection led to data theft, XSS, and denial of service.",
+      "summary": "The speaker, a staff AI security researcher with a web application and bug bounty background, argues that testing AI-enabled products should go beyond the chat window. The focus shifts to every place where outside data enters the model's context and every tool or display path the model can influence. Prompt injection serves as the delivery method, while the resulting impact is usually a familiar application flaw.\n\nExamples come from several products. A merchant assistant on an e-commerce site could be steered into a DNS lookup tool to leak a coupon code, since DNS traffic slips past HTTP-focused controls. Hidden instructions in an image or in white-on-white sticky note text reached a workspace assistant that humans could not see. A tool server's fetch function turned blind request forgery into a partial read, and a tool description carried exfiltration instructions. Model output inserted as raw HTML produced cross-site scripting, and a tool-output sandbox trusted messages from any origin. Two denial-of-service cases involved a model looping through reminder tool calls and a markdown payload that crashed an admin view on every reload.\n\nThe main takeaway is that the highest-impact findings lived in the application around the model rather than in the model itself. Testers should map what the model reads, what it can call, how its output is rendered, and which privileges it inherits. Existing skills for SSRF, XSS, access control, and rate-limit testing still apply.",
+      "durationSeconds": 1283,
+      "publishedAt": "2026-11-06",
+      "difficulty": "intermediate"
+    },
+    {
+      "youtubeId": "5UmDpKdvp9g",
+      "slug": "owasp-source-of-truth-a-field-guide-for-deep-technical-research",
+      "title": "Source of Truth - A Field Guide for Deep Technical Research",
+      "speakers": [
+        "Carley Fant"
+      ],
+      "track": "appsec",
+      "topics": [
+        "identity",
+        "web",
+        "learning",
+        "risk",
+        "trust"
+      ],
+      "teaser": "Presents a method for researching protocols and standards, tracing claims back to primary sources and spotting the assumptions that shape a design.",
+      "summary": "The talk starts from a common problem in security work: one reasonable question about a protocol quickly becomes a pile of browser tabs, outdated blog posts and simplified architecture diagrams. The speaker's example was learning OAuth under time pressure, where the first popular article was not enough. The core point is that the original standards hold the detail that summaries leave out, and that they link to a connected set of companion documents rather than standing alone.\n\nThe middle of the talk describes a research workflow. The speaker looks for the RFCs and their related best current practice and threat model documents, which were written for an earlier client-server world and can differ from how single-page applications work. Questions are treated as hypotheses to test, such as whether JavaScript can reach a token, and each token or data transfer is traced to find where leaks tend to happen, usually at the public internet boundary. AI tools are used with caution: they can produce citations that do not resolve, so they are best used to summarize sources the researcher has already read.\n\nThe takeaway is to decide identity and cryptography questions early, since these areas are often left unowned. Standards such as the OWASP ASVS can be attached to project stories and acceptance criteria, and large decisions can be broken into small steps to avoid analysis paralysis. The speaker also notes that the authors' own documents, not secondary articles, are the better guide to what a design should guarantee.",
+      "durationSeconds": 983,
+      "publishedAt": "2026-11-06"
+    }
+  ]
+}
