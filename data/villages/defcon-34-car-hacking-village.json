@@ -24,7 +24,7 @@
       "summary": "The talk looks at automotive Ethernet, which modern cars use for UDS diagnostics, and at how DHCP support on the diagnostic port can let an outsider obtain a valid address and reach gateway and ECU interfaces. The speaker contrasts this with static addressing, where an attacker would need both the correct target and the source address the device expects. With DHCP, the vehicle simply asks for an address and the attacker's laptop answers.\n\nThe central contribution is a way to measure flooding on Ethernet. Chinese and UN vehicle rules require denial-of-service tests, but they define no metric or threshold for Ethernet, so the speaker proposes packets per second. A sweep in 5,000 pps steps showed the vehicle reacting around 50,000 pps. The sender split the target rate across CPU cores so the rate stayed exact and repeatable. Floods aimed at an unused address had no effect, so the load landed only on the host that owned the assigned IP. On one production vehicle, a stationary flood at 50,000 pps shut off the engine and produced false warnings. A flood during slow driving caused a sudden stop at very low speed. At one million pps the instrument cluster went dark and stayed that way until the unit powered down. An open diagnostic port also answered an ECU reset sent over it.\n\nThe takeaways are to define a packets-per-second threshold for Ethernet denial-of-service testing and to restrict or disable DHCP on diagnostic interfaces, or limit it to authenticated testers. The speaker says the case was disclosed to the manufacturer, with a fix scheduled for November 2026.",
       "durationSeconds": 1348,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "AAkYvOUCm1A",
@@ -45,7 +45,7 @@
       "summary": "The talk opens with how passive keyless entry and start works. The car sends a low-frequency challenge when its owner is nearby, and the key fob answers over UHF with a response computed from a shared secret. The speaker frames the weakness: the system treats proximity as proof of authorization, and a relay can extend the radio link so the fob responds to a car it cannot physically reach.\n\nThe researchers bought an inexpensive relay kit from an online automotive-test vendor and operated it against a 2017 Suzuki model, demonstrating unlock and engine start with the key roughly ten meters away. Using a spectrum analyzer and software-defined radios, they located the tool's internal link near 915 MHz and recorded both the original LF and UHF traffic. Comparing the captures, they concluded the device demodulates the on-off keyed LF signal and retransmits the bits using FSK, reproducing the original frames exactly.\n\nTo close, the speaker outlines defenses. Detection approaches include watching turn-on transients, carrier frequency offset and peak measurements, or the relay hardware's own link. Mitigations include UWB or RSSI-based proximity binding, frequency hopping, sleeping the fob when it is still, and Faraday pouches. The takeaway is that a cheap, widely available tool can defeat the trust assumption built into modern vehicles.",
       "durationSeconds": 1483,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "jpbFKy5XOd4",

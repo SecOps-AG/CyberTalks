@@ -44,7 +44,7 @@
       "summary": "The talk opens with the dual-use problem that has long surrounded security tools such as mass scanners, Metasploit, Cobalt Strike and code analysis suites. The speaker, a technical policy manager for cyber safeguards at Anthropic, argues that AI sharpens this tension because capabilities arrive faster, at larger scale and to more people. Open-weight models cannot be gated, monitored or updated once released, so he frames hosted frontier models as a window in which defenders can get ahead.\n\nThe middle section walks through the written cyber constitution and its buckets: benign use that should never be blocked, low-risk dual use that is defensively biased but still blocked as a deliberate margin, high-risk dual use such as complex exploit building from binaries, and prohibited uses like self-replicating code, supply chain attacks and scaled data exfiltration. Since intent cannot be read from one exchange, Anthropic uses identity-based programs such as cyber verification and Project Glasswing as a proxy. The Fable 5 margin was set wider than for earlier models, accepting more false positives. Jailbreaks are judged with a new severity framework loosely modeled on CVSS, scoring capability gain, breadth, ease of weaponization and discoverability.\n\nThe closing part admits current shortcomings: legitimate agentic work gets blocked, independent researchers have the hardest path to access, four buckets flatten useful context, and refusal messages are vague. The speaker says the categories and thresholds will change, and invites practitioners to report blocked cases and help shape a shared industry standard.",
       "durationSeconds": 1810,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "vpEmJWlGLAY",
@@ -65,7 +65,7 @@
       "summary": "The talk opens with the promise of agentic browsers: AI assistants that open tabs, click buttons and act inside sessions the user is already logged into. The speaker argues that this access is what makes them dangerous, since an attacker who controls the agent's instructions inherits the user's identity. The session introduces PleaseFix, an agent-targeting vulnerability class that evolves ClickFix, and Intent Collision, where attacker content is folded into the user's own request so the agent treats it as one plan.\n\nThe middle of the talk is a series of live demonstrations. Injected instructions spread across a page evaded per-scroll classifiers. WhatsApp Web was a hard block in one browser, but a direct request to the agent kept the sensitive-site warning soft and let messages be sent. A calendar invite with a hidden button made Comet read a password file from the local filesystem and send it out. Claude in Chrome ran attacker JavaScript from a cloned CDN and leaked email, and a 1Password flow was used to reset a password. The speaker also described HistoryFixing, which poisons browser history, a feature present in browsers for years, that agents treat as ground truth. Localhost access was used to reach a Jupyter notebook and open a reverse shell, after URL checks were bypassed with redirects.\n\nThe closing takeaway is that many vendor boundaries were soft, model-based, or bypassed repeatedly, and that the vendors responded differently, with one paying a bounty. The speaker's conclusion is that only deterministic, code-level controls stopped the attacks, so builders should not rely on model safety training alone.",
       "durationSeconds": 1791,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "tOxVB751Nrs",
@@ -87,7 +87,7 @@
       "summary": "The talk starts from a shift in software development: coding agents write code far faster than humans can review it, so the bottleneck has moved to PR review. The speakers, from Corridor, argue that security should be enforced when code is generated rather than after vulnerable code is already in a pull request. They cite a benchmark result in which even a strong agent setup reached only a small share of secure solutions, though most outputs were functionally correct.\n\nThe core idea is security context retrieval. Before an agent implements a plan, a separate model identifies the security risks that the planned change could introduce, and those risks are added to the plan. On 30 SussVibes tasks, a Claude Code setup with this step raised security correctness from 36% to 52% while functional correctness stayed at 100%. To measure the retrieval step itself, the team built PreMortemBench. Frontier models scored F1 around 60 to 63%, and their latency was too high to run before every plan.\n\nTo close that gap, the team fine-tuned an open-weight Qwen model. It was faster and scored higher on their internal benchmark, with most of the gains on topics that few models retrieved correctly. The talk's broader takeaway is to measure agent harnesses on the risk axes you care about, and to weigh latency and precision alongside accuracy. The AgentBreaker framework, which extends AutoBencher to full agent harnesses, is released for that purpose.",
       "durationSeconds": 829,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "MCuUDMoGbeU",
@@ -108,7 +108,7 @@
       "summary": "The talk argues that many agent security benchmarks overstate success. They count an attack as successful when attack keywords appear anywhere in a model's reply, which also catches refusals that quote those keywords back. The presenter introduces SADF, a framework with an eight-class taxonomy of agentic failures covering tool calls, memory, retrieval pipelines, delegated authority and multi-agent handoffs, paired with a harness that scores only confirmed tool-execution results.\n\nThe experiments ran in a simulated environment, with several attempts per attack class. The framework wrapper changed outcomes as much as the model did. With Claude Sonnet held fixed, compromise rates ranged from about 12% under CrewAI to about 31% under SmolAgents. Memory poisoning was the hardest boundary for the Claude models, while delegated authority abuse was rare but potentially high impact. Three attack classes succeeded against every framework tested.\n\nThe practical takeaways are to evaluate the orchestration framework as well as the model, give agents bounded identities, filter outputs before they reach other tools or agents, and monitor and review tool calls. High-impact permissions, such as payments, should sit in stricter tiers. The harness and payloads are published on GitHub for teams that want to test their own agents.",
       "durationSeconds": 1410,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "Rg5ROBHZ9wA",
@@ -152,7 +152,7 @@
       "summary": "The speakers examine image provenance watermarks, focusing on Google's SynthID, which Gemini checks through a verification tool. They begin with baseline tests using simple distortions such as grayscale conversion, flips and cropping. The detector resisted most of these, but screenshots passed through it reliably, and the team says the detector struggles with cropping and borders.\n\nThe main attack is regeneration: a watermarked image is noised and then lightly denoised with an off-the-shelf diffusion model. About ten steps were enough to drop Gemini's detection rate to roughly 20 percent on their set of about 100 images, while the picture stayed mostly intact. To avoid querying the live service repeatedly, the team built a surrogate detector from pairs of photos and Nano Banana edits in Apple's Pico-Banana dataset, which carry the watermark implicitly. A convolutional classifier trained on these pairs ran on a CPU in about 27 milliseconds and reached roughly 90 percent accuracy on held-out data, so attack variants could be screened offline first.\n\nThe speakers also report that removing the watermark changed how Gemini described images, sometimes producing confident claims about fictional scenes. They suggest this could matter for agent confused-deputy attacks, retrieval poisoning and facial recognition. Their takeaways favor layered provenance, common cross-vendor standards and content-level reasoning over any single watermark. They note that human quality checks were limited.",
       "durationSeconds": 2967,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "0qssy0j4rHk",

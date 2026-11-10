@@ -25,7 +25,7 @@
       "summary": "The talk, given by a member of TikTok's vulnerability management team, challenges the view that web cache poisoning has little real impact. It starts with caching basics such as cache keys and time to live, and explains why earlier reports that exposed only public data or relied on short-lived entries were often closed as low severity.\n\nThe core of the talk is three submissions from one researcher against a single OAuth login endpoint. The first abused a redirect loop: the server kept answering with a 302 that carried the OAuth code, the cache stored it, and the attacker could use the code for a zero-click takeover. The team's fix blocked specific paths, and the second report used a malformed state value on an invalid language path to get a cached redirect, creating a one-click variant. The third used path traversal to get around the new rules, and a cached 404 leaked the code through a secondary header. The speaker notes that the mobile OAuth flow had received less scrutiny than web and was the only one affected by the first issue.\n\nThe takeaways are practical. Responses that contain user-specific data need cache keys tied to the session, and sensitive endpoints should send no-cache directives even when that costs server load. Caching rules must cover 302 and 404 responses, not only 200s. OAuth state parameters should be checked against a strict allowlist, and teams should fix root causes and test every platform, since a resolved report can still have bypasses.",
       "durationSeconds": 1263,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "0pJet2AADxM",
@@ -68,7 +68,7 @@
       "summary": "The talk opens with indirect prompt injection, where an attacker hides instructions in a web page or document that an AI assistant reads and then follows on the user's behalf. The speakers walk through ways such an injection can leak data: tricking a user into clicking a link, or getting the browser to fetch a rendered image whose query string carries sensitive content. They cover HTML, script and markdown routes, including reference-style markdown, and explain why regex filters struggle because lenient markdown parsers accept malformed syntax.\n\nThe middle of the talk argues that fixing one reported payload says little about whether the fix generalizes. The speakers present MPG, a mutation framework that splits a payload into benign carrier text and injection tokens, applies different mutation operators to each, and explores the resulting variant tree breadth-first. Testing runs through a Playwright browser harness against a live production deployment. A subtree viability score estimates how broadly a bypass spreads. In their internal set, the success rate rose from 35 percent for the original seeds to 54 percent once mutations were included.\n\nThe closing point is practical. Teams can use the approach after an incident to check whether a patch holds, or before release as a gate. A high viability score suggests the safeguard needs an architectural change, while a low score suggests a targeted filter may be enough.",
       "durationSeconds": 1597,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "fWajRG0n8ak",
@@ -89,7 +89,7 @@
       "summary": "The talk opens with a primer on how reverse proxies such as Nginx build a cache key from request fragments like scheme, host, path, query and selected headers. Most cache poisoning research targets unkeyed inputs, but this talk focuses on the key itself. When a configuration folds a header or cookie into the key, an attacker who controls that value can shift text between fragments and produce the same key with a different meaning.\n\nThe talk walks through several impacts. In one case, a path blocked by an access rule never reaches the cache, so splitting the key lets an unprivileged request reuse a response cached from a local admin request. Another case stores an error page under a homepage key, causing denial of service for ordinary users. Cache deception without user interaction is also shown, along with stored XSS built from host header reflection and identical responses on ports 80 and 443. The speaker notes that a CDN layer can be bypassed to reach the origin cache directly.\n\nFor defenders, the takeaway is to detect injection by probing fragment boundaries and to harden keys by hashing each fragment separately before combining them into one final hash. The speaker reports that Varnish resisted these attacks, and argues that this area still deserves much more research.",
       "durationSeconds": 1428,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "XLGIsG0sKr4",
@@ -200,7 +200,7 @@
       "summary": "This panel brings together bug bounty program managers to describe what has changed on the receiving end of the inbox over the past year. The panelists say the challenge has shifted from filtering noise to keeping up with a growing number of valid, more technical reports. AI lowers the barrier to submitting, so reports arrive more often, many are long and hard to reproduce, and some researchers let an AI decide severity without understanding the product. Programs are responding with tiered private programs, lower public payouts, explicit report templates, requests for video proof of concept, and AI-specific scope policies. Several panelists noted that a well-written report no longer signals quality.\n\nThe panel was skeptical that CVSS alone can capture severity, since it misses business context that only the company knows. Some teams use internal severity ranges instead, and others use AI to summarize and prioritize incoming reports while still checking the output by hand. For hackers, the advice was to validate and reproduce findings before submitting, explain real business impact, read the scope documents, and avoid low-value best-practice reports unless they feed a larger chain. Time-of-check versus time-of-use bugs and multi-step chains were called promising, and non-deterministic AI features need prompts, logs and request details.\n\nThe panelists agreed that bug bounty is not dying. One reported more valid high-severity reports and a raised bounty for those cases, while low-severity bugs that AI finds easily may lose value. They urged engineering teams to stay involved in remediation decisions and pointed to informal networks of program managers as a useful resource.",
       "durationSeconds": 3102,
       "publishedAt": "2026-11-06",
-      "difficulty": "intermediate"
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "ZEKr7YzIEz8",
