@@ -62,6 +62,10 @@ export type StoredTalk = {
   language?: string;
   /** Normally joined in from data/view-counts.json; an inline value wins. */
   viewCount?: number;
+  /** YouTube likes when known. Joined from data/view-counts.json; an inline value wins. */
+  likeCount?: number;
+  /** YouTube comments when the same fetch included them. */
+  commentCount?: number;
   /** ISO timestamp the view count was read. */
   viewCountFetchedAt?: string;
   difficulty?: Difficulty;
@@ -174,6 +178,8 @@ export type TalkIndexEntry = {
   language?: string;
   /** YouTube views when known; missing counts sort as 0. */
   viewCount?: number;
+  /** YouTube likes when known. Used by the homepage's default first page. */
+  likeCount?: number;
   /** Absent when the talk is unclassified. */
   difficulty?: Difficulty;
   /** Auto-band slides link. Absent when there isn't one. */

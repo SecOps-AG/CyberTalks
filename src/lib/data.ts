@@ -66,7 +66,14 @@ function canonicalizeTopic(topic: string, taxonomy: Taxonomy): string {
   return taxonomy.topicAliases?.[topic] ?? topic;
 }
 
-type ViewCounts = Record<string, { viewCount: number; fetchedAt: string }>;
+type ViewCountEntry = {
+  viewCount: number;
+  fetchedAt: string;
+  likeCount?: number;
+  commentCount?: number;
+};
+
+type ViewCounts = Record<string, ViewCountEntry>;
 
 /** data/view-counts.json, written by scripts/fetch-view-counts.mjs. Optional. */
 const getViewCounts = memo((): ViewCounts => {
@@ -218,6 +225,8 @@ const getArchive = memo((): Archive => {
         thumbnail: youtube ? undefined : `/materials/thumbs/${talk.youtubeId}.jpg`,
         language: talk.language ?? stored.language,
         viewCount: talk.viewCount ?? views?.viewCount,
+        likeCount: talk.likeCount ?? views?.likeCount,
+        commentCount: talk.commentCount ?? views?.commentCount,
         viewCountFetchedAt: talk.viewCountFetchedAt ?? views?.fetchedAt,
         topics: canonicalTopics,
         track,

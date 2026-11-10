@@ -32,7 +32,7 @@ import {
   getTopicCounts,
 } from "../src/lib/data";
 import { HUBS, inDefconVillage } from "../src/lib/hubs";
-import { initialBrowsePage } from "../src/lib/search";
+import { initialBrowse, initialBrowsePage } from "../src/lib/search";
 import { chunkList, sitemapPaths } from "../src/lib/sitemap-build";
 import { buildTitleIndex } from "../src/lib/talk-title";
 import {
@@ -86,13 +86,18 @@ export function writePageShards(): string {
   const editions = getEditions();
   const talks = getTalks();
   const trackCounts = getTrackCounts();
+  const talkIndex = getTalkIndex(talks);
+  const homeBrowse = initialBrowse(talkIndex, { pinPopularDc34: true });
 
   put(homePagePath, {
     stats: getStats(),
     conferences: getConferenceCounts(),
     mostWatched: getMostWatched(12),
     trackCounts,
-    initialTalks: initialBrowsePage(getTalkIndex(talks)).talks,
+    initialTalks: homeBrowse.talks,
+    initialFacets: homeBrowse.facets,
+    catalogSize: talkIndex.length,
+    resultSize: homeBrowse.total,
   });
   put(tracksIndexPath, trackCounts);
   put(topicsIndexPath, getTopicCounts());

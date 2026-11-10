@@ -111,7 +111,7 @@ test("changedSlugs reports new and edited talks, ignoring view-count refreshes",
     { slug: "gone", title: "Gone" },
   ];
   const after = [
-    { slug: "same", title: "Same", viewCount: 99, viewCountFetchedAt: "2026-11-09" },
+    { slug: "same", title: "Same", viewCount: 99, likeCount: 4, commentCount: 1, viewCountFetchedAt: "2026-11-09" },
     { slug: "edited", title: "New" },
     { slug: "fresh", title: "Fresh" },
   ];
