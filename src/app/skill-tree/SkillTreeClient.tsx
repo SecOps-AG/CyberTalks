@@ -31,7 +31,7 @@ const FIELD_KEY = "cybertalks:skill-tree-field";
 const STRIP = 46;
 const PAD = 16;
 /** Smallest zoom the first screen may use to fit the whole tree. */
-const MIN_FIT_K = 0.6;
+const MIN_FIT_K = 0.55;
 /** Branch gate (small diamond) half-size, world pixels. */
 const GATE_R = 9;
 /** Width of the faint band behind each tier column, world pixels. */
@@ -131,6 +131,29 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
 
   const top = RANKS[RANKS.length - 1].minSeconds;
 
+  const fieldNav = (
+    <div className={styles.fields} role="tablist" aria-label="Field">
+      {data.fields.map((f) => {
+        const p = fieldProgress(f);
+        return (
+          <button
+            key={f.slug}
+            type="button"
+            role="tab"
+            aria-selected={f.slug === field.slug}
+            className={styles.fieldTab}
+            onClick={() => chooseField(f.slug)}
+          >
+            {f.name}
+            <span className={styles.fieldCount}>
+              {p.done}/{p.total}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+
   const shared = {
     field,
     layout,
@@ -150,26 +173,6 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
             <p className={styles.lede}>
               Real conference talks, beginner to expert. Watching one unlocks the talks it leads to.
             </p>
-          </div>
-          <div className={styles.fields} role="tablist" aria-label="Field">
-            {data.fields.map((f) => {
-              const p = fieldProgress(f);
-              return (
-                <button
-                  key={f.slug}
-                  type="button"
-                  role="tab"
-                  aria-selected={f.slug === field.slug}
-                  className={styles.fieldTab}
-                  onClick={() => chooseField(f.slug)}
-                >
-                  {f.name}
-                  <span className={styles.fieldCount}>
-                    {p.done}/{p.total}
-                  </span>
-                </button>
-              );
-            })}
           </div>
         </div>
 
@@ -224,15 +227,15 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
       </section>
 
       <div className={styles.desktopOnly}>
-        <TreeCanvas {...shared} />
+        <TreeCanvas {...shared} rail={fieldNav} />
       </div>
       <div className={styles.mobileOnly}>
+        {fieldNav}
         <TreeList {...shared} />
       </div>
 
       <p className={styles.footnote}>
-        {field.unrated.toLocaleString()} {field.name} talks have no difficulty rating yet, so they are not in
-        the tree.{" "}
+        {field.unrated.toLocaleString()} {field.name} talks have no difficulty rating yet, so they are not in the tree.{" "}
         <a href={`/tracks/${field.track}`} className="link">
           Browse every {field.name} talk
         </a>
@@ -256,7 +259,16 @@ type SharedProps = {
 /* Desktop: the whole tree fitted to the screen, with pan and zoom.    */
 /* ------------------------------------------------------------------ */
 
-function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, onWatch }: SharedProps) {
+function TreeCanvas({
+  field,
+  layout,
+  status,
+  selected,
+  setSelected,
+  onToggle,
+  onWatch,
+  rail,
+}: SharedProps & { rail: React.ReactNode }) {
   const L = LAYOUT;
   const viewportRef = useRef<HTMLDivElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
@@ -279,12 +291,20 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
     const topOnPage = el.getBoundingClientRect().top + window.scrollY;
     const below = (hintRef.current?.offsetHeight ?? 44) + 12;
     const room = Math.max(420, window.innerHeight - topOnPage - below);
-    const k = clamp(Math.min((w - PAD * 2) / layout.width, (room - STRIP - PAD * 2) / layout.height, 1.3), MIN_FIT_K, MAX_K);
+    const k = clamp(
+      Math.min((w - PAD * 2) / layout.width, (room - STRIP - PAD * 2) / layout.height, 1.3),
+      MIN_FIT_K,
+      MAX_K,
+    );
     const h = Math.round(layout.height * k + STRIP + PAD * 2);
     setWidth(w);
     setHeight(h);
     setFitK(k);
-    setView({ k, x: (w - layout.width * k) / 2, y: STRIP + (h - STRIP - layout.height * k) / 2 });
+    setView({
+      k,
+      x: (w - layout.width * k) / 2,
+      y: STRIP + (h - STRIP - layout.height * k) / 2,
+    });
   }, [layout]);
 
   useLayoutEffect(() => {
@@ -310,13 +330,23 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
   const zoomAt = useCallback((factor: number, cx: number, cy: number) => {
     setView((v) => {
       const k = clamp(v.k * factor, 0.35, MAX_K);
-      return { k, x: cx - ((cx - v.x) * k) / v.k, y: cy - ((cy - v.y) * k) / v.k };
+      return {
+        k,
+        x: cx - ((cx - v.x) * k) / v.k,
+        y: cy - ((cy - v.y) * k) / v.k,
+      };
     });
   }, []);
 
   // ---- pan / pinch ----
   const pointers = useRef(new Map<number, { x: number; y: number }>());
-  const drag = useRef<{ x: number; y: number; vx: number; vy: number; moved: boolean } | null>(null);
+  const drag = useRef<{
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    moved: boolean;
+  } | null>(null);
   const pinch = useRef<{ d: number; k: number } | null>(null);
   const suppressClick = useRef(false);
 
@@ -325,11 +355,20 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pointers.current.size === 2) {
       const [a, b] = [...pointers.current.values()];
-      pinch.current = { d: Math.hypot(a.x - b.x, a.y - b.y), k: viewRef.current.k };
+      pinch.current = {
+        d: Math.hypot(a.x - b.x, a.y - b.y),
+        k: viewRef.current.k,
+      };
       drag.current = null;
       return;
     }
-    drag.current = { x: e.clientX, y: e.clientY, vx: viewRef.current.x, vy: viewRef.current.y, moved: false };
+    drag.current = {
+      x: e.clientX,
+      y: e.clientY,
+      vx: viewRef.current.x,
+      vy: viewRef.current.y,
+      moved: false,
+    };
   }
 
   function onPointerMove(e: React.PointerEvent) {
@@ -436,7 +475,11 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
     const x1 = L.width;
     const k = clamp(Math.min(1.5, (height - STRIP - PAD * 2) / b.height, (width - PAD * 2) / (x1 - x0)), fitK, MAX_K);
     setSelected(null);
-    setView({ k, x: (width - (x1 - x0) * k) / 2 - x0 * k, y: STRIP + (height - STRIP) / 2 - b.centerY * k });
+    setView({
+      k,
+      x: (width - (x1 - x0) * k) / 2 - x0 * k,
+      y: STRIP + (height - STRIP) / 2 - b.centerY * k,
+    });
   }
 
   // ---- search ----
@@ -450,7 +493,11 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
   const lit = (done: boolean, open: boolean) => (done ? styles.edgeDone : open ? styles.edgeOpen : styles.edgeLocked);
   const firstY = layout.branches[0]?.centerY ?? layout.rootY;
   const lastY = layout.branches[layout.branches.length - 1]?.centerY ?? layout.rootY;
-  edges.push({ key: "root", d: `M${L.rootX + L.rootR},${layout.rootY} H${L.trunkX}`, cls: styles.edgeOpen });
+  edges.push({
+    key: "root",
+    d: `M${L.rootX + L.rootR},${layout.rootY} H${L.trunkX}`,
+    cls: styles.edgeOpen,
+  });
   edges.push({
     key: "trunk",
     d: `M${L.trunkX},${Math.min(firstY, layout.rootY)} V${Math.max(lastY, layout.rootY)}`,
@@ -458,7 +505,11 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
   });
   for (const b of layout.branches) {
     const anyDone = b.talks.some((t) => status(t) === "watched");
-    edges.push({ key: `gate-${b.index}`, d: `M${L.trunkX},${b.centerY} H${L.gateX - GATE_R}`, cls: lit(anyDone, true) });
+    edges.push({
+      key: `gate-${b.index}`,
+      d: `M${L.trunkX},${b.centerY} H${L.gateX - GATE_R}`,
+      cls: lit(anyDone, true),
+    });
 
     // Group the branch by tier; each step between two tiers forks and merges
     // through one junction on the branch's center line, so links never cross.
@@ -476,7 +527,7 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
         }
         return;
       }
-      const hubX = (prev[0].x + group[0].x) / 2;
+      const hubX = (L.tierX[TIER_INDEX[prev[0].difficulty]] + L.tierX[TIER_INDEX[group[0].difficulty]]) / 2;
       const prevDone = prev.some((p) => status(p) === "watched");
       for (const p of prev) {
         edges.push({
@@ -496,12 +547,20 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
 
     // The run to the capstone lights up only once the whole branch is watched.
     const leaves = branchLeaves(b);
-    const capHub = leaves[0].x + 120;
+    const capHub = L.tierX[TIER_INDEX[leaves[0].difficulty]] + 120;
     const branchDone = b.talks.every((t) => status(t) === "watched");
     for (const t of leaves) {
-      edges.push({ key: `cap-${t.key}`, d: elbow(t.x + t.r, t.y, capHub, b.centerY), cls: lit(branchDone, false) });
+      edges.push({
+        key: `cap-${t.key}`,
+        d: elbow(t.x + t.r, t.y, capHub, b.centerY),
+        cls: lit(branchDone, false),
+      });
     }
-    edges.push({ key: `cap-${b.index}`, d: `M${capHub},${b.centerY} H${L.capX - L.capR}`, cls: lit(branchDone, false) });
+    edges.push({
+      key: `cap-${b.index}`,
+      d: `M${capHub},${b.centerY} H${L.capX - L.capR}`,
+      cls: lit(branchDone, false),
+    });
   }
   // Cross-branch prerequisites ("after" links) draw as dashed links.
   for (const t of layout.talks) {
@@ -554,12 +613,19 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
       if (viewportRef.current) {
         const r = viewportRef.current.getBoundingClientRect();
         if (r.top < 0 || r.top + y1 > window.innerHeight) {
-          window.scrollTo({ top: window.scrollY + r.top + y0 - window.innerHeight / 2, behavior: "smooth" });
+          window.scrollTo({
+            top: window.scrollY + r.top + y0 - window.innerHeight / 2,
+            behavior: "smooth",
+          });
         }
       }
       return;
     }
-    setView({ k: v.k, x: width / 2 - selectedTalk.x * v.k, y: (height + STRIP) / 2 - selectedTalk.y * v.k });
+    setView({
+      k: v.k,
+      x: width / 2 - selectedTalk.x * v.k,
+      y: (height + STRIP) / 2 - selectedTalk.y * v.k,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTalk?.youtubeId]);
 
@@ -571,249 +637,309 @@ function TreeCanvas({ field, layout, status, selected, setSelected, onToggle, on
     const rect = e.currentTarget.getBoundingClientRect();
     const wx = ((e.clientX - rect.left) / rect.width) * layout.width;
     const wy = ((e.clientY - rect.top) / rect.height) * layout.height;
-    setView((v) => ({ ...v, x: width / 2 - wx * v.k, y: (height + STRIP) / 2 - wy * v.k }));
+    setView((v) => ({
+      ...v,
+      x: width / 2 - wx * v.k,
+      y: (height + STRIP) / 2 - wy * v.k,
+    }));
   }
 
   const statusWord = (st: TalkStatus) => (st === "watched" ? "Watched" : st === "ready" ? "Ready to watch" : "Locked");
 
   return (
     <section className={styles.board} aria-label={`${field.name} skill tree`}>
-      <div
-        ref={viewportRef}
-        className={styles.viewport}
-        style={{ height }}
-        tabIndex={0}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
-        onKeyDown={onKeyDown}
-        data-fitted={fitted}
-        data-searching={q ? "true" : undefined}
-      >
+      <div className={styles.stage}>
+        <div className={styles.rail}>
+          <p className={styles.railHead}>Fields</p>
+          {rail}
+        </div>
         <div
-          className={styles.world}
-          style={
-            {
-              width: layout.width,
-              height: layout.height,
-              transform: `translate(${view.x}px, ${view.y}px) scale(${view.k})`,
-              "--k": view.k,
-            } as React.CSSProperties
-          }
+          ref={viewportRef}
+          className={styles.viewport}
+          style={{ height }}
+          tabIndex={0}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+          onKeyDown={onKeyDown}
+          data-fitted={fitted}
+          data-searching={q ? "true" : undefined}
         >
-          {TIERS.map((tier, i) => (
-            <div
-              key={tier.level}
-              className={`${styles.column} ${TIER_CLASS[i]}`}
-              style={{ left: L.tierX[i] - COLUMN_W / 2, width: COLUMN_W, height: layout.height }}
-            />
-          ))}
-
-          <svg className={styles.edges} width={layout.width} height={layout.height} aria-hidden="true">
-            {edges.map((e) => (
-              <path key={e.key} d={e.d} className={`${styles.edge} ${e.cls}`} />
-            ))}
-          </svg>
-
-          {/* field emblem */}
           <div
-            className={styles.root}
-            style={{ left: L.rootX - L.rootR, top: layout.rootY - L.rootR, width: L.rootR * 2, height: L.rootR * 2 }}
-            aria-hidden="true"
+            className={styles.world}
+            style={
+              {
+                width: layout.width,
+                height: layout.height,
+                transform: `translate(${view.x}px, ${view.y}px) scale(${view.k})`,
+                "--k": view.k,
+              } as React.CSSProperties
+            }
           >
-            <span className={styles.rootSlot} />
-          </div>
-          <div className={styles.rootName} style={{ left: L.rootX - 70, top: layout.rootY + L.rootR + 8, width: 140 }}>
-            {field.name}
-          </div>
-
-          {layout.branches.map((b) => {
-            const done = b.talks.filter((t) => status(t) === "watched").length;
-            const frac = done / b.talks.length;
-            const circ = 2 * Math.PI * (L.capR - 3);
-            return (
-              <div key={b.index}>
-                <button
-                  type="button"
-                  className={styles.gate}
-                  data-lit={done > 0}
-                  style={{ left: L.gateX - GATE_R, top: b.centerY - GATE_R, width: GATE_R * 2, height: GATE_R * 2 }}
-                  onClick={() => focusBranch(b.index)}
-                  aria-label={`Zoom to ${b.name}`}
-                  title={b.name}
-                />
-                <button
-                  type="button"
-                  className={styles.cap}
-                  data-done={done === b.talks.length}
-                  style={{ left: L.capX - L.capR, top: b.centerY - L.capR, width: L.capR * 2, height: L.capR * 2 }}
-                  onClick={() => focusBranch(b.index)}
-                  aria-label={`${b.name}: ${done} of ${b.talks.length} watched. Zoom to this branch.`}
-                >
-                  <svg viewBox={`0 0 ${L.capR * 2} ${L.capR * 2}`} aria-hidden="true">
-                    <circle cx={L.capR} cy={L.capR} r={L.capR - 3} className={styles.capTrack} />
-                    {done > 0 ? (
-                      <circle
-                        cx={L.capR}
-                        cy={L.capR}
-                        r={L.capR - 3}
-                        className={styles.capFill}
-                        strokeDasharray={`${circ * frac} ${circ}`}
-                        transform={`rotate(-90 ${L.capR} ${L.capR})`}
-                      />
-                    ) : null}
-                  </svg>
-                  <span className={styles.capSlot} />
-                </button>
-                <button
-                  type="button"
-                  className={styles.branchLabel}
-                  style={{ left: L.labelX, top: b.centerY }}
-                  onClick={() => focusBranch(b.index)}
-                  tabIndex={-1}
-                >
-                  <span className={styles.branchName}>{b.name}</span>
-                  <span className={styles.branchCount}>
-                    {done}/{b.talks.length} watched
-                  </span>
-                </button>
-              </div>
-            );
-          })}
-
-          {layout.talks.map((t) => {
-            const st = status(t);
-            const ti = TIER_INDEX[t.difficulty];
-            return (
-              <button
-                key={t.key}
-                type="button"
-                className={`${styles.node} ${TIER_CLASS[ti]}`}
-                data-status={st}
-                data-selected={selected === t.youtubeId}
-                data-match={q ? matches(t) : undefined}
-                style={{ left: t.x - t.r, top: t.y - t.r, width: t.r * 2, height: t.r * 2 }}
-                onClick={() => {
-                  if (suppressClick.current) return;
-                  setSelected(selected === t.youtubeId ? null : t.youtubeId);
+            {TIERS.map((tier, i) => (
+              <div
+                key={tier.level}
+                className={`${styles.column} ${TIER_CLASS[i]}`}
+                style={{
+                  left: L.tierX[i] - COLUMN_W / 2,
+                  width: COLUMN_W,
+                  height: layout.height,
                 }}
-                onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(t.youtubeId)}
-                onPointerLeave={() => setHovered((h) => (h === t.youtubeId ? null : h))}
-                onFocus={() => setHovered(t.youtubeId)}
-                onBlur={() => setHovered((h) => (h === t.youtubeId ? null : h))}
-                aria-label={`${t.title}. ${TIERS[ti].name}. ${statusWord(st)}.`}
-              >
-                <span className={styles.slot} />
-              </button>
-            );
-          })}
-
-          {showNames
-            ? layout.talks.map((t) => (
-                <span
-                  key={`name-${t.key}`}
-                  className={styles.nodeName}
-                  data-status={status(t)}
-                  data-match={q ? matches(t) : undefined}
-                  style={{ left: t.x + t.r + 7, top: t.y, width: Math.min(168, L.capX - L.capR - 10 - (t.x + t.r + 7)) }}
-                  aria-hidden="true"
-                >
-                  {t.title}
-                </span>
-              ))
-            : null}
-        </div>
-
-        {/* tier headers: pinned to the top, follow the camera sideways */}
-        <div className={styles.strip} data-overlay>
-          {TIERS.map((tier, i) => {
-            const center = view.x + L.tierX[i] * view.k;
-            return (
-              <div key={tier.level} className={`${styles.tierHead} ${TIER_CLASS[i]}`} style={{ left: center - 100, width: 200 }}>
-                <span className={styles.tierName}>{tier.name}</span>
-                <a className={styles.tierMore} href={`/search?track=${field.track}&difficulty=${tier.level}`} rel="nofollow">
-                  {field.rated[tier.level].toLocaleString()} rated talks →
-                </a>
-              </div>
-            );
-          })}
-        </div>
-
-        {hoveredTalk ? (
-          <div
-            className={`${styles.tip} ${TIER_CLASS[TIER_INDEX[hoveredTalk.difficulty]]}`}
-            style={{
-              left: clamp(view.x + hoveredTalk.x * view.k, 130, Math.max(130, width - 130)),
-              top: view.y + (hoveredTalk.y - hoveredTalk.r) * view.k - 10,
-            }}
-            aria-hidden="true"
-          >
-            <span className={styles.tipTier}>
-              {TIERS[TIER_INDEX[hoveredTalk.difficulty]].name} · {statusWord(status(hoveredTalk))}
-            </span>
-            <span className={styles.tipTitle}>{hoveredTalk.title}</span>
-            {hoveredTalk.speakers.length ? <span className={styles.tipMeta}>{hoveredTalk.speakers.join(", ")}</span> : null}
-          </div>
-        ) : null}
-
-        {!fitted ? (
-          <div className={styles.minimap} data-overlay>
-            <svg
-              width={MINI_W}
-              height={miniH}
-              viewBox={`0 0 ${layout.width} ${layout.height}`}
-              onPointerDown={(e) => {
-                miniDrag.current = true;
-                e.currentTarget.setPointerCapture(e.pointerId);
-                miniMove(e);
-              }}
-              onPointerMove={(e) => miniDrag.current && miniMove(e)}
-              onPointerUp={() => (miniDrag.current = false)}
-              role="img"
-              aria-label="Mini map. Click to move the view."
-            >
-              <rect width={layout.width} height={layout.height} className={styles.miniBg} />
-              {layout.talks.map((t) => (
-                <circle
-                  key={t.key}
-                  cx={t.x}
-                  cy={t.y}
-                  r={t.r * 1.3}
-                  className={`${styles.miniNode} ${TIER_CLASS[TIER_INDEX[t.difficulty]]}`}
-                  data-status={status(t)}
-                />
-              ))}
-              <rect
-                x={-view.x / view.k}
-                y={(STRIP - view.y) / view.k}
-                width={width / view.k}
-                height={(height - STRIP) / view.k}
-                className={styles.miniView}
-                strokeWidth={layout.width / 100}
               />
-            </svg>
-          </div>
-        ) : null}
+            ))}
 
-        {selectedTalk ? (
-          <div
-            ref={popRef}
-            className={`${styles.pop} ${TIER_CLASS[TIER_INDEX[selectedTalk.difficulty]]}`}
-            style={{ left: popLeft, top: popTop, width: POP_W, maxHeight: height - 16 }}
-            data-overlay
-          >
-            <TalkDetails
-              talk={selectedTalk}
-              layout={layout}
-              status={status}
-              onClose={() => setSelected(null)}
-              onSelect={setSelected}
-              onToggle={onToggle}
-              onWatch={onWatch}
-            />
+            <svg className={styles.edges} width={layout.width} height={layout.height} aria-hidden="true">
+              {edges.map((e) => (
+                <path key={e.key} d={e.d} className={`${styles.edge} ${e.cls}`} />
+              ))}
+            </svg>
+
+            {/* field emblem */}
+            <div
+              className={styles.root}
+              style={{
+                left: L.rootX - L.rootR,
+                top: layout.rootY - L.rootR,
+                width: L.rootR * 2,
+                height: L.rootR * 2,
+              }}
+              aria-hidden="true"
+            >
+              <span className={styles.rootSlot} />
+            </div>
+            <div
+              className={styles.rootName}
+              style={{
+                left: L.rootX - 70,
+                top: layout.rootY + L.rootR + 8,
+                width: 140,
+              }}
+            >
+              {field.name}
+            </div>
+
+            {layout.branches.map((b) => {
+              const done = b.talks.filter((t) => status(t) === "watched").length;
+              const frac = done / b.talks.length;
+              const circ = 2 * Math.PI * (L.capR - 3);
+              return (
+                <div key={b.index}>
+                  <button
+                    type="button"
+                    className={styles.gate}
+                    data-lit={done > 0}
+                    style={{
+                      left: L.gateX - GATE_R,
+                      top: b.centerY - GATE_R,
+                      width: GATE_R * 2,
+                      height: GATE_R * 2,
+                    }}
+                    onClick={() => focusBranch(b.index)}
+                    aria-label={`Zoom to ${b.name}`}
+                    title={b.name}
+                  />
+                  <button
+                    type="button"
+                    className={styles.cap}
+                    data-done={done === b.talks.length}
+                    style={{
+                      left: L.capX - L.capR,
+                      top: b.centerY - L.capR,
+                      width: L.capR * 2,
+                      height: L.capR * 2,
+                    }}
+                    onClick={() => focusBranch(b.index)}
+                    aria-label={`${b.name}: ${done} of ${b.talks.length} watched. Zoom to this branch.`}
+                  >
+                    <svg viewBox={`0 0 ${L.capR * 2} ${L.capR * 2}`} aria-hidden="true">
+                      <circle cx={L.capR} cy={L.capR} r={L.capR - 3} className={styles.capTrack} />
+                      {done > 0 ? (
+                        <circle
+                          cx={L.capR}
+                          cy={L.capR}
+                          r={L.capR - 3}
+                          className={styles.capFill}
+                          strokeDasharray={`${circ * frac} ${circ}`}
+                          transform={`rotate(-90 ${L.capR} ${L.capR})`}
+                        />
+                      ) : null}
+                    </svg>
+                    <span className={styles.capSlot} />
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.branchLabel}
+                    style={{ left: L.labelX, top: b.centerY }}
+                    onClick={() => focusBranch(b.index)}
+                    tabIndex={-1}
+                  >
+                    <span className={styles.branchName}>{b.name}</span>
+                    <span className={styles.branchCount}>
+                      {done}/{b.talks.length} watched
+                    </span>
+                  </button>
+                </div>
+              );
+            })}
+
+            {layout.talks.map((t) => {
+              const st = status(t);
+              const ti = TIER_INDEX[t.difficulty];
+              return (
+                <button
+                  key={t.key}
+                  type="button"
+                  className={`${styles.node} ${TIER_CLASS[ti]}`}
+                  data-status={st}
+                  data-selected={selected === t.youtubeId}
+                  data-match={q ? matches(t) : undefined}
+                  style={{
+                    left: t.x - t.r,
+                    top: t.y - t.r,
+                    width: t.r * 2,
+                    height: t.r * 2,
+                  }}
+                  onClick={() => {
+                    if (suppressClick.current) return;
+                    setSelected(selected === t.youtubeId ? null : t.youtubeId);
+                  }}
+                  onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(t.youtubeId)}
+                  onPointerLeave={() => setHovered((h) => (h === t.youtubeId ? null : h))}
+                  onFocus={() => setHovered(t.youtubeId)}
+                  onBlur={() => setHovered((h) => (h === t.youtubeId ? null : h))}
+                  aria-label={`${t.title}. ${TIERS[ti].name}. ${statusWord(st)}.`}
+                >
+                  <span className={styles.slot} />
+                </button>
+              );
+            })}
+
+            {showNames
+              ? layout.talks.map((t) => (
+                  <span
+                    key={`name-${t.key}`}
+                    className={styles.nodeName}
+                    data-status={status(t)}
+                    data-match={q ? matches(t) : undefined}
+                    style={{
+                      left: t.x + t.r + 7,
+                      top: t.y,
+                      width: Math.min(168, L.capX - L.capR - 10 - (t.x + t.r + 7)),
+                    }}
+                    aria-hidden="true"
+                  >
+                    {t.title}
+                  </span>
+                ))
+              : null}
           </div>
-        ) : null}
+
+          {/* tier headers: pinned to the top, follow the camera sideways */}
+          <div className={styles.strip} data-overlay>
+            {TIERS.map((tier, i) => {
+              const center = view.x + L.tierX[i] * view.k;
+              return (
+                <div
+                  key={tier.level}
+                  className={`${styles.tierHead} ${TIER_CLASS[i]}`}
+                  style={{ left: center - 100, width: 200 }}
+                >
+                  <span className={styles.tierName}>{tier.name}</span>
+                  <a
+                    className={styles.tierMore}
+                    href={`/search?track=${field.track}&difficulty=${tier.level}`}
+                    rel="nofollow"
+                  >
+                    {field.rated[tier.level].toLocaleString()} rated talks →
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+
+          {hoveredTalk ? (
+            <div
+              className={`${styles.tip} ${TIER_CLASS[TIER_INDEX[hoveredTalk.difficulty]]}`}
+              style={{
+                left: clamp(view.x + hoveredTalk.x * view.k, 130, Math.max(130, width - 130)),
+                top: view.y + (hoveredTalk.y - hoveredTalk.r) * view.k - 10,
+              }}
+              aria-hidden="true"
+            >
+              <span className={styles.tipTier}>
+                {TIERS[TIER_INDEX[hoveredTalk.difficulty]].name} · {statusWord(status(hoveredTalk))}
+              </span>
+              <span className={styles.tipTitle}>{hoveredTalk.title}</span>
+              {hoveredTalk.speakers.length ? (
+                <span className={styles.tipMeta}>{hoveredTalk.speakers.join(", ")}</span>
+              ) : null}
+            </div>
+          ) : null}
+
+          {!fitted ? (
+            <div className={styles.minimap} data-overlay>
+              <svg
+                width={MINI_W}
+                height={miniH}
+                viewBox={`0 0 ${layout.width} ${layout.height}`}
+                onPointerDown={(e) => {
+                  miniDrag.current = true;
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                  miniMove(e);
+                }}
+                onPointerMove={(e) => miniDrag.current && miniMove(e)}
+                onPointerUp={() => (miniDrag.current = false)}
+                role="img"
+                aria-label="Mini map. Click to move the view."
+              >
+                <rect width={layout.width} height={layout.height} className={styles.miniBg} />
+                {layout.talks.map((t) => (
+                  <circle
+                    key={t.key}
+                    cx={t.x}
+                    cy={t.y}
+                    r={t.r * 1.3}
+                    className={`${styles.miniNode} ${TIER_CLASS[TIER_INDEX[t.difficulty]]}`}
+                    data-status={status(t)}
+                  />
+                ))}
+                <rect
+                  x={-view.x / view.k}
+                  y={(STRIP - view.y) / view.k}
+                  width={width / view.k}
+                  height={(height - STRIP) / view.k}
+                  className={styles.miniView}
+                  strokeWidth={layout.width / 100}
+                />
+              </svg>
+            </div>
+          ) : null}
+
+          {selectedTalk ? (
+            <div
+              ref={popRef}
+              className={`${styles.pop} ${TIER_CLASS[TIER_INDEX[selectedTalk.difficulty]]}`}
+              style={{
+                left: popLeft,
+                top: popTop,
+                width: POP_W,
+                maxHeight: height - 16,
+              }}
+              data-overlay
+            >
+              <TalkDetails
+                talk={selectedTalk}
+                layout={layout}
+                status={status}
+                onClose={() => setSelected(null)}
+                onSelect={setSelected}
+                onToggle={onToggle}
+                onWatch={onWatch}
+              />
+            </div>
+          ) : null}
+        </div>
       </div>
       <div className={styles.hint} ref={hintRef}>
         <IconLegend />

@@ -256,6 +256,59 @@
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 28px rgba(57, 255, 20, 0.06);
 }
 
+.stage {
+  display: grid;
+  grid-template-columns: 186px minmax(0, 1fr);
+}
+
+/* field picker, left of the tree */
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  padding: 12px 10px;
+  border-right: 1px solid rgba(57, 255, 20, 0.16);
+  background: rgba(5, 9, 6, 0.92);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  /* take the canvas height, never set it */
+  contain: size;
+}
+
+.railHead {
+  margin: 0 0 2px 4px;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(125, 255, 106, 0.55);
+}
+
+.rail .fields {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 3px;
+}
+
+.rail .fieldTab {
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 9px;
+  border-color: transparent;
+  background: transparent;
+  font-size: 11px;
+  text-align: left;
+}
+
+.rail .fieldTab:hover {
+  border-color: rgba(57, 255, 20, 0.3);
+}
+
+.rail .fieldTab[aria-selected="true"] {
+  border-color: #39ff14;
+  background: rgba(57, 255, 20, 0.12);
+}
+
 .viewport {
   position: relative;
   overflow: hidden;
@@ -755,8 +808,8 @@
 .tierName {
   font-family: var(--font-orbitron), ui-sans-serif, sans-serif;
   font-weight: 700;
-  font-size: 15px;
-  letter-spacing: 0.14em;
+  font-size: 13px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--tier);
   text-shadow: 0 0 12px rgba(var(--tier-rgb), 0.35);
@@ -1268,6 +1321,10 @@
 
   .mobileOnly {
     display: block;
+  }
+
+  .mobileOnly > .fields {
+    margin-bottom: 10px;
   }
 
   .stats {

@@ -75,11 +75,13 @@ export const LAYOUT = {
   labelX: 1246,
   width: 1440,
   /** Talk node radius by tier: deeper tiers are a little bigger. */
-  nodeR: [17, 18, 20, 22],
-  capR: 26,
-  rowGap: 46,
-  lanePad: 12,
-  laneGap: 8,
+  nodeR: [15, 16, 17, 19],
+  capR: 24,
+  /** Vertical step between talks in one tier; they also zigzag sideways by `stagger`. */
+  rowGap: 30,
+  stagger: 19,
+  lanePad: 8,
+  laneGap: 6,
 } as const;
 
 export type PlacedTalk = SkillTalk & {
@@ -133,7 +135,7 @@ export function layoutField(field: SkillField): FieldLayout {
           ...talk,
           key: `${branchIndex}:${talk.youtubeId}`,
           branchIndex,
-          x: L.tierX[tier],
+          x: L.tierX[tier] + (column.length > 1 ? (row % 2 === 0 ? -L.stagger : L.stagger) : 0),
           y: centerY + (row - (column.length - 1) / 2) * L.rowGap,
           r: L.nodeR[tier],
           parents: [],
