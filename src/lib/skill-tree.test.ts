@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { hoursMinutes, layoutField, rankFor, talkStatus, type SkillField, type SkillTalk } from "./skill-tree";
 import type { Difficulty } from "./types";
 
-function talk(youtubeId: string, difficulty: Difficulty, durationSeconds = 1800, after: string[] = []): SkillTalk {
+function talk(youtubeId: string, tier: Difficulty, durationSeconds = 1800, after: string[] = []): SkillTalk {
   return {
     id: `edition-${youtubeId}`,
     youtubeId,
@@ -12,7 +12,7 @@ function talk(youtubeId: string, difficulty: Difficulty, durationSeconds = 1800,
     speakers: [],
     event: "Test",
     durationSeconds,
-    difficulty,
+    tier,
     teaser: "",
     after,
   };
@@ -23,8 +23,6 @@ const field: SkillField = {
   name: "Red Team",
   blurb: "",
   track: "red-team",
-  rated: { beginner: 0, intermediate: 0, advanced: 0, expert: 0 },
-  unrated: 0,
   branches: [
     { name: "Web", talks: [talk("a1", "beginner"), talk("a2", "intermediate"), talk("a3", "expert")] },
     { name: "Windows", talks: [talk("b2", "intermediate", 1800, ["a1"]), talk("b3", "advanced")] },
@@ -43,6 +41,24 @@ test("tiers are columns, left to right", () => {
   const layout = layoutField(field);
   const x = (id: string) => layout.byYoutubeId.get(id)!.x;
   assert.ok(x("a1") < x("a2") && x("a2") < x("b3") && x("b3") < x("a3"));
+  assert.equal(x("a2"), x("b2"));
+});
+
+test("cards in one tier stack without overlapping, and lanes do not overlap", () => {
+  const stacked: SkillField = {
+    ...field,
+    branches: [
+      { name: "Web", talks: [talk("c1", "beginner"), talk("c2", "beginner"), talk("c3", "intermediate")] },
+      { name: "Windows", talks: [talk("d1", "beginner")] },
+    ],
+  };
+  const layout = layoutField(stacked);
+  const get = (id: string) => layout.byYoutubeId.get(id)!;
+  assert.ok(get("c2").y - get("c1").y >= 64);
+  const [web, win] = layout.branches;
+  assert.ok(win.y >= web.y + web.height);
+  assert.deepEqual(get("c3").parents.sort(), ["c1", "c2"]);
+  for (const t of layout.talks) assert.ok(t.y >= 0 && t.y + 64 <= layout.height);
 });
 
 test("watching a talk unlocks the talks it feeds", () => {

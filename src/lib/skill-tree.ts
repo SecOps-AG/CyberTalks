@@ -17,12 +17,13 @@ export type SkillTalk = {
   /** Conference or event group, for a chip. */
   event: string;
   durationSeconds: number;
-  difficulty: Difficulty;
+  /** Column in the tree. Usually the talk's difficulty; set per tree when curated. */
+  tier: Difficulty;
   /** Own-words overview, or the card teaser. */
   teaser: string;
   /** youtubeIds of talks elsewhere in the field that also unlock this one. */
   after: string[];
-  /** Line icon name for the node (see app/skill-tree/icons). Empty = blank socket. */
+  /** Line icon name for the card (see app/skill-tree/icons). Empty = blank socket. */
   icon?: string;
 };
 
@@ -33,8 +34,6 @@ export type SkillField = {
   name: string;
   blurb: string;
   track: string;
-  rated: Record<Difficulty, number>;
-  unrated: number;
   branches: SkillBranch[];
 };
 
@@ -61,38 +60,38 @@ export const RANKS = [
 ] as const;
 
 /**
- * Icon tree geometry, in world pixels. Talks are round nodes placed at their
- * tier's column; several talks in one tier of a branch fork side by side.
- * A field emblem on the left feeds a trunk, the trunk feeds one gate per
- * branch, and each branch ends in a capstone with the branch name.
+ * Card tree geometry, in world pixels. A field emblem on the left feeds one
+ * hub per branch (progress ring plus name); talks are cards in tier columns,
+ * stacked when a branch has several talks in one tier.
  */
 export const LAYOUT = {
-  rootX: 64,
-  rootR: 40,
-  trunkX: 136,
-  gateX: 188,
-  tierX: [330, 570, 810, 1050],
-  capX: 1210,
-  /** Branch name starts here, right of the capstone. */
-  labelX: 1246,
-  width: 1440,
-  /** Talk node radius by tier: deeper tiers are a little bigger. */
-  nodeR: [16, 17, 18, 20],
-  capR: 24,
-  /** Vertical step between talks in one tier; they also zigzag sideways by `stagger`. */
-  rowGap: 25,
-  stagger: 27,
-  lanePad: 8,
-  laneGap: 6,
+  rootX: 40,
+  rootW: 170,
+  rootH: 190,
+  hubX: 250,
+  hubW: 380,
+  ringW: 60,
+  cardW: 260,
+  cardH: 64,
+  /** Left edge of the first tier column, and the step between columns. */
+  firstTierX: 750,
+  tierStep: 430,
+  /** Space after the last column. */
+  endPad: 70,
+  /** Gap between stacked cards, padding inside a lane, gap between lanes. */
+  cardGap: 10,
+  lanePad: 18,
+  laneGap: 14,
+  top: 20,
+  bottom: 20,
 } as const;
 
 export type PlacedTalk = SkillTalk & {
   key: string;
   branchIndex: number;
-  /** Node center. */
+  /** Card top-left corner. */
   x: number;
   y: number;
-  r: number;
   /** youtubeIds of the talks that unlock this one. Empty = entry point. */
   parents: string[];
 };
@@ -108,11 +107,9 @@ export type PlacedBranch = {
 
 export type FieldLayout = {
   width: number;
-  /** Column centers, capstone and label x after horizontal stretch. */
-  tierX: number[];
-  capX: number;
-  labelX: number;
   height: number;
+  /** Left edge of each tier column. */
+  tierX: number[];
   /** Field emblem center height. */
   rootY: number;
   branches: PlacedBranch[];
@@ -120,60 +117,52 @@ export type FieldLayout = {
   byYoutubeId: Map<string, PlacedTalk>;
 };
 
-/** Width of a field drawn with horizontal stretch `s` (tiers spread out, nodes keep their size). */
-export function stretchedWidth(s: number): number {
+export function layoutField(field: SkillField): FieldLayout {
   const L = LAYOUT;
-  return L.gateX + (L.capX - L.gateX) * s + (L.width - L.capX);
-}
-
-export function layoutField(field: SkillField, stretch = 1): FieldLayout {
-  const L = LAYOUT;
-  const sx = (x: number) => L.gateX + (x - L.gateX) * stretch;
-  const tierX = L.tierX.map(sx);
-  const capX = sx(L.capX);
+  const tierX = [0, 1, 2, 3].map((t) => L.firstTierX + t * L.tierStep);
   const branches: PlacedBranch[] = [];
   const all: PlacedTalk[] = [];
-  const maxR = Math.max(...L.nodeR);
-  let y = 0;
+  let y = L.top;
 
   field.branches.forEach((branch, branchIndex) => {
     const columns: SkillTalk[][] = [[], [], [], []];
-    for (const talk of branch.talks) columns[TIER_INDEX[talk.difficulty]].push(talk);
+    for (const talk of branch.talks) columns[TIER_INDEX[talk.tier]].push(talk);
+    const stack = (n: number) => n * L.cardH + Math.max(0, n - 1) * L.cardGap;
     const rows = Math.max(1, ...columns.map((c) => c.length));
-    const height = (rows - 1) * L.rowGap + maxR * 2 + L.lanePad * 2;
-    const centerY = y + height / 2;
+    const height = stack(rows) + L.lanePad * 2;
 
     const placed: PlacedTalk[] = [];
     columns.forEach((column, tier) => {
+      const top = y + (height - stack(column.length)) / 2;
       column.forEach((talk, row) => {
         placed.push({
           ...talk,
           key: `${branchIndex}:${talk.youtubeId}`,
           branchIndex,
-          x: tierX[tier] + (column.length > 1 ? (row % 2 === 0 ? -L.stagger : L.stagger) : 0),
-          y: centerY + (row - (column.length - 1) / 2) * L.rowGap,
-          r: L.nodeR[tier],
+          x: tierX[tier],
+          y: Math.round(top + row * (L.cardH + L.cardGap)),
           parents: [],
         });
       });
     });
 
     for (const talk of placed) {
-      const tier = TIER_INDEX[talk.difficulty];
-      const lower = placed.filter((p) => TIER_INDEX[p.difficulty] < tier);
-      const nearest = Math.max(-1, ...lower.map((p) => TIER_INDEX[p.difficulty]));
-      const own = lower.filter((p) => TIER_INDEX[p.difficulty] === nearest).map((p) => p.youtubeId);
+      const tier = TIER_INDEX[talk.tier];
+      const lower = placed.filter((p) => TIER_INDEX[p.tier] < tier);
+      const nearest = Math.max(-1, ...lower.map((p) => TIER_INDEX[p.tier]));
+      const own = lower.filter((p) => TIER_INDEX[p.tier] === nearest).map((p) => p.youtubeId);
       talk.parents = [...new Set([...own, ...talk.after])];
     }
 
-    branches.push({ name: branch.name, index: branchIndex, y, height, centerY, talks: placed });
+    branches.push({ name: branch.name, index: branchIndex, y, height, centerY: y + height / 2, talks: placed });
     all.push(...placed);
     y += height + L.laneGap;
   });
 
-  const height = Math.max(L.rootR * 2 + 40, y - L.laneGap);
-  // Shift everything down if the field is shorter than the emblem.
-  const shift = (height - Math.max(0, y - L.laneGap)) / 2;
+  const contentBottom = y - L.laneGap + L.bottom;
+  const height = Math.max(L.rootH + L.top + L.bottom, contentBottom);
+  // Center short fields on the emblem.
+  const shift = (height - contentBottom) / 2;
   if (shift > 0) {
     for (const b of branches) {
       b.y += shift;
@@ -183,22 +172,14 @@ export function layoutField(field: SkillField, stretch = 1): FieldLayout {
   }
 
   return {
-    width: stretchedWidth(stretch),
-    tierX,
-    capX,
-    labelX: capX + (L.labelX - L.capX),
+    width: tierX[3] + L.cardW + L.endPad,
     height,
+    tierX,
     rootY: height / 2,
     branches,
     talks: all,
     byYoutubeId: new Map(all.map((t) => [t.youtubeId, t])),
   };
-}
-
-/** Talks with no later talk in their branch: they feed the capstone. */
-export function branchLeaves(branch: PlacedBranch): PlacedTalk[] {
-  const top = Math.max(...branch.talks.map((t) => TIER_INDEX[t.difficulty]));
-  return branch.talks.filter((t) => TIER_INDEX[t.difficulty] === top);
 }
 
 export type TalkStatus = "watched" | "ready" | "locked";

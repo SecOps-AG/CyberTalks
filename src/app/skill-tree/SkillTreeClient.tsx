@@ -1,13 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getSavedState, markWatched, unmarkWatched } from "@/lib/saved";
 import { thumbnailSrc } from "@/lib/materials";
 import { formatDuration } from "@/lib/search";
 import {
-  branchLeaves,
-  stretchedWidth,
   hoursMinutes,
   LAYOUT,
   layoutField,
@@ -16,6 +14,7 @@ import {
   talkStatus,
   TIER_INDEX,
   TIERS,
+  watchedIn,
   type FieldLayout,
   type PlacedTalk,
   type SkillField,
@@ -28,17 +27,19 @@ import styles from "./skill-tree.module.css";
 type View = { x: number; y: number; k: number };
 
 const TIER_CLASS = [styles.t1, styles.t2, styles.t3, styles.t4];
+const TIER_COLOR = ["#7dff6a", "#00f0ff", "#ffb000", "#ff2bd6"];
+const TIER_GLOW = ["rgba(125,255,106,.07)", "rgba(0,240,255,.07)", "rgba(255,176,0,.065)", "rgba(255,43,214,.065)"];
+const LOCKED_COLOR = "rgba(125,255,106,.34)";
 const FIELD_KEY = "cybertalks:skill-tree-field";
-/** Tier header strip height inside the canvas, in screen pixels. */
-const STRIP = 36;
-const PAD = 16;
-/** Smallest zoom the first screen may use to fit the whole tree. */
-const MIN_FIT_K = 0.55;
-/** Branch gate (small diamond) half-size, world pixels. */
-const GATE_R = 9;
-/** Width of the faint band behind each tier column, world pixels. */
-const COLUMN_W = 130;
+/** Height of the pinned tier header strip, screen pixels. */
+const HEAD = 78;
+/** Below this zoom only the hex icons show; above it, talk names. */
+const NAMES_AT = 0.72;
+const MIN_K = 0.15;
 const MAX_K = 1.6;
+const MINI_W = 220;
+const MINI_H = 132;
+const RING = 2 * Math.PI * 28;
 
 /** Emblem icon for each field. */
 const FIELD_ICON: Record<string, string> = {
@@ -68,19 +69,20 @@ function branchIcon(b: { talks: { icon?: string }[] }): string | undefined {
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
-/** Circuit-style link: flat, a short diagonal in the middle, flat again. */
-function elbow(x1: number, y1: number, x2: number, y2: number) {
-  const dy = y2 - y1;
-  if (Math.abs(dy) < 0.5) return `M${x1},${y1} H${x2}`;
-  const mid = (x1 + x2) / 2;
-  const run = Math.min(Math.abs(dy), (x2 - x1) * 0.6);
-  return `M${x1},${y1} H${mid - run / 2} L${mid + run / 2},${y2} H${x2}`;
+function curve(x1: number, y1: number, x2: number, y2: number) {
+  const m = (x1 + x2) / 2;
+  return `M${x1} ${y1}C${m} ${y1} ${m} ${y2} ${x2} ${y2}`;
 }
+
+const minutes = (seconds: number) => `${Math.round(seconds / 60)} min`;
 
 export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
   const [fieldSlug, setFieldSlug] = useState(data.fields[0].slug);
   const [watched, setWatched] = useState<Set<string>>(() => new Set());
   const [selected, setSelected] = useState<string | null>(null);
+  /** Ask the canvas to zoom to a talk; `n` makes a repeat request for the same talk count. */
+  const [focus, setFocus] = useState<{ id: string; n: number } | null>(null);
+  const [query, setQuery] = useState("");
 
   const field: SkillField = data.fields.find((f) => f.slug === fieldSlug) ?? data.fields[0];
   const layout = useMemo(() => layoutField(field), [field]);
@@ -124,6 +126,7 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
   function chooseField(slug: string) {
     setFieldSlug(slug);
     setSelected(null);
+    setFocus(null);
     try {
       window.localStorage.setItem(FIELD_KEY, slug);
     } catch {
@@ -132,9 +135,14 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
     history.replaceState(null, "", `#${slug}`);
   }
 
+  function goTo(youtubeId: string) {
+    setSelected(youtubeId);
+    setFocus((f) => ({ id: youtubeId, n: (f?.n ?? 0) + 1 }));
+  }
+
   const nextUp = useMemo(() => {
     const ready = layout.talks.filter((t) => status(t) === "ready");
-    ready.sort((a, b) => TIER_INDEX[a.difficulty] - TIER_INDEX[b.difficulty] || a.branchIndex - b.branchIndex);
+    ready.sort((a, b) => TIER_INDEX[a.tier] - TIER_INDEX[b.tier] || a.branchIndex - b.branchIndex || a.y - b.y);
     return ready[0] ?? null;
   }, [layout, status]);
 
@@ -152,7 +160,7 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
     for (const b of f.branches)
       for (const t of b.talks) {
         total += 1;
-        if (watched.has(t.id) || [...watched].some((w) => w.endsWith(`-${t.youtubeId}`))) done += 1;
+        if (watchedIn(watched, t)) done += 1;
       }
     return { done, total };
   };
@@ -172,11 +180,10 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
             className={styles.fieldTab}
             onClick={() => chooseField(f.slug)}
             title={`${p.done} of ${p.total} watched`}
-            style={{ "--p": `${p.total ? (p.done / p.total) * 100 : 0}%` } as React.CSSProperties}
           >
             {f.name}
-            <span className={styles.fieldCount}>
-              {p.done}/{p.total}
+            <span className={styles.tabProgress} aria-hidden="true">
+              <i style={{ width: `${p.total ? (p.done / p.total) * 100 : 0}%` }} />
             </span>
           </button>
         );
@@ -190,30 +197,35 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
     status,
     selected,
     setSelected,
+    goTo,
+    query,
     onToggle: toggleWatched,
     onWatch: (t: PlacedTalk) => markWatched(t.id),
   };
 
   return (
     <div className={styles.page}>
-      <section className={`panel ${styles.head}`}>
-        <div className={styles.headText}>
-          <div className={styles.titleRow}>
-            <h1 className={styles.title}>Skill Tree</h1>
-            <p className={styles.lede}>
-              An experiment: talks from the archive, sorted by difficulty and topic into suggested paths. Treat it as
-              a loose guide to what to watch next, not a course.
-            </p>
-          </div>
+      <section className={styles.head}>
+        <div className={`panel ${styles.intro}`}>
+          <p className={styles.eyebrow}>A suggested watch order</p>
+          <h1 className={styles.title}>Skill Tree</h1>
+          <p className={styles.lede}>
+            An experiment: talks from the archive, sorted by difficulty and topic into suggested paths. Treat it as a
+            loose guide to what to watch next, not a course.
+          </p>
         </div>
 
-        <div className={styles.stats} aria-live="polite">
-          <div className={styles.badge} aria-hidden="true">
-            {["I", "II", "III"][rank.rankIndex]}
+        <div className={`panel ${styles.stats}`} aria-live="polite">
+          <div className={styles.rankRow}>
+            <div className={styles.badge} aria-hidden="true">
+              {["I", "II", "III"][rank.rankIndex]}
+            </div>
+            <div className={styles.rankText}>
+              <p className={styles.statLabel}>{field.name} rank</p>
+              <p className={styles.rankName}>{rank.rank.name}</p>
+            </div>
           </div>
-          <div className={styles.rankBlock}>
-            <p className={styles.statLabel}>{field.name} rank</p>
-            <p className={styles.rankName}>{rank.rank.name}</p>
+          <div>
             <div
               className={styles.rankBar}
               role="progressbar"
@@ -234,43 +246,65 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
                 : "Top rank in this field"}
             </p>
           </div>
-          <dl className={styles.nums}>
-            <div>
-              <dt className={styles.statLabel}>Watched</dt>
-              <dd>{hoursMinutes(rank.watchedSeconds)}</dd>
-            </div>
-            <div>
-              <dt className={styles.statLabel}>Talks</dt>
-              <dd>
-                {rank.watchedTalks}/{layout.talks.length}
-              </dd>
-            </div>
-          </dl>
-          <button
-            type="button"
-            className={styles.nextBtn}
-            disabled={!nextUp}
-            onClick={() => nextUp && setSelected(nextUp.youtubeId)}
-          >
-            Next talk to watch →
-          </button>
+          <div className={styles.statFoot}>
+            <dl className={styles.nums}>
+              <div>
+                <dt className={styles.statLabel}>Watched</dt>
+                <dd>{hoursMinutes(rank.watchedSeconds)}</dd>
+              </div>
+              <div>
+                <dt className={styles.statLabel}>Talks</dt>
+                <dd>
+                  {rank.watchedTalks} / {layout.talks.length}
+                </dd>
+              </div>
+            </dl>
+            <button
+              type="button"
+              className={styles.nextBtn}
+              disabled={!nextUp}
+              onClick={() => nextUp && goTo(nextUp.youtubeId)}
+            >
+              Next talk to watch →
+            </button>
+          </div>
         </div>
       </section>
 
-      <div className={styles.desktopOnly}>
-        <TreeCanvas {...shared} rail={fieldNav} />
-      </div>
-      <div className={styles.mobileOnly}>
+      <section className={`panel ${styles.board}`}>
         {fieldNav}
-        <TreeList {...shared} />
-      </div>
+        <div className={styles.desktopOnly}>
+          <TreeCanvas {...shared} focus={focus} />
+        </div>
+        <div className={styles.mobileOnly}>
+          <TreeList {...shared} />
+        </div>
+        <div className={styles.legend}>
+          {TIERS.map((tier, i) => (
+            <span key={tier.level} className={TIER_CLASS[i]}>
+              <i className={styles.sw} />
+              Tier {tier.numeral} · {tier.name}
+            </span>
+          ))}
+          <span>pulsing = ready · glowing = watched · dim = locked</span>
+          <label className={styles.find}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M10.5 4.5a6 6 0 1 0 0 12a6 6 0 1 0 0-12ZM15 15l5.5 5.5" />
+            </svg>
+            <span className={styles.srOnly}>Find a talk or speaker</span>
+            <input
+              type="search"
+              placeholder="Find a talk or speaker"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </label>
+        </div>
+      </section>
 
       <p className={styles.footnote}>
-        Only talks with a difficulty rating can be placed, so the tree is a small sample.{" "}
-        <a href={`/tracks/${field.track}`} className="link">
-          Browse every {field.name} talk
-        </a>
-        .
+        Each tree is a hand-picked sample of its field.{" "}
+        <a href={`/tracks/${field.track}`}>Browse every {field.name} talk</a>.
       </p>
     </div>
   );
@@ -282,728 +316,422 @@ type SharedProps = {
   status: (t: PlacedTalk) => TalkStatus;
   selected: string | null;
   setSelected: (id: string | null) => void;
+  goTo: (youtubeId: string) => void;
+  /** Search text: matching talks light up, the rest dim. */
+  query: string;
   onToggle: (t: PlacedTalk) => void;
   onWatch: (t: PlacedTalk) => void;
 };
 
 /* ------------------------------------------------------------------ */
-/* Desktop: the whole tree fitted to the screen, with pan and zoom.    */
+/* Desktop: an infinite canvas with pan, zoom, minimap and search.     */
 /* ------------------------------------------------------------------ */
 
 function TreeCanvas({
   field,
-  layout: base,
+  layout,
   status,
   selected,
   setSelected,
+  goTo,
+  query,
   onToggle,
   onWatch,
-  rail,
-}: SharedProps & { rail: React.ReactNode }) {
+  focus,
+}: SharedProps & { focus: { id: string; n: number } | null }) {
   const L = LAYOUT;
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const hintRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(640);
-  const [fitK, setFitK] = useState(1);
-  const [view, setView] = useState<View>({ x: PAD, y: STRIP, k: 1 });
-  const [hovered, setHovered] = useState<string | null>(null);
-  const [showNames, setShowNames] = useState(false);
-  const [query, setQuery] = useState("");
-  // Spread the tiers out so the tree fills the width the screen has.
-  const [stretch, setStretch] = useState(1);
-  const layout = useMemo(() => (stretch === 1 ? base : layoutField(field, stretch)), [base, field, stretch]);
-  const viewRef = useRef(view);
-  viewRef.current = view;
+  const ref = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState({ w: 0, h: 0 });
+  const [view, setView] = useState<View>({ x: 0, y: 0, k: 0.4 });
+  const [dragging, setDragging] = useState(false);
+  const drag = useRef<{ x: number; y: number; vx: number; vy: number } | null>(null);
+  const moved = useRef(false);
 
-  // Size the canvas so the whole tree fits the rest of the screen.
-  // If it can't fit even at the smallest zoom, the canvas grows and the page scrolls.
-  const measure = useCallback(() => {
-    const el = viewportRef.current;
-    if (!el || el.offsetParent === null) return;
-    const w = el.clientWidth;
-    const topOnPage = el.getBoundingClientRect().top + window.scrollY;
-    const below = (hintRef.current?.offsetHeight ?? 44) + 12;
-    const room = Math.max(420, window.innerHeight - topOnPage - below);
-    const kHeight = clamp(Math.min((room - STRIP - PAD * 2) / base.height, 1.3), MIN_FIT_K, MAX_K);
-    const L0 = LAYOUT;
-    const wantW = (w - PAD * 2) / kHeight;
-    const s = clamp((wantW - L0.gateX - (L0.width - L0.capX)) / (L0.capX - L0.gateX), 1, 1.9);
-    const worldW = stretchedWidth(s);
-    const k = clamp(Math.min((w - PAD * 2) / worldW, kHeight), MIN_FIT_K, MAX_K);
-    const h = Math.round(base.height * k + STRIP + PAD * 2);
-    setStretch(Math.round(s * 100) / 100);
-    setWidth(w);
-    setHeight(h);
-    setFitK(k);
-    setView({
-      k,
-      x: (w - stretchedWidth(Math.round(s * 100) / 100) * k) / 2,
-      y: STRIP + (h - STRIP - base.height * k) / 2,
-    });
-  }, [base]);
-
-  useLayoutEffect(() => {
-    measure();
-  }, [measure]);
-
+  // Measure the canvas.
   useEffect(() => {
-    const el = viewportRef.current;
+    const el = ref.current;
     if (!el) return;
-    let last = el.clientWidth;
-    const ro = new ResizeObserver(() => {
-      if (el.clientWidth !== last) {
-        last = el.clientWidth;
-        measure();
-      }
-    });
+    const measure = () => {
+      const r = el.getBoundingClientRect();
+      setSize((s) => (Math.abs(r.width - s.w) > 1 || Math.abs(r.height - s.h) > 1 ? { w: r.width, h: r.height } : s));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [measure]);
+  }, []);
 
-  const fitted = Math.abs(view.k - fitK) < 0.01 && Math.abs(view.x - (width - layout.width * fitK) / 2) < 2;
+  const fit = useCallback(() => {
+    if (!size.w) return;
+    const availW = Math.max(300, size.w - 48);
+    const availH = Math.max(280, size.h - HEAD - 20);
+    const k = clamp(Math.min(availW / layout.width, availH / layout.height), MIN_K, MAX_K);
+    setView({ k, x: (size.w - layout.width * k) / 2, y: HEAD + (availH - layout.height * k) / 2 + 6 });
+  }, [size.w, size.h, layout]);
+
+  // Start zoomed out on the whole tree, and again on a new field or size.
+  useEffect(fit, [fit]);
 
   const zoomAt = useCallback((factor: number, cx: number, cy: number) => {
     setView((v) => {
-      const k = clamp(v.k * factor, 0.35, MAX_K);
-      return {
-        k,
-        x: cx - ((cx - v.x) * k) / v.k,
-        y: cy - ((cy - v.y) * k) / v.k,
-      };
+      const k = clamp(v.k * factor, MIN_K, MAX_K);
+      return { k, x: cx - ((cx - v.x) * k) / v.k, y: cy - ((cy - v.y) * k) / v.k };
     });
   }, []);
+  const zoomCenter = (factor: number) => zoomAt(factor, size.w / 2, (size.h + HEAD) / 2);
 
-  // ---- pan / pinch ----
-  const pointers = useRef(new Map<number, { x: number; y: number }>());
-  const drag = useRef<{
-    x: number;
-    y: number;
-    vx: number;
-    vy: number;
-    moved: boolean;
-  } | null>(null);
-  const pinch = useRef<{ d: number; k: number } | null>(null);
-  const suppressClick = useRef(false);
-
-  function onPointerDown(e: React.PointerEvent) {
-    if ((e.target as HTMLElement).closest("[data-overlay]")) return;
-    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    if (pointers.current.size === 2) {
-      const [a, b] = [...pointers.current.values()];
-      pinch.current = {
-        d: Math.hypot(a.x - b.x, a.y - b.y),
-        k: viewRef.current.k,
-      };
-      drag.current = null;
-      return;
-    }
-    drag.current = {
-      x: e.clientX,
-      y: e.clientY,
-      vx: viewRef.current.x,
-      vy: viewRef.current.y,
-      moved: false,
-    };
-  }
-
-  function onPointerMove(e: React.PointerEvent) {
-    if (!pointers.current.has(e.pointerId)) return;
-    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    if (pinch.current && pointers.current.size === 2) {
-      const [a, b] = [...pointers.current.values()];
-      const rect = viewportRef.current!.getBoundingClientRect();
-      const k = clamp(pinch.current.k * (Math.hypot(a.x - b.x, a.y - b.y) / pinch.current.d), 0.35, MAX_K);
-      zoomAt(k / viewRef.current.k, (a.x + b.x) / 2 - rect.left, (a.y + b.y) / 2 - rect.top);
-      suppressClick.current = true;
-      return;
-    }
-    const d = drag.current;
-    if (!d) return;
-    const dx = e.clientX - d.x;
-    const dy = e.clientY - d.y;
-    if (!d.moved && Math.hypot(dx, dy) < 5) return;
-    if (!d.moved) {
-      d.moved = true;
-      setHovered(null);
-      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-    }
-    setView((v) => ({ ...v, x: d.vx + dx, y: d.vy + dy }));
-  }
-
-  function onPointerUp(e: React.PointerEvent) {
-    const wasClick = drag.current && !drag.current.moved;
-    pointers.current.delete(e.pointerId);
-    if (pointers.current.size < 2) pinch.current = null;
-    if (drag.current?.moved || suppressClick.current) {
-      suppressClick.current = true;
-      window.setTimeout(() => (suppressClick.current = false), 0);
-    }
-    // A plain click on empty canvas closes the talk card.
-    if (wasClick && !(e.target as HTMLElement).closest("button,a,[data-overlay]")) setSelected(null);
-    drag.current = null;
-  }
-
-  // Ctrl/⌘ + wheel (and trackpad pinch) zooms; a plain wheel scrolls the page
-  // when the tree is fitted, and pans once zoomed in.
-  const fittedRef = useRef(fitted);
-  fittedRef.current = fitted;
+  // Wheel zooms the canvas; over the talk card, search box or map it scrolls that instead.
   useEffect(() => {
-    const el = viewportRef.current;
+    const el = ref.current;
     if (!el) return;
     const onWheel = (e: WheelEvent) => {
-      if ((e.target as HTMLElement).closest("[data-overlay]")) return;
-      const rect = el.getBoundingClientRect();
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault();
-        zoomAt(Math.exp(-e.deltaY * 0.01), e.clientX - rect.left, e.clientY - rect.top);
-        return;
-      }
-      if (fittedRef.current) return;
+      if ((e.target as Element | null)?.closest?.("[data-stop]")) return;
       e.preventDefault();
-      setView((v) => ({ ...v, x: v.x - e.deltaX, y: v.y - e.deltaY }));
+      const r = el.getBoundingClientRect();
+      zoomAt(Math.exp(-e.deltaY * 0.0015), e.clientX - r.left, e.clientY - r.top);
     };
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
   }, [zoomAt]);
 
-  function onKeyDown(e: React.KeyboardEvent) {
-    if ((e.target as HTMLElement).closest("input")) return;
-    const step = 80;
-    const cx = width / 2;
-    const cy = height / 2;
-    switch (e.key) {
-      case "ArrowLeft":
-        setView((v) => ({ ...v, x: v.x + step }));
-        break;
-      case "ArrowRight":
-        setView((v) => ({ ...v, x: v.x - step }));
-        break;
-      case "ArrowUp":
-        setView((v) => ({ ...v, y: v.y + step }));
-        break;
-      case "ArrowDown":
-        setView((v) => ({ ...v, y: v.y - step }));
-        break;
-      case "+":
-      case "=":
-        zoomAt(1.2, cx, cy);
-        break;
-      case "-":
-        zoomAt(1 / 1.2, cx, cy);
-        break;
-      case "0":
-        measure();
-        break;
-      case "Escape":
-        setSelected(null);
-        break;
-      default:
-        return;
-    }
-    e.preventDefault();
-  }
-
-  function focusBranch(index: number) {
-    if (suppressClick.current) return;
-    const b = layout.branches[index];
-    const x0 = L.gateX - 30;
-    const x1 = layout.width;
-    const k = clamp(Math.min(1.5, (height - STRIP - PAD * 2) / b.height, (width - PAD * 2) / (x1 - x0)), fitK, MAX_K);
-    setSelected(null);
-    setView({
-      k,
-      x: (width - (x1 - x0) * k) / 2 - x0 * k,
-      y: STRIP + (height - STRIP) / 2 - b.centerY * k,
-    });
-  }
-
-  // ---- search ----
-  const q = query.trim().toLowerCase();
-  const matches = (t: PlacedTalk) =>
-    !q || t.title.toLowerCase().includes(q) || t.speakers.some((s) => s.toLowerCase().includes(q));
-
-  // ---- edges ----
-  type Edge = { key: string; d: string; cls: string };
-  const edges: Edge[] = [];
-  const lit = (done: boolean, open: boolean) => (done ? styles.edgeDone : open ? styles.edgeOpen : styles.edgeLocked);
-  const firstY = layout.branches[0]?.centerY ?? layout.rootY;
-  const lastY = layout.branches[layout.branches.length - 1]?.centerY ?? layout.rootY;
-  edges.push({
-    key: "root",
-    d: `M${L.rootX + L.rootR},${layout.rootY} H${L.trunkX}`,
-    cls: styles.edgeOpen,
-  });
-  edges.push({
-    key: "trunk",
-    d: `M${L.trunkX},${Math.min(firstY, layout.rootY)} V${Math.max(lastY, layout.rootY)}`,
-    cls: styles.edgeOpen,
-  });
-  for (const b of layout.branches) {
-    const anyDone = b.talks.some((t) => status(t) === "watched");
-    edges.push({
-      key: `gate-${b.index}`,
-      d: `M${L.trunkX},${b.centerY} H${L.gateX - GATE_R}`,
-      cls: lit(anyDone, true),
-    });
-
-    // Group the branch by tier; each step between two tiers forks and merges
-    // through one junction on the branch's center line, so links never cross.
-    const byTier = TIERS.map((_, i) => b.talks.filter((t) => TIER_INDEX[t.difficulty] === i)).filter((g) => g.length);
-    byTier.forEach((group, gi) => {
-      const prev = gi > 0 ? byTier[gi - 1] : null;
-      if (!prev) {
-        for (const t of group) {
-          const st = status(t);
-          edges.push({
-            key: `entry-${t.key}`,
-            d: elbow(L.gateX + GATE_R, b.centerY, t.x - t.r, t.y),
-            cls: `${lit(st === "watched", st !== "locked")} ${selected === t.youtubeId ? styles.edgeFocus : ""}`,
-          });
-        }
-        return;
-      }
-      const hubX = (layout.tierX[TIER_INDEX[prev[0].difficulty]] + layout.tierX[TIER_INDEX[group[0].difficulty]]) / 2;
-      const prevDone = prev.some((p) => status(p) === "watched");
-      for (const p of prev) {
-        edges.push({
-          key: `in-${p.key}`,
-          d: elbow(p.x + p.r, p.y, hubX, b.centerY),
-          cls: `${lit(status(p) === "watched", false)} ${selected === p.youtubeId ? styles.edgeFocus : ""}`,
-        });
-      }
-      for (const t of group) {
-        edges.push({
-          key: `out-${t.key}`,
-          d: elbow(hubX, b.centerY, t.x - t.r, t.y),
-          cls: `${lit(prevDone && status(t) === "watched", prevDone)} ${selected === t.youtubeId ? styles.edgeFocus : ""}`,
-        });
-      }
-    });
-
-    // The run to the capstone lights up only once the whole branch is watched.
-    const leaves = branchLeaves(b);
-    const capHub = layout.tierX[TIER_INDEX[leaves[0].difficulty]] + 120;
-    const branchDone = b.talks.every((t) => status(t) === "watched");
-    for (const t of leaves) {
-      edges.push({
-        key: `cap-${t.key}`,
-        d: elbow(t.x + t.r, t.y, capHub, b.centerY),
-        cls: lit(branchDone, false),
+  const focusOn = useCallback(
+    (id: string) => {
+      const n = layout.byYoutubeId.get(id);
+      if (!n || !size.w) return;
+      setView((v) => {
+        const k = Math.max(v.k, NAMES_AT + 0.2);
+        // Leave room for the talk card on the right.
+        const shift = size.w > 900 ? 180 : 0;
+        return {
+          k,
+          x: size.w / 2 - shift - (n.x + L.cardW / 2) * k,
+          y: (size.h + HEAD) / 2 - (n.y + L.cardH / 2) * k,
+        };
       });
-    }
-    edges.push({
-      key: `cap-${b.index}`,
-      d: `M${capHub},${b.centerY} H${layout.capX - L.capR}`,
-      cls: lit(branchDone, false),
-    });
-  }
-  // Cross-branch prerequisites ("after" links) draw as dashed links.
-  for (const t of layout.talks) {
-    for (const pid of t.after) {
-      const p = layout.byYoutubeId.get(pid);
-      if (!p) continue;
-      const parentDone = status(p) === "watched";
-      const f = selected === pid || selected === t.youtubeId ? styles.edgeFocus : "";
-      edges.push({
-        key: `${pid}->${t.key}`,
-        d: elbow(p.x + p.r, p.y, t.x - t.r, t.y),
-        cls: `${lit(parentDone && status(t) === "watched", parentDone)} ${styles.edgeCross} ${f}`,
-      });
-    }
-  }
-  // Lit edges draw last so they sit on top of locked ones.
-  const rankEdge = (e: Edge) => (e.cls.includes(styles.edgeDone) ? 2 : e.cls.includes(styles.edgeOpen) ? 1 : 0);
-  edges.sort((a, b) => rankEdge(a) - rankEdge(b));
+    },
+    [layout, size.w, size.h, L.cardW, L.cardH],
+  );
 
-  const selectedTalk = selected ? (layout.byYoutubeId.get(selected) ?? null) : null;
-  const hoveredTalk = hovered && hovered !== selected ? (layout.byYoutubeId.get(hovered) ?? null) : null;
-
-  // ---- talk card placement, next to its node ----
-  const popRef = useRef<HTMLDivElement>(null);
-  const [popTop, setPopTop] = useState(0);
-  const POP_W = 340;
-  let popLeft = 0;
-  let anchorTop = 0;
-  if (selectedTalk) {
-    const right = view.x + (selectedTalk.x + selectedTalk.r) * view.k + 16;
-    const left = view.x + (selectedTalk.x - selectedTalk.r) * view.k - 16 - POP_W;
-    popLeft = right + POP_W <= width - 8 ? right : Math.max(8, left);
-    anchorTop = view.y + (selectedTalk.y - selectedTalk.r) * view.k;
-  }
-  useLayoutEffect(() => {
-    if (!selectedTalk || !popRef.current) return;
-    const h = popRef.current.offsetHeight;
-    setPopTop(clamp(anchorTop - 24, 8, Math.max(8, height - h - 8)));
-  }, [selectedTalk, anchorTop, height]);
-
-  // Keep the selected node on screen (e.g. after "Next talk").
   useEffect(() => {
-    if (!selectedTalk || width === 0) return;
-    const v = viewRef.current;
-    const x0 = v.x + (selectedTalk.x - selectedTalk.r) * v.k;
-    const y0 = v.y + (selectedTalk.y - selectedTalk.r) * v.k;
-    const x1 = v.x + (selectedTalk.x + selectedTalk.r) * v.k;
-    const y1 = v.y + (selectedTalk.y + selectedTalk.r) * v.k;
-    if (x0 >= 0 && x1 <= width && y0 >= STRIP && y1 <= height) {
-      if (viewportRef.current) {
-        const r = viewportRef.current.getBoundingClientRect();
-        if (r.top < 0 || r.top + y1 > window.innerHeight) {
-          window.scrollTo({
-            top: window.scrollY + r.top + y0 - window.innerHeight / 2,
-            behavior: "smooth",
-          });
-        }
-      }
-      return;
-    }
-    setView({
-      k: v.k,
-      x: width / 2 - selectedTalk.x * v.k,
-      y: (height + STRIP) / 2 - selectedTalk.y * v.k,
-    });
+    if (focus) focusOn(focus.id);
+    // Only a new request moves the view.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTalk?.youtubeId]);
+  }, [focus]);
 
-  // ---- minimap (only once zoomed or panned away from the fitted view) ----
-  const MINI_W = 190;
-  const miniH = (layout.height / layout.width) * MINI_W;
-  const miniDrag = useRef(false);
-  function miniMove(e: React.PointerEvent<SVGSVGElement>) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const wx = ((e.clientX - rect.left) / rect.width) * layout.width;
-    const wy = ((e.clientY - rect.top) / rect.height) * layout.height;
-    setView((v) => ({
-      ...v,
-      x: width / 2 - wx * v.k,
-      y: (height + STRIP) / 2 - wy * v.k,
-    }));
-  }
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (e.button !== 0) return;
+    if ((e.target as Element).closest("[data-stop]")) return;
+    drag.current = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y };
+    moved.current = false;
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    const d = drag.current;
+    if (!d) return;
+    const dx = e.clientX - d.x;
+    const dy = e.clientY - d.y;
+    if (!moved.current && Math.abs(dx) + Math.abs(dy) < 5) return;
+    moved.current = true;
+    setDragging(true);
+    setView((v) => ({ ...v, x: d.vx + dx, y: d.vy + dy }));
+  };
+  const onPointerUp = () => {
+    drag.current = null;
+    setDragging(false);
+  };
 
-  const statusWord = (st: TalkStatus) => (st === "watched" ? "Watched" : st === "ready" ? "Ready to watch" : "Locked");
+  const k = view.k;
+  const near = k >= NAMES_AT;
+  const q = query.trim().toLowerCase();
+
+  const statuses = useMemo(() => new Map(layout.talks.map((t) => [t.youtubeId, status(t)])), [layout, status]);
+
+  const edges = useMemo(() => {
+    const r = near ? 0 : 33;
+    const outPt = (n: PlacedTalk) => [near ? n.x + L.cardW : n.x + L.cardW / 2 + r, n.y + L.cardH / 2];
+    const inPt = (n: PlacedTalk) => [near ? n.x : n.x + L.cardW / 2 - r, n.y + L.cardH / 2];
+    const hubOut = L.hubX + L.hubW;
+    let done = "";
+    let open = "";
+    let locked = "";
+    let root = "";
+    for (const n of layout.talks) {
+      const [bx, by] = inPt(n);
+      const own = statuses.get(n.youtubeId) === "watched";
+      if (n.parents.length === 0) {
+        const d = curve(hubOut, layout.branches[n.branchIndex].centerY, bx, by);
+        if (own) done += d;
+        else open += d;
+        continue;
+      }
+      for (const p of n.parents) {
+        const pn = layout.byYoutubeId.get(p);
+        if (!pn) continue;
+        const [ax, ay] = outPt(pn);
+        const d = curve(ax, ay, bx, by);
+        const lit = statuses.get(p) === "watched";
+        if (lit && own) done += d;
+        else if (lit) open += d;
+        else locked += d;
+      }
+    }
+    for (const b of layout.branches) root += curve(L.rootX + L.rootW, layout.rootY, L.hubX, b.centerY);
+    return { done, open, locked, root };
+  }, [layout, statuses, near, L]);
+
+  const labelFont = clamp(11.5 / k, 12, 28);
+  const mini = useMemo(() => {
+    const s = Math.min(MINI_W / layout.width, MINI_H / layout.height);
+    return { s, ox: (MINI_W - layout.width * s) / 2, oy: (MINI_H - layout.height * s) / 2 };
+  }, [layout]);
+
+  const onMini = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    const m = e.currentTarget.getBoundingClientRect();
+    const wx = (e.clientX - m.left - mini.ox) / mini.s;
+    const wy = (e.clientY - m.top - mini.oy) / mini.s;
+    setView((v) => ({ ...v, x: size.w / 2 - wx * v.k, y: (size.h + HEAD) / 2 - wy * v.k }));
+  };
+
+  const sel = selected ? layout.byYoutubeId.get(selected) : undefined;
+  const bg = Math.max(8, Math.round(26 * k));
 
   return (
-    <section className={styles.board} aria-label={`${field.name} skill tree`}>
-      <div className={styles.fieldBar}>{rail}</div>
-      <div className={styles.stage}>
-        <div
-          ref={viewportRef}
-          className={styles.viewport}
-          style={{ height }}
-          tabIndex={0}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onPointerCancel={onPointerUp}
-          onKeyDown={onKeyDown}
-          data-fitted={fitted}
-          data-searching={q ? "true" : undefined}
-        >
+    <div
+      ref={ref}
+      className={styles.canvas}
+      data-dragging={dragging ? "true" : undefined}
+      style={{ backgroundPosition: `${Math.round(view.x)}px ${Math.round(view.y)}px`, backgroundSize: `${bg}px ${bg}px` }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerLeave={onPointerUp}
+    >
+      <div
+        className={`${styles.world} ${near ? "" : styles.far}`}
+        style={{
+          width: layout.width,
+          height: layout.height,
+          transform: `translate(${view.x}px, ${view.y}px) scale(${k})`,
+        }}
+      >
+        {layout.tierX.map((x, t) => (
           <div
-            className={styles.world}
-            style={
-              {
-                width: layout.width,
-                height: layout.height,
-                transform: `translate(${view.x}px, ${view.y}px) scale(${view.k})`,
-                "--k": view.k,
-              } as React.CSSProperties
-            }
-          >
-            {TIERS.map((tier, i) => (
-              <div
-                key={tier.level}
-                className={`${styles.column} ${TIER_CLASS[i]}`}
-                style={{
-                  left: layout.tierX[i] - COLUMN_W / 2,
-                  width: COLUMN_W,
-                  height: layout.height,
-                }}
-              />
-            ))}
-
-            <svg className={styles.edges} width={layout.width} height={layout.height} aria-hidden="true">
-              {edges.map((e) => (
-                <path key={e.key} d={e.d} className={`${styles.edge} ${e.cls}`} />
-              ))}
-            </svg>
-
-            {/* field emblem */}
-            <div
-              className={styles.root}
-              style={{
-                left: L.rootX - L.rootR,
-                top: layout.rootY - L.rootR,
-                width: L.rootR * 2,
-                height: L.rootR * 2,
-              }}
-              aria-hidden="true"
-            >
-              <TalkIcon name={FIELD_ICON[field.slug]} className={styles.rootIcon} />
-            </div>
-            <div
-              className={styles.rootName}
-              style={{
-                left: L.rootX - 70,
-                top: layout.rootY + L.rootR + 8,
-                width: 140,
-              }}
-            >
-              {field.name}
-            </div>
-
-            {layout.branches.map((b) => {
-              const done = b.talks.filter((t) => status(t) === "watched").length;
-              const frac = done / b.talks.length;
-              const circ = 2 * Math.PI * (L.capR - 3);
-              return (
-                <div key={b.index}>
-                  <button
-                    type="button"
-                    className={styles.gate}
-                    data-lit={done > 0}
-                    style={{
-                      left: L.gateX - GATE_R,
-                      top: b.centerY - GATE_R,
-                      width: GATE_R * 2,
-                      height: GATE_R * 2,
-                    }}
-                    onClick={() => focusBranch(b.index)}
-                    aria-label={`Zoom to ${b.name}`}
-                    title={b.name}
-                  />
-                  <button
-                    type="button"
-                    className={styles.cap}
-                    data-done={done === b.talks.length}
-                    style={{
-                      left: layout.capX - L.capR,
-                      top: b.centerY - L.capR,
-                      width: L.capR * 2,
-                      height: L.capR * 2,
-                    }}
-                    onClick={() => focusBranch(b.index)}
-                    aria-label={`${b.name}: ${done} of ${b.talks.length} watched. Zoom to this branch.`}
-                  >
-                    <svg className={styles.capRing} viewBox={`0 0 ${L.capR * 2} ${L.capR * 2}`} aria-hidden="true">
-                      <circle cx={L.capR} cy={L.capR} r={L.capR - 3} className={styles.capTrack} />
-                      {done > 0 ? (
-                        <circle
-                          cx={L.capR}
-                          cy={L.capR}
-                          r={L.capR - 3}
-                          className={styles.capFill}
-                          strokeDasharray={`${circ * frac} ${circ}`}
-                          transform={`rotate(-90 ${L.capR} ${L.capR})`}
-                        />
-                      ) : null}
-                    </svg>
-                    <TalkIcon name={branchIcon(b)} className={styles.capIcon} />
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.branchLabel}
-                    style={{ left: layout.labelX, top: b.centerY }}
-                    onClick={() => focusBranch(b.index)}
-                    tabIndex={-1}
-                  >
-                    <span className={styles.branchName}>{b.name}</span>
-                    <span className={styles.branchCount}>
-                      {done}/{b.talks.length} watched
-                    </span>
-                  </button>
-                </div>
-              );
-            })}
-
-            {layout.talks.map((t) => {
-              const st = status(t);
-              const ti = TIER_INDEX[t.difficulty];
-              return (
-                <button
-                  key={t.key}
-                  type="button"
-                  className={`${styles.node} ${TIER_CLASS[ti]}`}
-                  data-status={st}
-                  data-selected={selected === t.youtubeId}
-                  data-match={q ? matches(t) : undefined}
-                  style={{
-                    left: t.x - t.r,
-                    top: t.y - t.r,
-                    width: t.r * 2,
-                    height: t.r * 2,
-                  }}
-                  onClick={() => {
-                    if (suppressClick.current) return;
-                    setSelected(selected === t.youtubeId ? null : t.youtubeId);
-                  }}
-                  onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(t.youtubeId)}
-                  onPointerLeave={() => setHovered((h) => (h === t.youtubeId ? null : h))}
-                  onFocus={() => setHovered(t.youtubeId)}
-                  onBlur={() => setHovered((h) => (h === t.youtubeId ? null : h))}
-                  aria-label={`${t.title}. ${TIERS[ti].name}. ${statusWord(st)}.`}
-                >
-                  <TalkIcon name={t.icon} className={styles.nodeIcon} />
-                </button>
-              );
-            })}
-
-            {showNames
-              ? layout.talks.map((t) => (
-                  <span
-                    key={`name-${t.key}`}
-                    className={styles.nodeName}
-                    data-status={status(t)}
-                    data-match={q ? matches(t) : undefined}
-                    style={{
-                      left: t.x + t.r + 7,
-                      top: t.y,
-                      width: Math.min(168, layout.capX - L.capR - 10 - (t.x + t.r + 7)),
-                    }}
-                    aria-hidden="true"
-                  >
-                    {t.title}
-                  </span>
-                ))
-              : null}
-          </div>
-
-          {/* tier headers: pinned to the top, follow the camera sideways */}
-          <div className={styles.strip} data-overlay>
-            {TIERS.map((tier, i) => {
-              const center = view.x + layout.tierX[i] * view.k;
-              return (
-                <div
-                  key={tier.level}
-                  className={`${styles.tierHead} ${TIER_CLASS[i]}`}
-                  style={{ left: center - 100, width: 200 }}
-                >
-                  <span className={styles.tierName}>{tier.name}</span>
-                </div>
-              );
-            })}
-          </div>
-
-          {hoveredTalk ? (
-            <div
-              className={`${styles.tip} ${TIER_CLASS[TIER_INDEX[hoveredTalk.difficulty]]}`}
-              style={{
-                left: clamp(view.x + hoveredTalk.x * view.k, 130, Math.max(130, width - 130)),
-                top: view.y + (hoveredTalk.y - hoveredTalk.r) * view.k - 10,
-              }}
-              aria-hidden="true"
-            >
-              <span className={styles.tipTier}>
-                {TIERS[TIER_INDEX[hoveredTalk.difficulty]].name} · {statusWord(status(hoveredTalk))}
-              </span>
-              <span className={styles.tipTitle}>{hoveredTalk.title}</span>
-              {hoveredTalk.speakers.length ? (
-                <span className={styles.tipMeta}>{hoveredTalk.speakers.join(", ")}</span>
-              ) : null}
-            </div>
-          ) : null}
-
-          {!fitted ? (
-            <div className={styles.minimap} data-overlay>
-              <svg
-                width={MINI_W}
-                height={miniH}
-                viewBox={`0 0 ${layout.width} ${layout.height}`}
-                onPointerDown={(e) => {
-                  miniDrag.current = true;
-                  e.currentTarget.setPointerCapture(e.pointerId);
-                  miniMove(e);
-                }}
-                onPointerMove={(e) => miniDrag.current && miniMove(e)}
-                onPointerUp={() => (miniDrag.current = false)}
-                role="img"
-                aria-label="Mini map. Click to move the view."
-              >
-                <rect width={layout.width} height={layout.height} className={styles.miniBg} />
-                {layout.talks.map((t) => (
-                  <circle
-                    key={t.key}
-                    cx={t.x}
-                    cy={t.y}
-                    r={t.r * 1.3}
-                    className={`${styles.miniNode} ${TIER_CLASS[TIER_INDEX[t.difficulty]]}`}
-                    data-status={status(t)}
-                  />
-                ))}
-                <rect
-                  x={-view.x / view.k}
-                  y={(STRIP - view.y) / view.k}
-                  width={width / view.k}
-                  height={(height - STRIP) / view.k}
-                  className={styles.miniView}
-                  strokeWidth={layout.width / 100}
-                />
-              </svg>
-            </div>
-          ) : null}
-
-          {selectedTalk ? (
-            <div
-              ref={popRef}
-              className={`${styles.pop} ${TIER_CLASS[TIER_INDEX[selectedTalk.difficulty]]}`}
-              style={{
-                left: popLeft,
-                top: popTop,
-                width: POP_W,
-                maxHeight: height - 16,
-              }}
-              data-overlay
-            >
-              <TalkDetails
-                talk={selectedTalk}
-                layout={layout}
-                status={status}
-                onClose={() => setSelected(null)}
-                onSelect={setSelected}
-                onToggle={onToggle}
-                onWatch={onWatch}
-              />
-            </div>
-          ) : null}
-        </div>
-      </div>
-      <div className={styles.hint} ref={hintRef}>
-        <IconLegend />
-        <div className={styles.options}>
-          <label className={styles.namesToggle}>
-            <input type="checkbox" checked={showNames} onChange={(e) => setShowNames(e.target.checked)} />
-            Show talk names
-          </label>
-          <input
-            type="search"
-            className={styles.find}
-            placeholder="Find a talk or speaker"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            aria-label="Find a talk in this tree"
+            key={t}
+            className={styles.band}
+            style={{
+              left: x - 80,
+              width: L.cardW + 160,
+              height: layout.height,
+              background: `linear-gradient(90deg, transparent, ${TIER_GLOW[t]} 25%, ${TIER_GLOW[t]} 75%, transparent)`,
+            }}
           />
+        ))}
+        {layout.branches.slice(1).map((b) => (
+          <div key={b.index} className={styles.lane} style={{ left: L.hubX - 30, top: b.y - 8, width: layout.width - L.hubX }} />
+        ))}
+        <svg
+          className={styles.edges}
+          width={layout.width}
+          height={layout.height}
+          viewBox={`0 0 ${layout.width} ${layout.height}`}
+          aria-hidden="true"
+        >
+          <path className={styles.edgeLocked} d={edges.locked} />
+          <path className={styles.edgeRoot} d={edges.root} />
+          <path className={styles.edgeOpen} d={edges.open} />
+          <path className={styles.edgeDone} d={edges.done} />
+        </svg>
+
+        <div
+          className={styles.root}
+          style={{ left: L.rootX, top: layout.rootY - L.rootH / 2, width: L.rootW, height: L.rootH }}
+          aria-hidden="true"
+        >
+          <div className={styles.rootIn} style={{ fontSize: clamp(12 / k, 14, 34) }}>
+            <TalkIcon name={FIELD_ICON[field.slug]} className={styles.rootIcon} />
+            <span>{field.name}</span>
+          </div>
         </div>
-        <div className={styles.controls} title="Drag to move. Ctrl + scroll or pinch to zoom.">
-          <button type="button" onClick={() => zoomAt(1.2, width / 2, height / 2)} aria-label="Zoom in">
-            +
-          </button>
-          <button type="button" onClick={() => zoomAt(1 / 1.2, width / 2, height / 2)} aria-label="Zoom out">
-            −
-          </button>
-          <button type="button" onClick={measure} aria-label="Show whole tree" data-active={!fitted}>
-            Fit
-          </button>
-        </div>
+
+        {layout.branches.map((b) => {
+          const done = b.talks.filter((t) => statuses.get(t.youtubeId) === "watched").length;
+          return (
+            <div
+              key={b.index}
+              className={styles.hub}
+              data-full={done === b.talks.length ? "true" : undefined}
+              style={{ left: L.hubX, top: b.centerY, width: L.hubW, fontSize: labelFont }}
+            >
+              <div className={styles.ring}>
+                <svg viewBox="0 0 64 64" aria-hidden="true">
+                  <circle className={styles.ringTrack} cx="32" cy="32" r="28" />
+                  {done > 0 ? (
+                    <circle
+                      className={styles.ringFill}
+                      cx="32"
+                      cy="32"
+                      r="28"
+                      strokeDasharray={`${(RING * done) / b.talks.length} ${RING}`}
+                      transform="rotate(-90 32 32)"
+                    />
+                  ) : null}
+                </svg>
+                <TalkIcon name={branchIcon(b)} className={styles.ringIcon} />
+              </div>
+              <div className={styles.hubName}>
+                {b.name}
+                <small>
+                  {done}/{b.talks.length} watched
+                </small>
+              </div>
+            </div>
+          );
+        })}
+
+        {layout.talks.map((t) => {
+          const st = statuses.get(t.youtubeId) ?? "locked";
+          const tier = TIER_INDEX[t.tier];
+          const hit = q ? t.title.toLowerCase().includes(q) || t.speakers.some((s) => s.toLowerCase().includes(q)) : null;
+          return (
+            <button
+              key={t.key}
+              type="button"
+              className={styles.node}
+              data-status={st}
+              data-selected={selected === t.youtubeId ? "true" : undefined}
+              data-match={hit === null ? undefined : String(hit)}
+              style={{ left: t.x, top: t.y, color: st === "locked" ? LOCKED_COLOR : TIER_COLOR[tier] }}
+              aria-label={`${t.title}, Tier ${TIERS[tier].numeral} ${TIERS[tier].name}, ${st}`}
+              title={near ? undefined : t.title}
+              onClick={() => {
+                if (moved.current) {
+                  moved.current = false;
+                  return;
+                }
+                setSelected(t.youtubeId);
+              }}
+            >
+              <span className={styles.hex}>
+                <span className={styles.hexIn}>
+                  <TalkIcon name={t.icon} className={styles.hexIcon} />
+                </span>
+              </span>
+              <span className={styles.nodeText}>
+                <span className={styles.cardTitle}>{t.title}</span>
+                <span className={styles.cardMeta}>
+                  {t.speakers.length ? `${t.speakers.join(", ")} · ` : ""}
+                  {minutes(t.durationSeconds)}
+                </span>
+              </span>
+            </button>
+          );
+        })}
       </div>
-    </section>
+
+      <div className={styles.tiers} aria-hidden="true">
+        {TIERS.map((tier, t) => (
+          <div
+            key={tier.level}
+            className={styles.tierHead}
+            style={{ left: Math.round(view.x + (layout.tierX[t] + L.cardW / 2) * k), color: TIER_COLOR[t] }}
+          >
+            <b>TIER {tier.numeral}</b>
+            <span>{tier.name}</span>
+            <i />
+          </div>
+        ))}
+      </div>
+      <div className={styles.canvasHead}>
+        <p className={styles.eyebrow}>{field.blurb}</p>
+        <h2>{field.name}</h2>
+      </div>
+
+
+      <div className={styles.zoomLevel}>{Math.round(k * 100)}%</div>
+      <div className={styles.controls} data-stop="1">
+        <button type="button" aria-label="Zoom in" onClick={() => zoomCenter(1.25)}>
+          +
+        </button>
+        <button type="button" aria-label="Zoom out" onClick={() => zoomCenter(0.8)}>
+          −
+        </button>
+        <button type="button" aria-label="Fit whole tree" onClick={fit}>
+          FIT
+        </button>
+      </div>
+      <div className={styles.hint}>{near ? "Drag to pan · scroll to zoom" : "Scroll or press + to zoom in and read talk names"}</div>
+
+      <div
+        className={styles.minimap}
+        data-stop="1"
+        role="img"
+        aria-label="Mini map of the whole tree. Click to jump there."
+        onPointerDown={onMini}
+      >
+        {layout.branches.map((b) => (
+          <span
+            key={b.index}
+            className={styles.miniHub}
+            style={{
+              left: mini.ox + L.hubX * mini.s,
+              top: mini.oy + (b.centerY - L.ringW / 2) * mini.s,
+              width: L.ringW * mini.s,
+              height: L.ringW * mini.s,
+            }}
+          />
+        ))}
+        {layout.talks.map((t) => {
+          const st = statuses.get(t.youtubeId);
+          return (
+            <span
+              key={t.key}
+              style={{
+                left: mini.ox + t.x * mini.s,
+                top: mini.oy + t.y * mini.s,
+                width: Math.max(2, L.cardW * mini.s),
+                height: Math.max(2, L.cardH * mini.s),
+                background: st === "locked" ? "rgba(125,255,106,.5)" : TIER_COLOR[TIER_INDEX[t.tier]],
+                opacity: st === "watched" ? 1 : st === "ready" ? 0.55 : 0.35,
+              }}
+            />
+          );
+        })}
+        <span
+          className={styles.miniView}
+          style={{
+            left: mini.ox - (view.x / k) * mini.s,
+            top: mini.oy - (view.y / k) * mini.s,
+            width: (size.w / k) * mini.s,
+            height: (size.h / k) * mini.s,
+          }}
+        />
+        <span className={styles.miniLabel}>Map</span>
+      </div>
+
+      {sel ? (
+        <aside className={styles.panelCard} data-stop="1" aria-live="polite">
+          <TalkDetails
+            key={sel.youtubeId}
+            talk={sel}
+            layout={layout}
+            status={status}
+            onClose={() => setSelected(null)}
+            onSelect={goTo}
+            onToggle={onToggle}
+            onWatch={onWatch}
+          />
+        </aside>
+      ) : null}
+    </div>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Phones: the same tree as a list, grouped by branch then level.      */
+/* Phones: the same tree as a list, grouped by branch then tier.       */
 /* ------------------------------------------------------------------ */
 
-function TreeList({ layout, status, selected, setSelected, onToggle, onWatch }: SharedProps) {
+function TreeList({ layout, status, selected, setSelected, query, onToggle, onWatch }: SharedProps) {
+  const q = query.trim().toLowerCase();
   const refs = useRef(new Map<string, HTMLLIElement>());
   useEffect(() => {
     if (!selected) return;
@@ -1013,7 +741,6 @@ function TreeList({ layout, status, selected, setSelected, onToggle, onWatch }: 
 
   return (
     <div className={styles.list}>
-      <Legend />
       {layout.branches.map((b) => {
         const done = b.talks.filter((t) => status(t) === "watched").length;
         return (
@@ -1028,11 +755,17 @@ function TreeList({ layout, status, selected, setSelected, onToggle, onWatch }: 
               </span>
             </header>
             {TIERS.map((tier, i) => {
-              const talks = b.talks.filter((t) => TIER_INDEX[t.difficulty] === i);
+              const talks = b.talks.filter(
+                (t) =>
+                  TIER_INDEX[t.tier] === i &&
+                  (!q || t.title.toLowerCase().includes(q) || t.speakers.some((s) => s.toLowerCase().includes(q))),
+              );
               if (talks.length === 0) return null;
               return (
                 <div key={tier.level} className={`${styles.listTier} ${TIER_CLASS[i]}`}>
-                  <p className={styles.listTierName}>{tier.name}</p>
+                  <p className={styles.listTierName}>
+                    Tier {tier.numeral} · {tier.name}
+                  </p>
                   <ul>
                     {talks.map((t) => {
                       const st = status(t);
@@ -1082,52 +815,9 @@ function TreeList({ layout, status, selected, setSelected, onToggle, onWatch }: 
 
 /* ------------------------------------------------------------------ */
 
-function Legend() {
+function StatusGem({ status, numeral }: { status: TalkStatus; numeral: string }) {
   return (
-    <span className={styles.legend}>
-      {TIERS.map((tier, i) => (
-        <span key={tier.level} className={TIER_CLASS[i]}>
-          <i className={styles.sw} />
-          {tier.name}
-        </span>
-      ))}
-      <span className={styles.legendState}>
-        <StatusGem status="ready" numeral="" small /> ready
-      </span>
-      <span className={styles.legendState}>
-        <StatusGem status="watched" numeral="" small /> watched
-      </span>
-      <span className={styles.legendState}>
-        <StatusGem status="locked" numeral="" small /> locked
-      </span>
-    </span>
-  );
-}
-
-function IconLegend() {
-  return (
-    <span className={styles.legend}>
-      {TIERS.map((tier, i) => (
-        <span key={tier.level} className={TIER_CLASS[i]}>
-          <i className={styles.sw} />
-          {tier.name}
-        </span>
-      ))}
-      {(["ready", "watched", "locked"] as const).map((st) => (
-        <span key={st} className={styles.legendState}>
-          <i className={styles.legendNode} data-status={st}>
-            <span className={styles.slot} />
-          </i>
-          {st}
-        </span>
-      ))}
-    </span>
-  );
-}
-
-function StatusGem({ status, numeral, small }: { status: TalkStatus; numeral: string; small?: boolean }) {
-  return (
-    <span className={styles.gem} data-status={status} data-small={small ? "true" : undefined} aria-hidden="true">
+    <span className={styles.gem} data-status={status} aria-hidden="true">
       <span>{status === "watched" ? "✓" : status === "locked" ? <LockIcon /> : numeral}</span>
     </span>
   );
@@ -1150,19 +840,39 @@ function TalkDetails({
   onToggle: (t: PlacedTalk) => void;
   onWatch: (t: PlacedTalk) => void;
 }) {
+  const [toast, setToast] = useState("");
   const st = status(talk);
-  const tier = TIERS[TIER_INDEX[talk.difficulty]];
+  const tierIndex = TIER_INDEX[talk.tier];
+  const tier = TIERS[tierIndex];
   const parents = talk.parents.map((id) => layout.byYoutubeId.get(id)).filter((t): t is PlacedTalk => Boolean(t));
   const unlocks = layout.talks.filter((t) => t.parents.includes(talk.youtubeId));
   const branch = layout.branches[talk.branchIndex];
 
+  function toggle() {
+    if (st === "watched") {
+      setToast("");
+    } else {
+      const opened = unlocks.filter((u) => status(u) === "locked").length;
+      setToast(
+        `+${minutes(talk.durationSeconds)} watched` +
+          (opened ? ` · opened ${opened} talk${opened > 1 ? "s" : ""}` : ""),
+      );
+    }
+    onToggle(talk);
+  }
+
   return (
     <div className={styles.details}>
-      {onClose ? (
-        <button type="button" className={styles.close} onClick={onClose} aria-label="Close">
-          ×
-        </button>
-      ) : null}
+      <div className={styles.detailHead}>
+        <span className={styles.statLabel}>
+          {st === "watched" ? "Watched" : st === "ready" ? "Ready to watch" : "Locked"}
+        </span>
+        {onClose ? (
+          <button type="button" className={styles.close} onClick={onClose} aria-label="Close talk card">
+            ×
+          </button>
+        ) : null}
+      </div>
       <div className={styles.thumb}>
         <img
           src={thumbnailSrc(talk.youtubeId, "mq")}
@@ -1172,67 +882,74 @@ function TalkDetails({
             e.currentTarget.style.visibility = "hidden";
           }}
         />
+        <span className={styles.play} aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7Z" />
+          </svg>
+        </span>
         {talk.durationSeconds ? <span className={styles.thumbDur}>{formatDuration(talk.durationSeconds)}</span> : null}
+        {st === "locked" ? (
+          <span className={styles.lockOver}>
+            Locked
+            <br />
+            Watch a talk that leads here to open it
+          </span>
+        ) : null}
       </div>
-      <p className={styles.detailChips}>
-        <span className={styles.tierChip}>{tier.name}</span>
+      <p className={styles.chips}>
+        <span className={styles.tierChip} style={{ color: TIER_COLOR[tierIndex] }}>
+          Tier {tier.numeral} · {tier.name}
+        </span>
         <span>{branch.name}</span>
         {talk.event ? <span>{talk.event}</span> : null}
       </p>
-      <h2 className={styles.detailTitle}>{talk.title}</h2>
-      {talk.speakers.length ? <p className={styles.speakers}>{talk.speakers.join(", ")}</p> : null}
-      {talk.teaser ? <p className={styles.teaser}>{talk.teaser}</p> : null}
-      {st === "locked" && parents.length ? (
-        <p className={styles.lockNote}>
-          Locked until you watch {parents.length === 1 ? "the talk" : "one of the talks"} it builds on. You can still
-          open it.
-        </p>
+      <h3 className={styles.detailTitle}>{talk.title}</h3>
+      {talk.speakers.length ? (
+        <div>
+          <p className={styles.statLabel}>Speakers</p>
+          <p className={styles.detailText}>{talk.speakers.join(", ")}</p>
+        </div>
+      ) : null}
+      {talk.teaser ? <p className={styles.detailText}>{talk.teaser}</p> : null}
+      <div className={styles.req}>
+        <p className={styles.statLabel}>Unlocked by</p>
+        {parents.length === 0 ? <div>Open from the start (first talk in this branch)</div> : null}
+        {parents.map((p) => (
+          <button key={p.youtubeId} type="button" onClick={() => onSelect(p.youtubeId)}>
+            {status(p) === "watched" ? "✓" : "○"} {p.title}
+          </button>
+        ))}
+      </div>
+      {unlocks.length ? (
+        <div className={styles.req}>
+          <p className={styles.statLabel}>Leads to</p>
+          {unlocks.map((u) => (
+            <button key={u.youtubeId} type="button" onClick={() => onSelect(u.youtubeId)}>
+              → {u.title}
+            </button>
+          ))}
+        </div>
       ) : null}
       <div className={styles.actions}>
-        <Link href={`/talks/${talk.slug}`} className={styles.primary}>
+        <Link href={`/talks/${talk.slug}`} className={styles.btn}>
           Open talk
         </Link>
         <a
           href={`https://www.youtube.com/watch?v=${talk.youtubeId}`}
           target="_blank"
           rel="noreferrer"
-          className={styles.secondary}
+          className={`${styles.btn} ${styles.btnAlt}`}
           onClick={() => onWatch(talk)}
         >
           YouTube ↗
         </a>
-        <button type="button" className={styles.secondary} onClick={() => onToggle(talk)} disabled={st === "locked"}>
-          {st === "watched" ? "Unmark" : "Mark watched"}
+        <button type="button" className={`${styles.btn} ${styles.btnAlt}`} onClick={toggle} disabled={st === "locked"}>
+          {st === "watched" ? "Mark unwatched" : "Mark watched"}
         </button>
       </div>
-      {parents.length ? (
-        <div className={styles.links}>
-          <p className={styles.statLabel}>Builds on</p>
-          <ul>
-            {parents.map((p) => (
-              <li key={p.youtubeId}>
-                <button type="button" onClick={() => onSelect(p.youtubeId)} data-status={status(p)}>
-                  <span aria-hidden="true">{status(p) === "watched" ? "✓" : "○"}</span> {p.title}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-      {unlocks.length ? (
-        <div className={styles.links}>
-          <p className={styles.statLabel}>Unlocks</p>
-          <ul>
-            {unlocks.map((u) => (
-              <li key={u.youtubeId}>
-                <button type="button" onClick={() => onSelect(u.youtubeId)} data-status={status(u)}>
-                  <span aria-hidden="true">→</span> {u.title}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
+      <p className={styles.toast} aria-live="polite">
+        {toast}
+      </p>
     </div>
   );
 }

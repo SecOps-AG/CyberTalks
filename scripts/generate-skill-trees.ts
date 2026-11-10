@@ -2,8 +2,8 @@
  * Resolve data/skill-trees.json (talks listed by youtubeId) against the archive
  * and write src/generated/skill-trees.json for the /skill-tree page.
  *
- * Each talk's tier is its difficulty. The build fails if a listed talk is
- * missing, has no difficulty, or is listed twice in one field.
+ * A talk's tier is the `tier` set in the tree, else its difficulty. The build
+ * fails if a listed talk is missing, has no tier, or is listed twice in one field.
  *
  *   npx tsx scripts/generate-skill-trees.ts
  */
@@ -13,9 +13,9 @@ import { fileURLToPath } from "node:url";
 import { getTalks } from "../src/lib/data";
 import { conferenceLabel, normalizeDifficulty } from "../src/lib/labels";
 import type { SkillTreeFile } from "../src/lib/skill-tree";
-import type { Difficulty, Talk } from "../src/lib/types";
+import type { Talk } from "../src/lib/types";
 
-type SourceTalk = string | { youtubeId: string; after?: string[]; icon?: string };
+type SourceTalk = string | { youtubeId: string; tier?: string; after?: string[]; icon?: string };
 type SourceFile = {
   fields: {
     slug: string;
@@ -45,10 +45,25 @@ const errors: string[] = [];
 const GENERIC_GROUP = /^(videos|briefings|channel videos|keynotes?)$/i;
 function eventLabel(talk: Talk): string {
   const group = talk.villageName.trim();
-  if (group && !GENERIC_GROUP.test(group)) return group;
+  if (group && !GENERIC_GROUP.test(group)) {
+    // DEF CON villages read better with the conference in front.
+    return talk.conference === "defcon" && !/def ?con/i.test(group) ? `DEF CON · ${group}` : group;
+  }
   // "community" and similar catch-all families have no useful label.
   const conference = conferenceLabel(talk.conference);
   return conference === conference.toUpperCase() && conference.length > 6 ? "" : conference;
+}
+
+/** Channel uploads often start the title with the speaker or the event: drop that. */
+function cleanTitle(talk: Talk): string {
+  let title = talk.title.trim();
+  for (const speaker of talk.speakers) {
+    for (const sep of [" - ", ": ", " – "]) {
+      if (title.toLowerCase().startsWith(`${speaker.toLowerCase()}${sep}`)) return title.slice(speaker.length + sep.length);
+    }
+  }
+  title = title.replace(/^DEF CON \d+[^-:]*[-:]\s*/, "");
+  return title;
 }
 
 /** The written summary's overview when there is one, else the card teaser. */
@@ -72,14 +87,6 @@ function blurbFor(talk: Talk): string {
 const out: SkillTreeFile = {
   fields: source.fields.map((field) => {
     const inField = new Set<string>();
-    const rated = { beginner: 0, intermediate: 0, advanced: 0, expert: 0 };
-    let unrated = 0;
-    for (const talk of talks) {
-      if (talk.track !== field.track) continue;
-      const level = normalizeDifficulty(talk.difficulty);
-      if (level) rated[level] += 1;
-      else unrated += 1;
-    }
     const branches = field.branches.map((branch) => ({
       name: branch.name,
       talks: branch.talks.flatMap((entry) => {
@@ -90,9 +97,10 @@ const out: SkillTreeFile = {
           errors.push(`${where}: not in the archive`);
           return [];
         }
-        const difficulty = normalizeDifficulty(talk.difficulty);
-        if (!difficulty) {
-          errors.push(`${where}: has no difficulty`);
+        const tier = normalizeDifficulty(ref.tier) ?? normalizeDifficulty(talk.difficulty);
+        if (ref.tier && !normalizeDifficulty(ref.tier)) errors.push(`${where}: unknown tier ${ref.tier}`);
+        if (!tier) {
+          errors.push(`${where}: has no tier or difficulty`);
           return [];
         }
         if (inField.has(ref.youtubeId)) errors.push(`${where}: listed twice in this field`);
@@ -102,11 +110,11 @@ const out: SkillTreeFile = {
             id: talk.id,
             youtubeId: talk.youtubeId,
             slug: talk.slug,
-            title: talk.title,
+            title: cleanTitle(talk),
             speakers: talk.speakers,
             event: eventLabel(talk),
             durationSeconds: talk.durationSeconds ?? 0,
-            difficulty,
+            tier,
             teaser: blurbFor(talk),
             after: ref.after ?? [],
             icon: ref.icon ?? "",
@@ -126,8 +134,6 @@ const out: SkillTreeFile = {
       name: field.name,
       blurb: field.blurb,
       track: field.track,
-      rated,
-      unrated,
       branches,
     };
   }),
