@@ -62,7 +62,7 @@ function TreeIcon() {
 function navItemClass(item: NavItem, active: boolean) {
   const base = "flex items-center gap-1.5 rounded-sm px-2 py-1 transition";
   if (item.highlight) {
-    return `${base} border border-cyan/55 bg-cyan/10 text-cyan shadow-cyan hover:bg-cyan/20${
+    return `${base} border border-cyan/55 bg-cyan/10 text-cyan hover:bg-cyan/20${
       active ? " bg-cyan/20" : ""
     }`;
   }
