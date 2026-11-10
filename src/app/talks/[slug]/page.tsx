@@ -92,6 +92,7 @@ export default async function TalkPage({ params }: Props) {
   const difficulty = normalizeDifficulty(talk.difficulty);
   const youtube = isYouTubeId(talk.youtubeId);
   const bands = publicMaterialBands(talk.materials);
+  const hasTopics = talk.topics.length > 0;
 
   return (
     <article className="space-y-8">
@@ -177,54 +178,54 @@ export default async function TalkPage({ params }: Props) {
         </div>
       </header>
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_16rem]">
-        <div className="min-w-0 space-y-6">
-          {youtube ? (
-            <YouTubeEmbed videoId={talk.youtubeId} title={talk.title} />
-          ) : talk.mediaUrl ? (
-            <LinkOutPlayer thumbnailSrc={thumbnailSrc(talk.youtubeId)} mediaUrl={talk.mediaUrl} />
-          ) : null}
-          {talk.teaser ? (
-            <p className="border-l-2 border-acid/40 pl-4 text-base leading-relaxed text-mint">
-              {talk.teaser}
-            </p>
-          ) : null}
-          <TalkSummaryPanel talk={talk} />
-          <MaterialsList materials={bands.materials} moreMaterials={bands.moreMaterials} />
-        </div>
+      {youtube ? (
+        <YouTubeEmbed videoId={talk.youtubeId} title={talk.title} />
+      ) : talk.mediaUrl ? (
+        <LinkOutPlayer thumbnailSrc={thumbnailSrc(talk.youtubeId)} mediaUrl={talk.mediaUrl} />
+      ) : null}
 
-        <aside className="space-y-6 lg:sticky lg:top-20 lg:self-start">
-          <section className="panel-quiet p-4">
-            <p className="label mb-2">Where</p>
-            <p className="text-[13px] leading-relaxed text-mint/80">
-              {talk.villageName}
-              <br />
-              {talk.eventName}
-            </p>
-            {duration ? (
-              <>
-                <p className="label mb-2 mt-4">Duration</p>
-                <p className="text-[13px] leading-relaxed text-mint/80">{duration}</p>
-              </>
-            ) : null}
-          </section>
-          {talk.topics.length > 0 ? (
-            <section className="panel-quiet p-4">
-              <p className="label mb-2">Topics</p>
-              <div className="flex flex-wrap gap-1.5">
-                {talk.topics.map((topic) => (
-                  <Link
-                    key={topic}
-                    href={`/topics/${topic}`}
-                    className="chip !normal-case !tracking-normal"
-                  >
-                    {labels[topic] ?? topic}
-                  </Link>
-                ))}
-              </div>
-            </section>
-          ) : null}
-        </aside>
+      <section
+        aria-label="Talk facts"
+        className={`panel-quiet grid grid-cols-2 ${hasTopics ? "lg:grid-cols-4" : ""}`}
+      >
+        <div className={`border-r border-acid/15 p-4 ${hasTopics ? "border-b lg:border-b-0" : ""}`}>
+          <p className="label mb-2">Where</p>
+          <p className="text-[13px] leading-relaxed text-mint/80">
+            {talk.villageName}
+            <br />
+            {talk.eventName}
+          </p>
+        </div>
+        <div className={`border-acid/15 p-4 ${hasTopics ? "border-b lg:border-b-0 lg:border-r" : ""}`}>
+          <p className="label mb-2">Duration</p>
+          <p className="text-[13px] leading-relaxed text-mint/80">{duration || "—"}</p>
+        </div>
+        {hasTopics ? (
+          <div className="col-span-2 p-4">
+            <p className="label mb-2">Topics</p>
+            <div className="flex flex-wrap gap-1.5">
+              {talk.topics.map((topic) => (
+                <Link
+                  key={topic}
+                  href={`/topics/${topic}`}
+                  className="chip !normal-case !tracking-normal"
+                >
+                  {labels[topic] ?? topic}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </section>
+
+      <div className="max-w-4xl space-y-6">
+        {talk.teaser ? (
+          <p className="border-l-2 border-acid/40 pl-4 text-base leading-relaxed text-mint">
+            {talk.teaser}
+          </p>
+        ) : null}
+        <TalkSummaryPanel talk={talk} />
+        <MaterialsList materials={bands.materials} moreMaterials={bands.moreMaterials} />
       </div>
 
       {related.length > 0 ? (
