@@ -69,6 +69,7 @@ export default async function SpeakerPage({ params }: Props) {
       {/* The speaker facet is pinned by the page itself — offering it again would
           only ever narrow to co-presenters. */}
       <TalkBrowser
+        pushFilters
         talks={initial.talks}
         listing={complete ? undefined : { kind: "speaker", key: speaker.slug }}
         catalogSize={talks.length}

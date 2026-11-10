@@ -25,6 +25,7 @@ export default async function BlackHatHubPage() {
 
   return (
     <TalkBrowser
+      pushFilters
       talks={talks}
       hide={["conferences", "villages"]}
       topicLabels={topicLabels()}

@@ -47,6 +47,7 @@ export default async function TrackPage({ params }: Props) {
       </header>
 
       <TalkBrowser
+        pushFilters
         talks={initial.talks}
         listing={{ kind: "track", key: track.slug }}
         catalogSize={talks.length}

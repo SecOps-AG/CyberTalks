@@ -32,6 +32,7 @@ export default async function DefconHubPage() {
 
   return (
     <TalkBrowser
+      pushFilters
       talks={talks}
       hide={["conferences"]}
       topicLabels={topicLabels()}

@@ -81,6 +81,7 @@ export default async function VillageEditionPage({ params }: Props) {
       </header>
 
       <TalkBrowser
+        pushFilters
         talks={talks}
         hide={isVillage ? ["years", "villages", "conferences"] : ["years", "villages", "conferences"]}
         topicLabels={topicLabels()}
