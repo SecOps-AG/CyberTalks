@@ -2326,19 +2326,22 @@
       "youtubeId": "UI1WEJ1E8c4",
       "slug": "interview-with-hd-moore",
       "title": "Interview with HD Moore",
-      "speakers": [],
+      "speakers": [
+        "HD Moore"
+      ],
       "track": "ics-ot",
       "topics": [
         "interview",
         "moore",
         "vulnerability-research"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Interview with HD Moore.",
-      "summary": null,
+      "teaser": "Traces the impact of Metasploit on OT security and explains how safe active scanning finds unmanaged assets.",
+      "summary": "The conversation opens with the reception of Metasploit, the exploit framework that faced heavy criticism early on. The interviewee explains that vetting exploit buyers never worked in practice, so open release became the approach, and that OT modules added around 2011 and 2012 drew similar pushback, especially for medical and serial port devices. He argues the framework remains valuable as a maintained archive of security research, even though memory-corruption payload work matters less now than logic flaws and default credentials.\n\nThe discussion then turns to run zero, which focuses on asset inventory rather than vulnerability scanning. The interviewee describes a staged scan engine that fingerprints devices before sending further traffic, skips unfamiliar services, and spreads probes across ranges to limit amplification. Examples include printers that react badly to unexpected data and serial adapters that reload when connected to, plus leftover logged-in serial sessions that stay exposed on networks. Customers often find far more internal assets than they expected, and security teams typically use the inventory to cross-check other tools.\n\nThe closing portion covers OT adoption, where operators are often wary of active scanning. Some customers scan only during maintenance windows, and the company is building a passive mode that reuses its scan logic. The main takeaway is that an accurate inventory, including OT protocols on corporate networks, is needed before anything can be secured.",
       "durationSeconds": 2123,
       "conference": "s4x",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "beSG1ogo5CU",
@@ -2510,8 +2513,8 @@
         "plc",
         "plcs"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Native EDR for PLCs.",
-      "summary": null,
+      "teaser": "Shows how native PLC logic agents stream scan timing and status data that reveals network scans and online program edits.",
+      "summary": "The talk adapts endpoint detection and response to programmable logic controllers, which the speaker calls controller EDR. Network sensors at every level are costly to deploy and still reveal little about what happens inside a controller. Instead, native ladder logic agents run on the controller itself. The collection, centralization, exploration and analysis steps are applied to signals such as run or program mode, uptime, faults, memory use, checksums, active forces, device identity and communication counters.\n\nData can be sent out by polling existing industrial protocols or by pushing a custom one-way protocol, which suits a data diode or strict outbound firewall rules. Scan cycle time receives special focus because nearly every controller reports it and it varies continuously, making it harder to spoof than static values. Mean shift clustering identifies normal operating states and a CUSUM accumulator flags sustained drift. In a captured incident, a bandwidth spike, a scan time anomaly and three memory drops after a login were correlated into a story of online edits, matching a controlled nmap scan and edits the speaker made.\n\nMeasured overhead was about one percent of scan cycle and CPU, with a few hundred bytes to about a kilobyte of memory for the custom protocol. Older controllers expose fewer metrics but make scan cycle deviations even more obvious. The takeaway is that controller-side telemetry gives security teams and controls engineers insight that network monitoring cannot.",
       "durationSeconds": 1624,
       "conference": "s4x",
       "viewCount": 1200,
@@ -2664,7 +2667,7 @@
         "point",
         "view"
       ],
-      "teaser": "Security researchers examine technical aspects of The Future of OT Security, An Alternative Point Of View.",
+      "teaser": "Traces the Purdue model's role in shaping OT security and presents the Open Process Automation approach as a path forward.",
       "summary": "### Overview\nIn this presentation, a representative from the cybersecurity firm Sygnia explores the past 40 years of Operational Technology (OT) security and critiques the industry's longstanding reliance on the Purdue Model. The speaker argues that rigid adherence to legacy network segmentation has hampered digital transformation and modern supply-chain integration while failing to address contemporary threat realities. As an alternative path forward, the talk highlights emerging secure-by-design standards—specifically the Open Process Automation Forum (OPAF)—and discusses how architectures must evolve toward unified IT/OT visibility and hybrid detection.\n\n### Key Topics\n- **History and Threat Landscape Evolution**: Over 40 years, OT threats transitioned through three phases: insider-dominated attacks with direct physical/local access (1982–2010), nation-state military-grade cyber weapons (kickstarted by Project Aurora and Stuxnet in 2010), and today's IT-to-OT cascading risks primarily driven by ransomware.\n- **The \"Original Sin\" of the Purdue Model**: The Purdue Model, originally created in the 1990s for a different purpose, was repurposed as OT's sole security architecture. Adding level 3.5 (IDMZ) and placing the Internet at level 5 created strict, dogmatic rules (e.g., forbidding direct L4-to-L3 communication, enforcing strictly on-premises operations, relying solely on passive IDS). These boundaries severely constrained bidirectional data flow required for digital transformation and modern demand-driven supply chains.\n- **Open Process Automation Forum (OPAF/OPAS)**: An initiative launched by ExxonMobil (now on version 2.1) supported by over 600 member organizations, introducing open, interoperable, secure-by-design architectures. Other aligned initiatives include NAMUR (integrating the NOA concept) and the U.S. Department of Energy's Cyber-Informed Engineering strategy.\n- **Architectural Shift & Hybrid SOC**: Moving toward distributed edge control devices while building a unified security operations center (SOC) that monitors both IT and OT estates.\n\n### Technical Details\n- **Distributed Control Nodes (DCNs)**: Edge devices running control logic, control loops, configuration management, and embedded security layers (data collection and detection). DCNs are intended to eventually replace PLCs and DCSs.\n- **Distributed Control Framework (DCF)**: A transitional wrapper component enabling legacy control devices to interface with new architectures without introducing intolerable latency.\n- **Open Process Automation Standard (OPAS)**: Employs the OPA Communication Framework (OCF) using OPC UA as the standard communication bus across controllers, cloud, IoT, and advanced computing platforms. Audience discussion noted that OPAS incorporates ISA/IEC 62443 security standards.\n- **Sygnia's Implementation**: Sygnia joined OPAF and built an OPAS-based cyber-kinetic innovation center. They adapted their \"Velocity\" Extended Detection and Response (XDR) platform across levels 4, 3, and parts of 2, while using API integrations with industrial IDS for lower-level visibility as an intermediate step toward full IT/OT hybrid telemetry.\n\n### Takeaways\n- Isolating OT from IT via air gaps or rigid Purdue boundaries is no longer viable in an era where ransomware cascades from IT into OT environments.\n- Process control security must shift from bolt-on network restrictions to open, secure-by-design frameworks like OPAS.\n- Security teams need to actively participate in pilots, testbeds, and standards convergence (OPAF, NAMUR NOA) to redefine detection, response, and data management across the entire digital enterprise.",
       "durationSeconds": 1879,
       "conference": "s4x",
@@ -2704,12 +2707,13 @@
         "problems",
         "solutions"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Problems & Solutions In Deploying SDN In OT.",
-      "summary": null,
+      "teaser": "Explains how software-defined networking can replace VLANs, spanning tree and manual switch setup in industrial control networks.",
+      "summary": "The speaker, who represents a switch vendor, begins with his own time as a discrete manufacturing end user building an Ethernet plant-floor network in 2006. He recalls the design-era problems: choosing topologies, relying on rapid spanning tree to stop loops caused by miswired cables, and struggling with multicast querier placement under IGMP. Plant staff unfamiliar with IP found VLANs hard to manage, and drawings were outdated within months of equipment delivery.\n\nHe then maps each problem to software-defined networking, where standard switches are steered by a central controller. Segmentation is device-centric, so a PLC can be allowed to talk to one robot over EtherNet/IP and nothing else, replacing many VLANs. Loops cannot be created, configuration is pushed from the controller so switches need no individual backups, and one policy change can apply across dozens of switches. A controller can learn existing traffic and write policies, which eases OEM commissioning and migration. Each new flow goes to the controller once, and blocked flows are written into switches so repeated DLR beacons do not overload it.\n\nHe notes limits: SDN is not built for user-level access control, and controllers must handle dual-port devices and VLAN-trunked uplinks. Gradual adoption can start by replacing a single aggregate switch. The main takeaway is to choose an OT-aware controller and build on the visibility and per-device control it provides.",
       "durationSeconds": 2600,
       "conference": "s4x",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "2sQNcc4xphw",
@@ -2943,12 +2947,13 @@
         "assessment",
         "semi"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Semi-Quantitative Cyber-Physical Risk Assessments.",
-      "summary": null,
+      "teaser": "Explains how semi-quantitative risk assessment combines process safety layers with cyber attack scenarios for chemical plants.",
+      "summary": "The talk covers semi-quantitative cyber-physical risk assessment for process plants, the middle ground between qualitative risk ratings and full quantification. Using a reactive vessel where thermal runaway could rupture the reactor, the speaker shows that a random pump failure and a cyber attack that cuts cooling produce the same overheating and consequence, so the same risk criteria apply to both. Tolerance limits are set as frequency-number curves by governments for individual, societal and environmental risk, and companies add their own criteria.\n\nTo size the safeguards, the speaker uses layers of protection analysis. Operator intervention, an automated shutdown that injects an inhibitor, and a rupture disc each reduce risk by a factor tied to their probability of failure on demand, and together they must bring the event frequency under the limit. For the cyber side, the speaker estimates the probability of defense failure given an attack rather than the likelihood of attack, since vulnerability and threat-action data are more available. Attack scenarios are modelled per element such as transmitters, controllers and engineering stations, then combined through dependency diagrams and protection rings, with the highest-probability ring setting the result.\n\nRisk can be read from the installation side, asking which attacks could cause a given loss, or from the device side, asking what an attacker reaching one component could cause. The speaker says the method has been used for about eight years with in-house tooling. In questions, the speaker acknowledges that the outputs remain estimates that depend on expert judgement, and that European authorities increasingly want to see this evidence for new plants.",
       "durationSeconds": 2015,
       "conference": "s4x",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "DtXveXqlJ_4",
@@ -3102,12 +3107,13 @@
         "michael",
         "fischerkeller"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Cyber Persistence Theory with Michael Fischerkeller.",
-      "summary": null,
+      "teaser": "Explains how states gain strategic advantage through cyber exploitation short of armed conflict, and why defenders should plan for it.",
+      "summary": "The talk introduces cyber persistence theory, which holds that most state activity in cyberspace is exploitation, the steady extraction of gains at a target's expense, rather than coercion. Exploitation can accumulate into strategic results without war. North Korea's theft of about two billion dollars from banks and crypto exchanges over four years, which funded its missile and nuclear programs, is one example; China's intellectual property theft, begun around 2010, is another.\n\nBecause offense and defense fit competition poorly, the speaker proposes initiative: a posture of anticipation that keeps adversaries reacting. Seizing it can mean corrupting servers where stolen data lands, which he frames as defense, or adopting zero trust. Agreed competition is an unspoken ceiling at the level of use of force or armed attack; states experiment freely below it, but destroying critical infrastructure would cross it and invite crisis. Risk-accepting actors may still push past it. U.S. agencies, including CYBERCOM and the FBI, have grown more proactive, and allied governments are following.\n\nFor asset owners and operators, the core recommendation is anticipatory resilience: expect exploitation, plan for it, be able to recover, and share those plans with sector peers. The speaker says state interactions in cyberspace have not yet escalated, though the theory unsettles people because it challenges deterrence.",
       "durationSeconds": 1855,
       "conference": "s4x",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "V6L723j7Zs4",
@@ -3216,12 +3222,13 @@
         "movement",
         "level"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Lateral Movement At Level 1.",
-      "summary": null,
+      "teaser": "Shows how an attacker chains a coupler exploit into nested PLCs and a safety controller at OT level one.",
+      "summary": "Many level one industrial devices sit between mixed networks, such as RF modems, field bus segments and third-party packaged units. Earlier research looked at attacks running upward toward supervisory systems, but sideways and deep downward movement from these devices received little attention. The talk argues that any device bridging security zones needs perimeter-grade hardening, and that serial, point-to-point or non-routable links should not be treated as isolated. It also explains why an attacker would want to reach safety instrumented systems, where bypasses may be enabled only through a hardware switch or limited software signals.\n\nTo illustrate the risk, the talk walks through a proof-of-concept based on a movable bridge controlled by a coupler, an object PLC and a safety controller. The attacker gets pre-authentication code execution on the coupler through a malformed FTP packet, then turns it into a proxy for the PLC's proprietary protocol. Weaknesses in that protocol's authentication allow a sniffed session value to be replayed and forged requests to be accepted. Using an undocumented command set, the attacker then changes logic in the PLC's memory without restarting it or altering the project checksum, moves into the firmware, and exploits a pre-authentication flaw in the safety controller's Ethernet module across the restricted link.\n\nA short demo shows the full chain, and the speaker notes that protocol-level messages, watchdog behaviour and running task lists could help detect parts of it. The vendor was notified and released advisories with interim mitigations, and the talk proposes a retrofit using a secure remote password exchange with message signing. The main takeaway for practitioners is to review segmentation on level one devices, avoid assuming that serial or non-routable links are safe, and assess impact beyond the immediate connectivity of any compromised link.",
       "durationSeconds": 1656,
       "conference": "s4x",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "Yt0XE0TEq0Y",
@@ -3356,12 +3363,13 @@
         "codesy",
         "procono"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Security Issues In Compiled PLC Logic (CoDeSys & ProConOs).",
-      "summary": null,
+      "teaser": "Examines how compiled PLC logic in CODESYS and ProConOS runtimes can tamper with controller functions even without root.",
+      "summary": "The talk looks at security weaknesses in the runtimes that execute compiled programmable logic controller (PLC) programs, focusing on CODESYS and ProConOS. Recent attack tooling aimed at CODESYS-based controllers, along with a 2022 ProConOS remote code execution bug, prompted the question of whether an attacker could keep a foothold on a PLC without root privileges, assuming the logic runs in a confined user space.\n\nThe speaker used vendor documentation and a Raspberry Pi build of the ProConOS eCLR runtime to test this. The runtime heap turned out to be readable, writable and executable, so logic code could overwrite its own instructions, stored user credentials, and the function pointers that protocol handlers and shell commands rely on. Structured text was used to read the process memory map and dump the heap. The speaker also found that initialization code in a binary runs when the file is loaded, before the controller enters run mode, so a malicious program could hook the file receive and factory reset handlers and carry itself into later projects. Testing was limited to the Raspberry Pi runtime, not PLCnext hardware.\n\nFor defenders, the speaker argued that logic should be treated as potentially malicious. Suggested measures included running logic in a separate process with inter-process communication despite the performance cost, providing out-of-band project management over a known protocol, restricting engineering ports to engineering workstations, and monitoring scan cycle timing for jitter that could reveal modified logic. Code signing and user management were described as useful but not sufficient against a malicious engineer.",
       "durationSeconds": 1762,
       "conference": "s4x",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "ihvrqlxk5tA",
@@ -3429,7 +3437,9 @@
       "youtubeId": "9-Q4RQvg_lc",
       "slug": "ralph-langner-on-ot-asset-management",
       "title": "Ralph Langner on OT Asset Management",
-      "speakers": [],
+      "speakers": [
+        "Ralph Langner"
+      ],
       "track": "ics-ot",
       "topics": [
         "asset-management",
@@ -3438,12 +3448,13 @@
         "asset",
         "management"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Ralph Langner on OT Asset Management.",
-      "summary": null,
+      "teaser": "Explains why automated, on-premise asset inventories underpin OT vulnerability management, change control and obsolescence planning.",
+      "summary": "The conversation opens with the guest's move from decades of OT security consulting to building OTbase, an on-premise OT asset management product. He argues that consulting showed how large the problem is, and that the only scalable answer is automation: an inventory built through active probing and refreshed every 24 hours. He separates asset management, which records verified facts about installed devices, from ICS threat detection, which watches for malicious activity, and says the two are distinct product categories.\n\nThe discussion then covers vulnerability management, change management and obsolescence planning as parts of asset management. Vulnerability mapping depends on an accurate inventory and needs ongoing CVE curation. The guest suggested that retiring outdated Windows systems and Adobe Flash often reduces risk more than chasing individual patches. Integrations with ServiceNow, SIEM platforms and Power BI dashboards came up, along with a gap: vendors rarely publish machine-readable lists of approved patches. Engineering-focused features such as IP address reservation and planned change workflows were also described.\n\nThe closing part addresses how risk dashboards can present OT status to executives. The guest warned that showing only unpatched counts can look bleak and that a strategy beyond patching, such as allowlisting or segmentation, is needed. The main takeaway is that a reliable asset inventory is the foundation for prioritizing vulnerabilities, and that asset tools should serve engineering and maintenance teams as well as security staff.",
       "durationSeconds": 4573,
       "conference": "s4x",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "Wtox8rMvA40",
@@ -3988,7 +3999,9 @@
       "youtubeId": "gtK0jw8tXs4",
       "slug": "edgard-capdevielle-on-nozomi-networks-and-the-ot-visibility-and",
       "title": "Edgard Capdevielle on Nozomi Networks & the OT Visibility & Detection Market",
-      "speakers": [],
+      "speakers": [
+        "Edgard Capdevielle"
+      ],
       "track": "ics-ot",
       "topics": [
         "detection",
@@ -3998,12 +4011,13 @@
         "nozomi",
         "network"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Edgard Capdevielle on Nozomi Networks & the OT Visibility & Detection Market.",
-      "summary": null,
+      "teaser": "Nozomi Networks' CEO discusses funding, OT market consolidation, channel strategy and the shift toward cloud-delivered monitoring.",
+      "summary": "Dale Peterson interviews Edgard Capdevielle, CEO of Nozomi Networks, about the company's recent $100 million Series D round and the wider market for operational technology security. The conversation opens with the company's growth to nearly 200 employees. Capdevielle explains that the round was described as pre-IPO to keep listing options open, that each funding round has been led by a different financial investor, and that the new money will go toward broader product coverage across industries and expanded go-to-market through partners and a new MSSP program.\n\nThe middle of the discussion covers market structure. Capdevielle expects OT security to consolidate into fewer, broader platforms more quickly than IT did, since OT lacks decades of specialization to build on. He notes that IT vendors which tried to add OT features to existing products have had little success, and that buyers acquiring startups often fail to keep investing in them. He also describes a channel-first model in which about 80 percent of business is fulfilled through partners, and the cloud-based Vantage offering, whose first purchase orders came from a water utility and an electric utility.\n\nThe closing segment looks ahead. Capdevielle expects on-premises sensors to remain necessary for years, with cloud delivery growing alongside them, and stresses that OT alerts should flow into existing SOC tooling such as Splunk and QRadar. For OT defenders, the discussion offers context for weighing platform choices, hybrid deployments and how monitoring data fits into established security operations.",
       "durationSeconds": 2900,
       "conference": "s4x",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "pKGC5bUFYuY",
@@ -4076,7 +4090,9 @@
       "youtubeId": "GjExvi7C-FU",
       "slug": "pat-kennedy-on-founding-growing-and-selling-osisoft",
       "title": "Pat Kennedy on Founding, Growing and Selling OSIsoft",
-      "speakers": [],
+      "speakers": [
+        "Pat Kennedy"
+      ],
       "track": "ics-ot",
       "topics": [
         "kennedy",
@@ -4085,12 +4101,13 @@
         "selling",
         "osisoft"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Pat Kennedy on Founding, Growing and Selling OSIsoft.",
-      "summary": null,
+      "teaser": "Traces how a refinery consulting firm grew its PI System data historian into a widely used industrial platform before its sale.",
+      "summary": "The interview traces the founder's path from a 1980 process control consultancy to the PI System, a data historian that started as an internal logger for checking control strategies during rare plant upsets. The team adopted sampling methods that kept data at its original fidelity, and it chose to act as a neutral data layer between control systems and enterprise users rather than build SCADA itself. Interfaces to new devices were offered for a fixed fee, and a large share of development still goes into them.\n\nSecurity comes up through a 2006 disclosure dispute over an ICCP server flaw, after which the company pursued national lab assessments and a formal security development life cycle. The founder argues that vulnerabilities erode the value of data, and that a focused product line made maintenance and secure updates easier than it would be for a vendor with many products. Partnering closely with Microsoft let the software build on tools users already knew, and he expects data volumes from cameras, grid sensors and large supply networks to keep growing.\n\nOn the sale, he recalls acquisition offers arriving almost routinely from 1981 onward, and says outside capital was taken on later to fund growth. He preferred private ownership to avoid quarterly pressure from public markets, and he treats customer care as the foundation of revenue. His closing advice to a founder is simply to look at customers, because they will show the way.",
       "durationSeconds": 2853,
       "conference": "s4x",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "OMgm0Ynvv3A",
@@ -4138,7 +4155,10 @@
       "youtubeId": "KBwen4d8ONg",
       "slug": "top-20-secure-plc-coding-practices",
       "title": "Top 20 Secure PLC Coding Practices",
-      "speakers": [],
+      "speakers": [
+        "Sarah Flukes",
+        "Vivek Ponada"
+      ],
       "track": "ics-ot",
       "topics": [
         "plc",
@@ -4146,12 +4166,13 @@
         "secure",
         "coding"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Top 20 Secure PLC Coding Practices.",
-      "summary": null,
+      "teaser": "Walks through a new list of 20 secure PLC coding practices aimed at the engineers who program controllers.",
+      "summary": "Host Dale Peterson talks with Sarah Flukes and Vivek Ponada, two leaders of a volunteer effort that produced the Top 20 PLC Secure Coding Practices list, with version 1.0 released in mid-June. The project started from a session at S4 by Jake Prosky and grew into a global, freely available document for the engineers and technicians who program controllers, not only security staff. It gives them concrete steps to point to when asked about security.\n\nThe practices are grouped by security goal, and integrity covers twelve of the twenty. Examples include checking HMI inputs at the controller level, using the controller's knowledge of process timing to flag a gate that opens slower than usual, and alerting when opposing signals such as start and stop are active together. Monitoring is another theme, such as logging scan cycle time, memory and CPU use so operators can spot drift. Many practices also help maintenance, for instance keeping logic in the controller so technicians can troubleshoot it with a laptop rather than only through the HMI. Power monitoring was scoped out as a system-level concern.\n\nThe list is licensed so anyone can use or adapt it with attribution, and feedback comes through a comment form on the project site, with yearly updates planned. The guests stressed it is not a standard or certification, and that it would not have stopped Stuxnet or ransomware on office PCs, though it may limit collateral damage. Vendors may document how their products meet the practices, but claims should be checked against the list. Roughly half the practices can be started today with little more than time.",
       "durationSeconds": 2953,
       "conference": "s4x",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "iWYaJ8pIrs8",
@@ -4212,19 +4233,22 @@
       "youtubeId": "L9CF1-n0GZw",
       "slug": "rob-lee-on-us-government-activities-disagreements-with-dale-and",
       "title": "Rob Lee on US Government Activities, Disagreements with Dale, and the Market for ICS Security Pro's",
-      "speakers": [],
+      "speakers": [
+        "Rob Lee"
+      ],
       "track": "ics-ot",
       "topics": [
         "government",
         "ics",
         "ics-security"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Rob Lee on US Government Activities, Disagreements with Dale, and the Market for ICS Security Pro's.",
-      "summary": null,
+      "teaser": "Covers US government efforts on industrial control system visibility, detection versus prevention, and ICS career prospects.",
+      "summary": "Dale Peterson hosts Rob Lee, CEO of Dragos, on the Unsolicited Response show to discuss recent US government efforts to improve industrial control system security. Lee welcomes the administration's habit of consulting asset owners rather than prescribing fixes, and he calls its focus on OT visibility and detection promising. He reports that officials met with the Electric Sector Coordinating Council and agreed on an action plan with items for both government and industry, and he wants agencies to deliver one consistent message to utility leaders.\n\nLee argues that agencies such as CISA need more funding and authority for federal networks and cannot scale to serve private asset owners, so larger companies should pay for their own services while free help goes to water co-ops and municipal utilities. On information sharing, he separates data sharing from information sharing and describes Neighborhood Keeper, where participants keep their data and identities private while receiving insights from detections sent out to them.\n\nOn priorities, Lee puts prevention first, beginning with a defensible architecture, multi-factor authentication and an incident response plan, while Peterson argues detection can come before some patching. Lee sees threat intelligence as most useful early, to inform risk, and warns that organizations without detection face growing reputational harm. Closing on careers, he says the entry-level ICS market is hard to enter but improving, with utilities training newcomers, and urges the community to understand business drivers and avoid toxic infighting.",
       "durationSeconds": 3155,
       "conference": "s4x",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "eZo6fAMSLzg",
@@ -4342,8 +4366,8 @@
         "thi",
         "they"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Nicole Perlroth Interview - This Is How They Tell Me The World Ends.",
-      "summary": null,
+      "teaser": "An interview about the zero-day exploit market, the incentives that shape it, and the risks to critical infrastructure.",
+      "summary": "Dale Peterson hosts this interview with journalist Nicole Perlroth about her book on the zero-day exploit market and the wider state of cyber conflict. The conversation starts with her first visit to an ICS security conference in 2013, where she was surprised to find a company openly selling zero-day exploits for industrial control systems. She describes a dinner with those sellers, where her repeated questions about which buyers they would refuse went unanswered. Perlroth says she wrote for a general audience, tracing how the market drifted abroad and how governments held onto flaws such as EternalBlue for years.\n\nThe discussion then turns to incentives. Perlroth suggests tax credits for companies that make a serious internal commitment to security, and fines for vendors whose weak practices expose critical systems, citing the SolarWinds update password as an example. On the grid, she argues that individual incidents look minor but together make up a serious threat. Peterson pushes back that some examples in the book, such as the Wolf Creek plant and an Iranian intrusion into a dam, are framed as more advanced than the evidence shows, and he notes that the book reads as more alarming than the facts require.\n\nBoth agree the book works for lay readers and that security professionals should bring these policy questions to a wider audience. Perlroth does not think zero days should automatically be handed over for patching, but she argues that governments should hold themselves to the criteria they cite when they stockpile flaws. The takeaway for practitioners is that disclosure, stockpiling and defensive investment are policy decisions as much as technical ones.",
       "durationSeconds": 3172,
       "conference": "s4x",
       "viewCount": 2200,
@@ -4822,12 +4846,13 @@
         "langill",
         "models"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 3. NIST CSF and Maturity Models with Joel Langill.",
-      "summary": null,
+      "teaser": "Explains how the NIST Cybersecurity Framework and maturity models fit together for industrial control system self-assessments.",
+      "summary": "The talk opens with the documentation landscape around cybersecurity. The speaker argues that policies sit at the base of the document stack, followed by standards and procedures, and that national guidance sets overlap heavily. The speaker explains that a framework is a flexible recipe organisations adapt to their own risk. The NIST Cybersecurity Framework's tiers and profiles measure risk awareness and the gap between current and target state, which differs from a maturity model.\n\nThe middle of the talk compares maturity models such as the C2M2, developed for the electric utility sector, and the CMMC used by the Department of Defense, which scores practices and processes separately. A federal facility example shows the problem of remediating by vulnerability count alone, without prioritisation or a target profile. The speaker also shows a heat-map of asset categories, revealing that standard IT platforms may be well covered while embedded industrial devices are weak. An unauthorised device creating an outbound path illustrates how process gaps persist even where controls exist.\n\nThe closing section covers tooling. The speaker demonstrates CSET version 9, a free government assessment tool, along with a custom spreadsheet that aggregates scores by category against a target. He also shows a custom CMMC module built inside CSET. The takeaways are to define risk tolerance before starting, begin assessments at operational assets, fund the work as an operating expense where possible, and track progress against targets over several years.",
       "durationSeconds": 3094,
       "conference": "s4x",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "myILNNCLEM8",
@@ -4929,8 +4954,8 @@
         "executive",
         "patrick"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 9. Risk Management & Executive Communication with Patrick Miller.",
-      "summary": null,
+      "teaser": "Shows security practitioners how to frame cyber risk in business terms that executives will act on.",
+      "summary": "The speaker argues that security practitioners often lose executive discussions because they lead with technical concerns and expect leaders to care about security for its own sake. Executives are judged on profit, loss and risk, so the talk urges presenters to start with their own mindset: set aside ego, expect to repeat the message in several forms, and build strong communication skills. Industrial and infrastructure organisations serve as the main context, and the speaker explains how ownership structure, vertical integration, multinational exposure, regulation and supply chain shape what a business values.\n\nThe middle section breaks down how executives think about risk. Risk is described as likelihood combined with consequence, and leaders typically choose to accept, mitigate or transfer it, often preferring acceptance first. Key numbers include the cost of downtime per minute, which lets a project be compared against expected loss, and insurance claims, which may be denied if no due diligence can be shown. Proposals should be framed around reliability, loss prevention, efficiency and uptime rather than the word security, backed by peer precedent, a root-cause analysis, and gaps sorted into people, process, technology or resource categories.\n\nThe closing example presents monitoring of industrial control assets as a low-cost, low-risk initiative that can start at a single network choke point. The speaker recommends bringing several options and a clear priority, asking for a decision while expecting it to be postponed, and running both a grassroots effort and a top-down push. The main takeaway is that the practitioner's job is to help the business make informed decisions, not to secure the company alone.",
       "durationSeconds": 2571,
       "conference": "s4x",
       "viewCount": 1700,
@@ -4950,12 +4975,13 @@
         "standards",
         "ics-security"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding 8. ICS Security Standards, Guidelines and Regulations with Jason Christopher.",
-      "summary": null,
+      "teaser": "Explains how ICS security standards, guidelines and regulations are made, how they differ, and how practitioners can adopt them.",
+      "summary": "This talk looks at how security standards, guidelines and regulations for industrial control systems are created and why they differ. The speaker explains that voluntary consensus standards come from standards development organizations, which use accredited, ballot-driven processes that can take years. Guidelines come from many kinds of bodies with a lighter process and can be finished much faster. Regulations usually grow out of a standard or guideline and add another review cycle before they take effect.\n\nThe middle of the talk surveys the ICS documents most often cited. IEC 62443 is organized around security levels and the different roles of asset owners, integrators and suppliers. NIST SP 800-82 overlays the broader SP 800-53 controls with guidance for operational technology. NERC CIP is mandatory for the mainland United States grid and uses bright-line criteria tied to grid functionality. The NIST Cybersecurity Framework is presented as a common language, with five functions, maturity tiers, and current and target profiles that turn standards into a repeatable improvement process that management can follow.\n\nThe session closes by debunking three myths: that standards are perfect, that they are too flawed to use, and that compliance alone means a security program is good enough. The practical advice is to start with one standard, map it to the framework, use the document to justify budget, and treat security as an ongoing journey rather than a finish line.",
       "durationSeconds": 2140,
       "conference": "s4x",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "B_CrA7YcM_k",
@@ -4973,12 +4999,13 @@
         "sistrunk",
         "chris"
       ],
-      "teaser": "Security researchers examine technical aspects of 7. Incident Response with Chris Sistrunk.",
-      "summary": null,
+      "teaser": "Walks through detection and incident response planning for control system networks, from visibility and hunting to playbooks.",
+      "summary": "Control system threats come from skilled, well-funded human adversaries who keep returning after they are evicted, so defenders should focus on who is attacking rather than which malware is used. The speaker argues that engineers and IT staff must learn each other's vocabulary, and that many organizations monitor only the IT side, leaving process networks blind.\n\nDetection is presented as a continuum that starts with a few critical assets and is fine-tuned before it expands. Sensor placement runs from enterprise and DMZ systems down to control networks and PLCs, where logs may be the only option. Hunting means baselining normal traffic and watching for unexpected internet connections, default account use and firmware changes. Alert tuning matters because floods of noisy Modbus alerts can bury a real intrusion. One case showed a thermal camera revealing a tampered HMI that ran hotter than an identical unit.\n\nFor response, the talk recommends a written plan mapped to both IT and ICS, with playbooks for commodity malware, compromised credentials and destructive attacks. Proprietary PLC systems lack standard forensic tools, so responders should follow documented collection steps, avoid rebooting devices, and assume attackers know their methods. Containment should be timed to the strike zone, after enough is learned about the intruder. The speaker closes by urging listeners to harden networks, start small with free tools and rehearse their plans.",
       "durationSeconds": 2895,
       "conference": "s4x",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "OalM9m14os4",
@@ -5080,12 +5107,13 @@
         "holcomb",
         "assessments"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 4. ICS Assessments with Jason Holcomb.",
-      "summary": null,
+      "teaser": "Explains low-impact active assessment techniques for industrial control systems and how to prioritize and patch the findings.",
+      "summary": "The talk, presented by a consulting practice leader, argues that online assessment is the only reliable way to learn what an industrial control system's attack surface really looks like, since documentation is often out of date. It addresses the fear that scanning can disrupt fragile legacy devices and urges planning with operations staff, looking at the system, network and device levels, and noting how old the equipment is before any testing.\n\nFour techniques are covered. Credentialed scanning uses built-in operating system calls, so it can enumerate ports, software inventory and missing patches with far fewer packets than a traditional scan. Configuration auditing checks a host against a chosen secure baseline and shows whether changes such as new patches have weakened it. When tools cannot be brought in, native OS commands can produce configuration dumps for offline analysis, and native ICS protocol queries can reveal controller firmware versions to check against vulnerability databases.\n\nVulnerability scores alone are hard to act on, since a low-rated flaw may matter greatly to a process while a critical one may not. The speaker recommends treating patching as cyber maintenance on a tiered, tested update cycle rather than copying IT policy, and reducing exposure by removing unneeded services, changing default credentials and choosing secure protocols. The main takeaway is that skipping active assessment means accepting unknown risk, and remediation should follow the operational context.",
       "durationSeconds": 1610,
       "conference": "s4x",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "YZ9nf6bd9EU",
@@ -5554,12 +5582,13 @@
         "building",
         "capable"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Building An OT Capable SOC.",
-      "summary": null,
+      "teaser": "Outlines how operational technology security functions can fit into a security operations center, from people to tooling.",
+      "summary": "The talk explores how an organisation can bring operational technology security into a security operations center. It argues a SOC is more than monitors and analysts in a dark room, and rests on three pillars: people with tiered, mixed skills; technology shaped by what data can be collected; and process that must be agreed on and tested. Functions span preparedness, proactive work such as threat hunting and tabletop exercises, and reactive incident response.\n\nThe speaker contrasts an IT SOC with an OT SOC, noting industrial protocols, diverse endpoints such as controllers and engineering workstations, and the consequences a routine network scan can have on a process. Several models are compared: extending an existing IT SOC, a dedicated OT SOC, adding security duties to a control room, outsourcing to managed providers, or a hybrid. Collection ranges from netflow and offline pcaps to span ports, syslog and historian data, and a collection management framework helps map plants, crown-jewel areas and network architecture.\n\nA worked example follows an alert from the OT monitoring platform into the SIEM, where a tier 1 analyst verifies it. A ticket is then raised and an investigation follows a playbook, with containment and recovery steps that are reviewed over time. The closing checklist asks whether risk justifies the investment, whether infrastructure supports collection, what budget and staff are available, and how licensing scales. Success can be tracked through coverage, mean time to detect and mean time to recover, and the program should grow in phases rather than being built at once.",
       "durationSeconds": 1749,
       "conference": "s4x",
       "viewCount": 2400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "R2e6kpSnz48",
@@ -5703,8 +5732,8 @@
         "realistic",
         "interactive"
       ],
-      "teaser": "Security researchers examine technical aspects of Factory Honeynet: Highly Realistic and Interactive.",
-      "summary": null,
+      "teaser": "Walks through a six-month high-interaction honeypot posing as a factory and the intrusions it attracted.",
+      "summary": "The project began with news coverage of factories hit by ransomware, and the team wanted to see how such attacks actually unfold. They built a high-interaction honeypot imitating a plastics injection molding plant. The HMI was designed first, and PLC logic then produced believable process behaviour, such as a conveyor that ramps up and down and simulated pressure readings. The exposed persona was a small company with two locations, generated staff photos, and phone lines with receptionist greetings and voicemail. Only a few PLC ports and VNC were reachable from the internet, and the network was fully tapped for monitoring.\n\nActivity stayed near zero until early summer, when the team opened VNC to the robotics workstation. Afterwards, one intruder installed a backdoor that turned out to run a Monero miner, which overheated the host laptops until the team blocked it. A ransomware operator ran TeamViewer and several tools, watched the process for about an hour and a half, and demanded a payment that was negotiated down but never made. A decryption test on a sample Omron project file showed the actor did not understand what the data was. Another intruder exfiltrated roughly seven gigabytes, while a script renamed files with no record kept, making recovery impossible. One operator left the simulated process running unchecked for four hours.\n\nAcross six months the team logged thousands of unique IPs, with only a small share classified as scanners and clear regional patterns in PLC queries. The main conclusions were that control systems should never be placed directly on the internet, and that attackers often seemed more interested in using a clean IP than in disrupting production. The speaker also stressed that a high-interaction honeypot needs daily attention, with incidents handled as they happen.",
       "durationSeconds": 1820,
       "conference": "s4x",
       "viewCount": 1100,
@@ -5841,8 +5870,8 @@
         "industrial",
         "internet"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Cisco Cyber Vision: Cybersecurity for the Industrial Internet.",
-      "summary": null,
+      "teaser": "Explains how Cisco Cyber Vision gives industrial networks asset visibility and policy-based segmentation through its ISE integration.",
+      "summary": "Industrial control environments often lack a clear inventory of what is connected, and the speaker argues that visibility is the first hurdle to securing them. IT-style discovery such as port scanning can disrupt fragile devices, while copying traffic with SPAN ports becomes costly across widely spread sites like substations and field locations.\n\nCisco Cyber Vision is presented as a two-tier system. Hardware sensors perform deep packet inspection on industrial protocols, building asset profiles and communication baselines, and flagging configuration changes, unusual connections and known vulnerabilities. A central component aggregates that data and can run as hardware or a virtual appliance. Because inspection happens at the edge, the traffic sent back is only a small share of network load. Grouping assets by process lets IT and operations plan maintenance windows together rather than rushing patches into production.\n\nA use case shows Identity Services Engine consuming Cyber Vision profiles to enforce segmentation policies on switches and routers without installing agents on devices. In an emergency, such as a device talking to an unexpected camera or running a cryptominer, the policy can contain the malicious traffic and let the industrial process keep running instead of isolating the node. The main takeaway is that embedded sensing and network-enforced policy suit OT better than span-based or out-of-band designs, though the speaker noted that encrypted TLS 1.3 traffic remained an open question.",
       "durationSeconds": 1394,
       "conference": "s4x",
       "viewCount": 1500,
@@ -5874,7 +5903,9 @@
       "youtubeId": "GxN4Y2as-OM",
       "slug": "controlled-chaos-the-inevitable-marriage-of-devops-and-security-2",
       "title": "Controlled Chaos - The Inevitable Marriage of DevOps & Security",
-      "speakers": [],
+      "speakers": [
+        "Kelly Shortridge"
+      ],
       "track": "hardware",
       "topics": [
         "devops",
@@ -5884,18 +5915,21 @@
         "marriage",
         "devop"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Controlled Chaos - The Inevitable Marriage of DevOps & Security.",
-      "summary": null,
+      "teaser": "Explores how chaos engineering and resilience can help security teams align with DevOps and protect industrial control systems.",
+      "summary": "Kelly Shortridge argues that DevOps, which unifies responsibility and accountability for software delivery, is reshaping how organizations run their infrastructure, including industrial control systems that are moving toward cloud platforms. She says security teams should join this shift rather than stand aside. Her proposed approach is chaos and resilience engineering, built on the idea that security controls will fail and incidents cannot be fully prevented, so systems should be designed to handle them gracefully.\n\nThe talk introduces the DIE model as an alternative to the CIA triad, describing three traits of modern infrastructure: distributed, immutable, and ephemeral. Distributed design limits outage severity through redundancy, immutable servers are rebuilt from version-controlled images rather than patched by hand, and short-lived resources shrink the window attackers have to persist. For testing, she recommends game days built around business priorities and the least-costly attacker path, starting in test environments. Examples include moving IP space across availability zones, planting bait files that shut down a container when an attacker tries to modify them, flagging outdated library versions, and monitoring cloud billing spikes that may signal data exfiltration or cryptomining.\n\nShe closes by urging ICS security teams to practice these experiments now, while many field systems remain unchanged, and to become enablers rather than gatekeepers.",
       "durationSeconds": 1658,
       "conference": "s4x",
       "viewCount": 2200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "eWpfTGSl-9I",
       "slug": "claroty-ot-security-enter-the-ciso",
       "title": "Claroty: OT Security - Enter The CISO",
-      "speakers": [],
+      "speakers": [
+        "Dave Weinstein"
+      ],
       "track": "hardware",
       "topics": [
         "ot-security",
@@ -5903,12 +5937,13 @@
         "enter",
         "ciso"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Claroty: OT Security - Enter The CISO.",
-      "summary": null,
+      "teaser": "Explains how CISOs inheriting operational technology security can build visibility, risk baselines and non-disruptive controls.",
+      "summary": "This session is aimed at CISOs who have just been handed responsibility for operational technology security. The speaker explains that many security leaders have little visibility into their OT environments and no baseline of asset communications to measure risk against. He points to unfamiliar industrial devices and protocols, legacy equipment that can stay in service for decades without basic authentication or encryption, and the danger that IT security tools can break production systems. He also stresses that OT staff are essential to validating any tool.\n\nThe threat picture is mostly non-targeted. Commodity malware, such as ransomware that spreads from corporate IT into plant networks, is the more common route in, which pushes governance toward a unified IT and OT framework. He argues a workable solution must be credible (mirroring IT security controls), efficient (fitting existing people, process and technology) and non-disruptive (doing no harm to production or IT operations). Capabilities he covers include risk assessment and remediation priorities, asset and communication visibility, vulnerability context for patching under operational limits, network segmentation, and detection of attackers abusing native device functions.\n\nHe closes by saying OT risk management has to be simplified: security terms need translating into language IT analysts understand, tools must integrate with existing security stacks, and deployment should be low-touch, with cloud delivery expected to cut cost and maintenance. The takeaway is to treat OT security as ongoing risk management rather than a one-time compliance exercise.",
       "durationSeconds": 1747,
       "conference": "s4x",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "-NI_FpjilO0",
@@ -5924,7 +5959,7 @@
         "applying",
         "language"
       ],
-      "teaser": "Security researchers examine technical aspects of Applying the Rust Programming Language in ICS.",
+      "teaser": "Shows how Rust's compile-time checks prevent common memory bugs in industrial control system software.",
       "summary": "Overview\nAdam Crane argues that Rust represents a critical modernization path for industrial control systems programming. Rather than blaming developers, he attributes persistent security bugs to using tools fundamentally ill-suited to contemporary requirements—specifically, C, which has remained essentially unchanged since 1972. Crane positions Rust adoption as inevitable, driven primarily by the massive productivity benefits developers gain when using a language designed for both safety and systems programming.\n\nKey Topics\nRust sits alongside C, C++, and Go as a compiled-to-machine-code language but uniquely offers both memory and thread safety without performance overhead. Crane catalogs five categories of C vulnerabilities—dangling references, use-after-free, null pointer dereferences, buffer overflows, and data races—and explains how Rust's compiler catches most of these at compile time through the borrow checker and ownership model, or enforces them at runtime via type constraints. The Rust ecosystem provides Cargo (integrated package management and build system), comprehensive documentation, and LLVM backend support for embedded architectures including ARM, MIPS, and PowerPC. Concretely, Crane presents Rod Bus, a Modbus client library released alongside the talk and available via crates.io, which includes a zero-cost C API shim enabling seamless integration with existing C/C++ codebases.\n\nTechnical Details\nRod Bus achieves 200,000 Modbus requests per second while consuming less than 1 megabyte of RAM. Rust's ownership model prevents dangling references and use-after-free at compile time through the borrow checker; the compiler uses lifetimes (denoted with apostrophes, e.g., 'a) to statically verify that references cannot outlive their referents. For multi-threaded safety, Rust employs Arc (atomic reference counting) for thread-safe shared ownership and Mutex for coordinated access, preventing data races through type system constraints rather than runtime checks. Code examples demonstrate the compiler rejecting unsafe patterns; for instance, after moving a variable's ownership, attempting to reference it triggers a detailed error message explaining the violation. Performance comparisons show Rustls, a Rust implementation of TLS, using less than half the memory of OpenSSL in most scenarios.\n\nPractical Deployment in ICS\nRust is most suitable for new greenfield systems with real-time and low-memory constraints. More pragmatically for existing vendors, Rust's C ABI compatibility enables gradual replacement of legacy components—an approach exemplified by Suricata IDS incrementally replacing protocol parsers with Rust and Mozilla replacing high-risk Firefox components. Crane plans to enhance Rod Bus by integrating Rustls and implementing X.509 certificate-based access control for secure Modbus, allowing vendors to enforce role-based permissions through certificate validation.\n\nWhen Rust Does Not Fit\nAdoption is impractical for vendors with large Windows-based deployments of Java, C#, or Go applications, or where critical library dependencies lack Rust implementations. The learning curve, while gentler than C++, exceeds that of Go or Java, presenting onboarding challenges for teams unfamiliar with ownership and borrowing concepts.\n\nTakeaways\nRust stabilized in 2018 with a commitment to backward compatibility going forward. Adoption is accelerating in major technology projects (Microsoft, Firefox, Suricata) though ICS-specific deployments remain nascent. University computer science curricula increasingly include Rust. Rather than replacing all C codebases overnight, Rust enables pragmatic incremental hardening of legacy systems and rapid secure development of new critical components, all enabled by C interoperability and measurably improved developer confidence in correctness.",
       "durationSeconds": 2062,
       "conference": "s4x",
@@ -6007,12 +6042,13 @@
         "companie",
         "ratings"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Moody's / Team8: Cyber Risk Ratings for Companies.",
-      "summary": null,
+      "teaser": "Explains how Moody's and Team8 are building a cyber risk rating that expresses exposure in financial terms and allows peer benchmarking.",
+      "summary": "Moody's, a credit rating agency, treats cyber risk alongside environmental risk as an existential business threat. Its global cyber risk group, formed in 2018, studied how cyber events affect credit. An earlier white paper covering 35 rated sectors flagged 13 of them as high or medium-high risk based on likely financial impact.\n\nThe talk covers a joint venture with Team8 to build a standalone cyber risk assessment and rating. Boards and executives want exposure expressed in financial terms and comparable peer benchmarks. The method blends management assessments, surveys, outside-in scanning and inside testing that validates the results, with the aim of completing assessments in weeks rather than months. Three obstacles were described: thin loss data, with only about 4% of roughly 130,000 entries in one commercial set holding enough financial detail; signal decay, where long-standing guidance such as forced password changes no longer predicts resilience; and industrial control environments, which the team has not yet addressed in depth.\n\nRather than a 0 to 100 score that implies false precision, the team is considering ordinal cohorts that separate firms able to withstand sophisticated attacks from those that can only stop commodity ones. The rating is meant to be transparent and independent, with no remediation work for assessed firms, and the team is seeking community input. Practitioners should weigh the data limits behind any output.",
       "durationSeconds": 1746,
       "conference": "s4x",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "kDUuDb4oEPc",
@@ -6188,12 +6224,13 @@
         "remote",
         "acces"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Dispel - Rapid, Secure Remote Access To ICS.",
-      "summary": null,
+      "teaser": "Explains how a moving target defense layer and rapid remote access can secure vendor and operator access to industrial control systems.",
+      "summary": "This sponsor-stage session looks at how operators and vendors reach equipment at remote industrial sites such as wind farms, solar installations and automated wells. The speaker says that today this usually means waiting for a specialist to arrive, driving someone out to the site, or working through a long login chain. The example walked through a typical vendor path: a VPN into the corporate network, a first jump host, a second jump host for the control cluster, and finally an RDP session. The speaker says this can take 12 to 15 minutes when done by hand, and claims the product connects users in seconds.\n\nThe middle of the talk argues that static defences fail because fixed VPN endpoints and jump hosts stay in the same place, so attackers can map them and reuse an exploit once a weakness is published. The proposed alternative is moving target defense, which keeps the path between the two ends changing. The product builds single-use, single-tenant networks across public cloud providers for each session, then tears them down or recycles them afterward. On-site hardware enforces user-specific allowlists. One customer, a water utility, reported about one million dollars in first-year savings from staff time, and the speaker said the security team was no longer seen as the blocker for operations.\n\nThe closing part covered authentication, which can either use a built-in console with username, password and multi-factor, or plug into an approval mechanism the organization already uses. For regulated environments, sessions can be screen recorded, livestreamed, or logged through syslog. The speaker asked the audience to bring the approach to their operational technology teams for a briefing and a trial, noting that a discretionary budget could fund it.",
       "durationSeconds": 750,
       "conference": "s4x",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "AvKLZZh8NG4",
@@ -6315,7 +6352,9 @@
       "youtubeId": "CvltQUOxtqE",
       "slug": "dhs-cisa-director-chris-krebs-keynote",
       "title": "DHS CISA Director Chris Krebs Keynote",
-      "speakers": [],
+      "speakers": [
+        "Chris Krebs"
+      ],
       "track": "ics-ot",
       "topics": [
         "cisa",
@@ -6324,12 +6363,13 @@
         "chri",
         "kreb"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in DHS CISA Director Chris Krebs Keynote.",
-      "summary": null,
+      "teaser": "Outlines the federal cybersecurity agency's priorities, with a focus on its industrial control systems initiative and training resources.",
+      "summary": "The keynote opens with the history of the Cybersecurity and Infrastructure Security Agency, a civilian agency created in 2018 from a legacy part of the Department of Homeland Security. The director explains that the agency cannot compel private operators to do anything; its role is to advise, share information and help owners manage their own risk. He lists five disciplines, IT security, control system security, supply chain, insider threat and physical security, and three audiences: security teams, executives and the general public.\n\nFive strategic priorities follow from the period after a 35-day federal shutdown: federal network security, election security, soft target protection, industrial control systems, and supply chain including 5G. Much of the talk covers the industrial control systems initiative, built on four pillars: engaging the community by asking more and giving more, a technology focus that includes the MITRE ICS ATT&CK framework, data integration into a common operating picture, and mapping risk across national critical functions. An interagency working group then gathers industry input on workforce, standards, supply chain and incident response.\n\nThe closing section introduces hands-on training environments for oil and gas, pipeline and water facility scenarios, displayed on the conference's third floor and aimed at under-resourced municipal water utilities. Attendees are pointed to the agency's website, regional advisors and an upcoming ICS Joint Working Group event. The takeaway is to engage with federal partners, share what works and use available training to strengthen defenses.",
       "durationSeconds": 1329,
       "conference": "s4x",
       "viewCount": 2200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "ZM-ZIWQNev0",
@@ -6376,19 +6416,22 @@
       "youtubeId": "trjewUjzeJo",
       "slug": "interview-with-ed-schweitzer",
       "title": "Interview with Ed Schweitzer",
-      "speakers": [],
+      "speakers": [
+        "Ed Schweitzer"
+      ],
       "track": "ics-ot",
       "topics": [
         "interview",
         "schweitzer",
         "vulnerability-research"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Interview with Ed Schweitzer.",
-      "summary": null,
+      "teaser": "Covers designing protective relays, early grid cybersecurity choices, and why power systems demand simplicity and tight latency.",
+      "summary": "This mainstage interview opens with the speaker's background as a third-generation inventor and the culture of first principles at his company. He explains that the power industry cannot treat the grid as a lab, so new technology should prove itself with customers who have a real need before standards or mandates lock it in.\n\nHe then recounts the first digital protective relay from the early 1980s, which was first sold to a Minnesota utility that used it for fault location. Built-in access levels and alarms were added after it became clear that a serial port with a modem could be abused. Later, customers added dial-back and encrypting modems, and one utility used a relay-controlled phone line so operators could grant time-limited access. He also described how added features and sampled-value designs increase complexity and the risk of misoperations, and he accepted Ethernet ports on relays while objecting to the timing non-determinism they bring.\n\nToward the end, he asks what inherently safe cyber would look like and challenges his staff to answer it. On legacy code, he says the company rewrites components when it can do them better. For the wider ICS community, he urges a focus on simplicity, low latency and determinism while staying secure, citing a serial encrypting transceiver that added only one byte of latency.",
       "durationSeconds": 1931,
       "conference": "s4x",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "UQceYzbhOkA",
@@ -6404,12 +6447,13 @@
         "grid",
         "hours"
       ],
-      "teaser": "Jason Larsen details 14 Hours And An Electric Grid.",
-      "summary": null,
+      "teaser": "Walks through the first 14 hours of an industrial control system intrusion, from firmware reversing to a rootkit on a serial gateway.",
+      "summary": "The talk recounts the first 14 hours of a penetration test against an electric utility's energy management network, where the goal was to reach substation protective relays and disable them. The speaker documented the work hour by hour to give a realistic picture of an average engagement, partly as a counterpoint to press coverage that swung between calling such bugs trivial and calling them reachable only by nation-states.\n\nEarly on, the converter's web login and firmware unlock were examined, and its TCP sequence numbers suggested an unusual custom network stack. Reversing the extracted firmware turned up a debug routine that read arbitrary memory and exposed the device password. The firmware checksum was a simple additive sum, so a modified image could be made to pass. The speaker then built an in-memory debugger, carved out a roughly 1.7 kilobyte code cave, and wrote a DNP3 man-in-the-middle implant in C. Spoofing tables kept operators seeing normal values, and compressed truth tables modeled plant start-up states.\n\nFirmware was deployed through an already compromised patch management system. Further exploits against an RTU and an intrusion detection device gave access to the safety half of the switchyard, and the full chain took about three weeks. The speaker argued that such techniques are within reach of many skilled professionals and that actors are often over-credited. The takeaway for vendors is to sign firmware with real cryptography rather than rely on checksums, and for asset owners that legacy ICS problems persist because replacement is never started.",
       "durationSeconds": 1921,
       "conference": "s4x",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "ZvtZWPKCs-I",
@@ -6559,7 +6603,9 @@
       "youtubeId": "V2kq_dAHwYE",
       "slug": "dale-petersons-s4x20-mini-keynote",
       "title": "Dale Peterson's S4x20 Mini-Keynote",
-      "speakers": [],
+      "speakers": [
+        "Dale Peterson"
+      ],
       "track": "ics-ot",
       "topics": [
         "dale",
@@ -6568,12 +6614,13 @@
         "mini-keynote",
         "mini"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Dale Peterson's S4x20 Mini-Keynote.",
-      "summary": null,
+      "teaser": "Urges ICS security practitioners to convince executives to fund bolder, consequence-focused change instead of routine hygiene.",
+      "summary": "The keynote opens with the history of S4, which began in 2007 to build an ICS security community when fewer than 40 people attended; the event now draws several hundred. The speaker describes a second mission of encouraging creative thinking and dramatic change over incremental progress. He argues the community has largely anticipated attacks: the 2015 Ukraine grid attack used rogue firmware on serial-to-Ethernet gateways, a weakness shown years earlier through unsigned firmware, a spearphishing exercise targeted pipeline companies, and Triton exposed the danger of natively run compiled logic. The core failure, in his view, is not persuading executives to invest.\n\nHe criticizes security recommendations from 2010 and 2020 as nearly identical, mostly routine IT practices labeled cyber hygiene, which yield minimal risk reduction for large effort. He sees consequence reduction as a promising idea that saw little progress in 2018 and 2019, and urges trying different strategies. This year's main stage adds sessions on corporate risk management, including board legal duties, a Norsk Hydro loss analysis, cyber insurance, and Moody's new cyber risk rating.\n\nHe closes by urging attendees to hold strong positions loosely, meet people they do not know, and use hallway and outdoor conversations where ideas take shape. Since over half the attending companies are hiring ICS security staff, he encourages people to pursue work that makes a real difference.",
       "durationSeconds": 1032,
       "conference": "s4x",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "L6T0p1KLTu0",
@@ -6586,12 +6633,13 @@
         "ics-security",
         "product"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding The Future of ICS Security Products ... What You Need To Know.",
-      "summary": null,
+      "teaser": "Sizes up the market for OT security products and how asset inventory, detection and vulnerability tools fit into ICS strategy.",
+      "summary": "The speaker opens by arguing that ICS security has finally drawn executive attention, and that practitioners should use it to reduce real risk instead of producing busy work. Executives often hire enterprise consultants whose metrics, such as PLC patch counts, do little to lower risk, and vendors selling a single bright shiny object can shape leadership's expectations before the security team does. The central message is to set expectations that current tooling is an interim step, because the product landscape will change substantially within two years.\n\nThe middle of the talk looks at three promises made by the roughly two dozen OT monitoring vendors: detection, asset inventory and vulnerability management. Passive network monitoring can reveal new devices, but it makes an incomplete inventory. Active queries that use native industrial protocols return richer data, and some vendors now parse engineering project files as well. Passive tools can report missing patches but cannot apply or verify them, so vulnerability management still needs another product. For detection, the speaker argues that passive sensors are only one data source alongside endpoint, firewall, historian and enterprise logs, and that current integrations with SIEMs are largely one-way.\n\nThe closing section recommends treating the asset management system as the single source of truth, checking how well each product actually integrates today rather than what its API promises, and expecting consolidation as vendors are acquired or leave the market. Buyers should decide whether to run a separate OT security operations center or integrate with the enterprise one, since most attacks start in the enterprise network. The speaker's final advice is to brief management proactively on the strategy and how it will evolve, so executives do not form their views from other sources.",
       "durationSeconds": 1846,
       "conference": "s4x",
       "viewCount": 2200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "0GFtPHZ13Ds",
@@ -6778,12 +6826,13 @@
         "triton",
         "vulnerability-research"
       ],
-      "teaser": "Security researchers examine technical aspects of Investigating Triton.",
-      "summary": null,
+      "teaser": "Traces the Triton safety system incidents, from early controller outages to the August outage that took down about six controllers.",
+      "summary": "The talk recounts the Triton safety system incidents at an industrial plant. The first outages in June 2017 hit one emergency shutdown controller, which engineers treated as a possible malfunction. They checked logs and removed the device for a mechanical test without involving the vendor or a cybersecurity review. The speaker calls this a missed chance to find the intruders.\n\nThe August 4 outage, on a Friday evening, took down about six controllers across several sensitive process areas, creating a risk of toxic gas release and explosions. Safety alarms began around 7:43 pm, and program-mode warnings were dismissed as routine because they only needed daily acknowledgement. Investigators found Python executables, a Triton trial log and unidentified programs running in controller memory. An engineering system imaged in time still held the tools, because the attackers had left them there; when checked later, the files had been deleted and wiped. Despite a segmented design on paper, weak DMZ firewall configuration let the attacker move from the IT network into the plant network. Antivirus caught Mimikatz activity on the IT side, but those alerts never reached a central SOC.\n\nEach outage kept the plant down for at least a week and brought lost production, product flushing and costly third-party investigation and recovery. The takeaway: when controllers fail, widen the investigation to cybersecurity, preserve evidence, route alerts to a monitored SOC, and harden DMZ firewall rules.",
       "durationSeconds": 323,
       "conference": "s4x",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "hfo_6t043aw",
@@ -7262,19 +7311,23 @@
       "youtubeId": "c2gK8Zp6dv8",
       "slug": "a-2nd-monitoring-network-at-level-0-1",
       "title": "A 2nd Monitoring Network at Level 0/1",
-      "speakers": [],
+      "speakers": [
+        "Amir",
+        "Joe Weiss"
+      ],
       "track": "blue-team",
       "topics": [
         "network",
         "monitoring",
         "level"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in A 2nd Monitoring Network at Level 0/1.",
-      "summary": null,
+      "teaser": "Explains why sensor-level electrical monitoring can verify control system process health when network data cannot.",
+      "summary": "Joe Weiss and Amir open by arguing that the lowest-level control devices, such as sensors, analyzers and actuators on serial, Modbus or fieldbus networks, have no security, authentication or logging. Network monitoring only shows what those devices report, so it cannot confirm whether a sensor or process is healthy. They use the Lion Air crash and the Plum Island black-start diesel concern to show how bad sensor data can drive automation in the wrong direction.\n\nThe middle of the talk turns to physics-layer monitoring. The presenter's company taps a small share of I/O signals passively, without touching the SCADA system, and samples electrical characteristics that slower network data drops. In one power generation case, a turbine that would not start, manually or automatically, was traced to a bad temperature sensor within an evening. In another, monitoring kept showing plant conditions after the Windows HMI went down, and a pump problem was found at a separate facility. A building management case and a dam failure caused by sensors pulling out of a wall were also discussed, and a demo showed electrical signatures changing when a sensor moved even though the measured level did not.\n\nThe closing argument is that machine learning can learn how readings such as pressure, flow, temperature and motor speed relate through physics, and flag process anomalies in real time. The speakers present this as a complement to network anomaly detection, and stress that engineers, not only IT and OT staff, need to take part in control system security work.",
       "durationSeconds": 1756,
       "conference": "s4x",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "SCNfl-X8org",
@@ -7352,8 +7405,8 @@
         "real",
         "time"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Digital Ghost: Real Time, Active Defense for ICS.",
-      "summary": null,
+      "teaser": "Presents GE's Digital Ghost platform, which detects, localizes and neutralizes cyberattacks on industrial control systems in real time.",
+      "summary": "The talk opens with GE's view of IT and OT convergence, framed around growth and defense. The speakers describe industrial pressures such as safety and productivity, then explain how a digital twin, a live model of an individual asset built from design data and sensor streams, supports early warnings and maintenance planning on jet engines and wind turbines.\n\nThe second half introduces Digital Ghost, a real-time active defense platform. It pairs digital twins of plant physics and control logic with live sensor data to separate normal behavior, faults and cyberattacks. Detection flags anomalies using correlations across many sensors, localization identifies compromised sensors despite closed-loop feedback, and neutralization rebuilds their values from trusted ones so operators can keep the plant running. Simulations covering about 600 normal and 900 attack cases reported roughly 99 percent accuracy. A field test on ten gas turbines produced a false positive rate below 1 percent, and a six-sensor reconstruction tracked true values with about 1 percent average error.\n\nThe closing section covers planned work with the Department of Energy to extend the approach to renewables, oil and gas, and transmission and distribution. The takeaway for practitioners is that critical infrastructure can add a model-based layer that validates sensor readings and keeps operations running during an intrusion, not just raise alarms.",
       "durationSeconds": 2412,
       "conference": "s4x",
       "viewCount": 1900,
@@ -7805,19 +7858,22 @@
       "youtubeId": "h2WDPGmgDkQ",
       "slug": "pasta-portable-automotive-security-testbed-with-adaptability-3",
       "title": "PASTA - Portable Automotive Security Testbed with Adaptability",
-      "speakers": [],
+      "speakers": [
+        "Oshi Toyama"
+      ],
       "track": "hardware",
       "topics": [
         "automotive",
         "automotive-security",
         "testbed"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in PASTA - Portable Automotive Security Testbed with Adaptability.",
-      "summary": null,
+      "teaser": "Presents PASTA, a portable tabletop automotive testbed with working vehicle controls for studying attacks on in-vehicle networks.",
+      "summary": "Toyota researcher Oshi Toyama introduces PASTA, a portable automotive security testbed built so people can study attacks on in-vehicle networks without a real car. He starts with the problem: vehicles were not designed with security in mind, and on older models the OBD-II diagnostic port had no central gateway, so an attacker plugged into it could send messages to ECUs. He cites the Jeep Chrysler remote hack on a running car, which led to a recall of about a million vehicles, as an example of the risk.\n\nThe platform is a small tabletop vehicle with steering, wheels, headlights, doors, brakes and hazard lamps, plus a simple simulator in a carrying case whose behavior is shown on three LED panels. Control commands travel as CAN messages through the platform rather than driving the simulator directly. Attack surfaces include the OBD-II port, junction boxes and JTAG ports, and each ECU can be reprogrammed in C. Safety functions are not yet fully implemented, so the speaker demonstrated how messages sent through the OBD-II port can take over the platform's behavior.\n\nThe design rests on four ideas: open, safe, adaptable and portable. Users should be able to rewrite CAN message definitions, ECU behavior and message frequencies. The speaker argues that the same principles suit ICS testbeds: match the testbed to the skills it should teach, keep educational versions affordable, use genuine protocols, and publish specifications openly. The project was still ongoing, with the specification and GitHub page not yet public, and questions about price were left unanswered.",
       "durationSeconds": 1301,
       "conference": "s4x",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "DIjZEn8QDn4",
@@ -7863,7 +7919,9 @@
       "youtubeId": "A2tQo4t4ibo",
       "slug": "s4x19-ics-detection-challenge-results",
       "title": "S4x19 ICS Detection Challenge Results",
-      "speakers": [],
+      "speakers": [
+        "Dale"
+      ],
       "track": "ics-ot",
       "topics": [
         "detection",
@@ -7873,12 +7931,13 @@
         "result",
         "results"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in S4x19 ICS Detection Challenge Results.",
-      "summary": null,
+      "teaser": "Reports results of an ICS detection challenge where vendors and open-source teams analyzed mining network captures for planted attacks.",
+      "summary": "This session reports on a community ICS detection challenge that tests whether products can build asset inventories and spot attacks hidden in real industrial packet captures. The scenario was a mining operation modeled on northern Quebec, built from hundreds of gigabytes of captured traffic with a 130 GB subset used for the detection phase. A third vendor withdrew late, so the organizers gave the captures and a score sheet to two commercial vendors, Dragos and Kaspersky, and an open-source team, with a few days to analyze them. The attack entered through the DMZ, moved through jump hosts and a terminal server to a historian, and reached PLCs, with decoy malware placed in the business network.\n\nKaspersky presented five incidents from its product, including an exploitation attempt, a downloader's command-and-control traffic, GrayEnergy connections, a suspicious PLC response, and a PLC that stopped after a firmware update. Dragos walked through its platform's zones, timelines and asset context to follow Havoc and GrayEnergy behavior, including a brute-force against NTLM accounts that pivoted across zones. The open-source pair found some activity but missed parts of the chain and produced false positives, such as redundancy traffic mistaken for ARP spoofing. None of the teams fully traced the final step.\n\nThe speakers drew several lessons. Many alerts came from unusual but legitimate OT behavior, so analysts need baselines, maintenance schedules and knowledge of device quirks. Scaling to many sites will require correlation and local triage. Neutral, data-driven tests give buyers a better basis for choosing a product than demos alone.",
       "durationSeconds": 3588,
       "conference": "s4x",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "1wBdD-KZ4rI",
@@ -7896,12 +7955,13 @@
         "crane",
         "cranes"
       ],
-      "teaser": "Security researchers examine technical aspects of The Industrial Radio Project - Hacking Cranes Using SDR.",
-      "summary": null,
+      "teaser": "Shows how researchers found replay and command injection flaws in wireless remote controls for industrial cranes.",
+      "summary": "The talk presents Trend Micro research into the wireless remote controls used on cranes and other heavy lifting equipment in construction, ports, mining, utilities and nuclear work. The researchers asked where these systems are used, how they work and what risks they carry. They tested devices from 14 vendors across several regions, most operating in the 400 to 900 MHz range, and found that captured radio commands could be replayed to move real cranes.\n\nTo understand the protocols, the team logged SPI traffic between a microcontroller and a sub-GHz radio chip with a logic analyzer, then mapped those operations to register accesses using the chip datasheet. They built an emulator that tracked radio state and linked it to a flow graph so captured traffic could be replayed over the air and compared against physical devices. Findings included command injection, abuse of the emergency stop to cause denial of service, and malicious re-pairing. One vendor obscured its messages with an XOR keyed to a pairing ID, which the team recovered by building a dictionary of possible IDs. They saw no proper authentication or encryption in the devices they examined.\n\nThe speaker also described a remote scenario in which a training video revealed a manufacturer, whose documentation explained how dip switches set the operating frequency, and recorded traffic from a public spot without replaying it. Demonstrations on owned equipment, with permission, included a handheld SDR, a wristwatch-sized transmitter and a remote device connected over LTE. The takeaway for operators is to ask vendors whether their equipment is susceptible and to apply patches. Many vendors released fixes, while one declined to patch a discontinued product.",
       "durationSeconds": 2085,
       "conference": "s4x",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "T1QmbPwwkSo",
@@ -8011,19 +8071,23 @@
       "youtubeId": "AB8J8CSvQas",
       "slug": "s4x18-debate-enterprise-soc-or-ot-soc",
       "title": "S4x18 Debate: Enterprise SOC or OT SOC?",
-      "speakers": [],
+      "speakers": [
+        "Dan Robert",
+        "Rob"
+      ],
       "track": "blue-team",
       "topics": [
         "soc",
         "s4x18",
         "debate"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning S4x18 Debate: Enterprise SOC or OT SOC?.",
-      "summary": null,
+      "teaser": "Two debaters argue whether an asset owner with industrial control systems should run one enterprise SOC or a dedicated OT SOC.",
+      "summary": "This session is a structured debate on how an asset owner with industrial control systems should organize security monitoring: one enterprise security operations center covering both IT and OT, or a dedicated OT-focused center. The audience voted before and after the arguments, and both debaters were asked to make the strongest case for their side, with the shared premise that either model needs real OT expertise.\n\nThe enterprise side argued that most intrusions begin on the IT network before they reach industrial systems, so an OT-only center risks seeing attacks too late. It cited a SANS white paper describing multi-stage ICS attacks, warned that coordination breaks down at handoffs between separate teams, and argued that one team is cheaper to run. It also held that IT staff can learn OT awareness faster than OT staff can pick up IT protocols and malware analysis.\n\nThe dedicated OT side countered that a center's value comes from its mission, not its label, and that industrial operations prioritize recovery time and root cause analysis. It said threat collection should focus on the adversaries that target industrial environments, noted that remote vendor access rather than phishing was the main entry path it had seen, and proposed a small, well-trained OT group that stays culturally connected to IT. Dan also noted that hybrid models with OT specialists inside an enterprise center could fit either view. Hands raised before and after the rebuttals shifted very little.",
       "durationSeconds": 2090,
       "conference": "s4x",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Td4OKIjX7K4",
@@ -8552,7 +8616,10 @@
       "youtubeId": "uEcI1mYN9fs",
       "slug": "ics-detection-challenge-phase-1-asset-identification-and-invento",
       "title": "ICS Detection Challenge: Phase 1 Asset Identification and Inventory",
-      "speakers": [],
+      "speakers": [
+        "Eric John",
+        "Dale"
+      ],
       "track": "ics-ot",
       "topics": [
         "detection",
@@ -8562,8 +8629,8 @@
         "asset",
         "identification"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in ICS Detection Challenge: Phase 1 Asset Identification and Inventory.",
-      "summary": null,
+      "teaser": "Compares ICS asset discovery tools on anonymized midstream oil and gas packet captures, scoring devices identified and accuracy.",
+      "summary": "This session reviews phase one of an industrial control systems detection challenge, an asset identification exercise in which vendors received offline packet captures from a midstream oil and gas operator. The captures came from 15 locations and were merged into a single stream of about 15 million packets and 800 unique IP addresses. Because the data was heavily anonymized, the organizers found that identifying strings had to be scrubbed across many protocols, not only in IP headers, and that sensitive names hid in places they had not expected.\n\nThe competitors had roughly an hour to process the files and were scored on completeness, correctness and timeliness, with extra credit for unique findings. The presenters said the tools were generally strong at identifying major automation suppliers and Rockwell and Cisco products, including serial numbers and models, but they fell off for field devices such as drive controllers and smaller components. One vendor identified fewer devices but with more detail and accuracy, while others produced more entries that appeared to be intelligent guesses. Several tools also exposed clear-text passwords, though no single tool found all of the planted ones, and one caught a program download to a PLC.\n\nThe session closed with takeaways for asset owners. Discovery tools can surface devices that owners or integrators have forgotten, and adding configuration files, logs and other data sources could improve results. The scoring model also needed clearer definitions of what counts as an asset. Phase two, which asked tools to detect injected malicious traffic, was scheduled for the following day.",
       "durationSeconds": 2223,
       "conference": "s4x",
       "viewCount": 1400,
@@ -8594,7 +8661,9 @@
       "youtubeId": "qUp6r3mirO0",
       "slug": "nozomis-scadaguardian-and-case-studies",
       "title": "Nozomi's SCADAguardian and Case Studies",
-      "speakers": [],
+      "speakers": [
+        "Andrea Carcano"
+      ],
       "track": "ics-ot",
       "topics": [
         "nozomi",
@@ -8602,12 +8671,13 @@
         "studie",
         "studies"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Nozomi's SCADAguardian and Case Studies.",
-      "summary": null,
+      "teaser": "Shows how passive OT network monitoring builds asset inventories and detects process anomalies, with customer case studies.",
+      "summary": "This vendor-led session walks through Nozomi Networks' SCADAguardian, a passive appliance that attaches to an industrial control network through a span port, network tap or virtual machine. It inspects traffic from the physical layer up to the process layer, learns a machine-learning baseline of how each PLC should behave, and adds modules for network visualization, asset inventory, vulnerability management and reporting.\n\nThe speakers then use the Industroyer attack, also called Crash Override, to frame the threat. They describe three phases: infection, discovery through passive reading of unencrypted industrial protocols, and an attack built from what was observed, using legitimate protocol commands rather than a specific vulnerability. The recommended defenses are real-time visibility, an accurate asset inventory, and combining signature detection with behavioral analysis, supported by geographically distributed deployments that feed a central operations center.\n\nThree customer cases follow. A one-person operations team at a small Vermont electric utility reclaimed time by mapping its network passively instead of using active scans. A large global utility used passive fingerprinting to build an asset inventory matched against vulnerability data, so it could prioritize firmware risk. A security vendor chose the product for threat detection, where grouping anomalies and signatures into incidents, such as a contractor's laptop appearing on the network, gave quick context. The session closes with examples of subtle anomalies, including timing changes, abnormal setpoints and unfamiliar function codes, and with audience questions about the machine-learning methods.",
       "durationSeconds": 2172,
       "conference": "s4x",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "AryTdZDuEcM",
@@ -8730,7 +8800,10 @@
       "youtubeId": "phVJM_JQnwk",
       "slug": "triton-ralph-langner-and-zach-tudor-thoughts-at-the-s4x18-closin",
       "title": "TRITON: Ralph Langner & Zach Tudor Thoughts at the S4x18 Closing Panel",
-      "speakers": [],
+      "speakers": [
+        "Ralph Langner",
+        "Zach Tudor"
+      ],
       "track": "ics-ot",
       "topics": [
         "triton",
@@ -8739,8 +8812,8 @@
         "zach",
         "tudor"
       ],
-      "teaser": "Security researchers examine technical aspects of TRITON: Ralph Langner & Zach Tudor Thoughts at the S4x18 Closing Panel.",
-      "summary": null,
+      "teaser": "Panelists weigh what the Triton safety-system attack reveals and which defensive lessons matter for industrial sites.",
+      "summary": "This closing-panel discussion looks at Triton, the attack on a safety system in an industrial plant, and what the community should take from it. It opens with the vendor response. Schneider Electric's decision to speak openly on stage is presented as real progress, compared with the defensive reaction Siemens gave after Stuxnet in 2010. The speaker, Ralph Langner, argues that the attackers' operational security was poor, and that experimenting on a live target while trying to disable a safety system, which exists to prevent harm to people, makes little sense.\n\nThe middle of the talk covers what public accounts still leave out: how the attackers reached the engineering workstation, whether a dropper or command-and-control channel was involved, and what the payload was designed to do. The speaker suggests the payload could be inferred from the physical process a safety controller protects and the actuators wired to it, since a safety controller has a very narrow purpose. He cautions against early nation-state attribution and against overstating the attack before the facts are known. He also notes that basic controls, such as application whitelisting or file integrity monitoring on engineering stations, could have blocked the intrusion.\n\nThe closing point concerns legacy infrastructure. The controller involved was about 16 years old, which shows how hard it is to secure installed industrial systems. The panelists encourage practitioners to put replacing aging controllers in front of executives as a serious option, and to expect more detail once the asset owner and investigators share findings.",
       "durationSeconds": 912,
       "conference": "s4x",
       "viewCount": 1100,
@@ -9120,12 +9193,13 @@
         "vulnerability-research",
         "threat-detection"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning The Antikernel.",
-      "summary": null,
+      "teaser": "Presents a hardware-based operating system design that removes all privileged code from the processor.",
+      "summary": "Andrew Zonenberg argues that conventional kernels give broad privilege to code that rarely needs it. He walks through monolithic kernels, microkernels and separation kernels, then describes the 1990s MIT exokernel, which was built for performance by separating resource protection from abstraction. Moving non-security functions out of the privileged mode shrinks the trusted base and the attack surface, which he presents as the starting point for his design.\n\nThe proposed anti-kernel is a set of independent hardware state machines with no software running in privileged mode. Thread scheduling is a simple hardware round-robin queue, and communication between components runs over two on-chip packet networks: one for remote procedure calls and interrupts, and one for DMA and bulk data. Source addresses are stamped by a formally verified transceiver, and routing is hardwired, so access can be controlled by message origin. A hardware allocator hands out physical memory pages, and protection is enforced when a page is actually accessed rather than when it is mapped. A hardware ELF loader can also check signatures on program headers before a process starts.\n\nThe prototype runs on an FPGA, with a critical core of under ten thousand lines and the network and parts of the name server covered by formal correctness proofs. Speed has not been optimized, and future work includes moving to RISC-V, adding peripherals, and writing an SDK. The main takeaway is that the design targets critical systems such as medical and avionics devices, where isolation and fault tolerance matter more than raw performance, and that each component's trusted base depends on which resources it chooses to rely on.",
       "durationSeconds": 1650,
       "conference": "s4x",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "3wn-xrTcnjI",
@@ -9251,12 +9325,13 @@
         "detail",
         "details"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Functional Safety & Cybersecurity ... Diving into the Details.",
-      "summary": null,
+      "teaser": "Shows how functional safety practices like FMEA and coverage testing can be combined with OT cybersecurity design.",
+      "summary": "The session argues that functional safety and operational technology cybersecurity overlap enough to be designed together, and that safety budgets can help fund security work. The presenters map the IEC 61508 safety lifecycle against the IEC 62443 security standard, with both starting from requirements and moving through design, implementation, module testing and system validation.\n\nA worked example follows a customer who wants to load PLC programs from a USB memory stick on a robot cell with no network. Threat modelling with STRIDE on the USB entry point and data flow shows that corruption calls for stronger integrity checks than a CRC, such as a hash, while information disclosure needs encryption. Separate memory areas keep security patches from changing safety functions. The development part covers coding standards, static analysis, cyclomatic complexity to size test cases, and code coverage, which can expose untested code or hidden backdoors.\n\nIn the question session, speakers discuss certification. They agree that security cannot be proven the way safety can, so claims should describe what a system was tested against rather than call it certified. Patch management is flagged as a new challenge for safety systems. The takeaway is to engage safety colleagues early and design for both safety and security together.",
       "durationSeconds": 1851,
       "conference": "s4x",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "b4lut5uWs2w",
@@ -9380,19 +9455,22 @@
       "youtubeId": "HnNqbeT1OKs",
       "slug": "exxonmobil-opa-interview",
       "title": "ExxonMobil OPA Interview",
-      "speakers": [],
+      "speakers": [
+        "Steve"
+      ],
       "track": "ics-ot",
       "topics": [
         "exxonmobil",
         "interview",
         "vulnerability-research"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning ExxonMobil OPA Interview.",
-      "summary": null,
+      "teaser": "Explains ExxonMobil's push for open, interoperable process control systems and the business and support hurdles it faces.",
+      "summary": "The interview covers ExxonMobil's Open Process Automation program, which started because many of the company's refinery and chemical plant control systems were facing obsolescence. Leaders found that proprietary protocols made third-party integration costly and that security had been bolted onto systems built before the internet. They set a vision for an open, secure, interoperable and portable platform, and when existing control suppliers resisted changing their business models, they recruited Lockheed Martin and built a coalition through the OPA forum.\n\nEarly results cited include the forum growing to 37 member companies within months, eight of them end users. A lab prototype, led by Lockheed Martin, is planned to test interoperability, portability, reliability and flexibility, with an RFP issued to suppliers. Much of the discussion focused on commercial questions: whether suppliers would lose lock-in, who would be accountable for integrated systems and support, and whether standard hardware and software could keep plants consistent over time. The proposed answers centre on a single systems integrator, independent conformance testing and public interfaces rather than fixed network designs.\n\nA recurring point is that most of the required technology already exists in adjacent industries such as telecom, avionics and IT, so the hard problems are commercial rather than technical. The discussion closes with the program framed as a breakthrough effort, meant as a leap rather than an incremental change.",
       "durationSeconds": 1787,
       "conference": "s4x",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "PBzhjRmXy3I",
@@ -9637,7 +9715,9 @@
       "youtubeId": "eEwXaDMohiE",
       "slug": "securing-ics-in-an-iiot-world-the-simple-solution",
       "title": "Securing ICS in an IIoT World ... The Simple Solution",
-      "speakers": [],
+      "speakers": [
+        "Dale Peterson"
+      ],
       "track": "ics-ot",
       "topics": [
         "ics",
@@ -9645,12 +9725,13 @@
         "simple",
         "solution"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Securing ICS in an IIoT World ... The Simple Solution.",
-      "summary": null,
+      "teaser": "Proposes a four-step framework for letting cloud vendors access ICS remotely without exposing the process to unacceptable risk.",
+      "summary": "The talk argues that broad terms such as industrial IoT, and the NIST definition of a cyber incident, have grown so inclusive that they stop being useful for deciding how to protect control systems. The speaker argues that ICS should be secured by context, since a nuclear plant, a chewing gum factory and a small water utility with two IT staff need very different approaches. The focus is traditional SCADA and PLC control linked to cloud services.\n\nPredictive maintenance can usually be delivered through a one-way device, but vendors increasingly want remote operations and engineering access. In one anonymized case, negotiations stretched over more than ten calls across a year before data sharing was agreed. The proposed approach has four steps. First, the vendor defines granular remote services and the owner judges the impact if that provider were compromised. Second, a perimeter device with deep packet inspection enforces only those approved actions. Third, that device is tested, ideally through vendor test reports. Fourth, allowed traffic is fuzz-style tested against PLCs and engineering workstations to confirm nothing crashes or misbehaves. Process safeguards, such as a physical switch that must be flipped before a remote command takes effect, can further limit the impact.\n\nThe closing warning is that ICS has repeatedly been connected first and secured later, as happened with corporate networks, Windows and virtualization, and unrestricted vendor access is hard to pull back. Owners should define services and their consequences before opening a connection.",
       "durationSeconds": 1168,
       "conference": "s4x",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "gGHLVB4LprY",
@@ -9682,8 +9763,8 @@
         "attack",
         "engineering"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Cyber Physical Attack Engineering.",
-      "summary": null,
+      "teaser": "Presents a methodology for finding digital inputs that cause direct harmful effects in industrial plants.",
+      "summary": "The talk starts from Stuxnet and argues that its real novelty was not its zero-days but its aim at the physical process rather than the control system itself. The speaker contrasts this with typical ICS intrusions, where an attacker gains control of a controller or HMI without a clear route to physical damage. He defines cyber physical attack engineering as applying technical analysis and experiments to identify digital attacks that produce harmful physical effects.\n\nHe then walks through the attack surface from the outside in. Taking over an HMI, abusing proprietary engineering interfaces that lack authentication, and sending Modbus commands usually offer limited physical risk because protection logic still blocks harmful actions. Manipulating control, protection or safety logic is far more serious, and so is tampering with sensors, since spoofed or miscalibrated readings can keep overpressure valves from opening while the legitimate logic keeps running. Stuxnet's overpressure and rotor speed vectors serve as the main examples. He also groups physical outcomes into catastrophic destruction, mass casualties through hazardous material release, equipment degradation, and product compromise, and suggests process transients and support systems such as lubrication as useful waypoints.\n\nHe closes by framing the problem as a maze from cyber entry points to physical exits, where defenders can find and cut viable paths. Existing safety analyses are a starting point, but they must be extended to cover malicious compromise. He argues that contractor laptops deserve more attention than they usually get, and he calls for a shared taxonomy and methodology. The main takeaway is that concrete, process-level risk findings are more likely to win the attention of asset owners and boards.",
       "durationSeconds": 2872,
       "conference": "s4x",
       "viewCount": 1400,
@@ -9751,19 +9832,22 @@
       "youtubeId": "7YAAWjGhuZY",
       "slug": "the-drone-threat-to-ics",
       "title": "The Drone Threat To ICS",
-      "speakers": [],
+      "speakers": [
+        "Kevin Finair"
+      ],
       "track": "ics-ot",
       "topics": [
         "ics",
         "drone",
         "threat"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for The Drone Threat To ICS.",
-      "summary": null,
+      "teaser": "Maps the threat landscape of drones against industrial and utility sites and proposes a modified DREAD model for ranking them.",
+      "summary": "The talk opens with Kevin Finair's work on Mesmer, a counter-drone platform meant to give operators airspace awareness and mitigation options against RC aircraft. He then surveys the drone threat with examples: commercial quadcopters carrying grenades and explosives in conflict zones, a fixed-wing aircraft with an improvised warhead, a model truck fitted with a rifle, and a drone with a chainsaw attached. Reconnaissance cases follow, including a paparazzi flight over a private island and a Zigbee survey that logged about 700 unique devices from the air.\n\nTo structure the discussion, he adapts Microsoft's DREAD model into a version he calls DREAM, which replaces the last value with a subjective mitigation score. He also borrows the police use-of-force continuum, arguing that responses to drones should escalate from detection to video monitoring to active mitigation, with each higher step demanding more cost and effort. He scored 25 drones using his own weightings, grouping them from ones he does not care about to ones he does.\n\nHe closes with forensics. Pulling logs from a DJI drone by powering it on in read-write mode is poor practice, and evidence that may reach a court needs forensically safe tooling. Because each vendor's log format must be reverse engineered, he calls for community tools. He shares his threat models for others to edit and urges organizations to build their own threat lists and response options through repeated internal discussion.",
       "durationSeconds": 2273,
       "conference": "s4x",
       "viewCount": 2400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "7GiMGuIDWx8",
@@ -10043,7 +10127,9 @@
       "youtubeId": "dHneI8SoB7Q",
       "slug": "interview-with-justine-bone-of-medsec-on-st-jude-disclosures-sho",
       "title": "Interview with Justine Bone of MedSec on St. Jude Disclosures / Short Selling",
-      "speakers": [],
+      "speakers": [
+        "Justine Bone"
+      ],
       "track": "ics-ot",
       "topics": [
         "interview",
@@ -10053,12 +10139,13 @@
         "jude",
         "disclosure"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Interview with Justine Bone of MedSec on St. Jude Disclosures / Short Selling.",
-      "summary": null,
+      "teaser": "Interview with MedSec's CEO about disclosing St. Jude cardiac device flaws and the unusual short-selling partnership behind it.",
+      "summary": "In this S4 main-stage interview, MedSec chief executive Justine Bone discusses research into implantable cardiac devices. Over roughly 18 months the team examined major manufacturers, and St. Jude Medical's products stood out as the least secure. The weaknesses included missing or weak encryption and authentication, poor input validation in the radio protocols between devices, and hardware with easy access to ports and firmware, allowing root privileges to be obtained quickly.\n\nThe talk then turns to the unusual disclosure path. MedSec licensed its findings to Muddy Waters, which published a report and announced a short position. Bone explained that earlier reports from other researchers had been ignored, so the team chose a route intended to force accountability. The vendor responded with a lawsuit, while the FDA and DHS later confirmed the issues. St. Jude released an update for the home monitoring unit, but the implants remained unpatched, and a battery recall left patients weighing whether to disconnect their monitors. On the ethics of profit, Bone said cost recovery is acceptable, but funding research this way is not something to encourage.\n\nThe closing part looks ahead. Future implant firmware updates will need clear answers about who may deploy code and how it is verified, since the research showed that commands could be sent by an attacker. Bone's stated goals were holding the manufacturer accountable and giving patients the information needed to discuss risks with their doctors.",
       "durationSeconds": 1758,
       "conference": "s4x",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "ghjfJxAfW1c",
@@ -10092,12 +10179,13 @@
         "basecamp",
         "vulnerability-research"
       ],
-      "teaser": "PLC Hacking Intro examines Project Basecamp.",
-      "summary": null,
+      "teaser": "Introduces Project Basecamp, a multi-researcher study of popular PLCs and the Metasploit and scanner tools released from it.",
+      "summary": "This session opens a longer presentation on Project Basecamp, a research effort that grew out of a Black Hat talk on Siemens S7 PLCs and a press panel where experts agreed that PLC weaknesses were widely known but rarely addressed. The speaker compares the situation to the early web, when session cookie hijacking was documented for years until the Firesheep tool made it trivial and vendors moved to HTTPS by default. The project aimed to create a similar wake-up moment for PLC security.\n\nSix researchers each received at least one PLC, drawn from the lab or donated, from widely used vendors including GE, Schneider's Modicon and Quantum, Rockwell Automation and SEL. They were asked to test attack categories informed by past vulnerabilities, such as custom firmware upload, and results were marked red for easily exploitable issues, yellow for harder ones, and green where attempts failed. GE devices fared worst, Schneider Quantum came a close second, and SEL devices showed no red findings.\n\nTo put the work in practitioners' hands, the team partnered with Rapid7 on Metasploit modules, with the first one for GE D20 password retrieval being released the same day, and with Tenable on Nessus plugins for SCADA devices plus a passive scanner that flags default credentials. The speaker presents the project as an early step, with the technical details to be covered by the lead researcher.",
       "durationSeconds": 848,
       "conference": "s4x",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "cM85q-bz6_s",
@@ -10115,12 +10203,13 @@
         "exposed",
         "killers"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Serial Killers: Ethernet/Serial Gateways Exposed.",
-      "summary": null,
+      "teaser": "Surveys security flaws in serial-to-Ethernet converters from Moxa, Lantronix, Grid Connect and Digi used across industrial networks.",
+      "summary": "Serial-to-Ethernet converters link older serial equipment to IP networks in power plants, oil and gas facilities, point-of-sale systems and other settings. The talk explains why these gateways matter after a 2015 attack on a Ukrainian electric utility, in which converters were bricked and power restoration was slowed. The research tested devices from Moxa, Lantronix, Grid Connect and Digi in mid-2015, starting with a teardown of the Moxa hardware.\n\nFor Moxa, the custom processor and proprietary management protocols on UDP 4800 and TCP 4900 were the main concern. Some models let an unauthenticated user retrieve the administrator password and SNMP credentials, and a single oversized web request could crash the device. Lantronix and Grid Connect shared an OEM chip, and their default four-digit configuration password could be guessed without brute-force protection. Their firmware was unsigned, so modified images could be loaded. Digi's 1SP device allowed easy debug access and crashed on a malformed TCP header, and its Windows configuration tool had a buffer overflow triggered by an inflated length field.\n\nVendor responses were thin. Moxa promised fixes that did not arrive in the stated timeframe, and Digi said it would not fix issues in that older product. The speaker's main takeaway is that proprietary management protocols are the biggest risk. Reverse-engineered protocol structure can support intrusion detection signatures, and blocking management ports at the perimeter plus monitoring traffic to them are practical defenses. The talk also noted that converters without firmware verification could serve as persistence points for an attacker.",
       "durationSeconds": 2078,
       "conference": "s4x",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "kdPSq9c4SjI",
@@ -10251,12 +10340,13 @@
         "plant",
         "wirelesshart"
       ],
-      "teaser": "Security researchers examine technical aspects of Attacking The Plant Through WirelessHART.",
-      "summary": null,
+      "teaser": "Shows how weak key handling and exposed debug ports let attackers join, spoof and sniff WirelessHART plant networks.",
+      "summary": "The talk presents three months of research into how WirelessHART is implemented in process control plants, covering transmitters, gateways and network managers from several suppliers. The attack surface runs from field devices through gateways to the plant network and the control systems. Scenarios included impersonating a gateway and manipulating process values; supply chain attacks were out of scope.\n\nThe protocol walkthrough explained the join phase, where a device needs a network ID and join key before the gateway hands out the session and network keys. Join keys could come from default values published in vendor manuals, from firmware dumps, or from decrypting a captured join exchange. All transmitters tested used the same vendor system-on-chip with JTAG and on-chip debugging enabled, so firmware could be dumped. The team had pinpointed where the join key sits in firmware but had not yet extracted it. The data link layer only authenticates, while the network layer uses AES-128 CCM* encryption. A dissector was built by extending an existing Zigbee framework. In the lab, cloning a transmitter's identifiers let a device rejoin as an existing one, while a race to displace a live device was only partly tested.\n\nThe conclusions were that the protocol is well designed but its implementation has weaknesses, and that a compromised gateway would be severe, including loss of process visibility. Recommendations included physical security, regular key changes, access lists where supported, and key management checks during commissioning and maintenance. The presenters said vendors were receptive to cooperating on fixes.",
       "durationSeconds": 2122,
       "conference": "s4x",
       "viewCount": 2400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "viGNDA6Be3s",
@@ -10310,8 +10400,8 @@
         "defense",
         "will"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Defense Will Win (In ICS / SCADA Security).",
-      "summary": null,
+      "teaser": "Argues that defenders can win against attackers in industrial control system conflicts by changing how success is measured.",
+      "summary": "A common claim in cyber conflict holds that offense always wins, because an attacker needs only one success while defenders must succeed every time. The speaker argues this runs against history, where defense has repeatedly taken over in new arenas, from trench warfare in World War I to early air power. Industrial control defenders also hold natural advantages: they know their process better than attackers and can change systems without breaking in.\n\nThe central problem, in his view, is how success is defined. Today any impact on a control system, even a brief outage or a minor incident at a small water facility, is treated as an attacker win. He proposes asking whether an attack caused an unacceptable impact instead. Cases used to illustrate this include a one to six hour Ukrainian grid outage affecting about 230,000 people, which was costly but not catastrophic, and Stuxnet, which damaged centrifuges at Natanz in a way comparable to bombing. He also cites fraud thresholds and data breach prosecution rates as examples of accepted harm.\n\nHis recommendations cover three areas: cyber maintenance, meaning patching, inventory and manageable change rather than deploying technology that cannot be maintained; protection layers that attackers cannot reach, such as separate safety systems or a vibration trip on a turbine; and recovery time objectives that management accepts. In the Q&A, he noted that asset owners are adding requirements to vendors, and an anecdote about a national red team showed that basic hardening blocked it from reaching its objective.",
       "durationSeconds": 1831,
       "conference": "s4x",
       "viewCount": 1400,
@@ -10371,12 +10461,13 @@
         "ics-security",
         "assessment-methodology"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning ICS Security Assessment Methodology, Tools & Tips.",
-      "summary": null,
+      "teaser": "Walks through scanning and testing tools and a methodology for assessing live industrial control systems without disrupting operations.",
+      "summary": "This owner-operator assessment talk explains how to evaluate an industrial control system for good security practice and known vulnerabilities, rather than searching for zero-days. The speaker argues that online scanning is only one part of the work, alongside architecture and configuration review, policy checks and interviews with operations staff. Findings should be ranked by impact and efficient risk reduction, so a fragile single point of failure or an exposed DMZ system may matter more than an unpatched panel far from the network edge.\n\nThe middle section focuses on scanning without causing unacceptable impact. Where possible, test a lab or staging system first; otherwise use redundant units, pick quiet periods, and agree with operations which components can go down and how they would be recovered. Two examples show the risk: a port scan hit a firmware-upload port on a safety PLC and left it without working firmware, and a scan crashed a real-time server while its standby survived. For enumeration, nmap with protocol-specific NSE scripts sends legitimate commands to identify devices, versions and locations. Nessus is the main broad scanner, and the speaker recommends credentialed scans, learning the product's hidden settings, and custom compliance audit files. Metasploit and similar tools are used to verify findings or demonstrate exploits.\n\nThe closing advice is about follow-through. Look at the root cause of missing patches rather than just the list, prioritize patching for exposed systems, and patch everything at least yearly. Set recovery time objectives and test them, and remove single points of failure.",
       "durationSeconds": 3388,
       "conference": "s4x",
       "viewCount": 19000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "OIidjp6L2zI",
@@ -10445,12 +10536,13 @@
         "hardware",
         "s4x16"
       ],
-      "teaser": "Security researchers examine technical aspects of Hardware Hacking Live at S4x16.",
-      "summary": null,
+      "teaser": "Shows how ultraviolet erasure of a microcontroller's lock fuses can expose locked firmware, and how to spot vulnerable chips.",
+      "summary": "The talk treats firmware extraction as an attacker's goal and focuses on cheap, known methods rather than expensive lab work. The target is a microcontroller whose code-protection bits live in floating-gate memory. Such a chip is vulnerable when those bits sit physically apart from the code memory and the unlocked state is all ones, because ultraviolet light can erase the protection without touching the program.\n\nThe speaker demonstrates on a Microchip PIC12F683. The locked chip reads back blank data and only its configuration word. After the package is removed with acid, the die is examined and the memory arrays are identified by cell size, grouping and nearby charge pumps, which points to the configuration fuses. Black nail polish masks the program memory, and the exposed fuses are erased under a UV eraser for an hour or more. Once the chip is back in its development kit, the configuration reads as erased and the firmware can be read out and disassembled.\n\nThe total cost is low, needing a microscope, a hot plate, acids, nail polish and acetone, so a student with basic lab access could attempt it. Defenders can avoid the risk by choosing parts where zero means unlocked, placing lock bits in the same address range as the code, or using differential fuses. Metal shields and co-located lock bits offer weaker protection, since UV can reach the edges of shielded cells or partially expose flash.",
       "durationSeconds": 1143,
       "conference": "s4x",
       "viewCount": 41000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "gv356LI6tb0",
@@ -10545,7 +10637,7 @@
         "hayden",
         "s4x16"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for General Michael Hayden's S4x16 Keynote.",
+      "teaser": "A former NSA and CIA director argues that cyber policy trails technology and that the private sector must lead the defense.",
       "summary": "### Overview\nIn his keynote address at S4x16, General Michael Hayden (former Director of the CIA, Director of the NSA, and Principal Deputy Director of National Intelligence) sets out a broad strategic, historical, and policy perspective on cyber defense. Emphasizing that he speaks as a former government official and liberal arts history major rather than a technical specialist, Hayden explores why cybersecurity remains fundamentally difficult to solve from a governance and policy standpoint.\n\n### Key Topics\n- **Cyber as a Warfighting Domain**: Hayden traces the doctrinal shift in the U.S. military recognizing cyberspace alongside land, sea, air, and space. Unlike natural domains, cyberspace is entirely man-made, originally architected by pioneers like Vint Cerf for ARPA to move large volumes of data quickly among a small group of trusted, known nodes—making modern defense structurally challenging.\n- **Threat Landscape Taxonomy**: Hayden outlines the evolution of threat actors (nation states, criminal gangs, and hacktivists) and attacks. While early activities focused on information theft, threats have escalated down the taxonomy to network corruption, data destruction, and physical-world disruption (e.g., Stuxnet destroying centrifuges at Natanz, attacks on Sony Pictures and Sands Casino, and electrical grid incidents in Ukraine).\n- **Nation-State vs. Rogue Actors**: Disagreeing with dramatic warnings of sudden \"cyber Pearl Harbors\" from peer powers like China, Hayden expresses greater concern over isolated, sanctioned states with nothing to lose (such as North Korea, Iran, or an isolated Russia) employing destructive attacks or utilizing criminal proxies.\n- **Government's Inherent Delays**: Hayden argues government will be \"permanently late to need\" due to bureaucratic sclerosis, the rapid pace of technological change, and political-cultural ambivalence about surveillance and state power in the digital sphere.\n- **Policy Responses and International Tensions**: Hayden reviews recent steps such as cybersecurity information-sharing legislation, executive orders imposing economic sanctions for commercial cyber espionage, DOD cyber strategy (including counter-battery responses to catastrophic attacks), and Xi Jinping's bilateral commitment regarding commercial theft. He also critiques the European Court of Justice's Safe Harbor ruling and differences in European governance structures, while expressing support for strong end-to-end encryption contrary to the FBI's stance.\n\n### Technical Details\n- **Evolution of Cyber Effects**: Threats have progressed from stealing data as a product or harvesting bulk records (e.g., OPM, Anthem, United Airlines) to data wiping and physical impact.\n- **Physical Degradation Examples**: Stuxnet's destruction of roughly 1,000 centrifuges at Natanz and the disruptive attacks on Ukrainian power infrastructure.\n- **Architectural Paradox**: The Internet retains its core protocols built for high-speed transmission among trusted nodes, while operating at global scale with millions of untrusted, anonymous endpoints.\n\n### Takeaways\n- **The Private Sector as the \"Main Body\"**: In military operational terms, Hayden concludes the private sector is the \"supported command\" (the main body) in cyber defense, while government acts merely in a supporting capacity.\n- **Law Follows Technology**: Just as the expansion of railroads drove continental commerce, standard time zones, and the Interstate Commerce Commission, technological advancements and private-sector norms—rather than legislative mandates—will dictate the future of privacy and security.\n- **Preserving Foundational Values**: Defenders and policymakers must avoid creating defensive controls, regulations, or precedents that undermine the open, unitary, and accessible nature of the web.",
       "durationSeconds": 2261,
       "conference": "s4x",
@@ -10579,7 +10671,9 @@
       "youtubeId": "BfkR8ElsgHo",
       "slug": "marty-edwards-director-of-dhs-ics-cert-interview",
       "title": "Marty Edwards, Director of DHS ICS-CERT, Interview",
-      "speakers": [],
+      "speakers": [
+        "Marty Edwards"
+      ],
       "track": "ics-ot",
       "topics": [
         "dhs",
@@ -10589,12 +10683,13 @@
         "ics-cert",
         "interview"
       ],
-      "teaser": "Security researchers examine technical aspects of Marty Edwards, Director of DHS ICS-CERT, Interview.",
-      "summary": null,
+      "teaser": "The ICS-CERT director explains how the program balances assessments, incident response and vulnerability coordination.",
+      "summary": "The interview opens with the director's path from control systems engineer to federal leader, and why he took the role to gain more influence over security culture in the control systems community. The conversation then clarifies the branding: the legacy proactive program was folded under the ICS-CERT name, which now covers both proactive work such as training and assessments and reactive work such as incident response, vulnerability coordination and intelligence analysis.\n\nA large part of the discussion covers measurement and scale. Current metrics mostly count activities like alerts, advisories and tickets, and he admits these do not show real outcomes. Assessments began as hands-on coaching with the CET tool and aim to help smaller companies start a security program. Because a small team cannot reach thousands of sites, remote assessments, partnerships with other agencies and aggregated publications are being explored. Incident triage weighs sector impact and whether a core service is affected, and the team sometimes takes lower-priority cases to fill gaps.\n\nThe closing points cover the mix of incidents on corporate networks versus control system networks, with attackers increasingly reaching the control layer through direct internet exposure. He also describes how vulnerabilities are coordinated, noting that the work depends on what researchers report, and he argues for advisories that state deployment scope and threat actor capability. The practical takeaway is that operators need dedicated control system staff, and vendors need better knowledge of where their products are deployed.",
       "durationSeconds": 2782,
       "conference": "s4x",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     }
   ]
 }

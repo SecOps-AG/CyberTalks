@@ -21,11 +21,12 @@
         "lossos"
       ],
       "teaser": "Explores 0x0E: Tal Lossos & Eran Shimony and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk compares vulnerability research on closed-source and open-source operating systems, then focuses on third-party Linux kernel modules, which run with full privileges and often receive less scrutiny than the core kernel. It explains the main ways user space talks to a kernel module, including ioctl, sysfs, shared memory and netlink sockets, and describes mapping user-reachable entry points to risky copy operations by tracing data from source to sink. Static analysis, code query tools and a dumb fuzzer are presented as practical aids for this work.\n\nThe main case study is OpenRazer, a driver for Razer peripherals. One lighting routine copies a user-supplied row length into an 80-byte stack buffer, and that length can reach 765 bytes, which produces a stack overflow. The same flaw was found in a sibling function used for another device, and a separate design issue was described for a mouse. A live demonstration showed that unprivileged input could crash the kernel.\n\nThe speakers then walk through the history of FORTIFY_SOURCE in the Linux kernel, from its first kernel version onward. They show how compile-time and runtime bounds checks were added to memory copy functions over several releases, and how the runtime check turns an overflow into a controlled panic rather than code execution, although older kernels remain exploitable. The findings were reported to the project, fixed and assigned CVEs. The practical takeaway is to scrutinize third-party drivers for unchecked lengths and to keep kernels current so that hardening checks are in place.",
       "durationSeconds": 1581,
       "conference": "sec-t",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "NIxXprVTPm8",
@@ -169,11 +170,12 @@
         "dishwasher-cloudless"
       ],
       "teaser": "Presents 0x0E: Trammell Hudson - Hacking your dishwasher, or cloudless Home Connect appliances and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Trammell Hudson describes how he runs Bosch Siemens Home Connect appliances without the vendor cloud. The manufacturer's app offers a no-cloud mode that keeps devices on the local network, but it disables the cloud API that home automation integrations use and stops firmware updates. His goal is local automation: power-aware scheduling, shared wall dashboards, one-button scenes that span lights, blinds, thermostats and appliances, and accessible controls such as physical buttons for an oven.\n\nThe reverse engineering started with a port scan that showed only an HTTPS port, and a cipher check that revealed TLS 1.2 pre-shared key suites. Decompiling the Android app with jadx showed that the interesting logic lived in native libraries, so he used Ghidra to find the PSK callback and then Frida on a rooted phone to log the key while the app connected. With that key, an OpenSSL client could talk to the appliance directly. He stressed that most of the work was dead ends, and that the OAuth login was separate and captured by hooking the browser invocation.\n\nThe cloud is only needed once, to log in and retrieve appliance credentials and XML descriptions, which are converted to JSON for an MQTT bridge. After that the system runs offline. He found the appliance traffic uses sound cryptography, though device control is still limited, and he released the project on GitHub, inviting documentation, pull requests and a Home Assistant integration. In Q&A he suggested the PSK is generated when a new owner resets the device.",
       "durationSeconds": 2143,
       "conference": "sec-t",
       "viewCount": 2300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "c-OG8AWhtKQ",

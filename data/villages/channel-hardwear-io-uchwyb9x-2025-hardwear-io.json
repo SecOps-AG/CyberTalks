@@ -459,7 +459,9 @@
       "youtubeId": "WNpW52x-EWY",
       "slug": "reverse-engineering-a-ledger-nano-x-hardware-implant",
       "title": "Reverse Engineering A Ledger Nano X Hardware Implant",
-      "speakers": [],
+      "speakers": [
+        "Joe Grand"
+      ],
       "track": "hardware",
       "topics": [
         "hardware",
@@ -469,8 +471,8 @@
         "ledger",
         "nano"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Reverse Engineering A Ledger Nano X Hardware Implant.",
-      "summary": null,
+      "teaser": "Traces how a tampered Ledger Nano X wallet hid a cellular-connected implant that captured recovery seeds.",
+      "summary": "Joe Grand describes a case that began when a buyer in Thailand opened a cheap Ledger Nano X, purchased only for its battery, and found extra wiring and a smaller battery inside. He places this within hardware espionage, where legitimate devices are modified after they leave the factory and then resold. He compares it with earlier cases involving Treasure wallets, where swapped chips produced predictable keys, and with the 2020 Ledger customer data leak, which was followed by mailed devices carrying a USB drive that harvested seeds.\n\nThe middle of the talk covers his own investigation. He bought several units from third-party sellers on a marketplace, found that they also carried implants hidden under epoxy, and traced the added circuitry. The implant tapped the SPI lines between the secure element and the display, and it included a cellular module. Grand dumped the flash over SWD with OpenOCD, then read an embedded SIM with smart card tools, which showed a data-only subscription first registered in the Netherlands. Firmware analysis suggested the implant watched for the 26 letters shown during seed setup, stored them, and sent them over the cellular network.\n\nHe closes by covering follow-up work and coordination with Ledger, which recommends buying only from authorized resellers and comparing devices against known-good photos. His takeaway is that hardware provenance matters, and that attackers keep revising their implants as defenses change.",
       "durationSeconds": 2766,
       "conference": "hardwear",
       "viewCount": 1000,
@@ -929,12 +931,13 @@
         "study",
         "coro"
       ],
-      "teaser": "Moritz Abrell analyzes NL 2025: Watch Out! A Security Case Study Of A COROS Sports Watch.",
-      "summary": null,
+      "teaser": "Shows how a popular COROS sports watch leaks data, exposes account tokens and crashes over Bluetooth Low Energy.",
+      "summary": "The talk examines a widely worn COROS sports watch and asks what an attacker within Bluetooth range could do without physical access. The research found that the watch uses legacy Just Works pairing and adds no application-layer encryption, so its traffic can be eavesdropped on or altered. On Android, the companion app skips bonding entirely, which allowed an impersonated fake watch to capture the phone's account API token without any user interaction.\n\nThe presenter also showed that the watch accepts injected notifications while disconnected and can be made to reset or trigger a find-my-device alert. Blackbox fuzzing with Radamsa found two inputs that crash the watch. One came from a malformed notification structure, and the other came from a short message that caused an integer underflow and an out-of-bounds read. Firmware was obtained from the HTTP-based update process, and reversing the bootloader in Ghidra with SVD files revealed a second CPU and the firmware parsing logic.\n\nDisclosure was slow, with fixes initially scheduled months away. After the advisories were published, a tech journalist's coverage added public pressure, and the vendor confirmed that all of its devices were affected and moved to prioritize the fixes. The takeaway for practitioners is that wearables with weak Bluetooth pairing can leak health and location data, and that vendor response timelines are worth scrutinising.",
       "durationSeconds": 1963,
       "conference": "hardwear",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "-w5mpXTnNJA",
@@ -1038,8 +1041,8 @@
         "end-user",
         "verifiable"
       ],
-      "teaser": "Andrew 'Bunnie' Huang details NL 2025: [Keynote] Towards End-User Verifiable Silicon.",
-      "summary": null,
+      "teaser": "Presents infrared inspection of soldered chips as a way to verify silicon in finished products without destroying them.",
+      "summary": "The talk argues for higher assurance silicon, borrowing the idea of structural correctness from projects such as Fiat Crypto, a formally proven compiler for elliptic curve code. It contrasts this with chip buyers today, who must rely on labels, certifications and designer claims. The speaker walks through supply chain risks, including gray markets, customs checkpoints and tampered products returned to distributors, and shows a decapped chip whose internals did not match its markings.\n\nThe central technique is IRIS, infrared in situ verification. It images a chip through its exposed backside after the chip is soldered to a board, so the device under inspection can still be used. It works on flip-chip and wafer-level packages with thinned, lightly doped substrates, but not on plastic-molded packages. Inexpensive microscope cameras with the infrared filter removed can do basic imaging, and a CNC-controlled rig can produce repeatable reference images. Example images show a touchscreen controller's converter channels and standard cells from a 130 nm design, and the speaker notes that electrical scan chain tests can be paired with optical checks.\n\nThe talk closes with open silicon. It argues that mature 28 nm nodes make open-source tape-outs economically viable, and describes adding an open RISC-V core and a software-defined I/O block to a commercial chip, along with RTL that allows simulation-based debugging. Practical takeaways include asking manufacturers for inspectable packaging, building shared databases of chip images, and helping find bugs in open designs.",
       "durationSeconds": 2910,
       "conference": "hardwear",
       "viewCount": 1200,
@@ -1629,8 +1632,8 @@
         "injection",
         "embedded-devices"
       ],
-      "teaser": "Enrico Pozzobon explores NL 2023 | Automated Fault Injection Attacks On Embedded Devices.",
-      "summary": null,
+      "teaser": "Details how electromagnetic fault injection can hijack automotive microcontroller firmware without prior knowledge of the code.",
+      "summary": "The talk covers automated electromagnetic fault injection against automotive electronic control units. The team first tried voltage glitching, but it required heavy board modification and temperature control, so they switched to EMFI, which needs no changes to the board. Their main target was a gateway ECU built on an automotive-grade NXP microcontroller. Published attacks on similar chips did not work on the real device, and program counter corruption tricks that suit ARM were much harder on PowerPC.\n\nThe attack used the standard diagnostic flashing process. Its unlock step relies on repair shop secrets that have leaked publicly, and the erase step happens before the new image is verified, so an attacker could reach about 4 MB of flash with a jump. Exception handlers on this device printed register dumps over UART, which gave the team feedback on each injection. A genetic search algorithm used that feedback to tune coil position, pulse duration, voltage, timing and memory state. It found a working program counter corruption after roughly 10,000 injections on average, at about five per second. The resulting code execution could read the bootloader and re-enable JTAG through configuration records.\n\nThe setup cost about 5,000 and worked on five targets from three manufacturers across three architectures. The lesson for practitioners is that fault injection can be cheaper and more automatable than expected when a target emits useful feedback. Suggested mitigations include memory protection unit write or execute rules, running the bootloader inside the HSM, and authenticating every firmware write rather than relying on a single validity flag.",
       "durationSeconds": 2621,
       "conference": "hardwear",
       "viewCount": 2200,
@@ -1654,8 +1657,8 @@
         "doorbell",
         "guide"
       ],
-      "teaser": "Daniel Schwendner examines NL 2023 | Hacking A Smart Doorbell: An IoT Hacking Guide.",
-      "summary": null,
+      "teaser": "Shows how a smart doorbell's Bluetooth Low Energy setup traffic and unencrypted video stream can be sniffed and abused.",
+      "summary": "The talk walks through hacking a cheap smart doorbell that offers Wi-Fi and Bluetooth Low Energy, using a neighbour on the home network as the threat model. It begins with the companion Android app: decompiling it and using Frida to bypass SSL pinning showed encrypted API traffic, and certificate validation held for the main domain. Attention then turns to Bluetooth Low Energy, covering the stack from HCI through ATT and GATT, and how services are enumerated with nRF Connect and Bettercap.\n\nSniffing the setup session is the core of the attack. Android HCI snoop logs serve as a reference, and a Sniffle receiver on low-cost TI boards captures the pairing traffic over the air. Filtering the ATT write requests exposes the Wi-Fi network name, password and an account name, sent as JSON split across packets because pairing used no link-layer encryption. The camera's Wi-Fi traffic is also unencrypted: ring notifications go over HTTP and the video stream over UDP as JPEG frames, which a short Python script can extract and which can be replaced with other images.\n\nThe closing advice is to place the doorbell on a separate Wi-Fi network and set it up somewhere trusted, since its proprietary firmware is hard to change. In Q&A, the speaker noted that the Bluetooth service shuts down after setup, and an audience member said similar devices also send credentials in plain text.",
       "durationSeconds": 2174,
       "conference": "hardwear",
       "viewCount": 1800,
@@ -1680,14 +1683,15 @@
         "management",
         "system"
       ],
-      "teaser": "Yashin investigates NL 2023 | Attacking Vehicle Fleet Management Systems.",
-      "summary": null,
+      "teaser": "Shows how exposed telematics boxes and an unauthenticated MQTT fleet backend let attackers track and control vehicles.",
+      "summary": "Two researchers describe a side project that began in 2020 to examine internet-connected automotive embedded devices for flaws that could be exploited remotely at scale. Most of the roughly 18 devices they tested had serious, easy-to-find issues. The talk focuses on two telematics control units used for fleet management, which the speakers said could affect tens of thousands of vehicles.\n\nThe first unit, a box sold by a Chinese vendor and installed in heavy machinery such as cranes and trucks, could be rooted physically through an exposed USB connector. Its firmware had no binary protections. The bundled MQTT client pointed to a broker with no authentication, where a binary protocol carried GPS, fuel, and engine data tied to SIM identifiers. Anyone could publish to any vehicle's topic, impersonating vehicles or the backend. The speakers described possible CAN injection and malicious firmware updates but did not test them. Vendor responses were slow, and the flaw was reportedly still present at the last check.\n\nThe second case started from exposed brokers found with Shodan and Censys. Documentation and domain names helped identify one fleet-management vendor. Firmware was pulled from an update URL seen in traffic, revealing a command handler that ran without a token check. An ID derived from epoch time let the team achieve code execution on thousands of devices, with access to live video, tire pressure monitoring, and engine immobilization. Disclosure was still open when the talk was given, so the vendor's name was withheld. The takeaway is that fleet backends should require authentication and that exposed IoT services deserve regular external checks.",
       "durationSeconds": 2563,
       "conference": "hardwear",
       "viewCount": 1100,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2023,
-      "eventLabel": "NL 2023"
+      "eventLabel": "NL 2023",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "xyqkgzDch3Y",
@@ -1761,8 +1765,10 @@
       "youtubeId": "SLuB2eza6kU",
       "slug": "nl-2023-basebanheimer-now-i-am-become-death-the-destroyer-of-cha",
       "title": "NL 2023 | Basebanheimer: Now I Am Become Death, The Destroyer Of Chains -Daniel Komaromy",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Daniel Komaromy"
+      ],
+      "track": "wireless",
       "topics": [
         "basebanheimer",
         "become",
@@ -1770,14 +1776,15 @@
         "destroyer",
         "chain"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for NL 2023 | Basebanheimer: Now I Am Become Death, The Destroyer Of Chains -Daniel Komaromy.",
-      "summary": null,
+      "teaser": "Walks through cellular baseband exploitation on Samsung and MediaTek modems, from a heap overflow to a Linux kernel pivot.",
+      "summary": "The talk covers cellular baseband research aimed at building complete exploit chains, from a zero-click trigger in the modem through to the application processor, on newer Samsung Shannon and MediaTek Dimensity chipsets. For Samsung, the speaker described a heap overflow in LTE session management, where traffic flow template packet filter components were limited only by a formula while a fixed-size array could hold fewer entries. A hidden debug mode that records heap events and produces RAM dumps helped with debugging, and network-controlled filter allocation served as heap shaping. The usual unlinking technique did not fit, because the overflow writes pointers rather than chosen values.\n\nSamsung's user-space radio interface daemon also produced stack and heap overflows quickly, though hardened allocators make them hard to weaponize. On MediaTek Dimensity, the move to a new instruction set required a decompiler plugin and QEMU support before bug hunting. A layer 2 GPRS radio link control bug came from unlimited reassembly of containers across messages, and the vendor advisory described it inaccurately. The talk also explored a direct route into the Linux kernel through shared-memory ring buffers, where an integer wrap and attacker-controlled offsets allowed arbitrary reads and writes. That is effectively full coverage on 32-bit kernels, and on 64-bit kernels scanning for targets was practical. A demo closed the talk.\n\nSeveral chains remained under embargo or unfinished, so the speaker presented them as work in progress. The main takeaway is that baseband bugs are often reachable through specification gaps and shared-memory bookkeeping, and that public tooling and debugging aids have made these modems far easier to study.",
       "durationSeconds": 2927,
       "conference": "hardwear",
       "viewCount": 1000,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2023,
-      "eventLabel": "NL 2023"
+      "eventLabel": "NL 2023",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "WgXw6GgYz78",
@@ -1955,14 +1962,15 @@
         "modern",
         "sniffer"
       ],
-      "teaser": "Mike Ryan examines USA 2023 | Building A Modern Bluetooth Sniffer.",
-      "summary": null,
+      "teaser": "Shows how to sniff all Bluetooth channels at once with software-defined radio and feed the decoded packets into Wireshark.",
+      "summary": "The talk addresses a practical limit of Bluetooth sniffing. Narrowband software-defined radios hop between channels and miss traffic, while wideband capture hardware is expensive. The speaker presents a multi-channel approach using a Blade RF device, whose newer firmware covers enough spectrum to watch all Bluetooth channels at the same time. He also introduces a tool that integrates with Wireshark, so captured packets appear directly under the interface list.\n\nMuch of the talk explains the signal processing behind the tool. Raw IQ samples are split into individual channels with a polyphase channelizer, bursts are detected by amplitude, and frequency demodulation with offset correction turns each burst into bits. Without a connection's access address, the decoder finds packet starts by checking whether the length field in the BLE header matches the burst length. To keep up with the sample rate, the channelizer uses SIMD fixed-point arithmetic and a GPU-accelerated FFT library. The speaker said this let a modern laptop decode all 80 classic channels and all 40 BLE channels in real time. He also noted that per-radio physical characteristics can be plotted to track individual devices.\n\nThe live demo showed Bluetooth advertising packets, including some unencrypted BLE traffic. The speaker closed by describing unfinished work: classic Bluetooth support, Windows builds, and channel hopping for cheaper radios that cannot cover the full band. A practitioner who wants to try this today can install the tool with a supported radio, though its limits on narrower radios matter for planning.",
       "durationSeconds": 2164,
       "conference": "hardwear",
       "viewCount": 1200,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2023,
-      "eventLabel": "hardwear.io USA 2023"
+      "eventLabel": "hardwear.io USA 2023",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "Pwj9l_yuS34",
@@ -2018,8 +2026,8 @@
         "decaping",
         "technique"
       ],
-      "teaser": "Security researchers examine technical aspects of Exploring chip decaping techniques for silicon die inspection and reverse engineering.",
-      "summary": null,
+      "teaser": "Shows how hot air can soften a chip's plastic package so its silicon die can be exposed for inspection.",
+      "summary": "Chip secrets are often locked inside their packages, so the silicon die and the circuits on it cannot be seen directly. The talk focuses on removing the die from plastic packages, a step needed before the silicon can be examined closely.\n\nTwo approaches are compared. Very strong acid works but is dangerous to handle. Heating the package with a hot air tool is far cheaper and simpler, and it is the method demonstrated. The plastic casing is heated until it is hot enough to weaken, then the package is cracked open by hand to reveal the die.\n\nOnce the die is exposed, the speaker cleans off the remaining material and shows the silicon sitting in the opened package. The takeaway for practitioners is that a basic heat source can expose a die for visual inspection and reverse engineering without resorting to acid.",
       "durationSeconds": 189,
       "conference": "hardwear",
       "viewCount": 1400,
@@ -2029,7 +2037,9 @@
       "youtubeId": "_Uz4tN-I2D4",
       "slug": "affordable-emfi-attacks-against-modern-iot-chips-by-davide-toldo",
       "title": "Affordable EMFI Attacks Against Modern IoT Chips by Davide Toldo",
-      "speakers": [],
+      "speakers": [
+        "Davide Toldo"
+      ],
       "track": "hardware",
       "topics": [
         "iot",
@@ -2038,12 +2048,13 @@
         "attack",
         "modern"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Affordable EMFI Attacks Against Modern IoT Chips by Davide Toldo.",
-      "summary": null,
+      "teaser": "Shows how a low-cost electromagnetic fault injection rig can skip instructions on a modern IoT chip with secure boot.",
+      "summary": "The talk argues that modern IoT chips with closed debug ports, secure boot and flash encryption still have a gap. Electromagnetic fault injection (EMFI) can disrupt a chip from outside and skip checks even when the code itself is sound. The speaker presents it as an introductory walkthrough for newcomers who want a reproducible EMFI setup on a budget, and explains why a pulse must be placed accurately in both time and space.\n\nThe build starts with a cheap XY positioning stage, where a belt-driven 3D printer or drawing robot is preferred over lead-screw designs because of backlash. An inexpensive FPGA board handles the delay generator, with a Raspberry Pi Pico or ChipWhisperer as alternatives. Pulsers range from a commercial unit that reaches higher voltage to the open-source PicoEMP. Custom hardware reset and SMB-connected breakouts, plus a control script that logs results to CSV for 2D mapping, complete the rig. On a recent chip, a test loop showed instruction skips in specific die regions, while brownout detection and USB polling noise complicated the work.\n\nThe takeaway is that the entry cost is modest and that deployed devices may be exposed if an attacker has physical access and time. Practitioners should check whether this attack fits their threat model. If glitches do not appear, a higher-voltage pulser may be needed, and even well-written code cannot fully defend against this class of attack.",
       "durationSeconds": 1806,
       "conference": "hardwear",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "NnmAikOTHaA",
@@ -2070,7 +2081,10 @@
       "youtubeId": "MeLeg1sVmss",
       "slug": "breakmi-reversing-exploiting-and-fixing-fitness-tracking-ecosyst",
       "title": "BreakMi: Reversing, Exploiting & Fixing Fitness Tracking Ecosystems by M. Casagrande & D. Antonioli",
-      "speakers": [],
+      "speakers": [
+        "M. Casagrande",
+        "D. Antonioli"
+      ],
       "track": "privacy",
       "topics": [
         "fitness",
@@ -2079,12 +2093,13 @@
         "exploiting",
         "fixing"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning BreakMi: Reversing, Exploiting & Fixing Fitness Tracking Ecosystems by M. Casagrande & D. Antonioli.",
-      "summary": null,
+      "teaser": "Reverse engineers Xiaomi and Fitbit tracker Bluetooth protocols and shows how pairing and session flaws enable device takeover.",
+      "summary": "Fitness trackers pair with a phone companion app over Bluetooth Low Energy, and the app relays their data to a vendor backend over Wi-Fi. This talk assesses the Xiaomi and Fitbit ecosystems, whose application-layer protocols are proprietary and undocumented. The researchers captured Bluetooth traffic with HCI snoop logs and Wireshark, decompiled the Android companion apps, used dynamic instrumentation to match captured packets with values in memory, and intercepted the app's Wi-Fi traffic to map backend endpoints.\n\nIn the Xiaomi devices tested, link-layer encryption was disabled and the application layer offered no confidentiality or integrity. The older pairing version sent the pairing key in clear text behind a weak button confirmation. The newer version relied on a public key shared across the whole ecosystem, and its authentication challenge could be replayed, with only the app authenticating to the tracker. The speakers demonstrated dropping, impersonation and man-in-the-middle attacks from nearby, plus a remote attack from a malicious Android app that shares the phone's BLE channel and can trigger an unauthenticated factory reset, enabling device takeover. The Fitbit Charge 2 fared better, with link-layer security enabled and MAC-based authentication, but its real-time mode was unencrypted and its pairing was replayable, which still allowed impersonation.\n\nThe toolkit is open source, and the authors reported the issues to both vendors. Xiaomi classified the problem as a lack of encryption and reportedly shipped new firmware, while Google acknowledged the findings and released a fix. The proposed countermeasures are user-indicated pairing, authenticated encryption keyed with the pairing key, and enabling BLE link-layer security. The takeaway is that vendor-specific app-layer protocols should not be trusted to protect wearable data on their own.",
       "durationSeconds": 2504,
       "conference": "hardwear",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "vmQcrU5pNvU",
@@ -2237,19 +2252,22 @@
       "youtubeId": "WlcQrx7VK00",
       "slug": "keynote-the-microarchitectures-that-i-saw-and-the-ones-that-i-ho",
       "title": "Keynote |The Microarchitectures That I Saw And The Ones That I Hope To One Day See by Rodrigo Branco",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Rodrigo Branco"
+      ],
+      "track": "hardware",
       "topics": [
         "microarchitecture",
         "hope",
         "rodrigo"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding The Microarchitectures That I Saw And The Ones That I Hope To One Day See by Rodrigo Branco.",
-      "summary": null,
+      "teaser": "Recounts CPU side-channel disclosures and vendor responses, drawing lessons on hidden assumptions and system composition.",
+      "summary": "In this keynote, Rodrigo Branco looks back on about fifteen years of CPU security work, with more attention to failures and frustrations than to wins. He argues that most serious flaws come from two sources: assumptions that abstraction layers make about the components beneath them, and the mistaken belief that individually secure parts remain secure when combined. For unfamiliar systems, he suggests listing what you don't know, then building tooling to answer those questions.\n\nThe middle of the talk recounts how side-channel concerns were handled inside a major chip vendor. A casual answer given to students in 2007, that cache leaks were a software problem, hardened into internal policy and resisted later challenges. He describes pushing for a clear position on kernel address randomization after a TSX-based bypass, the 2017 research that used cache side channels against browser ASLR, and an early public disclosure in 2018 triggered by a competitor's patch. Other cases include a report on the management engine dismissed as unexploitable until the research team was reorganized, and cloud mitigations that had been broken for years without anyone noticing.\n\nHe closes by urging basic checks, such as re-running published proofs of concept, and by noting that bugs in hardware that cannot be patched tend to persist. He criticizes marketing-driven vendor responses and legal pressure around disclosure, and encourages researchers to keep probing complex systems, since skills carry across targets.",
       "durationSeconds": 3088,
       "conference": "hardwear",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "hpOp9X4sMaE",
@@ -2321,19 +2339,23 @@
       "youtubeId": "RlV9t0gXTLI",
       "slug": "bypass-nxp-lpc-family-debug-check-with-voltage-fault-injection-b",
       "title": "Bypass NXP LPC-Family Debug Check with Voltage Fault Injection by Waleed AlZamil and Bandar Alharbi",
-      "speakers": [],
+      "speakers": [
+        "Waleed AlZamil",
+        "Bandar Alharbi"
+      ],
       "track": "hardware",
       "topics": [
         "bypass",
         "fault-injection",
         "injection"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Bypass NXP LPC-Family Debug Check with Voltage Fault Injection by Waleed AlZamil and Bandar Alharbi.",
-      "summary": null,
+      "teaser": "Shows how a voltage glitch during power-on defeats the debug lock on an NXP LPC1343 microcontroller.",
+      "summary": "The talk examines the code read protection (CRP) mechanism in NXP LPC microcontrollers, which decides at boot whether the debug interface stays enabled. The speakers walk through the protection levels, the configuration word that sets them, and where the boot code checks that word. They note that earlier 2017 research used voltage fault injection to reach flash through the ISP bootloader, which led them to target the debug lock instead.\n\nTheir test setup used an LPC1343 driven by a glitch generator and a probe, with the decoupling capacitor on the core supply removed to make the glitch easier to deliver. Attempts that timed the glitch from a reset trigger did not work. Moving the trigger to a power-on cycle produced a successful glitch. The team used it to re-enable the debug interface, read back the stored CRP3 value, and showed the attack against the CRP1, CRP2 and CRP3 levels. They also compared the boot code across other LPC families, found a similar mechanism, and assumed comparable checks exist there.\n\nThe practical takeaway is that a debug lock enforced by a boot-time check can be undone by a well-timed voltage glitch, so hardware read protection has to account for fault injection. The speakers said they contacted NXP, which discussed the findings with them and was professional in its response. The session closed with audience questions about how the glitch was triggered and whether the vendor planned mitigations.",
       "durationSeconds": 1343,
       "conference": "hardwear",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "kGX210erV3s",
@@ -2359,7 +2381,9 @@
       "youtubeId": "6390Zqca3Mg",
       "slug": "practical-invasive-attacks-how-hardware-is-hacked-for-compatible",
       "title": "Practical Invasive Attacks, How Hardware is Hacked For Compatible Product Creation by Thomas Olivier",
-      "speakers": [],
+      "speakers": [
+        "Thomas Olivier"
+      ],
       "track": "hardware",
       "topics": [
         "practical",
@@ -2369,12 +2393,13 @@
         "hacked",
         "compatible"
       ],
-      "teaser": "Security researchers examine technical aspects of Practical Invasive Attacks, How Hardware is Hacked For Compatible Product Creation by Thomas Olivier.",
-      "summary": null,
+      "teaser": "Shows how an invasive reverse engineering team probes a secure chip's ROM to clone printer cartridge electronics.",
+      "summary": "Compatible printer cartridge makers need to understand the secure chips inside original cartridges. The speaker framed this as a threat model in which the main barrier is how long an attacker needs to clone a device. These chips are packaged black boxes with no datasheet, pinout or architecture reference, so the work starts from zero. The target had analog blocks, a digital CPU, flash, ROM and RAM spread across five metal layers.\n\nThe team delayered the die by mechanical polishing, imaged each layer with a scanning microscope, stitched the images and rebuilt the standard cell library to read the netlist. An angled polish exposed the ROM bits, and the extracted dump looked unencrypted, yet it still did not yield readable strings or recognisable code. The shield over the chip blocked direct probing, so the team used focused ion beam rewiring to reach internal signals, then microprobed them and found that the ROM boots before the flash. Netlist tracing exposed memory select logic, a control path into the instruction register, and a shield sensor whose input could be tied to supply voltage, disabling the shield and two other countermeasures.\n\nFull analysis stayed out of reach because the ROM address scrambling and an apparently custom instruction set remained unresolved. Next steps were to simulate the fetch circuitry and rebuild the datasheet. The speaker's takeaway is that a shield is only one layer, that no chip resists unlimited invasive effort, and that certification schemes need better ways to assess reverse engineering attacks.",
       "durationSeconds": 2343,
       "conference": "hardwear",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "uCGGKYG2NBg",
@@ -2499,12 +2524,13 @@
         "relay",
         "attack"
       ],
-      "teaser": "Security researchers examine technical aspects of Bluetooth LE Link Layer Relay Attacks by Sultan Qasim Khan | hardwear.io NL 2022.",
-      "summary": null,
+      "teaser": "Explains how Bluetooth LE link-layer relay attacks defeat proximity-based keyless entry, and how to mitigate them.",
+      "summary": "Proximity-based keyless systems, including car key fobs, smart locks, building access controls and some laptops and phones, unlock when a trusted token is nearby. They estimate distance from signal strength, time of flight or phase measurements. Signal-strength checks are easy to fool, and ranging schemes without a cryptographic distance check can also be beaten. Relaying traffic between a token and a lock makes both devices believe they are close together, even when they are far apart.\n\nThe talk reviews earlier relay approaches against Bluetooth Low Energy. GAP-layer relays used standard host APIs, HCI-level relays bypassed the host stack, and analog relays carried the whole 2.4 GHz band but added latency and range limits. The focus is a link-layer relay, in which one device acts as a master toward the real peripheral and as a slave toward the real central, forwarding link-layer packets. Added latency can be hidden by choosing a shorter connection interval on one side. Encryption is the main obstacle, because control packets are encrypted and both sides must keep matching counters. The attacker must therefore find when connection updates take effect, using traffic analysis and empty packets to probe timing. A live demonstration relayed an unlock request over distance to a Tesla Model Y at short range.\n\nThe main mitigations are requiring user interaction before an unlock, and using secure ranging standards that verify distance cryptographically, which limits how far a relay can stretch the apparent distance. The practical takeaway is that signal-strength or unauthenticated timing checks alone should not protect valuable assets, since BLE relay attacks are practical.",
       "durationSeconds": 2732,
       "conference": "hardwear",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "uKWjjJmp_mM",
@@ -2534,7 +2560,9 @@
       "youtubeId": "eaysAi_5z1A",
       "slug": "keynote-reverse-engineering-is-good-for-soul-by-travis-goodspeed",
       "title": "Keynote | Reverse Engineering Is Good For Soul by Travis Goodspeed | hardwear.io NL 2022",
-      "speakers": [],
+      "speakers": [
+        "Travis Goodspeed"
+      ],
       "track": "malware",
       "topics": [
         "reverse-engineering",
@@ -2542,8 +2570,8 @@
         "engineering",
         "soul"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Reverse Engineering Is Good For Soul by Travis Goodspeed | hardwear.io NL 2022.",
-      "summary": null,
+      "teaser": "Shares personal stories of reverse engineering, from smart card firmware dumps to a DIY wristwatch that doubles as a radio.",
+      "summary": "The keynote argues that reverse engineering is the work the speaker enjoys most, more than security itself, and that it is worth protecting from jobs that crowd it out. Travis Goodspeed recounts his career, including a stint in New York taking apart products and a factory line, and time working with Windows reverse engineer Jeff Chapel, whose publishing dropped off once he lacked the quiet to work. A nuclear engineer friend serves as a contrast: he stopped enjoying his job because he could not take on small, self-contained problems.\n\nThe technical examples come next. A 1998 report on Nagravision smart cards, released during litigation, described reading firmware through instruction fetches by placing needles on the chip, along with a buffer overflow in the card's input buffer. Goodspeed adapted that overflow to a modern USB smart card reader and published a Go client that dumps the reader's firmware. He also built a home chemistry setup for decapping and delayering chips, and wrote a ROM annotation tool called Mastermind. Separately, he described the 1997 dispute between AOL and MSN Messenger, in which an overflow in AOL's Oscar protocol client was used to survey which messenger users were running.\n\nHe closes with his own wristwatch project: a TI MSP430-based board that fits an original watch case, with amateur radio transmit, a frequency counter, and an on-watch disassembler. He urges listeners to keep reverse engineering in their lives and to protect the time needed to do it.",
       "durationSeconds": 2834,
       "conference": "hardwear",
       "viewCount": 1500,
@@ -2554,7 +2582,9 @@
       "youtubeId": "SXbgaRk4_Hg",
       "slug": "grinding-tractors-to-a-halt-growing-pains-in-agricultural-hardwa",
       "title": "Grinding Tractors To A Halt Growing Pains In Agricultural HardwareSecurity by Sick Codes hardwear.io",
-      "speakers": [],
+      "speakers": [
+        "Sick Codes"
+      ],
       "track": "hardware",
       "topics": [
         "grinding",
@@ -2564,12 +2594,13 @@
         "pain",
         "agricultural"
       ],
-      "teaser": "Security researchers examine technical aspects of Grinding Tractors To A Halt Growing Pains In Agricultural HardwareSecurity by Sick Codes hardwear.io.",
-      "summary": null,
+      "teaser": "Follows chip-off extraction of John Deere tractor firmware and exposed keys, showing how unencrypted embedded devices leak secrets.",
+      "summary": "The talk opens with recent ransomware and extortion incidents hitting agriculture and food companies, including Colonial Pipeline, JBS Foods, a farmer cooperative and AGCO. From there it asks what happens to a manufacturer's embedded code once hardware leaves the factory, since used units circulate on resale sites and can be taken apart at home.\n\nThe research centres on a secondhand John Deere telematics gateway. Its NAND flash was removed with a hot air gun and read through a socket, then the file system was rebuilt in a Docker container. Findings included an engineering mode that could be switched on before login, a temporary folder not held in RAM, and plaintext databases holding a Wi-Fi password. A key pair for an MQTT setup was identical across devices; the vendor confirmed it was a development key left in production, though it was not in active use. A hardcoded repository login let the speaker download about 4,000 RPM packages before directory listing was disabled, and a leftover trash folder on one unit revealed the packages needed to rebuild the operating system on a Raspberry Pi.\n\nThe speaker closes by arguing that the minimal kit is cheap, that very few researchers examine agricultural equipment, and that secondhand chips may still hold customer data. The Q&A touched on right-to-repair, the vendor's response to the disclosures, and the later launch of a bug bounty program.",
       "durationSeconds": 2001,
       "conference": "hardwear",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "iq2yj0_rRRk",
@@ -2596,8 +2627,11 @@
       "youtubeId": "TdwbdVU6ZmU",
       "slug": "perimeter-breached-hacking-an-access-control-system-by-steve-pov",
       "title": "Perimeter Breached! Hacking An Access Control System by Steve Povolny & Sam Quinn | hardwear.io USA",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Steve Povolny",
+        "Sam Quinn"
+      ],
+      "track": "hardware",
       "topics": [
         "access-control",
         "perimeter",
@@ -2606,12 +2640,13 @@
         "control",
         "system"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Perimeter Breached! Hacking An Access Control System by Steve Povolny & Sam Quinn | hardwear.io USA.",
-      "summary": null,
+      "teaser": "Shows how a building access control panel was taken over through its serial, JTAG and web interface flaws to gain root and unlock doors.",
+      "summary": "Trellix researchers Steve Povolny and Sam Quinn explain why they targeted access control systems, which they see as a single point of failure bridging physical and digital security. They bought a used Mercury-made panel whose marketing said it was approved for government facilities, then started with its circuit board. A four-pin port carried serial output that stopped during boot, and a 20-pin port looked like JTAG.\n\nUsing a J-Link debugger, they halted the processor, dumped the U-Boot bootloader and found a hard-coded boot delay of zero that blocked interrupting boot. Patching it gave them a bootloader shell and then a root shell over serial. A hardware watchdog that rebooted the board about every 15 seconds was disabled by flipping one bit in its mode register. The web interface ran CGI pages as root, and a hostname field reached a system call. Character filters were bypassed with tabs and curl, and that payload only ran at boot. A firmware upload diagnostic page skipped authentication and had a buffer overflow in signature-size parsing, which chained with the injection into unauthenticated remote code execution.\n\nThe team reported eight zero-days to the vendor. The two covered in the talk scored 9.0 and 10.0, and the vendor said other OEM partners using the boards are affected too. For the demo, they wrote a small program that called a kernel driver to hold door relays open. The takeaway is that certification claims say little about device security, and debug ports and default settings deserve close scrutiny.",
       "durationSeconds": 2614,
       "conference": "hardwear",
       "viewCount": 2200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "snGujIUkfAk",
@@ -2626,8 +2661,8 @@
         "soc",
         "injection"
       ],
-      "teaser": "Security researchers examine technical aspects of Breaking A Recent SoC’s Hardware AES Accelerator Using Body Biasing Injection by Karim M. Abdellatif.",
-      "summary": null,
+      "teaser": "Shows a low-cost body biasing injector faulting a recent SoC's hardware AES accelerator and recovering its key.",
+      "summary": "The talk looks at body biasing injection, a fault injection technique that applies a high voltage through a needle touching the substrate of a decapped chip. The speaker notes it is rarely covered in the literature and is cheaper than laser attacks, though it still requires decapping. The earlier low-cost design was extended with a programmable voltage near 250 volts, both pulse polarities, microcontroller control and USB power.\n\nA glitchable counter loop first confirmed that positive and negative pulses altered results at different spots on the surface. The target was a low-power SoC with Wi-Fi and Bluetooth, built on 40 nm and used in hardware wallets. Power traces and a signal-to-noise leakage check identified the window where the AES accelerator ran. Early faults at 250 volts only corrupted the output communication. An external supply raised the effective voltage to about 500 volts, and tuning let the speaker fault AES in round nine with roughly 60 percent success.\n\nWith faulty ciphertexts from round nine, the speaker ran differential fault analysis and recovered the full AES key using about 10,000 trials. Practical notes covered damage risk: three chips were damaged, so the needle should be lifted before moving across the surface, and front-side decapping is harder. The main takeaway is that a cheap homemade injector can break a hardware AES accelerator. Future work includes testing more devices and checking how the technique affects unsecured elements and glitch detectors.",
       "durationSeconds": 1518,
       "conference": "hardwear",
       "viewCount": 1300,
@@ -2706,8 +2741,10 @@
       "youtubeId": "FQRMNjZVlHg",
       "slug": "self-labeling-electronic-shelf-labels-by-steffen-robertz-hardwea",
       "title": "Self-labeling Electronic Shelf Labels by Steffen Robertz | hardwear.io USA 2022",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Steffen Robertz"
+      ],
+      "track": "hardware",
       "topics": [
         "self-labeling",
         "electronic",
@@ -2716,12 +2753,13 @@
         "steffen",
         "robertz"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Self-labeling Electronic Shelf Labels by Steffen Robertz | hardwear.io USA 2022.",
-      "summary": null,
+      "teaser": "Shows how electronic shelf labels can be torn down, decoded over their 433 MHz radio link, and forged or replayed.",
+      "summary": "The talk examines electronic shelf labels, the e-ink price tags used in supermarkets and increasingly in hospitals and document storage. The speaker outlines the market growth and possible abuse, including blocking price updates, luring shoppers to malicious QR codes, and reusing cheap displays. The target was a tag from a common Chinese supplier, paired with a base station that converts Ethernet into a proprietary 433 MHz protocol.\n\nThe teardown covered the external flash, which held the image data, and an unlabelled microcontroller. Acid decapping exposed a die marking, and a unique-ID lookup pointed to an STM8 low-power part. Its SWIM debug header, found on the board, allowed flash readout, although protection was enabled. The FCC filings did not match the observed signal, which was FSK slightly off the stated frequency. Replaying a captured price update with an SDR restored an old price, so no replay protection existed. The speaker decoded the frame types and their run-length image compression, then rebuilt the protocol in GNU Radio to push a custom image onto a tag.\n\nThe main lesson is that the protocol had no authentication, integrity checks or real error correction, and that a custom radio protocol offers little protection when a cheap transceiver chip can capture it. Because tags do not reply to the sender, an attacker's range is mainly limited by transmit power. The speaker recommends encryption, authentication and error correction, and plans to publish the tools and firmware dumps.",
       "durationSeconds": 2422,
       "conference": "hardwear",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "jgQ4SxzOFAk",
@@ -2780,12 +2818,13 @@
         "exploiting",
         "buffer"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Unwanted Features: Finding & Exploiting An In ROM Buffer Overflow On The LPC55S69 by Laura Abbott.",
-      "summary": null,
+      "teaser": "Details a buffer overflow in an NXP boot ROM on a microcontroller and how it leads to code execution despite protections.",
+      "summary": "The talk begins with why a company building servers chose the NXP LPC55S69 microcontroller as a hardware root of trust for measuring its software. Because the chip's boot ROM includes a firmware update parser for the SB2 format, the team had to decide whether that code could be trusted.\n\nThe core finding is that the ROM parser treats SB2 header fields as untrusted input. An integer underflow and a conditionally updated callback let a copy run past a global buffer, and an adjacent heap allocator variable gives the attacker control of the callback pointer. That redirects execution into ROM code, which the memory protection unit restricts, but an executable ROM patch area in SRAM sits at the end of the overflowed region. A stack canary, checked only during ISP mode, was bypassed by a single 512-byte write that overwrote it. The payload then disables the MPU and SAU. An attacker could read flash and roll back signed images, but keys and secure boot settings on a sealed device stayed protected. The unique device secret had not yet been locked at the time, which threatens DICE-based device identity.\n\nNXP agreed to fix the issue in new silicon, but that takes time, so interim mitigations such as validating the header in code on the chip and checking signatures were weighed, with the caveat that signatures prove only authenticity. The team decided to write its own update mechanism instead. Takeaways include validating input at every boundary, recognizing that ROM bugs are hard to fix, and publishing ROM source so customers can audit it.",
       "durationSeconds": 2399,
       "conference": "hardwear",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "jyyCOoWksbg",
@@ -2852,7 +2891,9 @@
       "youtubeId": "aMAFlvfQ4Gs",
       "slug": "can-you-park-a-car-in-a-classroom-phillippe-azalbert-hardwear-io",
       "title": "Can you park a car in a classroom? | Phillippe Azalbert | hardwear.io Webinar",
-      "speakers": [],
+      "speakers": [
+        "Phillippe Azalbert"
+      ],
       "track": "appsec",
       "topics": [
         "park",
@@ -2861,12 +2902,13 @@
         "azalbert",
         "hardwear"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Can you park a car in a classroom? | Phillippe Azalbert | hardwear.io Webinar.",
-      "summary": null,
+      "teaser": "Describes how a portable automotive test bench was built from scavenged ECUs, with sensor emulation and lessons for car security training.",
+      "summary": "This talk from Quarks Lab explains why automotive security training benefits from a portable test bench, and how one was built. Modern cars run dozens of electronic control units over networks such as CAN and LIN, with a growing wireless attack surface. Bringing a real car to a training room is impractical, since few attendees can touch it at once and a triggered crash frame can lock the powertrain module until a manufacturer tool resets it.\n\nThe Car in a Box is a case sized to fit aboard a plane, holding ECUs from a scrapped vehicle wired to several networks, an infotainment unit with Bluetooth and cellular, and a control panel. The builders learned that some modules are immobilizer-enrolled and need a matching working car, that wake-up frames must be present, and that pin documentation should be located before wiring straight to pins instead of untangling harnesses. Sensors were emulated with an Arduino Mega using relays to ground, digital potentiometers for variable resistance, and a timer-driven clock for square signals, while a tyre pressure sensor was replayed with a software-defined radio. A Raspberry Pi touchscreen controls the simulation over serial.\n\nTakeaways include that the same ECU weaknesses can span models and manufacturers, that some signals such as fuel level are averaged over about a minute, and that most microcontrollers are protected, so firmware recovery may need vendor hardware. Third-party diagnostic apps can reveal hidden manufacturer commands. The speaker also answered questions on costs, a build time of three to four weeks, and the role of UDS diagnostics.",
       "durationSeconds": 2428,
       "conference": "hardwear",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "OY7sNrcBnP0",
@@ -2997,7 +3039,9 @@
       "youtubeId": "3PMX1f9BVso",
       "slug": "moonbounce-internals-of-the-3rd-publicly-known-uefi-firmware-imp",
       "title": "MoonBounce: Internals of the 3rd publicly known UEFI firmware implant | Mark Lechtik | hardwear.io",
-      "speakers": [],
+      "speakers": [
+        "Mark Lechtik"
+      ],
       "track": "hardware",
       "topics": [
         "hardware",
@@ -3007,12 +3051,13 @@
         "publicly",
         "known"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for MoonBounce: Internals of the 3rd publicly known UEFI firmware implant | Mark Lechtik | hardwear.io.",
-      "summary": null,
+      "teaser": "Traces how the MoonBounce UEFI implant hooks boot services to reach Windows user mode and links it to APT41.",
+      "summary": "The talk presents Kaspersky's analysis of MoonBounce, a UEFI firmware implant found in the wild by the company's firmware scanning technology. The speaker explains the boot process the implant abuses, focusing on the DXE dispatcher stored in SPI flash, where the attackers patched the first bytes of several boot services functions with inline hooks. Each hook restores the original bytes after its first run and passes control on, so normal boot continues.\n\nThe infection chain is walked through in stages. An AllocatePool hook places shellcode in physical memory, and a CreateEventEx hook registers a callback for legacy boot so the payload can be mapped in that case as well. An ExitBootServices hook lets the implant survive into the Windows loader, where it hooks OslArchTransferToKernel and then ExAllocatePool in the kernel. A driver then watches for svchost processes running with the netsvcs argument and injects a user-mode stager via APC to reach a command-and-control server. The second-stage payload was not recovered.\n\nAttribution rests on shared infrastructure: a Scrambled Cross implant reached command servers that resolved to the same IPs as the MoonBounce domain, and some used a certificate tied to APT41. Compilation timestamps and other backdoors on the network suggest long-term remote access. The closing advice covers firmware updates, TPM and Boot Guard where supported, firmware scanning, and training analysts to act on firmware alerts.",
       "durationSeconds": 2530,
       "conference": "hardwear",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "UJKSjJl1Lgk",
@@ -3039,7 +3084,9 @@
       "youtubeId": "dctyq0npB5s",
       "slug": "cpu-fuzzing-for-discovering-hardware-caused-information-leakage",
       "title": "CPU Fuzzing for Discovering Hardware caused Information Leakage Michael",
-      "speakers": [],
+      "speakers": [
+        "Michael Schwarz"
+      ],
       "track": "hardware",
       "topics": [
         "fuzzing",
@@ -3049,8 +3096,8 @@
         "information",
         "leakage"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding CPU Fuzzing for Discovering Hardware caused Information Leakage Michael.",
-      "summary": null,
+      "teaser": "Shows how CPU fuzzing finds new microarchitectural side channels and attacks that leak data across cores and virtual machines.",
+      "summary": "The talk covers how microarchitectural side channels and transient execution attacks can be found automatically rather than through slow manual analysis. Because this research depends on expertise and luck, the speaker applies fuzzing, a software testing technique, to CPUs. Each test uses a reset sequence, a trigger sequence and a measurement sequence of instructions, and compares cold and hot paths to reveal timing differences. This model rediscovers flush and reload on its own.\n\nRunning the approach on five AMD and Intel CPUs for about four days each rediscovered two known side channels and uncovered four new ones. Two attacks were built on them. One abuses the RDRAND instruction, whose latency rises across cores and virtual machines, enabling a covert channel between AWS instances without memory sharing or networking. Another shows that the non-temporal MOV can replace CLFLUSH, leaking more bytes per Meltdown access and breaking KASLR. A mutation-based fuzzer for data sampling attacks then ran for 26 hours, finding a new zombie load variant, Medusa, that leaked an OpenSSL RSA key, and a regression on Ice Lake.\n\nThe speaker concludes that these fuzzers are still simple and lack guidance, so progress needs feedback from performance counters, debug interfaces or other side channels. The tools and accompanying papers are open source on GitHub.",
       "durationSeconds": 2524,
       "conference": "hardwear",
       "viewCount": 1000,
@@ -3140,8 +3187,10 @@
       "youtubeId": "3lUo8eNxHV0",
       "slug": "nl-2021-blackboxing-diebold-nixdorf-atms-by-vladimir-kononovich",
       "title": "NL 2021: Blackboxing Diebold-Nixdorf ATMs by Vladimir Kononovich",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Vladimir Kononovich"
+      ],
+      "track": "hardware",
       "topics": [
         "blackboxing",
         "diebold-nixdorf",
@@ -3149,8 +3198,8 @@
         "vladimir",
         "kononovich"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning NL 2021: Blackboxing Diebold-Nixdorf ATMs by Vladimir Kononovich.",
-      "summary": null,
+      "teaser": "Explains how researchers decrypted, re-signed and uploaded custom firmware to an ATM cash dispenser over USB.",
+      "summary": "The talk covers research into a cash dispenser module from a well-known ATM vendor, started after the speaker's team obtained a pair of firmware files from a bank project. The files were encrypted. The speaker explains that the decryption routine is a modified XTEA cipher with a non-standard delta constant, and that its key material is read from a dedicated region of the controller board. The firmware header also checks for a special block that can point to alternate key offsets, which made it possible to work with keys the team did not hold.\n\nThe firmware signature was self-signed, so the team could re-sign modified images with a shorter RSA key, since the signature field size is set by the format. The modified image was then uploaded to the dispenser over USB, using the device identifiers to trigger the upgrade path. The smart card that protects USB traffic also had a denial-of-service issue. Requesting a session key for the maximum counter value blocked further key generation, although the speaker notes that reinitializing the applet restores it when vendor keys are available.\n\nTo complete the attack, the team patched the firmware so it no longer requested session keys from the smart card, adjusted the vendor Java software, and synchronized session counters. They then configured cassette contents, ran a cash-out, and opened the shutter to collect the banknotes. The speaker presents this as a black-box method that needs only a USB connection inside the dispenser and leaves no logs. The practical lesson is that self-signed firmware and weak key handling undermine otherwise strong transport protection. At the time of the talk, the related CVEs were still in the registration and confirmation process.",
       "durationSeconds": 1785,
       "conference": "hardwear",
       "viewCount": 2100,
@@ -3254,7 +3303,9 @@
       "youtubeId": "h8N5s-dfv6Q",
       "slug": "how-to-perform-electromagnetic-side-channel-analysis-by-simulati",
       "title": "How to perform electromagnetic side channel analysis by simulation by Davide | hardwear.io Webinar",
-      "speakers": [],
+      "speakers": [
+        "Davide"
+      ],
       "track": "hardware",
       "topics": [
         "side-channel",
@@ -3264,12 +3315,13 @@
         "side",
         "channel"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for How to perform electromagnetic side channel analysis by simulation by Davide | hardwear.io Webinar.",
-      "summary": null,
+      "teaser": "Shows how simulated electromagnetic traces of a chip can reveal leakage hotspots before the silicon is fabricated.",
+      "summary": "Electromagnetic side-channel attacks need only one leaky position over a chip's surface to compromise a device, yet existing power analysis tools cannot show where that position is or how the physical layout affects it. The talk presents a simulation flow that models the magnetic field of a whole chip. Current flowing in the upper metal layers is extracted with a commercial tool, the Biot-Savart law turns each current segment into a magnetic field, and the flux through a probe's surface is differentiated over time to produce the voltage an oscilloscope would record.\n\nSimulated traces are noise-free, so a standard correlation attack lights up almost the entire die, unlike measured maps. To address this, the speaker computes how much noise would have to be added to a simulated trace to push a correlation below significance, and reports a correlation only when the correct key guess stands out from the others. Validation on a test chip compared simulated and measured correlation maps across different probe heights and diameters, vertical and horizontal probes, and front-side versus back-side analysis, finding close agreement in the leaking areas and their intensities.\n\nThe flow was then applied at the design stage to locate leaky standard cells and to compare two chip variants with different power routing. The variant whose supply and ground rails carry current in opposing directions showed fewer and weaker leaking areas, matching the measurements. The speaker noted that simulation time did not visibly grow with circuit complexity. The takeaway for designers is that such a flow can assess electromagnetic robustness and guide layout changes before fabrication.",
       "durationSeconds": 2497,
       "conference": "hardwear",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "nrs0kNG7jcA",
@@ -3389,7 +3441,9 @@
       "youtubeId": "V-tmr0VzoOY",
       "slug": "nl-2021-automated-vulnerability-hunting-in-smm-using-brick-by-as",
       "title": "NL 2021: Automated Vulnerability Hunting In SMM Using Brick by Assaf & Itai",
-      "speakers": [],
+      "speakers": [
+        "Assaf"
+      ],
       "track": "ai-security",
       "topics": [
         "smm",
@@ -3398,14 +3452,15 @@
         "hunting",
         "brick"
       ],
-      "teaser": "Security researchers examine technical aspects of NL 2021: Automated Vulnerability Hunting In SMM Using Brick by Assaf & Itai.",
-      "summary": null,
+      "teaser": "Shows how SMM handlers in UEFI firmware can be checked for memory corruption bugs using an automated IDA-based tool.",
+      "summary": "The talk introduces System Management Mode, the highly privileged x86 CPU mode that firmware uses for tasks such as power management and legacy device emulation. It explains how SMM memory (SMRAM) is isolated from the operating system, and how software triggers system management interrupts through a communication buffer that lives outside protected memory. That buffer is the attack surface the rest of the talk focuses on.\n\nThe speaker then covers common bug classes in SMM handlers. A missing size check on the communication buffer can let writes spill into SMRAM. Unvalidated nested pointers can give an attacker an arbitrary write target. Double fetches of a value can be exploited by a DMA device that changes the buffer between the validation check and its later use. Each class is illustrated with a small example and its mitigation, such as explicit size checks and copying sensitive fields into SMRAM local variables.\n\nThe talk then presents Brick, an open-source static analysis tool built on IDA. It extracts SMM images from firmware, runs heuristic detection modules for each bug class, and writes an HTML report. A live demo scans several modules and highlights suspicious handlers, while code from the EDK2 reference implementation comes out clean. The speaker reports a few CVEs found with the tool, notes that the heuristics produce false positives and negatives so human review remains necessary, and invites contributions to improve detection accuracy and speed.",
       "durationSeconds": 2688,
       "conference": "hardwear",
       "viewCount": 2300,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2021,
-      "eventLabel": "NL 2021"
+      "eventLabel": "NL 2021",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "en_KNCiJMrw",
@@ -3433,7 +3488,9 @@
       "youtubeId": "A53WOO6BR2Q",
       "slug": "breaking-chips-with-undetectable-hardware-trojans-matt-venn-hard",
       "title": "Breaking chips with undetectable hardware trojans | Matt Venn | hardwear.io webinars 2021",
-      "speakers": [],
+      "speakers": [
+        "Matt Venn"
+      ],
       "track": "hardware",
       "topics": [
         "hardware-trojans",
@@ -3443,36 +3500,43 @@
         "hardware",
         "trojan"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Breaking chips with undetectable hardware trojans | Matt Venn | hardwear.io webinars 2021.",
-      "summary": null,
+      "teaser": "Shows how a change to a chip's doping layers can add a hidden trojan that alters logic without visible changes.",
+      "summary": "The talk opens with a short primer on how transistors work and how they combine into logic cells, using an inverter from the open SkyWater 130 nanometre design kit as the example. The speaker explains that layout files can be turned back into a netlist and simulated, even without the original design files, and demonstrates this on that small inverter.\n\nThe main demonstration uses a simple padlock chip built with the open-source OpenLane flow. The extracted circuit opens only with the correct button combination. The speaker then shows how changing just the diffusion layers, swapping the doping type in one transistor and cutting a connection in another, can force a flip-flop output high. Editing the layout in KLayout creates the altered mask data, and the simulation shows the lock opening on a wrong combination, one clock cycle sooner.\n\nThe talk closes on the limits of the attack. Inserting such a change requires access to the foundry's files, and mask sets are expensive, so the modification is framed as a proof of concept. Recovering the logic from a raw die is much harder without the process design kit. A large customer could counter it by requesting masks back for inspection, while shared shuttle runs make that impractical. The practical takeaway is that layout-level edits can change behaviour while looking identical under a microscope.",
       "durationSeconds": 2152,
       "conference": "hardwear",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "Sb1hYkPzfeA",
       "slug": "securing-your-microcontroller-with-arm-trustzone-technology-oren",
       "title": "Securing Your Microcontroller with Arm TrustZone Technology | Oren Hollander | hardwear_io Webinar",
-      "speakers": [],
+      "speakers": [
+        "Oren Hollander"
+      ],
       "track": "hardware",
       "topics": [
         "arm",
         "trustzone",
         "technology"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Securing Your Microcontroller with Arm TrustZone Technology | Oren Hollander | hardwear_io Webinar.",
-      "summary": null,
+      "teaser": "Explains how Arm TrustZone for ARMv8-M isolates secure and non-secure code on microcontrollers.",
+      "summary": "The session opens with why embedded software needs stronger isolation. The speaker walks through three real attacks: Stuxnet, which spread through Windows workstations and reached PLCs at an Iranian nuclear plant; LoJax, a UEFI firmware rootkit that survives operating system reinstalls; and a dynamic voltage and frequency scaling attack that can leak cryptographic keys from the secure area on Arm CPUs.\n\nThe core of the talk covers Arm TrustZone for ARMv8-M, the security extension aimed at Cortex-M microcontrollers. It explains how the address space is split into secure and non-secure regions using a Security Attribution Unit and an optional implementation-defined attribution unit, and how the two combine so that the stricter setting wins. It describes secure gateway veneers as the only controlled entry points from non-secure to secure code, how interrupts can be assigned to either world, and how registers are stacked and cleared on world switches. Toolchain support is covered too, including the CMSE extensions in GCC and Arm Compiler and SAU setup through CMSIS.\n\nThe closing section weighs what TrustZone does and does not stop. It protects software against software attacks, as long as the secure code itself has no bugs, and can block bus masters such as DMA when the silicon vendor uses the extra security signal. It does not stop glitching or power side-channel attacks, which need hardware countermeasures. Debug access to the secure world is governed by vendor-specific secure debug authentication, so practitioners should check what their chip provides.",
       "durationSeconds": 4098,
       "conference": "hardwear",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "7nD391e_NK0",
       "slug": "pcie-device-security-the-evolution-of-dma-attacks-maggie-and-cua",
       "title": "PCIe device security-The evolution of DMA attacks | Maggie & Cuauhtemoc | hardwear.io webinars 2021",
-      "speakers": [],
+      "speakers": [
+        "Maggie",
+        "Cuauhtemoc"
+      ],
       "track": "hardware",
       "topics": [
         "pcie",
@@ -3482,12 +3546,13 @@
         "attack",
         "maggie"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning PCIe device security-The evolution of DMA attacks | Maggie & Cuauhtemoc | hardwear.io webinars 2021.",
-      "summary": null,
+      "teaser": "Traces the history of PCIe direct memory access attacks and the Intel features, like VT-d and SR-IOV, that defend against them.",
+      "summary": "PCIe is a long-lived interconnect used in everything from small IoT boards to data center servers. The talk focuses on direct memory access (DMA), which lets a device read and write system memory without the CPU's involvement. That efficiency is also what makes it an attack path. The speakers argue that limiting physical access to expansion slots does not remove the risk, because integrated DMA engines and add-in cards with their own firmware can start memory transactions without the host's knowledge.\n\nThe presenters survey roughly two decades of DMA research and tooling, from early Windows kernel subversion and Thunderbolt work to FPGA-based implants and wireless DMA devices. They then cover defenses. Intel VT-d remaps device memory access so a device can only reach regions explicitly mapped to it, while SR-IOV splits one physical device into virtual functions that can be assigned to separate guests. For each, they outline benefits and tradeoffs, including the need to define DMAR tables correctly and the fact that VT-d does not isolate devices sharing an external PCIe bridge.\n\nThe closing section looks at emerging standards, including SPDM for device attestation and CXL for cache-coherent and memory-semantic links. The practical takeaways are to keep VT-d enabled for both pre-boot and runtime, review DMAR tables, keep devices behind the same bridge at the same trust level, and keep firmware and drivers current. A short Q&A covered how virtual functions are assigned and whether DMA can be used to capture memory for forensics.",
       "durationSeconds": 2164,
       "conference": "hardwear",
       "viewCount": 2300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "bIAkRD_mf-4",
@@ -3578,7 +3643,9 @@
       "youtubeId": "_e2fieV8S2o",
       "slug": "building-cantact-pro-an-open-source-can-bus-tool-eric-evenchick",
       "title": "Building CANtact Pro: An Open Source CAN Bus Tool | Eric Evenchick hardwear.io USA Conference 2021",
-      "speakers": [],
+      "speakers": [
+        "Eric Evenchick"
+      ],
       "track": "hardware",
       "topics": [
         "can-bus",
@@ -3586,12 +3653,13 @@
         "building",
         "cantact"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Building CANtact Pro: An Open Source CAN Bus Tool | Eric Evenchick hardwear.io USA Conference 2021.",
-      "summary": null,
+      "teaser": "Traces the design of the open source CANtact Pro, a two-channel CAN FD and single-wire CAN adapter, and lessons from building it.",
+      "summary": "Eric Evenchick introduces Controller Area Network (CAN), a multi-master bus common in cars, industrial control and avionics, and explains why it is often trusted by default: any node that can send frames is believed by everyone else on the bus. He describes higher-layer protocols built on it, such as ISO-TP for longer payloads and diagnostic services, and calibration protocols that can expose memory access if left enabled in production.\n\nHe then traces the history of the open source CANtact line, from the first low-cost USB adapter built on an STM32 microcontroller to the goal of a two-channel CANtact Pro supporting CAN FD and single-wire CAN. Design choices covered include an NXP Cortex-M4 part with a USB bootloader, discrete isolation for the signal and power paths, and a case built from a prefab enclosure customized by a manufacturer. On the software side, he covers Linux SocketCAN support, a cross-platform driver written in Rust over libusb, and Python bindings published to PyPI through automated GitHub builds.\n\nThe talk closes with practical lessons from hardware production: plan enclosures and mechanical fit from the start, expect bill-of-materials costs to multiply through wholesale and retail pricing, get feedback from pre-release testers, and account for component shortages. Next steps include improving the Rust command-line interface, upstreaming CAN FD support into the Linux kernel, and building a breakout board for OBD-II connectors.",
       "durationSeconds": 1857,
       "conference": "hardwear",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "xRuIsYROkqs",
@@ -4315,7 +4383,9 @@
       "youtubeId": "Kl9p5Y7fbbY",
       "slug": "security-property-driven-fault-injection-assessment-in-modern-so",
       "title": "Security Property-driven Fault Injection Assessment in Modern SoCs by Farimah Farahmandi",
-      "speakers": [],
+      "speakers": [
+        "Farimah Farahmandi"
+      ],
       "track": "hardware",
       "topics": [
         "fault-injection",
@@ -4325,12 +4395,13 @@
         "assessment",
         "modern"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Security Property-driven Fault Injection Assessment in Modern SoCs by Farimah Farahmandi.",
-      "summary": null,
+      "teaser": "Shows a property-driven framework that pinpoints critical SoC locations vulnerable to fault injection attacks.",
+      "summary": "IoT devices are built on system-on-chips that store keys and sensitive data, and hardware flaws are hard to patch once silicon is produced. The talk surveyed fault injection methods, including clock and voltage glitching, laser-based attacks on SRAM, and focused ion beam edits. Such faults can force a chip to store wrong values or skip critical instructions. Existing countermeasures are limited: active shielding and sensors are costly, while parity and redundancy schemes give partial coverage. Designers rarely know which parts of a chip to protect.\n\nThe speaker presented a framework that takes security properties written by the designer, builds a fault model covering the spatial and temporal control of a given injection technique, and simulates faults at gate level. Locations whose faults violate a property are reported, and the search is narrowed using cone-of-influence and feasibility checks. In an AES case study, a fault during a state transition could make the done signal assert after the first round, exposing key and plaintext information. Another case showed that don't-care states, once synthesis connects them to protected states, can bypass protection without appearing in standard verification.\n\nBenchmark results identified a small set of critical locations that could be protected locally, aiming for stronger protection at manageable overhead. The analysis was simulation-based, with FPGA validation underway for one property. Planned work includes extending the framework to RTL and physical layers, adding fault models, and extracting properties automatically.",
       "durationSeconds": 2809,
       "conference": "hardwear",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "ALYTNbC0gw8",
@@ -4466,19 +4537,22 @@
       "youtubeId": "KohIewYHHMY",
       "slug": "looking-at-silicon-ken-shirriff",
       "title": "Looking at Silicon | Ken Shirriff",
-      "speakers": [],
+      "speakers": [
+        "Ken Shirriff"
+      ],
       "track": "hardware",
       "topics": [
         "silicon",
         "looking",
         "shirriff"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Looking at Silicon | Ken Shirriff.",
-      "summary": null,
+      "teaser": "Shows how microscope photos of vintage chip dies reveal transistors, logic gates, microcode ROMs and FPGA configuration bits.",
+      "summary": "The talk shows how to read the structure of old silicon chips from microscope photos of their dies. It starts with the Intel 8008, showing how individual transistors look as switches and how they combine into inverters, NAND and NOR gates, bit-storage loops and registers. The speaker then covers the HP nanoprocessor, where each chip needed its own bias voltage, and the FPGA, where repeated tiles hold configuration memory, lookup tables and routing switches that map onto a bitstream format.\n\nThe middle section focuses on reading ROM contents directly from the die. For the Sinclair scientific calculator, the speaker recovered a 320-word program and built a simulator to show how trig and logarithm functions were approximated with slow, repeated decimal shifts. In the Intel 8086, a 10-kilobit microcode ROM was read out and checked against die photos, which revealed a couple of undocumented instructions. The 8087 constant ROM was shown to hold the binary value of pi. Counterfeit cases followed: a memory chip that was really a touch-tone generator, and an 8086 that turned out to be a semi-custom logic array.\n\nThe closing part gives practical advice for newcomers. Ceramic and metal-can packages can be opened with a saw or chisel instead of harsh acids. A metallurgical microscope, many overlapping photos stitched into one high-resolution image, and household chemicals for stripping oxide and metal layers make the work feasible at home. Online die photos also allow practice. The speaker notes that analysis becomes much harder after about 1980, when two metal layers and tiny features call for electron microscopy.",
       "durationSeconds": 2100,
       "conference": "hardwear",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "BpocgiNuJKY",
@@ -4555,7 +4629,7 @@
         "Ilja van Sprundel",
         "Joseph Tartaro"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "thing",
         "iommu",
@@ -4563,8 +4637,8 @@
         "sprundel",
         "joseph"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Things not to do when using an IOMMU | Ilja van Sprundel & Joseph Tartaro.",
-      "summary": null,
+      "teaser": "Catalogs how kernel drivers misuse IOMMU mappings, from leaked and late unmaps to information leaks reachable over DMA.",
+      "summary": "An IOMMU lets a host limit which memory a device can reach through DMA, acting like a firewall between peripherals and system RAM. The talk takes the IOMMU and platform as working correctly and focuses on driver code, where mappings are set up and where mistakes happen. It traces how DMA went from a trusted path to an attack surface, and why external ports, secure devices and virtual machines depend on IOMMU protection.\n\nThe speakers grouped recurring driver mistakes and illustrated each with examples from Linux and FreeBSD. Mapping errors include leaked mappings that outlive their buffers, device-controlled unmaps driven by pointers in shared memory, and unmapping only after freeing. Race conditions arise when drivers validate data in memory the device can still change. Information leaks come from buffers that are never cleared, or from structure padding and unused fields. Because mappings are page-granular, small buffers can expose neighbouring stack or heap data, and a demonstration against an emulated network card recovered credentials from kernel heap memory.\n\nTheir conclusion is that enabling an IOMMU only stops trivial DMA attacks. Stronger protection requires drivers to unmap as soon as possible, keep pointers private, validate every device-supplied value, clear buffers and keep function pointers out of shared memory. They called for simpler, granularity-aware APIs, consistent IOMMU deployment and better documentation, noting that they were not aware of any secure-coding standard for driver DMA.",
       "durationSeconds": 2169,
       "conference": "hardwear",
       "viewCount": 1800,
@@ -4651,8 +4725,8 @@
         "extraction",
         "emfi"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Toasting MCUs: A Firmware Extraction by EMFI | Karim & Olivier | Hardwear.io Conference Netherlands.",
-      "summary": null,
+      "teaser": "Shows a low-cost programmable electromagnetic fault injector and its use to bypass firmware protections on an IoT microcontroller.",
+      "summary": "A security team from Ledger presents a low-cost electromagnetic fault injection (EMFI) platform they built because commercial tools were expensive and earlier homemade designs used a fixed voltage and an external power supply. The board runs from USB at 3.3 V. A step-up stage feeds a voltage multiplier that reaches about 1.2 kV, charging a ceramic capacitor bank that discharges quickly through an IGBT. An STM32 microcontroller sets the output voltage via PWM and reads it back through an ADC, so pulse strength can be tuned in software.\n\nThe design choices are explained: ceramic capacitors for fast discharge despite limited energy storage, a dedicated gate driver for the IGBT, and two SMA outputs that let the pulse polarity be flipped without building another coil. The presenter then tested the tool on an IoT chip with three protection levels. By scanning the die surface and changing the voltage per location, he found that low voltages had little effect while higher ones crashed the chip, with roughly 300 to 500 V being the useful range. At 400 V, a fault against the level-bypass command succeeded in about 60 percent of attempts. A later fault during a read-memory command, checked through power traces, succeeded about 30 percent of the time.\n\nThe closing comparison points to portable USB power, programmable voltage and a total build cost near 200 dollars. In the Q&A, the team said probe distance was not varied because voltage served as the tuning knob, that some packages needed decapsulation while others did not, and that closely spaced pulses were possible because the capacitors keep residual charge. The takeaway is that a cheap, programmable EMFI board can support repeated fault attempts against real microcontroller protections.",
       "durationSeconds": 1738,
       "conference": "hardwear",
       "viewCount": 1000,
@@ -4715,12 +4789,13 @@
         "boot",
         "cristofaro"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Look mum, no key! Bypassing Encrypted Secure Boot | Cristofaro Mune & Niek Timmers.",
-      "summary": null,
+      "teaser": "Shows how electromagnetic fault injection bypasses ESP32 encrypted secure boot and reads plaintext flash without the key.",
+      "summary": "The talk shows how electromagnetic fault injection can defeat encrypted secure boot on the ESP32, an Xtensa-based IoT chip, without the encryption key. The team first checked their probe and setup by reproducing earlier voltage-glitching results and using a simple counting loop to confirm the chip responded to the technique. They then mapped a sensitive spot on the die and tuned timing and pulse strength against a trigger tied to the end of bootloader loading, reaching a signature-check bypass at about two successful glitches per minute.\n\nNext they glitched the memory copy loop that moves the bootloader into RAM, so that copied pointer values reached the program counter and gave control of execution. Flash encryption blocked this route because decryption is transparent to the CPU. Instead they used the ROM download mode, which cannot be disabled, to place code in SRAM, and found that SRAM survives a watchdog warm reset. Glitching the reboot redirected execution into leftover data, and from there they reached the normal-mode command handler and read plaintext flash, checking each attempt with a liveness command.\n\nA single EM glitch thus bypassed secure boot and flash encryption and extracted plaintext flash. The disclosure produced CVEs, and revision 3 of the chip adds fault-injection checks and permanently disables the bootloader function. The speakers advised starting with low pulse strength, since strong pulses can damage nearby components. Their takeaway is that fault injection should not be limited to skipping instructions, because combining it with other techniques makes attacks far more effective.",
       "durationSeconds": 3163,
       "conference": "hardwear",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "j9dCXmc5WhE",
@@ -4820,12 +4895,13 @@
         "effective",
         "boot-time"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Sinking U-Boots with Depthcharge: Effective Exploitation of Boot-Time Security Debt | Jon Szymaniak.",
-      "summary": null,
+      "teaser": "Shows how leftover U-Boot debug commands on a speaker expose memory read and write primitives that enable a root shell.",
+      "summary": "The talk examines security debt in U-Boot, the bootloader widely used on system-on-a-chip devices. Engineering conveniences such as UART console commands, memory display and modify tools, and environment variables can undermine a secure boot chain when they stay enabled in production builds. The speaker argues that the attack surface reaches beyond the serial console to physical bus interfaces, network boot, and unauthenticated storage.\n\nTo demonstrate, the speaker presents Depth Charge, a Python toolkit with a companion microcontroller that operates on I2C buses. Against a consumer Sonos bookshelf speaker, the walkthrough covers initial console inspection and dumping U-Boot from RAM through an I2C command that acts as a read-write primitive. Command tables found in the binary reveal a hidden, more permissive command set. Patching the lock-state checks in memory, without actually unlocking the device, exposes those extra commands. Appending an init argument to the kernel command line then yields a fallback root shell. A deliberate unaligned access triggered a data abort that leaked the global data pointer and its exported jump table.\n\nThe closing advice is to expose the minimum by default, remove the command line interface where possible, and use device-unique authentication such as challenge-response for service unlocks instead of shared passwords. Teams should also verify file system and storage contents, since an attacker with physical access can tamper with them. Fault injection and glitching are noted as ways to defeat password checks.",
       "durationSeconds": 2953,
       "conference": "hardwear",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "FFGQJBmRkLw",
@@ -4851,7 +4927,9 @@
       "youtubeId": "Hzazchbvu6M",
       "slug": "securing-can-bus-augmenting-the-can-protocol-dr-ken-tindell-hard",
       "title": "Securing CAN bus: augmenting the CAN protocol | Dr. Ken Tindell | Hardwear.io Webinar",
-      "speakers": [],
+      "speakers": [
+        "Dr. Ken Tindell"
+      ],
       "track": "hardware",
       "topics": [
         "can-bus",
@@ -4860,12 +4938,13 @@
         "tindell",
         "hardwear"
       ],
-      "teaser": "Security researchers examine technical aspects of Securing CAN bus: augmenting the CAN protocol | Dr. Ken Tindell | Hardwear.io Webinar.",
-      "summary": null,
+      "teaser": "Shows how hardware source tagging and bus guardians can stop CAN bus spoofing and denial-of-service attacks.",
+      "summary": "Dr. Ken Tindell opens with why the Controller Area Network in cars, rail, healthcare and factory equipment is hard to secure. Designed in the 1980s before connected vehicles, it has no authentication. Attackers reach it by cutting into exposed wiring, abusing OBD-II dongles, or hijacking an ECU through flaws in infotainment or telematics. He separates frame attacks, which spoof IDs or flood the bus through a normal controller, from protocol attacks that reconfigure the transmit pin and bit-bang the bus.\n\nHe then reviews common defences. Intrusion detection spots anomalies but cannot reliably stop a frame. Security gateways filter traffic yet cannot stop a device hijacked through permitted messages. Message authentication adds key-management and replay problems, and shared keys let a compromised node impersonate others. His proposal, CANhg, embeds fast out-of-band bits in standard frames that carry a hardware source address, invisible to ordinary controllers. An IDPS can trigger an error frame before a spoofed frame completes, and a bus guardian disconnects the offending host with overload frames to prevent a bus-off loop.\n\nA bench demo showed a spoofed frame destroyed and the attacking node shut down. Policy stays in software so it can vary per manufacturer, while the hardware supplies mechanisms. Guardians go on the nodes at greatest risk, and FPGA prototypes, a draft specification and formal verification are in progress. The takeaway is that hardware source tagging with software policy can add authentication and denial-of-service protection without rewiring vehicles.",
       "durationSeconds": 2628,
       "conference": "hardwear",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "7AIwe3YbaK8",
@@ -4987,7 +5066,7 @@
         "henrik",
         "ferdinand"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Analyzing Embedded Systems The Smart Way | Henrik Ferdinand Noelscher | Hardwear.io Webinar.",
+      "teaser": "Explains how to map PCB components, automate part number lookup, and reconstruct a schematic to plan embedded security testing.",
       "summary": "### Overview\nIn this Hardwear.io webinar presentation, Henrik Ferdinand Noelscher discusses efficient methodologies for reverse engineering embedded systems, focusing on printed circuit boards (PCBs). Embedded hardware analysis traditionally begins with tearing down a device and manually inspecting components, tracing connections, and looking up documentation—a process that can be tedious, error-prone, and time-consuming. Noelscher proposes automating component identification, part number recognition, and technical documentation retrieval to reconstruct high-level schematics quickly and accelerate the testing pipeline.\n\n### Key Topics\n- **Targeting Active Components**: Prioritizing integrated circuits, microcontrollers, and flash storage over passive parts (such as resistors and capacitors) to identify firmware execution and data storage locations.\n- **Optimized PCB Imaging**: Capturing high-resolution images of PCB front and back layers using clean boards, proper lighting, low ISO, long exposure times, and minimal background space to facilitate automated analysis.\n- **Automated Component Detection**: Implementing color-based segmentation and rectangular fitting to identify chip packages, paired with template matching to locate repeating components across orientations.\n- **OCR and Part Number Resolution**: Extracting text from chip surfaces via optical character recognition, handling noise with character length thresholds, and resolving authentic part numbers using catalog databases and naming schemas.\n- **Unlabeled and Rebranded ICs**: Analyzing physical chip package dimensions and power/ground supply pin layouts to identify custom-labeled or scraped chips based on known manufacturer designs.\n- **Automated Data Gathering**: Scraping and structuring datasheets, pinout tables, IDE definitions, and reference manuals to surface debugging ports (such as JTAG), communication buses, and architecture details.\n- **Hardware Netlist Extraction Techniques**: Comparing low-overhead non-destructive approaches with advanced methods like PCB delayering, X-ray imaging, and automated flying-probe testing.\n\n### Technical Details\nTo isolate chips on a circuit board, the system blurs high-frequency noise and removes background solder mask colors (such as green) using pixel thresholding. Rectangles are fitted over the remaining segmented blobs to delineate chip boundaries. For passives or missing components, template matching calculates similarity metrics across the board and supports rotation-invariant detection. Extracted chip images are fed into OCR services, filtering out artifacts and matching against catalog patterns (e.g., STM32 naming schemes). For Ball Grid Array (BGA) components, table extraction converts package diagram matrices into structured pinout lists that can be mapped over the PCB layout. When extracting documentation, converting PDFs into HTML, images, and text allows regular expressions on tables of contents and keyword searches (such as targeting JTAG or UART) to automatically segment and index critical chapters.\n\n### Takeaways\nAutomating the early reconnaissance steps of hardware analysis reduces back-and-forth between the workbench and the computer while minimizing missed attack vectors. Analysts do not need complete physical netlists to begin firmware extraction; partial schematic reconstruction identifying key interfaces (e.g., SPI flash connections, UART lines, debugging interfaces) provides sufficient leverage for penetration testing. High-quality imaging and small, modular automation tools significantly enhance analysis speed and thoroughness.",
       "durationSeconds": 2286,
       "conference": "hardwear",
@@ -5462,7 +5541,9 @@
       "youtubeId": "Ev28MXJdjHE",
       "slug": "hardware-security-evaluation-of-intel-max-10-fpgas-dr-sergei-sko",
       "title": "Hardware security evaluation of Intel MAX 10 FPGAs | Dr. Sergei Skorobogatov | hardwear.io NL 2019",
-      "speakers": [],
+      "speakers": [
+        "Sergei Skorobogatov"
+      ],
       "track": "hardware",
       "topics": [
         "hardware-security",
@@ -5472,12 +5553,13 @@
         "fpga",
         "sergei"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Hardware security evaluation of Intel MAX 10 FPGAs | Dr. Sergei Skorobogatov | hardwear.io NL 2019.",
-      "summary": null,
+      "teaser": "Shows how Intel MAX 10 FPGA security fuses can be bypassed with laser, electromagnetic and power glitching attacks.",
+      "summary": "This talk evaluates the hardware security of Intel MAX 10 FPGAs, devices marketed for security use because their configuration bitstream sits in on-die flash rather than external memory. The speaker explains the three security fuses (verify protect, encrypted-only and JTAG security) and how the boot logic reads their state from specific byte sequences in system memory. Protection only holds when verify protect and encrypted-only are both set, a point the manufacturer does not clearly document.\n\nThe attacks range from invasive to non-invasive. Backside laser fault injection flipped the fuses and gave full access, and timing tests showed the pulse must land close to the TCK edge. Non-invasive methods included searching for undocumented JTAG commands, where none helped, and recovering about 97% of the data through remanence after an interrupted chip erase. Power analysis of boot traces, electromagnetic analysis, which had poor signal-to-noise, and power glitching were also tried, with glitching more effective on dual-supply devices. Electromagnetic pulse injection proved the most practical route, but the flyback voltage from the coil could not be suppressed, as fast, ultrafast and silicon carbide diodes all failed, so the speaker worked with the pulse instead.\n\nThe closing section covers dangers to the researcher, including hydrofluoric acid, piranha solution, high-power lasers and charged capacitors or inductors that can produce voltage spikes. The conclusion is that the device was not certified for high security, that newer parts do not necessarily have better protections, and that keys stored in flash remain a weak point. Future work points to reverse engineering and memory extraction on smaller process nodes.",
       "durationSeconds": 3441,
       "conference": "hardwear",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "4ZsocBDr3iQ",
@@ -6050,21 +6132,25 @@
       "youtubeId": "L5yl4A1npVU",
       "slug": "2018-black-box-is-dead-long-live-black-box-by-v-kononovich-and-a",
       "title": "2018: Black Box Is Dead. Long Live Black Box! by V. Kononovich And A. Stennikov",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "V. Kononovich",
+        "A. Stennikov"
+      ],
+      "track": "hardware",
       "topics": [
         "dead",
         "kononovich",
         "black",
         "long"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 2018: Black Box Is Dead. Long Live Black Box! by V. Kononovich And A. Stennikov.",
-      "summary": null,
+      "teaser": "Details reverse engineering of an NCR ATM cash dispenser controller's firmware and how its protections were bypassed.",
+      "summary": "The talk revisits black box attacks against ATMs, where extra hardware attached to internal buses makes a machine dispense cash without relying on the processing center or the ATM software. The speakers outline the ATM architecture, from the network link and XFS middleware down to device buses, and compare the serial, SDC and USB interfaces used by cash dispensers. They focus on NCR dispensers, recalling an earlier attack that exploited predictable key generation in an encrypted protocol.\n\nThe main research targeted the dispenser controller, which can be bought secondhand. The speakers explain how they analysed its unencrypted, unstripped firmware to map its services, classes and command handling. They describe how the initial encryption key is issued after a physical toggle is switched, how the bootloader was reached through a command that is not encrypted, and how the signed firmware upload had to be satisfied. Repeated bricking during firmware uploads is covered as part of the process. Their patched firmware removed the requirement for command encryption, and a demonstration showed a cash withdrawal.\n\nThe team reported the issues to NCR, which confirmed them, released fixes in a security update with two CVE identifiers, and published guidance for operators. The practical takeaway is that encrypting bus traffic does not help if firmware can be replaced or its checks patched, so physical access control and firmware integrity verification matter for dispenser hardware.",
       "durationSeconds": 2136,
       "conference": "hardwear",
       "viewCount": 1400,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2018
+      "year": 2018,
+      "difficulty": "expert"
     },
     {
       "youtubeId": "10Dag6ee2d8",
@@ -6303,7 +6389,9 @@
       "youtubeId": "C9caTarwLEA",
       "slug": "2018-spreading-the-load-building-a-better-hardware-hacking-commu",
       "title": "2018: Spreading The Load: Building A Better Hardware Hacking Community by Kate Temkin",
-      "speakers": [],
+      "speakers": [
+        "Kate Temkin"
+      ],
       "track": "hardware",
       "topics": [
         "hardware-hacking",
@@ -6311,13 +6399,14 @@
         "load",
         "building"
       ],
-      "teaser": "Security researchers examine technical aspects of 2018: Spreading The Load: Building A Better Hardware Hacking Community by Kate Temkin.",
-      "summary": null,
+      "teaser": "Traces a Nintendo Switch boot ROM flaw and argues hardware security needs more openness, shared knowledge and accessible tooling.",
+      "summary": "This keynote argues that hardware security is about where software security was ten years ago: many vendors either ignore it or hide their implementation details, and the wider community treats hardware hacking as a closed, elite skill. The speaker uses the Nintendo Switch as the main case. The console's software was heavily hardened, but the Tegra X1 boot ROM was deliberately hidden and locked once it finished running. Researchers got the code out using voltage fault injection, and development boards exposed a boot configuration flag that allowed arbitrary memory writes during boot.\n\nFurther work showed that USB recovery mode could leak stack contents through a request with a user-controlled length, and that this led to an unbounded memory copy. The flaw affected Nvidia Tegra processors going back about a decade and undermined the chip's root of trust, including key material meant to be inaccessible to software. The speaker describes a coordinated disclosure that was disrupted when someone else published details early, forcing the team to release its tooling sooner than planned. The talk also notes that similar peek-and-poke style commands were found in Qualcomm recovery tools.\n\nThe speaker concludes that the problem is cultural as much as technical. Vendors should avoid hiding boot code, since obscurity does not protect devices, and engineers across electrical and software disciplines should stop treating hardware as separate. The community should favour open, inexpensive tools and approachable teaching over secretive exploit showcases. Security also needs to be weighed as a design constraint alongside cost, performance and power, and disclosure timelines for hardware may need negotiating with vendors rather than a fixed 90-day rule.",
       "durationSeconds": 3276,
       "conference": "hardwear",
       "viewCount": 1100,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2018
+      "year": 2018,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "00gbXqaH6Ik",
@@ -6502,8 +6591,11 @@
       "youtubeId": "nqF_IjXg_uM",
       "slug": "2017-kernelfault-by-niek-timmers-and-cristofaro-mune",
       "title": "2017:- KERNELFAULT by Niek Timmers & Cristofaro Mune",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Niek Timmers",
+        "Cristofaro Mune"
+      ],
+      "track": "hardware",
       "topics": [
         "kernelfault",
         "niek",
@@ -6511,8 +6603,8 @@
         "cristofaro",
         "mune"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 2017:- KERNELFAULT by Niek Timmers & Cristofaro Mune.",
-      "summary": null,
+      "teaser": "Shows how voltage glitching on an ARM Linux system can bypass kernel checks and redirect program control flow.",
+      "summary": "The talk explains how voltage fault injection can be used against a Linux system running on an ARM-based embedded target. It starts with background on glitching: a workstation drives a glitch generator, a trigger signal from the target marks the attack window, and the glitch timing and shape are randomized until the software misbehaves. The speakers note that fault injection has previously been used to pull keys from smart cards and to bypass protections on game consoles, and that finding exploitable kernel bugs has become harder, which makes hardware-assisted attacks attractive.\n\nTo tune the attack, the team built a test setup in which a user-space application talks to a kernel module that updates a counter while it runs. Plotting the results across glitch length and intensity showed a narrow band where the counter was skipped without the target crashing. They then applied the technique to a kernel check on a user-supplied length value, which let them load more data into memory than the check should allow. A second case used glitching to corrupt instructions so the program counter jumped to unintended addresses, giving control over execution. They report a success rate of roughly one percent, or about one successful bypass every 15 minutes, and they also show a variant driven from user space.\n\nThe main takeaway is that a single well-timed glitch can break software security boundaries, and that the search for working parameters can be narrowed to speed up results. The speakers argue that checks tied to one point in time are weak, because a glitch can land at many different places in the code.",
       "durationSeconds": 2970,
       "conference": "hardwear",
       "viewCount": 1300,
@@ -6918,7 +7010,10 @@
       "youtubeId": "_RJvJZIogO4",
       "slug": "2016-reverse-engineering-vehicles-burpsuite-style-by-javier-and",
       "title": "2016 :- Reverse Engineering vehicles Burpsuite Style by Javier & Ferdinand",
-      "speakers": [],
+      "speakers": [
+        "Javier",
+        "Ferdinand"
+      ],
       "track": "malware",
       "topics": [
         "reverse-engineering",
@@ -6927,13 +7022,14 @@
         "vehicle",
         "burpsuite"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 2016 :- Reverse Engineering vehicles Burpsuite Style by Javier & Ferdinand.",
-      "summary": null,
+      "teaser": "Shows an open-source CAN bus tool that logs, rewrites, and hijacks UDS and TP 2.0 diagnostic sessions in cars.",
+      "summary": "The talk opens with the diagnostic protocols that run over a vehicle's CAN bus. The speakers explain that UDS and TP 2.0 are transport layers that split payloads larger than a single CAN frame, and they describe the main UDS services that matter to an attacker: security access, reading memory by address, reading data by identifier, and requesting firmware uploads. They note that TP 2.0 is a close relative of UDS with different service codes and frame sizes.\n\nThey then introduce the Cam Badger, a low-cost board built around an LPC1769 microcontroller with two CAN interfaces, an SD card for logs and rule files, and standalone, USB serial, and network modes. Its firmware parses UDS and TP 2.0 traffic in real time and can run as a man-in-the-middle that rewrites specific bytes or masks on the fly. In a live demo, a speed-related byte was halved on the way through with no visible added latency. The talk also covers recording traffic with timestamps for later playback and capturing firmware transfers from the bus to the SD card.\n\nThe final section covers security access hijacking. A bridge device watches for another tester completing a successful security access exchange, then takes over that diagnostic session without knowing the key or algorithm. The demo shows that the session type must match the target module before the hijack works, and that memory can then be read without authentication. The takeaway is that a session authenticated for one tool can be reused by another device on the bus. The speakers publish the tool and its documentation on GitHub and offered a booth demo afterward.",
       "durationSeconds": 2217,
       "conference": "hardwear",
       "viewCount": 1400,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2016
+      "year": 2016,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "ui-vqv-Ox-w",

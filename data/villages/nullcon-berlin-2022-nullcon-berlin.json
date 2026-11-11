@@ -134,7 +134,7 @@
         "finding-flaws"
       ],
       "teaser": "Demonstrates keynote Day 2 | Hunting Evasive Vulnerabilities: Finding Flaws That Others Miss by James Kettle and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk looks at why some web vulnerabilities stay hidden even after heavy scanning and manual testing. The speaker argues that an obvious flaw can distract a tester from a more serious one nearby, and that visible defenses can discourage attacks that would still work. He gives a Bugzilla timing attack that succeeded in Firefox because a duplicated X-Frame-Options header was merged by a front end, and he explains that DNS rebinding keeps being rediscovered because people assume it is outdated.\n\nHe also covers how security terminology drifts over time, so request smuggling and response splitting are now often described in shallow ways that hide their original meaning. He recommends tracing techniques back to their original papers. Another case is a spreadsheet CSV injection that he first dismissed, then developed into a payload that could silently send spreadsheet data out through DNS once the file was opened. For finding hidden issues, he suggests replacing technology fingerprinting with behaviour-based questions, such as which inputs affect a response and whether they are part of a cache key, and he uses cache poisoning as the example.\n\nHe closes by encouraging testers to automate repetitive steps so that more payloads are cheap to try, to ask small questions with quick code, and to filter noise carefully without discarding useful results. His takeaways are to test ideas rather than assume they will fail, to check for evidence of unexpected behaviour and not only confirmed loopholes, and to learn from original sources.",
       "durationSeconds": 2427,
       "conference": "nullcon",
       "viewCount": 22000,
@@ -257,7 +257,9 @@
       "youtubeId": "Mvm1yLbx_bM",
       "slug": "jailbreaking-the-appletv3-tales-from-a-full-stack-hack-by-tihm-s",
       "title": "Jailbreaking The AppleTV3: Tales From A Full Stack Hack by Tihm Star | Nullcon Berlin",
-      "speakers": [],
+      "speakers": [
+        "Tihm Star"
+      ],
       "track": "blue-team",
       "topics": [
         "jailbreaking-appletv3",
@@ -267,11 +269,12 @@
         "full-stack"
       ],
       "teaser": "Analyzes jailbreaking The AppleTV3: Tales From A Full Stack Hack by Tihm Star | Nullcon Berlin and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk covers building a full untethered jailbreak for the third-generation Apple TV, a 2012 set-top box running a stripped-down iOS build. The speaker explains why the device went roughly eight years without a public hack: it has no JIT, a small attack surface, and no bootrom exploit available at the time. The entry point is a DNS redirect and a trusted self-signed certificate that make the Trailers app render attacker-hosted pages, followed by a WebKit memory corruption that gives read and write access to the process.\n\nFrom there, much of the work was filling gaps left by the initial exploit. Crash logs revealed library addresses, and memory was dumped in slow chunks, first over USB and later through a remote-control automation workaround. Code signing was sidestepped by locking memory pages, and a return-chain trick through a lazy-linked function let the exploit keep running. A kernel exploit then disabled code signing and sandboxing and elevated privileges, with kernel offsets taken from a newer, unencrypted kernel image.\n\nFor persistence, the early boot daemon was replaced with a JavaScript core binary that runs a JavaScript file on every boot and repeats the kernel exploit, producing an untethered jailbreak. When the launch manager would not start SSH, the speaker injected code into another system daemon to request it. The main takeaway is that a complete device compromise can be assembled from several older, public bugs, where the hard part is the glue between them. The talk closes with a light demo of replacing the screensaver images.",
       "durationSeconds": 2463,
       "conference": "nullcon",
       "viewCount": 24000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "QtObgEfy5Jw",
@@ -359,7 +362,9 @@
       "youtubeId": "L0FYefkGyeg",
       "slug": "attack-surfaces-for-5g-networks-by-altaf-shaik-nullcon-berlin",
       "title": "Attack Surfaces For 5G Networks? by Altaf Shaik | Nullcon Berlin",
-      "speakers": [],
+      "speakers": [
+        "Altaf Shaik"
+      ],
       "track": "wireless",
       "topics": [
         "attack-surfaces",
@@ -369,7 +374,7 @@
         "shaik-nullcon"
       ],
       "teaser": "Demonstrates attack Surfaces For 5G Networks? by Altaf Shaik | Nullcon Berlin and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The speaker, a cellular security researcher at TU Berlin, presents 5G as a platform for many industries rather than a simple upgrade of 4G. Most deployments today are non-standalone: the radio is new, but the core still runs 4G protocols, so the standalone security improvements are largely missing.\n\nHe revisits long-standing weaknesses that fake base stations exploit over the air, including identifier exposure, forced downgrades and null encryption. He then walks through 5G's countermeasures: concealed subscriber identifiers, randomized temporary identifiers, user-plane integrity protection, and a change that moves security setup ahead of capability exchange. A 2021 retest of operators first checked in 2015 found mixed results, with some randomizing identifiers and others still issuing ones that stayed constant for days. Integrity protection was absent in networks tested in several countries, and phones offer no true 5G-only mode.\n\nLooking beyond the radio, he covers new attack surfaces: APIs of the network exposure function, private 5G cores attached to public networks, virtualized and open RAN components, and network slicing. In tests against six or seven narrowband IoT networks, he reached devices belonging to others. He closes by noting that many security features are optional, so correct configuration decides whether 5G is safer than 4G, and that several further findings were held back during disclosure.",
       "durationSeconds": 2500,
       "conference": "nullcon",
       "viewCount": 1500,

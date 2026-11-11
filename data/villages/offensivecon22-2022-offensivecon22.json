@@ -22,10 +22,11 @@
         "actually-find"
       ],
       "teaser": "Demonstrates mark Dowd- Keynote -How Do You Actually Find Bugs and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Mark Dowd's OffensiveCon 2022 keynote addresses a question he is often asked: how researchers actually find bugs in major software, a process rarely covered in talks. He argues that mindset matters as much as technique, since researchers constantly meet evidence that their understanding is incomplete. He describes running two projects at once, stepping away when stuck, and returning later with fresh context. He treats patches as frustrating but useful documentation of how bugs look in a given codebase.\n\nThe middle of the talk covers assumptions that cause researchers to skip promising targets, such as \"everyone has already looked at this\" or \"this attack surface is mined out.\" Dowd describes finding overlooked bugs in major applications and notes that a flaw judged useless can become valuable after later code changes. He reads documentation only after forming hypotheses from the code, which surfaces behaviour that specifications rule out. Examples include a state-machine flaw in a messaging app, a reference-counting race in an iOS kernel port subsystem, and a sendmail signal-handling bug found while writing a book chapter. He also highlights indirect attack surface, legacy support, and unnecessary library features such as the Log4j formatting functionality.\n\nHe closes with practical habits: record failed ideas and why they failed so they can be rechecked in newer versions, compare how other projects implement the same component, and treat fuzzing and static analysis as valuable but insufficient on their own. He warns that building tooling can become a distraction from reading code, and suggests pairing tool builders with bug hunters. His takeaway is that vulnerability research is difficult but learnable, and that code reading is a distinct skill that needs deliberate practice.",
       "durationSeconds": 3578,
       "viewCount": 20000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "yXZQ0KKI8n0",
@@ -85,10 +86,11 @@
         "menarini"
       ],
       "teaser": "Examines federico Menarini and Martijn Bogaard and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines the trusted execution environment on the Exynos-based Samsung Galaxy S21, focusing on Samsung's Tigris secure OS and its loadable firmware modules, which run at kernel-level privilege beside the secure kernel. It explains how normal-world apps reach the secure world through the Linux kernel and the secure monitor, and how the firmware images sit encrypted in a dedicated partition and are loaded at boot.\n\nThe researchers extracted and decrypted these modules, then looked for flaws. Starting from a trusted application that already had permission to issue secure monitor calls, they abused the crypto manager's encrypted DMA handler, which did not check its source and destination addresses, to copy secure memory out and overwrite it. Heap spraying made the physical addresses needed for this predictable enough to work. Other cases were reached from the normal world with a custom kernel and helper drivers. In the RPMB module, a shared-memory call wrote to caller-supplied pointers without validation. Misconfigured TrustZone address space controller ranges could be inverted to expose secure memory to the non-secure side. A firmware image could be overwritten at runtime, and the signature check then passed for the replacement code. A secure logging ring buffer with unchecked pointers allowed writes into hardware registers.\n\nThe main takeaway is that the bugs are often simple, but reaching them is hard because the firmware is encrypted and its hardware is poorly documented. The speakers said more issues were still in disclosure, and they advised Samsung device owners to install updates promptly.",
       "durationSeconds": 3138,
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "oVbpy1KbiBc",
@@ -129,10 +131,11 @@
         "yegor-vasilenko"
       ],
       "teaser": "Outlines alex Ermolov, Alex Matrosov and Yegor Vasilenko UEFI Firmware Vulnerabilities and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk covers UEFI firmware vulnerabilities, presenting 28 issues found by the speakers' research team, 23 of them disclosed that week and affecting about 25 vendors. It explains why shared reference code spreads flaws across many device makers, and why fixes are slow to reach endpoints when reference code, device makers and update channels ship on different schedules.\n\nThe central case study follows the USB runtime driver, whose SMM handlers accept pointers from untrusted system memory. The presenters trace repeated rediscoveries from 2007 to 2021, including a function-table call-out and integrity checks based on CRC32 that could be forged. They then show a device still receiving updates while carrying a four-year-old flaw, and a return-oriented programming chain that reads SMRAM from inside SMM on a system where SMM Code Check was not enabled. Other cases involve call-outs from runtime and boot services, and misused GetVariable calls that overflow stacks in DXE drivers; one was reproduced in QEMU and could compromise the Secure Boot chain of trust. The team also introduced EFI Explorer, an IDA Pro plugin for spotting these patterns.\n\nThe closing argument is that these bug classes persist because development teams lack practical knowledge of how attackers exploit them. Newer isolation mitigations raise the bar but add complexity, and vendors are unlikely to adopt them everywhere. Practitioners should push firmware updates through every layer, remove legacy code paths, and use the published advisories and open tooling to test their own code.",
       "durationSeconds": 2952,
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "1CjQ1_QWssI",
@@ -173,16 +176,19 @@
         "carl-smith"
       ],
       "teaser": "Reviews simon Scannell, Niklas Breitfeld and Carl Smith - Counter-Strike: Global Offsets and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The speakers set out to get code execution on Counter-Strike: Global Offensive clients from a malicious community server, since players join servers at random. They focused on server-to-client messages, built a proxy to inspect and modify the game's custom UDP protobuf traffic, and used leftover assertion-style checks from development code to find out-of-bounds accesses in the older Source engine C++ code.\n\nThe first bug was an information leak. Map downloads at round start use an HTTP URL the server supplies, and on Linux the client compared the Content-Length header case-sensitively while libcurl ignored case. A response with two length headers made the client allocate a heap buffer from one value and write it to disk from an empty body, leaving uninitialized heap memory in the file. Windows used a different HTTP API and the same idea still worked there. The server could then ask the client to upload game files, which were sent in full, so the leaked pointers defeated ASLR. Retries were harmless because the client's memory was never corrupted.\n\nThe second bug was an unchecked split-screen control message, which the client accepted even when no split-screen had been requested. Its slot index allowed an out-of-bounds access that led to a virtual call. Server-set config values stored in the data section let the attackers place a fake object and a vtable pointing to a jump gadget, and color values, obfuscated with a key derived from memory, became predictable once the base image was known. A pivot into a ROP chain gave control of the client. The team reported both issues through HackerOne in January, and after public disclosure Valve fixed them and paid a $15,000 bounty. Key lessons: do not trust server-supplied sizes, and keep parsing consistent across libraries.",
       "durationSeconds": 1217,
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "Pufx4hVMVVw",
       "slug": "shane-huntley-keynote-your-place-in-the-threat-landscape",
       "title": "Shane Huntley - Keynote - Your Place in the Threat Landscape",
-      "speakers": [],
+      "speakers": [
+        "Shane Huntley"
+      ],
       "track": "red-team",
       "topics": [
         "shane-huntley",
@@ -192,10 +198,11 @@
         "place-threat"
       ],
       "teaser": "Outlines shane Huntley - Keynote - Your Place in the Threat Landscape and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Shane Huntley, who now leads a threat intelligence team at Google after years in offensive security, argues that exploit developers and vulnerability researchers are part of a wider geopolitical contest and should understand their place in it. He notes that each part of the security community tends to see itself at the centre. Most of the threats his team tracks do not involve zero-days, but zero-days are among the most constrained resources an attacker has, which makes them a useful place to push back.\n\nThe middle of the talk covers concrete cases. North Korean actors posed as researchers, building social media profiles and blogs, then sent project files that ran PowerShell commands to people who were willing to look at a supposed zero-day. Some of those researchers were compromised, and the group was later linked to a reportedly full-chain exploit against Chrome and Windows 10. Defenders are finding zero-days too: his team reported 11 that were in active use last year, and a public count of in-the-wild zero-days reached a record. He describes Google's seven-day disclosure window for actively exploited bugs, which prompted a quick iOS update from Apple. He also covers commercial surveillance vendors, federal charges against former intelligence operators working for a UAE firm, and an Alibaba Cloud report of a Log4j issue that drew pushback from the Chinese government.\n\nHe closes with predictions: detection will make zero-day use harder, legal and geopolitical pressure on offensive tooling will grow, and investment in secure systems will increase. His advice to practitioners is to weigh their employer, their legal exposure and their reputational risk before taking on offensive work, since ignorance is becoming a weaker excuse.",
       "durationSeconds": 1683,
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "3RYf3g0nJmM",
@@ -213,10 +220,11 @@
         "baseband-debugger"
       ],
       "teaser": "Discusses eneko Cruz Elejalde- Building a DIY Baseband Debugger from Scratch and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The baseband processor in a smartphone handles cellular communications and runs its own firmware, which on some devices has little internal privilege separation and no signature checks. The talk covers the minimum needed to research it: a test phone, a shielded RF enclosure, a software-defined radio running a base station stack, and access to the firmware and debug symbols. The speaker explains why the application processor and baseband exchange AT commands, and why a rarely used AT command handler can be overwritten to serve as a debugger channel rather than the shared-memory interface.\n\nThe middle of the talk shows the firmware patches that make this work. Patched handlers let the baseband return register values and memory contents over the AT channel, and a second loaded module disables the memory protection regions set by both the baseband firmware and the kernel that loads it, so memory can be written. Breakpoints are placed by replacing an instruction with a software interrupt, whose handler polls a shared status block for debugger requests, reports registers, restores the original instruction and processor mode, and sleeps briefly so the real-time scheduler does not starve other tasks. Monitor mode is chosen so the rest of the baseband keeps running.\n\nIn a live demonstration, a breakpoint was set in the layer 3 handler and a crafted mobility management reject message was sent over a test call. The debugger showed the registers at the stop point and dumped the received message bytes from memory, and the baseband stayed responsive afterwards. The practical takeaway is that a debugger for a closed baseband is feasible with firmware patching and careful scheduling, which lowers the barrier to baseband research. The presenter said the patches and agent code would be released.",
       "durationSeconds": 3114,
       "viewCount": 2200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "V1nJeV0Uq0M",
@@ -285,7 +293,10 @@
       "youtubeId": "EFrIfXd3KZQ",
       "slug": "tamas-k-lengyel-and-balint-varga-perke-case-studies-of-fuzzing-w",
       "title": "Tamas K Lengyel and Bálint Varga-Perke - Case Studies of Fuzzing with Xen",
-      "speakers": [],
+      "speakers": [
+        "Tamas K Lengyel",
+        "Bálint Varga-Perke"
+      ],
       "track": "red-team",
       "topics": [
         "tamas-lengyel",
@@ -295,10 +306,11 @@
         "case-studies"
       ],
       "teaser": "Details tamas K Lengyel and Bálint Varga-Perke - Case Studies of Fuzzing with Xen and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk presents KFX, an open-source full-VM snapshot fuzzer built on the Xen hypervisor and integrated with AFL and AFL++. The speakers explain how Xen's VM forking creates copy-on-write clones that reset quickly, how a magic CPU ID marks where fuzzing starts and ends without a custom compiler, and how Intel Processor Trace supplies coverage feedback. Because the forks have no I/O, the target code must be self-contained.\n\nThe first case study fuzzes virtio code in the Linux kernel, motivated by Intel TDX threat models where the host sits outside the trust boundary. Xen cannot run virtio, so the team captured VM state from KVM with a QMP memory dump, patched KVM to pause at the magic CPU ID, and loaded the state into Xen with a custom transplant tool. To find harness points, they built a DMA monitor that removes EPT permissions on DMA pages and unwinds the stack on each access. This produced 738 distinct contexts, grouped into 70 snapshots. Two weeks of fuzzing found no sanitizer or panic hits, only hangs that fell outside the threat model.\n\nThe second case study targets a Windows antivirus product's document parser. The speaker placed breakpoints around file reads and a common ancestor function, injected test inputs into the buffer, and used a Ghidra extension that ranks functions by cumulative cyclomatic complexity to choose targets. A proof of concept rediscovered a known PowerPoint parser overflow. A later run of about nine hours produced 22 crashes that traced back to a single heap overflow in an older version. The takeaway is that full-system introspection reaches code that is hard to instrument, though large inputs and swapping can affect stability.",
       "durationSeconds": 3174,
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "nERNZ5mL46Q",

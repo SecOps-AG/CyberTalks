@@ -176,7 +176,7 @@
         "They Drive",
         "We Listen"
       ],
-      "track": "community",
+      "track": "wireless",
       "topics": [
         "wardriving",
         "v2x",
@@ -184,12 +184,13 @@
         "drive",
         "listen"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for V2X Wardriving - They Drive, We Listen.",
-      "summary": null,
+      "teaser": "Shows how V2X broadcasts from roadside units and cars can be captured over 802.11p and decoded into maps and vehicle data.",
+      "summary": "The talk covers V2X communication, focusing on the vehicle-to-infrastructure and vehicle-to-vehicle parts that run as CITS over 802.11p in the 5.9 GHz band. It walks through the stack, from GeoNetworking and transport layers to CAM and DENM messages, traffic light MAP and SPaT messages and roadside information, most of them ASN.1 encoded and signed under IEEE 1609.2. The privacy scheme with rotating certificates and identifiers is also covered.\n\nThe team built a portable capture rig on a Raspberry Pi with patched Wi-Fi cards and recorded packets while driving around Munich, Heidelberg and Austria. Most captured messages were position beacons from passenger cars, and most signed messages used NIST P-256 signatures. Some unsigned messages from what appeared to be test traffic lights were likely discarded by vehicles. Vehicle dimensions helped guess a car model, and comparing positions with OpenStreetMap speed limits flagged implausible speed readings.\n\nFor security testing, they built packets in Scapy with custom layers based on asn1tools and ETSI definitions. A test car did not display unsigned spoofed emergency-vehicle warnings. They fuzzed the ASN.1 layers in black-box fashion, using periodic beacons as a heartbeat to detect crashes, and noted that deeper signed layers need valid certificates to reach. The speakers plan to contribute their layers and mapping work to upstream projects and invited others to sniff and test V2X traffic.",
       "durationSeconds": 3410,
       "conference": "troopers",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "ULpr1LUAhIc",
@@ -872,11 +873,12 @@
         "threat-detection"
       ],
       "teaser": "Open-Source Firmware Security Testing details EMBA.",
-      "summary": null,
+      "summary": "The talk introduces EMBA, an open-source analyzer for embedded device firmware that automates the manual steps of firmware triage. The presenters contrast it with the usual workflow of running strings, binwalk, find and grep by hand, then reversing binaries in a decompiler, which they describe as slow and messy. EMBA takes a firmware image, extracts it with a set of extraction modules and a deep extraction mode for nested archives, and runs its analysis modules even when no Linux root filesystem is found.\n\nFor triage, the tool counts calls to legacy C functions such as string copy across every binary and library, using objdump with radare2 as a fallback, and checks for nearby length checks, network functionality, binary protections and whether a binary looks like vendor code. In a public Netgear router advisory example, the setup CGI binary stood out with thousands of string copy uses and many calls to system, which pointed the tester to where to look first. For known issues, EMBA builds a software bill of materials by combining static string matching with executing binaries using version flags, then queries CVE data and exploit sources.\n\nThe closing part covers the HTML report, which lets users drill down from components to CVEs and exploits, and notes support for container images. The takeaway is that automation handles known components and triage, so testers can focus manual effort on flagged areas, though finding new zero-days still depends on human analysis.",
       "durationSeconds": 2107,
       "conference": "troopers",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "c_DqxHmH7kc",
@@ -890,12 +892,13 @@
         "game",
         "over"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in UDS Fuzzing and the Path to Game Over.",
-      "summary": null,
+      "teaser": "Walks through pen testing automotive UDS diagnostics, from service enumeration to exploiting weak seed randomness in ECU security access.",
+      "summary": "This talk walks through a penetration testing approach to Unified Diagnostic Services (UDS), the diagnostic protocol that vehicle ECUs use over CAN and other in-car buses. The method starts by discovering arbitration IDs across the 11-bit and 29-bit ranges, then enumerating one-byte service IDs, and using negative response codes to learn why a request is refused. The speaker notes that some services, such as ECU reset and data identifier access, can have safety consequences when left unrestricted.\n\nThe core of the talk is the security access service, a seed-and-key challenge. The presenters describe finding that most ECUs they tested, roughly 90 percent by their estimate, seed their random number generator from processor uptime, which restarts at each boot and makes seeds predictable. They built two CaringCaribou modules for this: a randomness tester that resets the ECU and counts duplicate seeds across repeated requests, and a delay fuzzer that finds the reset-to-request timing at which a known seed reappears, so a previously obtained key can be reused.\n\nOnce access is gained, the speakers outlined what an attacker could reach, such as firmware dumps and data that is only writable under security access, including battery temperature thresholds. Their mitigation advice covers hardware security modules, a proper entropy source for seeds, and enforcing the same protections in bootloader modes, where they had found bypasses. The takeaway is to test every session and mode, not only the normal operating mode.",
       "durationSeconds": 3051,
       "conference": "troopers",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "clhzUGcx47A",
@@ -1257,7 +1260,7 @@
         "zero-trust",
         "azure-ad"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Breaking Azure AD joined endpoints in zero-trust environments.",
+      "teaser": "Shows how Azure AD joined Windows devices can be abused to steal and forge primary refresh tokens and bypass compliance checks.",
       "summary": "Dirk-jan Mollema explains Azure AD joined devices in Microsoft zero-trust architectures, then details token storage, hardware versus software protection, and joint-process abuses he discovered. Research demos cover stealing or replaying device tokens, bypassing conditional access assumptions, and an MFA bypass given privileged Entra roles—framed as breaking supposedly hardened cloud workstations.  Primary tools include ROADtools-derived insights and custom Mollema releases documented on dirkjanm.io for red-team assessors.  Defenders are urged to monitor device join events and PRT theft as closely as interactive user logons.",
       "durationSeconds": 3537,
       "conference": "troopers",
@@ -1457,8 +1460,11 @@
       "youtubeId": "WbIDOVB3lCs",
       "slug": "decrypt-everything-everywhere-by-birk-kauer-and-dennis-mantz-kaw",
       "title": "Decrypt everything, everywhere - by Birk Kauer and Dennis Mantz @ Kawaiicon 2019",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Birk Kauer",
+        "Dennis Mantz"
+      ],
+      "track": "red-team",
       "topics": [
         "decrypt",
         "everything",
@@ -1467,19 +1473,20 @@
         "kauer",
         "denni"
       ],
-      "teaser": "Security researchers examine technical aspects of Decrypt everything, everywhere - by Birk Kauer and Dennis Mantz @ Kawaiicon 2019.",
-      "summary": null,
+      "teaser": "Shows how a commercial encryption appliance was broken through command injection, Frida-guided fuzzing and privilege escalation to root.",
+      "summary": "The talk examines a commercial data encryption appliance sold for transparent encryption of cloud and on-premise data. The appliance holds the keys itself and returns decrypted data only to authorised requests. The researchers first wanted a real shell. Its admin command-line interface blocks special characters, but one network sub-command passed its argument straight to the Linux ip tool. By chaining an ip netns command, they ran arbitrary commands and reached a root shell.\n\nTo find more bugs, they targeted two binary services reachable through the firewall. These had no stack canaries, no PIE and an executable stack. Without source code, standard fuzzers were slow, so they built a fuzzer around Frida's Stalker module for coverage tracking. It hooked the packet parsing function, mutated inputs and sent them to the running process over the network. This turned up a denial-of-service condition. Separately, a login audit script triggered by SSH logins put attacker-controlled usernames into a shell command, which gave unauthenticated remote code execution. Local services bound to localhost then allowed escalation to root. Further issues, including a feature bypass, were mentioned but not covered for lack of time.\n\nThe researchers reported their findings to the vendor, which disputed that the root shell was possible. No public advisories or CVEs followed. The takeaway is that hardened appliances from security vendors can still contain basic injection flaws, and that coverage-guided fuzzing of closed binaries is practical with dynamic instrumentation.",
       "durationSeconds": 857,
       "conference": "troopers",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "u0h1xD0UDdE",
       "slug": "tr19-how-to-efficiently-assess-active-directories-of-any-scale",
       "title": "TR19: How to efficiently assess Active Directories of Any Scale",
       "speakers": [],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "tr19",
         "efficiently",
@@ -1488,8 +1495,8 @@
         "directorie",
         "scale"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for TR19: How to efficiently assess Active Directories of Any Scale.",
-      "summary": null,
+      "teaser": "Walks through BloodHound attack-path graphing with Cypher queries and an assessment tool for large Active Directory environments.",
+      "summary": "The session opens with why Active Directory matters: it handles authentication and authorization for users and computers, so compromising it can let an attacker impersonate most accounts and reach protected data. Real takeovers usually chain a foothold on a client, local admin escalation, and misconfigurations or vulnerabilities that are present in the environment, which makes them harder than they sound but still achievable with the right tools.\n\nThe first half is a primer on BloodHound. SharpHound collects data through regular LDAP queries and Win32 API calls, which are loaded into a Neo4j database and explored through a web UI or Cypher queries. The speaker walks through shortest-path queries, edge filtering and pre-built queries, and argues that path reduction is pointless until basic tiering and admin separation are in place. A PowerShell wrapper lets users run the same queries from a terminal and filter results by object properties. A scoring approach is also presented that rates high-value groups by the share of users who can reach them and the share of computers those users touch, giving management a figure to act on.\n\nThe second half presents Directory Ranger, which combines a questionnaire-based organizational audit with a technical scan for misconfigurations and vulnerabilities. The scan runs with standard user rights, without installing an agent, and relies on Microsoft's APIs. For assessments of a foreign directory, an encrypted configuration is exported to an administrator on the other side, who runs the collector and returns the data for analysis. Scans of more than 100,000 objects typically take 30 to 45 minutes, and the report is produced quickly after import. Typical use cases are compliance self-assessments, due diligence before mergers and acquisitions, and vetting suppliers before establishing trust. The takeaway is to check the basics before running path analysis, and to use assessment results to set remediation requirements before trusting another directory.",
       "durationSeconds": 1953,
       "conference": "troopers",
       "viewCount": 2000,
@@ -2115,7 +2122,10 @@
       "youtubeId": "VXHlB0EdBe0",
       "slug": "tr19-the-anatomy-of-windows-telemetry",
       "title": "TR19: The Anatomy of Windows Telemetry",
-      "speakers": [],
+      "speakers": [
+        "Alexander Dominic",
+        "Maximilian"
+      ],
       "track": "blue-team",
       "topics": [
         "windows",
@@ -2123,12 +2133,13 @@
         "tr19",
         "window"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for TR19: The Anatomy of Windows Telemetry.",
-      "summary": null,
+      "teaser": "Maps the architecture, data sources and network behaviour of Windows 10 telemetry and how to reduce it.",
+      "summary": "Researchers from Germany's Federal Office for Information Security (BSI) examine the telemetry built into Windows 10. The analysis is part of a larger BSI project and uses a Windows 10 1607 Long Term Servicing Branch build, chosen for its feature stability over a multi-year project. The speakers explain why telemetry matters for confidentiality and integrity, especially for government clients where Windows 10 is set to become the standard client image.\n\nThe architecture centres on the Diagnostic Tracking Service. It gathers data from Event Tracing for Windows as the primary source and from bundled executables and API functions as secondary sources. Collected events are compressed, buffered and copied to a local transaction file before being uploaded to Microsoft-managed back-end hosts roughly every 10 to 15 minutes, while the service polls for updates on a fixed interval. The telemetry level and control files pushed by Microsoft determine which data collection points are enabled and which external executables run, and the trigger logic stays opaque. The team found a man-in-the-middle weakness in the HTTP handling that Microsoft has since fixed.\n\nTo reduce exposure, the speakers compare four options: lowering the telemetry level, blocking back-end endpoints, disabling the service, and isolating the machine from the internet. They rate each by how much data it removes, how sustainable it is and how much maintenance it needs. Blocking endpoints and tuning individual data collection points are not sustainable, because updates can change endpoints and components. They advise a risk assessment and disabling telemetry where it is not needed, and they outline future work: a richer data viewer and continuous analysis of the secondary data sources.",
       "durationSeconds": 3267,
       "conference": "troopers",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "DPROA-6sa3o",
@@ -2189,7 +2200,7 @@
         "attacking",
         "non-window"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in TR19: Fun with LDAP and Kerberos: Attacking AD from non-Windows machines.",
+      "teaser": "Shows how to attack Active Directory through LDAP and Kerberos from Linux, without relying on Windows tooling.",
       "summary": "Ronnie Flathers teaches Active Directory offense from Linux using dig SRV records, unauthenticated LDAP binds, impactet-free static binaries, windapsearch, and Heimdal Kerberos clients. LDAP remains the source of truth for adminCount, nested domain admins, SPNs, and unconstrained delegation, while manual filters beat noisy net commands.\n\nHe releases krbroot for blazing Kerberos pre-auth spraying with minimal UDP traffic that often misses classic 4625 logging unless Kerberos auditing is enabled. The talk demos AS-REP roasting, overpass-the-hash via keytabs, ticket forging for persistence, and SMB/LDAP authenticated purely from .ccache files.\n\nThe goal is showing you do not need PowerShell on-domain to map and attack AD as long as DNS, time sync, and valid creds exist.",
       "durationSeconds": 3546,
       "conference": "troopers",
@@ -2213,12 +2224,13 @@
         "graph",
         "management"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in TR19: CypherDog 2.0 - Attackers think in Graphs, Managements needs Metrics....",
-      "summary": null,
+      "teaser": "Shows a PowerShell client that queries BloodHound's REST API, turning attack-path data into lists, metrics and reports.",
+      "summary": "CypherDog is a PowerShell module that wraps the BloodHound REST API, so Active Directory attack-path data can be queried from the command line instead of through the web interface. The talk opens with a short recap of BloodHound's core vocabulary: nodes, edges and paths, plus the object and relationship types added over time, such as ACLs, GPO links and delegation.\n\nThe demonstrations focus on reading and changing graph data. Commands return nodes, edges and shortest or all paths as PowerShell objects, support tab completion and pipeline chaining, and can print the equivalent Cypher query for any call. The speaker also showed adding and editing nodes and edges, safety switches for deletions, per-object notes, and a cheapest-path option that weights edges other than group membership. Listing commands expose nested administrative rights, and counting commands rank nodes by memberships, local admins or sessions.\n\nThe final part covered metrics meant for management. A custom index measures what share of users can reach a high-value group and how many computers they can then access, alongside average hop counts. The talk closed with a node blacklisting approach for excluding paths, and a note that the code and a beta would be shared publicly. The main takeaway is that exporting graph results into tables and CSV files makes attack-path findings easier to quantify and explain to non-technical audiences.",
       "durationSeconds": 2964,
       "conference": "troopers",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "5dj4vOqqGZw",
@@ -2297,7 +2309,7 @@
         "azure",
         "azure-ad"
       ],
-      "teaser": "Security researchers examine technical aspects of TR19: I'm in your cloud, reading everyone's emails - hacking Azure AD via Active Directory.",
+      "teaser": "Shows how on-premises Active Directory compromise and Azure AD misconfigurations lead to cloud admin takeover.",
       "summary": "Fox-IT consultant Dean walks Troopers through hybrid identity attacks that jump from on-premises Active Directory into Azure AD and Microsoft 365 mailboxes via misconfigured sync, federation trust, or inherited delegations. He explains why cloud-only security teams still inherit legacy AD sins and how password spray plus token theft yields silent mailbox access. Dean references Python BloodHound tooling he maintains and shares remediation patterns for tightening AD Connect, rotating service principals, and monitoring anomalous OAuth grants. The session targets advanced identity penetration testers and architects hardening hybrid estates.",
       "durationSeconds": 2895,
       "conference": "troopers",
@@ -2320,12 +2332,13 @@
         "active",
         "directory"
       ],
-      "teaser": "Core Security Principles investigates TR19: Active Directory and Azure.",
-      "summary": null,
+      "teaser": "Explains tiered administration, clean source and trust hardening for Active Directory and Azure hybrid environments.",
+      "summary": "The talk starts from the premise that Active Directory holds the keys to an organisation, that stolen credentials are a leading breach pattern, and that prevention alone is unrealistic in large environments, so containment becomes the goal. The speakers present three common core controls for a single forest: administrative tiering with logon and control restrictions, the clean source principle applied to administration, and attack path analysis with tools such as BloodHound to reveal hidden privileges and shadow admins.\n\nThe discussion then extends these controls to multi-forest and hybrid setups. For trusts, it argues that every trust affects security regardless of direction, and recommends unidirectional trusts, keeping SID filtering enabled, using selective authentication and reviewing trust configuration regularly. For Azure AD Connect, it notes that the default sync account can hold replication rights that allow a DCSync and reset most user passwords, so it should be hardened and placed under tier 0 control. ADFS servers and the pass-through authentication agent are also treated as tier 0 systems, because a stolen token signing key enables forged SAML logons to cloud services.\n\nFor Azure, the speakers suggest mapping tenant administrator roles into tiers, since a few roles can take over the whole tenant. Their recommendations include separating on-premises and cloud administration, requiring MFA on privileged roles, using conditional access tied to managed devices, and avoiding personal email addresses on cloud global administrator accounts. They also warn that marketplace VM images may be outdated. The practical takeaway is to classify every asset into exactly one tier, restrict logons and control paths between tiers, and check configurations on a schedule.",
       "durationSeconds": 3867,
       "conference": "troopers",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "0r8FzbOg2YU",
@@ -2343,19 +2356,20 @@
         "adversary",
         "resilience"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in TR19: BloodHound and the Adversary Resilience Methodology.",
+      "teaser": "Shows how BloodHound queries expose Active Directory permissions, GPO control and admin paths that defenders can audit and remove.",
       "summary": "### Overview\nIn this presentation, Andrew Robbins and Rohan discuss how defenders can leverage BloodHound—historically an offensive Active Directory (AD) permissions mapping tool—to improve enterprise AD security posture through graph-based analysis. Grounded in John Lambert's quote that 'defenders think in lists, attackers think in graphs,' the speakers present practical auditing methodologies, real-world case studies, and new analytical tooling designed to identify and eliminate systemic attack paths.\n\n### Key Topics\n- **BloodHound 2.1 Release Features**: Recent additions include support for resource-based constrained delegation (using the `msDS-AllowedToActOnBehalfOfOtherIdentity` attribute and Will Schroeder's Rubeus research), an edge UI for exploitation and abuse info, a database warm-up button to load graphs into Neo4j RAM, optimized Cypher queries, improved data ingestion speed, and SharpHound collector updates (such as improved ACL parsing logic and detection fallback).\n- **Active Directory Auditing via Graphs**: Using Cypher queries in Neo4j to audit complex permissions, including inbound AD object control (who can control Domain Admins), Group Policy Object (GPO) abuse paths (non-DA principals controlling GPOs linked to DAs), and least-privilege violations (identifying hosts with thousands of local admins).\n- **Eliminating Stale Object Control (PrivExchange Case Study)**: Addressing excessive AD permissions granted by default Exchange installations. Exchange servers often inherit `WriteDacl` rights over the domain head from legacy installers (e.g., Exchange Server 2003), allowing attackers to perform DCSync. The speakers outline how to safely remove these permissions by deploying targeted System Access Control Lists (SACLs) and monitoring for Windows Event 5136.\n- **Cross-Domain and Forest Attack Paths**: Demonstrating that Active Directory domain trusts are not security boundaries. Organizations often suffer from foreign local administrators and cross-domain group nesting, allowing low-privileged domain users to pivot through multiple trusts to forest-level compromise.\n- **BloodHound Analytics Tooling**: The introduction of two open-source (GPLv3) tools to measure and monitor AD resilience: a Power BI workbook (`BloodHoundAnalytics.pbix`) and a QA verification script (`bloodhound_analytics.py`).\n\n### Technical Details\n- **Auditing GPOs**: Manual enumeration requires tracing linked OUs, inheritance blocks, WMI filters, and GUID lookups in ADUC. BloodHound maps these relationships natively, allowing single Cypher queries to isolate foreign groups or users with write/edit access to GPOs affecting Domain Admins.\n- **SACL Validation Workflow**: To address fears that revoking dangerous permissions will cause operational outages, defenders can configure an auditing ACE in the target object's SACL (such as success auditing on the `modify_permissions` right for the Exchange Trusted Subsystem). If no Event 5136 is generated over a chosen evaluation period (e.g., 14 months in the speakers' client case), the corresponding discretionary ACE (`WriteDacl`) can be safely deleted without breaking service functionality.\n- **BloodHound Analytics Suite**:\n  - `BloodHoundAnalytics.pbix`: Connects directly to Neo4j to generate visual dashboards, highlighting metrics such as the percentage of users with an attack path to Domain Admin, high-risk groups, and distributions of local admin rights across endpoints.\n  - `bloodhound_analytics.py`: Performs data completeness quality checks (noting that most environments only capture ~5% of user sessions), audits universal critical asset risks (e.g., RDP or local admin rights on Domain Controllers), and maps cross-domain exposure.\n\n### Takeaways\nDefenders cannot secure modern Active Directory environments using traditional flat lists and static spreadsheets. By viewing AD relationships as an attack graph, blue teams can locate critical bottleneck permissions, safely validate revocation through Windows event SACLs, and systematically sever attack paths before adversaries can exploit them.",
       "durationSeconds": 3006,
       "conference": "troopers",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "KhLp5w-AoJg",
       "slug": "tr19-you-dis-liked-mimikatz-wait-for-kekeo",
       "title": "TR19: You (dis)liked mimikatz? Wait for kekeo",
       "speakers": [],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "tr19",
         "liked",
@@ -2363,18 +2377,21 @@
         "wait",
         "kekeo"
       ],
-      "teaser": "Security researchers examine technical aspects of TR19: You (dis)liked mimikatz? Wait for kekeo.",
-      "summary": null,
+      "teaser": "Shows how Kekeo abuses Kerberos, CredSSP single sign-on and smart card certificates to obtain user credentials.",
+      "summary": "The talk traces the history of mimikatz, the Windows credential tool, from early experiments with bypassing software restrictions to a toolkit that pulls credentials from memory. The speaker covers features added over the years, including cleartext password recovery, Kerberos ticket handling, golden and silver tickets, and modules touching event logging and DPAPI. The speaker explains that Kekeo was written because mimikatz does not handle network protocols, so a separate tool was needed for Kerberos and authentication at the protocol level.\n\nThe middle of the talk focuses on the CredSSP-based single sign-on used by Remote Desktop. The speaker shows that credentials sent to a terminal server can be captured by impersonating that server, and that a local administrator on the server can recover them without running as admin. The talk then turns to smart cards and PKINIT, showing how a certificate's private key can be used ahead of time to sign authentication timestamps and later obtain tickets. The speaker demonstrates this against a domain controller, and a separate demo shows that a delegated Kerberos ticket can be reused on another machine.\n\nThe closing section covers defensive takeaways. Windows ticket handling is restrictive by default, but delegation settings and certificate authority servers need strict protection, since a compromised PKI server can issue certificates for any user. The speaker notes that Microsoft's mitigations are opt-in and need recent Windows versions across the network, which many environments cannot meet. Protecting CA keys with HSMs and non-exportable configuration is presented as a practical measure.",
       "durationSeconds": 3577,
       "conference": "troopers",
       "viewCount": 2200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "YmzfWHiXNZ8",
       "slug": "tr19-not-a-security-boundary-breaking-forest-trusts",
       "title": "TR19: Not A Security Boundary: Breaking Forest Trusts",
-      "speakers": [],
+      "speakers": [
+        "Will Schrader"
+      ],
       "track": "hardware",
       "topics": [
         "tr19",
@@ -2384,12 +2401,13 @@
         "trust",
         "trusts"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for TR19: Not A Security Boundary: Breaking Forest Trusts.",
-      "summary": null,
+      "teaser": "Shows how a two-way forest trust with default settings lets an attacker in one forest compromise a partner forest.",
+      "summary": "The talk challenges the long-held view that an Active Directory forest is a security boundary. The speakers start with Kerberos basics, ticket granting tickets, the three delegation models, and how domain trusts pass referral tickets between domains. They explain that SID filtering is meant to stop a trusted forest from abusing another forest, and they note that Microsoft documentation describes forests as security boundaries.\n\nThe core attack chains three default behaviours. A server with unconstrained delegation caches the TGTs of users who authenticate to it. The printer bug (the MS-RPRN print spooler RPC method) can coerce a domain controller to authenticate back to a chosen host using its machine account. Delegated TGTs can cross a two-way forest trust. In the demo, an attacker who controls a domain controller in one forest triggers the printer bug against a domain controller in the partner forest, captures that machine account's TGT from memory, imports it, and performs a DCSync against the victim forest. The demonstration used stock trust settings on patched Windows Server 2012 or later systems.\n\nThe speakers describe how Microsoft first closed the report as won't fix, then reversed the decision and issued a CVE. Mitigations discussed include selective authentication and disabling TGT delegation on each side of a trust. A patch is described that blocks cross-forest TGT delegation by default, with an opt-in flag for environments that need it. The main takeaway for practitioners is that a forest's security depends on every forest it trusts, which matters during acquisitions.",
       "durationSeconds": 2677,
       "conference": "troopers",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "2bhZesSax4g",
@@ -3289,12 +3307,13 @@
         "enhanced",
         "administrative"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for TR18: Attack and defend Microsoft Enhanced Security Administrative Environment.",
+      "teaser": "Shows how attackers move from tier 1 and tier 2 access to domain controllers in a Microsoft red forest environment.",
       "summary": "### Overview\nIn this presentation, penetration testers Hao and Pipe discuss techniques for attacking and hardening Microsoft's Enhanced Security Administrative Environment (ESAE), commonly known as a Red Forest. While the ESAE tiered administrative model (Tier 0, Tier 1, and Tier 2) is designed to isolate administrative credentials and prevent lateral movement from standard workstations or servers into domain controllers, real-world misconfigurations and secondary management channels often allow attackers to bypass these boundaries and escalate privileges to Tier 0.\n\n### Key Topics\nThe speakers outline several major vectors used to bridge tiers:\n- Abusing Active Directory permissions and discovering overlooked \"shadow admin\" accounts.\n- Subverting virtualization infrastructure (such as VMware vSphere) hosting virtualized domain controllers.\n- Abusing centralized endpoint security and management platforms (antivirus, configuration management, backup, and EDR tools).\n- Identifying weaknesses and misconfigurations in Multi-Factor Authentication (MFA) provisioning and self-service portals.\n\n### Technical Details\n- **Active Directory Permission Abuse & Shadow Admins**: Attackers search for accounts with non-standard administrative privileges such as `Replicating Directory Changes` and `Replicating Directory Changes All` (enabling DCSync attacks). Service accounts in applications like Microsoft SharePoint (User Profile Service account), Riverbed SteelHead, and on-premises directory synchronization servers frequently hold these permissions. Additionally, Microsoft Exchange servers (via `Exchange Windows Permissions` and `Exchange Trusted Subsystem`) possess domain-wide write rights; running as `NT AUTHORITY\\SYSTEM` on an Exchange server allows granting DCSync rights to standard users using tools like PowerView. Attackers can also target write permissions on the `AdminSDHolder` container, which propagates permissions to protected groups.\n- **Virtualization Infrastructure Attacks**: Virtual domain controllers expose Tier 0 to hypervisor administrators. Attackers leveraging compromised vCenter credentials or console access can bypass network segmentation. By using data store browsers, PowerCLI scripts, or tools like Veeam Backup to take snapshots, attackers can extract raw VMDK files. Once downloaded, multi-part VMDKs can be merged, loopback-mounted on Linux, or parsed with forensic tools to extract `NTDS.dit` hashes without ever directly touching the running OS (provided full-disk encryption is not implemented).\n- **Endpoint Management Exploitation**: Centralized agents running as `NT AUTHORITY\\SYSTEM` cross tier boundaries. In Symantec Endpoint Protection, an attacker with console access can configure Host Integrity policies using VBScript payloads to create a user and add them to Domain Admins on managed domain controllers. Similarly, Microsoft SCCM (via GUI or PowerSCCM), Veritas NetBackup (restoring `ntds.dit` from unencrypted backups), and cloud-hosted EDR platforms (like Carbon Black, targeted via phishing and live-response shells) can be weaponized for code execution and credential harvesting.\n- **MFA Provisioning Weaknesses**: Attackers exploit self-service portals that rely solely on single-factor domain credentials or default ports (e.g., port 7004). Flaws include unexpired enrollment links left in mailboxes, unmonitored enrollment that lacks notifications, missing rate limits on registered devices, look-up table PDF cards stored in inboxes, and reusable QR activation codes.\n\n### Takeaways\nTo properly defend ESAE and Active Directory environments:\n- Audit permissions for shadow admin rights, not just explicit group memberships, treating accounts with DCSync or object modification rights as Tier 0.\n- Strictly isolate virtualization infrastructure hosting domain controllers, or keep Tier 0 on dedicated hardware, and mandate full disk encryption for virtual DCs.\n- Implement separate, segmented endpoint security and management infrastructure per tier so management agents cannot bridge Tier 1/2 to Tier 0.\n- Secure MFA provisioning by expiring enrollment links, requiring multi-factor authentication to access self-service consoles, and enforcing device enrollment limits and notifications.\n- Restrict and rotate credentials using Managed Service Accounts (gMSAs) and dedicated privileged access workstations.",
       "durationSeconds": 3349,
       "conference": "troopers",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "uQOwfH5RlRQ",
@@ -3461,7 +3480,9 @@
       "youtubeId": "eNentN_zETk",
       "slug": "tr18-real-life-network-and-security-automation",
       "title": "TR18: Real-Life Network and Security Automation",
-      "speakers": [],
+      "speakers": [
+        "Yvonne"
+      ],
       "track": "hardware",
       "topics": [
         "automation",
@@ -3469,12 +3490,13 @@
         "tr18",
         "real-life"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in TR18: Real-Life Network and Security Automation.",
-      "summary": null,
+      "teaser": "Surveys real-world network automation projects, from read-only data collection to fully automated site deployments.",
+      "summary": "The talk opens with a skeptic's question about managing many vendors and thousands of devices. The speaker answers with a staged path: start with read-only access, move on to device provisioning, and only then automate service provisioning. The material comes from about 300 people in an online course who built their own tools, often because vendor products were too expensive, lacked a needed feature, or were too heavy for a small problem.\n\nThe early examples are simple but practical. One integrator used an Ansible playbook to check device uptime after a campus power outage, instead of logging into hundreds of devices by hand. Another engineer compared expected and actual LLDP neighbours to verify a switch build-out during construction. Further cases include a half-matrix of pings to flag latency anomalies, parsing Nexus transceiver output to plan optics replacements, and exporting Cisco ACI data into spreadsheets. Later projects generate topology graphs for VLANs and IP multicast from device output, enforce consistent firewall settings, and handle zero-touch provisioning keyed on MAC addresses. A telco deploys MPLS customer sites in about ten minutes, and a government body refreshed nearly 2,000 sites using spreadsheet-driven templates and CDP-based topology checks. A Swiss bank rebuilt 24 data centers from identical templates with automated tests.\n\nThe speaker notes that multi-vendor standard data models still have gaps and that many devices lack SSH command mode. The takeaway is that network engineers need systems thinking, data models and some programming skills, that vendor demos should be treated with caution, and that building small, useful tools is a practical place to start.",
       "durationSeconds": 3040,
       "conference": "troopers",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "CGVjnqc9lXI",
@@ -3703,19 +3725,23 @@
       "youtubeId": "Yc7gDfqRRkQ",
       "slug": "cloud-seeding",
       "title": "Cloud Seeding",
-      "speakers": [],
+      "speakers": [
+        "Graham",
+        "Vlad"
+      ],
       "track": "cloud",
       "topics": [
         "cloud",
         "seeding",
         "vulnerability-research"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Cloud Seeding.",
-      "summary": null,
+      "teaser": "Shows how a ride-hailing app's sign-up and SMS verification can be abused at scale to create accounts and take free rides.",
+      "summary": "The talk examines how a ride-hailing service's mobile app and cloud API can be used in ways their designers did not intend. The researchers decompiled the Android app, found leftover test code and embedded keys, and got past certificate pinning by pulling the key store password, adding their own certificate and re-signing the app so its traffic could be proxied. The API then revealed that nearby drivers could be queried across a city grid, and that sign-up checks were light, with real verification only when a ride was requested.\n\nThe main experiment was automated account creation. The team used a telephony API to buy cheap numbers for verification texts, scripted sign-ups with randomized details, and used promo and referral codes to get free rides. They also showed that the verification request could be triggered for any known user ID, and that a four-digit PIN could be brute forced across many unverified accounts, with two accounts verified in about a minute. A second app was shown to reuse shared phone numbers, letting a tester log into existing accounts.\n\nThe speakers also outlined possible impacts, such as flooding demand to drain driver supply, and argued that phone numbers are a weak basis for identity and that backends should not trust the client. They said they had not reported the issues to the vendors, viewing them as design choices rather than bugs.",
       "durationSeconds": 3850,
       "conference": "troopers",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "6P7zE33y-Xg",
@@ -5555,12 +5581,13 @@
         "reverse",
         "engineering"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Reverse engineering a Digital Two way Radio.",
-      "summary": null,
+      "teaser": "Shows how a handheld DMR radio's locked firmware was dumped, patched, and extended with new code and a recovered update key.",
+      "summary": "Travis Goodspeed examines the Tytera MD380, a low-cost handheld radio that speaks the DMR digital protocol. Many operators run it without encryption because no commercial scanner can receive DMR traffic, and the device's firmware is protected against debugging and its updates are encrypted. The talk walks through how those barriers were overcome.\n\nThe main processor is an STM32F405 ARM Cortex-M4 with readout protection, while the baseband chip is documented only in Chinese. The speaker obtained that documentation through an online document-sharing site. A null-pointer read at address zero exposed the first 48 kilobytes of flash, which contained the bootloader that locks the debug interface. Changing a single byte disabled the lock, and erasing the device then allowed a debugger to reach the application, which could be dumped and patched. Inspecting the image with a binary visualization tool revealed roughly 210 kilobytes of font and graphics data that could be overwritten to make room for new code.\n\nFor the update files, two firmware versions showed identical headers and identical blocks where ciphertext was expected, pointing to a stream cipher reusing its keystream. Known plaintext from the vector table let the team recover a 512-bit key and decrypt the images. They then hooked the USB device firmware update handler to read memory and call functions, and said an Android companion app and a promiscuous reception mode would follow. The takeaway is that a vendor-locked radio can be opened by reading its boot code, using known structure in the data, and watching for key reuse.",
       "durationSeconds": 1795,
       "conference": "troopers",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "9xEaokePOmg",
@@ -6284,7 +6311,7 @@
         "a Case Study",
         "Atilla Marosi"
       ],
-      "track": "community",
+      "track": "malware",
       "topics": [
         "case-study",
         "troopers15",
@@ -6292,12 +6319,13 @@
         "marosi",
         "finspy"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for [TROOPERS15] Atilla Marosi - Hacking FinSpy - a Case Study.",
-      "summary": null,
+      "teaser": "Reverse engineers the FinSpy Android spyware's configuration, SMS command channel and weak four-byte encryption key.",
+      "summary": "This talk examines FinSpy, a surveillance product sold to government agencies, through the Android app exposed in a 2025 data leak. The speaker compared an early unobfuscated release (4.21) with a later obfuscated one (4.51), noting that the basic design stayed the same. He used static tools to map permissions, services and receivers, then observed the app's behavior at runtime on a test phone.\n\nThe configuration is hidden inside a ZIP-style archive, with pieces of data stored in unused header fields. The speaker reused the original extraction code to pull out settings such as the heartbeat interval, a date after which the phone is cleaned, the allowed communication channels and the active modules. Control runs over SMS, and the only filter on incoming master commands is the device's IMEI. Encryption relies on embedded keys, and only a four-byte value varies per target, which he brute-forced in minutes on a cheap cloud server.\n\nTo show the impact, he built a fake server, redirected the traffic of an infected test device and sent a crafted SMS with a higher counter value than the last valid one. This let him reconfigure the phone, take it over and download the files it had collected. He observed that the same key values appeared across versions, including a recent sample from VirusTotal, so a single detection pattern could cover many builds. His takeaway is that the key design is weak and may be deliberate.",
       "durationSeconds": 2666,
       "conference": "troopers",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "9bdU3g-ka14",
@@ -6306,18 +6334,19 @@
       "speakers": [
         "Automating Network Security"
       ],
-      "track": "community",
+      "track": "cloud",
       "topics": [
         "troopers15",
         "ivan",
         "pepelnjak"
       ],
       "teaser": "Automating Network Security investigates [TROOPERS15] Ivan Pepelnjak.",
-      "summary": null,
+      "summary": "The speaker argues that changing a firewall rule in a traditional data center can take weeks, because requests pass through many hands and maintenance windows gate every change, while cloud platforms let application owners deploy rules in real time. His remedy is to simplify and standardize application requirements into reusable templates, reduce the blast radius by replacing one central firewall with small per-application ones, and recognize that simple packet filtering is often enough inside a data center.\n\nNext he reviews throughput figures for virtual appliances to show that software firewalls and load balancers can now handle serious traffic. He describes existing practice: per-tenant firewalls tied to orchestration platforms through security groups rather than IP addresses, tap aggregation fabrics programmed through switch APIs, a switch script that keeps traffic on the same firewall in a cluster, and a shortcut that lets known backup sessions skip the firewall. For attacks, he covers blackholing via BGP, FlowSpec rules pushed to routers, and deterministic traffic distribution across a bank of IDS sensors.\n\nHe closes by arguing that the main barriers are mindset, processes, and licensing models that charge per box or per node. His suggested path is a small pilot with like-minded teams, then a showcase with a willing application team, and before buying new products, asking whether a policy or process change would solve the problem. In Q&A, he suggested packet filters for inbound access to an internet-facing Hadoop cluster, with policy-based routing sending only outbound traffic through a firewall.",
       "durationSeconds": 3311,
       "conference": "troopers",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "8zlTv7fRjV8",
@@ -6327,7 +6356,7 @@
         "[TROOPERS15] Marion Marschalek",
         "Joseph Moti"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "windows",
         "troopers15",
@@ -6336,12 +6365,13 @@
         "joseph",
         "moti"
       ],
-      "teaser": "Security researchers examine technical aspects of [TROOPERS15] Marion Marschalek, Joseph Moti - The Wallstreet of Windows Binaries.",
-      "summary": null,
+      "teaser": "Shows how scoring Windows functions by version-diff attributes surfaces an unchecked heap overflow in a crypto decoding routine.",
+      "summary": "Marion Marschalek and Joseph Moti follow up on their earlier research into missing safe-API checks in Windows libraries. They explain that a public write-up of a Schannel vulnerability involved a function they had already flagged but could not reach. That gap pushed them to change approach: rather than hunting for missing checks alone, they score functions on attributes that hint at risk.\n\nThe tool, called Wall Street, records per-function attributes such as suspicious keywords in names (load, decode, copy, write), calls to exploitable-looking functions, and the presence or absence of safe APIs across Windows 7, 8 and 10. It also tracks whether a function was added or removed and how much its code changed between versions. They decompiled Windows libraries and drivers into an SQLite database, which struggled at that scale. They report roughly 910 missing safe-API cases and argue that small changes between versions are often the most useful signal. Several candidates were reviewed, including an unchecked size in an MS CMS DLL and a check added to a user32 copy function.\n\nThe main demo followed a decode attribute sequence function. A memory copy there takes its length from a string-length call with no bound check, and the input arrives through a structure produced by a CryptDecodeObject-style routine. The speakers traced which module registers the decoder and which mail component calls it, then described how a crafted signed and encrypted email could reach the overflow in an email client. The takeaway for practitioners is to diff binaries across versions, focus on small changes near memory operations, and check the reachability of candidate functions before judging them exploitable. The tool was released publicly.",
       "durationSeconds": 3890,
       "conference": "troopers",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "86zmv5WqEOY",
@@ -6822,12 +6852,13 @@
         "michael",
         "ossmann"
       ],
-      "teaser": "RF Retroflectors explores [TROOPERS15] Michael Ossmann.",
-      "summary": null,
+      "teaser": "Shows how a one-transistor implant can reflect a radar signal to leak keystrokes, cable data and monitor images.",
+      "summary": "The talk covers RF retroreflectors, a form of reflective radio attack in which an attacker aims a radar signal at a target and reads information from the signal that bounces back. The speaker traces the idea to the Great Seal bug, a passive device from the 1940s that needed no power. The technique builds on backscatter communication, which is well studied in UHF RFID work, so an implant only has to vary how its antenna reflects a signal.\n\nThe experiments used several radar sources, from a police radar gun and cheap 10 GHz speed radars to a HackRF One software-defined radio with coffee-can waveguide antennas. The implants are built around one transistor and two wire antennas. Congo Flock is wired into a cable. Flamenco Flock recovered keystrokes from a PS/2 keyboard in a live demo, although the signal arrived upside down. Tango Flock returned a usable low-speed USB signal. Salsa Flock, a VGA design, needed bias power taken from the control channel, and saved captures yielded a partial monitor image. Simulations showed that a quarter of the bandwidth still reveals much of that image, and that combining repeated frames could improve it.\n\nDemonstrations ran at about 30 centimeters. The speaker estimated that hundreds of meters may be practical with more power and better antennas, though he has not tested that. He argues that unintentional reflections from ordinary devices and cables are the least understood area, and that researchers should study how exposed everyday electronics are.",
       "durationSeconds": 3667,
       "conference": "troopers",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "2zvrzgGzyYw",
@@ -7013,12 +7044,13 @@
         "boot",
         "ways"
       ],
-      "teaser": "Job de Haas investigates TROOPERS14 - 20 Ways Past Secure Boot.",
-      "summary": null,
+      "teaser": "Surveys around twenty ways attackers get past secure boot, from debug ports and glitching to logic flaws in signing.",
+      "summary": "Secure boot uses a root of trust, typically a key fixed in silicon, to check a digital signature on each stage before it runs. Vendors can delegate trust down a chain of keys and release privileges as the system starts, so a break early in that chain can yield code execution at a higher privilege level. The speaker notes that such breaks are often not persistent, but a compromised stage can serve as a stepping stone, for example to extract keys before they are wiped.\n\nThe talk walks through a long list of attack classes, split loosely between hardware and logic. Hardware examples include exposed JTAG and UART debug interfaces, a boot-source pin on an automotive ECU that skipped signature checks, and a timing attack on the Xbox 360 that recovered a signature byte by byte using a small FPGA. Voltage and electromagnetic glitching were covered too, with a live electromagnetic fault injection demo on a microcontroller showing how probe position and timing decide whether a check is skipped. Logic flaws included accepting empty signatures, copying firmware without rechecking it, encrypting code without authenticating it, reusing development signing keys, weak randomness, and state left behind after suspend and resume.\n\nThe main takeaways are to verify code at the point of execution, sign and authenticate every loader including encrypted ones, separate development and production keys, and clear key registers after use. Glitch resistance must cover every critical branch, since a countermeasure at one point is not enough. Good design principles and lessons from past failures go a long way.",
       "durationSeconds": 3133,
       "conference": "troopers",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "KQq29xBn7Ow",
@@ -7358,12 +7390,13 @@
         "oil-and-water",
         "water"
       ],
-      "teaser": "Ivan Pepelnjak details TROOPERS14 - Security and SDN -- A perfect fit or oil-and-water?.",
-      "summary": null,
+      "teaser": "Separates SDN hype from substance, then examines control-plane attack risks and security uses like traffic taps and DDoS blackholing.",
+      "summary": "The talk opens by explaining software-defined networking. The speaker notes that the term is used loosely by vendors and startups, and that the Open Networking Foundation defines it as separating the network's control plane from its forwarding plane, so one controller manages many devices. The speaker argues that many of the underlying ideas are old, and that some, such as BGP-based remote triggered blackholing and BGP flowspec, already run in production networks.\n\nThe security section treats the controller as a high-value target, since compromising it gives an attacker control of the network, and it carries the usual risks of its operating system, language and TLS setup. Switches have a limited control-plane path, so an attacker can flood the controller with packets or force excessive flow setup. Mitigations discussed include out-of-band control networks, proactive flow installation based on known topology instead of reactive setup, distributed intelligence, and control-plane policing. The speaker warns that policing on many switches is one shared bucket, so one interface can starve the others.\n\nThe talk then covers defensive uses. Flow-based counters can measure specific traffic, flow rules can steer mirrored traffic to tap aggregation and IDS appliances, and traffic can be split across sensors by address range. In one example, an intrusion detection system asks the controller to drop a suspicious flow. The closing message is that the field is immature and changing, so practitioners should judge whether it fits their network rather than ignore it.",
       "durationSeconds": 3116,
       "conference": "troopers",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "s_7Cy2w2dCw",
@@ -7418,19 +7451,20 @@
       "speakers": [
         "Vladimir Wolstencroft"
       ],
-      "track": "community",
+      "track": "mobile",
       "topics": [
         "troopers14",
         "three",
         "billion",
         "dollar"
       ],
-      "teaser": "Vladimir Wolstencroft examines TROOPERS14 - The Three Billion Dollar App.",
-      "summary": null,
+      "teaser": "Shows how an attacker reverse engineered the Android apps of Snapchat and Wickr to expose flaws in their client-side cryptography.",
+      "summary": "The talk examines two mobile messaging apps, Snapchat and Wickr, which promote self-destructing or highly secure messaging, and asks whether their privacy claims and reported valuations hold up. The speaker treats the attacker as the owner of the client, so the work focuses on the Android app itself: extracting it, decompiling it, and rebuilding a custom client.\n\nIn Snapchat, request tokens were generated from client-side timestamps and static strings, so requests could be forged and replayed, and message encryption used a static key in ECB mode. Sessions never expired. A find-friends function was abused to map phone number ranges, exposing about 4.6 million usernames. An unauthenticated retry request let messages reach any user, including the sender. Snapchat fixed this within an hour after the issue was raised publicly. Wickr randomized its ciphertext and had no obvious hardcoded secrets, so the speaker turned to its native library, patched the ARM binary to expose the key and initialisation vector, and used them to decrypt and send messages. The key was reported through a bug bounty and accepted.\n\nThe main takeaway is that client-side checks such as lockouts offer little protection once an attacker controls the app, and that static keys or predictable IVs undermine encryption wherever they are embedded.",
       "durationSeconds": 3313,
       "conference": "troopers",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "kt3PsOSLH_4",
@@ -7527,14 +7561,14 @@
       "speakers": [
         "Elite"
       ],
-      "track": "community",
+      "track": "policy",
       "topics": [
         "troopers14",
         "vulnerability-research",
         "keynote"
       ],
-      "teaser": "Security researchers investigate TROOPERS14 - Keynote and analyze defensive countermeasures.",
-      "summary": null,
+      "teaser": "Argues that hacking and security choices are political, covering exploit sales, surveillance, and arms control debates.",
+      "summary": "The keynote challenges the common hacker stance that the community stays out of politics, arguing that choices such as whether to disclose a vulnerability or sell an exploit are already political. It treats a working exploit as a weapon, which raises questions about regulation and about who controls its use once released.\n\nThe middle of the talk surveys examples. A recalled anecdote describes a government contact asking for help with a highly secure BlackBerry setup, which later appeared in the press. The NSA's cheaper internal ThinThread system is contrasted with the costlier Trailblazer project, which the speaker links to contractor lobbying. Large platforms are criticised for profiting from personal profiles, and unencrypted mail and weak PGP adoption are called out. The talk also covers whistleblowing and an iterated prisoner's dilemma, where tit-for-tat is presented as a better strategy than betrayal. Other topics include national identification requirements for internet access, UN codes of conduct, export rules that now cover intrusion software, and the lack of product liability for software.\n\nThe closing urges hackers to engage with politicians, to share their knowledge of offensive security at hearings, and to avoid taking contracts that would make them lobbyists. Practical advice includes building recoverable components, limiting the identification data collected for authorization, and avoiding backdoors. The takeaway is that if technical experts stay out of the room, others will shape the rules.",
       "durationSeconds": 3567,
       "conference": "troopers",
       "viewCount": 2200,
@@ -8341,12 +8375,13 @@
         "scale",
         "attack"
       ],
-      "teaser": "Adem Sen explores TROOPERS13 - Understanding & Mitigating Large Scale DoS Attacks.",
-      "summary": null,
+      "teaser": "Explains the main types of denial-of-service attacks and why scrubbing, ACL automation and vendor claims often fall short.",
+      "summary": "The talk traces how denial-of-service attacks grew from a side effect of early TCP/IP weaknesses into a mainstream threat driven by large botnets, with attacks reaching around 100 Gbit/s. The speaker groups real-world attacks into four major categories: application-layer attacks, protocol state attacks such as SYN floods, volumetric floods, and multi-vector combinations of these. Common tools such as hping and slow HTTP clients rely on brute force rather than vulnerabilities, and slow HTTP requests that are never completed can exhaust a server's sockets while showing little on the server itself.\n\nThe talk then challenges several myths. Lab tests are presented as showing that firewalls and IPS devices can fail under modest packet rates, regardless of vendor claims, and one vendor reportedly confirmed that its firewalls were vulnerable in default configuration. Cloud-based scrubbing raises certificate and data-protection concerns and creates a single point of failure. Automatically generated ACLs are shown to be risky, since a Cloudflare outage was linked to a rule matching oversized packets that was pushed across Juniper routers. Blackholing is described as no real mitigation, because the customer is still knocked offline.\n\nFor practitioners, the main takeaways are to combine purpose-built scrubbing with the ISP, collect NetFlow to learn normal traffic, apply rate limiting at the application layer, monitor server sockets, and test defences with traffic generators instead of trusting datasheets. Joining information-sharing groups and watching public announcements are presented as useful early warning sources.",
       "durationSeconds": 3402,
       "conference": "troopers",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "uEHcAaz__Js",
@@ -8467,12 +8502,13 @@
         "oauth2",
         "ready"
       ],
-      "teaser": "Dominick Baier explores TROOPERS13 - OAuth2 - Ready or not (here I come).",
-      "summary": null,
+      "teaser": "Walks through OAuth 2.0 flows and their weaknesses, from bearer tokens and redirect URIs to client binding and sign-in misuse.",
+      "summary": "The speaker, who works with developers building internal and commercial software, explains OAuth 2.0 as an authorization protocol rather than an authentication one. He describes why it displaced the older WS-* specifications as mobile and roaming clients became common. Using a valet parking key analogy, he introduces the roles of resource owner, client, resource server and authorization server, then walks through the authorization code flow for web applications, the implicit flow for installed apps, and the resource owner password flow for trusted clients. Token formats, lifetimes and refresh tokens are covered along the way, including how revocation works.\n\nThe middle of the talk covers the protocol's history, from a single author who withdrew his name before finalization to the many revisions and satellite specifications that left much to implementers. The main criticisms are that bearer tokens are protected only by TLS, that carrier-branded certificates and disabled certificate validation in apps can expose them, and that redirect URIs are often checked loosely. He also shows how embedded login windows give users no real way to verify who is asking for their password, and how using OAuth as a sign-in mechanism let a malicious app pass a token to a legitimate one.\n\nHe concludes that the protocol itself is not the main problem, but its many options and loose implementations are, and that developers without security backgrounds are a risk when they implement it. For practitioners, the takeaways are to use OpenID Connect for authentication, validate redirect URIs strictly, bind refresh tokens to clients, and treat the specification as a set of pitfalls rather than a finished recipe.",
       "durationSeconds": 3257,
       "conference": "troopers",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "WvghLaSB9zc",
@@ -8652,7 +8688,7 @@
       "speakers": [
         "Chema Alonso"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "ipv6",
         "troopers13",
@@ -8660,12 +8696,13 @@
         "config",
         "meet"
       ],
-      "teaser": "Chema Alonso examines TROOPERS13 - Your IPv6 default config meets FOCA (...and starts to cry).",
-      "summary": null,
+      "teaser": "Shows how default IPv6 settings in Windows let an attacker intercept local network traffic through rogue router advertisements.",
+      "summary": "The talk starts from a simple point: IPv6 is enabled by default on Windows machines since Vista, even on networks where administrators never configured it. Windows prefers IPv6 for connections on the local segment and tries IPv6 name resolution first. Most network defences are built around ARP and IPv4, so the speaker argues they miss the equivalent IPv6 traffic, where Neighbor Discovery takes over the role ARP plays.\n\nThe demonstrations begin with neighbor advertisement spoofing, which places an attacker between a client and a Windows file server so that the file share session can be captured and read. The central case is a rogue router. By sending Router Advertisement messages, an attacker makes a Windows host configure it as the default gateway and, through default DNS discovery, as its DNS server. A client on a network with only a link-local IPv4 address then depends on the attacker, whose translation tool converts IPv6 requests into IPv4 requests for sites that have no IPv6 records. In the demo, HTTPS links were downgraded to HTTP and the credentials typed into a login form were captured. The talk also describes a denial-of-service in which repeated Router Advertisements make Windows create many addresses until its memory is exhausted, and notes that the vendor's only advice is to filter these messages on switches.\n\nThe takeaways are that IPv6 is present on most networks whether or not it was configured, that disabling it can break services that depend on it, and that IPv4-focused security tooling needs IPv6 coverage to be useful.",
       "durationSeconds": 3065,
       "conference": "troopers",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "dbtToclC09A",

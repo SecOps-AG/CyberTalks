@@ -502,7 +502,10 @@
       "youtubeId": "RjLqfhQGUnE",
       "slug": "14-lee-chagolla-christensen-and-will-schroeder-nemesis-2-0-build",
       "title": "14. Lee Chagolla-Christensen & Will Schroeder: Nemesis 2.0: Building an Offensive VirusTotal",
-      "speakers": [],
+      "speakers": [
+        "Lee Chagolla-Christensen",
+        "Will Schroeder"
+      ],
       "track": "red-team",
       "topics": [
         "chagolla-christensen",
@@ -511,12 +514,13 @@
         "building",
         "offensive"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 14. Lee Chagolla-Christensen & Will Schroeder: Nemesis 2.0: Building an Offensive VirusTotal.",
-      "summary": null,
+      "teaser": "Presents a rewritten Nemesis 2.0 that automates triage and enrichment of files collected during red team assessments.",
+      "summary": "Offensive assessments produce thousands of files pulled from C2 agents, SharePoint, wikis and remote sessions. Triaging them usually means moving files between Linux hosts, Windows VMs and cracking rigs, which is slow, inconsistent and repeated across operators. The speakers present Nemesis 2.0, an offensive counterpart to VirusTotal that automatically enriches files and prioritizes credentials and useful information over malware.\n\nThey explain why the first Nemesis, which tried to model entire networks, was rewritten. Pain points included reconciling host identities across C2 frameworks, a Kubernetes-based deployment, many schemas and a Streamlit interface. Version 2.0 narrows the scope to file enrichment, runs on Docker Compose, uses Dapper for messaging and durable workflows, and adds a React interface with viewers for SQLite databases, zipped source code and office documents converted to PDF.\n\nA live demo showed a YARA match exposing a password in an extracted document, a .NET binary with deserialization checks and decompiled source, and a Chromium history database queried in the browser. Planned work includes more analyzers, automatic container builds, a possible return to Kubernetes and selective AI-assisted triage, constrained by inference cost. The main takeaway is that operators can drop in custom enrichment modules and share triage results across a team.",
       "durationSeconds": 2611,
       "conference": "x33fcon",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "UpaCQeFwk-M",
@@ -563,7 +567,9 @@
       "youtubeId": "WxCgARfon28",
       "slug": "12-ryan-robinson-unpacking-the-unstoppable-how-loaders-continue",
       "title": "12. Ryan Robinson: Unpacking the Unstoppable: How Loaders Continue to Outwit AI, EDR, and Sandboxes",
-      "speakers": [],
+      "speakers": [
+        "Ryan Robinson"
+      ],
       "track": "malware",
       "topics": [
         "edr",
@@ -573,12 +579,13 @@
         "unstoppable",
         "loaders"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 12. Ryan Robinson: Unpacking the Unstoppable: How Loaders Continue to Outwit AI, EDR, and Sandboxes.",
-      "summary": null,
+      "teaser": "Explains how malware loaders evade sandboxes and EDR, and compares scripts, emulators and sandboxes for recovering their payloads.",
+      "summary": "The talk looks at malware loaders, the stage that runs before the real payload, and at how analysts can get past them. The speaker, a malware analyst who maintains a sandbox, defines loaders, cryptors and packers and notes that the terms are often used interchangeably. Three approaches to recovering a payload are compared: static unpackers that mimic a known scheme, emulators such as Qiling built on Unicorn that run decryption routines and hook memory calls, and full sandboxes, which are the most reliable but the most costly to run and maintain.\n\nThe case studies make up the middle of the talk. A leaked build of the Brute Ratel C2 loader was handled with a static extractor written with Capstone, which recovered the configuration by following the decoding steps found in the builder. A later loader stopped in the sandbox because it checked for fewer than three CPU cores, fewer than 28 running processes, nearly empty temp and downloads folders, disks under 50 GB, and uptime under ten minutes. The fix was to add realistic noise to the sandbox image and take new snapshots. A more recent metamorphic loader, with thousands of junk instructions per build, avoided emulators with CreateSection, checked graphics adapter vendor IDs, and counted unique running processes against a threshold of 85. One check exploited Windows Defender's internal emulator.\n\nThe closing section tests an AI reverse engineering assistant on a junk-heavy function. It flagged decoy calls as critical functionality and then doubted its own conclusion, so manual analysis is still needed. The speaker presents the field as an arms race in which older tricks return in new forms, and argues that maintenance effort and cross-team workload are the real costs for defenders.",
       "durationSeconds": 2733,
       "conference": "x33fcon",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "C8i337_BdvE",
@@ -604,8 +611,10 @@
       "youtubeId": "GyoxCTYPAus",
       "slug": "10-dominic-chell-hiding-in-plain-sight",
       "title": "10. Dominic Chell: Hiding in Plain Sight",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Dominic Chell"
+      ],
+      "track": "red-team",
       "topics": [
         "dominic",
         "chell",
@@ -613,12 +622,13 @@
         "plain",
         "sight"
       ],
-      "teaser": "Security researchers examine technical aspects of 10. Dominic Chell: Hiding in Plain Sight.",
-      "summary": null,
+      "teaser": "Explores network-based beacon detection for C2 traffic and red team evasion ideas like traffic encoders and mail-based channels.",
+      "summary": "Dominic Chell argues that command-and-control traffic gets less research attention than endpoint evasion, and notes that mature clients are catching red team beacons more often. He explains how common frameworks pull tasks over HTTP on a sleep and jitter cycle, and how URI selection across Cobalt Strike, Havoc, Nighthawk and Sliver changes how repeatable that traffic looks. Detection signals fall into timing, request and response content, transport and infrastructure, and tradecraft.\n\nHe then presents a prototype that hunts for beaconing in proxy logs of about 2.5 to 3 million requests over 11 days. Python pandas filters for hosts and URIs seen across much of the window, with consistent response sizes and regular intervals, and enriches the results with free threat intelligence sources before an AI model scores confidence. In a demo, a planted beacon was rated likely malicious while a benign Microsoft domain scored low. He admits that operator changes to sleep times and large data jitter skew results, and that network data alone is limited.\n\nOn the evasion side, he shows traffic encoders that hide tasking inside real-looking page content, using an archived copy of an old website on a re-registered expired domain, where injected blocks changed response lengths. He also describes API middleware that relays C2 through trusted cloud services, and a mail channel that uses a hidden Outlook folder so the beacon polls its own mailbox instead of making outbound web requests. He closes by encouraging red teamers to experiment with less common C2 transports.",
       "durationSeconds": 2480,
       "conference": "x33fcon",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "2geUDY2oPlQ",
@@ -669,7 +679,9 @@
       "youtubeId": "cgHmv2JKZ-Y",
       "slug": "8-stephan-berger-from-zero-to-a-moderately-skilled-macos-forensi",
       "title": "8. Stephan Berger: From Zero to a Moderately Skilled MacOS Forensic Analyst",
-      "speakers": [],
+      "speakers": [
+        "Stephan Berger"
+      ],
       "track": "blue-team",
       "topics": [
         "macos",
@@ -679,12 +691,13 @@
         "moderately",
         "skilled"
       ],
-      "teaser": "Security researchers examine technical aspects of 8. Stephan Berger: From Zero to a Moderately Skilled MacOS Forensic Analyst.",
-      "summary": null,
+      "teaser": "Shows how to set up a macOS analysis lab and triage suspicious installers and binaries with built-in and free tools.",
+      "summary": "The talk is an introduction to macOS forensics for responders who are new to the platform. The speaker explains that Apple's built-in protections are strong, yet attackers still succeed by guiding users through manual bypass steps, using fake installers, malvertising and paid search ads. For a lab, he suggests a free macOS virtual machine, with samples moved in through file transfer sites instead of shared folders.\n\nTriage starts with the delivery format. DMG images lack a magic header but can be mounted and inspected, and packages may hide install scripts that run before or after installation. Application bundles, Info.plist files and code signatures reveal useful clues, and fat binaries should be split with lipo before analysis. For persistence, he focuses mostly on LaunchAgents and LaunchDaemons, and recommends KnockKnock to flag new entries.\n\nFor a fast verdict he relies on built-in tools: strings, FLOSS for obfuscated strings, otool for linked libraries and nm for function names, where names such as keychain or wallet access point to stealer behaviour. Dynamic checks with fs_usage and FileMonitor show which files a sample opens and writes. His takeaway is that these low-effort steps answer most maliciousness questions, while deep reversing is reserved for high-stakes cases.",
       "durationSeconds": 2390,
       "conference": "x33fcon",
       "viewCount": 2400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "50fS76TZKYs",
@@ -711,7 +724,9 @@
       "youtubeId": "f3z0f-dIU90",
       "slug": "daniel-hirschberger-lightning-talk-edrs-a-moving-story",
       "title": "Daniel Hirschberger lightning talk: EDRS a moving story.",
-      "speakers": [],
+      "speakers": [
+        "Daniel Hirschberger"
+      ],
       "track": "blue-team",
       "topics": [
         "daniel",
@@ -721,18 +736,21 @@
         "moving",
         "edrs"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Daniel Hirschberger lightning talk: EDRS a moving story..",
-      "summary": null,
+      "teaser": "Shows how local administrators can abuse pending file rename operations at boot to disable CrowdStrike and Defender.",
+      "summary": "A penetration tester describes a Windows assessment of a Citrix machine where CrowdStrike kept running and he had local administrator rights. While chasing machine account credentials, he needed to get past the EDR, which led him to Microsoft Sysinternals utilities such as MoveFile. These tools rely on the MoveFileEx API, which schedules file renames and deletions at boot, before services start, and stores them in the PendingFileRenameOperations registry value.\n\nUsing the same mechanism, he queued moves of the CrowdStrike folders and then of the Microsoft Defender folder. A direct move was denied even for administrators, so he wrote the registry entries by hand and chained moves in a set order that relocated the Defender folder. Moving the whole folder removed the Defender interface, while a softer variant that moved only the key executables kept the panel working but stopped the service. Moving the entire Microsoft ProgramData folder caused a login loop, whereas moving the contents of the Defender folder alone did not, and he said he had no full explanation for the boot behaviour.\n\nHe published a script, move-edr, that automates these moves with preset EDR paths, custom paths, adjustable prefixes, hard or soft modes and an undo option. He closed by arguing that an EDR offers little protection once an attacker holds local administrator rights, and he left open why certain object-manager path prefixes break the moves.",
       "durationSeconds": 679,
       "conference": "x33fcon",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "eKFgOtNpxwU",
       "slug": "6-dirk-jan-mollema-bringing-your-own-identity-provider-to-entra",
       "title": "6. Dirk-jan Mollema: Bringing Your Own Identity Provider to Entra for Persistence and MFA Bypasses",
-      "speakers": [],
+      "speakers": [
+        "Dirk-jan Mollema"
+      ],
       "track": "red-team",
       "topics": [
         "persistence",
@@ -741,12 +759,13 @@
         "mollema",
         "bringing"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for 6. Dirk-jan Mollema: Bringing Your Own Identity Provider to Entra for Persistence and MFA Bypasses.",
-      "summary": null,
+      "teaser": "Shows how OIDC trust features in Entra ID can give persistent access and bypass MFA.",
+      "summary": "The talk looks at how OpenID Connect, the identity layer built on OAuth, is used in Microsoft Entra ID beyond ordinary single sign-on. It separates ID tokens, which authenticate a user to a client, from access tokens, which authorize calls to APIs. The first feature covered is federated credentials, which let an external identity provider such as GitHub Actions authenticate as an application or managed identity without a stored secret. Because adding one creates different audit events than adding a client secret, detections built around secret additions can miss it.\n\nThe middle section covers external authentication methods, which let a tenant use a third-party MFA provider such as Duo. The speaker showed that Entra fetches discovery data and signing keys from a host the attacker controls, so a fake provider can issue a valid-looking MFA claim. By rewriting the redirect in a proxy, the sign-in went to a custom endpoint and produced tokens with no MFA prompt. The same trust flow exists in the older custom controls feature. The root issue is that Entra does not check that the issuer matches the discovery domain, which the OAuth specification requires. Microsoft closed the reports as admin configuration behaviour rather than a vulnerability.\n\nFor post-exploitation, an attacker with high privileges could add an external MFA method scoped to chosen users. For defenders, the takeaways are to watch Graph activity and audit logs for changes to authentication method policies and custom controls, and to build detections for federated credential additions. The speaker noted that the audit log format is hard to parse and shared a query for it, and the proof-of-concept tooling is part of the ROADtools project.",
       "durationSeconds": 2733,
       "conference": "x33fcon",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "WqIFt2JypeU",
@@ -1079,7 +1098,7 @@
       "speakers": [
         "Berk Albayrak"
       ],
-      "track": "community",
+      "track": "threat-intel",
       "topics": [
         "wizard",
         "spider",
@@ -1088,12 +1107,13 @@
         "berk",
         "albayrak"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 17. Wizard Spider: Operational Environment by Berk Albayrak.",
-      "summary": null,
+      "teaser": "Traces Wizard Spider from Trickbot initial access and Cobalt Strike use to Conti ransomware and its leaked internals.",
+      "summary": "This talk from a proactive intelligence team profiles Wizard Spider, a financially motivated cybercrime group active since around 2017 and linked to Trickbot, Conti and related ransomware. The presenter explains how the group gains entry through Trickbot, a banking trojan spread by large spam and business email compromise campaigns. Trickbot then drops secondary payloads such as Cobalt Strike, which the operators use for lateral movement and privilege escalation before choosing victims for ransomware.\n\nThe middle of the talk walks through the team's investigation. Researchers found a Cobalt Strike server tied to the group that was used to scan for and exploit the Log4j vulnerability against VMware vCenter servers, and that server held more than 30 victims, cracking tools and extortion infrastructure. Conti's admin panel, exposed through a misconfiguration, revealed affiliate chats, and blockchain tracing with Elliptic was used to estimate the flow of funds. The speaker also covered cold-calling victims, hypervisor encryption, and backup servers holding terabytes of stolen data. Leaked chats from 2022 exposed the group's internal structure, with roughly 200 members, and links to other ransomware gangs.\n\nThe talk closes with the group's response to public reports, including shutdowns, rebranding and a period of inactivity, and argues that the strongest defence is interrupting the intrusion early, before encryption. Practitioners are reminded that most spam campaigns never reached the ransomware stage, and that leaked internal data can confirm and extend earlier intelligence findings.",
       "durationSeconds": 1758,
       "conference": "x33fcon",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "C-Fh4sIdY8c",
@@ -1118,7 +1138,9 @@
       "youtubeId": "_TEnBLt2JF4",
       "slug": "15-improving-the-stealthiness-of-memory-injection-techniques-by",
       "title": "15. Improving the Stealthiness of Memory Injection Techniques by Diego Capriotti",
-      "speakers": [],
+      "speakers": [
+        "Diego Capriotti"
+      ],
       "track": "appsec",
       "topics": [
         "injection",
@@ -1128,12 +1150,13 @@
         "technique",
         "diego"
       ],
-      "teaser": "Security researchers examine technical aspects of 15. Improving the Stealthiness of Memory Injection Techniques by Diego Capriotti.",
-      "summary": null,
+      "teaser": "Shows how to reduce the memory artifacts left by module overloading and module stomping so they evade open-source memory scanners.",
+      "summary": "The talk groups common memory injection techniques into code injection, PE injection and process manipulation, and notes that most share indicators such as dynamic memory allocation and permission changes that memory scanners look for. The speaker picks module overloading and module stomping, which avoid fresh allocations, and pairs them with a Python loader that calls Windows APIs through ctypes, so no compiled loader is needed and Python offers no AMSI-style inspection.\n\nEarlier, a memory module loader was shown to leave executable regions and suspicious indicators in Moneta and PE-sieve. The module shifting variant then loads a hosting DLL, writes shellcode over its text section, runs it through a function pointer, and restores the original DLL bytes afterwards. In the demonstrations this left no results in either scanner, and padding the overwrite to match the roughly 45 kilobyte code rewrite normal in .NET CLR processes helped it blend in.\n\nThe takeaway is that loader, technique and payload should be designed together, and that a functionally independent shellcode can be discarded after it runs. Defenders can still spot public implementations, which skip cleanup and leave an unusually large overwrite of a system DLL that a runtime-aware scanner could flag.",
       "durationSeconds": 2168,
       "conference": "x33fcon",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "2UruLKYwyEc",
@@ -2057,18 +2080,19 @@
       "speakers": [
         "Grzegorz Tworek"
       ],
-      "track": "community",
+      "track": "blue-team",
       "topics": [
         "grzegorz",
         "tworek",
         "good"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding 14. Grzegorz Tworek - The Good, the Bad and the ETW.",
+      "teaser": "Walks through Windows monitoring options and Event Tracing for Windows, with live demos of providers, sessions and trace collection.",
       "summary": "### Overview\nIn this presentation, Grzegorz Tworek (also introducing himself as Greg), Malware Security Lead Engineer at Standard Chartered, provides a practical crash course on Windows monitoring mechanisms with a primary focus on Event Tracing for Windows (ETW). Aimed at blue teamers, red teamers, system administrators, and developers, the talk surveys built-in Windows telemetry options before diving into the architecture, security configurations, sniffing opportunities, and evasion or triggering techniques associated with ETW.\n\n### Key Topics\n- **Windows Monitoring Landscape**: A comparison of various built-in diagnostic and monitoring facilities, including classic Event Logs, Performance Counters, debug output (monitored via Sysinternals DebugView), Windows Software Trace Preprocessor (WPP), In-Flight Trace Recorder (IFR) kept in circular memory dumps, and kernel black boxes for boot and services.\n- **ETW Architecture**: Introduction to the core ETW engine, introduced in Windows Vista, which connects controllers, event providers, and consumers, with support for live sessions (`-ets`) and binary event trace log (`.etl`) files.\n- **Provider Management and Manifests**: Inspecting and discovering providers using native command-line utilities (`logman query providers`) and registry keys (`HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Security` and Autologgers). Demonstrating manifest extraction from binary hard links using Resource Hacker to view `WEVT_TEMPLATE` resources.\n- **Access Control & Permissions**: Analyzing security descriptors in the registry and utilizing PowerShell to parse provider ACLs and SDDL strings to see which accounts (Local System, Administrators, Authenticated Users) can read or write events.\n- **Blinding & Evasion**: Demonstrating how unregistering providers, tampering with Autologger registry values (`Enable`), or setting the environment variable `COMPlus_ETWEnabled=0` disables .NET ETW telemetry inside processes.\n\n### Technical Details\n- **Native CLI Commands**: Tworek relies heavily on built-in tools like `logman` (e.g., `logman query -ets`, `logman start osk -p \"Microsoft-Windows-OSK\" -o osk.etl -ets`, `logman stop osk -ets`) and `tracerpt` (e.g., `tracerpt osk.etl -o osk.xml`) to collect and convert traces without third-party dependencies.\n- **Sniffing with ETW**: The speaker highlights sensitive telemetry that ETW providers capture, including cleartext HTTP/HTTPS data via `WinINet` before TLS encapsulation, network frames via built-in packet providers, USB bus traffic, and on-screen keyboard keystrokes via `Microsoft-Windows-OSK`. Tworek demonstrates sniffing OSK inputs, extracting `tcID` values from the resulting XML trace, and mapping those decimal scan codes to raw keyboard inputs.\n- **Service Triggering via ETW**: Demonstrating that while an unprivileged regular user receives an `error 5` (access denied) when attempting to start a service such as the Windows Error Reporting Service (`WerSvc`), the service configuration has an ETW event trigger (`sc qtriggerinfo WerSvc`). By calling the undocumented `ntdll.dll` export `EtwEventWriteNoRegistration`, an unprivileged user can emit the trigger event and cause the Service Control Manager to start the target service.\n- **Ecosystem Tools**: Recommending utilities such as Microsoft Message Analyzer, TraceView (SDK/WDK), FireEye's SilkETW, Pavel Yosifovich's ETW Explorer, Zac Brown's Posh-ETW, and Airbus CERT's WinShark.\n\n### Takeaways\nETW provides an extremely powerful, low-overhead monitoring architecture with over a thousand native providers, but its security implications cut both ways. Administrators and defenders must recognize that ETW can expose sensitive cleartext data (keystrokes, network frames, decrypted web traffic), can be blinded via registry manipulation or environment variables, and can even be abused by unprivileged users to indirectly execute actions such as triggering service starts.",
       "durationSeconds": 2555,
       "conference": "x33fcon",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "KdgUec9pU9U",
@@ -2466,7 +2490,7 @@
       "speakers": [
         "Bartosz Jerzman"
       ],
-      "track": "community",
+      "track": "blue-team",
       "topics": [
         "x33fcon",
         "hunting",
@@ -2474,12 +2498,13 @@
         "bartosz",
         "jerzman"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for 09. x33fcon 2019 - Hunting beacons by Bartosz Jerzman.",
-      "summary": null,
+      "teaser": "Shows statistical and header-based methods for spotting C2 beaconing in HTTP logs, plus fake TLS detection.",
+      "summary": "This talk covers hunting beaconing, the periodic check-ins malware makes to its command-and-control server, mostly using HTTP logs from a NATO cyber defense exercise. Signatures rarely catch well-configured beacons, so the speaker tests behavioural hypotheses instead. The first measures how regular connection intervals are, using the coefficient of variation to separate automated jittered beacons from manually paced sessions. The same method surfaces slow beacons that check in about every half hour.\n\nThe next hypotheses focus on HTTP metadata. Grouping requests by URI across hosts can reveal backup C2 domains sharing one path. A single destination receiving many different URIs with an unchanged referrer suggests automation, because browsers normally update the referrer as users navigate. Constant URI length can flag encoded payloads stored in the path.\n\nThe talk then turns to a fake TLS protocol linked to the Lazarus group, where the handshake imitates a legitimate site but the real traffic afterward uses a pre-shared key. The early message sizes are fixed and too small to be genuine TLS records, which makes them a profiling target for network analysts and sandbox captures. The closing section shows how to find C2 servers through default Cobalt Strike behaviour, such as its team server management port, DNS listener replies and HTTP server quirks, and urges defenders to hunt for defaults and operator mistakes.",
       "durationSeconds": 1728,
       "conference": "x33fcon",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "UDCRyilt4I0",
@@ -2525,26 +2550,33 @@
       "youtubeId": "V_V9KGbEVWE",
       "slug": "06-x33fcon-2019-atomic-threat-coverage-how-to-att-and-ck-by-dani",
       "title": "06. x33fcon 2019 - Atomic Threat Coverage: How to ATT&CK by Danil Yugoslavsky & Mateusz Wydra",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Danil Yugoslavsky",
+        "Mateusz Wydra"
+      ],
+      "track": "blue-team",
       "topics": [
         "x33fcon",
         "atomic",
         "threat",
         "danil"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for 06. x33fcon 2019 - Atomic Threat Coverage: How to ATT&CK by Danil Yugoslavsky & Mateusz Wydra.",
-      "summary": null,
+      "teaser": "Shows how to turn MITRE ATT&CK mappings into maintained detection rules, data requirements, and playbooks from plain-text files.",
+      "summary": "The speakers, who work on SOC and threat detection teams, start from a practical problem: ATT&CK describes techniques at a high level, so turning them into detections, justifying log sources to engineers, and reporting progress to management takes a lot of manual research. Their earlier framework mapped ATT&CK techniques to alerts, required data, logging policies and response steps in a Confluence knowledge base, but unit tests, detection logic and page updates were still handled by hand, and changes rippled across many linked pages.\n\nThe replacement, Atomic Threat Coverage, keeps every entity in YAML files. It pulls in Sigma detection rules and Atomic Red Team tests, then generates Markdown or Confluence pages, HIVE case templates built from response playbooks, Kibana dashboards, and ATT&CK Navigator layers per customer. A live demo showed a detection page linking its ATT&CK mappings, generated queries for chosen SIEMs, the data needed and the logging policy that produces it. The dashboards showed that most of the 211 open-source Sigma rules were not yet implemented for the sample customer, and nearly 80 percent carried experimental status, so they need testing before production use.\n\nThe closing section covered the workflow: changes go through Git and merge requests, one make command regenerates all outputs, and the data stays compatible with community projects that can be pulled in directly. The speakers also outlined next steps, including a shared coverage definition, more ATT&CK-mapped projects such as Metasploit post-exploitation modules, and automated hardening driven by ATT&CK mappings.",
       "durationSeconds": 2860,
       "conference": "x33fcon",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "qbEB5uHqakY",
       "slug": "04-x33fcon-2019-chaos-in-the-machine-apt28-complex-by-jason-kitc",
       "title": "04. x33fcon 2019 - Chaos in the Machine: APT28 Complex by Jason Kitchen & Alex Orleans",
-      "speakers": [],
+      "speakers": [
+        "Jason Kitchen",
+        "Alex Orleans"
+      ],
       "track": "threat-intel",
       "topics": [
         "x33fcon",
@@ -2553,12 +2585,13 @@
         "apt28",
         "complex"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding 04. x33fcon 2019 - Chaos in the Machine: APT28 Complex by Jason Kitchen & Alex Orleans.",
-      "summary": null,
+      "teaser": "Examines how internal politics, rivalry and national pride shape APT28 operations and the mistakes they produce.",
+      "summary": "The talk argues that state-sponsored intrusions are not as orderly as their reputation suggests. The speakers, who draw on their experience tracking state actors, treat groups such as APT28 (fancy bear) and Sandworm as human organizations shaped by competing priorities, fear of exposure and internal politics. Their analysis rests on open-source reporting and two 2018 US government indictments of GRU officers, and they present the links between units and activity clusters as working assumptions.\n\nThey describe how chaos moves down from strategic culture, organizational culture, rivalry between intelligence agencies, leadership demands and domestic politics to the operators on keyboard. Case studies include the 2016 US election intrusions, where fancy bear and cozy bear were both inside the same party networks and were removed, showing a lack of deconfliction. Closed-access operations against anti-doping bodies were driven by a desire to recover national prestige, and they reused personnel and laptops despite high risk. An attempted closed-access operation against the OPCW was tracked and disrupted. The talk also contrasts these with a 2018 US Cyber Command action against the Internet Research Agency.\n\nFor practitioners, the takeaway is to treat attribution as input to detection and emulation rather than just a label. Teams can ask what data an actor would value given current events, include physical and radio-frequency exposure such as how far office Wi-Fi reaches in red team scope, and consider how institutional pressure affects an actor's tool choices and operational tradeoffs.",
       "durationSeconds": 2383,
       "conference": "x33fcon",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "nZcUGSz2PtI",
@@ -3041,8 +3074,10 @@
       "youtubeId": "qG7HSRBJCBg",
       "slug": "14-weaponizing-the-usb-armory-by-yashin-mehaboobe",
       "title": "14. Weaponizing the USB Armory by Yashin Mehaboobe",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Yashin Mehaboobe"
+      ],
+      "track": "red-team",
       "topics": [
         "usb",
         "weaponizing",
@@ -3050,12 +3085,13 @@
         "yashin",
         "mehaboobe"
       ],
-      "teaser": "Security researchers examine technical aspects of 14. Weaponizing the USB Armory by Yashin Mehaboobe.",
-      "summary": null,
+      "teaser": "Shows how a USB Armory board can act as a keystroke-injection and composite USB attack device.",
+      "summary": "The talk looks at turning the USB Armory, a small Linux board in a USB stick form factor, into an offensive device for human interface device (HID) attacks. It explains why keyboard and mouse injection is often overlooked: a device that presents itself as a keyboard can type commands on a locked-down machine with no network exploit needed. Endpoint policies that block USB storage may not catch composite devices that combine several USB functions. The talk compares the board with earlier tools such as the Teensy, Rubber Ducky and Bash Bunny, and notes that running Linux on the Armory makes it easier to customise.\n\nThe demos use an open-source framework that generates payload scripts for a chosen target. The first shows a keystroke attack on Windows that opens the run prompt, types a command and launches PowerShell. The second uses a composite Ethernet and HID device with a DHCP server on the board, so injected commands can move data out over the network with netcat. Other options covered include a mass storage variant, a rogue SMB server approach that works against locked machines, and a idea of using a PIR sensor on the GPIO pins to check whether someone is present before running a payload. Composite support was unreliable on Windows 10, and HID work needed a 4.4 kernel image.\n\nThe main takeaway is that brief physical access with a plausible USB device can lead to command execution and data theft, so defenders should review USB policies for composite devices as well as storage. The speaker notes that documentation for the board is sparse and points to the vendor's community forum and kernel build examples for help.",
       "durationSeconds": 1807,
       "conference": "x33fcon",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Nn9yJjFGXU0",

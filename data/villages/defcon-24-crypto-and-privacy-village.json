@@ -40,13 +40,16 @@
       ],
       "teaser": "Why traditional system and application logs fall short for forensic investigations, and how privacy-preserving telemetry enhances detection.",
       "summary": "### The Fundamental Tension: Accountability vs. Privacy\nIn enterprise software engineering, audit logging is an indispensable pillar of information security, required for incident forensics, non-repudiation, fraud detection, and regulatory compliance. At 01:52, security engineer Alisha Kloc addresses the complex design challenge that emerges when security logging intersects with user privacy. While security teams naturally seek to capture maximum data to facilitate forensic investigations, collecting granular user telemetry creates massive privacy liabilities, expands the enterprise breach surface, and frequently violates data minimization principles established under global privacy frameworks.\n\n### The Perils of Over-Logging: The \"Stalking Problem\"\nAt 05:25, Kloc explores one of the most pervasive yet under-discussed insider threat vectors: internal employees abusing access privileges to surveil individuals. Within customer service, technical support, and administrative divisions, employees with legitimate access tools often perform unauthorized lookups on ex-partners, romantic interests, celebrities, politicians, or family members. At 27:43, the speaker examines case studies where lack of context in administrative logs allowed rogue employees to systematically stalk users without detection, because internal logging mechanisms merely recorded generic database transactions rather than evaluating the business legitimacy of the access.\n\n### Designing Structured Actor-Target Audit Logging\nTo resolve this dilemma, Kloc advocates moving away from raw database query dumps toward structured application-level logging centered on \"The Who and the Whom.\" At 16:11, the presentation outlines the core schema requirements for privacy-conscious audit trails:\n- **The Actor:** Unambiguously identifying the authenticated employee, session ID, origin IP, and authentication mechanism.\n- **The Target:** Documenting the specific user, record, or data entity being accessed.\n- **The Context and Justification:** Requiring staff to input or link valid business justifications—such as an active support ticket ID, customer service call session, or formal dispute reference—before retrieving sensitive records.\n- **Behavioral Anomaly Detection:** Profiling access patterns to identify red flags, such as employees querying accounts sharing their own last name, residential address, or accessing statistically abnormal volumes of profile records.\n\n### Mitigating Log Infiltration and Credential Leakage\nA critical hazard of indiscriminate logging is the inadvertent capture of sensitive authentication secrets and protected personal data. At 20:47, Kloc warns of common anti-patterns where application debuggers and centralized logging aggregators (e.g., Elasticsearch, Splunk) inadvertently ingest passwords, session cookies, credit card numbers, and protected health information (PHI) via HTTP request parameters. The speaker emphasizes strict data scrubbing pipelines, regex sanitization, and structured field whitelisting to guarantee that sensitive credentials and private communications are stripped before logs are committed to permanent disk storage.\n\n### Separation of Duties and Architectural Controls\nAt 39:58, the session details defensive architectural controls required to safeguard the integrity of audit infrastructure:\n- **Tamper-Evident Storage:** Forwarding audit logs to append-only, write-once-read-many (WORM) storage or cryptographically signed remote repositories to prevent administrators from altering log files to cover their tracks.\n- **Strict Access Segmentation:** Enforcing dual-authorization controls and least-privilege policies so that general system administrators cannot read or search sensitive user access audit logs without explicit compliance authorization.\n- **Log Retention and Lifecycle Management:** Establishing rigorous retention schedules that purge detailed operational logs after their legal and compliance utility expires, ensuring historical user data does not persist indefinitely.\n\n(AI summary — Gemini 3.8 Flash)",
-      "durationSeconds": 2633
+      "durationSeconds": 2633,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "SyitnCnCIFE",
       "slug": "greg-norcie-my-usability-goes-to-11-a-hackers-guide-to-use",
       "title": "Greg Norcie - My Usability Goes to 11 A Hackers Guide to Use",
-      "speakers": [],
+      "speakers": [
+        "Greg Norcie"
+      ],
       "track": "privacy",
       "topics": [
         "privacy",
@@ -56,13 +59,16 @@
       ],
       "teaser": "A hacker guide to usable security and human factors in privacy tooling, examining why cryptographically sound software often fails users.",
       "summary": "Cryptography and privacy: My Usability Goes to 11 A Hackers Guide to Use. Technical analysis of encryption and privacy issues.\n\n(AI summary — Claude Haiku)",
-      "durationSeconds": 2067
+      "durationSeconds": 2067,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "JQiDGH2OW6k",
       "slug": "ladar-levison-compelled-decryption-state-of-the-art-in-doctrinal",
       "title": "Ladar Levison - Compelled Decryption: State of the Art in Doctrinal Perversity",
-      "speakers": [],
+      "speakers": [
+        "Ladar Levison"
+      ],
       "track": "policy",
       "topics": [
         "policy",
@@ -79,7 +85,9 @@
       "youtubeId": "YN_qVqgRlx4",
       "slug": "nate-cardozo-crypto-state-of-the-law",
       "title": "Nate Cardozo - Crypto State of the Law",
-      "speakers": [],
+      "speakers": [
+        "Nate Cardozo"
+      ],
       "track": "policy",
       "topics": [
         "policy",
@@ -96,7 +104,10 @@
       "youtubeId": "2GtoAycltxM",
       "slug": "mat-caughron-trey-blalock-revocation-the-frailty-of-pki",
       "title": "Mat Caughron, Trey Blalock - Revocation the Frailty of PKI",
-      "speakers": [],
+      "speakers": [
+        "Mat Caughron",
+        "Trey Blalock"
+      ],
       "track": "privacy",
       "topics": [
         "pki",
@@ -106,13 +117,16 @@
       ],
       "teaser": "Analyzing certificate revocation protocols including CRL and OCSP, exploring the systemic vulnerabilities and privacy leaks undermining public PKI.",
       "summary": "### The Fragile Pillar of Public Key Infrastructure\nPublic Key Infrastructure (PKI) underpins the security, authenticity, and cryptographic confidentiality of the modern World Wide Web. However, the integrity of PKI hinges upon an often-overlooked mechanism: certificate revocation. When a private key is compromised, a Certificate Authority (CA) erroneously misissues a certificate, or an employee departs an organization, the web trust model requires that browsers instantly recognize the compromised certificate as invalid. At 01:47, security researchers Mat Caughron and Trey Blalock dissect why digital certificate revocation represents the most structurally broken and fragile component of modern internet security.\n\n### The Mechanics and Failure of Certificate Revocation Lists (CRLs)\nThe earliest mechanism for certificate revocation was the Certificate Revocation List (CRL)—a cryptographically signed file published periodically by the issuing CA listing all invalidated certificate serial numbers:\n- **Performance and Bandwidth Bottlenecks:** As the web expanded, CRL files ballooned to dozens of megabytes, creating unacceptable network latency and bandwidth consumption for web browsers attempting to validate every TLS connection.\n- **Staleness and Propagation Delay:** CRLs are generated on fixed schedules (daily or weekly). During the gap between list generations, compromised certificates remain fully accepted, leaving victims exposed to active man-in-the-middle (MitM) attacks.\n\n### Online Certificate Status Protocol (OCSP) and the Soft-Fail Crisis\nTo solve the scalability and latency bottlenecks of CRLs, the IETF developed the Online Certificate Status Protocol (OCSP, RFC 6960), enabling clients to query a CA's responder server directly regarding the real-time status of a specific certificate serial number. However, at 24:40, the speakers expose the fatal flaw of browser OCSP implementations:\n- **The \"Soft-Fail\" Reality:** Because CA OCSP responders frequently experience downtime, high network latency, or network hiccups, browser vendors (including Google Chrome and Mozilla Firefox) refuse to enforce \"hard-fail\" validation, which would block users from reaching websites.\n- **The Attacker Advantage:** If an active man-in-the-middle attacker intercepts the connection, they simply block or drop the browser's outgoing OCSP request. The browser's soft-fail logic treats the timeout as a benign network error and accepts the revoked certificate without warning the user, rendering OCSP completely ineffective against active network adversaries.\n\n### Real-Time Privacy Leakage via Plaintext Inquiries\nBeyond defensive inefficacy, OCSP introduces severe privacy liabilities. At 19:39, the presentation highlights how OCSP queries expose user browsing activities:\n- **Cleartext HTTP Transmission:** To prevent circular cryptographic dependencies (requiring a TLS handshake to validate the TLS certificate of the OCSP server), OCSP requests are transmitted over unencrypted HTTP.\n- **Surveillance and Profiling:** Anyone on the local network—malicious Wi-Fi operators, ISPs, or intelligence agencies—can monitor these cleartext OCSP queries to track every domain visited by a user in real time. Furthermore, the issuing CA receives a continuous, deanonymized telemetry feed of user browsing habits across the globe.\n\n### Modern Alternatives: OCSP Stapling, Must-Staple, and Short-Lived Certs\nAt 30:55, Caughron and Blalock examine engineering advancements designed to overcome PKI revocation frailties:\n- **OCSP Stapling (RFC 6066):** Rather than having millions of client browsers query the CA, the web server periodically fetches a cryptographically signed OCSP response from the CA and \"staples\" it directly into the initial TLS handshake, eliminating client latency and privacy leaks.\n- **OCSP Must-Staple:** A certificate extension informing browsers that a valid stapled OCSP response is mandatory. If an attacker strips the stapled response, the browser hard-fails the connection, neutralizing soft-fail circumvention.\n- **Short-Lived Certificates:** Pioneered by automated CAs like Let's Encrypt, drastically reducing certificate validity periods (from years down to 90 days or even hours) diminishes reliance on revocation infrastructure, as expired certificates naturally self-invalidate.\n\n(AI summary — Gemini 3.8 Flash)",
-      "durationSeconds": 2660
+      "durationSeconds": 2660,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "90EYVy35gsY",
       "slug": "david-wong-how-to-backdoor-diffie-hellman",
       "title": "David Wong - How to Backdoor Diffie-Hellman",
-      "speakers": [],
+      "speakers": [
+        "David Wong"
+      ],
       "track": "privacy",
       "topics": [
         "cryptography",
@@ -122,7 +136,8 @@
       ],
       "teaser": "Cryptographer David Wong demonstrates how to construct cryptographic backdoors into Diffie-Hellman key exchanges using malicious prime selection.",
       "summary": "Cryptography and privacy: How to Backdoor Diffie-Hellman. Technical analysis of encryption and privacy issues.\n\n(AI summary — Claude Haiku)",
-      "durationSeconds": 2304
+      "durationSeconds": 2304,
+      "difficulty": "expert"
     },
     {
       "youtubeId": "TY1aWIdaWj4",

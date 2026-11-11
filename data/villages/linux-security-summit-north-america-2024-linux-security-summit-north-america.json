@@ -293,11 +293,12 @@
         "enhancing",
         "systemd"
       ],
-      "teaser": "Bill Roberts analyzes Enhancing Systemd Security Using TPM 2.0.",
-      "summary": null,
+      "teaser": "Explains how systemd's TPM 2.0 session handling let bus attackers capture disk encryption keys, and how the fixes close that gap.",
+      "summary": "The talk examines how systemd unlocks LUKS-encrypted disks with a key sealed in a TPM 2.0, and how traffic between the host and the TPM can expose that key. Encrypted TPM sessions are the standard mitigation, but systemd's first session support created a key pair inside the TPM without verifying the public key it received. An attacker on the bus could substitute their own key, decrypt the session and read the disk key while the host never noticed.\n\nThe release that followed added a bind key that used the PIN as a shared secret, but recorded traffic could then be attacked offline, which is weak for short PINs. Later fixes strengthened the PIN with a PBKDF2-style derivation using HMAC-SHA256 and a salt stored in the LUKS metadata. The final fix, in version 254, records the TPM object's name at enrollment, similar to trusting an SSH host fingerprint, so sessions are protected even without a PIN. The work also replaced per-operation primary key creation with the storage root key, which avoids requiring the owner password.\n\nThe main lesson is to verify any key used to start a TPM session, and to use the feature API or the enhanced system API with proper object names. Remaining work includes sealing over an encrypted session and PCR policies, though the speaker warned that unmeasured components such as systemd itself could be swapped to capture PINs. Users on older versions should upgrade to 254 or later.",
       "durationSeconds": 1980,
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     }
   ]
 }

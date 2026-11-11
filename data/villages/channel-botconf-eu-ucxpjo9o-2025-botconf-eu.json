@@ -1041,15 +1041,19 @@
       "youtubeId": "HGYpymyXvio",
       "slug": "a-detailed-look-into-the-mozi-p2p-iot-botnet",
       "title": "A detailed look into the Mozi P2P IoT botnet",
-      "speakers": [],
+      "speakers": [
+        "Chris Dietrich",
+        "Andreas Klopsch",
+        "Rafa Edgefinger"
+      ],
       "track": "malware",
       "topics": [
         "iot",
         "botnet",
         "p2p"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning A detailed look into the Mozi P2P IoT botnet.",
-      "summary": null,
+      "teaser": "Examines how the Mozi IoT botnet hides command and control in BitTorrent DHT traffic and what drove its 2020 growth.",
+      "summary": "Mozi is a Linux malware family that targets IoT devices, mostly MIPS and ARM systems, and was first seen in September 2019. The researchers place it among long-running botnets whose operators' intent is still unclear, alongside Hajime. Its command and control rides on the BitTorrent distributed hash table. Mozi nodes share a fixed node ID prefix, so they cluster together in an unstructured overlay. When a crawler queries a Mozi node, the node randomly replies either with a list of other Mozi peers or with a forged configuration disguised as a peer response.\n\nPropagation relies on about fourteen exploits against device web interfaces and on brute-forcing default telnet credentials. The botnet held a few thousand nodes per day until September 10, 2020, when its count jumped to between 80,000 and 100,000 node IDs before settling near 30,000. The only binary difference the team found around that date was one added password, which they say aligns with the surge without fully proving cause. India became the largest source of infections, and a mid-July rise in Georgia remained unexplained. The team also described capabilities such as DDoS, downloading signed binaries, and DNS and HTTP manipulation, none of which they had observed in use. A second part presented a service that unpacks ARM ELF samples by emulating them in QEMU, dumping memory and rebuilding the binary.\n\nThe speakers observed no attacks, and they noted that Mozi is still in active development, including a low-level traffic manipulation module seen in September 2020. Practitioners should watch for small binary changes and shifts in population, since these can signal new propagation or tasking.",
       "durationSeconds": 1056,
       "conference": "botconf",
       "difficulty": "intermediate",
@@ -1091,8 +1095,8 @@
         "story",
         "unique"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Fritzfrog: A Story of a Unique P2P Botnet.",
-      "summary": null,
+      "teaser": "Dissects Fritz Frog, a peer-to-peer SSH worm botnet that shares commands, files and crypto-mining jobs across infected nodes.",
+      "summary": "The talk covers Fritz Frog, a peer-to-peer botnet that Guardicore Labs first noticed when SSH brute-force attacks against their sensors all delivered the same unknown Go binary. No public scanner flagged the file, and the process scanned other SSH hosts while listening on local port 1234. That led the team to follow a campaign seeing hundreds to thousands of attacks a day on their sensors.\n\nThe researcher debugged the malware and traced a Diffie-Hellman key exchange on that port, followed by encrypted, base64-encoded commands. Disassembling the command dispatcher exposed commands for database sync, target management, payloads and peer statistics, which showed that every infected machine acted as its own command server. Infection runs a netcat call over the SSH session, so a firewall sees only ordinary SSH traffic. Nodes share binaries as torrent-like blobs that are assembled in memory, run and deleted. A voting module elects a winner that splits brute-force targets so no two nodes overlap. A Monero miner is deployed the same way, and an antivirus module kills rival miner processes.\n\nTo gauge scope, the team built a Go client that mimicked the protocol, planted its own breached host, and crawled peer lists. This surfaced millions of targets and roughly 500 infected nodes. The protocol looked newly written, the malware kept little on disk, and its brute force used many usernames. The speaker suspects the operators run the network as a service for other groups, for deployment, ransomware or DDoS, rather than for mining alone.",
       "durationSeconds": 1561,
       "conference": "botconf",
       "difficulty": "intermediate",
@@ -2259,8 +2263,8 @@
         "ddo",
         "booter"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Dennis Schwarz - The Russian DDoS One: Booters to Botnets.",
-      "summary": null,
+      "teaser": "Traces Russian-language DDoS booter services back to the botnets behind them, using passive pivots and admittedly shaky attribution.",
+      "summary": "Dennis Schwarz, a security researcher on the ASERT team at Arbor Networks, looks at what he calls the \"Russian DDoS One,\" an informal group of threat actors who sell DDoS booter services on public Russian-language underground forums. He explains how these sellers advertise, how reputation and dispute handling work on the forums, and why most of their real business moves to private chat channels, which makes tracking them difficult.\n\nUsing Arbor's Blade Runner data and open sources, he pivots from booter domains, handles and contact details to the botnet command-and-control servers behind them. Each story follows one actor. One seller's domains led to a botnet that may or may not be his. Another operator's sales pages tied to several malware families and possibly a hosting role. A team's accidental paste of its target orders linked many command servers to one large botnet. A blacklister's leaked chat logs connected booters to attacks on specific addresses. Many of the links are circumstantial, and he leaves open questions about who really runs each botnet.\n\nThe takeaway is that mapping booters to botnets is largely passive, relying on luck, shared infrastructure and pattern matching, so attribution stays uncertain. He suggests that future work could use DDoS honeypots and known target domains to trace operators more actively, while acknowledging the legal and operational risks that would come with it.",
       "durationSeconds": 1992,
       "conference": "botconf",
       "difficulty": "intermediate",
@@ -2414,18 +2418,19 @@
       "speakers": [
         "Virus Tracker"
       ],
-      "track": "community",
+      "track": "threat-intel",
       "topics": [
         "peter",
         "kleissner",
         "vulnerability-research"
       ],
-      "teaser": "Security researchers investigate Peter Kleissner and analyze defensive countermeasures.",
-      "summary": null,
+      "teaser": "Shows how a botnet sinkhole operation tracks infections, crawls peer-to-peer networks and filters out false positives.",
+      "summary": "The speaker presents Virus Tracker, a sinkhole operation that registers domains used by malware command-and-control servers and points them at its own infrastructure to record which machines check in. Rather than stopping after a few days like many researchers, the project aims to follow botnets for years, covering more than 7,000 domains and over three million machines a day. Domains are gathered from public malware analysis services and added automatically, while some are predicted by reversing domain generation algorithms.\n\nOperational problems get equal attention. For privacy reasons only minimal metadata is kept, with one request per IP address per day, and POST content is not analysed. Sandboxes, security vendors and crawlers create false positives, which are filtered using expected request paths, user agents and a list of analysis-system addresses. Takedowns by Microsoft and the FBI, registrar complaints, and domain costs of roughly 700 to 1,000 euros a month were discussed. A botnet operator blacklisted the sinkhole, and a DDoS above 1 Gbit/s led the data center to null-route the server for about two hours. Peer-to-peer botnets such as ZeroAccess, ZeroX and Sality are crawled with custom C tools, and the defenses of the Gameover network are described.\n\nThe trend data shows infections falling after takedowns, mobile botnets being tracked, and criminals moving toward fewer, more targeted infections. The speaker plans a public API and argues that sinkhole operators should share data instead of duplicating work.",
       "durationSeconds": 2758,
       "conference": "botconf",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "l2ZSG_96PoM",

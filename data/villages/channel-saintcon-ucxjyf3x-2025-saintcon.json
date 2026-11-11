@@ -5024,20 +5024,21 @@
         "Will Schroeder",
         "Maxwell Harley"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "christensen",
         "schroeder",
         "maxwell",
         "harley"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 2023 - Lee Christensen, Will Schroeder, and Maxwell Harley - Fighting Data With Data.",
-      "summary": null,
+      "teaser": "Presents Nemesis, an open-source platform that automatically enriches data collected during offensive engagements.",
+      "summary": "The talk starts with the repetitive work red teamers face after pulling files from a target. A downloaded .NET assembly has to be copied to a Windows analysis machine for decompilation, an encrypted Office document needs its hash extracted and cracked on a separate rig, and most offensive tool output is unstructured text. Data also stays siloed across several C2 frameworks and individual laptops, so teammates lack a shared view of an assessment.\n\nThe speakers introduce Nemesis, a Kubernetes-based data processing platform. Connectors send data from C2 frameworks to a web API, which queues it for enrichment services. Those services extract text from Office files, convert documents to PDF, scan for credentials, check .NET binaries for deserialization primitives, and decompile assemblies. Results are stored in Elasticsearch and PostgreSQL, surfaced in a dashboard, and sent to Slack when something notable turns up. Demos cover a Chrome extension that uploads documents, automatic cracking of an encrypted zip's hash against a small wordlist, and DPAPI chains where Chrome logins were decrypted automatically after a domain backup key was retrieved. A beacon object file also collects registry keys so services can be modeled.\n\nThe speakers argue that keeping raw data lets teams re-run newly discovered analysis on old engagements, work from an offline model of a network, and give every operator a new technique once it is added. Their takeaway is that structured, retained offensive data supports analytics and research. The project is open source on GitHub.",
       "durationSeconds": 2959,
       "conference": "saintcon",
       "viewCount": 1100,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2023
+      "year": 2023,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "qEpOesRrrno",
@@ -6575,7 +6576,9 @@
       "youtubeId": "LNfl2VU4wvE",
       "slug": "metacortex-password-attacks-from-ashigaru-to-daimyo",
       "title": "metacortex - Password Attacks From Ashigaru to Daimyo",
-      "speakers": [],
+      "speakers": [
+        "metacortex"
+      ],
       "track": "red-team",
       "topics": [
         "metacortex",
@@ -6584,12 +6587,13 @@
         "ashigaru",
         "daimyo"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for metacortex - Password Attacks From Ashigaru to Daimyo.",
-      "summary": null,
+      "teaser": "Walks through password hashing, cracking methods like brute force, wordlists, rules and masks, and GPU-based hashcat runs.",
+      "summary": "The talk opens with why passwords matter: compromising one credential can expose everything that account reaches, and users often choose weak ones. It explains how hashing turns input into a fixed-length digest, shown with a short Python demo where the same input always gives the same SHA-256 output but a one-character change alters it completely. Comparing hashes rather than stored plaintext is presented as the basic defence.\n\nThe middle section covers the main cracking approaches. Brute force tries every combination and is thorough but can become impractical as length grows. Wordlists are fast but only succeed if the password appears in the list, and hybrid attacks add digits to dictionary words. Rules apply substitutions and mutations to wordlist entries. Rainbow tables are described as largely obsolete because of their storage size. Salting is covered as a defence, since unique per-entry salts make attacks much harder. Demos compare simple Python brute-force and wordlist scripts with hashcat attack modes, masks and rule files.\n\nThe closing part explains cracking time as total possibilities divided by guesses per second, and how CUDA-enabled GPUs have raised that rate, so password policies must keep pace with hardware. The speaker describes a GPU cracking rig used in audits and cautions against submitting sensitive hashes to online cracking services. The takeaway is to require longer passwords, use salted hashes and audit for predictable organisational patterns.",
       "durationSeconds": 3306,
       "conference": "saintcon",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "a7qg9g1PAVU",
@@ -6759,12 +6763,13 @@
         "gigawatt",
         "vulnerabilitie"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Waylon Grange - 1 21 GigaWatts! - Vulnerabilities in Solar Panel Controllers.",
-      "summary": null,
+      "teaser": "Shows how a residential solar panel controller falls to hardware access, firmware decryption and hard-coded passwords.",
+      "summary": "The talk documents a hardware and firmware assessment of a home solar panel gateway, starting with the vendor's consumer and installer mobile apps. Both were .NET wrappers, and decompiling them exposed a public cloud storage bucket of firmware packages plus an index mapping images to devices. The packages were encrypted, and the decryption tool was only available inside the firmware, so the researcher needed a way onto the device first. A native routine in the installer app turned out to derive the installer password from the username and serial number.\n\nOn the hardware side, the controller exposed a UART console while JTAG was disabled, and the kernel rejected input over the serial line. Glitching the root filesystem failed because the device panicked on tampering. Instead, the researcher dumped the external boot flash with a hardware programmer, changed one byte in the U-Boot environment to restore a boot delay, and reflashed the chip. That gave a U-Boot prompt, from which the filesystem could be read and the decryption tool recovered. The decryption key was derived from hashed string blocks in the binary, so the firmware could be decrypted. A web upgrade function then allowed unsanitized command execution on the box.\n\nRoot login still failed because a custom PAM module ignored the shadow file and checked a hard-coded, serial-derived password instead. Three CVEs traced back to that module, and owners could not change the password. A later firmware change added firewall rules but also a URL that disabled them shortly after boot. The talk closes by noting that serial numbers are printed on the case and labels, so these credentials are predictable. The takeaways are to avoid hard-coded passwords, never roll your own crypto, and fail hard when hardware has been tampered with.",
       "durationSeconds": 2592,
       "conference": "saintcon",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "l1kiOW0XpyM",
@@ -6948,7 +6953,7 @@
       "speakers": [
         "Kyle Feuz"
       ],
-      "track": "community",
+      "track": "blue-team",
       "topics": [
         "wireshark",
         "kyle",
@@ -6957,8 +6962,8 @@
         "introduction",
         "beginners"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Kyle Feuz - Wireshark : A Beginners Introduction.",
-      "summary": null,
+      "teaser": "Walks beginners through Wireshark's interface, capture placement, baselining, TLS decryption, filters and Nmap scan detection.",
+      "summary": "This two-hour beginner training introduces Wireshark through hands-on work with prepared capture files, avoiding live captures and the legal questions they raise. The session tours the packet list, packet details and packet bytes panes, then covers where to capture traffic. The right capture point depends on the traffic of interest, and the speaker covers switch port mirroring, network taps and the challenges of wireless capture.\n\nThe middle section focuses on baselining normal traffic so anomalies stand out. Attendees compare a baseline capture with others using capture file properties, protocol hierarchy and endpoint statistics. For encrypted web traffic, the speaker shows how to set the SSLKEYLOGFILE environment variable so a browser writes TLS session keys, then loads that file into Wireshark to decrypt HTTP, follow streams and export transferred objects.\n\nThe final part covers efficiency through custom profiles, display filters, filter buttons and coloring rules. A default Nmap scan serves as the case study: a sequential ARP sweep finds active hosts, then one source sends a burst of SYN attempts across many ports, producing reset packets. The takeaway is to learn what normal looks like on your own network before hunting for deviations.",
       "durationSeconds": 7438,
       "conference": "saintcon",
       "viewCount": 1100,
@@ -7041,12 +7046,13 @@
         "ficker",
         "hackers"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Erich Ficker - Hacking SDR - What is RF and why hackers should care.",
-      "summary": null,
+      "teaser": "Introduces radio frequency basics and software-defined radio hardware, tools and attack types for newcomers.",
+      "summary": "The speaker introduces radio frequency as a broadcast medium that anyone in range can receive, and explains how software-defined radio lets a computer tune to and decode those signals. A basic receiver dongle costs around 40 dollars. The talk compares receivers such as the AirSpy with transmit-capable devices like the HackRF and YardStick One, and covers software including GNU Radio, SDR# and SDR++.\n\nPractical examples follow. Antenna length is tied to wavelength, so a quarter-wave antenna suits 1090 MHz aircraft transponder reception, which the speaker used to map nearby flights. A public FCC ID printed on a utility power meter led to its operating band of 902 to 927 MHz, showing how device filings can reveal frequencies. Wireless utility meters and water treatment telemetry on unlicensed ISM bands were discussed as data that nearby listeners can capture. Attack categories covered eavesdropping, man-in-the-middle, replay and forged messages, with a replay weakness in a home security keypad from earlier research as an example.\n\nThe closing message is that encoding is not encryption, and that an inexpensive dongle and free software are enough to start exploring which nearby transmissions are unprotected. Attendees were pointed toward GNU Radio tutorials as a next step for decoding and replaying signals.",
       "durationSeconds": 3414,
       "conference": "saintcon",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "u011rLQraCc",
@@ -7251,12 +7257,13 @@
         "another",
         "homelab"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Shaun Price - One man's trash is another man's Homelab 2021 Edition.",
-      "summary": null,
+      "teaser": "Covers budget home lab hardware picks, server builds, networking gear, and storage options for 2021.",
+      "summary": "This talk is a 2021 update to an earlier home lab presentation, looking at how supply shortages, budget cuts and a crowded GPU and drive market changed what hobbyists can buy used. The speaker describes a storage server he built in a Supermicro chassis, buying six large drives at different retail stores and burning them in before installation, and he notes that enterprise surplus gear has become harder to find. He frames home lab planning around three factors, upfront hardware cost, ongoing power cost and performance, along with how much noise and clutter the household will tolerate.\n\nHardware options are compared by price and capability. Small thin clients and tiny desktops offer cheap compute for small clusters, while 1U servers offer more memory and out-of-band management. The speaker warns that a lower-TDP CPU can run hotter in a case with a low T-case limit, raising fan noise. Budget X99 motherboards from overseas marketplaces can host ECC or non-ECC memory in a desktop case. Networking covers used switches, with a caution that one switch rebooted when fed by a modified sine wave UPS, and host bus adapters need airflow to avoid errors.\n\nThe closing part covers hiding gear in a furniture build, separating production services from lab work by nesting a lab inside a bare-metal ESXi host behind a physical edge firewall, and choosing hypervisors such as ESXi, Proxmox or unRAID. Q&A closes the session.",
       "durationSeconds": 3019,
       "conference": "saintcon",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Taow5h6i4CQ",
@@ -7842,14 +7849,16 @@
       "youtubeId": "r8JDBqyHX5A",
       "slug": "2020-14",
       "title": "Badge Assembly",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Badge Assembly"
+      ],
+      "track": "hardware",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "summary": null,
+      "summary": "This video is a step-by-step assembly guide for the SAINTCON 2020 badge. It opens with the kit contents: a lanyard, a paper sheet holding a gift code for designing a custom mini badge through OSH Park, mini badge holder boards, and a daughter board with the microcontroller. The main board gets surface-mount pads soldered to its edges, then eight red LEDs are seated with their flat sides and short cathode legs matched to the silkscreen. The LEDs are tested before the remaining parts go on.\n\nNext, the battery holder is soldered to the back of the main board and the button is checked to cycle through the LED modes. The vertical and horizontal side boards slot into their notches, and the pads must line up or the part is reversed. A rubber band helps hold the ball structure steady while each joint is soldered. Seventeen mini badge holders are then snapped from their panel, four of which have a horizontal slot orientation. Headers go onto each holder before it is fitted to the ball, and the wider slot on each board keeps the orientation correct.\n\nTo finish, the presenter builds the year's mini badge, placing a surface-mount LED and resistor on its back. A powered-down badge serves as a jig to keep the pins straight while they are soldered. Spare parts in the kit cover the custom mini badge the builder designs. The practical takeaways are to test each subsystem early, check alignment before final soldering, and confirm LED polarity.",
       "durationSeconds": 1569,
       "conference": "saintcon",
       "viewCount": 1200,
@@ -7858,7 +7867,9 @@
       "eventLabel": "SAINTCON 2020",
       "enrichmentGaps": {
         "teaser": "Generated line repeated the event label; dropped when the real title was recovered."
-      }
+      },
+      "difficulty": "beginner",
+      "teaser": "Walks through soldering the SAINTCON 2020 badge, from surface-mount boards and LEDs to headers and a mini badge."
     },
     {
       "youtubeId": "maporp1OLcM",
@@ -9469,20 +9480,23 @@
       "youtubeId": "NHbmBeXXi5I",
       "slug": "2019-karl-sickendick-reverse-engineering-and-code-emulation-with",
       "title": "2019 - Karl Sickendick - Reverse Engineering and Code Emulation with Ghidra",
-      "speakers": [],
+      "speakers": [
+        "Karl Sickendick"
+      ],
       "track": "malware",
       "topics": [
         "reverse-engineering",
         "ghidra",
         "emulation"
       ],
-      "teaser": "Security researchers examine technical aspects of 2019 - Karl Sickendick - Reverse Engineering and Code Emulation with Ghidra.",
-      "summary": null,
+      "teaser": "Shows how Ghidra's P-code can be emulated with Python to run a single binary function outside the full program.",
+      "summary": "Ghidra, the open-source reverse engineering tool released by the NSA, is introduced first, along with how it works. Its SLEIGH modules lift machine code for many architectures into P-code, an architecture-neutral intermediate language, and the decompiler builds C-like output from that. The speaker covers setup, shared projects that let teams track changes on a Ghidra server, and the basic workflow of importing a binary, running analysis, and enabling P-code in the listing. Comparing x86-64 and ARM64 function prologues shows how P-code makes the exact effect of each instruction easy to read.\n\nNext come ways to improve decompiler output: fixing function signatures and parameter types so changes propagate through the code, and defining custom structures and data types. The talk also covers scripting in Ghidra's built-in Python environment, which runs an older Python 2.7-based runtime, so modern third-party libraries are harder to use. Scripts can query the open program and the current address, and can ask the user for input.\n\nThe main demo is P-code emulation, which runs one function without executing the whole program. The target was a function from the NSA's Python Enigma simulator that takes output, key, rotor, plugboard, and input pointers. After the script set up those arguments in memory, the emulation finished in a few minutes and produced the same output as the original binary. The speaker closes by noting limits: system calls are not emulated, and the interface is rough. Emulation fills the gap between static and dynamic analysis when a debugger is impractical, such as for malicious code or hardware without tooling.",
       "durationSeconds": 1430,
       "conference": "saintcon",
       "viewCount": 1700,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2019
+      "year": 2019,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "KXr5HRWdZhU",

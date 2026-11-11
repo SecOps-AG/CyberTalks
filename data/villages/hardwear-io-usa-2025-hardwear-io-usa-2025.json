@@ -107,12 +107,13 @@
         "journey",
         "vulnerability-research"
       ],
-      "teaser": "Ryan Grachek investigates Journey Into JTAG.",
-      "summary": null,
+      "teaser": "Shows how JTAG on a 2013 Samsung Galaxy S4 was re-enabled by abusing fuse override registers and boot-stage weaknesses.",
+      "summary": "The talk targets the 2013 Samsung Galaxy S4, an Android phone built on a Qualcomm APQ8064 with a locked bootloader and JTAG disabled by fuse. It walks through the boot chain from the boot ROM and staged secondary loaders to TrustZone and little kernel, and explains how a developer-edition check tied to the eMMC CID unlocks unsigned boot. JTAG basics follow, covering TAP controllers, boundary scan and the trade-off between commercial and open-source debuggers.\n\nEarly OpenOCD attempts auto-discovered the ARM and Qualcomm taps, but the target kept resetting. A gray-market repair box, the Z3X Easy JTAG, held a modified OpenOCD build and init script in host memory. Reverse engineering them revealed a fuse override register that restores the manufacturer debug configuration. By driving ARM7 scan chains to set a breakpoint and halting the core quickly enough to write that register, the speaker regained JTAG access to the application processor and could debug TrustZone and the bootloaders.\n\nFurther analysis showed the third-stage loader incrementing anti-rollback fuses on every read, and an open fuse permissions region allowed read access to that anti-rollback area to be removed. A shellcode-based route through a flaw in a Windows Phone toolkit was also shown to skip boot authentication. The takeaway is that debug locks on production silicon can be undone through configuration registers and loosely protected fuse permissions, and that old devices remain exposed long after support ends. The vulnerability was found in 2015 and disclosed to Qualcomm in 2024.",
       "durationSeconds": 2758,
       "conference": "hardwear",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "DGC9a9SIOXw",
@@ -163,18 +164,19 @@
       "speakers": [
         "Hash Salehi"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "budget",
         "vulnerability-research",
         "threat-detection"
       ],
-      "teaser": "Hash Salehi analyzes BAM BAM On A Budget: You CAN Do It!.",
-      "summary": null,
+      "teaser": "Follows a reverse engineer who reproduces a published EMP glitch attack to dump a locked microcontroller's flash over CAN.",
+      "summary": "The talk covers a paid job to extract firmware from a locked board built around an MPC5566 processor. The speaker expected a 2020 academic paper on glitching this chip's boot access module to work as a recipe, but the UART on the target board never answered, and the paper did not mention a reset configuration setting needed to expose the boot pins.\n\nWorking on cheap automotive controllers that use the same chip, the speaker confirmed the part by decapping it and obtained a development unlock code from a third party. Glitching used a Pico EMP tool modified to reach about 255 volts, with a clock output watched as a success signal. Attempts over CAN needed a custom Arduino adapter to send one-shot messages. JTAG access was reached by glitching at boot but returned only zeros, so the speaker wrote a loader that dumps the boot block, shadow memory and main flash over CAN. The working voltage was around 60 volts, far below the paper's 444 volts, and it shifted with coil placement and temperature.\n\nThe main takeaways are that papers should publish configuration details and complete code, since one missing setting cost months of work, and that glitch parameters need retuning between sessions. The speaker's published tools now let others repeat the attack in minutes.",
       "durationSeconds": 2255,
       "conference": "hardwear",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "srbeubi005U",
@@ -235,7 +237,7 @@
         "stolen",
         "payment"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Reverse Eng Card Skimmers to Retrieve Stolen Payment Info by Aidan Quimby.",
+      "teaser": "Shows how point-of-sale card skimmers are reverse engineered to recover stolen payment data and understand EMV cloning.",
       "summary": "IBM X-Force Red’s Aidan Quimby dissects 110+ point-of-sale overlay skimmers, chip-shimmer theory, chip-off flash extraction, SWD firmware RE with SVD-Loader, and Bluetooth pairing tricks to recover stolen magstripe data like criminals do. He ties persistent magstripe acceptance and weak EMV fallback to billion-dollar fraud, EBT disproportionate victimization, and why faster retail detection pushes gangs to the next store.",
       "durationSeconds": 2714,
       "conference": "hardwear",
@@ -280,12 +282,13 @@
         "signal",
         "silence"
       ],
-      "teaser": "Samy Kamkar analyzes Exploiting Something Deeply Hidden: Signals, Silence, And Secrets.",
-      "summary": null,
+      "teaser": "Traces how physical inputs like temperature, light and electromagnetism can be abused to extract secrets from locks, RAM and cards.",
+      "summary": "The talk argues that security researchers often overlook inputs, and that any physical process that moves energy can serve as one. The speaker frames temperature, pressure, power, magnetism and light as ways to influence a device. Using a door lock as a running example, the chain runs from keypad and battery port through the solenoid, relay, microcontroller and firmware, showing how power glitching or exposed debug pins could expose the firmware and its secret key.\n\nSeveral concrete cases follow. Cooling DRAM slows capacitor leakage, leaving a few minutes to move memory and recover an encryption key from a locked laptop. A magnetic stripe can be read by dusting the card with iron oxide, and a coil-driven device was built to flip bits in its service code. A laser pointed at a window can recover speech from the window's vibrations, with sound improved by filtering a modulated beam through GNU Radio. A phone's camera ranging emits detectable light, so a prototype could flag when someone was aiming a camera. Keystrokes were also inferred from their acoustic signatures and from reflected laser light, with roughly 80 to 90 percent accuracy in one demonstration.\n\nThe talk also covers wireless keyboards, where a cheap nRF24 radio can receive traffic and a disguised USB charger hid injection hardware, prompting an FBI advisory about office chargers. The speaker closes by urging listeners to treat unexplained signals and sounds as questions worth investigating, and to list every input a system accepts before hunting for flaws.",
       "durationSeconds": 2683,
       "conference": "hardwear",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     }
   ]
 }

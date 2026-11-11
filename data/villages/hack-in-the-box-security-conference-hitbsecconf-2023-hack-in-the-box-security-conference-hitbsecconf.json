@@ -168,7 +168,7 @@
         "Y. He",
         "W. Li"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "windows",
         "hitb2023am",
@@ -177,12 +177,13 @@
         "window",
         "desktop"
       ],
-      "teaser": "Z. WangJunjie explores #HITB2023AMS D1T1 - Hunting Windows Desktop Window Manager Bugs.",
-      "summary": null,
+      "teaser": "Explains DirectComposition's attack surface in the Windows Desktop Window Manager and the memory-corruption bugs found there.",
+      "summary": "The talk examines DirectComposition, the Windows component that lets applications build hardware-accelerated graphics and animations. Applications send command buffers through win32k system calls into shared memory, and the Desktop Window Manager (DWM) process, which runs at system integrity, executes them. The speakers walk through how kernel and user-mode objects are created, bound, and recovered when DWM restarts, and why its large command-handling code is a broad attack surface.\n\nThe researchers used a modified fuzzer that submitted generated command sequences to DWM, and they found two bugs this way while others came from manual code audit. The reported bugs include a type confusion from an unchecked resource lookup, a use-after-free where a view box subscriber stays registered after removal, out-of-bounds access through an index read from shared memory, and a buffer overflow caused by a size calculation that rounds down to zero. One case depends on a race with a thread that clears shared memory, and the speakers explained how to widen that timing window. Each case was shown with its command sequence and crash stack.\n\nThe conclusion is that the DWM command surface is still large and changing, and that many bugs need several commit calls to reach. Because DWM runs at system integrity and its calls are not filtered by the app container sandbox, it is a useful target for privilege escalation from a sandboxed process. The speakers noted that the RPC port dispatch code inside DWM has not yet been publicly reviewed.",
       "durationSeconds": 2782,
       "conference": "hitb",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "NY7kBh3XVzE",

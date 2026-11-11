@@ -48,7 +48,10 @@
       "youtubeId": "Ai3DB_xP7DY",
       "slug": "namespacing-the-linux-integrity-measurement-architecture",
       "title": "Namespacing the Linux Integrity Measurement Architecture",
-      "speakers": [],
+      "speakers": [
+        "Stefan Berger",
+        "Christian"
+      ],
       "track": "blue-team",
       "topics": [
         "namespacing-linux",
@@ -58,10 +61,11 @@
         "namespacing"
       ],
       "teaser": "Presents namespacing the Linux Integrity Measurement Architecture and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Presented at the Linux Security Summit North America, this talk covers extending the Linux Integrity Measurement Architecture (IMA) into containers. The motivation is to make container audit messages distinguishable from host messages, keep a measurement log per IMA namespace, allow attestation through a virtual TPM, and lock containers down so that only sanctioned software from a known source can run. Per-container keyrings would let a container ship its own signing keys, and Keylime allow lists could verify what runs inside it.\n\nThe design centres on tying the IMA namespace to user namespaces rather than adding a new clone flag, which keeps privilege requirements within the user namespace model. The IMA namespace is created when a securityfs instance is mounted, then moves through a configuration stage, where values such as the hash algorithm and policy template are written, to an active state that locks the configuration. Policy evaluation is hierarchical, so root cannot hide activity in child namespaces, and each namespace has its own integrity cache with group locking to handle concurrent file and namespace deletion. A kernel compile benchmark showed about 1% overhead on the host, while running policies in both the host and a namespace currently measures files twice. Audit rule restrictions were introduced to prevent log flooding.\n\nTesting combined unshare, nsenter, BusyBox, keyctl and evmctl with a virtual TPM, run in many concurrent containers. Upstreaming is planned in four stages, starting with virtualised securityfs and audit-only policies, and a prototype integrates with runc. The speakers' main takeaways are to treat namespaces as instances of objects passed through functions, to handle IMA's hierarchical policy and shared-file state with care, and to make namespaced subsystems behave like the host to minimise surprises.",
       "durationSeconds": 2828,
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "GhNMbXQci28",

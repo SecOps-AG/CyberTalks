@@ -621,7 +621,7 @@
         "criminal"
       ],
       "teaser": "Demonstrates W3LL phishing kit - the tools, the criminal ecosystem, and the market impact and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This talk from a Group-IB threat intelligence analyst examines the W3LL phishing kit and the criminal operation behind it, which the company has tracked for several years. The speaker follows the attack in stages, from preparing and sending emails through staging links, running the fake login page, compromising accounts and monetising them. Monitoring tied to the kit counted more than 800 phishing domains, over 56,000 targeted email addresses and more than 8,000 compromised accounts, with targets spread across many industries and the United States accounting for most of them.\n\nThe W3LL store, active since about 2018 and open only by referral, sold mailers, phishing emails, compromised servers and the kit itself. After Group-IB published a report, the storefront went offline and sales moved to Telegram bots. The mailers can encode headers and rename attachments as they send. Attachments are layered HTML and JavaScript that load the fake site in a full-screen frame. Link staging relies on redirect tools, open redirects on trusted services and URL shorteners. The kit checks a licence code against a back end, filters bots using user-agent and ISP lists and a check for an open RDP port, and can relay multifactor prompts so the operator captures session cookies. A separate tool, ConTool, uses the Microsoft Azure API to pull mailbox contents from compromised accounts.\n\nThe speaker estimates the operator's profit at roughly $500,000, based on tracked cryptocurrency accounts, and lists uses such as data theft, fake invoices and CEO fraud. The main takeaway is that multifactor authentication alone may not stop session-cookie theft from this kit, and that the service model lets many groups run similar campaigns.",
       "durationSeconds": 1776,
       "conference": "virus-bulletin",
       "viewCount": 1400,
@@ -1243,11 +1243,12 @@
         "sold"
       ],
       "teaser": "Analyzes shadowPad: the masterpiece of privately sold malware in Chinese espionage and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines ShadowPad, a modular backdoor used in Chinese espionage and in supply chain intrusions such as CCleaner and ShadowHammer. The presenters trace its lineage to PlugX, pointing to shared project naming in controller debug strings and to an author who sold malware earlier. ShadowPad loads plugins in memory: a small basic set handles installation and command-and-control contact, while utility plugins add file browsing, service and registry control, shell commands, keylogging and screen control.\n\nUsing a 2015 controller recovered from an attacker's toolkit, the researchers show how operators configure the builder and listener: campaign identifiers, anti-debugging and persistence options, injection targets and C2 protocols. Across about 100 samples, most carried only basic plugins, with utilities pushed later from the server, which suggests the developer decides what each customer receives. The actors covered include APT41, which used heavily customised samples in the ShadowHammer supply chain attack; a group that moved from its own backdoors to ShadowPad from 2018 and bought a limited plugin set; and a cluster called FishMonger that targeted COVID-19 research from 2018 onward.\n\nThe presenters argue that private sale explains its longevity: buyers avoid building and testing their own malware, and a maintained product with anti-forensic features is harder for vendors to study. For defenders, the takeaway is that a shared, sold tool can link unrelated intrusions, so attribution based on ShadowPad alone needs careful validation and a strong inventory of indicators.",
       "durationSeconds": 2027,
       "conference": "virus-bulletin",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "noJSTz_kYeY",
@@ -2154,7 +2155,10 @@
       "youtubeId": "CWvWoM-wzbw",
       "slug": "a-new-open-source-hypervisor-level-malware-monitoring-and-extrac",
       "title": "A new open-source hypervisor-level malware monitoring and extraction system [...]",
-      "speakers": [],
+      "speakers": [
+        "Michael Lestenski",
+        "Kristof Chansky"
+      ],
       "track": "malware",
       "topics": [
         "open-source",
@@ -2164,11 +2168,12 @@
         "system"
       ],
       "teaser": "Provides A new open-source hypervisor-level malware monitoring and extraction system [...] and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk presents an open-source hypervisor-level system for monitoring malware and extracting its unpacked code. The speakers argue that conventional user-mode sandboxes are easy to defeat: malware can call system calls directly, remove inline hooks, or flood the log with API hammering that stalls analysis.\n\nBuilding on DRAKVUF, a virtual machine introspection tool that needs no guest agent, the team hooks memory-related system calls. A dump is taken when a protected region begins with an MZ header or when a page is both writable and executable, and the region's bounds come from the Windows virtual address descriptor tree. When no memory pointer is passed, the caller is found by heuristically unwinding the user-mode stack. User-mode API tracing uses page-table tricks so breakpoints stay invisible, and lazily loaded DLLs are handled by injecting page faults. Copy-on-write behaviour, which discarded hooks, was traced to Internet Explorer's shim mechanism.\n\nA demonstration on a clean Windows 7 machine running a strategy game showed the monitor detecting and changing in-game currency from outside the guest. The authors packaged their work as an open-source sandbox with a web interface, sample queue and API log view, and outlined ongoing research into Intel Processor Trace support. Practitioners are encouraged to try the projects and send feedback.",
       "durationSeconds": 2002,
       "conference": "virus-bulletin",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "8K_aG1d6dzo",
@@ -2344,7 +2349,9 @@
       "youtubeId": "qZef-SoREdY",
       "slug": "standardized-reporting-with-the-malware-behavior-catalog",
       "title": "Standardized reporting with the Malware Behavior Catalog",
-      "speakers": [],
+      "speakers": [
+        "Des Beck"
+      ],
       "track": "malware",
       "topics": [
         "reporting",
@@ -2354,11 +2361,12 @@
         "standardized-reporting"
       ],
       "teaser": "Reviews standardized reporting with the Malware Behavior Catalog and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Des Beck from MITRE introduces the Malware Behavior Catalog (MBC), a shared vocabulary for describing what malware does during analysis. MBC is independent of MITRE ATT&CK but designed to complement it. ATT&CK centers on adversary behavior seen during intrusions, whereas MBC focuses on malware code and adds anti-analysis behaviors and low-level micro behaviors that ATT&CK lacks. The catalog helps compare results across analysis tools, label datasets for research, and tell analysts what to look for.\n\nThe core of the talk covers standardized reporting. Beck explains how Cuckoo Sandbox signatures were mapped to MBC: of 565 community signatures, 313 described behaviors suitable for mapping, and 165 were already mapped to ATT&CK version 6. The team corrected 83 existing mappings, extended 21 signatures with an extra behavior, and added 148 new ones. He then showed how tool output and MBC behaviors can be expressed in STIX 2.1, using attack pattern objects for behaviors, a malware analysis object for the sandbox report, and relationship objects to link them.\n\nBeck closes with next steps: mapping another analysis tool from FireEye's FLARE team, building a library of code snippets that show how each behavior is implemented, and growing the user community. The catalog is published as markdown on GitHub, and attendees can join its discussion list.",
       "durationSeconds": 1215,
       "conference": "virus-bulletin",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "lK5o4w43wZA",
@@ -2385,7 +2393,9 @@
       "youtubeId": "gkxAgaluRpM",
       "slug": "advanced-pasta-threat-mapping-threat-actor-usage-of-open-source",
       "title": "Advanced Pasta Threat: mapping threat actor usage of open-source offensive security tools",
-      "speakers": [],
+      "speakers": [
+        "Paul Litwak"
+      ],
       "track": "malware",
       "topics": [
         "advanced-pasta",
@@ -2395,11 +2405,12 @@
         "threat-actor"
       ],
       "teaser": "Details advanced Pasta Threat: mapping threat actor usage of open-source offensive security tools and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines how threat actors use open-source offensive security tools (OSTs) such as Metasploit and Mimikatz, and what that means for attribution and for the debate over publishing them. The speaker cites vendor reports referencing OST projects rising from about one in twenty in 2015 to roughly one in four, and notes that small libraries, such as memory injection code, are rarely documented because they hide inside custom malware.\n\nThe speaker sorts OST users into three groups: lazy copy-pasters who leave strings or exports behind that let defenders write signatures, authors who read and modify borrowed code, such as a leaked source tree that ported a stager from C to C++, and users who deploy public frameworks unchanged. Because manual matching did not scale, the team compiled each library's historical commits with several Visual Studio versions and compared the output with a code reuse engine, producing a public map that links actors to libraries.\n\nThe talk closes with a hunting method. From the compiled builds, the team extracted repeating binary patterns, such as a fixed error-code call in a memory injection library, and turned them into automatic YARA signatures released publicly, which matched samples from several groups. The speaker urges OST authors to embed identifiable markers in their output and suggests grace periods after major releases so defenders can update signatures. The speaker argues the debate should weigh each category separately, since injection libraries mainly help researchers while new C2 frameworks add little insight.",
       "durationSeconds": 2344,
       "conference": "virus-bulletin",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "f7-nbMSr1QU",
@@ -3203,11 +3214,12 @@
         "chain"
       ],
       "teaser": "Investigates A deep dive into iPhone exploit chains and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines a state-linked surveillance campaign that used iPhone and Android exploits against Uyghur Muslims and Tibetans inside and outside China. For the Uyghur-focused activity, attackers compromised news websites that community members read and used hidden iframes to deliver malware. The Tibetan activity relied on messaging apps such as WeChat and WhatsApp, with lures that impersonated a journalist. Registration patterns and infrastructure gave only limited links between the campaigns.\n\nThe core of the talk walks through five iPhone exploit chains covering 14 vulnerabilities across iOS 10 to 12.1. Each chain starts from a different entry bug, including a heap overflow in a GPU driver, a use-after-free in IOSurface, a bounds check broken during a refactor, an unbounded memory move in a daemon, and an unfinished voucher code path. Each one then gains kernel task port access. Post-exploitation steps were consistent: copying launchd credentials to escape the sandbox, patching the in-memory platform policy, and adding a signing blob so unsigned code would run. Boot flags and a kernel file-limit value served as compromise indicators, changed as iOS versions changed. The payload collected messaging databases, contacts, photos, and keychain tokens. The Android chains used Chrome exploits from versions 39 to 73 and needed only one click.\n\nThe closing point is that the attackers kept developing new exploits, and a reboot alone would not clear the iPhone implant. Defenders can look for the hard-coded user agent and run fuzzy searches for terms tied to these communities to spot infrastructure being set up. The talk also stresses the physical risk to people who are targeted this way.",
       "durationSeconds": 1854,
       "conference": "virus-bulletin",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "sx6NnzN35cE",
@@ -3519,11 +3531,12 @@
         "ryuk"
       ],
       "teaser": "Evaluates shinigamis revenge: the long tail of Ryuk malware and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk looks at Ryuk, a ransomware family first seen in 2018 that shifted from mass spam campaigns to targeted attacks against organisations likely to pay large ransoms. The presenters describe how intrusions often begin with other malware that maps the victim network, or with exposed remote desktop access, before the ransomware is deployed days later.\n\nThey analysed ten samples grouped by PDB strings and mapped their behaviour to MITRE ATT&CK. Most were built for 64-bit systems, deleted shadow copies and backups, and altered registry keys for persistence. Some wiped the master boot record, and the samples carried kill lists of antivirus, email and office services that grew over time. Several skipped systems set to Russian, Ukrainian or Belarusian languages. The speakers also corresponded with operators over email for months, collecting around 40 to 45 negotiation exchanges with an average demand of about 82 BTC, and noted that one wallet address was reused for six months.\n\nAttribution claims are reviewed, including links to Lazarus, code reuse from Hermes and TrickBot-linked groups, but the speakers stress that the evidence is circumstantial. Compilation timestamp analysis of roughly 600 files showed build spikes that were compared with public reports of a code switch. They conclude that Ryuk remains active and profitable, and defenders should focus on remote access hardening and early detection of precursor malware.",
       "durationSeconds": 1535,
       "conference": "virus-bulletin",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "OldiIbsbbIc",
@@ -3628,7 +3641,9 @@
       "youtubeId": "AIVnd85PmWQ",
       "slug": "lazarus-group-one-mahjong-game-played-with-different-sets-of-til",
       "title": "Lazarus Group: one mahjong game played with different sets of tiles",
-      "speakers": [],
+      "speakers": [
+        "Peter"
+      ],
       "track": "malware",
       "topics": [
         "lazaru",
@@ -3637,11 +3652,12 @@
         "played"
       ],
       "teaser": "Reviews lazarus Group: one mahjong game played with different sets of tiles and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This talk examines malware attributed to the Lazarus group, using a mahjong-style matching analogy. Static traits from known Lazarus binaries, such as command-and-control servers, code fragments and strings, act as tiles, and new unrelated samples are checked for matches to expand the known set. The presenter reviews publicly reported operations, including the Sony Pictures intrusion, a fraudulent SWIFT campaign against several banks, a watering-hole attack on Polish banks and the WannaCry outbreak.\n\nThe middle of the talk shows the technical traits used to link samples. A dropper from the Polish bank campaign unpacked through several stages, with dynamically resolved Windows API names, a fake TLS handshake that borrowed popular domains to slip past intrusion prevention, and self-deleting batch files. Rich header analysis found most 32-bit and 64-bit samples linked with Visual Studio 98 or 2010, while several families did not fit that pattern.\n\nSix case studies follow. They cover earlier WannaCry versions dating back to 2016, a Java downloader with an unchecked architecture branch, a remote code execution chain against old 32-bit Windows servers that used a packed dropper, a remote access tool with a Chinese-named configuration section, a casino infrastructure attack linked through a session hijacker, and a weakly attributed case built on a modified RC4 routine. The takeaway is that the toolset is large, changes with each attack and is often only partly attributed, so defenders should expect variation and weigh single-indicator links carefully.",
       "durationSeconds": 1798,
       "conference": "virus-bulletin",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "dpZtr8EeOiY",
@@ -3816,7 +3832,7 @@
         "online"
       ],
       "teaser": "Discusses internet balkanization: why are teams raising borders online and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk argues that the internet is splitting along national and cultural lines, a process the speaker calls balkanization, and asks whether the security community should take a position on it. It contrasts the old Silk Road, which spread goods and ideas, with an early internet built on trust among a small group of researchers and therefore lacking strong privacy and security. The Great Firewall of China, first running in 1997, is presented as the example that set the trend for other states building online filters.\n\nThe middle of the talk turns to concrete cases. A Turkish journalist was jailed after police found incriminating documents on his office computer. A forensic analysis by a security firm reportedly showed the files were planted at night while the machine was off, and that the computer had been attacked by a state-linked Trojan twelve times in the week before his arrest. The speaker also describes a commercial surveillance industry that sells to governments with little export control, and companies pressed to hand over user data or remove content. Mass surveillance, the speaker argues, leads people to self-censor, and an open internet also supports economic growth.\n\nThe closing section draws on the Manhattan Project to warn that compartmentalized research can lead teams toward outcomes nobody would choose, and compares security researchers to doctors who treat patients on either side of a border. The speaker's message is that practitioners should decide what kind of internet they want, since access to information and privacy are basic rights, rather than settle whether balkanization is good or bad.",
       "durationSeconds": 1504,
       "conference": "virus-bulletin",
       "viewCount": 1100,
@@ -3887,7 +3903,9 @@
       "youtubeId": "9-5m_BTzTrk",
       "slug": "unpacking-the-packed-unpacker-reversing-an-android-anti-analysis",
       "title": "Unpacking the packed unpacker: reversing an Android anti-analysis library",
-      "speakers": [],
+      "speakers": [
+        "Maddy Stone"
+      ],
       "track": "malware",
       "topics": [
         "android",
@@ -3897,11 +3915,12 @@
         "unpacker"
       ],
       "teaser": "Presents unpacking the packed unpacker: reversing an Android anti-analysis library and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Maddy Stone, a reverse engineer on Google's Android security team, walks through analyzing a native Android library called Wedding Cake. The problem was an app that would not run under dynamic analysis and kept its logic in native code rather than Java, which blocked the usual triage routes. The library is recognizable by randomly named files and classes, two specific native method signatures, and a JNI load routine that decrypts code in place. It wraps the earlier stage-three payload of the Shinhwa Android malware family.\n\nShe explains how JNI method registration normally works, then shows that the registration data was missing and that the load routine repeatedly calls a decryption function over blocks of the binary. Rather than fully reverse the seed-generation logic, which resembled a weak random number generator, she wrote an IDA Python script to decrypt the library and recover the hidden method names and function pointers. The runtime checks came next: dozens of system property tests for emulators, an ELF header check for ARM, a scan of /proc for the Monkey test tool, and checks for the Xposed hooking framework. Any single failed check makes the app exit.\n\nOnce past the checks, the decrypted code matched the earlier Shinhwa functionality, confirming the app was malware. Later samples download the ELF dynamically, but the same script still worked after cosmetic changes. The takeaway is that authors accept losing some targets to extend their lifespan, and layering techniques targets manual reviewers, static tools and automated pipelines separately.",
       "durationSeconds": 1541,
       "conference": "virus-bulletin",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "IPhJcPbJs8Y",
@@ -4122,7 +4141,9 @@
       "youtubeId": "Y9dlT1Ya8pA",
       "slug": "from-drive-by-download-to-drive-by-mining-understanding-the-new",
       "title": "From drive-by download to drive-by mining: understanding the new paradigm",
-      "speakers": [],
+      "speakers": [
+        "Jerome Segura"
+      ],
       "track": "malware",
       "topics": [
         "mining",
@@ -4132,11 +4153,12 @@
         "paradigm"
       ],
       "teaser": "Demonstrates from drive-by download to drive-by mining: understanding the new paradigm and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk looks at how web threats have shifted over the past few years. Browser exploit kits once depended on a steady supply of zero-days against Internet Explorer and Flash, but as those plugins faded and no new kit replaced the departed leaders, their effectiveness dropped sharply. Attention moved to cryptocurrency mining, and WebAssembly made it practical to run a miner inside a browser tab.\n\nThe speaker explains how browser mining works: a page loads a mining library such as Coinhive, which fetches WebAssembly code and keeps a WebSocket open to a back end that hands out work. The abuse, known as drive-by mining or cryptojacking, is traced to the Pirate Bay in 2017 and spread to ad networks, video streaming sites, and a Drupal campaign that mined on both the server and the visitor's browser. The largest case described was a router exploit affecting about 200,000 devices, which injected miners into every browsing session passing through them. Attackers evaded blocklists by rotating proxies and cloud-hosted domains, obfuscating strings, keeping CPU use under a threshold, and using pop-unders that kept mining after the visitor left the page.\n\nThe talk notes that legitimate opt-in mining is rare compared with silent criminal use, and that even opt-in implementations can be abused. The takeaway for defenders is that blocklists alone are insufficient and that behaviour-based detection of abnormal CPU use is needed. User consent is presented as the baseline for any acceptable in-browser mining.",
       "durationSeconds": 1776,
       "conference": "virus-bulletin",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "mT7q3Qqzlos",
@@ -4212,11 +4234,12 @@
         "tool"
       ],
       "teaser": "Provides android reverse engineering tools: not the usual suspects and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk presents a Docker-based Android reverse engineering environment that can be shared as one portable setup instead of a heavy virtual machine. The container bundles tools such as apktool, an Android emulator, JEB and radare2, and it can be slimmed down by removing emulator versions from the build file. The demo shows connecting over SSH, decompiling a sample and launching the emulator.\n\nThe main case study is a JEB Python plugin that decrypts strings in an Android malware family first seen in 2015 that uses anti-emulator and anti-debugger checks. The encrypted strings sit in static constructors, so the script lists each decompiled class's methods, filters for the static constructor, and picks out assignments that call the decoding method. After reverse engineering the routine, which applies two XOR operations with different keys, the script rewrites the displayed lines with the decrypted text and refreshes the interface. The same decoding is then reproduced with a radare2 Python script that sends commands to the tool and decodes the bytes found at each address.\n\nThe talk also covers debugging with Code Inspector, where a breakpoint on the file name passed to the dex class loader reveals the path of a hidden payload at runtime. It closes with a man-in-the-middle proxy that intercepts encrypted HTTP traffic from a test phone once its certificate is installed. The takeaway is that scripting JEB and radare2 speeds up repetitive string decryption, and that the code and environment are published for reuse.",
       "durationSeconds": 1576,
       "conference": "virus-bulletin",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "QyNipvZbO7o",
@@ -4370,7 +4393,7 @@
         "threat"
       ],
       "teaser": "Presents industroyer: biggest threat to industrial control systems since Stuxnet and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk, from ESET, examines Industroyer, a malware family built to attack electricity substations. It caused a roughly one-hour blackout in Ukraine in December 2016. The speakers place it among the few known ICS-specific malware families, alongside Stuxnet and Dragonfly, and note that BlackEnergy, a general-purpose tool, had been used to reach the network for the 2015 Ukrainian outage, where operators watched breakers being opened through remote access software.\n\nThe walkthrough covers the malware's internals. A main backdoor gained persistence by replacing a service's image path, and a backup backdoor disguised as Notepad was added in case the first was removed. A custom port scanner and a reconnaissance path were also included. The attackers abused hard-coded database credentials in an in-house substation logging tool and ran shell commands through the database. The payloads fell into three groups. The most important sent commands over IEC 101, IEC 104, IEC 61850 and OPC DA to open circuit breakers, using the protocols as designed rather than exploiting software bugs. A denial-of-service module exploited a Siemens protection relay flaw over UDP to knock devices offline. A data wiper destroyed SCADA configuration files, corrupted the registry and killed processes to hamper recovery.\n\nThe speakers argue that the danger lies as much in the operator's skill and familiarity with the target's architecture as in the code itself. Protocols designed without security make this kind of abuse possible, and patches are slow to reach field devices. Offline backups matter for recovery. The one-hour outage may have been a test, so defenders should stay alert for follow-on activity.",
       "durationSeconds": 1681,
       "conference": "virus-bulletin",
       "viewCount": 1400,
@@ -4579,7 +4602,9 @@
       "youtubeId": "VGWXwXGhlRU",
       "slug": "turning-trickbot-decoding-an-encrypted-command-and-control-chann",
       "title": "Turning Trickbot: decoding an encrypted command-and-control channel",
-      "speakers": [],
+      "speakers": [
+        "Andrew Brandt"
+      ],
       "track": "malware",
       "topics": [
         "command-and-control",
@@ -4589,11 +4614,12 @@
         "encrypted"
       ],
       "teaser": "Investigates turning Trickbot: decoding an encrypted command-and-control channel and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Andrew Brandt, director of threat research at Symantec, shares how he decrypts and records Trickbot command-and-control traffic in his lab. He routes TLS traffic through an SSL visibility appliance that re-signs connections, then captures the decrypted sessions with a packet-capture platform that indexes metadata. He argues Trickbot is a rewrite of the older Dyre banking trojan, with a familiar command set on unusual TLS ports such as 447 and 449.\n\nThe command-and-control pattern is mostly HTTP GET requests whose URIs carry a campaign group tag, a machine identifier, a Windows version code and a numbered command, with the server usually sending back a simple acknowledgement. The bot finds its public address through several IP-lookup websites instead of STUN, persists via a scheduled task that reruns about every 15 minutes, and spreads a module that uses EternalBlue across subnets. Profiling data, including sandbox checks, goes out in plain text, while encrypted configuration files for banking injections and mail harvesting can be decoded with a community tool to reveal targeted banks and exfiltration IPs.\n\nFor defenders, the practical takeaways are blocking identified IP addresses, watching for lookups to public IP-check services, and flagging PNG files that hide executable content. Fixed user agent strings claiming Windows 10 and Chrome 57, plus certificates tied only to IP addresses, are also strong signals. Brandt notes the operators may change these traits.",
       "durationSeconds": 1612,
       "conference": "virus-bulletin",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "TMvSiQQxCY0",
@@ -4667,11 +4693,12 @@
         "shadow"
       ],
       "teaser": "Investigates walking in your enemys shadow: when fourth-party collection becomes attribution hell and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines fourth-party collection, in which one threat actor gathers intelligence by intercepting or piggybacking on another actor's implants, command-and-control servers or network traffic. The speakers place it within a taxonomy of first-, second- and third-party collection and separate passive wire interception from active compromise of a rival's infrastructure. Their central concern is that overlapping intrusions on the same machine can make attribution unreliable.\n\nThe case studies include a research institute machine hosting several espionage families at once, and a developer group whose malware traffic was collected by another actor after a botnet had already infected them. A patched svchost binary planted on a Net Traveler server, a web-based command-and-control setup where someone inserted a tracking image, and a compromised website used by two groups that targeted each other's victims are also covered. The speakers additionally describe a group whose samples used the default demo configuration of a commercial surveillance toolkit, and a proxy in China run by infected APT developers.\n\nThe speakers argue that the goal is to move attribution from an art toward a more rigorous practice that states clearly what can and cannot be known. They note that code reuse and shared tools can mislead clustering, and that they had not yet seen clear cases of actors backdooring each other's tools or splicing closed-source code. Practitioners should treat such overlaps as hypotheses to test rather than proof of who is behind an intrusion.",
       "durationSeconds": 1981,
       "conference": "virus-bulletin",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "dTzLM8k_Pb0",
@@ -4785,11 +4812,12 @@
         "evolution"
       ],
       "teaser": "Discusses APT Reports and OPSEC Evolution, or: These Are Not the APT Reports You Are Looking For and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk argues that public APT reports serve defenders poorly. The speakers say many run dozens of pages, lean toward PR or reputation, and bury the most useful material, such as attacker objectives and motivation, at the end. They frame the problem from the attacker's side, using the APT1 report and cases such as Flame, Gauss and Careto to show how exposure forced operators to drop tools and infrastructure. They also explain why operations get caught: slow tool development, the difficulty of scaling across many targets, and deployment failures.\n\nTo make reports more useful, the speakers propose an \"engagement process\" that mirrors how an operation is planned. It moves from setting intelligence requirements, to building a target report, to choosing an attack plan covering method and tooling, and then to lateral movement. Defenders can map each stage to their own controls. The speakers suggest treating data destruction and manipulation as risks alongside theft, limiting exposed public information, using intelligence providers to look for pre-positioned attackers, and building a backup and response plan so logs and snapshots survive an intrusion.\n\nThe closing argument is that public disclosure has changed attacker behaviour. Some groups now ignore being seen, while others tear down infrastructure quickly once exposed. The speakers ask vendors for more actionable reporting, call for less reliance on IP-based attribution, and urge consumers to test a report against their own defenses rather than copying indicators from it.",
       "durationSeconds": 1741,
       "conference": "virus-bulletin",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "aT9620uiuk0",
@@ -5273,7 +5301,9 @@
       "youtubeId": "JWm2AICa6rg",
       "slug": "pos-fraud-trends-and-counter-actions-to-mass-fraud",
       "title": "POS fraud - trends and counter-actions to mass fraud",
-      "speakers": [],
+      "speakers": [
+        "Ken Dunham"
+      ],
       "track": "malware",
       "topics": [
         "fraud",
@@ -5510,7 +5540,10 @@
       "youtubeId": "doYHyCP6icg",
       "slug": "defeating-sandbox-evasion-how-to-increase-successful-emulation-r",
       "title": "Defeating Sandbox Evasion: How to Increase Successful Emulation Rate in your Virtualized Environment",
-      "speakers": [],
+      "speakers": [
+        "Alexandre",
+        "Stanislav"
+      ],
       "track": "malware",
       "topics": [
         "defeating-sandbox",
@@ -5520,7 +5553,7 @@
         "successful-emulation"
       ],
       "teaser": "Reviews defeating Sandbox Evasion: How to Increase Successful Emulation Rate in your Virtualized Environment and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This talk looks at how malware can spot and sidestep Cuckoo Sandbox, an open-source automated malware analysis system, and how a virtualized analysis environment can be recognised from inside. The researchers from Check Point walk through weaknesses in Cuckoo's user-mode hooks, including stack canary corruption that reveals hooked functions, sleep skipping that can be exposed by comparing system time queries, an agent listening on a known port, and predictable analyzer folder and configuration file names. For each weakness they describe the evasion and a proposed fix.\n\nFurther cases cover process injection bookkeeping that can be tricked into skipping monitor injection, a process whitelist that allows code to run unmonitored when created suspended, and exception counting that reveals whether exception hooks are present. The second half shifts to detecting the virtual machine itself, using clock drift against web time, per-core CPU identifier checks to expose faked processor counts, and ACPI firmware table contents, with mitigations for each.\n\nThe talk closes by presenting an open-source tool that checks for Cuckoo, VirtualBox, VMware and generic artifacts such as registry keys, devices, MAC addresses and processes. Its JSON configuration lets new checks be added without recompiling, and reports can be HTML, console output or per-check files. The main takeaway for analysts is to harden sandboxes against these checks, and for defenders to assess their own virtual analysis systems.",
       "durationSeconds": 1758,
       "conference": "virus-bulletin",
       "viewCount": 1400,
@@ -5737,7 +5770,9 @@
       "youtubeId": "RNqzF6X9lms",
       "slug": "android-packer-facing-the-challenges-building-solutions",
       "title": "Android packer: facing the challenges, building solutions",
-      "speakers": [],
+      "speakers": [
+        "Roland"
+      ],
       "track": "malware",
       "topics": [
         "android",
@@ -5747,11 +5782,12 @@
         "building"
       ],
       "teaser": "Details android packer: facing the challenges, building solutions and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Android packers wrap an app's real code in encrypted form and unpack it at runtime, which makes them harder to analyse than ordinary obfuscation or app-shrinking tools. The talk separates these two approaches, then compares three packing services: APKProtector, Bangcle and Ijiami. Using a test app submitted to each service, the speaker shows how the packers rewrite the manifest, replace the original classes with a loader, and store the encrypted payload in the assets or native libraries.\n\nNext, the talk covers the anti-analysis tricks seen in these packers. Ijiami alters the header of the unpacked file in memory, which defeats signature-based searches. Bangcle spawns three processes that trace one another, blocking debuggers such as GDB. Standard reverse engineering tools and emulator-based dynamic analysis struggle with both.\n\nTo work around this, the speaker builds a Volatility plugin for Android memory images. Memory is captured with a LiME kernel module, and the plugin uses the memory map list, rather than the altered header, to locate the unpacked file, which is then dumped and its header repaired. The closing part notes that detecting packed samples is hard because the payload cannot be unpacked statically, so generic detection should combine loader traits such as manifest entries, encrypted payload size and source file characteristics.",
       "durationSeconds": 1785,
       "conference": "virus-bulletin",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "lFOa0GxJ42g",
@@ -5974,7 +6010,9 @@
       "youtubeId": "FY2YKxBxOkg",
       "slug": "the-internet-of-bad-things-observed",
       "title": "The Internet of Bad Things, Observed",
-      "speakers": [],
+      "speakers": [
+        "Ross Anderson"
+      ],
       "track": "malware",
       "topics": [
         "internet",
@@ -5984,11 +6022,12 @@
         "things-observed"
       ],
       "teaser": "Demonstrates the Internet of Bad Things, Observed and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Ross Anderson opens by arguing that as cheap processors and network connections spread into cars, meters, toys and medical devices, malware will reach far beyond PCs. He sketches a wider range of threats, from vendors shipping malicious code to state surveillance tools and the legal fight over hacking warrants.\n\nThe core of the talk is payment security. He walks through the EMV chip-and-pin system, where fraud rose after deployment as criminals moved online. Case studies include a payment terminal whose tamper protection could be bypassed for about a dollar's worth of materials despite a certification claim, ATMs whose supposedly unpredictable numbers were simple counters, and tampered terminals in UK bars and clubs that drained customers' accounts. He also covers no-PIN attacks and a study showing that PINs can be inferred from the motion of a phone captured by its camera. A further study found that many secondhand Android phones kept personal data and credentials after a factory reset, and that the mobile antivirus products tested had weaknesses of their own.\n\nTo close, he describes Device Analyzer, a research app run on about 23,000 Android devices with user consent, and the Cambridge Cybercrime Centre, which aims to give academic researchers shared access to cybercrime datasets under standard agreements. He urges practitioners to contribute data and help build tools for studying these threats.",
       "durationSeconds": 2362,
       "conference": "virus-bulletin",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "3VgS9f8Gass",
@@ -6024,11 +6063,12 @@
         "away-watching"
       ],
       "teaser": "Provides swipe away, teamsre watching you and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines point-of-sale malware, focusing on RAM scrapers that capture card data while it sits briefly in memory after a swipe. It outlines the payment flow, the data stored in the magnetic stripe tracks, and common infection routes such as insider bribery, phishing, and brute-forced remote administration tools. Most families follow the same three steps: dumping process memory, searching it with patterns, and exfiltrating matches to a command-and-control server.\n\nThe core of the talk traces the evolution of the Dexter family using compile timestamps. Early Stardust builds added a keylogger based on classic Windows hooks with lightly encrypted logs. Revelation added a raw-input keylogger that still captures keystrokes when the window lacks focus, and introduced FTP as a second exfiltration channel. Misto replaced its process blacklist with a target list of point-of-sale applications and appears to have moved command-and-control handling into a separate module. A later build set autorun entries and disabled firewall notifications before fetching a file from an FTP server. A live demo showed an infected terminal checking in with a control panel, and swiped card data appearing in the dumps view.\n\nThe speakers argued that EMV chips will not end the threat, since chip cards still expose the cardholder name, account number and expiry date in clear. A short Python scraper using the same method pulled those tags from a test terminal. Practitioners should expect continued activity before the 2015 liability shift, and should watch for abuse of remote administration tools and unexpected process memory access.",
       "durationSeconds": 1592,
       "conference": "virus-bulletin",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "ozfYqsPNc3o",
@@ -6116,7 +6156,10 @@
       "youtubeId": "4CTl4f5eQS0",
       "slug": "we-know-it-before-you-do-predicting-malicious-domains",
       "title": "We know it before you do: predicting malicious domains",
-      "speakers": [],
+      "speakers": [
+        "Way Zoo",
+        "Carl Sanders"
+      ],
       "track": "malware",
       "topics": [
         "predicting",
@@ -6124,11 +6167,12 @@
         "domain"
       ],
       "teaser": "Analyzes teams know it before you do: predicting malicious domains and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Malicious domains are used for command and control, drive-by downloads and phishing, yet most blocklists only react after a domain has already been abused. Attackers exploit this with short-lived domains and domain generation algorithms (DGAs). The talk frames the work as predicting future malicious domains from patterns already seen, focusing on newly registered domains and domains that change hands.\n\nFour prediction approaches were presented. Previously malicious domains that return to the market after a long gap, often still resolvable through parking pages, are scored on name randomness, top-level domain, fast-flux behaviour and resale price. For DGAs, sandboxed samples are filtered for noise lookups, and seeds are found by black-box testing, altering inputs such as timestamps on a web page, so future domain lists can be generated. Shared infrastructure, including malicious name servers, infected-host IPs filtered for cloud, CDN and hosting ranges, and WHOIS registrant similarities, forms the third approach. The fourth looks at timing patterns in passive DNS, such as setup queries, sudden spikes and periodic automated lookups, which can signal upcoming activity.\n\nThe data came from about 1.5 billion passive DNS queries a day, a sinkhole holding around 28 million infected IP addresses, and daily WHOIS checks. Predicted domains were published as signatures. Over 80% of them were later flagged by more than one VirusTotal engine, and they surfaced in passive DNS about eight hours after publication on average. Just over half of the signatures fired in the few firewalls where results were visible. The speakers present this as a first step toward early warning rather than a complete solution.",
       "durationSeconds": 1637,
       "conference": "virus-bulletin",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "zHBM9RGHTJg",
@@ -6154,7 +6198,9 @@
       "youtubeId": "MXDCsSZ7g_0",
       "slug": "opsec-for-security-researchers",
       "title": "OPSEC for security researchers",
-      "speakers": [],
+      "speakers": [
+        "Vincent"
+      ],
       "track": "malware",
       "topics": [
         "opsec",
@@ -6164,11 +6210,12 @@
         "researchers"
       ],
       "teaser": "Outlines OPSEC for security researchers and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk explores what operational security means for security researchers, focusing on protecting their own work and information rather than on counterintelligence. The speaker argues that researchers often feel invulnerable, yet their work can look suspicious to common criminals, more capable criminal groups, intelligence agencies and mass surveillance, and data collected today can resurface years later. Examples include threats sent by an exploit kit developer to a researcher, a researcher whose employer was pressured after he was publicly exposed, and a developer who changed his public profile to announce his group membership right after a campaign was published.\n\nPractical advice centres on situational awareness and on scoping opsec to a single operation, which is easier to manage than a large organisation. Groups should appoint an opsec lead, compartmentalise information by sensitivity, and keep separate identities strictly apart, since cross-contamination can undo them. The speaker is critical of tools: encryption depends on how keys and passwords are handled, email leaks metadata even when encrypted, and instant messaging with disappearing messages is preferred. Tor is judged acceptable for everyday use but weak for highly sensitive work and against agencies, and phones should be treated as trackable, with burner devices and clean laptops for travel.\n\nIf approached by law enforcement, the advice is to stay quiet, call a lawyer and avoid incriminating yourself. Researchers should also watch for recruitment attempts, including at conferences, and avoid bragging about access or secrets. The closing message is that discipline matters more than any tool, and that the best protection is not standing out as an anomaly, while adopting only the opsec that can realistically be sustained.",
       "durationSeconds": 1893,
       "conference": "virus-bulletin",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "NzAiFO2mKsE",
@@ -6410,7 +6457,9 @@
       "youtubeId": "Cu3IVS2xPE4",
       "slug": "hiding-the-network-behind-the-network-botnet-proxy-business-mode",
       "title": "Hiding the network behind the network. Botnet proxy business model",
-      "speakers": [],
+      "speakers": [
+        "Christina B Banu"
+      ],
       "track": "malware",
       "topics": [
         "botnet",
@@ -6419,11 +6468,12 @@
         "proxy"
       ],
       "teaser": "Examines hiding the network behind the network. Botnet proxy business model and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk looks at a proxy network built to hide botnet command-and-control servers, found during an investigation of the CryptoLocker malware. Malware authors have long relied on domain generation algorithms, but researchers can reverse those and block or take down the domains. A specialised anonymisation service answers that problem: the malware author buys the service and infects machines, while the infected hosts talk only to the proxy layer.\n\nThe network the team studied had two proxy levels per client. First-level machines acted as authoritative name servers for malware domains and redirected DNS and HTTP traffic to a central DNS server, which returned four addresses from the client's pool. Second-level machines tunnelled traffic through many VPN sessions to the real command server. The central server ran PHP scripts for managing servers, clients and domains, plus a checker that verified each server's responses. The infrastructure served several malware families, including Citadel, CryptoLocker and Smoke Loader, across ten clients.\n\nAbuse reports had limited effect. For a first-level machine, operators swapped IP lists between clients, so the reported address stopped answering while the network recovered within minutes. For a second-level machine, the malware was back within a day on a new address. During the CryptoLocker takedown, operators tried twice to restore service, in June and August, adding addresses that were quickly removed or never answered as valid C2. The conclusion is that frequent, fast changes made the network resilient, and similar proxy services are likely to spread in the botnet market.",
       "durationSeconds": 1289,
       "conference": "virus-bulletin",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "MJpwkckmVr4",
@@ -6485,7 +6535,9 @@
       "youtubeId": "AU45hoaD2m4",
       "slug": "the-evolution-of-webinjects",
       "title": "The evolution of webinjects",
-      "speakers": [],
+      "speakers": [
+        "Shan Ian"
+      ],
       "track": "malware",
       "topics": [
         "evolution",
@@ -6495,11 +6547,12 @@
         "webinjects"
       ],
       "teaser": "Analyzes the evolution of webinjects and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk traces how banking trojans evolved from keyloggers and form grabbing to web injects, which let attackers alter the pages a victim sees in the browser. It walks through the Zeus-style configuration format, with target URLs, GET/POST flags and data-before/data-after markers, and the capabilities built on it: harvesting logins and card data, displaying and changing balances, hiding transfers, and capturing one-time codes. It also covers mobile malware that intercepts SMS-based TANs, and injects aimed at non-financial services such as Facebook.\n\nThe speaker then looks at how these tools became commodities. Underground sellers offer cheap phishing-style injects alongside more complex automatic transfer systems, often bundled with mobile malware, admin panels, and public or private licensing or revenue-share deals. Two prevalent kits are examined: one whose framework reuses inject logic across many banks, and another that loads injects from external servers using base64-encoded URLs. Shared function names, code structure, panel designs and URL patterns can help link campaigns to one author.\n\nThe final section covers delivery. Injects hosted on external servers are harder to analyse forensically, let sellers price features separately, and resist reuse, while inline injects in the configuration file can be fully analysed once downloaded. External servers are often stateful and require requests in a set order. The conclusion is that no single web inject platform is ubiquitous, but some are far more popular than others. For defenders, the practical takeaway is to track server interactions and panel fingerprints.",
       "durationSeconds": 1580,
       "conference": "virus-bulletin",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "EFgV0RolbmA",
@@ -6623,7 +6676,9 @@
       "youtubeId": "5Dn7tHtwGU0",
       "slug": "pac-the-problem-auto-config-or-stealing-bank-accounts-with-a-1kb",
       "title": "PAC - the Problem Auto Config (or stealing bank accounts with a 1KB file)",
-      "speakers": [],
+      "speakers": [
+        "Fabio Asini"
+      ],
       "track": "malware",
       "topics": [
         "problem",
@@ -6633,11 +6688,12 @@
         "bank"
       ],
       "teaser": "Details PAC - the Problem Auto Config (or stealing bank accounts with a 1KB file) and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Fabio Asini of Kaspersky Lab explains how Brazilian banking trojans abuse Proxy Auto-Config (PAC) files, small JavaScript scripts that tell browsers which proxy to use for each URL. Because Chrome shares Internet Explorer's proxy settings and Firefox reads a preferences file, a trojan only needs a registry or prefs change to point a victim's browser at a malicious script. The script can be a remote URL or a file of about one kilobyte kept on disk, and it is delivered through drive-by download kits or small trojans.\n\nThe talk traces an arms race. Blocking the URLs failed when attackers rotated random addresses and used URL shorteners. Detecting the small files pushed authors toward obfuscation, sold as a tool for around $2,000, and then toward intimidation of researchers, including a death threat against an active phishing reporter. The scripts redirect victims to fake pages for more than 40 Brazilian banks, webmail and payment services, a Bitcoin marketplace and government sites, and they block antivirus update servers and security community sites.\n\nKaspersky's answer is detection built on a JavaScript emulator that calls the FindProxyForURL function, so obfuscation does not hide the logic. Asini urges vendors to detect these files despite false-positive concerns, notes a similar technique in a Russian trojan, and offers samples to researchers.",
       "durationSeconds": 1815,
       "conference": "virus-bulletin",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "BuWkGYESDxo",

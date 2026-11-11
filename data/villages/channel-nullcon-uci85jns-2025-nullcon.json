@@ -1000,7 +1000,7 @@
       "slug": "goa-2023-jailbreaking-the-apple-homepod-fun-with-checkm8-and-sma",
       "title": "Goa 2023 | Jailbreaking The Apple HomePod: Fun With Checkm8 And Smart Speakers",
       "speakers": [],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "apple",
         "jailbreaking",
@@ -1008,14 +1008,15 @@
         "checkm8",
         "smart"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Goa 2023 | Jailbreaking The Apple HomePod: Fun With Checkm8 And Smart Speakers.",
-      "summary": null,
+      "teaser": "Shows how a bootrom exploit gives code execution on an Apple HomePod and what a jailbroken speaker can then do.",
+      "summary": "The talk covers jailbreaking Apple's HomePod smart speaker, which runs a customized tvOS on an A8 chip vulnerable to the checkm8 bootrom exploit. Earlier efforts, such as a virtualized tvOS build and a community hardware connector, never produced a lasting jailbreak, and the checkra1n tool stopped working around iOS 15. The presenter shows how to open the enclosure with heat and a screwdriver and reach the USB port through a cheap 3D-printed adapter with pogo pins.\n\nThe exploit path follows the boot chain. The bootrom exploit remaps a bootrom page into SRAM by editing page tables, patches out signature checks, and boots a patched iBoot. A custom ramdisk loader then mounts the real root filesystem, injects code into launchd, and enables SSH. Launchd is patched so every new process loads a tweak-injection library, allowing hooks into system daemons. Because the sealed system snapshot is restored on a normal reboot, changes disappear, which the speaker notes can protect against bricking.\n\nDemonstrations included a custom timer sound, streaming music from an Android device through a Spotify daemon, rewriting Siri replies, routing Siri queries to a chat model, and using the microphone as a covert listening device. The talk ends by noting that a jailbroken HomePod leaves no persistent indicators, has no microphone light, and can only be re-exploited by rebooting it, so owners should unplug idle devices.",
       "durationSeconds": 2915,
       "conference": "nullcon",
       "viewCount": 1600,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2023,
-      "eventLabel": "nullcon Goa 2023"
+      "eventLabel": "nullcon Goa 2023",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "zJ_67Yaeb70",
@@ -1892,7 +1893,7 @@
         "privilege",
         "rony"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Hacking Android Foreground Services Escalation Of Privileges by Rony Das | Nullcon Goa 2022.",
+      "teaser": "Shows how Android foreground service timing can be abused to record the microphone without a visible notification.",
       "summary": "### Overview\nIn this talk presented at Nullcon Goa 2022, Rony Das demonstrates a privilege escalation bypass affecting Android foreground services. Das explores how background execution limits introduced in Android 8 (Oreo) mandate sticky foreground notifications whenever applications access sensitive hardware components like the microphone, camera, or GPS. While prior bypasses (notably patched under CVE-2019-2219) attempted to briefly initiate services and stop notifications, Das demonstrates a new threading technique that offloads media recording calls to a separate thread, enabling continuous covert audio recording up to Android 10 without leaving a persistent user notification.\n\n### Key Topics\n- **Android Foreground Service Limits**: Android 8 Oreo introduced restrictions preventing background applications from accessing sensitive hardware sensors (microphone, camera, GPS) without an active, non-dismissible foreground notification.\n- **The 5-Second Window**: Once `startForegroundService()` is invoked, developers have a strict 5-second window to post a foreground notification, otherwise the Android operating system kills the service.\n- **Historical Vulnerability (CVE-2019-2219)**: An earlier technique allowed apps to start a foreground service, hand off audio recording to the Android Media API, and stop the notification. Google addressed this issue with a December 2019 patch.\n- **Threading Bypass**: Das discovered that by dispatching audio capture to a background `Runnable`/thread, the main thread can invoke `stopForeground()` almost immediately (within 2–3 seconds), avoiding the persistent sticky notification while audio recording continues unobtrusively.\n\n### Technical Details\nIn Android's security model, hardware sensors are governed by strict application context and service restrictions. Long-running background spyware needs persistence without visual indicators. Under the documented architecture, calling Android's built-in `Android Media API` delegates recording tasks to Android's media server context, which writes output directly to internal cache storage without requiring custom low-level sensor implementation.\n\nUnder CVE-2019-2219, Google patched direct sequential calls because completing the operation inline took too long or failed under updated OS checks. In Das's updated zero-day technique:\n1. The malicious service invokes `startForegroundService()`.\n2. Immediately, execution dispatches a new thread (`Runnable`) tasked with calling `startRecording()` via the Android Media API for a prolonged duration (e.g., 2 minutes).\n3. Because the recording logic runs asynchronously on another thread, the main execution thread immediately calls the stop foreground notification method well within the 5-second deadline (typically within 2 to 3 seconds).\n4. The foreground notification disappears almost instantaneously, yet the underlying media server continues recording audio into the application's cache directory.\n\nDuring a live demo on a physical Android 10 device, Das compared the patched technique against the new threading approach. The demonstration verified that despite no visible notification appearing in the status bar, newly written audio files continuously grew in size within the app's cache directory.\n\n### Takeaways\nDas noted that Google resolved the underlying issue in Android 11. However, for Android 10, Google indicated they would not backport a fix due to extensive infrastructure changes required in the operating system. Because Android 10 remained unpatched for this specific flaw, no CVE was assigned for this variant.",
       "durationSeconds": 1859,
       "conference": "nullcon",
@@ -1917,12 +1918,13 @@
         "tihmstar",
         "nullcon"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Jailbreaking iOS In The PostApocalyptic Era by CoolStar Tihmstar | Nullcon Goa 2022.",
-      "summary": null,
+      "teaser": "Walks through post-exploitation steps for iOS jailbreaking, from kernel memory access to sandbox escape and code signing bypasses.",
+      "summary": "The talk picks up after an initial kernel exploit has already been obtained and focuses on post-exploitation for iOS jailbreaking. The goals are a stable kernel read and write primitive that survives across processes and reboots, escaping the sandbox to become root, bypassing code signing enforcement, and enabling system-wide code injection for tweaks. It traces how kernel memory access has changed, from simply patching the kernel before iOS 9, through kernel patch protection, to the hardware-enforced KTRR on newer devices.\n\nThe middle section walks through the workarounds for each mitigation era. Task ports to the kernel were reused through host special ports, and remapped memory got past pointer checks, while later zone separation was sidestepped with a fake task structure. From iOS 14 onward, a library built on IOSurface connect methods provides the primitive, which is handed between processes and held by launchd. Escaping the sandbox and gaining root involves swapping credential label pointers and adjusting UIDs. Code signing bypasses rely on trust caches, MobileFileIntegrity and CoreTrust, while newer devices need debugger-based tricks and user-space reboots to get code loaded into launchd.\n\nThe closing part covers the root filesystem. Remounting it read-write was possible by clearing flags on the root vnode through iOS 14, but sealed snapshots in iOS 15 block that, so files are placed on the data volume instead. The speaker concludes that each new mitigation makes jailbreaking harder, and that arbitrary kernel read and write alone is no longer enough without bypasses for pointer authentication or the page protection layer.",
       "durationSeconds": 2800,
       "conference": "nullcon",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "CfHOKY6CQQE",
@@ -2151,19 +2153,22 @@
       "youtubeId": "WXqff23dT5I",
       "slug": "elevating-the-trustzone-to-achieve-a-powerful-android-kernel-exp",
       "title": "Elevating The TrustZone To Achieve A Powerful Android Kernel Exploit | Tamir Zahavi Nullcon Goa 2022",
-      "speakers": [],
+      "speakers": [
+        "Tamir Zahavi"
+      ],
       "track": "mobile",
       "topics": [
         "android",
         "kernel",
         "trustzone"
       ],
-      "teaser": "Security researchers examine technical aspects of Elevating The TrustZone To Achieve A Powerful Android Kernel Exploit | Tamir Zahavi Nullcon Goa 2022.",
-      "summary": null,
+      "teaser": "Shows how a Qualcomm TrustZone communication bug lets an Android app gain arbitrary kernel memory read and write.",
+      "summary": "Android phones run a second, higher-privileged operating system called TrustZone, which holds keys for things like DRM and is almost always closed source. This talk examines Qualcomm's implementation, which shares memory with the Android kernel through a kernel module and ION buffers. Shared regions are described by physical addresses and a whitelist that tells the secure side what memory it may touch.\n\nThe bug lies in how the kernel builds those whitelist entries. Because a user process supplies buffer references with offsets, overlapping offsets can overwrite an address so the secure side whitelists arbitrary physical memory, including kernel memory. Non-contiguous buffers then let the attacker control both the address and the size of the whitelisted region. Getting a usable command out of a DRM trustlet required heavy reversing; two of its functions shared one symmetric key for encryption and decryption, so they could act as a memory copy. That gave arbitrary kernel read and write, and kernel symbols were located by scanning memory, letting the exploit disable SELinux across several devices and builds without per-build changes.\n\nThe exploit needs the Qualcomm kernel module, which is normally out of reach for apps, though a previously published service bug could bridge that gap. Physical addresses are not randomized, and the attack is data-only, so it sidesteps code-execution mitigations and may survive memory tagging. The takeaways: closed-source secure components and physical-memory primitives deserve more research, and the vendor fix added a check against overlapping data. A write-up and source code were promised.",
       "durationSeconds": 2652,
       "conference": "nullcon",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "OAQi8TcnnyM",
@@ -2310,21 +2315,24 @@
       "youtubeId": "QIJ82hoZRWU",
       "slug": "goa-2022-scale-hacking-to-secure-your-cloud-and-beyond-by-anand",
       "title": "Goa 2022 | Scale Hacking To Secure Your Cloud And Beyond by Anand Prakash",
-      "speakers": [],
+      "speakers": [
+        "Anand Prakash"
+      ],
       "track": "cloud",
       "topics": [
         "scale",
         "cloud",
         "anand"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Goa 2022 | Scale Hacking To Secure Your Cloud And Beyond by Anand Prakash.",
-      "summary": null,
+      "teaser": "Walks through bug bounty case studies where small flaws were chained into account takeovers and cloud compromises.",
+      "summary": "The talk presents bug bounty case studies in which several small flaws were chained into high-impact results. At Tinder, sign-in relied on Facebook's Account Kit phone login. The speaker found a hidden endpoint, referenced in the dashboard's JavaScript, for changing a phone number that never checked the new number against the confirmation code. That let an attacker obtain a session cookie for any Account Kit user, and Tinder's API accepted it to take over accounts.\n\nAt Uber, a driver sign-up flow returned an internal user ID for any phone number or email entered. A separate consent-screen RPC call then exposed that user's mobile access token, which worked across the app's APIs. The speaker also described a Facebook issue, not yet publicly disclosed, where an access token from the main app let authorized third-party apps reach messages and account data despite only basic permissions. The cloud section covered an open Docker registry whose images contained hardcoded AWS keys, and CloudFormation templates that exposed Jira, Slack and GitHub tokens. A developer's AWS key pushed to a public repository gave full control over EC2, RDS and S3 for a crypto platform within a minute; the key was deactivated two days after the disclosure.\n\nThe takeaways are to chain low-severity findings, test main applications rather than stopping at reconnaissance, and learn how backends and infrastructure work instead of relying on automated tools. Persistence matters, and researchers should stay within permission and ethical limits.",
       "durationSeconds": 1153,
       "conference": "nullcon",
       "viewCount": 1300,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2022,
-      "eventLabel": "nullcon Goa 2022"
+      "eventLabel": "nullcon Goa 2022",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Vgy150R4bRw",
@@ -2433,7 +2441,9 @@
       "youtubeId": "J0bZGugLoYk",
       "slug": "electrovolt-pwning-desktop-apps-built-on-electron-by-mohan-sri-r",
       "title": "ElectroVolt Pwning Desktop Apps Built On Electron by Mohan Sri Rama | Nullcon Goa 2022",
-      "speakers": [],
+      "speakers": [
+        "Mohan Sri Rama"
+      ],
       "track": "red-team",
       "topics": [
         "electron",
@@ -2443,12 +2453,13 @@
         "app",
         "built"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding ElectroVolt Pwning Desktop Apps Built On Electron by Mohan Sri Rama | Nullcon Goa 2022.",
-      "summary": null,
+      "teaser": "Shows how Electron desktop apps like VS Code and Teams can be taken over via XSS, misconfigured web preferences and V8 exploits.",
+      "summary": "The talk introduces Electron, the framework that lets developers build cross-platform desktop apps with HTML, CSS and JavaScript, and explains how its main process and renderer process differ. It then covers the web preferences that govern the renderer, including sandboxing, node integration, preload scripts and context isolation, and shows how weaker settings let a script injection reach the operating system.\n\nCase studies follow. In VS Code, a malicious markdown file in an untrusted folder led to a chain of cross-origin navigation and postMessage misconfigurations that reached a window with node integration enabled. In Discord, a cross-site scripting flaw in an embedded frame was combined with an error in how Electron initialised new windows, and a V8 bug was then used to run code in a window without sandboxing. In Microsoft Teams, a zero-day in an editor component was used to pollute prototypes and leak internal IPC, which could read a local file and expose a user's authentication token. Other cases involve node integration in subframes and disabled context isolation, where V8 exploits flipped configuration bits in the renderer.\n\nThe takeaways are practical. Keep sandboxing on, disable node integration and enable context isolation, and avoid exposing privileged IPC channels or the legacy remote module. Restrict XSS and open-redirect routing, including on subdomains, and keep Electron updated, since its V8 and Chromium components tend to lag behind the Chrome browser.",
       "durationSeconds": 2205,
       "conference": "nullcon",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "gFTVw08NXmo",
@@ -3075,7 +3086,7 @@
         "devop",
         "jovin"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in DevSecOps - Automating Security in DevOps | Jovin Lobo | Nullcon Webinar 2021.",
+      "teaser": "Shows how security checks such as dependency scanning and secrets detection can be built into DevOps pipelines.",
       "summary": "### Overview\nIn this Nullcon Webinar session, speaker Jovin Lobo discusses the transition from traditional security practices to DevSecOps by automating security checks directly within DevOps pipelines. The presentation covers the four core pillars of DevOps—Continuous Integration (CI), Continuous Delivery (CD), Infrastructure as Code (IaC), and Continuous Monitoring—and explains how traditional security approaches (such as manual code reviews, isolated penetration testing, and post-deployment audits) fail to scale with modern deployment velocity. To prevent security from becoming a bottleneck, organizations must integrate automated security tools seamlessly across every stage of the software delivery lifecycle.\n\n### Key Topics\n- **DevOps Core Pillars**: Reviewing Continuous Integration (using Git/GitHub), Continuous Delivery (using Jenkins), Infrastructure as Code, and Continuous Monitoring (using Elastic Stack: Filebeat, Logstash, Elasticsearch, and Kibana).\n- **The DevSecOps Imperative**: Why traditional security models fail against rapid release cycles and scaling microservice architectures, necessitating shared responsibility and \"security by default.\"\n- **Pipeline Security Integration**: Automating checks at multiple stages including pre-commit hooks, secrets management, software composition analysis (SCA), static application security testing (SAST), dynamic application security testing (DAST), infrastructure assessment, compliance checks, and container scanning.\n- **Vulnerability Management & Monitoring**: Aggregating multi-tool findings into centralized management dashboards and protecting runtime infrastructure using Web Application Firewalls (WAF).\n- **Cultural Transformation**: Fostering cross-team collaboration and scaling security capabilities through dedicated Security Champions rather than relying solely on a separate security silo.\n\n### Technical Details\nLobo outlines specific stages and tools utilized across an automated DevSecOps pipeline:\n- **Pre-Commit Hooks & Secrets Management**: Developers use tools like `pre-commit` (and hooks such as `git-secrets` or `detect-secrets`) to prevent committing sensitive items like AWS keys directly to source control. Secrets management solutions like HashiCorp Vault ensure credentials and configurations are injected dynamically.\n- **Software Composition Analysis (SCA)**: Identifies vulnerable third-party components and dependencies using tools such as OWASP Dependency-Check, Retire.js, or language-specific tools like Bundler-Audit.\n- **Static Application Security Testing (SAST)**: Automated scanners inspect source code for vulnerabilities and bad practices. Recommended tools include Brakeman (for Ruby) or Semgrep, which Lobo highlights as highly configurable and customizable for writing custom rules across multiple programming languages.\n- **Dynamic Application Security Testing (DAST)**: Tools such as OWASP ZAP (Zed Attack Proxy) run automated scans against deployed staging environments to identify runtime flaws.\n- **Infrastructure & Container Security**: Infrastructure vulnerability scanning is conducted via OpenVAS, while compliance is enforced as code using Chef InSpec. Container images are scanned for vulnerabilities using tools like Trivy.\n- **Centralized Vulnerability Management & Incident Response**: Rather than managing output in silos, results are funneled into centralized dashboards such as ArcherySec, OWASP DefectDojo, or Faraday. Runtime monitoring and defense combine ModSecurity WAF in front of production servers with ELK (Elasticsearch, Logstash, Kibana) and Filebeat for log aggregation.\n\n### Takeaways\nAutomating security in DevOps requires choosing tools tailored to the technology stack and programming languages in use, while keeping the pipeline configuration principles uniform. Tooling alone is insufficient; organizations must bridge the gap between development and security through cultural change, cross-training, and establishing \"Security Champions\" to maintain security velocity alongside software releases.",
       "durationSeconds": 2586,
       "conference": "nullcon",
@@ -3548,7 +3559,9 @@
       "youtubeId": "SkeOWvDXvK4",
       "slug": "exploiting-android-messengers-with-webrtc-natalie-silvanovich-nu",
       "title": "Exploiting Android Messengers with WebRTC | Natalie Silvanovich | Nullcon Webinar 2021",
-      "speakers": [],
+      "speakers": [
+        "Natalie Silvanovich"
+      ],
       "track": "mobile",
       "topics": [
         "android",
@@ -3558,12 +3571,13 @@
         "natalie",
         "silvanovich"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Exploiting Android Messengers with WebRTC | Natalie Silvanovich | Nullcon Webinar 2021.",
-      "summary": null,
+      "teaser": "Shows how WebRTC bugs in Android messaging apps can yield fully remote exploits, and how app design changes their reach.",
+      "summary": "WebRTC is a Google audio and video library embedded in browsers and many mobile messaging apps. Earlier WebRTC memory corruption bugs seemed to need the victim to answer a call. Inspired by an NSO Group exploit against WhatsApp that worked without an answer, the research asked whether WebRTC could enable a fully remote Android exploit.\n\nEarly heap overflows were too limited, so the focus shifted to the SCTP library used for WebRTC data channels. WebRTC passed real object pointers as transport addresses, leaking heap pointers during normal traffic, and an echoed packet signed with a weak key could trigger a virtual call through one. A use-after-free in incoming SCTP handling then let the exploit read memory, defeat ASLR and run a call through a fake object. The exploit was rewritten as Frida hooks, roughly seven per application, which made it practical to test across 14 shortlisted apps. It worked on several, including Google Duo, Signal and Mocha, fully remote, while VK and OK needed a click and a contact.\n\nReach depended on app design. Apps that started connections before the callee answered were fully remote, while waiting for an answer or limiting calls to contacts reduced exposure. Disabling unused data channels also stopped the exploit in some apps, and 12 of the 14 apps had not been updated in a year. The takeaway is that adding WebRTC is a serious risk, so apps should enable only the features they need, keep the library current, and question whether video belongs in non-core apps.",
       "durationSeconds": 2228,
       "conference": "nullcon",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "2TEMJ7aO5Kg",
@@ -3613,19 +3627,22 @@
       "youtubeId": "bWegGahBXx8",
       "slug": "rapid-threat-model-prototyping-threat-modeling-for-agile-and-dev",
       "title": "Rapid Threat Model Prototyping; threat modeling for Agile & DevOps | Nullcon Webinar | Geoffrey Hill",
-      "speakers": [],
+      "speakers": [
+        "Geoffrey Hill"
+      ],
       "track": "appsec",
       "topics": [
         "threat-modeling",
         "devops",
         "agile"
       ],
-      "teaser": "Security researchers examine technical aspects of Rapid Threat Model Prototyping; threat modeling for Agile & DevOps | Nullcon Webinar | Geoffrey Hill.",
-      "summary": null,
+      "teaser": "Shows how to run quick threat models inside agile and DevOps pipelines using STRIDE, trust zones and CWE mappings.",
+      "summary": "Threat modeling often gets dropped in agile and DevOps teams because the traditional approach is slow, relies on long debates, and produces data flow diagrams that drift away from the real design. The speaker argues that threats should be found early, when a control is still cheap to add, and that the goal is finding mitigations rather than exhausting every possible threat. He frames good threat modeling around defense in depth, identity and least privilege, and secure deployment, and stresses that it should expose design flaws rather than implementation bugs.\n\nThe core of the talk is Rapid Threat Model Prototyping, an open-source method he created. Teams start from an existing architecture diagram and add security metadata, assigning each element a trust zone from 0 to 9. Simple rules based on the differences between zones then point to likely STRIDE threats, such as elevation of privilege across a boundary. Each threat is mapped to CWE and CAPEC entries that supply standard mitigations. The output is machine-readable, so it can feed backlog items, automated test cases, pull request checks and release notes.\n\nThe closing advice is practical. Legacy components can be treated as black boxes and given a quick STRIDE pass, while complex ones can be recorded as known weaknesses and planned for retirement. Development teams, supported by a security champion, should write up the results, since security-written reports tend to confuse non-specialists. Cost arguments persuade business and development leads, because problems found during design are far cheaper to fix than those found just before release.",
       "durationSeconds": 2596,
       "conference": "nullcon",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "VM_X3Lm5GTo",
@@ -3776,7 +3793,9 @@
       "youtubeId": "cEklly2r7Es",
       "slug": "pushing-private-communication-forward-engineering-at-signal-jim",
       "title": "Pushing Private Communication Forward: Engineering at Signal | Jim O'Leary | NULLCON Webinar",
-      "speakers": [],
+      "speakers": [
+        "Jim O'Leary"
+      ],
       "track": "appsec",
       "topics": [
         "communication",
@@ -3786,12 +3805,13 @@
         "engineering",
         "signal"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Pushing Private Communication Forward: Engineering at Signal | Jim O'Leary | NULLCON Webinar.",
-      "summary": null,
+      "teaser": "Walks through Signal's engineering work on calling, group management, PIN-based recovery and privacy features.",
+      "summary": "Jim O'Leary, who leads engineering at Signal, contrasts the data-driven business models common in tech with Signal's non-profit model, funded by grants and donations and built to hold as little user data as possible. He notes that the clients and server code are published, along with protocol specifications, so outside researchers can review them.\n\nThe technical tour covers several recent projects. Calling is built on RingRTC, a Rust layer over a locked-down fork of WebRTC that gives iOS, Android and desktop one shared interface instead of separate per-platform copies. A group redesign, described in a white paper, adds admin roles and member removal while the service still does not learn who is in a group. For PIN-based secure value recovery, the PIN is stretched with Argon2 into a key, and the service runs inside Intel SGX enclaves that avoid writing data to disk, with clients checking published code hashes through remote attestation. Other items include a local device-to-device transfer on iOS, stickers and reactions designed so the server cannot see their contents, disappearing media, and on-device face blurring shipped to help protest organizers.\n\nIn the Q&A, Jim addressed published government data requests, the lack of two-factor authentication given that Signal has no passwords, how calls are routed, and how outside developers can contribute. He closes by arguing that privacy tools should not be limited to technical experts.",
       "durationSeconds": 2824,
       "conference": "nullcon",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "oK7Fe6cMxIw",
@@ -4269,19 +4289,22 @@
       "youtubeId": "LAE_KStI31M",
       "slug": "xnu-heap-exploitation-from-kernel-bug-to-kernel-control-tihmstar",
       "title": "XNU heap exploitation: From kernel bug to kernel control | Tihmstar | NULLCON Goa 2020",
-      "speakers": [],
+      "speakers": [
+        "Tihmstar"
+      ],
       "track": "red-team",
       "topics": [
         "exploitation",
         "kernel",
         "heap-exploitation"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding XNU heap exploitation: From kernel bug to kernel control | Tihmstar | NULLCON Goa 2020.",
-      "summary": null,
+      "teaser": "Walks through three iOS kernel heap exploits, from an XNU double free to obtaining the kernel task port.",
+      "summary": "The talk walks through how kernel heap bugs in Apple's XNU kernel can be turned into full kernel control on iOS. It starts with background on Mach ports, where a send right to the kernel task port grants read and write access to kernel memory, and on the zone allocator, which hands out fixed-size chunks from zones and only releases pages during garbage collection.\n\nThe first case, called treadmill, is a double free in the asynchronous path of lio_listio. By spraying out-of-line port descriptors, the speaker reallocates the freed buffer with attacker-controlled data, producing overlapping messages that leak a heap pointer and build a read primitive. The second case is a voucher use-after-free. A timing side channel reveals when garbage collection has released a page so it can be reclaimed, and a fake port overlapping a real one supplies reads. A later variant replaces the spray with pipe buffers, which hold data in place and make reads and writes safer. Once the kernel slide is known, a remapped fake task and a fake IOKit object yield a kernel call primitive, which elevates credentials and returns the kernel task port.\n\nThe takeaways are that a double free or use-after-free should be converted into a controlled object overlap, that pipe buffers offer a more stable primitive than repeated sprays, and that Mach APIs often provide a route around new mitigations. The speaker notes these techniques were shown on older iOS versions, and that pointer authentication changes what is practical on newer devices.",
       "durationSeconds": 2632,
       "conference": "nullcon",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "_oIL-U6W-fs",
@@ -4353,7 +4376,9 @@
       "youtubeId": "eOuUBPOSn0Y",
       "slug": "taking-the-guess-out-of-glitching-adam-laurie-nullcon-goa-2020",
       "title": "Taking the guess out of Glitching! | Adam Laurie | NULLCON Goa 2020",
-      "speakers": [],
+      "speakers": [
+        "Adam Laurie"
+      ],
       "track": "hardware",
       "topics": [
         "taking",
@@ -4363,8 +4388,8 @@
         "laurie",
         "nullcon"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Taking the guess out of Glitching! | Adam Laurie | NULLCON Goa 2020.",
-      "summary": null,
+      "teaser": "Walks through the tools, triggers and measurement setup needed to fault a microcontroller's clock or power for bypassing read protection.",
+      "summary": "Adam Laurie introduces glitching as precisely timed fault injection, where a brief drop in clock or supply voltage makes a chip skip a security decision such as a read-protection check. He presents the session as a primer for newcomers rather than a new technique, and lists the kit needed: a glitch generator (an FPGA or a development board's GPIO pins), a trigger source, a fast switch to pass the glitch to the target, a stable power supply that can deliver non-standard voltages, and an oscilloscope with at least four channels.\n\nUsing an NXP LPC microcontroller as the example, he explains that its code read protection levels decide whether a bootloader remains available to talk to. He recommends practising on an off-the-shelf development board before a live target. A small shunt resistor on the supply line makes the chip's power activity visible, which shows whether it is running. He then extracts the bootloader, sets a debugger breakpoint on the instruction that checks protection, and uses that timing to aim the glitch. Tuning width and depth lets a glitch that kills the chip be turned into one that only causes a fault. Triggering on the UART echo was more consistent than triggering on a GPIO line, and soldering a dedicated board reduced the wiring problems that breadboards caused.\n\nThe main takeaways are to reconnoitre on a dev board first, back off the voltage when a glitch destroys the target, and choose a trigger close to the event being attacked.",
       "durationSeconds": 2720,
       "conference": "nullcon",
       "viewCount": 1500,
@@ -4893,20 +4918,23 @@
       "youtubeId": "N2JG7qIlpi0",
       "slug": "how-to-build-your-own-infosec-company-mario-heiderich-nullcon-go",
       "title": "How to build your own Infosec Company | Mario Heiderich | nullcon Goa 2019",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Mario Heiderich"
+      ],
+      "track": "policy",
       "topics": [
         "build",
         "company",
         "mario",
         "heiderich"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning How to build your own Infosec Company | Mario Heiderich | nullcon Goa 2019.",
-      "summary": null,
+      "teaser": "Shares lessons on founding and running a small infosec consultancy, from first clients to avoiding burnout.",
+      "summary": "The talk argues that a small boutique security firm, roughly 5 to 20 people, can offer more transparency, faster processes and better value than large consultancies, which the speaker describes as bureaucratic and sometimes overpriced. He frames the start as a motivation question: decide whether the goal is to grow and sell, or to keep a firm running for the long term, then register the business once that is clear. Building a reputation comes first, through talks, papers, public research and challenges, followed by winning a first client, ideally someone already known.\n\nThe practical section covers staying organised. He recommends a few lean tools, ideally ones clients also use, and writing down every agreement from a call and having the client confirm it by email. He also describes an inbox-zero habit and a fixed end-of-day cutoff to avoid burnout. On security for the firm itself, he advises a realistic threat model rather than paranoia, plus backups kept in isolated locations. He reports testing recovery once a year by wiping his own partition and timing how long he needs to be productive again, which took about six hours.\n\nThe final part deals with difficult clients. He describes those who demand lower rates after praising the work, delay schedules repeatedly, or keep requesting revisions beyond the contract, and says firing such clients is sometimes necessary. He recommends partnering with other small firms to pass on work and share pressure during the busy fourth quarter, and warns that burnout can take months to recover from. He closes by noting that demand for security services is high right now, making it a good time to start.",
       "durationSeconds": 2877,
       "conference": "nullcon",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "1rTv8lyEtv8",
@@ -5040,7 +5068,9 @@
       "youtubeId": "qg3sr677srY",
       "slug": "the-windows-sandbox-paradox-james-forshaw-nullcon-goa-2019",
       "title": "The Windows Sandbox Paradox | James Forshaw | nullcon Goa 2019",
-      "speakers": [],
+      "speakers": [
+        "James Forshaw"
+      ],
       "track": "malware",
       "topics": [
         "windows",
@@ -5050,12 +5080,13 @@
         "jame",
         "forshaw"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in The Windows Sandbox Paradox | James Forshaw | nullcon Goa 2019.",
-      "summary": null,
+      "teaser": "Explores how Windows sandboxes changed after Windows 10, covering access tokens, app containers and the mitigations that followed.",
+      "summary": "The talk revisits the Windows sandbox model from the speaker's 2015 presentation. A sandboxed process runs with a restricted access token, and a second list of sandbox identifiers must also pass the access check on each resource, while a more privileged broker process grants access on request. The speaker recaps why sandboxes add a hop after remote code execution and why usability and performance limit their design.\n\nMuch of the talk covers what changed after Windows 10. Enforced updates and faster release cycles let Microsoft ship protections quickly, but each release also brought new code and new bugs. App container changes included an opt-in flag for device drivers, capabilities generated from hashed names, an opt-out from the all application packages identifier, and child app containers. Registry symbolic links were blocked in sandboxes and mount points were restricted, but bypasses such as hard links and a global symbolic link type were found. Other mitigations covered win32k system calls, a policy blocking non-system fonts with a user-mode font driver as the fallback, and a process creation restriction on access tokens that also applies to WMI. A Chrome case showed a sandboxed process duplicating an unnamed section handle to regain write access, because the object had no security descriptor.\n\nA demonstration showed a tool for inspecting access tokens and security descriptors and running access checks offline, such as comparing an Edge token against System32. The speaker concludes that Windows 10 has had one of the biggest impacts on sandboxing in years, that fast-moving features often introduce bugs, and that better system call filtering and the bootstrapping problem remain open.",
       "durationSeconds": 2725,
       "conference": "nullcon",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "xiNRElHxQJE",
@@ -5785,7 +5816,7 @@
         "meer",
         "keynote"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Goa 2018:- Keynote by Haroon Meer.",
+      "teaser": "Urges security practitioners to chase important problems, build defensive tools, and pursue independent research over distraction.",
       "summary": "### Overview\nIn his keynote address at Nullcon Goa 2018, Haroon Meer (founder of Thinkst and creator of Thinkst Canary) reflects on his career across offensive security, defensive engineering, and product development. Drawing heavily on Richard Hamming’s classic essay and talk *You and Your Research*, as well as observations from Dan Geer and Brian Snow, Meer delivers advice directed at both young and experienced security professionals. He challenges the cybersecurity community to stop chasing passive distractions and instead tackle significant, enduring problems, urging practitioners—particularly offensive researchers—to embrace blue-team defense and product development.\n\n### Key Topics\n- **Distractions in InfoSec and Passive Learning:** The security industry is easily distracted by constant novelty and conference culture, which can turn into passive entertainment (\"potato chips for your mind\") rather than active learning and substantive problem-solving. Meer notes that aiming simply to be a conference speaker is an empty pursuit.\n- **The Current Stagnation of Defense:** Despite millions spent, typical enterprise defense remains fragile. Meer references two heuristics: lateral movement in many organizations remains as easy as it was in 2003, and most organizations are only zero to one 0-days away from catastrophe.\n- **Shifting from Red Team to Blue Team:** Breaking into networks has become relatively routine, and offensive techniques like social engineering are often overly easy rather than challenging. In contrast, defensive problems (such as local admin passwords or two-factor authentication) offer massive research opportunities and commercial potential (e.g., Duo Security).\n- **Avoiding Utopian Thinking:** Defenders frequently let perfection undermine practical effectiveness. Meer cites EMET bypasses and the historical demise of the Linux honeypot tool Sebek (killed because researchers proved it could be detected via kernel syscall timing in a lab, despite attackers in the wild never performing such checks). Blue teams should \"embrace the hack\" and solve real-world organizational challenges rather than rejecting imperfect tools.\n- **Hamming's Lessons on First-Class Research:** Success in groundbreaking work is rarely just luck. Key factors include independent thoughts, the courage to chase them, deep drive, and emotional commitment. Knowledge compounds like interest, meaning sustained extra effort leads to dramatically outsized productivity.\n\n### Technical Details\n- **Sebek and Honeypots:** Meer highlights Sebek, an early 2000s Honeynet Project rootkit-like tool designed to capture keystrokes and traffic from compromised boxes. Academic/lab demonstrations showed Sebek could be detected via precise syscall timing, leading defenders to shelve a tool that was otherwise effective against real-world adversaries who do not perform syscall timing.\n- **Defensive Tooling and Pragmatism:** Mentioning Microsoft's Enhanced Mitigation Experience Toolkit (EMET), Meer illustrates that even if reverse engineers can bypass an exploit mitigation tool, deploying it still protects enterprises against common threats.\n- **Compounding Work and Metasploit:** Meer uses HD Moore's creation of Metasploit as an example of restructuring ad-hoc work (copy-pasting shellcode and one-off exploits) into an open platform that others can build upon.\n- **Thinkst Canary:** During the Q&A, Meer explains that Canary focuses on alerting organizations to compromises with minimal effort and low false positives, addressing the organizational challenge of adoption rather than merely writing technical code.\n\n### Takeaways\n- **Dedicate Time to Great Thoughts:** Regularly schedule time to ask yourself: \"What are the important problems in your field, and why aren't you working on them?\"\n- **Embrace Constraints and Put in the Work:** First-class research requires intense dedication and emotional investment rather than relying on talent, luck, or ideal working conditions.\n- **Focus on Usable Solutions:** Tackle enterprise organizational barriers directly rather than blaming users or abandoning tools over minor edge cases. High-value opportunities exist in building resilient, usable defensive products.",
       "durationSeconds": 2928,
       "conference": "nullcon",
@@ -5799,14 +5830,16 @@
       "youtubeId": "IBXAxewzIxo",
       "slug": "goa-2018",
       "title": "Interviewing InfoSec Professionals",
-      "speakers": [],
+      "speakers": [
+        "Interviewing InfoSec Professionals"
+      ],
       "track": "community",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "summary": null,
+      "summary": "An interview with an information security professional, recorded at a nullcon event, covering how the conference compares with others and what the interviewee sees as the main challenges facing the field. The speaker describes a community that feels tighter than most conferences, with companies from several countries and corporate sponsors attending. They mention talking with bug bounty researchers about web, mobile and IoT hacking, and they note new additions such as machine learning training, a hardware capture-the-flag contest and a car hacking village. They also praise the strong student presence and the depth of technical discussion.\n\nTurning to the wider field, the interviewee argues that digitization and new technology keep widening the attack surface, so organizations that once had confined architectures are now more open and exposed. In their view, relying on processes and audits alone will not keep pace with that change, and defenders need deep technical expertise. They also point to policy, privacy and data protection questions raised by technology as major concerns worldwide.\n\nThe takeaway is that security teams should pair compliance work with hands-on technical depth, and that events bringing technical specialists together with policy perspectives help practitioners keep up with fast-moving threats.",
       "durationSeconds": 220,
       "conference": "nullcon",
       "viewCount": 1600,
@@ -5815,7 +5848,9 @@
       "eventLabel": "nullcon Goa 2018",
       "enrichmentGaps": {
         "teaser": "Generated line repeated the event label; dropped when the real title was recovered."
-      }
+      },
+      "difficulty": "beginner",
+      "teaser": "Interviewing InfoSec Professionals explores Goa 2018."
     },
     {
       "youtubeId": "B0xqrNMR1q4",
@@ -6412,7 +6447,9 @@
       "youtubeId": "Q5T-OY_prmg",
       "slug": "goa-2017-increasing-your-impact-on-facebook-bug-bounty-by-jack-w",
       "title": "Goa 2017 - Increasing Your Impact On Facebook Bug Bounty by Jack Whitton",
-      "speakers": [],
+      "speakers": [
+        "Jack Whitton"
+      ],
       "track": "red-team",
       "topics": [
         "bug-bounty",
@@ -6420,14 +6457,15 @@
         "impact",
         "facebook"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Goa 2017 - Increasing Your Impact On Facebook Bug Bounty by Jack Whitton.",
-      "summary": null,
+      "teaser": "Explains how to make Facebook bug bounty reports more impactful and avoid common false positives.",
+      "summary": "The talk gives practical advice for getting Facebook bug bounty reports triaged faster and with more impact. It starts with the program's scope, which covered Facebook apps, Instagram, WhatsApp, HHVM and React, and with its scale: over 100 reports a day, more than $5 million paid to 900-plus researchers, and a top payout of $335,000 for a code execution bug in OpenID. The speaker, from Facebook's product security team, recommends retesting in incognito mode with fresh accounts to rule out cookie or cache side effects, and including user IDs, content IDs and full URLs in reports.\n\nThe middle section covers common false positives that flood the queue. Accepting several variations of a password at login is a deliberate usability choice, rate limits may simply have thresholds the tester has not reached, and marketing micro-sites on separate infrastructure hold no user data, so a missing X-Frame-Options header there is usually low impact.\n\nThe closing examples are 2016 reports with real impact: a GraphQL mutation that let one page's messaging setting be changed without a permission check, an email address exposed through hidden markup in the page admin invite flow, video attachments that could be used to delete other users' comments, and an insecure direct object reference in Business Manager that allowed claiming another user's page. The speaker suggests targeting new features, reading engineering blogs, checking mobile and m. subdomains, and inspecting raw HTTP responses for data hidden in the interface.",
       "durationSeconds": 1462,
       "conference": "nullcon",
       "viewCount": 1100,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2017,
-      "eventLabel": "nullcon Goa 2017"
+      "eventLabel": "nullcon Goa 2017",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "0ofFjE2TAwA",
@@ -6780,27 +6818,32 @@
       "youtubeId": "ZpLHJTJLlrU",
       "slug": "goa-2017-bug-bounty-reports-how-do-they-work-by-adam-bacchus",
       "title": "Goa 2017 - Bug Bounty Reports: How Do They Work by Adam Bacchus",
-      "speakers": [],
+      "speakers": [
+        "Adam Bacchus"
+      ],
       "track": "red-team",
       "topics": [
         "bug-bounty",
         "bounty",
         "they"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Goa 2017 - Bug Bounty Reports: How Do They Work by Adam Bacchus.",
-      "summary": null,
+      "teaser": "Shows how to write bug bounty reports that security teams can triage quickly, using good and bad real-world examples.",
+      "summary": "Adam Bacchus, chief bounty officer at HackerOne, explains how to write bug bounty reports that a security team can act on. He defines core terms such as vulnerability, report, disclosure and bounty program, and stresses that the internal security team is the real audience, since it must persuade developers to fix a bug. Scope comes next: he explains why some assets are excluded and why a hunter should ask about anything unlisted. He also covers service level expectations, including first response, bounty decisions and remediation timelines by severity.\n\nThe middle section focuses on report content. A strong report includes reproduction steps, a realistic account of exploitability, and an impact statement tied to confidentiality, integrity and availability for the organization's assets. Bacchus contrasts a clickjacking report with a working proof-of-concept page against a bare claim that a server runs outdated software, and notes that low-severity issues like open redirects or logout CSRF rarely merit a report unless chained with something else. Real examples show how clarity and tone shape outcomes, from a password-change flaw that was easy to reproduce to a researcher whose hostile replies ended their participation on the platform.\n\nHe closes with advice on handling disagreements, such as explaining why a report is out of scope or marking duplicates with timestamps, and on public disclosure after a fix. Resources include the Web Application Hacker's Handbook, Google Bug Hunter University, Google Gruyere and HackerOne's hacktivity feed of disclosed reports.",
       "durationSeconds": 1536,
       "conference": "nullcon",
       "viewCount": 1600,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2017,
-      "eventLabel": "nullcon Goa 2017"
+      "eventLabel": "nullcon Goa 2017",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "JE4UNdlgShI",
       "slug": "goa-2017-nearly-generic-fuzzing-of-xml-based-formats-by-nicholas",
       "title": "Goa 2017 - Nearly Generic Fuzzing Of XML Based Formats by Nicholas Gregoire",
-      "speakers": [],
+      "speakers": [
+        "Nicholas Gregoire"
+      ],
       "track": "red-team",
       "topics": [
         "fuzzing",
@@ -6809,14 +6852,15 @@
         "format",
         "nichola"
       ],
-      "teaser": "Security researchers examine technical aspects of Goa 2017 - Nearly Generic Fuzzing Of XML Based Formats by Nicholas Gregoire.",
-      "summary": null,
+      "teaser": "Explains how structure-aware mutation and reusable XML fragments help fuzz XSLT and SVG parsers, along with the bugs found that way.",
+      "summary": "The talk covers fuzzing file formats built on XML, such as XSLT and SVG. Generating inputs from a grammar produces files that are valid but shallow, while random byte changes break the syntax, so neither reaches much of the code. The speaker builds on earlier XSLT feature research, which produced a corpus of stylesheets covering most of the language and is reused as seed material.\n\nThe mutation engine works at three levels. A generic structural layer parses the XML tree and adds, removes or replaces nodes and attributes, drawing replacements from fragments stored in a per-format SQLite database; the same removal logic also minimises crashing inputs. An optional dialect layer applies format-specific changes, such as enabling XSLT's forward-compatible mode or repairing variable references, which led to more use-after-free bugs. The bottom layer is byte-level mutation delegated to AFL, with the engine plugged in as an external Python mutator. Large applications run in persistent or in-process modes, with AddressSanitizer builds used for deeper checks.\n\nAfter a few months of runs, the XSLT targets reached roughly a billion executions per day and an SVG target about nine million. Findings included a low-impact libxslt bug that needed a namespace from the earlier corpus, Adobe Reader bugs including two earlier issues that reappeared and two new use-after-free bugs, a Firefox use-after-free that was fixed with further reports pending, and an Inkscape crash that may allow control of the instruction pointer. The takeaway is that structure-aware mutation combined with a feature corpus reaches code that plain fuzzing misses. Planned next steps include more dialects, more targets and Windows support.",
       "durationSeconds": 2764,
       "conference": "nullcon",
       "viewCount": 1100,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2017,
-      "eventLabel": "nullcon Goa 2017"
+      "eventLabel": "nullcon Goa 2017",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "BftxP_odT54",
@@ -7043,16 +7087,18 @@
       "youtubeId": "gSFy87LT-pA",
       "slug": "goa-2015-building-custom-scans-for-real-world-enterprise-network",
       "title": "Goa 2015: Building custom scans for real world enterprise network by Sanoop Thomas",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Sanoop Thomas"
+      ],
+      "track": "recon",
       "topics": [
         "network",
         "building",
         "custom",
         "scan"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Goa 2015: Building custom scans for real world enterprise network by Sanoop Thomas.",
-      "summary": null,
+      "teaser": "Shows a graphical IDE that eases writing Nmap Scripting Engine scripts with autocomplete, templates and in-editor debugging.",
+      "summary": "The speaker, an independent security researcher, starts from the Nmap Scripting Engine, which has grown to around 500 scripts for vulnerability checks, brute forcing and exploitation. These scripts are written in Lua, a lightweight language that needs no compilation. Writing them is slow, though: traditional editors offer little help, debugging means running Nmap from the command line, and library functions have to be looked up in online documentation again and again. Scripts also run conditionally, so one only fires when the scan finds a matching service such as FTP.\n\nTo address this, he built a free, Java-based development environment that recognises both Lua syntax and Nmap library functions. It offers autocomplete, debugging inside the editor, and settings for the local Nmap installation, script paths and word lists. He walks through creating a project from a generated skeleton, filling in the author, port, categories and license. For the example he builds a Shellshock check against a CGI script, places the payload in an HTTP User-Agent header, sends a GET request, and returns the status code and response to the scan output. He also notes that Nmap scripts now cover web checks such as SQL injection, so Nmap increasingly works as a web application scanner.\n\nThe practical takeaway is that custom Nmap scripts can be written quickly with editor support, instead of repeatedly checking documentation. The tool is free and runs on any operating system with a Java runtime. The speaker suggests that easier script writing could encourage more community contributions to Nmap.",
       "durationSeconds": 1259,
       "conference": "nullcon",
       "viewCount": 1000,
@@ -7065,16 +7111,18 @@
       "youtubeId": "Mfgzx-ctXmQ",
       "slug": "goa-2015-hacking-tizen-the-os-of-everything-by-ajin-abraham",
       "title": "Goa 2015: Hacking Tizen The OS of Everything by Ajin Abraham",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Ajin Abraham"
+      ],
+      "track": "mobile",
       "topics": [
         "tizen",
         "everything",
         "ajin",
         "abraham"
       ],
-      "teaser": "Security researchers examine technical aspects of Goa 2015: Hacking Tizen The OS of Everything by Ajin Abraham.",
-      "summary": null,
+      "teaser": "Surveys Tizen's app model and security design, then presents research on its ASLR, CSP, and browser weaknesses.",
+      "summary": "Tizen is presented as a Linux-based, open-source operating system aimed at smart home and many device types, not just phones. The talk covers its native C++ and web app formats, where apps are installed, and the web APIs that give web apps direct device access. It then outlines the security design: apps run as a non-root user, SMACK provides mandatory access control with a very large rule set, and web apps must define a content security policy.\n\nThe research section examines web apps, memory protection, and the WebKit-based browser. A demo showed shellcode placed on the stack of a native app still running, meaning non-executable stack protection was absent. The speaker also showed that address space randomization was ineffective in Tizen 2.2, since a changed process personality setting disabled it and library addresses repeated across launches. In the browser, a script opening a new window could write content into a tab labelled with a trusted domain, and a null-byte trick in a script URL bypassed a same-origin policy that Chrome enforced.\n\nFor testers, the talk suggests a methodology covering certificate and signature checks, manifest review for excess privileges, SMACK rules, C++ code review, emulator-based dynamic analysis, and decrypting traffic by installing a proxy certificate. The speaker concludes the design is ambitious but complex enough that developers may misconfigure it, and that the research is ongoing.",
       "durationSeconds": 2601,
       "conference": "nullcon",
       "viewCount": 1700,
@@ -7258,7 +7306,9 @@
       "youtubeId": "a4_PvN_A1ts",
       "slug": "goa-2015-the-nsa-playset-rf-retroreflectors-by-michael-ossmann",
       "title": "Goa 2015: The NSA Playset RF Retroreflectors by Michael Ossmann",
-      "speakers": [],
+      "speakers": [
+        "Michael Ossmann"
+      ],
       "track": "wireless",
       "topics": [
         "playset",
@@ -7266,14 +7316,15 @@
         "michael",
         "ossmann"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Goa 2015: The NSA Playset RF Retroreflectors by Michael Ossmann.",
-      "summary": null,
+      "teaser": "Shows how radar-illuminated RF retro-reflector implants can covertly capture keyboard, USB, and video signals.",
+      "summary": "Michael Ossmann opens by framing active emission security as an under-researched area, contrasting it with passive Tempest-style monitoring. He recaps the Great Seal bug, a microphone and antenna hidden in a carving and revealed in 1960, which was illuminated by radar to pick up room audio. He then covers the NSA ANT catalog leaked in 2013, which lists retro-reflector implants such as a VGA video tap, a keystroke implant, a beacon, and an audio device. He stresses that his own designs are forward-engineered and only loosely inspired by those leaked documents.\n\nThe middle of the talk explains the technique: an attacker fires a radar signal at a tiny implant, which modulates the reflection with the signal on a target cable, and the attacker recovers that data from the return. He describes cheap radar options, including a toy radar gun with a baseband output, and his HackRF transceivers operating at 2482 MHz at very low power. He shows his own implants for PS2 and low-speed USB keyboards and for VGA, recovering a keystroke pattern and a screen image from the reflected signal. He notes that the keystroke demo was run from earlier captured data rather than live.\n\nHe closes by saying countermeasures are not yet well understood, since detection requires sweeping a wide range of frequencies and is hard to do well. He suggests that noise jamming could be defeated by correlating the transmitted noise with its reflection. He urges researchers to build and test these systems, and to respect spectrum rules and local laws.",
       "durationSeconds": 3082,
       "conference": "nullcon",
       "viewCount": 1900,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2015,
-      "eventLabel": "nullcon Goa 2015"
+      "eventLabel": "nullcon Goa 2015",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "w1O3b9cZEtE",
@@ -7323,7 +7374,9 @@
       "youtubeId": "_frDZJ0HJa0",
       "slug": "goa-2015-drone-attacks-how-i-hijacked-a-drone-by-rahul-sasi",
       "title": "Goa 2015: Drone Attacks How I hijacked a drone by Rahul Sasi",
-      "speakers": [],
+      "speakers": [
+        "Rahul Sasi"
+      ],
       "track": "red-team",
       "topics": [
         "drone",
@@ -7332,14 +7385,15 @@
         "rahul",
         "sasi"
       ],
-      "teaser": "Security researchers examine technical aspects of Goa 2015: Drone Attacks How I hijacked a drone by Rahul Sasi.",
-      "summary": null,
+      "teaser": "Shows how a consumer quadcopter's control firmware can be reversed and backdoored through a serial port proxy.",
+      "summary": "Rahul Sasi opens by explaining why he started this research: drones are spreading into surveillance, delivery and other uses, and a blog post on drone malware drew wide attention. He wanted to answer whether a drone bought from another country could be backdoored, and how a security flaw in one could be found. He covers quadcopter basics, including how the control software relies on gyroscope, ultrasonic and pressure sensors to hover, stabilise and land.\n\nThe research targets a consumer Parrot AR Drone. Dynamic analysis was impractical because setting breakpoints stopped the motors, so he obtained the control binary, program.elf, from a firmware update and a telnet service on the device, then reversed it in IDA. Debug strings helped him map functions, and data section references revealed the serial ports linked to motors and sensors. He focused on the autonomous auto-landing routine and found it used raw sensor altitude readings without checking them against earlier values. In his toy demonstration, a nearby object spoofing the sensor made the drone shut its motors down.\n\nFor the malware part, he built a generic proof of concept called maldrone, written in Go, that sits between the control program and the hardware. It kills the original program, patches serial port references in the binary, and opens a reverse connection to an attacker, with a Python script used to upload it. The live demo was unreliable on stage. He closes by urging developers to validate all input, including sensor data, and to protect firmware and serial interfaces on devices.",
       "durationSeconds": 2890,
       "conference": "nullcon",
       "viewCount": 1700,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2015,
-      "eventLabel": "nullcon Goa 2015"
+      "eventLabel": "nullcon Goa 2015",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "9h6uvmqbmX8",
@@ -7583,7 +7637,9 @@
       "youtubeId": "HbwdTApYAoQ",
       "slug": "goa-2014-o-dea-assertions-untwining-the-security-of-the-saml-pro",
       "title": "Goa 2014: O Dea Assertions Untwining the Security of the SAML protocol by Achin Kulshrestha",
-      "speakers": [],
+      "speakers": [
+        "Achin Kulshrestha"
+      ],
       "track": "appsec",
       "topics": [
         "saml",
@@ -7592,14 +7648,15 @@
         "protocol",
         "achin"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Goa 2014: O Dea Assertions Untwining the Security of the SAML protocol by Achin Kulshrestha.",
-      "summary": null,
+      "teaser": "Explains how SAML single sign-on works and how signature wrapping and XML attacks can break SAML service providers.",
+      "summary": "The talk introduces SAML, the XML-based standard that lets a company's identity provider vouch for users to cloud and web services, so people do not need a separate password for each application. It walks through a typical web single sign-on flow, where a service provider redirects the browser to the identity provider, which returns a signed assertion carrying authentication, attribute and authorization statements. The speaker explains that the XML signature covers a referenced element rather than the assertion's content directly, which sets up the main weakness.\n\nThe central attack covered is signature wrapping. Signature validation finds the signed element by its ID, while claim processing reads values through XPath, so an attacker can move a genuine signed assertion into a wrapper element and place a forged assertion where the claims are read. Other issues include missing schema validation, XML external entity injection through DOCTYPE declarations, and trusting certificates embedded in the key info element without checking them against a trust chain or revocation status.\n\nCountermeasures include rejecting DOCTYPEs, validating each assertion against the SAML schema, and confirming that only the signed element is processed. Keys should be verified before they are trusted. For replay, the talk recommends one-time-use conditions, checking the IssueInstant, rejecting reused request IDs, keeping the NotBefore and NotOnOrAfter window short, and using SubjectLocality. The speaker closes by noting that SAML does not define how an identity provider authenticates users, so that step needs testing as well.",
       "durationSeconds": 2379,
       "conference": "nullcon",
       "viewCount": 1000,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2014,
-      "eventLabel": "nullcon Goa 2014"
+      "eventLabel": "nullcon Goa 2014",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "E4YptOJzVXQ",
@@ -7692,7 +7749,9 @@
       "youtubeId": "cwmmLRUYaQ8",
       "slug": "goa-2014-advanced-smartphone-forensics-by-vladimir-katalov-elcom",
       "title": "Goa 2014:-Advanced Smartphone Forensics by Vladimir Katalov @elcomsoft",
-      "speakers": [],
+      "speakers": [
+        "Vladimir Katalov"
+      ],
       "track": "blue-team",
       "topics": [
         "forensics",
@@ -7700,14 +7759,15 @@
         "forensic",
         "vladimir"
       ],
-      "teaser": "Security researchers examine technical aspects of Goa 2014:-Advanced Smartphone Forensics by Vladimir Katalov @elcomsoft.",
-      "summary": null,
+      "teaser": "Explains how investigators pull data from iPhone, BlackBerry and Windows Phone backups, cloud accounts and keychains.",
+      "summary": "The talk, from a password recovery vendor, shows how investigators can pull smartphone data beyond a simple cable connection. It covers iPhone, BlackBerry and Windows Phone; Android was left out of this research. For iOS, the speaker compares logical, advanced logical and physical acquisition, explains that the iTunes backup password is stored on the device, and points out data that survives deletion, such as attachment images, saved Wi-Fi networks and a location history.\n\nThe middle section focuses on cloud sources. An iCloud backup can be downloaded with an Apple ID and password, with no handset required, and its chunks were found spread across Amazon and Microsoft storage. Downloads made through this protocol produced no notification to the account owner. iCloud Documents can be fetched and exported to PDF or Office formats, Find My iPhone can return a device's location, and iCloud Keychain was examined, including the SMS verification step that protects it. For BlackBerry, older desktop backups were weakly protected, while BlackBerry 10 backup keys were held by a vendor service. Windows Phone data was reached through Microsoft account interfaces.\n\nThe closing point is a trade-off between security, privacy and convenience. Anyone holding cloud credentials may reach far more than the handset itself, and the provider may hold the keys. The speaker lists open work on photo streams, third-party app data and fingerprint data.",
       "durationSeconds": 3230,
       "conference": "nullcon",
       "viewCount": 1100,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2014,
-      "eventLabel": "nullcon Goa 2014"
+      "eventLabel": "nullcon Goa 2014",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "8Lo0yOMkbtM",
@@ -7724,14 +7784,15 @@
         "lavakumar",
         "ankita"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Goa 2014:- Pentesting without pentesters by Lavakumar, Ankita.",
-      "summary": null,
+      "teaser": "Shows how existing Selenium functional tests can drive automated web vulnerability scans without extra security testing budget.",
+      "summary": "The talk starts from a problem faced by small development teams that ship frequent releases but cannot afford security testing for each one. The speaker asked whether security checks could be added to the functional testing that already runs on every build, without slowing releases or adding staff. To learn that process, the speaker worked with a functional tester and saw how browser-driven Selenium test cases mimic user actions.\n\nThe central idea is to route Selenium test traffic through an intercepting proxy so a scanner records the requests the tests generate. Test cases reach the useful parts of an application and fill in valid data, which automated crawlers often miss. A difficulty was that tests log out at the end, so replaying raw logs would use invalid sessions. The speaker added a start and end call to each test so the scanner groups requests into workflows. It then maps dependencies between requests, such as CSRF tokens taken from earlier responses, and replays them dynamically. In a demo, this approach found a cross-site scripting issue.\n\nThe talk also argued that findings should suit developers. Typical penetration test reports describe impact in terms developers do not need, so the speaker proposed step-by-step fix instructions. Encoding recommendations depend on the context where input is reflected, such as HTML or CSS. The reporting component was still in development, and the approach had been tried in one live environment. The takeaway is that teams can reuse existing functional tests for scanning and give developers concrete remediation steps.",
       "durationSeconds": 1231,
       "conference": "nullcon",
       "viewCount": 1800,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2014,
-      "eventLabel": "nullcon Goa 2014"
+      "eventLabel": "nullcon Goa 2014",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "0LHSsGk4nL4",
@@ -8195,21 +8256,22 @@
       "speakers": [
         "Justin Searl"
       ],
-      "track": "community",
+      "track": "ics-ot",
       "topics": [
         "framework",
         "samuraistfu",
         "smartgrid",
         "utilitie"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Goa 2013: SamuraiSTFU - Smartgrid Testing Framework for Utilities - By Justin Searl.",
-      "summary": null,
+      "teaser": "Introduces an open-source pentest distribution and methodology for smart grid and control system environments.",
+      "summary": "The talk introduces Samurai STFU, a freely available open-source penetration testing distribution aimed at electric utilities and other control system environments. The speaker explains why testing these networks needs special care: a careless port scan, spider, or automated vulnerability scan aimed at a control server can crash equipment, interrupt power to a substation, or halt a production line. Field devices in substations and plants are also reachable by physical attackers, so the testing scope has to extend down to embedded hardware and not stop at the servers.\n\nThe middle of the talk covers the toolset and methodology. The distribution bundles tools for JTAG and serial bus work, bus snooping, firmware disassembly, software-defined radio and custom wireless protocols, and fuzzers and simulators for industrial protocols. Practical cautions include slowing port scans, avoiding empty UDP probes that some control protocols cannot handle, and using a Nessus policy that favors authenticated checks over unauthenticated ones. For proprietary protocols, the speaker described reverse engineering only as much as needed to fuzz a target, and gave rough effort estimates for embedded and wireless work.\n\nThe closing portion covered the release plan, documentation, and training. The speaker said the public release would follow within a few weeks, with a mailing list for feedback, and that commercial support would be offered as services rather than as a separate paid edition. A practitioner should take away that control environments need context-aware testing: check protocol behavior and device fragility before running standard tools, and treat physical access to field devices as a real attack path.",
       "durationSeconds": 2584,
       "conference": "nullcon",
       "viewCount": 1500,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2013,
-      "eventLabel": "nullcon Goa 2013"
+      "eventLabel": "nullcon Goa 2013",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "yRpilXPv8pU",

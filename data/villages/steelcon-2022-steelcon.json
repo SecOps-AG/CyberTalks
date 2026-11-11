@@ -223,7 +223,9 @@
       "youtubeId": "pO67GZ2zcoo",
       "slug": "finding-zero-days-in-wordpress-plugins-and-themes-and-testing-be",
       "title": "Finding Zero Days In WordPress Plugins And Themes And Testing Beyond WPScan by Noman Riffat",
-      "speakers": [],
+      "speakers": [
+        "Noman Riffat"
+      ],
       "track": "blue-team",
       "topics": [
         "finding-zero",
@@ -233,7 +235,7 @@
         "plugins-themes"
       ],
       "teaser": "Provides finding Zero Days In WordPress Plugins And Themes And Testing Beyond WPScan by Noman Riffat and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The speaker, a security consultant, argues that WordPress runs a large share of websites and that thousands of third-party plugins and themes contain bugs. Rather than relying only on automated scanners such as WPScan, he recommends reading plugin code, guided by a checklist of WordPress functions and hooks that often hide weak access checks.\n\nThe core lesson concerns the admin-ajax and admin-post endpoints, which are reachable without logging in. A check such as is_admin only reports the page being loaded, not who is requesting it. In one plugin, an is_admin gate guarded user-supplied URLs that were fetched and passed to code execution, giving unauthenticated remote code execution. In a premium booking plugin used on an artist booking site, an admin_init hook ran an export routine with no authorisation check, so a single crafted request returned a CSV of submitted personal records. A separate theme case showed that a subscriber-level account could change footer settings and store script on the homepage, because the save hook lacked both authorisation and sanitisation. Hooks are grouped by access: the nopriv variants serve anonymous users, while the plain variants require any logged-in session, so open registration greatly widens what an attacker can reach.\n\nThe talk ends with practical advice: check whether registration is open or any plugin lets visitors sign up, since a low-privilege account can unlock hooks that anonymous users cannot reach. The theme case also arose from a third-party sign-in flow that quietly created a WordPress account. The speaker tested on isolated local installs, and he warns that downloaded premium code may contain malware, so it should never run on production systems.",
       "durationSeconds": 1756,
       "conference": "steelcon",
       "viewCount": 1300,

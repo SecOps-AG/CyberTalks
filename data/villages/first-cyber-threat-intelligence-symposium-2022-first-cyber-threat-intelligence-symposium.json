@@ -39,7 +39,7 @@
         "in-the-wild",
         "wild"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for 0-day In-the-Wild Exploitation in 2022...so far..",
+      "teaser": "Examines the zero-day exploits seen actively exploited in the wild during 2022 and why many are variants of patched bugs.",
       "summary": "Project Zero’s Zero-Day Mission\n\nGoogle Project Zero researcher Maddie Stone tracks zero-days exploited in the wild to drive structural mitigations and “make zero-day hard”—raising exploit cost and requiring more bugs per capability. She maintains public spreadsheets and a GitHub repository of in-the-wild zero-days since mid-2014.\n\n2022 Statistics So Far\n\nThrough 2022 the team counted 18 in-the-wild zero-days. Nine were variants of previously patched bugs; four were variants of 2021 zero-days attackers reused within roughly twelve months because patches were incomplete. Stone argues this shows zero-days are not yet “hard.”\n\nWhat “Hard” Would Look Like\n\nRemote phone compromise via a link still typically chains about three zero-days (renderer RCE, sandbox escape, local privilege escalation). Harder ecosystems would require more chained bugs, novel bug classes, undocumented attack surfaces, non-reusable exploit techniques, and highly selective deployment rather than broad watering-hole burns.",
       "durationSeconds": 2112,
       "conference": "first",
@@ -258,7 +258,9 @@
       "youtubeId": "BEf1c_dkAJ4",
       "slug": "csirt-and-soc-modernization-practices",
       "title": "CSIRT and SOC Modernization Practices",
-      "speakers": [],
+      "speakers": [
+        "Villas Benitez"
+      ],
       "track": "blue-team",
       "topics": [
         "soc",
@@ -266,12 +268,13 @@
         "modernization",
         "practice"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in CSIRT and SOC Modernization Practices.",
-      "summary": null,
+      "teaser": "Explains how incident response teams can plan, measure and redesign their services, roles and processes using maturity models.",
+      "summary": "The talk looks at how CSIRTs and SOCs can move beyond day-to-day operations and deliberately improve themselves. The speaker describes modernization as a cycle: operate, review annual performance against stakeholder expectations, choose a limited set of initiatives within the approved budget and resources, then design and implement them. A common first step is to clarify the mandate, stating what the team does and does not do, because unclear responsibilities confuse stakeholders and weaken trust.\n\nThe speaker then walks through how a change should cascade. Services lead to processes and workflows, which shape the organization, skills and training, facilities, technology and, finally, communication with partners such as law enforcement, other agencies and the media. For assessment, the talk points to two maturity models: SOC-CMM, which is very detailed, and the lighter SIM3. It also covers the FIRST services framework mapped to roughly 26 to 27 roles, along with NIST NICE and ENISA role work for defining skills. Teams should pick services that fit their own context rather than copy others, and monitoring is treated as a service that is not always present at national or sectoral level.\n\nFor measurement, the speaker gives examples of monthly metrics. The number of open incidents at month end should normally be above zero, a growing backlog of unclosed incidents is a warning sign, and SLA breaches should be tracked. Metrics that do not inform decisions should be dropped. Team size guides which maturity target is realistic, with larger teams suited to SOC-CMM and teams of seven to fifteen people often aiming at SIM3. The main takeaways are to define a clear purpose, check the mandate, measure only what will be used, and publicly recognize improvements.",
       "durationSeconds": 2049,
       "conference": "first",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "4rc7zegkFsw",
@@ -372,7 +375,9 @@
       "youtubeId": "6SSVOfcoVUA",
       "slug": "edr-internals-from-a-defenders-perspective",
       "title": "EDR Internals From a Defenders Perspective",
-      "speakers": [],
+      "speakers": [
+        "Olaf Hartung"
+      ],
       "track": "blue-team",
       "topics": [
         "edr",
@@ -381,12 +386,13 @@
         "perspective",
         "internals"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in EDR Internals From a Defenders Perspective.",
-      "summary": null,
+      "teaser": "Explains how Microsoft Defender for Endpoint collects telemetry, where its blind spots are, and how to tune it.",
+      "summary": "Olaf Hartung, a defensive specialist at FalconForce, looks at what Microsoft Defender for Endpoint actually does on a Windows host. He walks through its parts: antivirus that relies mainly on signatures with some cloud analysis, attack surface reduction rules, application control, and the EDR sensor. The sensor ships events to a cloud store for advanced hunting, where data is kept for about 30 days. Microsoft decides which events are logged, and some sources such as network connections are heavily rate limited, so beaconing is hard to see from this data.\n\nHe then explains how the telemetry is gathered. The product uses kernel callbacks and Event Tracing for Windows, with its own aggregation providers and a local store that forwards events when connectivity drops. The collection is driven by a signed configuration that sets event filters, global and local caps, and dynamic data collection scripts. Some events, such as service creation and scheduled tasks, only appear if specific Windows audit policies are enabled, and the speaker found that Microsoft does not document which of these it enables. He also noted that the diagnostics tracing service could be stopped or paused by a local administrator, which would suspend parts of the telemetry stream.\n\nFor practitioners, the main takeaway is to verify what the product actually sees in their own environment. Check audit policies in group policy, because local settings can override the ones the product expects. Review exclusions and attack surface reduction rules, since both can be abused, and consider application control in audit mode and native event logs to fill gaps. Hartung closes by arguing that vendors should document their telemetry coverage so defenders can understand where the product is strong and where it needs supplementing.",
       "durationSeconds": 2072,
       "conference": "first",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "dohFohtqXDc",
@@ -465,12 +471,13 @@
         "threat",
         "hunting"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Formulating An Intelligence-Driven Threat Hunting Methodology.",
-      "summary": null,
+      "teaser": "Lays out a repeatable threat hunting process that links adversary behavior, available visibility and business risk to detection.",
+      "summary": "The talk starts from the idea that threat hunting is a proactive search for intrusions that earlier controls missed, and argues that it should be a repeatable process rather than an ad hoc exercise. The speaker proposes three inputs: an understanding of how relevant adversaries operate, a clear view of the telemetry the organization actually has (host, network and file or artifact data), and an understanding of which assets and risks matter most. Hunting hypotheses built from these inputs should be specific, measurable, detectable, timely and testable, so that a hunt can be evaluated and refined.\n\nThe middle of the talk works through two examples. For business email compromise, the hunt looks for spoofed or injected messages through email header anomalies and missing DKIM signatures, tied to the financial loss the attacker is after. For a ransomware intrusion, the speaker describes a reported case that moved from phishing and initial access to ransomware deployment in about three and a half hours, using Cobalt Strike, PsExec, WMI, AdFind, BloodHound and domain controller compromise. A hunt aimed at the early discovery phase would look for unusual Active Directory enumeration, such as high volumes of LDAP queries. The speaker also touches on credential abuse, suggesting checks for one-to-many remote logon patterns and attempts to bypass multi-factor authentication, and notes that cloud hunting remains a difficult, provider-specific problem.\n\nThe closing point is that a hunt which must be repeated should become an automated detection. The speaker describes a cycle in which the detection baseline is established first, hunts cover gaps beyond it, and validated hunts are then automated, steadily improving coverage over time.",
       "durationSeconds": 2030,
       "conference": "first",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "_ZrEHK1Kc_Y",
@@ -691,12 +698,13 @@
         "abuse",
         "material"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Online Child Sexual Abuse Material (CSAM): The Insider Attack You Have Not Seen Coming.",
-      "summary": null,
+      "teaser": "Walks security teams through real CSAM incidents on their networks and the response lessons learned the hard way.",
+      "summary": "The talk opens by outlining the forms of online child sexual exploitation, including grooming, live-streamed abuse, sextortion and the circulation of child sexual abuse material (CSAM). It points to rising volumes of reports to the US National Center for Missing and Exploited Children and argues that any platform or corporate network can be misused, including by its own staff, so the problem belongs to security teams.\n\nTwo incident case studies follow. In the first, a research and education organisation received a police notice about one of its IP addresses. Investigators traced it to a former employee who had gained access to a retired administrator's laptop and used it to share illegal files through a peer-to-peer client for about 30 days, a threat the mature security team had never modelled. In the second, an alert about uploads from an academic supercomputing centre led into a federated, multi-layer cloud platform. The operator had already deleted the affected virtual machines and logs, leaving investigators with only a few email addresses and IP addresses, and cross-border legal requests were slow.\n\nThe takeaways are practical. Treat this material as a cybercrime issue, load known hashes and indicators into existing detection tooling so analysts need not view images, and investigate hits instead of simply deleting them. Organisations should report to law enforcement, keep evidence forensically sound, shield staff from exposure including file names, and write CSAM-specific procedures covering incident response, HR and legal. Building a relationship with local police before an incident occurs is also advised.",
       "durationSeconds": 3959,
       "conference": "first",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "7c-HrJmPj2Q",

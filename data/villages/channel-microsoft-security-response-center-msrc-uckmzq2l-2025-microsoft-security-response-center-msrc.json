@@ -221,14 +221,14 @@
       "slug": "bluehat-2026-pulling-strings-from-user-to-global-admin-via-appid",
       "title": "BlueHat 2026: Pulling strings: From user to global admin via appIdUris",
       "speakers": [],
-      "track": "community",
+      "track": "cloud",
       "topics": [
         "pulling",
         "string",
         "user"
       ],
-      "teaser": "Security researchers examine technical aspects of BlueHat 2026: Pulling strings: From user to global admin via appIdUris.",
-      "summary": null,
+      "teaser": "Shows how a low-privilege Entra user reached global admin by abusing a loosely validated OAuth audience string.",
+      "summary": "This talk looks at a part of OAuth that is often overlooked: the audience claim in access tokens and how Microsoft Entra handles application identifier URIs. By default, any user in a tenant can register an application, and a resource app can define its own roles that an administrator consents to. The speaker explains how these pieces fit together and why the audience tells a resource which service a token was issued for.\n\nThe research began with attempts to get around the verified-domain filter on identifier URIs, and that filter held up. Stepping back, the speaker noticed that the portal enforced URI formatting while the manifest accepted arbitrary strings. Comparing service principal names across tenants revealed that Azure AD Graph still accepted an old, non-URI identifier, microsoft.azure.activedirectory, which was unreserved in most tenants. By registering that string on a self-owned resource app, assigning it a role that allows role management, and requesting a token, a low-privilege user could add themselves to the global admin role.\n\nCameron Vincent from MSRC described the response. The case was triaged within minutes, and Microsoft stopped allowing arbitrary identifier strings by default, for both admins and non-admins. Developers were advised to validate the audience, tenant ID, subject, scope and roles claims, and to use the object ID rather than email or preferred username to identify users. The main takeaways are to keep accepted audiences in sync with what is reserved in Entra, and to return to a dead-end problem from a new angle.",
       "durationSeconds": 1827,
       "conference": "microsoft",
       "viewCount": 1000,
@@ -916,7 +916,7 @@
         "copilot",
         "studio"
       ],
-      "teaser": "Security researchers examine technical aspects of Security Research in Copilot Studio.",
+      "teaser": "Maps Copilot Studio's architecture and Power Platform integrations to show where security bugs hide and how to report them.",
       "summary": "### Overview\nIn this Microsoft Security Response Center (MSRC) virtual session, Security Program Manager Alyssa Str introduces Scott Gorick, Principal Security Architect for Power Platform and Dynamics. Gorick outlines the architecture of Microsoft Copilot Studio, details how it fits within the broader Power Platform and Microsoft Entra ecosystems, and provides guidance for external security researchers conducting vulnerability research and submitting high-efficacy bug reports to MSRC bounty programs.\n\n### Key Topics\n- **Trust Boundaries and Identity Plane**: Gorick explains that Microsoft Entra ID forms the identity plane and the primary trust boundary. The highest-tier bounty targets involve cross-tenant information disclosure, followed by environment-level boundary escapes, resource permissions, and data loss prevention (DLP) bypasses. Dataverse also implements its own distinct authorization model.\n- **Copilot Studio and Power Platform Composition**: The platform enables low-code/no-code, pro-code, and agentic workflows. Copilot Studio integrates tightly with over 1,000 pre-built connectors, Power Automate flows, Power Apps, Power Pages, Azure OpenAI, Azure AI Builder, and Azure Bot Service. Gorick demonstrates dynamic chaining, generative answers over public or uploaded data, and tracing mode for inspecting model decision-making.\n- **Platform Vulnerability vs. Developer Misconfiguration**: A core message is distinguishing between developer misconfigurations (e.g., publishing an unauthenticated bot with SharePoint access or testing as a tenant Global Admin who has default break-glass access) and legitimate platform vulnerabilities (e.g., bypassing configured DLP policies, security feature bypasses, IDOR, or SSRF).\n\n### Technical Details\n- **Vulnerability Surfaces**: Key areas for security testing include Server-Side Request Forgery (SSRF) when copilot fetches URLs for grounding, Insecure Direct Object References (IDOR) on admin/API endpoints, indirect prompt injection via conversational state stores or Dataverse, and file parsing/abuse from document uploads.\n- **Connector and Identity Abuse**: Referring to external research by Samsung regarding OAuth application consent abuse for zero-click phishing, Gorick highlights how connectors can be abused for identity risks, aligning with OWASP low-code/no-code top risks.\n- **Power Fx and Extensibility**: Power Fx acts as an expression language executing on nodes within agent flows or within Dataverse to concatenate strings and compose context. Pro-developer extensibility through Dataverse plugins and custom connectors provides critical attack surface often leveraged by top bug bounty researchers.\n- **Governance and Administration**: Central administration is performed via the Power Platform Admin Center (PPAC) and managed environments. Gorick notes that tools like the Center of Excellence (CoE) Starter Kit highlight the governance controls and milestones researchers should investigate when looking for bypasses.\n\n### Takeaways\nResearchers should understand how Copilot Studio composes underlying infrastructure (Azure OpenAI, Azure Bot Service, Dataverse) and focus on platform-level boundary violations rather than standard configuration choices. Staying within the Bounty Rules of Engagement, testing with low-privilege accounts rather than Global Admins, and understanding what assumptions the application makes are crucial steps for identifying significant zero-day vulnerabilities.",
       "durationSeconds": 3206,
       "conference": "microsoft",
@@ -928,19 +928,23 @@
       "youtubeId": "cvH9M_C7BR4",
       "slug": "zero-day-quest-microsofts-bug-bounty-program-and-ai-research",
       "title": "Zero Day Quest: Microsoft's Bug Bounty Program and AI Research",
-      "speakers": [],
+      "speakers": [
+        "Andrew",
+        "Lynn"
+      ],
       "track": "ai-security",
       "topics": [
         "ai",
         "bug-bounty",
         "zero-day"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Zero Day Quest: Microsoft's Bug Bounty Program and AI Research.",
-      "summary": null,
+      "teaser": "Explains Microsoft's AI bug bar and bounty program, covering prompt injection, model poisoning and inferential disclosure categories.",
+      "summary": "The session, part of Microsoft's Zero Day Quest research challenge, introduces the Microsoft Security Response Center's AI bug bounty program. Rewards for the Copilot scope have been doubled, with top awards now reaching $30,000. Only reports rated important or critical under the AI bug bar qualify for a payout.\n\nThe AI bug bar extends the existing Windows and online services bars with categories for AI systems. Inference manipulation includes prompt injection and input perturbation, model manipulation covers model and data poisoning, and inferential information disclosure covers training data reconstruction, membership and attribute inference, model stealing and input extraction. Severity rises with security impact and falls when the victim must take action. A hidden-text web page example shows how injected instructions can reach Copilot, and a later case used rendered image tags to exfiltrate data to an attacker server. Two lessons were highlighted: prompt injection must show a concrete security impact, and system prompt extraction is no longer in scope.\n\nFor newcomers, the speakers recommended hands-on challenges, conference recordings, research papers and other researchers' write-ups. Strong reports include the exact product URL, configuration choices, prompt text, evidence of the behaviour, and how often it reproduces. Reports are submitted through the researcher portal, where additional findings can be added later.",
       "durationSeconds": 3672,
       "conference": "microsoft",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "jq9DcEL3cHE",
@@ -1107,19 +1111,23 @@
       "youtubeId": "pyhhRbWh--E",
       "slug": "bluehat-oct-23-s05-octo-tempest-a-year-of-response",
       "title": "BlueHat Oct 23. S05: Octo Tempest: A Year of Response",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Wayman Ho",
+        "Riley Childs"
+      ],
+      "track": "threat-intel",
       "topics": [
         "octo",
         "tempest",
         "response"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for BlueHat Oct 23. S05: Octo Tempest: A Year of Response.",
-      "summary": null,
+      "teaser": "Traces the Octo Tempest group's shift from SIM swapping to ransomware, and the social engineering and identity tactics behind it.",
+      "summary": "Octo Tempest, a financially motivated group also tracked as Scattered Spider or Octopus, began around 2022 with SIM swapping and cryptocurrency theft against telecoms and crypto firms. By 2023 it had shifted toward data theft, extortion and ransomware, hitting large IT, retail, hospitality and entertainment organizations. The speakers describe its members as English-speaking people from Western countries, part of a wider online community called The Com. Initial access usually starts with lookalike domains, SMS phishing and fake login pages, plus impersonation of employees to help desks and pressure on overworked IT administrators.\n\nOnce inside, the group abuses tooling already present, such as EDR agents and enterprise software deployment platforms, to push its own credential stealers and persistence. It adds rogue federation providers to identity platforms, weakens conditional access rules, steals break-glass accounts and has joined incident response calls to read chats. Persistence hides among legitimate remote management tools and newly created virtual machines that mimic existing naming. Access can move from first foothold to global admin within 24 hours, and backup systems are also targeted.\n\nThe speakers recommend phishing-resistant MFA, compliant-device requirements that cover every location, and help desk procedures that refuse or escalate high-risk password and MFA resets. They urge least privilege and just-in-time access for EDR live response and deployment tools, blocking unapproved remote access software, and logging VM creation. Removing administrator privilege is a fast containment step, and incident teams should prepare out-of-band communications kept off corporate devices. They present the case as a pattern that similar criminal groups are likely to repeat.",
       "durationSeconds": 1998,
       "conference": "microsoft",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "psb7rLSWWmo",
@@ -1282,20 +1290,23 @@
       "youtubeId": "fqHqPOcpvZw",
       "slug": "bluehat-oct-23-day-2-keynote-jason-haddix",
       "title": "BlueHat Oct 23. Day 2 Keynote: Jason Haddix",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Jason Haddix"
+      ],
+      "track": "blue-team",
       "topics": [
         "jason",
         "haddix",
         "bluehat",
         "keynote"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for BlueHat Oct 23. Day 2 Keynote: Jason Haddix.",
-      "summary": null,
+      "teaser": "Walks through how threat actors breached a large gaming company using stolen cookies, and what defenders changed afterward.",
+      "summary": "This keynote is a case study of a serious intrusion at Ubisoft, a video game company with about 22,000 staff, carried out by several threat actors. The speaker, who was the company's CISO at the time, explains that the entry point was stolen session cookies and credentials bought cheaply from underground marketplaces. Many of these came from personal or home laptops used during the shift to remote work. Once inside, the attackers spent weeks reading internal wikis, tickets, logs and developer tooling to learn the network, and avoided the noisy techniques that usually trigger EDR alerts. Their aim was partly disruption rather than ransom, and they deleted virtual machines and backups.\n\nThe middle of the talk covers the response. Remaining devices moved to managed hardware with EDR, and personal antivirus was reimbursed for staff. Web session cookies were shortened to 24 hours and mobile sessions to one week. MFA changes were limited to trusted networks, number matching and login location maps were added, and hardware keys were rolled out in phases. Admin panels were placed behind jump hosts, and VM deletion on ESXi was blocked unless verified by hand. A secrets management program used pre-commit hooks, a vault with credential rotation, and repository scanning. The team also monitored dark web markets with sock puppet accounts and paid bug bounties for leaked company credentials.\n\nThe closing takeaways are to treat downtime as a core threat model, to lean on identity and session controls, to run secrets management as a funded program, and to watch criminal markets for your own data. The speaker also stresses sharing threat intelligence with peers and with local FBI field offices during a breach.",
       "durationSeconds": 2108,
       "conference": "microsoft",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "bJlqRrMdgjQ",
@@ -1520,12 +1531,13 @@
         "window",
         "registry"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning BlueHat Oct 23. S10: Exploring the Windows Registry as a Powerful LPE Attack Surface.",
-      "summary": null,
+      "teaser": "Walks through reverse engineering the Windows kernel registry and the bug classes that enable local privilege escalation.",
+      "summary": "The talk treats the Windows registry as a local attack surface, where a bug in its kernel implementation can let a low-privileged user reach kernel-level rights. The speaker, a Project Zero researcher, explains that the registry code has grown from a simple design in Windows NT 3.1 into a large mix of decades-old and recent code. Features such as registry virtualization, transactions and differencing hives add layers of state that interact in complicated ways.\n\nThe research method was to reverse engineer one self-contained component at a time in IDA, using public kernel symbols, then reason about its logic and how it interacts with other features. Three bug classes were highlighted: resource exhaustion that pushes hive and system-wide size quotas to reach rarely tested error paths, poor handling of partial failure in multi-step operations, and hive-format states that the loader accepts but the kernel never produces. A case study followed predefined keys, which slipped past safe handle wrappers in several system calls and led to crashes and a use-after-free. Microsoft later deprecated them. The speaker also described hive-based memory corruption, where out-of-bounds cell indexes can yield an address leak and arbitrary read and write, and walked through an exploit for one early bug that ended with a token swap to SYSTEM.\n\nThe work produced 33 issues in Project Zero's tracker, which were assigned 39 CVEs, most of them elevation of privilege. The takeaways are that the registry is underexplored and rewards deep, persistent analysis, and that vendors can gain the most by reducing attack surface and removing whole bug classes. Publishing more detailed public symbols would also save researchers considerable reverse engineering effort.",
       "durationSeconds": 2791,
       "conference": "microsoft",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "1l45-Y48Zf0",
@@ -1726,7 +1738,9 @@
       "youtubeId": "Q-FWpakkBFw",
       "slug": "bluehat-seattle-2019-modern-binary-analysis-with-ils",
       "title": "BlueHat Seattle 2019 || Modern Binary Analysis with ILs",
-      "speakers": [],
+      "speakers": [
+        "Peter LaFosse"
+      ],
       "track": "malware",
       "topics": [
         "binary-analysis",
@@ -1734,12 +1748,13 @@
         "seattle",
         "modern"
       ],
-      "teaser": "Security researchers examine technical aspects of BlueHat Seattle 2019 || Modern Binary Analysis with ILs.",
-      "summary": null,
+      "teaser": "Explains why intermediate languages suit binary analysis and compares several IL designs with live plugin demos.",
+      "summary": "Binary analysis works on compiled output, where variable names, types, and function boundaries are gone and must be inferred. The speakers argue that many of these gaps are undecidable, such as separating code from data or resolving indirect jumps, so analysis tools must plan for failures. Intermediate languages offer a smaller, more regular layer that can support analysis across architectures.\n\nThe survey compares IRs used for reverse engineering, including LLVM IR, Ghidra's P-code, IDA's microcode, radare's ESIL, and Binary Ninja's BNIL family. LLVM IR was built for emitting code rather than recovering it, though re-emitting lifted code for another architecture is an advantage. Before choosing an IL, the speakers suggest checking architecture and language coverage, lifting completeness, stack handling, and data-flow APIs.\n\nTwo demos followed on Binary Ninja. A crypto-constant plugin recognized MD5 and Kasumi constants in a library built from public source, and still found them after the constants were XORed, since it read values from the medium-level IL. A second plugin resolved functions loaded at runtime through dlsym and GetProcAddress, creating pointers that added cross-references a plain import list would miss. Analysis written against a tree-based IL can stay portable across platforms and architectures.",
       "durationSeconds": 2541,
       "conference": "microsoft",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "UktwgSxIGnc",
@@ -1766,19 +1781,22 @@
       "youtubeId": "GB7V9FbFA7g",
       "slug": "bluehat-seattle-2019-dont-forget-to-subscribe",
       "title": "BlueHat Seattle 2019 || Don't forget to SUBSCRIBE.",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Elvis Corrado"
+      ],
+      "track": "hardware",
       "topics": [
         "seattle",
         "forget",
         "subscribe"
       ],
-      "teaser": "Security researchers examine technical aspects of BlueHat Seattle 2019 || Don't forget to SUBSCRIBE..",
-      "summary": null,
+      "teaser": "Traces the path from JTAG shell access on an embedded device to a heap exploit chain in its UPnP service.",
+      "summary": "The talk starts with a consumer ARM-based network device whose firmware was not publicly available. The speaker found the FCC filing and internal photos, noticed unpopulated header pins that looked like JTAG, and wired them to an adapter. Using OpenOCD, he dumped memory from the running kernel, located the boot parameters, and redirected init so a shell started at boot.\n\nWith a shell, he reviewed the boot scripts and focused on the UPnP daemon handling WPS. The main binary was not position independent, and while the heap and libraries were randomized and DEP was enabled, the main binary's fixed addresses limited the options. An oversized timeout header in a subscribe request led to a crash, and changing the subscription duration gave him control of a register holding attacker data. He then sprayed the heap with subscription allocations, used a base64-encoded SOAP field to place gadgets without bad characters, and pivoted the stack with a memcpy gadget because a load-multiple instruction rejects the stack pointer. The chain eventually returned a shell after about 25 minutes.\n\nThe talk ends with a failed attempt to pivot through a local TCP service, followed by a test-case harness that discovers UPnP services and fuzzes them automatically. It rediscovered a known out-of-bounds read in miniupnpd caused by misusing snprintf's return value, which was already fixed upstream. The takeaway is to automate repetitive manual checks and save the exact request that caused each crash.",
       "durationSeconds": 2293,
       "conference": "microsoft",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "njfP1k52dbs",
@@ -1803,19 +1821,22 @@
       "youtubeId": "XmP9Rcn5fZo",
       "slug": "bluehat-seattle-2019-kubernetes-practical-attack-and-defense",
       "title": "BlueHat Seattle 2019 || Kubernetes Practical Attack and Defense",
-      "speakers": [],
+      "speakers": [
+        "Jay Beale"
+      ],
       "track": "cloud",
       "topics": [
         "kubernetes",
         "seattle",
         "kubernete"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for BlueHat Seattle 2019 || Kubernetes Practical Attack and Defense.",
-      "summary": null,
+      "teaser": "Walks through a live, demo-driven attack on an intentionally vulnerable Kubernetes cluster, from pod compromise to cloud takeover.",
+      "summary": "The speaker, Jay Beale, opens with a short overview of Kubernetes from an attacker's point of view. He covers the control plane, including the API server, the etcd state store, controllers and the scheduler, and the worker nodes running the kubelet and a container runtime. Each of these is a place where a misconfiguration can be abused. The rest of the session is a live demo against a deliberately vulnerable cluster, with each stage framed as defeating a character from a movie.\n\nThe attack starts with a web app that passes user input into a shell command, which gives remote command execution and a shell inside a pod. From there the default service account token is used to check what the pod is allowed to do. A neighbouring microservice that was not reachable from outside is then used to run commands, and a label-based service selector is abused by launching a rogue pod with matching labels, so that traffic meant for a backend service is redirected to the attacker. That yields another service account token. A Node.js serialization flaw in one microservice gives code execution, and an unauthenticated Redis instance that had been exposed inside the cluster leads to a node. From the node, the cloud metadata API returns instance credentials, a cluster state bucket in object storage holds admin tokens, and a pod that mounts the host filesystem gives root on the node. A tool called Peratis automates many of these checks.\n\nThe speaker stresses that none of these steps needed a CVE; they came from configuration. He closes with defenses that would have blocked parts of the chain: network policies to limit pod traffic and cloud API egress, pod security policies that stop host mounts and privileged containers, Linux capability limits, seccomp and AppArmor profiles, read-only root filesystems, and a service mesh that enforces identity and encryption between pods.",
       "durationSeconds": 2760,
       "conference": "microsoft",
       "viewCount": 2400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "M3OhEBVOeYY",
@@ -2000,8 +2021,10 @@
       "youtubeId": "aeeU2E8T5a8",
       "slug": "graph-for-security-workshop-scaling-graphical-analysis-leo-meyer",
       "title": "GRAPH FOR SECURITY WORKSHOP || Scaling Graphical Analysis, Leo Meyerovich",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Leo Meyerovich"
+      ],
+      "track": "blue-team",
       "topics": [
         "workshop",
         "graph",
@@ -2009,12 +2032,13 @@
         "analysi",
         "meyerovich"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for GRAPH FOR SECURITY WORKSHOP || Scaling Graphical Analysis, Leo Meyerovich.",
-      "summary": null,
+      "teaser": "Shows how graph models turn SOC logs and APIs into interactive investigations, with GPU scaling and a trafficking case study.",
+      "summary": "The talk starts from the cost of manual investigation. Analysts pivot by hand between SIEM logs, threat intelligence lookups and endpoint data, then repeat the same work when the time window grows. The speaker argues that a hypergraph built from log events, combined with a virtual graph over vendor APIs, gives responders one model they can click through. A notebook demo showed query results from Splunk and Kusto becoming an interactive graph, with edges colored by time to show what happened first.\n\nThe middle section covers automation and where graphs fit. Pivot steps can be saved as workflows that run from an alert, and the generated queries are often more thorough than what an analyst would type manually. Graphs work well for scoping, following progression over time and showing relationships, but the speaker stressed that they are not the answer to every problem. For a case study with an anti-trafficking group, business records and online reviews were scored with machine learning, then a simpler clustering method was run on the same data. Expanding the linked company metadata revealed a wider network of phone numbers and individuals. The speaker also described GPU-backed dataframes and graph algorithms that handle billions of edges interactively.\n\nThe closing part gives practical advice for graph projects. Many data projects fail, so the speaker recommended starting with one user and one useful result, not a large platform build. Teams should avoid asking people to remove existing tools, and should work first with a small group of enthusiastic champions. Shared playbooks for common incident types can encode best practice and set coverage goals for a team.",
       "durationSeconds": 2680,
       "conference": "microsoft",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "GermFKsD0UM",
@@ -2062,19 +2086,22 @@
       "youtubeId": "NrMBT7yvv2A",
       "slug": "graph-for-security-workshop-grapl-a-graph-platform-for-detection",
       "title": "GRAPH FOR SECURITY WORKSHOP || Grapl - a Graph platform for detection response, Colin O'Brien",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Colin O'Brien"
+      ],
+      "track": "blue-team",
       "topics": [
         "detection",
         "workshop",
         "graph"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for GRAPH FOR SECURITY WORKSHOP || Grapl - a Graph platform for detection response, Colin O'Brien.",
-      "summary": null,
+      "teaser": "Shows how a graph-based detection and response platform turns logs into linked entities for faster investigations.",
+      "summary": "Grapl is an open-source detection and response platform that stores security data as a graph instead of isolated log lines. The speaker argues that attackers exploit relationships between processes, files, networks and users, which log searches and SIEM joins handle poorly. Logs become subgraphs with server-side identity resolution, so reused process IDs stop causing confusion, and these merge into one master graph in near real time.\n\nDetections are Python analyzers that query this graph for suspicious structure. In one example, the signal is not the two normal binaries themselves but the unexpected parent-child link between them. Subgraphs carry risk scores, and lenses such as an asset view combine overlapping risks without extra correlation work. Because the rules are plain Python, they can be unit tested and linted, which helps alerts keep working as they are tuned.\n\nFor investigations, the speaker contrasts a hash-based lead that runs into search window limits and process ID recycling in a log store. In Grapl, an analyst opens a lens, creates an engagement and pivots through process ancestry with constant-time queries, while a Jupyter notebook records the steps for reuse and training. The platform runs largely on serverless AWS services and deploys with a short setup script. The takeaway is that modelling relationships directly makes detection and investigation faster and more compact.",
       "durationSeconds": 1924,
       "conference": "microsoft",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "tGWSnuyZ4GQ",
@@ -2285,7 +2312,7 @@
         "implants",
         "code"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || Memory Resident Implants Code injection is alive and well.",
+      "teaser": "Explains how memory-resident implants inject code without touching disk, and how defenders can still detect them.",
       "summary": "Luke Jennings surveys how attackers host implants entirely in memory without traditional exploits, beginning with reflective DLL injection and process hollowing, then tracing Sysmon signatures attackers bypass via atom bombing and anti-NtClose thread hijacks. He contrasts kernel-hooking limits with ETW and Defender ATP telemetry on Windows 10, and shows how memory forensics still catches meterpreter-style RWX regions even when API sequences vary. Jennings details real intrusions using DoublePulsar, WannaCry staging, Metasploit in energy-sector theft, and Isotope RAT kernel staging before discussing dotnet ghost pack loaders, JIT ETW visibility, and Gargoyle-like timer tricks that hide assemblies between executions.",
       "durationSeconds": 3161,
       "conference": "microsoft",
@@ -2542,12 +2569,13 @@
         "control",
         "blending"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || Overt Command & Control: The Art of Blending In.",
-      "summary": null,
+      "teaser": "Shows how red teams blend command and control traffic into trusted cloud services to evade web proxies and blue team detection.",
+      "summary": "The speakers argue that defenders now run web proxies with reputation databases, EDR and threat hunting, which makes traditional HTTPS and DNS command and control easy to spot. They describe tricks their red team has used to get around these controls: buying aged domains with good reputations, domain fronting (which they say is now largely dead), and splitting traffic into smaller chunks to avoid data loss prevention. They also described persistence that survives infrastructure being burned, though each method is unreliable and new domains stand out.\n\nThe main part introduces C3, a custom command and control framework. Its implants are written in C++, with relays on compromised hosts and a server relay that passes traffic to a Cobalt Strike team server. Extensibility comes from small channel and implant interfaces, so a new transport needs only a few methods. Channels shown include OneDrive through the Graph API, Outlook tasks over REST and Exchange Web Services, and file shares for internal movement. A live demo showed a phishing payload beaconing over OneDrive, then a new file share interface reaching a second host.\n\nIn closing, the speakers said the framework would be released within weeks and suggested that defenders look for suspicious patterns in cloud service traffic, though legitimate use makes that hard. In Q&A, they acknowledged that file share relays validate commands from the server relay, but that anyone with write access could still drop files. Their core point is that defenders who use available telemetry and understand how these channels look can still detect many of them, while blending into busy cloud services makes that harder.",
       "durationSeconds": 2500,
       "conference": "microsoft",
       "viewCount": 2300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "HQJdE0E9EI4",
@@ -2729,7 +2757,10 @@
       "youtubeId": "VeoXT0nEcFU",
       "slug": "bluehat-v18-first-strontium-uefi-rootkit-unveiled",
       "title": "BlueHat v18 || First STRONTIUM UEFI Rootkit Unveiled",
-      "speakers": [],
+      "speakers": [
+        "Jean Boutin",
+        "Frederick"
+      ],
       "track": "malware",
       "topics": [
         "rootkit",
@@ -2737,27 +2768,28 @@
         "strontium",
         "unveiled"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in BlueHat v18 || First STRONTIUM UEFI Rootkit Unveiled.",
-      "summary": null,
+      "teaser": "Traces a Sednit-linked trojanized LoJack agent to a UEFI rootkit found in a real-world attack.",
+      "summary": "ESET researchers Jean Boutin and Frederick present their analysis of a campaign attributed to the Sednit group, also tracked as Strontium and APT28. The group used a trojanized copy of the userland agent from the Computrace/LoJack anti-theft product. Earlier public research had shown that this agent's configuration was weakly protected, with a single-byte XOR key and no authentication, so an attacker who could overwrite the file could redirect the agent to a new server. Reused domains and IP addresses linked the samples to earlier Sednit operations.\n\nTelemetry then led the team to more components. A signed kernel driver gave low-level hardware access, one tool dumped the SPI flash firmware, and a second tool inserted a rootkit called SecDxe into the UEFI image and wrote it back to flash. The writer only succeeded on misconfigured platforms, because it exploited a race condition in the BIOS write-protection logic. The rootkit dropped the agent files and temporarily changed a Windows boot-execute registry value, then restored it so the change stayed hidden.\n\nFor practitioners, the talk shows that firmware persistence survives operating system reinstalls, and that reflashing alone does not remove the userland components. Secure Boot, current firmware and modern chipset protections are the main defences, and the speakers recommend firmware assessment tools to check whether protections are configured correctly.",
       "durationSeconds": 3137,
       "conference": "microsoft",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "oWDpP8ThGP8",
       "slug": "bluehat-v18-an-ice-cold-boot-to-break-bitlocker",
       "title": "BlueHat v18 || An Ice Cold boot to break bitlocker",
       "speakers": [],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "cold",
         "boot",
         "break",
         "bitlocker"
       ],
-      "teaser": "Security researchers examine technical aspects of BlueHat v18 || An Ice Cold boot to break bitlocker.",
-      "summary": null,
+      "teaser": "Shows how cold boot memory remanence, SPI flash tampering and EFI variables can recover BitLocker keys from a powered-off laptop.",
+      "summary": "Consultants tested a client's new Windows 10 laptop fleet, configured with Microsoft's recommended settings and BitLocker, against a stolen-laptop scenario. Network attacks and DMA ports were protected, so they chose a cold boot approach: chill the RAM so its contents survive power loss, then boot a separate tool to dump memory and extract the volume key.\n\nEarly dumps came back as zeroes because the firmware wiped memory at boot. Reading the SPI flash revealed a memory overwrite request flag stored in an EFI variable that is not integrity protected. The flag comes from the TCG platform reset mitigation specification, which asks firmware to wipe memory after a crash. The team built a cheap microcontroller-based programmer to clear that bit. In a recorded demo, a stolen laptop was opened, its RAM cooled, and the machine booted from USB; the volume key was recovered and the disk mounted in about two minutes. Secure Boot enrollment, boot order settings, BIOS passwords and tamper switches were also bypassed. Only a powered-off machine with a pre-boot BitLocker PIN resisted.\n\nTakeaways: build your own threat model rather than trusting a specification, keep firmware patched, and use pre-boot PINs and shutdown policies. After a loss, revoke credentials and treat returned devices with suspicion. The vendors described physical attacks as out of scope, and hardware memory encryption was offered as a longer-term fix.",
       "durationSeconds": 2862,
       "conference": "microsoft",
       "viewCount": 21000,
@@ -3030,8 +3062,8 @@
         "content",
         "dangerous"
       ],
-      "teaser": "Security researchers examine technical aspects of BlueHat v17 || Dangerous Contents - Securing .Net Deserialization.",
-      "summary": null,
+      "teaser": "Explains how insecure .NET deserialization enables code execution and outlines prevention and scanning steps.",
+      "summary": "Serialization turns in-memory objects into a stream that can be stored or sent and later rebuilt. The talk explains why this becomes dangerous in .NET: several deserializers read type names from the incoming data, so anyone who can alter that data can make the program create unexpected types. Framework types with side-effecting constructors, setters or finalizers can be chained into gadgets. A simple example used TempFileCollection with BinaryFormatter, where a crafted object deletes files when it is garbage collected.\n\nSeveral APIs are covered. BinaryFormatter is the most common risk and sits underneath features such as ASP.NET ViewState and resource files. JavaScriptSerializer is safe by default but becomes exploitable with a simple type resolver, and a payload that builds an XmlDocument can enable file disclosure or server-side request forgery. Json.NET with a non-default TypeNameHandling setting can bridge into BinaryFormatter through a WindowsIdentity gadget. ServiceStack.Text can be walked to a member of type object, and its later allow list still included every serializable class by default.\n\nAttacks need three conditions: a stream an attacker can modify, type information read from that stream, and no limit on the types created. Mitigations include keeping streams server-side or protecting them with an HMAC, preferring DataContractSerializer or XmlSerializer, and writing exact-match SerializationBinder allow lists that throw on unexpected types. ASP.NET machine keys should be guarded like admin passwords. To find exposure, search source code for TypeNameHandling and SimpleTypeResolver, and check web logs for base64 prefixes or $type markers.",
       "durationSeconds": 1381,
       "conference": "microsoft",
       "viewCount": 2200,
@@ -3120,19 +3152,22 @@
       "youtubeId": "9lYRIp_Xysg",
       "slug": "bluehat-v17-scaling-incident-response-5-keys-to-successful-defen",
       "title": "BlueHat v17 || Scaling Incident Response - 5 Keys to Successful Defense at Scale",
-      "speakers": [],
+      "speakers": [
+        "Matt Swan"
+      ],
       "track": "blue-team",
       "topics": [
         "incident-response",
         "incident",
         "response"
       ],
-      "teaser": "Security researchers examine technical aspects of BlueHat v17 || Scaling Incident Response - 5 Keys to Successful Defense at Scale.",
-      "summary": null,
+      "teaser": "Explains how incident response can scale to a fleet of 200,000 machines using inventory, forensics, IOC matching and fleet-wide jobs.",
+      "summary": "Matt Swan, whose team secures customer data in SharePoint Online and Office 365, explains why traditional incident response stops working at cloud scale. Running scripts across domains and querying event logs in Cosmos or HDInsight no longer keeps up when the fleet reaches over 200,000 machines and the logs reach terabytes per day. He presents five capabilities his team built to close that gap.\n\nThe early capabilities focus on visibility. A lightweight agent answers queries on each machine on a randomized schedule and reports to a cloud database, enabling historical tracking of fleet health. Agents also scan their local /24 subnets to find unmanaged Windows hosts, and that inventory can drive automated remediation and firewall configuration. For forensics, agents upload startup entries, local groups and certificates daily, and attach a snapshot of logged-in users, processes and loaded DLLs to real-time alerts. Executables go through a cloud workflow that runs PE Studio triage.\n\nThe later capabilities focus on hunting and eviction. An IOC store fed by findings from real incidents syncs to agents every 15 minutes, and a job system runs YARA scans across the fleet. In a red team exercise, new indicators produced a feedback loop that surfaced additional command and control infrastructure. For response, the team applied coordinated inoculation such as static routes, hosts file sinkholes and blocked image execution, and normalized data into Kusto with a shared schema so queries can span tables. He added that IP blackholing was still being built and needs guards against overly broad blocks.",
       "durationSeconds": 1380,
       "conference": "microsoft",
       "viewCount": 2300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Ays8GShgTQY",

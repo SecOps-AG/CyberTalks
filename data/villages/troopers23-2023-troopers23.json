@@ -576,17 +576,20 @@
         "side"
       ],
       "teaser": "Outlines (Windows) Hello from the other side and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Windows Hello for Business replaces passwords with a device-bound key, unlocked by a PIN or biometric, that signs users in to Azure AD. The speaker walks through how that key is provisioned: a device registration request sends a public key with an access token, with no attestation of where the key was generated. He then shows how a signed assertion is exchanged for a primary refresh token, and notes that the multi-factor requirement for enrollment was not enforced in the versions he tested.\n\nUsing single sign-on data from a compromised user session, an attacker without admin rights can register a software-held key, bypassing TPM protection and overwriting the legitimate device key without notifying the user. Users who can edit the searchable device keys property through the Azure AD Graph API can add such a key to other accounts, and a phished device code can supply the needed token. In hybrid setups using Cloud Kerberos trust, a partial ticket-granting ticket from Azure AD can be upgraded to a full TGT and the NT hash recovered, enabling movement into Active Directory. Protected groups are blocked, but the AD Connect sync account could be reached by giving a cloud account its security identifier and account name.\n\nThe issues were reported in October 2022 and largely fixed by May, with the enrollment requirement enforced and key property edits restricted. The takeaway is that Windows Hello for Business is still better than passwords but is weaker than Microsoft often suggests. Administrators should review deny lists and treat synced accounts as high-value targets.",
       "durationSeconds": 3429,
       "conference": "troopers",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "u-RsFCXMqfk",
       "slug": "the-power-of-coercion-techniques-in-windows-environments",
       "title": "The Power of Coercion Techniques in Windows Environments",
-      "speakers": [],
+      "speakers": [
+        "Martin"
+      ],
       "track": "blue-team",
       "topics": [
         "windows",
@@ -595,7 +598,7 @@
         "window"
       ],
       "teaser": "Reviews the Power of Coercion Techniques in Windows Environments and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk looks at coercion techniques in Windows Active Directory environments, where an attacker forces a machine such as a domain controller to authenticate to a host the attacker chooses. The speaker covers several RPC-based methods that can trigger this, including PetitPotam, the PrinterBug, DFSCoerce and an Outlook issue that prompts user credentials through a sound file. Microsoft has only partly addressed these, so several still work on fully patched servers. The usual defence, RPC filters, is a community suggestion rather than an official Microsoft recommendation.\n\nCoercion alone yields a machine account NTLM authentication that is hard to crack, so the demonstrations focus on relaying it. In one chain, a relayed domain controller authentication is sent to an AD Certificate Services web enrollment endpoint (ESC8), which issues a certificate that can be turned into a Kerberos ticket and then used to dump hashes. In another, a server where the machine account is a local administrator accepts the relayed authentication, giving the attacker admin access; the speaker links this to common Configuration Manager setups. A third path coerces a domain controller to a server with unconstrained delegation, where a forwarded ticket is dumped from memory and reused to reach the domain controller.\n\nThe speaker argues that the coercion bugs are unlikely to be fully fixed, so defenders should target the misconfigurations they depend on. His practical points are requiring SMB signing on servers, using constrained rather than unconstrained delegation, auditing machine accounts that hold local admin rights, correcting AD CS web enrollment settings and improving network segmentation. He also suggested blocking NTLM from tier-0 servers, while noting admins found this hard to deploy.",
       "durationSeconds": 2826,
       "conference": "troopers",
       "viewCount": 1100,

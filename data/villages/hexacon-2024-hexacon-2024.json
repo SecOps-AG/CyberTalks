@@ -53,19 +53,23 @@
       "youtubeId": "R33cR3ZMTxM",
       "slug": "hexacon2024-0-click-rce-on-tesla-model-3-through-tpms-sensors-by",
       "title": "HEXACON2024 - 0-click RCE on Tesla Model 3 through TPMS Sensors by David Berard & Thomas Imbert",
-      "speakers": [],
+      "speakers": [
+        "David Berard",
+        "Thomas Imbert"
+      ],
       "track": "red-team",
       "topics": [
         "rce",
         "tesla",
         "sensors"
       ],
-      "teaser": "Security researchers examine technical aspects of HEXACON2024 - 0-click RCE on Tesla Model 3 through TPMS Sensors by David Berard & Thomas Imbert.",
-      "summary": null,
+      "teaser": "Shows a zero-click remote code execution chain against a Tesla Model 3 through its tire pressure sensor pathway.",
+      "summary": "The talk covers a remote attack on the VCC, the Tesla Model 3 ECU that handles physical access control through phone keys, NFC cards and ultra-wideband, and that also hosts the tire pressure monitoring system. The firmware was extracted from the infotainment file system and runs on a PowerPC microcontroller using VLE encoding. The tire pressure sensors talk to the car over Bluetooth Low Energy with Protocol Buffers messages, and public projects helped the researchers recover the message definitions.\n\nWhile reversing the firmware, the researchers found an integer overflow in the handler for the certificate-in-parts message used when a new sensor is adopted. A very large start index defeats the bounds check, so a copy writes just before the certificate buffer and overwrites a function pointer. The firmware has no integrity checks, no randomization and no memory protection, so the researchers redirected execution to shellcode written in C that could call firmware functions and send messages on the vehicle CAN bus. Reaching the vulnerable code required a sensor in a disconnected state. They achieved this by racing the car to connect to a sensor during the auto-learn phase, using two ESP32 boards, since a Linux Bluetooth stack was too slow.\n\nThe exploit worked on the first attempt at the contest. The speakers point out that the impact includes opening and starting the car and sending commands to other ECUs, and that the attack can run on very cheap hardware. Tesla shipped a fixed firmware version with additional checks. The takeaway for practitioners is that standalone ECUs, which lack the layered defenses of the infotainment system, can be easier targets for vehicle research.",
       "durationSeconds": 1414,
       "conference": "hexacon",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "DSEDpTd3iic",

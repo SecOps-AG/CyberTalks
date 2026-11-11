@@ -156,11 +156,12 @@
         "side"
       ],
       "teaser": "Reviews breaking Container Boundary Using Side Channel Attack - Adhokshaj Mishra and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk asks whether two Docker containers on the same host can exchange data when they share nothing but a binary path. The answer uses a covert channel built on CPU temperature. The key observation is that containers read the host's hardware temperature sensors and get the same values as the host, unlike virtual machines, which receive virtualized or dummy readings.\n\nThe sender heats the processor by running tightly packed AVX floating-point instructions across all cores, then lets it cool, so heating and cooling represent bits. The bitstream is encoded with Manchester coding so the receiver can recover timing from the signal itself, and error correction codes guard against noise. The reader process polls the temperature sensor, samples at more than twice the modulation rate, and decodes the fluctuations. In a demo, two containers that shared only the path to the binaries exchanged 16 bits. Heating and cooling cycles took about two seconds each, with swings of roughly 20 to 25 degrees, and the speaker stressed these figures were only a rough reference that depends on the machine. At that pace, transmitting a 5 MB file would take many months, so the channel only suits very small, critical data.\n\nDetection is hard to generalize, so the speaker recommends first defining a threat model. Within that model, one can look for unusually wide, sustained temperature or frequency swings rather than normal spikes. The mitigation shown was blocking containers' access to the sensor path, which only addresses this specific demo. Broader restrictions on hardware access are difficult in practice, since software vendors often require privileged containers.",
       "durationSeconds": 3574,
       "conference": "security-fest",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "ShSR0c81h5U",
@@ -221,11 +222,12 @@
         "large"
       ],
       "teaser": "Presents hack the patch: and attack websites at large scale - Emil Trägårdh and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk explores how attackers exploit the gap between a security patch being released and it being applied. The speaker explains that anyone can compare an original release with its patched version, a technique called patch diffing, to find the flaw behind a one-day vulnerability before most sites are updated. Using a home-made tool that produces a side-by-side git view of changed files, he narrows a large codebase down to the few modified files that handle requests and permissions.\n\nWorking on a WordPress page builder plugin, the speaker shows that the vulnerable code relied on a nonce, a token meant to prevent request forgery, as its only check on a rendering action. The patch replaced this with a proper capability check. Because the nonce could be obtained by a logged-out visitor, the old check could be satisfied without administrator rights. He tests the behaviour on a local installation, then adapts the request so it can run against other sites. He then applies the same approach across a list of about 1.4 million domains, noting that a small fraction ran the affected software, which illustrates why such bugs are attacked at scale.\n\nThe closing part focuses on defence. The speaker cites a median time to patch of around 60 days, leaving a long window for one-day exploitation. He argues that general firewall rules rarely stop logic flaws like this, while virtual patches only arrive after a specific rule is written. Listeners are urged to limit internet exposure where possible, keep a tested disaster recovery plan, and recognise that AI tools may lower the skill needed for patch diffing in the future.",
       "durationSeconds": 2728,
       "conference": "security-fest",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "k7tQFrmlo2Q",
@@ -286,7 +288,7 @@
         "detection-engineering"
       ],
       "teaser": "Outlines day 2 and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This recording covers the Day 2 program of Security Fest 2024, a run of talks from the morning through the closing ceremony. It opens with a session on keeping Windows Exchange off the public internet by fronting it with mutual TLS, HAProxy and Nginx routing, and separated logs. Later speakers cover how AI tools lower the bar for deepfakes, fake news sites and evasive malware, and how a threat intelligence team searches sandbox reports in natural language. A web authentication talk follows, tracing account takeovers through registration endpoints, SSO trust gaps and email parsing quirks.\n\nLater sessions move to national digital identity and incident response. One researcher shows how a Polish mobile ID app's verification could be bypassed because the server never checked that the signed data belonged to the person presenting it, and how most verifiers relied on visual checks. An incident responder walks through triage on large networks, starting with antivirus logs, PowerShell script block logging, new service events, and tools such as Velociraptor and Hayabusa. The final technical demo compares patched and unpatched versions of an open-source page builder to show how quickly a fix can be turned into an exploit.\n\nThe main takeaways are to keep administrative and VPN services off the public internet, centralize and time-sync logs, enable PowerShell logging, validate identity data on the server, and shorten patch windows. The day closes with the capture-the-flag results and thanks to the organizers.",
       "durationSeconds": 28559,
       "conference": "security-fest",
       "viewCount": 1300,

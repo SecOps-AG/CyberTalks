@@ -1171,12 +1171,13 @@
         "seen",
         "principal"
       ],
-      "teaser": "Emilian Cebuc details Has Anyone Seen the Principal.",
-      "summary": null,
+      "teaser": "Shows how Azure service principals can be abused to escalate from application admin to global admin, with detection and prevention advice.",
+      "summary": "This talk looks at Azure ID (Entra ID) service principals, the non-user identities that applications use inside a tenant. The presenters argue that these are often overlooked in assessments, which tend to focus on Azure resources. A tenant with an E3 or E5 license has hundreds of first-party applications onboarded by default, and some of their service principals hold broad Microsoft Graph permissions. A 2019 study had found many such principals with heavy permissions. Two years later, the presenters found that most of them could no longer be signed into, though a few still carried useful application permissions.\n\nThe attack walkthrough starts with a compromised application administrator who adds a client secret to a first-party Office 365 Exchange Online service principal. That principal is used to add the administrator to a group with access to a production Key Vault. From the vault, the presenters retrieve the token for an automation account service principal, which has enough rights to add a user to the Global Administrator group. Storm Spotter, with Neo4j queries, helps map admins, group memberships and subscription roles to find such paths. First-party principal sign-ins do not appear in the usual sign-in logs, which makes them harder to spot.\n\nFor prevention, the presenters recommend least privilege for application admin roles, managed through Privileged Identity Management with time-boxed activation, plus MFA and conditional access. They also suggest restricting who can register and consent to applications, avoiding broad permissions such as directory read-write, and removing Azure resource roles that service principals do not need. For detection, they advise reviewing audit logs as well as sign-in logs, and using Storm Spotter queries on role assignments and password presence. They conclude that a layered monitoring approach is needed.",
       "durationSeconds": 1256,
       "conference": "fwd-cloudsec",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "QqYpbmFh1d8",
@@ -1588,12 +1589,13 @@
         "radiu",
         "automating"
       ],
-      "teaser": "Kinnaird McQuade analyzes \"Limiting Blast Radius by Automating IAM Policies using Policy Sentry\".",
-      "summary": null,
+      "teaser": "Shows how to generate scoped AWS IAM policies from resource ARNs and access levels using an open source CLI tool.",
+      "summary": "Machine roles attached to cloud workloads are attractive targets, yet their IAM policies are often far broader than they need to be. Developers usually write these policies and tend to fall back on managed policies, wildcard resources or wildcard actions just to get things working. The speaker presented two manual principles for least privilege: limit each statement to the specific resource ARN required, and restrict actions to access levels such as read and list instead of a whole-service wildcard. Repeating this by hand across thousands of roles is tedious, error prone and hard to audit.\n\nTo automate this, the speaker introduced Policy Sentry, an open source command line tool. Users generate a YAML template, paste resource ARNs under access level keys such as read, write, list, permissions management and tagging, and run the write command to produce a JSON policy. The tool draws on AWS documentation data bundled with it to select every action that matches each requested access level and resource type. In the live demo, an S3 bucket and a Systems Manager parameter were turned into scoped policies in seconds, and the tool does not call the AWS API.\n\nTemplates can be stored in Git and run inside a CI/CD pipeline, and a Terraform module for that was mentioned. Audience questions covered subfolder-level S3 paths, which the tool parses from the ARN format. The key takeaway is that generating policies from resource ARNs and access levels makes least privilege faster, repeatable and easier to audit without requiring deep IAM expertise.",
       "durationSeconds": 1002,
       "conference": "fwd-cloudsec",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "ph_sopC5_O4",
@@ -1678,12 +1680,13 @@
         "attack",
         "cloud"
       ],
-      "teaser": "Nick Jones explores \"Automating Attack Simulation in the Cloud\".",
-      "summary": null,
+      "teaser": "Shows how to turn cloud attack techniques into automated test cases that validate AWS detection coverage.",
+      "summary": "Detecting attacks in the cloud is harder than on premise because there are fewer clear signs of malicious intent. Behaviour that is normal in one AWS account can be suspicious in another, although organisation-wide CloudTrail makes the logs easier to collect. The talk also noted that attackers automate too, such as using CI/CD pipelines to start cryptomining rigs soon after leaked credentials are found, and that cloud techniques are less fully catalogued than Windows techniques in ATT&CK.\n\nThe middle of the talk presented Leonidas, an open-source tool that defines attack test cases in YAML, deploys them as Lambda functions behind an API, and compiles matching detections to Sigma rules. Each case also generates documentation and logs its parameters, identity and timestamps. A demo chained steps together: checking caller identity, reviewing GuardDuty and CloudTrail, creating a backdoor user with an API key, and retrieving a secret from Secrets Manager. Test runs can be scheduled, randomised, or combined with on-premise steps to simulate hybrid attacks.\n\nFor getting started, the speaker advised threat modelling the environment, codifying scenarios even as simple scripts, and confirming defenders can see the right telemetry before running attacks. Prioritise privileged, infrequent actions such as changes to GuardDuty or CloudTrail, and IAM changes made by unusual principals. Useful log sources include GuardDuty, VPC flow logs, S3 object-level logging, Lambda execution logs, and Kubernetes audit logs. Detection should be treated as an ongoing, iterative development project.",
       "durationSeconds": 1444,
       "conference": "fwd-cloudsec",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "aloi74MH4zk",
@@ -1699,12 +1702,13 @@
         "attacker",
         "perspective"
       ],
-      "teaser": "Abhisek Datta explores \"Kubernetes from an Attacker's Perspective\".",
-      "summary": null,
+      "teaser": "Walks through Kubernetes attack surface and a live demo escalating from a pod to node access via a hostPath mount.",
+      "summary": "The talk looks at Kubernetes from an attacker's point of view, starting with the architecture: the API server in front of etcd, the scheduler and controllers that enforce cluster state, and kubelets on worker nodes. It introduces a simple threat model built on three questions: who the attackers are, what they can reach, and how they get in. An external attacker has little to work with by default, so the focus is on exposed applications, the unauthenticated version endpoint on the API server, kubelet ports, and node port ranges left open when worker nodes lack a firewall. An attacker already inside a pod can list environment variables, which reveal services in the same namespace, and scan the pod and service networks, where unauthenticated message queues such as Kafka or RabbitMQ are often found.\n\nThe live demo starts from a pod whose default service account can create pods only in its own namespace. A new pod that mounts the node's root filesystem through a hostPath volume gives the attacker access to the host. From there, the attacker can chroot into the host, list containers through the container runtime, and use the kubelet's credentials to enumerate nodes and pods across the cluster. Redeploying the pod with a node name pins it to the machine running the target workload, so a chain of narrow permissions and defaults amounts to cluster-admin-like access.\n\nThe speaker notes that a pod security policy blocking hostPath mounts would stop this specific path. He points to a Kubernetes attack matrix that catalogues tools and tactics for both testers and defenders, along with a self-hosted lab and an intentionally vulnerable cluster for practice. The practical takeaways are to harden defaults, firewall worker nodes, and log pod creation so that these moves can be detected.",
       "durationSeconds": 1528,
       "conference": "fwd-cloudsec",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "_JGXdOyVugg",
@@ -1720,12 +1724,13 @@
         "what",
         "told"
       ],
-      "teaser": "Brandon Sherman explores \"What I wished someone told me before going multi-account\".",
-      "summary": null,
+      "teaser": "Covers how to structure and secure multi-account AWS environments, from blast radius and IAM to making the business case.",
+      "summary": "Moving to a multi-account AWS setup is as much an organizational task as a technical one. The speaker starts with shadow cloud accounts, which finance expense records can reveal. He then explains why account boundaries matter: each account is a hard wall, IAM grants apply to a specific principal within a specific account, and blast radius is therefore bounded by account. One unauthenticated Jenkins server leaked keys that gave admin access across a dozen accounts.\n\nNon-security stakeholders respond to dollar figures, so framing arguments around cost helps, since one account per team makes spend easy to attribute. Many AWS limits are hard limits set per account, so adding accounts can raise ceilings, though physical limits such as hardware-backed key services and network latency still apply. Connectivity choices like PrivateLink and cross-account role assumption each carry trade-offs. Humans still need access, so he advises giving them several roles per account, including a read-only one, rather than always using full admin rights.\n\nFor AWS Organizations, he advises keeping workloads out of the management account, avoiding moving accounts between organizations, and being careful about who can change service control policies. Logs and encryption keys belong in separate accounts. In the Q&A he suggested limiting account lifetimes and using red team exercises to find over-permissioned credentials, and warned that detaching an account from an organization is manual and can break things, so test with non-production accounts first.",
       "durationSeconds": 2393,
       "conference": "fwd-cloudsec",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "YGT_AmCA-eA",
@@ -1784,12 +1789,13 @@
         "controller",
         "rule"
       ],
-      "teaser": "Ian Mckay explores \"Creating the AWS Account Controller - Your rules don't apply to me\".",
-      "summary": null,
+      "teaser": "Shows how an open-source AWS tool automates creating and deleting short-term developer accounts, including steps the APIs lack.",
+      "summary": "Short-term sandbox accounts in AWS Organizations are easy to create but hard to delete. Deleting one requires a password reset, an emailed link, a payment method and phone verification on the root user before the account can leave the organization. The idea comes from re:Invent 2018 talks on developer accounts and budget-based deletion, and the speaker automates each manual step.\n\nThe open-source solution deploys as one CloudFormation stack. Puppeteer handles steps with no API, such as the reset flow, billing details and phone setup. A catch-all subdomain routes reset emails through SES inbound and S3 to a Lambda function that extracts the link. Passwords are generated and kept in Secrets Manager. For phone verification, an Amazon Connect instance plays DTMF tones through prompts so the displayed code can be entered. Removal from the organization fails within seven days of creation, so deletion waits until that window passes.\n\nThe live demo signs in through a custom SAML application, creates an account with a monthly budget, and deletes it. A budget alarm terminates accounts over the threshold, and a service control policy blocks changes to it. Optional features include separate create and delete components, budget caps, blocking long-term resources such as reserved instances, unsubscribing from marketing email, and a Control Tower mode using Service Catalog. The tool suits developer and sandbox accounts rather than production.",
       "durationSeconds": 1051,
       "conference": "fwd-cloudsec",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "5erD8yA6jjw",

@@ -229,8 +229,8 @@
         "coming",
         "collapse"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 03 - BruCON 0x11 - Epochalypse Now The Coming Collapse of Time Integrity Trey Darley Pedro Umbelino.",
-      "summary": null,
+      "teaser": "Explains the 2036 and 2038 time rollover risks, with exposure scans, affected device examples and steps for organisations to take.",
+      "summary": "The talk covers the time integrity problem behind two rollovers: the 32-bit NTP counter that wraps in February 2036, and the signed 32-bit Unix time counter that overflows in January 2038. The speakers trace how the time_t design pattern spread from C code into operating systems, databases, file formats, protocols and firmware. They compare the situation with Y2K and IPv4 exhaustion, and explain why dependencies between standards bodies make the affected surface hard to map.\n\nTo estimate exposure, the speakers combined scans and other data sources. Probes of SNMP and NTP mode 6 responses inferred processor architecture and kernel version, and about 14,000 of 20,000 systems with high-confidence fingerprints were vulnerable to the rollover. Automatic tank gauges that monitor fuel at stations and backup generators were tested and shown to fail, with remote logins breaking. Smart TVs and sinkhole telemetry were used as further heuristics.\n\nThe closing advice is to inventory assets, test systems in integration environments, and demand proof from vendors. Organisations should harden time sources by adopting authenticated NTS, using on-premise clocks, and isolating control planes from internet time servers. The speakers also argued that supply chain dependence and geopolitics make coordination essential, and urged attendees to raise the issue inside their organisations.",
       "durationSeconds": 3620,
       "conference": "brucon",
       "difficulty": "advanced",
@@ -446,8 +446,8 @@
         "firewall",
         "api-to-api"
       ],
-      "teaser": "Johan Caluwé investigates 05 - BruCON 0x10 - Bypassing firewalls with API-to-API Hacking.",
-      "summary": null,
+      "teaser": "Shows how chaining API calls and encoding transformations can slip payloads past a web application firewall to second-order APIs.",
+      "summary": "The talk covers how modern API-driven applications can be attacked through the calls they make to other APIs. A gateway API often forwards user input to a second, internal API, and that second API tends to trust traffic that has already passed the web application firewall. The speaker starts with a single document API where removing a key from the request body, rather than changing its value, made the access check evaluate to true and returned every document. No payload was needed, so the firewall had nothing to match.\n\nThe middle section moves to API-to-API cases. A reseller lookup endpoint passed a parameter into a path on an Elasticsearch-style backend, and injecting an index name and a create keyword turned a read-only store writable. In a search API, the two services had different maximum page sizes; one value accepted by the first service but rejected by the second leaked a stack trace containing credentials for back-office access. The speaker then shows how JSON Unicode escapes and URL percent-encoding are decoded at different hops, so a traversal string the firewall would block arrives decoded at the second API.\n\nThe takeaways are to validate input where it is actually used rather than only at the edge, to treat verbose errors and mixed status codes from internal calls as signs of a hidden service, and to test for missing values and chained encodings. The speaker notes that legacy codebases make complete validation hard, so testing and disclosure processes are also part of the defence.",
       "durationSeconds": 3053,
       "conference": "brucon",
       "difficulty": "advanced",
@@ -996,8 +996,8 @@
         "binary-analysis",
         "automating"
       ],
-      "teaser": "Gergely Revay examines 03 - BruCON 0x0D - Automating Binary Analysis with Ghidra's P-Code.",
-      "summary": null,
+      "teaser": "Shows how Ghidra's P-code intermediate representation can automate binary analysis, using COM object recovery as an example.",
+      "summary": "The speaker, a security researcher who started using Ghidra on a backdoor detection project, focuses on automating reversing with its intermediate representation, P-code. He compares scripting options: Jython-based Python support is limited and tied to Python 2, Ghidra Bridge allows Python 3, and he favors Java for the full SDK and Eclipse debugging. He also covers headless mode for standalone tools and the flat program API, roughly 150 methods meant to stay stable across releases.\n\nP-code makes side effects explicit, such as which instruction sets the zero flag behind a conditional jump. Low P-code translates each instruction directly, while high P-code produced by the decompiler exposes function arguments and variables. Two demos follow. The first script lists imported functions, then finds calls to COM functions such as CoCreateInstance and prints the P-code around each call site. The second reads the first and fourth arguments of that call from high P-code, recovering the CLSID and IID as readable UUIDs.\n\nThe main takeaway is that P-code allows architecture-independent analysis, so a tool may handle several processor families without rewriting. High P-code makes parameter recovery practical where assembly-level work would be tedious, though the demo only handles UUIDs hard-coded in the binary.",
       "durationSeconds": 2645,
       "conference": "brucon",
       "difficulty": "advanced",
@@ -1639,8 +1639,11 @@
       "youtubeId": "YGJaj6_3dGA",
       "slug": "12-brucon-0x0a-signaturesaredead-long-live-resilient-signatures",
       "title": "12 - BruCON 0x0A - $SignaturesAreDead = “Long Live RESILIENT Signatures” wide ascii nocase",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Daniel Bohannon",
+        "Matthew TT"
+      ],
+      "track": "blue-team",
       "topics": [
         "signaturesaredead",
         "resilient",
@@ -1648,8 +1651,8 @@
         "0x0a",
         "long"
       ],
-      "teaser": "Security researchers examine technical aspects of 12 - BruCON 0x0A - $SignaturesAreDead = “Long Live RESILIENT Signatures” wide ascii nocase.",
-      "summary": null,
+      "teaser": "Shows how to build detections that survive attacker changes, using regsvr32 and SCT file abuse as worked examples.",
+      "summary": "Daniel Bohannon and Matthew TT argue that hash, IP and domain indicators are brittle because attackers can change them cheaply, and they present a methodology for building detections that hold up from many angles. They define detection broadly, covering real-time and historical data on endpoints and networks. Their process starts by defining the target and the false positive tolerance, then collecting and generating samples, testing existing protections, writing broad rules and tuning them down, and validating against new true positives.\n\nFor malware binaries, they look beyond hashes at imports and exports, version information, certificates, resources, export timestamps, mutexes, named pipes and config artifacts. They group samples into families so that a detection built on the shared core can catch likely future variants. For regsvr32 abuse, they show how small changes to argument order, slashes, file extensions, process names, whitespace and quoting can defeat naive rules. They also show how the minimal required structure of an SCT file can serve as a stable anchor for network and endpoint detections, and how breaking logic into separate pieces avoids brittle regular expressions.\n\nThe talk closes by tying detection work to hunting and to coverage across the attack lifecycle. The speakers urge practitioners to understand the data limits of their tools, to compensate for gaps, and to automate repetitive questions so analysts can spend time on methodology rather than manual collection.",
       "durationSeconds": 3392,
       "conference": "brucon",
       "difficulty": "advanced",
@@ -1671,8 +1674,8 @@
         "finding",
         "0day"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding 11 - BruCON 0x0A - Finding 0days in embedded systems with code coverage guided fuzzing.",
-      "summary": null,
+      "teaser": "Shows how to emulate closed-source embedded firmware and run coverage-guided fuzzing through binary instrumentation to find bugs.",
+      "summary": "The talk tackles a practical gap in embedded security research. Many routers, cameras and IoT devices ship as closed-source binaries on restricted systems with no compiler, limited shells and slow tooling, which makes fuzzing them hard. The speakers explain why user-mode QEMU falls short when a firmware's listener daemon depends on a separate process that talks to the hardware, and why full-system emulation under a hypervisor was needed instead.\n\nTo get firmware running, they described collecting images from vendor websites, companion apps, traffic capture or chip-off flash extraction. They then worked through emulation problems: missing shared libraries fixed with soft links, a fake NVRAM fed over Unix domain sockets, a renamed network interface to satisfy wireless setup, and patching only as a last resort. Once the firmware ran, they added dynamic binary instrumentation to collect coverage without source. Their approach translates code and redirects execution to injected buffers, with support for several architectures and host operating systems.\n\nAs a case study, they examined a consumer router and found an exploitable issue in the international firmware that was not obvious in the regional edition, though a less obvious issue appeared there too. The takeaway is that coverage-guided fuzzing of whole embedded systems is feasible with these techniques. The speakers said the fuzzer was not yet released.",
       "durationSeconds": 3484,
       "conference": "brucon",
       "difficulty": "advanced",
@@ -1876,7 +1879,7 @@
       "speakers": [
         "Arnaud Soullié"
       ],
-      "track": "community",
+      "track": "ics-ot",
       "topics": [
         "dyode",
         "brucon",
@@ -1887,7 +1890,8 @@
       "durationSeconds": 2451,
       "conference": "brucon",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "0hnxgu8lkfc",
@@ -1939,15 +1943,15 @@
       "speakers": [
         "Matt Wixey"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "invisibly",
         "silently",
         "light",
         "sound"
       ],
-      "teaser": "Matt Wixey analyzes BruCON 0x09 - Hacking invisibly and silently with light and sound.",
-      "summary": null,
+      "teaser": "Shows how light and sound can carry commands and data across air-gapped systems and past physical alarms.",
+      "summary": "This talk explores ways to move commands and data across air-gapped machines using light and sound. It assumes malware is already on an isolated computer and focuses on controlling that malware and extracting small pieces of data, such as passwords or encryption keys. Demonstrations include steering malware through a laptop's ambient light sensor with a laser pointer, leaking a file by making tiny changes to screen brightness, and exchanging near-ultrasonic tones between laptops, with audible clicks removed by pre-faded audio. An image hidden in the spectrogram of an audio track is also shown as a covert exfiltration method.\n\nThe middle section turns to surveillance and physical security. A cheap laser microphone, built for about 30 pounds, recovers room speech from the vibrations in a window pane. The speaker tested nine infrared alarm systems and found that any remote disarmed any system. A phone-controlled device was shown that waits for a text message and then sends an infrared disarm signal. Ultrasonic echolocation pulses were used to confuse a drone's altitude sensor, causing it to climb, sink, or stop responding to commands. Lighter examples include delayed auditory feedback that disrupts speech and a music recogniser that switches off a television.\n\nFor defenders, the speaker recommends disabling ambient light sensors and microphones where they are not needed, using screen filters, and following Tempest guidance. For alarms, physical keypads are preferred over remotes, and any remotes should use tested rolling-code schemes with anti-jamming and be uniquely paired to each device. The overall point is that these techniques are cheap and leave little forensic trace, but they require physical proximity and are affected by the environment. The talk closes with plans for infrared-based acoustic keylogging and further drone research.",
       "durationSeconds": 3066,
       "conference": "brucon",
       "difficulty": "advanced",
@@ -2552,15 +2556,15 @@
         "Dhia Mahjoub",
         "Thomas Mathew"
       ],
-      "track": "community",
+      "track": "threat-intel",
       "topics": [
         "dns",
         "unified",
         "view",
         "track"
       ],
-      "teaser": "Dhia Mahjoub investigates BruCON 0x07 - Unified DNS View to Track Threats.",
-      "summary": null,
+      "teaser": "Shows how DNS query patterns from both sides of the recursive resolver expose malicious domains and their hosting.",
+      "summary": "The talk presents research that combines DNS data from below and above the recursive resolver into one view for tracking internet threats. The speakers explain that the resolver network sees tens of billions of queries a day, far more than analysts can review by hand. Classic reputation scoring struggles with domain generation algorithms, compromised legitimate sites and cheap bulk registrations, so the method instead watches client query patterns, which attackers find harder to control.\n\nThe detection pipeline flags domains whose traffic spikes within a two-hour window after a quiet history, then filters them by how long the spike lasts, which record types were queried and what active record probes return. A decision tree sorts the survivors into families, reducing around 100,000 candidates to roughly 50 or 60 for analysts. Examples include exploit kit landing domains, domain generation algorithm domains tied to banking trojans whose clients query in tight groups, fake software, browser lockers and phishing. Benign look-alikes such as Chinese SEO sites were separated using lexical cues and shared client IPs.\n\nThe second half pivots from confirmed domains into hosting infrastructure. Compromised domains gain extra subdomains pointing at other IPs, some domains resolve to several addresses for resilience, and shady or bulletproof hosters operate across jurisdictions. Pivots on neighboring IPs, server fingerprints and registrant emails surfaced further malicious domains, and one hosting prediction came true the following day. The takeaway is that traffic models seeded into a graph, paired with hosting analysis, can widen coverage without relying on URL or content inspection.",
       "durationSeconds": 3119,
       "conference": "brucon",
       "difficulty": "intermediate",
@@ -2582,8 +2586,8 @@
         "brucon",
         "0x07"
       ],
-      "teaser": "Alexandre Dulaunoy details BruCON 0x07 - CVE-Search.",
-      "summary": null,
+      "teaser": "Shows how the open-source CVE-Search tool keeps a local, offline copy of vulnerability data for fast lookups.",
+      "summary": "CVE-Search is an open-source Python tool for searching vulnerability data locally instead of sending queries to public websites. The talk traces its origins to a small script from 2012 built on NIST data, and explains why the project wanted an offline tool: keeping product searches internal, supporting fast lookups alongside network monitoring, and storing data in flexible structures. The architecture uses a core updater that pulls sources such as the NIST National Vulnerability Database, CPE dictionaries, CWE, vendor statements and cross-reference feeds into MongoDB, with Redis caching the web interface and API.\n\nThe middle of the talk covers how the data is used. Searches are driven by CPE product names, output can be JSON for Unix tools such as jq, and users can rank vulnerabilities by internal group, blacklist or whitelist software they do not run, and mark entries they have already reviewed. The speakers also showed analyses built on the data, such as counting how often vendors write \"unknown\" in advisories, with Oracle appearing often, and tracking CVSS medians for Sun and Oracle Java products after an acquisition. They described hard problems, including inconsistent CPE naming for libraries such as OpenSSL and vulnerabilities that never receive a CVE.\n\nThe closing part covered planned work: a management tool that assigns vulnerable systems to teams, pre-assignment tracking for issues without CVE IDs, scanning from nmap results, and better developer documentation. They also acknowledged the dual-use risk of automated exploitation and asked for openly licensed data feeds and contributions.",
       "durationSeconds": 2282,
       "conference": "brucon",
       "difficulty": "intermediate",
@@ -2734,8 +2738,8 @@
         "riot",
         "games"
       ],
-      "teaser": "Mark Hillick explores BruCON 0x07 - Levelling Up Security @ Riot Games.",
-      "summary": null,
+      "teaser": "Traces how a fast-growing game company built its security program from scratch, covering incidents, team alignment, and tooling.",
+      "summary": "Mark Hillick, who leads the security team for Riot Games in Europe, describes how the company built a security program from almost nothing over about two and a half years. He starts with the scale of the business, with around 17 offices worldwide, roughly 2,000 staff and a player base of about 70 million, and explains how fast cloud adoption led to sprawling per-team AWS accounts and VPN links. Several incidents shaped the approach: large NTP amplification and DDoS attacks against game services, an internal leak of unreleased material, and the loss of a password database.\n\nThe middle of the talk covers what the team changed. Awareness training was rebuilt around stories and feedback from engineers, and a secure code card was written together with developers. A community of practice failed to draw attendees, so security was instead presented inside other teams' existing groups. A request-for-comments process produced a standard for secure offices, which was later turned into machine-readable checks. Internal tools flagged untagged AWS instances, and a private bug bounty grew into a public one, with HackerOne findings linked to Jira. Hiring leaned on open-ended interviews and a practical test environment.\n\nThe closing section stresses alignment with product owners and tech leads, plain-language outreach, and the need to accept that not everything can be done at once. Mark admits the team was slow to communicate the real impact of breaches and plans to restructure around player-facing and corporate audiences. Audience questions covered DDoS resilience through points of presence closer to players, and code ownership.",
       "durationSeconds": 4584,
       "conference": "brucon",
       "difficulty": "intermediate",
@@ -2854,14 +2858,14 @@
       "speakers": [
         "Matthew Halchyshak Joseph Tartaro"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "necromancy",
         "resurrecting",
         "dead"
       ],
       "teaser": "Matthew Halchyshak Joseph Tartaro details BruCON 0x06 - Cyber necromancy - resurrecting the dead.",
-      "summary": null,
+      "summary": "The talk covers how the speakers brought back online play for Metal Gear Online on PS2 and PS3 after the publisher shut the servers down. Unlike PC games, the console titles offered no server to inspect, no packet captures, and little debugging, so the team had to rebuild the backend working only from the client. They redirected traffic with custom DNS, reimplemented the STUN and HTTP services, and got past the PS2 DNAS piracy and cheat check by using memory dumps from an emulator and cheat-code style memory writes. On the PS3 they patched binaries under custom firmware to skip PSN account and age checks, while SSL certificate pinning remained the main obstacle.\n\nThe custom game protocol turned out to be XOR-encoded with a hardcoded four-byte key, which the speakers spotted from the absence of null bytes. Decoded packets showed headers with sequence numbers, command codes and a hash, and the team mapped fields by replaying traffic, changing values and watching how the client reflected them back. Error codes in the first bytes helped locate handlers, and blank or fake success responses often let the client keep going. Unlocking items and settings was slow, tedious bit-level work, and joining a game was hardest because it needed several clients to agree. They found the relevant checks with static analysis in IDA, patched out one stats step, and eventually completed a join by validating the joining player ID.\n\nThe main takeaway is that packet captures make this kind of revival far easier than working from a client alone, and that a backend which accepts loosely formed requests can speed up client mapping. The speakers also noted the project took about ten months of part-time effort, and that community pressure and legal concerns were a real part of running a revived service.",
       "durationSeconds": 3054,
       "conference": "brucon",
       "difficulty": "advanced",
@@ -3567,7 +3571,10 @@
       "youtubeId": "slvT-GgOzQ0",
       "slug": "cyberwar-not-what-we-were-expecting",
       "title": "\"Cyberwar\" : Not What We Were Expecting",
-      "speakers": [],
+      "speakers": [
+        "Josh Corman",
+        "Jericho"
+      ],
       "track": "threat-intel",
       "topics": [
         "cyberwar",
@@ -3575,8 +3582,8 @@
         "what",
         "were"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning \"Cyberwar\" : Not What We Were Expecting.",
-      "summary": null,
+      "teaser": "Argues that cyber war is already underway and dismantles media hype, expert rhetoric and attribution myths.",
+      "summary": "The talk takes aim at how cyber war is discussed. The speakers argue that media coverage, pundits and think-tank papers lean on dramatic analogies such as Pearl Harbor and electronic Hiroshima instead of clear definitions. They note that the Pentagon described cyberspace without defining cyber war, and that many infrastructure incidents cited as cyber attacks are doubtful. A playful comparison of squirrel-caused outages with supposed cyber incidents suggests that historical harm has been far more mundane.\n\nThe middle section focuses on what is already widely accepted. Modern conflict spans several domains, targets extend to defense suppliers and private companies, and state-backed espionage has already cost large firms intellectual property. The speakers contrast the expense of nation-state weapons with reusable malware, and show that internet-exposed industrial controllers with default passwords can be reached with little skill. They also cover non-state actors, false flags that make attribution unreliable, and how propaganda spreads through social media.\n\nThe closing part considers private citizens who take part in conflict. Vigilante groups can disrupt government intelligence work, so the speakers look to historical letters of Mark as a model for bounded, structured participation. They advise any group to agree on principles, a code of conduct and exit conditions first. Their takeaway is that the community should decide what role it will play and prepare for it rather than simply reacting.",
       "durationSeconds": 3806,
       "conference": "brucon",
       "difficulty": "intermediate",

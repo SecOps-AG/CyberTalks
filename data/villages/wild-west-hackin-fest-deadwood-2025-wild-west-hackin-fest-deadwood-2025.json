@@ -219,7 +219,7 @@
         "jack"
       ],
       "teaser": "Explores mailFail: Spoof Emails in Seconds | Jack Hyland and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Jack Hyland, a penetration tester, presents a follow-up to his earlier research on email spoofing, picking up where SPF, DMARC and DKIM basics leave off. He introduces a browser extension he wrote that checks a domain's mail records, links each finding to the relevant RFC section, and generates the commands for each attack. Across roughly ten demonstrations, he shows how common misconfigurations let an attacker send mail that appears to come from a trusted sender.\n\nThe first group of cases targets authentication weaknesses. An open SMTP relay on a domain's authorized sending IP can deliver mail as that domain to any recipient, and it passes SPF and DMARC. A 512-bit DKIM key was factored with the number field sieve on a rented cloud machine in about two days, which allowed signing of spoofed messages, although the receiving provider still flagged the key as too small. DMARC policies set to none, or to a percentage below 100, let spoofed mail reach inboxes. Domains named in DMARC reporting addresses that were never registered can be claimed to collect failing mail. Microsoft 365 direct send accepted unauthenticated internal mail from outside, and the delivery notification option hid bounces from the victim.\n\nThe final cases cover DNS zone exposure. NSEC records let an attacker walk and enumerate a full zone, and NSEC3 hashes can be cracked offline. He also shows a reply-to header that sends replies to a lookalike domain. His practical advice is to deploy DKIM, set DMARC to reject or quarantine, and avoid the percentage tag.",
       "durationSeconds": 2659,
       "conference": "wwhf",
       "viewCount": 1300,
@@ -325,11 +325,12 @@
         "jame"
       ],
       "teaser": "Explores AI-Driven OSINT in the Hands of Cybercriminals | James McQuiggan and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This talk looks at how AI is changing open-source intelligence (OSINT), and how criminals can use the same tools defenders use. It starts with the reconnaissance stage of the attack chain and stresses that a finding only counts once several independent sources confirm it, citing past misidentifications during high-profile events.\n\nDemonstrations showed a chatbot generating Google dork queries and Shodan search filters on request, which could then be scripted, and workflow tools running daily port checks. For image geolocation, a dedicated tool placed one of two personal photos near the wrong city, while a general chatbot described both scenes at a regional level. A separate case showed a content creator's public profiles and voter records being linked to an address, phone number and family details in under half an hour.\n\nAttack examples included AI-written phishing in many languages and deepfake video calls. In one case, a finance chief approved a transfer of about 25 million after a video call with a deepfaked executive. In another, a job applicant used a face-swapped identity, got hired, and the laptop later showed malware activity within minutes of connecting; it was linked to a North Korean operative. The speaker urged verifying unexpected or urgent requests through a separate channel, treating voice and video with suspicion, using AI for threat intelligence and alert triage with humans still in charge, and checking what an organization's own exposure looks like.",
       "durationSeconds": 2775,
       "conference": "wwhf",
       "viewCount": 20000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "G7qafyzsKF8",
@@ -347,11 +348,12 @@
         "sean"
       ],
       "teaser": "Demonstrates from User to Entra ID Admin | Sean Metcalf and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk looks at how an ordinary user account can lead to full control of a Microsoft Entra ID tenant. The speaker separates the directory roles Microsoft tags as privileged from the highly privileged application permissions that effectively equal Global Administrator. He also covers default settings that let regular users register apps, consent to them and invite guests, along with hygiene problems seen in assessments, such as standard accounts in privileged roles, permanently active PIM assignments, and role-assignable groups whose owners are weakly protected.\n\nNext he walks through attack paths. Access tokens can be copied from a browser and replayed from another machine, and adversary-in-the-middle proxies can capture sessions even when MFA is enabled. An attacker who controls an account with application administrator rights, or an owner of a privileged application, can add a credential to that application and use its permissions to add a member to Global Administrator. Conditional access gaps are a major theme: MFA enforced only outside the corporate network, admins not covered by MFA, and exclusions that are never removed. Delegated partner administration and on-premises sync accounts with cloud rights can also cross tenant boundaries. The Midnight Blizzard intrusion serves as a case study. A password spray against a legacy test tenant led to malicious OAuth apps in the production tenant and access to Exchange Online mailboxes, and the intrusion was not detected until weeks later.\n\nFor defenders, the recommendations are to keep admin accounts cloud-only, require phishing-resistant MFA for the most privileged roles, use dedicated admin workstations, and protect break-glass accounts with hardware keys and loud alerting. He also advises enabling Entra password protection, reviewing consent grants, Exchange forwarding rules and mailbox permissions, and running the review tools he mentions. The overall message is that identity configuration determines how far an attacker can go once a single account is compromised.",
       "durationSeconds": 2919,
       "conference": "wwhf",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "pPRv5bha2PE",
@@ -458,11 +460,12 @@
         "testing-teaming"
       ],
       "teaser": "Analyzes powering Up Linux-Unleashing PowerShell for Penetration Testing and Red Teaming and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk argues that PowerShell remains relevant to attackers and testers, including on Linux. The speaker traces PowerShell for Linux from its early availability, describes a bug fixed with the Kali team where installing it removed existing tools, and cites a 2023 threat report that ranked PowerShell as the top attack vector. The benefits covered are fewer AMSI issues and limited logging, while the limitations include unsupported cmdlets and older versions breaking sessions.\n\nThe middle of the talk walks through scenarios from real assessments. Initial access can come from enabling a PowerShell subsystem in the SSH daemon config, which gives a PowerShell prompt over SSH. Enumerating user-created variables can reveal a stored credential object that can be exported and decoded back into a plaintext password. In a separate case, a Linux admin's PowerShell profile contained global variables with a username and password. In a rebuilt hybrid environment, that account turned out to hold domain admin rights. The speaker demonstrated Catalyst, a privilege-escalation checking script that runs through Invoke-Command in memory without touching disk, with a run-all mode covering shell history, cloud credentials, services and breakout checks.\n\nThe closing point is that these paths can avoid tools that antivirus and EDR often flag, such as Impacket, NetExec and CrackMapExec. The speaker suggests that PowerShell on Linux is advancing, and shares scripts and resources in the hope they help in future engagements.",
       "durationSeconds": 989,
       "conference": "wwhf",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "DqCLMuaXhQg",
@@ -721,11 +724,12 @@
         "line"
       ],
       "teaser": "Presents will It Run? Fooling EDRs With Command Lines Using Empirical Data | Wietze Beukema and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This talk looks at how attackers disguise command lines so endpoint detection tools miss what they are doing, a problem that grows as intrusions rely more on built-in Windows tools. Command lines reveal intent to defenders, so the aim is to keep a command working while changing its appearance. The speaker walks through concrete cases: swapping slashes for hyphens, using Unicode lookalike dashes that a terminal renders identically but logs record differently, substituting superscript letters that the Windows installer still accepts, switching slashes in URLs, inserting characters that certutil ignores, adding double quotes to scheduled task commands, and using path traversal into folders that do not exist. Each trick is paired with an open-source detection rule that it defeats.\n\nTo move beyond single examples, the speaker black-box tested nearly 70 Windows executables common in intrusions across eight obfuscation categories, including case changes, character insertion, shorthand, and URL notation. Reported results included double quotes accepted by about 93% of the binaries, option character substitution by about 72%, Unicode substitution or insertion by roughly one in four, shorthand by 6%, and alternative URL notation by 16% of those that take URLs. Each binary was described in a model file that was checked by repeated testing, and a generator produced obfuscated command lines that still ran. The tools and a web version were released.\n\nThe main takeaway is that the problem is widespread, will not disappear with patches, and cannot be solved by fixing single cases. Defenders should avoid relying on command-line keywords alone and prefer signals such as file writes to unexpected folders or network events. Rare Unicode characters and unusually many quotes are cheap to detect with little production impact. Testing detections against obfuscated variants is recommended, and Linux and macOS coverage is planned.",
       "durationSeconds": 2908,
       "conference": "wwhf",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     }
   ]
 }
