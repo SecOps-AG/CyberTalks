@@ -1222,6 +1222,33 @@
   display: none;
 }
 
+/* Tree / List switch, phones only. */
+.viewSwitch {
+  display: none;
+  gap: 0;
+  margin: 10px 12px 0;
+  border: 1px solid rgba(57, 255, 20, 0.3);
+  width: max-content;
+}
+
+.viewSwitch button {
+  min-height: 40px;
+  padding: 0 18px;
+  border: 0;
+  background: transparent;
+  color: rgba(125, 255, 106, 0.7);
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.viewSwitch button[aria-pressed="true"] {
+  background: rgba(57, 255, 20, 0.16);
+  color: #39ff14;
+}
+
 /* ---------- breakpoints ---------- */
 @media (max-width: 1100px) {
   .head {
@@ -1238,14 +1265,67 @@
     width: 100%;
   }
 
-  .desktopOnly {
+  .viewSwitch {
+    display: flex;
+  }
+
+  .board[data-phone-view="list"] .desktopOnly {
     display: none;
   }
 
-  .mobileOnly {
+  .board[data-phone-view="list"] .mobileOnly {
     display: grid;
     gap: 14px;
     padding: 12px;
+  }
+
+  /* Leave a strip of page above and below so a thumb can still scroll past the tree. */
+  .canvas {
+    height: clamp(420px, 70svh, 640px);
+  }
+
+  .canvasHead {
+    display: none;
+  }
+
+  .tierHead b {
+    font-size: 10px;
+  }
+
+  .tierHead span {
+    font-size: 8px;
+  }
+
+  .hint {
+    left: 66px;
+    right: 10px;
+    bottom: 12px;
+    font-size: 9px;
+  }
+
+  .controls button {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+
+  .zoomLevel {
+    bottom: 154px;
+  }
+
+  /* Pinching replaces the map on a small screen. */
+  .minimap {
+    display: none;
+  }
+
+  /* The talk card becomes a sheet along the bottom of the tree. */
+  .panelCard {
+    left: 8px;
+    right: 8px;
+    top: auto;
+    bottom: 8px;
+    width: auto;
+    max-height: 58%;
   }
 
   .find {
@@ -1255,6 +1335,27 @@
 
   .find input {
     width: 100%;
+  }
+}
+
+/* Phones turned sideways: short screen, so keep page above and below the tree. */
+@media (max-height: 560px) and (pointer: coarse) {
+  .canvas {
+    height: clamp(280px, 76svh, 560px);
+  }
+
+  .panelCard {
+    top: 8px;
+    bottom: 8px;
+    width: 320px;
+  }
+
+  .minimap {
+    display: none;
+  }
+
+  .zoomLevel {
+    display: none;
   }
 }
 
