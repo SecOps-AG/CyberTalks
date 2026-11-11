@@ -76,6 +76,36 @@ function curve(x1: number, y1: number, x2: number, y2: number) {
 
 const minutes = (seconds: number) => `${Math.round(seconds / 60)} min`;
 
+/** Below this canvas width the talk card becomes a sheet along the bottom. */
+const PHONE_W = 760;
+
+/**
+ * Zoom `v` to `k`, keeping the world point that was under (fromX, fromY) under (toX, toY).
+ * With from = to this is a plain zoom around a point; a pinch moves the point as the fingers move.
+ */
+function scaleAround(v: View, k: number, fromX: number, fromY: number, toX: number, toY: number): View {
+  const nk = clamp(k, MIN_K, MAX_K);
+  return { k: nk, x: toX - ((fromX - v.x) * nk) / v.k, y: toY - ((fromY - v.y) * nk) / v.k };
+}
+
+function reducedMotion() {
+  return typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+}
+
+/** True on touch screens, so hints talk about pinching instead of scrolling. */
+function useCoarsePointer() {
+  const [coarse, setCoarse] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia?.("(pointer: coarse)");
+    if (!mq) return;
+    const update = () => setCoarse(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+  return coarse;
+}
+
 export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
   const [fieldSlug, setFieldSlug] = useState(data.fields[0].slug);
   const [watched, setWatched] = useState<Set<string>>(() => new Set());
@@ -83,6 +113,8 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
   /** Ask the canvas to zoom to a talk; `n` makes a repeat request for the same talk count. */
   const [focus, setFocus] = useState<{ id: string; n: number } | null>(null);
   const [query, setQuery] = useState("");
+  /** Phones can switch between the zoomable tree and a plain list. */
+  const [phoneView, setPhoneView] = useState<"tree" | "list">("tree");
 
   const field: SkillField = data.fields.find((f) => f.slug === fieldSlug) ?? data.fields[0];
   const layout = useMemo(() => layoutField(field), [field]);
@@ -271,8 +303,16 @@ export function SkillTreeClient({ data }: { data: SkillTreeFile }) {
         </div>
       </section>
 
-      <section className={`panel ${styles.board}`}>
+      <section className={`panel ${styles.board}`} data-phone-view={phoneView}>
         {fieldNav}
+        <div className={styles.viewSwitch} role="group" aria-label="Show the tree as">
+          <button type="button" aria-pressed={phoneView === "tree"} onClick={() => setPhoneView("tree")}>
+            Tree
+          </button>
+          <button type="button" aria-pressed={phoneView === "list"} onClick={() => setPhoneView("list")}>
+            List
+          </button>
+        </div>
         <div className={styles.desktopOnly}>
           <TreeCanvas {...shared} focus={focus} />
         </div>
@@ -344,8 +384,48 @@ function TreeCanvas({
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [view, setView] = useState<View>({ x: 0, y: 0, k: 0.4 });
   const [dragging, setDragging] = useState(false);
-  const drag = useRef<{ x: number; y: number; vx: number; vy: number } | null>(null);
   const moved = useRef(false);
+  /** Fingers (or the mouse) currently down on the canvas, canvas-local pixels. */
+  const pointers = useRef(new Map<number, { x: number; y: number }>());
+  /** The gesture in progress, measured from where it started. */
+  const gesture = useRef<
+    | { mode: "pan"; x: number; y: number; view: View }
+    | { mode: "pinch"; dist: number; mx: number; my: number; view: View }
+    | null
+  >(null);
+  /** Recent pan positions, for the glide after a flick. */
+  const trail = useRef<{ t: number; x: number; y: number }[]>([]);
+  const glide = useRef(0);
+  const lastTap = useRef<{ t: number; x: number; y: number } | null>(null);
+  const coarse = useCoarsePointer();
+
+  // Gestures can fire many moves per frame; draw at most once a frame.
+  const latest = useRef(view);
+  latest.current = view;
+  const pending = useRef<View | null>(null);
+  const frame = useRef(0);
+  const draw = useCallback((v: View) => {
+    pending.current = v;
+    if (frame.current) return;
+    frame.current = requestAnimationFrame(() => {
+      frame.current = 0;
+      const next = pending.current;
+      pending.current = null;
+      if (next) setView(next);
+    });
+  }, []);
+  const current = () => pending.current ?? latest.current;
+  const stopGlide = () => {
+    cancelAnimationFrame(glide.current);
+    glide.current = 0;
+  };
+  useEffect(
+    () => () => {
+      cancelAnimationFrame(frame.current);
+      cancelAnimationFrame(glide.current);
+    },
+    [],
+  );
 
   // Measure the canvas.
   useEffect(() => {
@@ -366,18 +446,21 @@ function TreeCanvas({
     const availW = Math.max(300, size.w - 48);
     const availH = Math.max(280, size.h - HEAD - 20);
     const k = clamp(Math.min(availW / layout.width, availH / layout.height), MIN_K, MAX_K);
+    stopGlide();
+    pending.current = null;
     setView({ k, x: (size.w - layout.width * k) / 2, y: HEAD + (availH - layout.height * k) / 2 + 6 });
   }, [size.w, size.h, layout]);
 
   // Start zoomed out on the whole tree, and again on a new field or size.
   useEffect(fit, [fit]);
 
-  const zoomAt = useCallback((factor: number, cx: number, cy: number) => {
-    setView((v) => {
-      const k = clamp(v.k * factor, MIN_K, MAX_K);
-      return { k, x: cx - ((cx - v.x) * k) / v.k, y: cy - ((cy - v.y) * k) / v.k };
-    });
-  }, []);
+  const zoomAt = useCallback(
+    (factor: number, cx: number, cy: number) => {
+      const v = pending.current ?? latest.current;
+      draw(scaleAround(v, v.k * factor, cx, cy, cx, cy));
+    },
+    [draw],
+  );
   const zoomCenter = (factor: number) => zoomAt(factor, size.w / 2, (size.h + HEAD) / 2);
 
   // Wheel zooms the canvas; over the talk card, search box or map it scrolls that instead.
@@ -387,6 +470,8 @@ function TreeCanvas({
     const onWheel = (e: WheelEvent) => {
       if ((e.target as Element | null)?.closest?.("[data-stop]")) return;
       e.preventDefault();
+      cancelAnimationFrame(glide.current);
+      glide.current = 0;
       const r = el.getBoundingClientRect();
       zoomAt(Math.exp(-e.deltaY * 0.0015), e.clientX - r.left, e.clientY - r.top);
     };
@@ -398,14 +483,19 @@ function TreeCanvas({
     (id: string) => {
       const n = layout.byYoutubeId.get(id);
       if (!n || !size.w) return;
+      stopGlide();
+      pending.current = null;
       setView((v) => {
-        const k = Math.max(v.k, NAMES_AT + 0.2);
+        // On a phone the card covers the bottom, so the talk sits above it at a readable size.
+        const phone = size.w < PHONE_W;
+        const k = phone ? Math.max(v.k, 0.9) : Math.max(v.k, NAMES_AT + 0.2);
         // Leave room for the talk card on the right.
         const shift = size.w > 900 ? 180 : 0;
+        const cy = phone ? HEAD + (size.h * 0.42 - HEAD) / 2 + 20 : (size.h + HEAD) / 2;
         return {
           k,
           x: size.w / 2 - shift - (n.x + L.cardW / 2) * k,
-          y: (size.h + HEAD) / 2 - (n.y + L.cardH / 2) * k,
+          y: cy - (n.y + L.cardH / 2) * k,
         };
       });
     },
@@ -418,25 +508,134 @@ function TreeCanvas({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus]);
 
+  const local = (e: { clientX: number; clientY: number }) => {
+    const r = ref.current!.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  };
+
+  /** Start (or restart) a gesture from the fingers now down, so adding or lifting one never jumps the view. */
+  const begin = () => {
+    const pts = [...pointers.current.values()];
+    const view0 = current();
+    if (pts.length >= 2) {
+      const [a, b] = pts;
+      gesture.current = {
+        mode: "pinch",
+        dist: Math.max(1, Math.hypot(b.x - a.x, b.y - a.y)),
+        mx: (a.x + b.x) / 2,
+        my: (a.y + b.y) / 2,
+        view: view0,
+      };
+    } else if (pts.length === 1) {
+      gesture.current = { mode: "pan", x: pts[0].x, y: pts[0].y, view: view0 };
+    } else {
+      gesture.current = null;
+    }
+    trail.current = [];
+  };
+
   const onPointerDown = (e: React.PointerEvent) => {
-    if (e.button !== 0) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
     if ((e.target as Element).closest("[data-stop]")) return;
-    drag.current = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y };
-    moved.current = false;
+    stopGlide();
+    if (pointers.current.size === 0) moved.current = false;
+    pointers.current.set(e.pointerId, local(e));
+    // A second finger is always a pinch, never a tap.
+    if (pointers.current.size > 1) {
+      moved.current = true;
+      setDragging(true);
+      for (const id of pointers.current.keys()) ref.current?.setPointerCapture?.(id);
+    }
+    begin();
   };
+
   const onPointerMove = (e: React.PointerEvent) => {
-    const d = drag.current;
-    if (!d) return;
-    const dx = e.clientX - d.x;
-    const dy = e.clientY - d.y;
-    if (!moved.current && Math.abs(dx) + Math.abs(dy) < 5) return;
-    moved.current = true;
-    setDragging(true);
-    setView((v) => ({ ...v, x: d.vx + dx, y: d.vy + dy }));
+    if (!pointers.current.has(e.pointerId)) return;
+    pointers.current.set(e.pointerId, local(e));
+    const g = gesture.current;
+    if (!g) return;
+    if (g.mode === "pinch") {
+      const [a, b] = [...pointers.current.values()];
+      if (!b) return;
+      const dist = Math.max(1, Math.hypot(b.x - a.x, b.y - a.y));
+      // Zoom around the point between the fingers, and follow it as they move.
+      draw(scaleAround(g.view, (g.view.k * dist) / g.dist, g.mx, g.my, (a.x + b.x) / 2, (a.y + b.y) / 2));
+      return;
+    }
+    const p = pointers.current.get(e.pointerId)!;
+    const dx = p.x - g.x;
+    const dy = p.y - g.y;
+    if (!moved.current) {
+      // A finger wobbles more than a mouse; a small slip is still a tap.
+      if (Math.abs(dx) + Math.abs(dy) < (e.pointerType === "mouse" ? 5 : 10)) return;
+      moved.current = true;
+      setDragging(true);
+      ref.current?.setPointerCapture?.(e.pointerId);
+    }
+    const now = performance.now();
+    trail.current.push({ t: now, x: p.x, y: p.y });
+    while (trail.current.length > 2 && now - trail.current[0].t > 100) trail.current.shift();
+    draw({ ...g.view, x: g.view.x + dx, y: g.view.y + dy });
   };
-  const onPointerUp = () => {
-    drag.current = null;
+
+  /** After a flick, keep sliding and slow down. */
+  const flick = () => {
+    const tr = trail.current;
+    if (tr.length < 2 || reducedMotion()) return;
+    const a = tr[0];
+    const b = tr[tr.length - 1];
+    const dt = b.t - a.t;
+    if (dt <= 0 || performance.now() - b.t > 60) return;
+    let vx = (b.x - a.x) / dt;
+    let vy = (b.y - a.y) / dt;
+    if (Math.hypot(vx, vy) < 0.25) return;
+    let t0 = performance.now();
+    const step = (t: number) => {
+      const dt2 = Math.min(32, t - t0);
+      t0 = t;
+      const v = current();
+      draw({ ...v, x: v.x + vx * dt2, y: v.y + vy * dt2 });
+      const decay = Math.pow(0.995, dt2);
+      vx *= decay;
+      vy *= decay;
+      glide.current = Math.hypot(vx, vy) > 0.02 ? requestAnimationFrame(step) : 0;
+    };
+    glide.current = requestAnimationFrame(step);
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (!pointers.current.has(e.pointerId)) return;
+    const wasPan = gesture.current?.mode === "pan";
+    pointers.current.delete(e.pointerId);
+    if (pointers.current.size > 0) {
+      // Lifting one finger of a pinch hands over to a pan with the other.
+      begin();
+      return;
+    }
+    gesture.current = null;
     setDragging(false);
+    if (wasPan && moved.current) {
+      flick();
+      return;
+    }
+    // Double tap on open ground zooms in there, like a map.
+    if (e.pointerType !== "mouse" && !moved.current && e.type === "pointerup") {
+      const p = local(e);
+      const onTalk = (e.target as Element).closest("button");
+      const prev = lastTap.current;
+      if (!onTalk && prev && performance.now() - prev.t < 320 && Math.hypot(p.x - prev.x, p.y - prev.y) < 30) {
+        lastTap.current = null;
+        zoomAt(2, p.x, p.y);
+      } else {
+        lastTap.current = onTalk ? null : { t: performance.now(), x: p.x, y: p.y };
+      }
+    }
+  };
+
+  const onPointerLeave = (e: React.PointerEvent) => {
+    // A captured pointer keeps the gesture going outside the canvas.
+    if (ref.current?.hasPointerCapture?.(e.pointerId)) return;
+    if (e.pointerType === "mouse") onPointerUp(e);
   };
 
   const k = view.k;
@@ -489,7 +688,9 @@ function TreeCanvas({
     const m = e.currentTarget.getBoundingClientRect();
     const wx = (e.clientX - m.left - mini.ox) / mini.s;
     const wy = (e.clientY - m.top - mini.oy) / mini.s;
-    setView((v) => ({ ...v, x: size.w / 2 - wx * v.k, y: (size.h + HEAD) / 2 - wy * v.k }));
+    stopGlide();
+    const v = current();
+    draw({ ...v, x: size.w / 2 - wx * v.k, y: (size.h + HEAD) / 2 - wy * v.k });
   };
 
   const sel = selected ? layout.byYoutubeId.get(selected) : undefined;
@@ -504,7 +705,8 @@ function TreeCanvas({
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      onPointerLeave={onPointerUp}
+      onPointerCancel={onPointerUp}
+      onPointerLeave={onPointerLeave}
     >
       <div
         className={`${styles.world} ${near ? "" : styles.far}`}
@@ -609,6 +811,15 @@ function TreeCanvas({
                   return;
                 }
                 setSelected(t.youtubeId);
+                // On a phone the card covers the bottom; slide the talk up above it.
+                if (size.w < PHONE_W) {
+                  stopGlide();
+                  const v = current();
+                  const top = v.y + t.y * v.k;
+                  const want = HEAD + 8;
+                  const room = size.h * 0.42 - HEAD - L.cardH * v.k;
+                  if (top < want || top > want + Math.max(0, room)) draw({ ...v, y: v.y + want - top });
+                }
               }}
             >
               <span className={styles.hex}>
@@ -659,7 +870,15 @@ function TreeCanvas({
           FIT
         </button>
       </div>
-      <div className={styles.hint}>{near ? "Drag to pan · scroll to zoom" : "Scroll or press + to zoom in and read talk names"}</div>
+      <div className={styles.hint}>
+        {coarse
+          ? near
+            ? "Drag to move · pinch to zoom"
+            : "Pinch or double tap to zoom in"
+          : near
+            ? "Drag to pan · scroll to zoom"
+            : "Scroll or press + to zoom in and read talk names"}
+      </div>
 
       <div
         className={styles.minimap}
