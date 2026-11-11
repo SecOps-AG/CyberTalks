@@ -14,17 +14,19 @@ import { usePush } from "@/components/push/PushPage";
 import {
   computeFacets,
   countActive,
+  createTextMatcher,
   EMPTY_FILTERS,
   filtersFromParams,
   filtersToQuery,
   filterTalks,
-  mergeSummaries,
+  markSummaryMatches,
   PAGE_SIZE,
   paginate,
   queryTerms,
   sortTalks,
   toggleValue,
   withHaystack,
+  withSummaries,
   type Facets,
   type Filters,
   type SortKey,
@@ -34,7 +36,7 @@ import { inDefconVillage } from "@/lib/hubs";
 import { fetchAdditionalTalkIndexChunks } from "@/lib/fetch-talk-index";
 import { archiveSearchHref, searchVariantRel } from "@/lib/search-index/href";
 import { summaryYearsToLoad } from "@/lib/summary-years";
-import type { TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
+import type { SearchEntry, TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
 
 type Dimension =
   | "conferences"
@@ -111,6 +113,17 @@ export type TalkBrowserProps = {
   /** Offer the "Not on YouTube" materials filter (media-archive recordings). */
   notYouTubeFilter?: boolean;
 };
+
+/** Shortest search text that filters the catalog. */
+const MIN_QUERY_LENGTH = 2;
+/** How many recent queries keep their results for instant backspacing. */
+const RESULT_CACHE_SIZE = 32;
+type CachedResults = { facets?: Facets; sorted?: SearchEntry[] };
+
+/** Pause in typing, in ms, before the results catch up with the box. */
+const QUERY_SETTLE_MS = 90;
+/** Shortest gap between catalog updates while index shards are arriving. */
+const CATALOG_FLUSH_MS = 500;
 
 const SORTS: { value: SortKey; label: string }[] = [
   { value: "relevance", label: "Relevance" },
@@ -214,6 +227,21 @@ export function TalkBrowser({
 
     setCatalogLoading(true);
 
+    // Shards land a few dozen at a time. Each new list re-filters and re-sorts
+    // the whole catalog, so apply them at most a few times a second rather
+    // than once per shard, which would keep the page busy while someone types.
+    let pending: TalkIndexEntry[] | null = null;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    let applied = false;
+    const flush = () => {
+      timer = null;
+      if (cancelled || !pending) return;
+      setRemoteTalks(pending);
+      setCatalogReady(true);
+      pending = null;
+      applied = true;
+    };
+
     fetchAdditionalTalkIndexChunks({
       years: hintYears.length > 0 ? hintYears : undefined,
       conferences: hintConferences.length > 0 ? hintConferences : undefined,
@@ -223,13 +251,21 @@ export function TalkBrowser({
       onChunk: (talks, meta) => {
         if (cancelled) return;
         if (meta.file) loadedChunkFilesRef.current.add(meta.file);
-        setRemoteTalks(talks);
-        setCatalogReady(true);
-        setCatalogLoading(!meta.complete);
+        pending = talks;
+        if (!applied || meta.complete) {
+          if (timer) clearTimeout(timer);
+          flush();
+        } else if (!timer) {
+          timer = setTimeout(flush, CATALOG_FLUSH_MS);
+        }
+        if (meta.complete) setCatalogLoading(false);
       },
     })
       .then(({ talks, loadedFiles }) => {
         if (cancelled) return;
+        if (timer) clearTimeout(timer);
+        timer = null;
+        pending = null;
         for (const file of loadedFiles) loadedChunkFilesRef.current.add(file);
         setRemoteTalks(talks);
         setCatalogReady(true);
@@ -243,6 +279,7 @@ export function TalkBrowser({
 
     return () => {
       cancelled = true;
+      if (timer) clearTimeout(timer);
       controller.abort();
     };
   }, [remoteIndex, ready, yearFilterKey, conferenceFilterKey]);
@@ -311,6 +348,40 @@ export function TalkBrowser({
     setReady(true);
   }, [syncUrl, allExtras]);
 
+  // Summary shards arrive one year at a time. Folding each into the search
+  // text rebuilds every result, so they are applied together a few times a
+  // second instead of once per year.
+  const summaryQueueRef = useRef<TalkSummaryEntry[][]>([]);
+  const summaryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const queueSummaries = useCallback((entries: TalkSummaryEntry[]) => {
+    summaryQueueRef.current.push(entries);
+    if (summaryTimerRef.current) return;
+    summaryTimerRef.current = setTimeout(() => {
+      summaryTimerRef.current = null;
+      const batches = summaryQueueRef.current;
+      summaryQueueRef.current = [];
+      setSummaries((prev) => {
+        let changed = false;
+        const next = new Map(prev);
+        for (const batch of batches) {
+          for (const entry of batch) {
+            if (entry.summary && next.get(entry.id) !== entry.summary) {
+              next.set(entry.id, entry.summary);
+              changed = true;
+            }
+          }
+        }
+        return changed ? next : prev;
+      });
+    }, CATALOG_FLUSH_MS);
+  }, []);
+  useEffect(
+    () => () => {
+      if (summaryTimerRef.current) clearTimeout(summaryTimerRef.current);
+    },
+    [],
+  );
+
   // One fetch per year. Later list changes (chunks, filters) must not refetch
   // a shard that already landed. The browser cache can reuse the response.
   useEffect(() => {
@@ -327,29 +398,31 @@ export function TalkBrowser({
             return;
           }
           const entries: TalkSummaryEntry[] = await res.json();
-          setSummaries((prev) => {
-            let changed = false;
-            const next = new Map(prev);
-            for (const entry of entries) {
-              if (entry.summary && next.get(entry.id) !== entry.summary) {
-                next.set(entry.id, entry.summary);
-                changed = true;
-              }
-            }
-            return changed ? next : prev;
-          });
+          queueSummaries(entries);
         } catch {
           loadedSummaryYearsRef.current.delete(year);
         }
       })();
     }
-  }, [talks]);
+  }, [talks, queueSummaries]);
 
+  // The box shows every keystroke at once. Results follow once typing pauses
+  // for a moment, so a burst of keys costs one search instead of one per key.
+  // Clearing the box applies straight away.
+  const [settledQuery, setSettledQuery] = useState(draftQuery);
+  useEffect(() => {
+    const delay = draftQuery.trim() === "" ? 0 : QUERY_SETTLE_MS;
+    const timer = setTimeout(() => setSettledQuery(draftQuery), delay);
+    return () => clearTimeout(timer);
+  }, [draftQuery]);
   // Typing stays responsive at thousands of talks: the list lags a frame, the input never does.
-  const deferredQuery = useDeferredValue(draftQuery);
+  const deferredQuery = useDeferredValue(settledQuery);
+  // One letter matches nearly every talk, so it is not worth recounting the
+  // whole catalog for: results start at the second character.
+  const searchQuery = deferredQuery.trim().length >= MIN_QUERY_LENGTH ? deferredQuery : "";
   const effective = useMemo<Filters>(
-    () => ({ ...filters, q: deferredQuery }),
-    [filters, deferredQuery],
+    () => ({ ...filters, q: searchQuery }),
+    [filters, searchQuery],
   );
 
   // A new query is a new result set, so it goes back to page 1.
@@ -370,13 +443,13 @@ export function TalkBrowser({
   }, [filters, draftQuery, syncUrl, ready]);
 
   // Search text is derived here rather than shipped: see withHaystack.
-  // Summaries are merged in when available, enriching the haystack without blocking initial render.
-  const searchable = useMemo(() => {
-    const base = withHaystack(talks);
-    if (summaries.size === 0) return base;
-    const terms = queryTerms(draftQuery);
-    return mergeSummaries(base, summaries, terms);
-  }, [talks, summaries, draftQuery]);
+  // It depends on the talks and the loaded summaries only, never on the query,
+  // so a keystroke does not rebuild it for the whole catalog.
+  const baseSearchable = useMemo(() => withHaystack(talks), [talks]);
+  const searchable = useMemo(
+    () => withSummaries(baseSearchable, summaries),
+    [baseSearchable, summaries],
+  );
 
   const activeCount = countActive({ ...filters, q: draftQuery });
   // Until the listing or the remote catalog lands, the rail shows the server's
@@ -385,23 +458,62 @@ export function TalkBrowser({
   const catalogPending = Boolean(remoteIndex) && catalogLoading;
   const serverFacets =
     initialFacets != null && activeCount === 0 && (listingPending || catalogPending);
-  const facets = useMemo(
-    () =>
-      serverFacets && initialFacets
-        ? initialFacets
-        : computeFacets(searchable, effective, { alwaysShowDifficulties }),
-    [serverFacets, initialFacets, searchable, effective, alwaysShowDifficulties],
+  // Match the search text once per (deferred) keystroke; facets and results
+  // both start from this list. Typing forward narrows the previous matches.
+  const matchTextRef = useRef<ReturnType<typeof createTextMatcher> | null>(null);
+  matchTextRef.current ??= createTextMatcher();
+  // Summaries only matter to the text match. With no query the plain entries
+  // are used, so a summary shard landing does not redo the default listing.
+  const source = searchQuery ? searchable : baseSearchable;
+  const textMatched = useMemo(
+    () => matchTextRef.current!(source, searchQuery, filters.includeExtras),
+    [source, searchQuery, filters.includeExtras],
   );
-  const filtered = useMemo(() => filterTalks(searchable, effective), [searchable, effective]);
+  // Results for queries already shown, so backspacing (or clearing the box)
+  // redraws from memory. The no-query listing has its own slot, which a
+  // summary shard landing does not empty. Both empty when talks or filters change.
+  const defaultCache = useMemo(
+    () => new Map<string, CachedResults>(),
+    [baseSearchable, filters, alwaysShowDifficulties, pinPopularDc34],
+  );
+  const queryCache = useMemo(
+    () => new Map<string, CachedResults>(),
+    [searchable, filters, alwaysShowDifficulties, pinPopularDc34],
+  );
+  const resultCache = searchQuery ? queryCache : defaultCache;
+  const cached = (q: string) => {
+    let hit = resultCache.get(q);
+    if (!hit) {
+      if (resultCache.size >= RESULT_CACHE_SIZE) {
+        resultCache.delete(resultCache.keys().next().value!);
+      }
+      hit = {};
+      resultCache.set(q, hit);
+    }
+    return hit;
+  };
+  const facets = useMemo(() => {
+    if (serverFacets && initialFacets) return initialFacets;
+    const hit = cached(effective.q);
+    hit.facets ??= computeFacets(source, effective, { alwaysShowDifficulties }, textMatched);
+    return hit.facets;
+  }, [serverFacets, initialFacets, source, effective, alwaysShowDifficulties, textMatched, resultCache]);
   const sorted = useMemo(() => {
+    const hit = cached(effective.q);
+    if (hit.sorted) return hit.sorted;
     const pin =
       pinPopularDc34 &&
       effective.sort === "relevance" &&
       queryTerms(effective.q).length === 0 &&
       countActive(effective) === 0;
-    return sortTalks(filtered, effective.sort, effective.q, { pinPopularDc34: pin });
-  }, [filtered, effective, pinPopularDc34]);
-  const paged = useMemo(() => paginate(sorted, effective.page), [sorted, effective.page]);
+    const filtered = filterTalks(source, effective, textMatched);
+    hit.sorted = sortTalks(filtered, effective.sort, effective.q, { pinPopularDc34: pin });
+    return hit.sorted;
+  }, [source, effective, textMatched, pinPopularDc34, resultCache]);
+  const paged = useMemo(() => {
+    const page = paginate(sorted, effective.page);
+    return { ...page, items: markSummaryMatches(page.items, effective.q) };
+  }, [sorted, effective.page, effective.q]);
 
   const update = useCallback((patch: Partial<Filters>) => {
     // Any change to the result set sends you back to page 1.

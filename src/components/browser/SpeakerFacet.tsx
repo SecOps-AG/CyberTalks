@@ -14,6 +14,20 @@ const REGULARS = 6;
  * type-ahead — the current selection, a search over every name in the results,
  * and the few people credited more than once. Same shape as TopicFacet.
  */
+/**
+ * The name check runs over every speaker in the facet each time the results
+ * change. Names do not change, so remember each answer.
+ */
+const personCache = new Map<string, boolean>();
+function isPerson(label: string): boolean {
+  let known = personCache.get(label);
+  if (known === undefined) {
+    known = isLikelyPersonSpeaker(label);
+    personCache.set(label, known);
+  }
+  return known;
+}
+
 export function SpeakerFacet({
   options,
   selected,
@@ -31,7 +45,7 @@ export function SpeakerFacet({
   const query = needle.trim().toLowerCase();
 
   const personOptions = useMemo(
-    () => options.filter((option) => isLikelyPersonSpeaker(option.label)),
+    () => options.filter((option) => isPerson(option.label)),
     [options],
   );
 

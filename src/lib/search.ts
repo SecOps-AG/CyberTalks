@@ -131,55 +131,76 @@ export function buildIndexEntry(talk: Talk): TalkIndexEntry {
 }
 
 /**
- * Derive the search text client-side. One pass over the index at mount costs a
- * few milliseconds; shipping it would roughly double the payload, since every
- * word in it is already present in the fields it is built from.
+ * Derive the search text client-side. Shipping it would roughly double the
+ * payload, since every word in it is already present in the fields it is
+ * built from.
  *
- * Summary text is merged in later, fetched on-demand from per-year shards.
+ * Results are cached per index entry object, so when the catalog grows one
+ * shard at a time only the new talks are processed. Typing never comes back
+ * here: the haystack depends on the talk, not on the query.
  */
-export function withHaystack(entries: TalkIndexEntry[]): SearchEntry[] {
-  return entries.map((entry) => ({
+const haystackCache = new WeakMap<TalkIndexEntry, SearchEntry>();
+
+function toSearchEntry(entry: TalkIndexEntry): SearchEntry {
+  const cached = haystackCache.get(entry);
+  if (cached) return cached;
+  const speakersLower = entry.speakers.join(" ").toLowerCase();
+  const titleLower = entry.title.toLowerCase();
+  const built: SearchEntry = {
     ...entry,
     speakerSlugs: entry.speakers.map(slugifySpeaker),
+    titleLower,
+    speakersLower,
     haystack: [
-      entry.title,
-      entry.teaser ?? "",
-      entry.speakers.join(" "),
-      entry.villageName,
-      entry.eventShortName,
-      entry.trackName,
-      entry.topics.join(" "),
+      titleLower,
+      (entry.teaser ?? "").toLowerCase(),
+      speakersLower,
+      entry.villageName.toLowerCase(),
+      entry.eventShortName.toLowerCase(),
+      (entry.trackName ?? "").toLowerCase(),
+      entry.topics.join(" ").toLowerCase(),
       entry.kind,
-    ]
-      .join(" ")
-      .toLowerCase(),
-  }));
+    ].join(" "),
+  };
+  haystackCache.set(entry, built);
+  return built;
+}
+
+export function withHaystack(entries: TalkIndexEntry[]): SearchEntry[] {
+  return entries.map(toSearchEntry);
 }
 
 /**
- * Merge summary data into search entries. Enriches haystack with summary text
- * and marks entries where the query matched the summary.
+ * Fold summary text into the search text. Runs when a summary shard lands,
+ * not per keystroke: the result only depends on which summaries are loaded.
+ * Entries without a summary keep their object, so nothing is copied for them.
  */
-export function mergeSummaries(
+export function withSummaries(
   entries: SearchEntry[],
   summaries: Map<string, string>,
-  terms: string[],
 ): SearchEntry[] {
-  if (terms.length === 0) return entries;
-
+  if (summaries.size === 0) return entries;
   return entries.map((entry) => {
     const summary = summaries.get(entry.id);
     if (!summary) return entry;
-
     const summaryLower = summary.toLowerCase();
-    const matchedInSummary = terms.every((term) => summaryLower.includes(term));
-
-    return {
-      ...entry,
-      haystack: entry.haystack + " " + summaryLower,
-      matchedInSummary: matchedInSummary || undefined,
-    };
+    return { ...entry, haystack: entry.haystack + " " + summaryLower, summaryLower };
   });
+}
+
+/**
+ * Flag results whose summary holds every query term, for the "Matched in
+ * summary" note. Only call it on the page being shown (24 cards), not the
+ * whole catalog.
+ */
+export function markSummaryMatches(entries: SearchEntry[], q: string): SearchEntry[] {
+  const terms = queryTerms(q);
+  if (terms.length === 0) return entries;
+  return entries.map((entry) =>
+    entry.summaryLower && terms.every((term) => entry.summaryLower!.includes(term))
+      ? { ...entry, matchedInSummary: true }
+      : entry,
+  );
 }
 
 /** Every whitespace-separated term must appear somewhere in the entry. */
@@ -257,16 +278,77 @@ function matchesDimension(
   return true;
 }
 
-export function filterTalks(entries: SearchEntry[], filters: Filters): SearchEntry[] {
-  const terms = queryTerms(filters.q);
-  return entries.filter((entry) => matchesDimension(entry, filters, terms, null));
+/**
+ * Talks that match the search text, honouring the extras toggle. Every other
+ * filter and every facet count works from this list.
+ */
+export function matchText(
+  entries: SearchEntry[],
+  q: string,
+  includeExtras: boolean,
+): SearchEntry[] {
+  const terms = queryTerms(q);
+  if (terms.length === 0 && includeExtras) return entries;
+  return entries.filter(
+    (entry) =>
+      (includeExtras || entry.kind === "talk") &&
+      (terms.length === 0 || matchesQuery(entry, terms)),
+  );
+}
+
+/**
+ * True when every talk matching `next` also matches `previous`: each earlier
+ * term is contained in some new term ("ransom" → "ransomware", or a word added).
+ */
+function narrowsQuery(previous: string[], next: string[]): boolean {
+  return previous.every((term) => next.some((candidate) => candidate.includes(term)));
+}
+
+/**
+ * `matchText` that remembers its last answer. Typing forward only narrows the
+ * results, so the next keystroke scans the previous matches instead of the
+ * whole catalog.
+ */
+export function createTextMatcher() {
+  let last: {
+    entries: SearchEntry[];
+    terms: string[];
+    includeExtras: boolean;
+    result: SearchEntry[];
+  } | null = null;
+  return (entries: SearchEntry[], q: string, includeExtras: boolean): SearchEntry[] => {
+    const terms = queryTerms(q);
+    const reuse =
+      last != null &&
+      last.entries === entries &&
+      last.includeExtras === includeExtras &&
+      narrowsQuery(last.terms, terms);
+    const source = reuse ? last!.result : entries;
+    const result =
+      reuse && terms.join(" ") === last!.terms.join(" ")
+        ? last!.result
+        : source === entries
+          ? matchText(entries, q, includeExtras)
+          : source.filter((entry) => terms.every((term) => entry.haystack.includes(term)));
+    last = { entries, terms, includeExtras, result };
+    return result;
+  };
+}
+
+export function filterTalks(
+  entries: SearchEntry[],
+  filters: Filters,
+  matched?: SearchEntry[],
+): SearchEntry[] {
+  const matching = matched ?? matchText(entries, filters.q, filters.includeExtras);
+  return matching.filter((entry) => matchesDimension(entry, filters, [], "q"));
 }
 
 /** Cheap relevance: title hits beat teaser/speaker hits, then newest first. */
 function relevanceScore(entry: SearchEntry, terms: string[]): number {
   if (terms.length === 0) return 0;
-  const title = entry.title.toLowerCase();
-  const speakers = entry.speakers.join(" ").toLowerCase();
+  const title = entry.titleLower ?? entry.title.toLowerCase();
+  const speakers = entry.speakersLower ?? entry.speakers.join(" ").toLowerCase();
   let score = 0;
   for (const term of terms) {
     if (title.startsWith(term)) score += 6;
@@ -385,11 +467,15 @@ export function sortTalks(
         });
         return options?.pinPopularDc34 ? pinPopularDc34FirstPage(sorted) : sorted;
       }
-      return sorted.sort(
-        (a, b) =>
-          relevanceScore(b, terms) - relevanceScore(a, terms) || b.year - a.year ||
-          a.title.localeCompare(b.title),
-      );
+      {
+        // Score each talk once, not on every comparison inside the sort.
+        const scores = new Map<SearchEntry, number>();
+        for (const entry of sorted) scores.set(entry, relevanceScore(entry, terms));
+        return sorted.sort(
+          (a, b) =>
+            scores.get(b)! - scores.get(a)! || b.year - a.year || a.title.localeCompare(b.title),
+        );
+      }
   }
 }
 
@@ -410,18 +496,18 @@ export type Facets = {
   difficulties: FacetOption<Difficulty>[];
 };
 
+/** Counts values across entries. `pick` calls `add` once per value an entry carries. */
 function tally<T extends string | number>(
   entries: SearchEntry[],
-  pick: (entry: SearchEntry) => { value: T; label: string }[],
+  pick: (entry: SearchEntry, add: (value: T, label: string) => void) => void,
 ): Map<T, FacetOption<T>> {
   const counts = new Map<T, FacetOption<T>>();
-  for (const entry of entries) {
-    for (const { value, label } of pick(entry)) {
-      const existing = counts.get(value);
-      if (existing) existing.count += 1;
-      else counts.set(value, { value, label, count: 1 });
-    }
-  }
+  const add = (value: T, label: string) => {
+    const existing = counts.get(value);
+    if (existing) existing.count += 1;
+    else counts.set(value, { value, label, count: 1 });
+  };
+  for (const entry of entries) pick(entry, add);
   return counts;
 }
 
@@ -447,40 +533,66 @@ export type FacetOptions = {
   alwaysShowDifficulties?: boolean;
 };
 
+const FACET_DIMENSIONS = [
+  "conferences",
+  "years",
+  "villages",
+  "tracks",
+  "topics",
+  "speakers",
+  "lengths",
+  "difficulties",
+] as const;
+
+/**
+ * `matched` is `matchText(entries, filters.q, filters.includeExtras)` when the
+ * caller already has it, so the search text is matched once per keystroke.
+ */
 export function computeFacets(
   entries: SearchEntry[],
   filters: Filters,
   options: FacetOptions = {},
+  matched?: SearchEntry[],
 ): Facets {
-  const terms = queryTerms(filters.q);
+  // The query is never a facet, so it is matched once up front and every facet
+  // below scans only the talks that match the search text.
+  const matching = matched ?? matchText(entries, filters.q, filters.includeExtras);
+  // Skipping a facet nobody has picked from changes nothing, so those facets
+  // share one filtered list. Only facets with picks need their own pass.
+  const narrowed = matching.filter((entry) => matchesDimension(entry, filters, [], "q"));
+  const picked = new Set<Dimension>(
+    FACET_DIMENSIONS.filter((dimension) => filters[dimension].length > 0),
+  );
   const subset = (skip: Dimension) =>
-    entries.filter((entry) => matchesDimension(entry, filters, terms, skip));
+    picked.has(skip)
+      ? matching.filter((entry) => matchesDimension(entry, filters, [], skip))
+      : narrowed;
 
   const conferences = [
-    ...tally(subset("conferences"), (e) => [
-      { value: e.conference, label: conferenceLabel(e.conference) },
-    ]).values(),
+    ...tally<string>(subset("conferences"), (e, add) =>
+      add(e.conference, conferenceLabel(e.conference)),
+    ).values(),
   ].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 
-  const years = [...tally(subset("years"), (e) => [{ value: e.year, label: String(e.year) }]).values()]
+  const years = [...tally<number>(subset("years"), (e, add) => add(e.year, String(e.year))).values()]
     .sort((a, b) => b.value - a.value);
 
   const villages = [
-    ...tally(subset("villages"), (e) =>
-      inDefconVillage(e) ? [{ value: e.villageSlug, label: e.villageName }] : [],
-    ).values(),
+    ...tally<string>(subset("villages"), (e, add) => {
+      if (inDefconVillage(e)) add(e.villageSlug, e.villageName);
+    }).values(),
   ].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 
   const tracks = [
-    ...tally(subset("tracks"), (e) =>
-      e.track ? [{ value: e.track, label: e.trackName || e.track }] : [],
-    ).values(),
+    ...tally<string>(subset("tracks"), (e, add) => {
+      if (e.track) add(e.track, e.trackName || e.track);
+    }).values(),
   ].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 
   const topicSubset = subset("topics");
-  const topicCounts = tally(topicSubset, (e) =>
-    e.topics.map((topic) => ({ value: topic, label: topic })),
-  );
+  const topicCounts = tally<string>(topicSubset, (e, add) => {
+    for (const topic of e.topics) add(topic, topic);
+  });
   // A selected topic must stay visible even once it has narrowed the set to itself.
   for (const topic of filters.topics) {
     if (!topicCounts.has(topic)) topicCounts.set(topic, { value: topic, label: topic, count: 0 });
@@ -489,11 +601,11 @@ export function computeFacets(
     (a, b) => b.count - a.count || a.value.localeCompare(b.value),
   );
 
-  const speakerCounts = tally(subset("speakers"), (e) =>
-    e.speakerSlugs.flatMap((slug, index) =>
-      slug ? [{ value: slug, label: e.speakers[index] }] : [],
-    ),
-  );
+  const speakerCounts = tally<string>(subset("speakers"), (e, add) => {
+    e.speakerSlugs.forEach((slug, index) => {
+      if (slug) add(slug, e.speakers[index]);
+    });
+  });
   // Same as topics: a picked speaker stays listed once they are the whole set.
   for (const slug of filters.speakers) {
     if (speakerCounts.has(slug)) continue;
@@ -523,9 +635,9 @@ export function computeFacets(
 
   // Only classified talks are counted, in fixed easiest-to-hardest order.
   // Unclassified talks have no difficulty field and are not implied by a 0 count.
-  const difficultyCounts = tally(subset("difficulties"), (e) => {
+  const difficultyCounts = tally<Difficulty>(subset("difficulties"), (e, add) => {
     const level = normalizeDifficulty(e.difficulty);
-    return level ? [{ value: level, label: difficultyLabel(level) }] : [];
+    if (level) add(level, difficultyLabel(level));
   });
   const difficulties: FacetOption<Difficulty>[] = DIFFICULTIES.map((level) => ({
     value: level,
@@ -574,9 +686,13 @@ export function paginate<T>(items: T[], page: number, pageSize = PAGE_SIZE) {
 }
 
 function stripSearchFields(entry: SearchEntry): TalkIndexEntry {
-  const { haystack, speakerSlugs, matchedInSummary, ...talk } = entry;
+  const { haystack, speakerSlugs, titleLower, speakersLower, summaryLower, matchedInSummary, ...talk } =
+    entry;
   void haystack;
   void speakerSlugs;
+  void titleLower;
+  void speakersLower;
+  void summaryLower;
   void matchedInSummary;
   return talk;
 }

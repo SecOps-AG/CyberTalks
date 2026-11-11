@@ -19,6 +19,7 @@ function buildResults(query: string, talks: TalkIndexEntry[]): ResultItem[] {
   const q = query.trim().toLowerCase();
   const terms = q.split(/\s+/).filter(Boolean);
 
+  // withHaystack caches per talk, so this is a cheap lookup after the first call.
   const searchable = withHaystack(talks);
   const matchedTalks = filterTalks(searchable, {
     ...EMPTY_FILTERS,
