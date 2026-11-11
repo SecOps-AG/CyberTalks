@@ -118,6 +118,10 @@ export type TalkBrowserProps = {
 const MIN_QUERY_LENGTH = 2;
 /** How many recent queries keep their results for instant backspacing. */
 const RESULT_CACHE_SIZE = 32;
+type CachedResults = { facets?: Facets; sorted?: SearchEntry[] };
+
+/** Pause in typing, in ms, before the results catch up with the box. */
+const QUERY_SETTLE_MS = 90;
 /** Shortest gap between catalog updates while index shards are arriving. */
 const CATALOG_FLUSH_MS = 500;
 
@@ -402,8 +406,17 @@ export function TalkBrowser({
     }
   }, [talks, queueSummaries]);
 
+  // The box shows every keystroke at once. Results follow once typing pauses
+  // for a moment, so a burst of keys costs one search instead of one per key.
+  // Clearing the box applies straight away.
+  const [settledQuery, setSettledQuery] = useState(draftQuery);
+  useEffect(() => {
+    const delay = draftQuery.trim() === "" ? 0 : QUERY_SETTLE_MS;
+    const timer = setTimeout(() => setSettledQuery(draftQuery), delay);
+    return () => clearTimeout(timer);
+  }, [draftQuery]);
   // Typing stays responsive at thousands of talks: the list lags a frame, the input never does.
-  const deferredQuery = useDeferredValue(draftQuery);
+  const deferredQuery = useDeferredValue(settledQuery);
   // One letter matches nearly every talk, so it is not worth recounting the
   // whole catalog for: results start at the second character.
   const searchQuery = deferredQuery.trim().length >= MIN_QUERY_LENGTH ? deferredQuery : "";
@@ -449,16 +462,25 @@ export function TalkBrowser({
   // both start from this list. Typing forward narrows the previous matches.
   const matchTextRef = useRef<ReturnType<typeof createTextMatcher> | null>(null);
   matchTextRef.current ??= createTextMatcher();
+  // Summaries only matter to the text match. With no query the plain entries
+  // are used, so a summary shard landing does not redo the default listing.
+  const source = searchQuery ? searchable : baseSearchable;
   const textMatched = useMemo(
-    () => matchTextRef.current!(searchable, searchQuery, filters.includeExtras),
-    [searchable, searchQuery, filters.includeExtras],
+    () => matchTextRef.current!(source, searchQuery, filters.includeExtras),
+    [source, searchQuery, filters.includeExtras],
   );
   // Results for queries already shown, so backspacing (or clearing the box)
-  // redraws from memory. Emptied whenever the talks or the filters change.
-  const resultCache = useMemo(
-    () => new Map<string, { facets?: Facets; sorted?: SearchEntry[] }>(),
+  // redraws from memory. The no-query listing has its own slot, which a
+  // summary shard landing does not empty. Both empty when talks or filters change.
+  const defaultCache = useMemo(
+    () => new Map<string, CachedResults>(),
+    [baseSearchable, filters, alwaysShowDifficulties, pinPopularDc34],
+  );
+  const queryCache = useMemo(
+    () => new Map<string, CachedResults>(),
     [searchable, filters, alwaysShowDifficulties, pinPopularDc34],
   );
+  const resultCache = searchQuery ? queryCache : defaultCache;
   const cached = (q: string) => {
     let hit = resultCache.get(q);
     if (!hit) {
@@ -473,9 +495,9 @@ export function TalkBrowser({
   const facets = useMemo(() => {
     if (serverFacets && initialFacets) return initialFacets;
     const hit = cached(effective.q);
-    hit.facets ??= computeFacets(searchable, effective, { alwaysShowDifficulties }, textMatched);
+    hit.facets ??= computeFacets(source, effective, { alwaysShowDifficulties }, textMatched);
     return hit.facets;
-  }, [serverFacets, initialFacets, searchable, effective, alwaysShowDifficulties, textMatched, resultCache]);
+  }, [serverFacets, initialFacets, source, effective, alwaysShowDifficulties, textMatched, resultCache]);
   const sorted = useMemo(() => {
     const hit = cached(effective.q);
     if (hit.sorted) return hit.sorted;
@@ -484,10 +506,10 @@ export function TalkBrowser({
       effective.sort === "relevance" &&
       queryTerms(effective.q).length === 0 &&
       countActive(effective) === 0;
-    const filtered = filterTalks(searchable, effective, textMatched);
+    const filtered = filterTalks(source, effective, textMatched);
     hit.sorted = sortTalks(filtered, effective.sort, effective.q, { pinPopularDc34: pin });
     return hit.sorted;
-  }, [searchable, effective, textMatched, pinPopularDc34, resultCache]);
+  }, [source, effective, textMatched, pinPopularDc34, resultCache]);
   const paged = useMemo(() => {
     const page = paginate(sorted, effective.page);
     return { ...page, items: markSummaryMatches(page.items, effective.q) };
