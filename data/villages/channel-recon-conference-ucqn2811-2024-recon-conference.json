@@ -933,14 +933,16 @@
       "youtubeId": "5LfI0G9llXc",
       "slug": "recon-brussels-2018",
       "title": "Dissecting QNX",
-      "speakers": [],
+      "speakers": [
+        "Dissecting QNX"
+      ],
       "track": "recon",
       "topics": [
         "recon",
         "brussel",
         "brussels"
       ],
-      "summary": null,
+      "summary": "The talk dissects QNX, a closed-source, POSIX-compliant real-time operating system found in automotive infotainment, routers and industrial equipment. It walks through the boot process, the microkernel design and its message-passing model, which pushes most services into user space and leaves the IPC layer as a large attack surface. It also covers the legacy password hashes still found in firmware and the qnet networking layer, which trusts remote user IDs without authentication.\n\nThe core research targets randomness and exploit mitigations. The QNX 6 user-space generator, based on an older Yarrow design, relied on weak boot-time entropy and never mixed runtime entropy back into its state. QNX 7 adopts a Fortuna-based design with a seed file and a kernel generator, though its strength depends on system integration. Mitigations were often opt-in or misconfigured: the stack stayed executable by default, ASLR gave about 4.5 bits of minimum entropy on 32-bit systems, and a remote brute-force attack against a forking network service reached a root shell in about 23 seconds. Stack canaries averaged under 8 bits, kernel canaries were never generated, and read-only relocation data was broken. Local information leaks through the process filesystem and the LD_DEBUG variable were also demonstrated.\n\nSeveral issues were fixed in QNX 6.6 patches and QNX 7, but embedded devices are often updated slowly, so the flaws may stay in the field for years. The main takeaway is that integrators must verify kernel startup flags, entropy sources and exposed debugging services in their own firmware images.",
       "durationSeconds": 3333,
       "conference": "recon",
       "viewCount": 1500,
@@ -949,7 +951,9 @@
       "eventLabel": "Recon Brussels 2018",
       "enrichmentGaps": {
         "teaser": "Generated line repeated the event label; dropped when the real title was recovered."
-      }
+      },
+      "difficulty": "expert",
+      "teaser": "Reverse engineers QNX's exploit mitigations and random number generators, uncovering weak entropy, ASLR gaps and information leaks."
     },
     {
       "youtubeId": "RXYfjnXLGsc",
@@ -2662,7 +2666,10 @@
       "youtubeId": "EWCcOlJf4pE",
       "slug": "recon-2022-the-next-generation-of-virtualization-based-obfuscato",
       "title": "Recon 2022 - The Next Generation of Virtualization based Obfuscators",
-      "speakers": [],
+      "speakers": [
+        "Tim",
+        "Moritz"
+      ],
       "track": "recon",
       "topics": [
         "recon",
@@ -2670,14 +2677,15 @@
         "generation",
         "obfuscator"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Recon 2022 - The Next Generation of Virtualization based Obfuscators.",
-      "summary": null,
+      "teaser": "Shows how virtualization-based obfuscators are reverse engineered, and how next-generation designs like Loki resist those attacks.",
+      "summary": "The talk starts with why obfuscators are used to protect intellectual property and hide malicious payloads in commercial software. It explains how a virtual machine based obfuscator works: protected code is translated into custom bytecode, and a VM entry, a fetch-decode-execute dispatcher, and a handler table interpret it at runtime. Common hardening layers are covered too, including duplicated and obfuscated handlers, inlined dispatchers, and bytecode blinding that ties decryption to the execution flow.\n\nThe middle section shows how current VMs can be broken with automated techniques. Instruction removal strips junk code through dead code elimination, constant folding and constant propagation. Symbolic execution derives the semantics of each handler, and program synthesis uses input-output sampling and codebook lookups checked with SMT solvers. The speakers argue that these attacks work because handler semantics are simple and predictable, and because components can be analyzed one at a time.\n\nThe talk then presents next-generation designs built on two principles: target-specific, complex instruction sets, and interlocked VM components that force global analysis. A academic prototype called Loki applies key-dependent semantics, polynomial encodings, point functions that defeat sampling, and mixed Boolean-arithmetic rewriting to stall solvers. The closing takeaway is that analysis tools must scale to large instruction sequences and cross-handler data flow, and that binary lifting and MBA deobfuscation need work, since obfuscation currently looks ahead.",
       "durationSeconds": 3185,
       "conference": "recon",
       "viewCount": 1800,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2022,
-      "eventLabel": "Recon 2022"
+      "eventLabel": "Recon 2022",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "XNhXNXiBkO8",

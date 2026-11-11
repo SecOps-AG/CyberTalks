@@ -484,7 +484,7 @@
         "Paweł Maziarz",
         "Gynvael Coldwind"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "tcp-ip",
         "pawe",
@@ -492,12 +492,13 @@
         "gynvael",
         "coldwind"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Paweł Maziarz, Gynvael Coldwind: TCP/IP over whatever | CONFidence.",
+      "teaser": "Shows how TCP/IP traffic and small amounts of data can be smuggled out of restricted networks over DNS, ICMP, light, and sound channels.",
       "summary": "### Overview\nIn this talk presented at CONFidence, Paweł Maziarz explores creative mechanisms for tunneling network traffic and exfiltrating data across unconventional media and protocols. While co-presenter Gynvael Coldwind could not attend in person, the presentation draws on their joint concepts, tools, and slides. The overarching premise is that whenever two endpoints can transmit and receive arbitrary data—whether using standard network protocols or physical channels like light and sound—they can establish full bidirectional TCP/IP communication.\n\n### Key Topics\n- **Pyramid of Data Transfer:** Maziarz outlines an adversary-focused hierarchy of network egress techniques. At the lower levels are mundane activities and simple exfiltration/infiltration to bypass DLP and antivirus systems. Higher levels involve command-and-control (C2), application protocol tunneling (e.g., HTTP proxies, SSH `-D` dynamic SOCKS tunneling, `sslh`, and `socat`), culminating at the very top with full TCP/IP tunneling.\n- **TUN/TAP Interfaces:** Explanation of how virtual network interfaces operate at Layer 3 (TUN) and Layer 2 (TAP). Any program reading from or writing to the file descriptor of a TUN device can encapsulate raw IP packets into custom transmission mediums.\n- **DNS as a Tunneling and Exfiltration Vector:** Techniques for exfiltrating arbitrary payloads using DNS TXT records, encoding commands in subdomains (respecting 63-character subdomain and 255-character domain limits via hex encoding and regex splitting), and setting up lightweight DNS listener servers in Python.\n- **ICMP Tunneling:** Using ICMP echo request and echo reply payloads (up to MTU constraints, ~1472 bytes) to bypass restrictive firewalls, complete with an architecture where a custom daemon responds asynchronously with reversed payloads.\n- **Acoustic and Out-of-Band Channels:** Transmitting digital data as audio via amplitude modulation (ASK/OOK) or frequency shift keying (FSK)—similar to acoustic couplers and modems—or via camera/flashlight Morse code, VGA/HDMI, Firewire, PS/2, RS-232, and LPT ports.\n\n### Technical Details\n- **Tun/Tap Virtual Adapters:** By assigning an IP address (e.g., 10.0.0.1) to a TUN device, traffic routed through that adapter is exposed to user-space software as raw packets, which can then be serialized and forwarded over any arbitrary channel.\n- **IP Over Whatever (IPOWD):** Maziarz describes a modular daemon architecture designed to handle TUN packets asynchronously. The daemon reads from the TUN interface and forwards data across interchangeable transports (such as ICMP, DNS, or named pipes/FIFOs/datagram sockets) written as microservices in languages like Go, Python, or Bash. In one demonstration, traffic between two hosts (Flower and OVH) is routed over an ICMP transport to serve HTTP requests.\n- **DNS One-Liners:** Demonstrations of Bash one-liners utilizing DNS queries (`dig`/`nslookup`) to retrieve base64-encoded payloads from TXT records and pipe them directly into an interpreter (`sh`).\n- **Modulation & Sound Cards:** Demonstration of audio-based exfiltration using phone voice recorders and PC sound cards, converting data to audio tones via ASK and FSK modulation to evade enterprise DLP monitoring.\n\n### Takeaways\nAs long as an attacker or penetration tester can find any bidirectional or asynchronous channel to exchange signals, establishing a fully functional TCP/IP connection is feasible. Security teams and DLP systems often monitor standard protocols but fail to account for out-of-band or low-level channels like ICMP payloads, DNS subdomain structuring, serial ports, or acoustic modulation.",
       "durationSeconds": 2807,
       "conference": "confidence",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "g3-pK6g1DaY",

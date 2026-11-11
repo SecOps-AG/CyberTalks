@@ -10,7 +10,10 @@
       "youtubeId": "AlN59giec0M",
       "slug": "leveraging-the-apple-esf-for-behavioral-detections",
       "title": "Leveraging the Apple ESF for Behavioral Detections",
-      "speakers": [],
+      "speakers": [
+        "Jaren Bradley",
+        "Matt Benyo"
+      ],
       "track": "blue-team",
       "topics": [
         "leveraging-apple",
@@ -20,7 +23,7 @@
         "apple"
       ],
       "teaser": "Presents leveraging the Apple ESF for Behavioral Detections and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Jaren Bradley and Matt Benyo, researchers at Jamf Threat Labs, explain Apple's Endpoint Security Framework, which since macOS 10.15 lets third-party system extensions in user space receive file and process events and, for authorization events, block operations. They contrast fast static checks such as team IDs, file hashes and YARA rules with behavioral detections, which accept more false positives in exchange for catching activity never seen before.\n\nThey walk through several examples. A file in the temp directory with a PDF extension that is really a Mach-O executable is flagged, as is a launch agent named with a com.apple prefix whose target binary is unsigned. For process activity, they show how parent, responsible, process group and session IDs rebuild the context of a single exec event, tracing a curl piped into osascript and an mdfind search whose results were piped into tar. They then cover three detections built after zero-day bypasses were found, all since patched: a Gatekeeper bypass using a script-only app launched through launchd and bash, caught by checking for app translocation; a TCC bypass in which a nested app inside Zoom carried ad hoc signing; and a Safari archive quarantine bug caused by a missing root header in the bill of materials, detected by watching sandbox broker renames that lack the quarantine attribute.\n\nThe takeaway is that ESF gives defenders streamlined event data they can turn into their own detection logic. The speakers also suggest that checking whether built-in macOS security components do their job can reveal techniques that have not been documented yet.",
       "durationSeconds": 2233,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -43,7 +46,7 @@
         "table-microsoft"
       ],
       "teaser": "Provides lets Dance in the Cache - Destabilizing Hash Table on Microsoft IIS and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This talk examines how Microsoft IIS implements and uses its internal hash tables for HTTP headers, configuration and caching. The speaker explains hash flooding, where crafted keys collide in one bucket and turn lookups into linear scans, and notes that Microsoft's table implementations were vulnerable by default. The research focused on the URI cache module, which stores responses in three hash tables.\n\nThe first case is a denial-of-service attack. Because the hash function is public and predictable, the researcher crafts keys that hash to zero, so every subdirectory of a requested URL also inserts a colliding record. In a demo on an eight-core server, CPU load reached 100 percent and the server stopped answering requests after a few minutes. The second case is cache poisoning: IIS uses only the first occurrence of a repeated query string parameter as the cache key, while ASP.NET concatenates all values, so an attacker can poison the cached response served to other visitors. The third case is an authentication bypass in the token cache. The hash covers username and password, but on a collision only the username is compared, so after one legitimate logon an attacker can reuse that user's cached token by trying random passwords. Exchange's scheduled health-check account was shown to keep such a token cached indefinitely.\n\nSuggested mitigations include pseudo-random hash functions such as SipHash or HighwayHash, input size limits and randomized hashing. The speaker stresses that cache inconsistencies between IIS and backend frameworks remain a recurring source of flaws, and that copied code can silently break security checks.",
       "durationSeconds": 2577,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -252,7 +255,9 @@
       "youtubeId": "T1YEKAUJVjE",
       "slug": "harm-reduction-a-framework-for-effective-and-compassionate-secur",
       "title": "Harm Reduction: A Framework for Effective & Compassionate Security Guidance",
-      "speakers": [],
+      "speakers": [
+        "Kyle Tobiner"
+      ],
       "track": "policy",
       "topics": [
         "healthcare",
@@ -311,7 +316,7 @@
         "protocol"
       ],
       "teaser": "Examines automatic Protocol Reverse Engineering and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Malware that depends on a command-and-control server is hard to analyze when that server is offline and no traffic captures exist. Manually reverse engineering the expected commands and message formats from the binary can take days or weeks. This talk presents an automated method that recovers a program's communication protocol directly from its executable, including the state machine of valid message exchanges and the format of each message type.\n\nThe approach pairs two components. A learning algorithm (L-star) asks whether particular sequences of message types are valid, and a symbolic execution engine answers by constraining the program's send and receive calls to those types and checking whether any execution path survives. Message types are inferred as the study goes by looking at the bytes common to example messages. The researchers demonstrated the method on a toy login client, then an SMTP client, and then a remote administration tool, where the full state machine was recovered in roughly two minutes.\n\nThe method still needs the user to identify the send and receive functions in advance, and its accuracy depends on the symbolic execution engine, which struggles with multithreaded code and parts of the Windows API. The speakers named broader engine support as future work and invited attendees to download the released tool. Practitioners can use this kind of recovered protocol to find implementation bugs or hidden commands by comparing it against the intended specification.",
       "durationSeconds": 2013,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -336,7 +341,7 @@
         "mobile-networks"
       ],
       "teaser": "Examines attacks From a New Front Door in 4G & 5G Mobile Networks and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Mobile operators are opening their 4G and 5G core networks through network exposure APIs, letting businesses and third parties manage connected devices. The speaker explained how a company can get access: register with a tax ID and business email, buy IoT SIM cards in bulk, then use a connectivity portal and service APIs to query locations, change settings or send messages to devices.\n\nThe researchers obtained access on nine platforms and focused on high-impact APIs, such as core configuration changes, billing counter manipulation, device messaging and master key upload. Reported weaknesses included loose customer verification at sign-up, weak password rules, static tokens lasting a day to a week, and missing or unenforced rate limits. Private subscriber identifiers were exposed in application APIs, making enumeration easy, and downlink IP fields lacked validation, so one account could ping up to 200 devices on a platform. A webhook meant for delivery reports returned SIM credentials and location data, and some platforms lacked injection protection.\n\nThe speaker noted that OAuth and TLS, the approaches recommended by 3GPP, were rarely applied fully, and that only two platforms avoided the reported issues. Firewalls helped only in part, and SMS malware was not blocked. The main takeaways are that 5G shifts risk toward industries and critical infrastructure, that one API flaw can reach a whole IoT estate, and that security by design and rigorous testing are essential. A Telecom API top 10 was suggested as a useful reference. Vendors were notified before disclosure, and the testing caused no disruption.",
       "durationSeconds": 2413,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -347,7 +352,10 @@
       "youtubeId": "CIjzABWO3DY",
       "slug": "a-new-trend-for-the-blue-team-using-a-symbolic-engine-to-detect",
       "title": "A New Trend for the Blue Team: Using a Symbolic Engine to Detect Evasive Forms of Malware/Ransomware",
-      "speakers": [],
+      "speakers": [
+        "Morris",
+        "Mars"
+      ],
       "track": "malware",
       "topics": [
         "trend-blue",
@@ -357,7 +365,7 @@
         "symbolic-engine"
       ],
       "teaser": "Details A New Trend for the Blue Team: Using a Symbolic Engine to Detect Evasive Forms of Malware/Ransomware and evaluates key implications for security practitioners.",
-      "summary": "Black Hat session on A New Trend for the Blue Team: Using a Symbolic Engine to Detect Evasive Forms of Malware/Ransomware.",
+      "summary": "TX1 Networks presents a malware detection approach built on symbolic execution, aimed at ransomware and other evasive samples. The speakers argue that signature databases struggle with obfuscated binaries, dynamic analysis is slow and can be bypassed, and learning models miss new variants. Their engine, Tsar, walks each function's control flow, treats values as symbols, and simulates Windows API calls, so analyst-written rules can flag behaviors directly.\n\nA prototype inferred API names in a stripped sample from parameter patterns, such as a pointer that behaved like CreateFile. Rules flagged CRC hashing through repeated XOR with a magic constant, reflective DLL loading through PE header checks followed by memory allocation, import fixing and an entry-point call, and process hollowing through suspended process creation and changes to the PEB image base. Across 233 fresh samples, about 61 percent showed process hollowing, and the rest were mostly hacking tools or installers. A ransomware rule checked file enumeration, file operations and encryption routines, including custom Salsa20 and RC5 variants, reaching roughly 96 percent detection with near-zero false positives on a clean set.\n\nFor defenders, the main takeaway is that lightweight symbolic analysis can cover obfuscated malware without executing it. The team released the engine on GitHub so the community can write and share detection rules.",
       "durationSeconds": 2283,
       "conference": "black-hat",
       "aiSummary": "## Overview\n\nIn this presentation, researchers Morris, Sheng-Hao, and Mars/Hank from TXOne Networks introduce a novel approach for blue teams to detect evasive malware and ransomware using a symbolic execution engine. Addressing the audience at a major security venue (USA stage), the team outlines the severe operational impact of modern ransomware families (such as Conti, LockBit 2.0, and previously WannaCry) across various industry verticals. They argue that traditional detection paradigms are failing against sophisticated evasion and obfuscation, presenting symbolic execution as a new direction to bridge existing security gaps.\n\n## Limitations of Current Detection Approaches\n\nThe speakers review current industry-standard detection methodologies and detail the hard bottlenecks associated with each:\n\n- **Signature-Based Detection:** Relies on sequence lists and static assembly extraction. It requires massive signature databases, demands continuous signature updates, and struggles significantly against obfuscated samples and variants.\n- **Behavior / Dynamic Detection:** Relies on heuristics, API calls, system call sequences, and control flow graphs (CFGs). This approach is vulnerable to dynamic execution evasion/bypasses, suffers from time-consuming scanning, and frequently requires real-time internet connectivity.\n- **Machine Learning-Based Detection:** Evaluates API call behavior sequences but struggles to classify new variants due to training dataset limitations and unseen obfuscation patterns.\n\n## Motivation and Prior Work\n\nTo overcome the challenges of time-consuming scanning, continuous database updates, evasion, and obfuscated code, the researchers turned to symbolic execution. They evaluated three key prior academic studies that informed their design:\n\n1. **2005 Study (Lightweight Template Matching):** Proposed using data reference relationships and templates. While conceptually novel at the time, it released no practical tools for blue teams and failed against obfuscated malware samples.\n2. **2018 Study (Hidden Markov Models):** Used Hidden Markov Models (HMM) to address obfuscation, but failed to analyze critical API parameters and relied on feature fields/magic numbers that are not universally present across API calls.\n3. **2019 Study (Asm2Vec):** Explored learning-based representation of assembly instructions to analyze code representation.\n\n## Proposed Symbolic Engine and Evaluation Scope\n\nThe researchers developed an engine utilizing symbolic execution to analyze binary internals beyond simple surface-level classification. Their implementation and evaluation focus on:\n\n- **Handling Obfuscation and Evasion:** Inspecting API parameters, data references, and control structures to identify evasive behaviors without requiring unconstrained runtime execution.\n- **Real-World Malware Verification:** Testing common ransomware evasion and execution techniques, including CRC32 hashing (dynamic API resolution), dropper/loader architectures, and process hollowing.\n- **Empirical Dataset:** Evaluating the approach against thousands of ransomware samples to validate detection accuracy and provide practical, community-oriented tooling for blue team operations.",
@@ -369,7 +377,10 @@
       "youtubeId": "ABUC7ZGB1Ok",
       "slug": "the-8th-annual-black-hat-usa-noc-report",
       "title": "The 8th Annual Black Hat USA NOC Report",
-      "speakers": [],
+      "speakers": [
+        "Neil Weiler",
+        "Bart Stump"
+      ],
       "track": "blue-team",
       "topics": [
         "annual-black",
@@ -401,7 +412,7 @@
         "dedicated-cache"
       ],
       "teaser": "Outlines ret2page: The Art of Exploiting Use-After-Free Vulnerabilities in the Dedicated Cache and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines exploiting use-after-free bugs in dedicated kernel slab caches, which hold objects of a single type. It reviews how general caches let unrelated types share memory, and why newer Android kernels from 5.4 never merge dedicated caches, forcing the slower cross-cache attack. The speaker explains the slab and buddy allocator behaviour this depends on, and why that approach needs many allocations and is hard to make deterministic.\n\nThe core is Return to Page, a generic technique that sprays pages of the same allocation order and migratetype that user space can read and write, such as pipe buffers, so a freed object's page is reclaimed more reliably. Two fixed bugs illustrate it. The first is an epoll use-after-free triggered by closing a file descriptor during a loop check. The exploit bypasses KASLR by using splice error codes to tell whether a guessed kernel slide is correct, then gains arbitrary read and write. The second is a TTY-driver bug that frees a PID object twice; the exploit reclaims the page with pipe buffers, leaks a task structure, and redirects a PID pointer to controlled memory to reach the file descriptor table.\n\nThe takeaway is that dedicated caches are not a barrier, since controllable page reuse can replace much of the cross-cache work. The talk ends with a demo of the technique on several Android 11 flagship devices and points to the slides for reference.",
       "durationSeconds": 2120,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -498,7 +509,7 @@
         "build-privacy"
       ],
       "teaser": "Presents better Privacy Through Offense: How To Build a Privacy Red Team and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk makes the case that offensive testing belongs in privacy programs and explains how a privacy red team differs from a security one. Security red teams target the company as a container of information, while privacy red teams target the user data inside it, often through user interfaces or APIs. An earlier IoT example shows why: an ordinary code injection flaw exposed a phone's photos and location, so a plain security bug carried a high privacy impact.\n\nThe speaker outlines how a privacy red team can be built around adversary modeling, a weaknesses taxonomy, and several kinds of assessment, from long emulation campaigns to purple team control tests and focused product compromise tests. Hiring draws on vulnerability research, app engineering, red teaming and penetration testing. Example operations include checking whether chained account features expose contact details, a two-week sprint to find sensitive data leaving internal services, and data-type attempts by low and high capability adversaries.\n\nPrivacy findings are more subjective than security findings, since law, company statements and user expectations all shape them, so the speaker sorts results into bugs, roadmap items and design issues. Standard metrics like time to compromise often do not fit, so measurement should cover the organization's posture, its defenses and the red team itself. Early legal partnership is essential, because red team data access can carry regulatory risk, and privacy tests may trigger blue team alarms. The field is young, and the speaker expects it to gain technical depth as security did.",
       "durationSeconds": 1957,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -522,7 +533,7 @@
         "research-modern"
       ],
       "teaser": "Details attack on Titan M, Reloaded: Vulnerability Research on a Modern Security Chip and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Maxime Rossi Bellom and Damiano Melotti of Quarkslab present their vulnerability research on Titan M, the security chip Google built for early Pixel phones. It handles secure boot, the lock screen unlock logic and the StrongBox keystore. It runs an open-source embedded controller OS on a Cortex-M3 core and talks to the main processor over SPI. The talk recaps earlier work on the chip, including a firmware downgrade flaw and wiring to a UART console on some boards.\n\nThe team first ran black-box fuzzing through their own client, mutating messages and reading the return codes. It surfaced several bugs within minutes, including an earlier overflow and a new crash, but it only reached shallow states and gave weak crash signals. They then emulated the firmware with Unicorn and AFL++ in unicorn mode, hooking functions that could not run in emulation. This reached deeper code in the identity and key master tasks, though without a scheduler some bugs stayed out of view. A format-aware fuzzer aimed at the SPI rescue feature found nothing. The main finding was a one-byte out-of-bounds write in a key parameter parser, limited to a few values, which they steered toward a key master buffer address.\n\nUsing the UART logs to track progress, they turned the write into code execution on the chip and read its memory, including the bootrom. They then forged a begin-operation request for a key blob from the Android keystore database and recovered the decrypted StrongBox key on a rooted Pixel 3A. The attack assumes root access and access to key blobs. The vulnerability was reported to Google and was not yet fixed when the talk was given. The takeaways are that emulation-based fuzzing suits constrained targets like this better than blind fuzzing, and that requiring user authentication for keys adds a barrier.",
       "durationSeconds": 2024,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -584,7 +595,10 @@
       "youtubeId": "cVf7Ww67j68",
       "slug": "trace-me-if-you-can-bypassing-linux-syscall-tracing",
       "title": "Trace Me if You Can: Bypassing Linux Syscall Tracing",
-      "speakers": [],
+      "speakers": [
+        "Rex Wall",
+        "Genuine Zhang"
+      ],
       "track": "blue-team",
       "topics": [
         "trace-bypassing",
@@ -594,7 +608,7 @@
         "trace"
       ],
       "teaser": "Outlines trace Me if You Can: Bypassing Linux Syscall Tracing and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines how Linux runtime security tools observe system calls. It covers tracepoints, kprobes, ptrace and seccomp as hooks, and explains that these tools read syscall arguments from user-space memory. An attacker thread that shares that memory can swap a value after the monitor has checked it but before the kernel uses it, a time-of-check to time-of-use gap.\n\nThe speakers show this against Falco and pdig, which they tested on a Kubernetes cluster and on AWS Fargate. For connect, a server that drops packets stretches the kernel's TCP retries, giving the attacker time to replace a malicious IP address with a benign one, so the monitor reports the wrong destination. For file opens, a FUSE-based remote storage mount such as GCS Fuse has a long round trip, which offers the same window to change a sensitive filename. A seccomp-based variant changes arguments while filters are still being evaluated. Vendors responded by comparing syscall enter and exit arguments, and the speakers note that some calls, such as execve and send, were harder to influence or to exploit reliably.\n\nFor defenders, the takeaways are to confirm whether a tracer re-reads user memory at syscall exit, to check that mitigations match the kernel versions you run, and to have the tracer install seccomp filters before the monitored process starts. They also recommend collecting telemetry from several independent sources so that bypassing one does not blind the team, and baselining normal values so that altered ones stand out.",
       "durationSeconds": 2308,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -640,7 +654,7 @@
         "jedi"
       ],
       "teaser": "Evaluates A Fully Trained Jedi, You Are Not and evaluates key implications for security practitioners.",
-      "summary": "Black Hat session on A Fully Trained Jedi, You Are Not.",
+      "summary": "Adam Shostack argues that expecting every software engineer to become a security expert sets unrealistic goals. He points out that programs have always contained bugs, and that operations teams often learn about flaws only after release, through production scanning and reverse engineering. He describes shifting security left into design, development and testing, where fixes cost far less, but says the change needs clear responsibilities and must serve the goals of the developers asked to adopt it.\n\nTo define what developers actually need, he uses Bloom's taxonomy to set learning goals and suggests chunking knowledge into a small, agreed set. He proposes teaching threats through the question of what can go wrong, covering STRIDE, the dangers of parsing and predictability, and kill chains to connect them. He argues that many flaws are lightweight and can be found with modest system and security knowledge. As an example, spoofing is harder to prevent on desktops, where programs lack the identity that mobile platforms provide.\n\nIn questions, he suggests that teams reduce risk-committee disputes by engaging engineers early, and that shared expectations let requirements include security from the start. He closes by saying organisations and the wider community should define what developers need to know, train to that standard, and measure whether deliveries become more predictable with fewer last-minute escalations.",
       "durationSeconds": 2441,
       "conference": "black-hat",
       "aiSummary": "## Overview\n\nIn this Black Hat presentation, Adam Shostack—a member of the Black Hat review board, co-creator of CVE, and threat modeling expert at Shostack & Associates—challenges the cybersecurity industry's expectation that everyone involved in securing software needs to be a \"Jedi.\" Using a *Star Wars* analogy, Shostack notes that a rebellion requires many people with varied backgrounds and skill sets rather than a small group of elite heroes. He argues that demanding heroism across the board fosters burnout (referencing an upcoming session by Stacy Thayer) and sets unrealistic standards, as most individuals lack specialized attributes or training and face high risks. Shostack frames security as an ecosystem problem spanning increasingly connected environments, supply chains, and software engineering teams.\n\n## Roots of Security Bugs and Software Flaws\n\nShostack highlights that the foundation of security challenges stems from software engineering itself:\n- **Historical Precedent**: Citing Bill Cheswick and Steve Bellovin’s book *Firewalls and Internet Security* from nearly 30 years ago, Shostack revisits their principle that all programs have bugs, larger programs have disproportionately more bugs, and by extension, security programs inherently contain security bugs—a condition that has escalated as software complexity has grown.\n- **Role of the Engineering Team**: Software engineers—broadly including developers, Site Reliability Engineers (SREs), and Scrum Masters—are both the source of and the ultimate solution to software security issues.\n- **Categories of Developer-Introduced Problems**: Developers generally do not intend to introduce flaws, but issues typically arise in three distinct ways:\n  1. Writing code that contains implementation bugs or larger architectural design flaws.\n  2. Failing to implement the necessary security features required for safe system operation.\n  3. Designing and shipping security features that are fundamentally unusable.\n\n## Development vs. Operational Security and the \"Reverse Engineering Trap\"\n\nShostack bifurcates the software lifecycle into two primary domains:\n- **Development (Application Security)**: The phase where software is built and bugs are continuously added and resolved.\n- **Production (Operational Security)**: The operational phase facing a constant \"fire hose\" of CVEs and runtime security issues.\n\nTo defend production environments, organizations rely on technologies such as firewalls, Security Information and Event Management (SIEM) systems for alert management, Extended Detection and Response (XDR) tools, and recurring vulnerability scanners. \n\nHowever, Shostack identifies a critical industry pitfall termed the **\"reverse engineering trap.\"** Operational security teams often resort to reverse engineering software in production to understand and validate systems because they lack direct communication and access to the development teams who wrote the code. This reliance on reverse engineering highlights a pervasive gap separating operational security practitioners from the developers building the features.",
@@ -667,7 +681,7 @@
         "dependence-international"
       ],
       "teaser": "Examines (Long) Dragon Tails - Measuring Dependence on International Vulnerability Research and evaluates key implications for security practitioners.",
-      "summary": "Black Hat session on (Long) Dragon Tails - Measuring Dependence on International Vulnerability Research.",
+      "summary": "A team from the Atlanta Council's Cyber Statecraft Initiative asks whether bad policy could disrupt the flow of vulnerability research that software security depends on. They treat that research as a supply and use China's 2021 rules on reporting network product flaws as a natural experiment, since the law applies to entities in China but not elsewhere. The case study begins with the Log4j disclosure, where an Alibaba Cloud researcher reported privately to Apache, and Alibaba was later reportedly suspended from a government information-sharing forum over its handling.\n\nThe team gathered acknowledgment data from CVE records and security updates for Microsoft, Apple, F5, VMware and Red Hat, tagging credited entities by country and batching counts by month around key 2020 and 2021 dates. Apple and VMware showed no visible supply shock, while F5 had too few China-tagged entries to compare. Microsoft showed a steep proportional drop in Chinese contributions after July 2020, but raw counts stayed productive, so the effect did not spread across the wider ecosystem. Red Hat showed an unexplained dip in early 2017. Inconsistent dates and double counting across product lines limited the comparisons.\n\nThe takeaway is that the reliability of this research pipeline should not be taken for granted. The speakers recommend harmonizing disclosure rules between governments and companies, funding open source vulnerability discovery tools, and tracking where disclosures flow so that investment can follow thinning areas. Their draft report invites expert feedback.",
       "durationSeconds": 1144,
       "conference": "black-hat",
       "aiSummary": "Overview:\nStewart Scott of the Atlantic Council examines global software supply chain risks through the lens of international vulnerability research ecosystems. The presentation investigates how legal, geopolitical, and policy interventions impact Coordinated Vulnerability Disclosure (CVD) pipelines across open-source and proprietary software. Specifically, Scott presents an empirical methodology using historical CVE acknowledgment datasets to assess whether Chinese regulatory requirements created measurable supply shocks in international security disclosures.\n\nKey Topics:\n- Coordinated Vulnerability Disclosure (CVD) dynamics and global bug bounty distribution\n- China's Regulations on the Management of Security Vulnerabilities (RMSV) and the Log4j case study\n- Empirical supply shock measurement using vendor security advisories and CVE credits\n- Global legal friction versus legal protections for independent vulnerability researchers\n\nTechnical Details:\nCoordinated Vulnerability Disclosure operates as a strategic balance between immediate public disclosure and indefinite withholding, guiding vulnerability flows to entities capable of engineering patches. Congressional testimony following the Log4j crisis highlighted significant geographic concentration in bug bounty disbursements, revealing systemic dependency on international security researchers. The real-world fragility of this ecosystem was demonstrated during the Log4j disclosure: an Alibaba Cloud researcher reported the flaw privately to Apache, but Alibaba was later suspended for six months from an MIIT information-sharing forum for failing to notify Chinese authorities within the two-day window mandated by domestic regulations.\n\nThe focal point of the study is China's Regulations on the Management of Security Vulnerabilities (RMSV), which were drafted in July 2020, passed in July 2021, and took effect in September 2021. RMSV mandates that domestic network product providers report discovered vulnerabilities to the Ministry of Industry and Information Technology (MIIT) within two days, creating legal friction with standard CVD timelines. This regulatory shift, alongside U.S. sanctions and domestic security laws, established potential chilling mechanisms capable of inducing a supply shock by disincentivizing Chinese researchers from participating in Western vendor disclosure programs.\n\nTo measure whether an empirical supply shock occurred, the researchers developed automated scraping scripts to harvest public CVE records and vendor security updates across five major technology vendors: Microsoft, Apple, F5, VMware, and Red Hat. The analysis tracks three primary variables over time: CVE identifiers, public acknowledgment dates, and credited security entities. By mapping acknowledgment trends across key regulatory milestones—July 2020, July 2021, September 2021, and December 2021—the methodology isolates shifts in international vulnerability reporting volume while accounting for broader legal trends, including European ENISA directives, CISA binding operational directives, and US DOJ CFAA prosecution policies.\n\nKey Takeaways:\nSoftware supply chain risk models must account for geopolitical and regulatory friction that can disrupt international vulnerability research pipelines. When governments penalize researchers for adhering to CVD timelines or mandate early domestic reporting, the flow of security intelligence to upstream maintainers degrades. Vendors and policymakers must standardize public CVE acknowledgment tracking and establish robust legal protections to maintain resilient, cross-border vulnerability disclosure ecosystems.\n\n(AI summary — Gemini Flash)",
@@ -692,7 +706,7 @@
         "fail-to-challenge-vulnerability"
       ],
       "teaser": "Analyzes no Mr. Cyber Threat! - A Psychological Approach To Managing the Fail-to-Challenge Vulnerability and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk opens with the Kitty Genovese case as a parable about bystanders who see a threat but do not act. The speakers, from the UK Ministry of Defence's cyber awareness, behaviours and culture team, link this to social engineering, where staff notice an intruder yet rarely challenge them. They argue that awareness and training rarely change behaviour, and that programmes should build intrinsic motivation through autonomy, competence and relatedness.\n\nThey explain that gamification must balance difficulty between railroading and a difficulty wall, create a game world where failure carries no real harm, and avoid pitting people against each other. The team uses threat avatars, consistent fictional villains such as the hacktivist group Defiance, delivered through a touring escape room and a magazine. Their challenge model rates responses on social impact and on whether they actually remove the risk. A role-play shows an actor asking an employee to lend a laptop and plug in a USB stick, followed by a debrief and a green card for the desk.\n\nAcross 22 exercises that directly engaged 850 people, 77% found the exercise engaging and useful, and 91% said they would feel confident raising a challenge. Safeguards include two observers on covert radio, printed permission letters, dummy devices and a debrief after every exercise. The takeaways are that such exercises can be cheap and quick, that short training doses are memorable, and that motivation should sit at the centre of security programmes without harming people.",
       "durationSeconds": 2474,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -713,7 +727,7 @@
         "uninitialized-data"
       ],
       "teaser": "Demonstrates AEPIC Leak: Architecturally Leaking Uninitialized Data from the Microarchitecture and evaluates key implications for security practitioners.",
-      "summary": "Black Hat session on AEPIC Leak: Architecturally Leaking Uninitialized Data from the Microarchitecture.",
+      "summary": "The talk presents Epic Leak, a flaw in recent Intel CPUs that lets software read stale data held in the super queue, the buffer between the L2 cache and the last-level cache. The local APIC's memory-mapped registers occupy 16-byte slots, and Intel's manual says that reading bytes 4 through 15 of each slot can give undefined results. The presenters found that these reads return leftover data instead of zeros. They ruled out registers, the execution engine, the private caches and shared memory, and traced the data to the super queue.\n\nTo reach valuable secrets, the attack targets SGX enclaves, whose pages a malicious operating system still manages. Using the paging instructions EWB and ELDU, an attacker can push enclave pages through the super queue. A sibling hyperthread can then overwrite queue entries so that chosen cache lines stay frozen, because all-zero lines are never transmitted. The enclave does not need to be running for this to work. In a live demo, the speaker recovered an AES round key from the xmm0 register at the key-generation instruction, and the same method can dump register contents from the SSA page.\n\nThe suggested mitigations are to disable the APIC MMIO region and move to x2APIC, which Intel recommends. Intel also released microcode that flushes the super queue on SGX transitions. Where SGX is used, disabling hyperthreading is advised, since another thread can still run between transitions and read queue contents. The issue was reported in December 2021 and went public after an embargo. The key takeaway is that an architectural read can leak secrets directly, without any side channel.",
       "durationSeconds": 1312,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -762,7 +776,7 @@
         "virtual-machines"
       ],
       "teaser": "Provides A Journey Into Fuzzing WebAssembly Virtual Machines and evaluates key implications for security practitioners.",
-      "summary": "Black Hat session on A Journey Into Fuzzing WebAssembly Virtual Machines.",
+      "summary": "Patrick Ventuzelo walks through how he fuzzed WebAssembly virtual machines, from standalone C, C++ and Rust runtimes to JavaScript engines in browsers. He first recaps the stages a module passes through: decoding, validation, instantiation and execution. Coverage-guided fuzzing with AFL came first, sharing one corpus across targets. Later he used in-process harnesses for the Rust runtimes and the arbitrary trait to generate structurally valid modules, and mined the official test suite and the text format for seeds.\n\nFor logic bugs he ran differential fuzzing, feeding the same module to several implementations and comparing whether each accepted or rejected it. For browsers he generated JavaScript API sequences with grammar-based tools, and compared baseline and optimizing compilers in engines such as V8 to catch incorrect optimization. Over about two years the work produced roughly 120 bugs from around two million modules, mostly Rust panics such as out-of-bounds indexing and overflows.\n\nHis takeaways were to reuse corpora between targets, keep crashes as seeds, and add fuzzing to continuous integration. Differential results need careful manual triage, and keeping harnesses current as the specification evolves was the main difficulty. Next steps include Go and Java runtimes and WebAssembly 2.0 features.",
       "durationSeconds": 2283,
       "conference": "black-hat",
       "aiSummary": "Overview:\nPatrick from Fuzzing Labs details practical methodologies and engineering workflows for fuzzing WebAssembly (Wasm) virtual machines and standalone runtimes. The talk provides an architectural breakdown of WebAssembly's execution stages, sandboxing properties, and binary specification. Patrick outlines an iterative fuzzing approach that progressively enhances coverage across parsers, runtimes, and reverse-engineering tools through corpus sharing and crash recycling.\n\nKey Topics:\n- WebAssembly MVP 1.0 architecture: stack machine, compilation targets, and host interaction\n- WebAssembly lifecycle stages: binary decoding, validation, instantiation, and execution\n- Coverage-guided fuzzing of standalone Wasm engines using Honggfuzz, AFL, and AFL++\n- Corpus engineering strategies: cross-target corpus reuse and crash recycling\n\nTechnical Details:\nWebAssembly, standardized in 2017 with MVP 1.0, is a binary instruction format featuring a text-based representation (WAT) and a stack-based virtual machine. Source languages like C, C++, and Rust compile to Wasm via toolchains such as LLVM, Emscripten, and Binaryen. A host environment—such as V8 in browsers and Node.js, or standalone engines like Wasmer, Wasmtime, and Wasm3—executes modules across four distinct stages: binary decoding/parsing, validation (type checking), instantiation (allocating memory, globals, and tables), and function execution. The runtime enforces sandboxing by rendering function bodies, execution stacks, and indirect function call tables immutable once instantiated.\n\nAt the binary level, a Wasm module begins with a four-byte magic number (\\x00asm) followed by a four-byte version field, followed by 11 unique standard sections and optional custom sections. Because the initial decoding phase ingests raw, untrusted binary data, coverage-guided fuzzing is uniquely effective at identifying parsing vulnerabilities. The research focused on instrumenting standalone C/C++ runtimes and parsing libraries—including Binaryen, Wasm3, and the Radare2 Wasm disassembler—using custom Clang/GCC compilers coupled with Honggfuzz, AFL, and AFL++.\n\nInitial fuzz campaigns revealed common memory safety defects, such as out-of-bounds reads and writes, null pointer dereferences, and memory allocation assertion failures during binary decoding. To scale bug discovery, Patrick implemented a cross-target corpus sharing strategy: because distinct runtimes implement the Wasm specification through different control-flow graphs and parser logic, seed inputs generated by one engine frequently explored deeper code paths in another. Furthermore, crashing test cases from one engine were systematically recycled into the active seed corpus of competing runtimes, uncovering disparate parsing logic, while transitions toward in-process fuzzing significantly accelerated execution throughput.\n\nKey Takeaways:\nFuzzing complex virtual machines requires targeting early lifecycle stages such as binary decoding and validation before attempting execution-stage fuzzing. Security researchers should leverage cross-target corpus sharing and crash recycling across alternative implementations of the same standard specification to maximize branch coverage. Developers building Wasm runtimes must harden binary parsers against malformed section headers and out-of-bounds memory accesses.\n\n(AI summary — Gemini Flash)",
@@ -774,7 +788,10 @@
       "youtubeId": "Ni1RqTwPiIQ",
       "slug": "talent-need-not-apply-tradecraft-and-objectives-of-job-themed-ap",
       "title": "Talent Need Not Apply: Tradecraft and Objectives of Job-themed APT Social Engineering",
-      "speakers": [],
+      "speakers": [
+        "Savannah",
+        "Allison Wyckoff"
+      ],
       "track": "threat-intel",
       "topics": [
         "talent-need",
@@ -784,7 +801,7 @@
         "objectives-job-themed"
       ],
       "teaser": "Demonstrates talent Need Not Apply: Tradecraft and Objectives of Job-themed APT Social Engineering and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines how advanced persistent threat groups use job-themed lures, linking the approach to the wave of job changes after the pandemic. The first case is a North Korea-linked group tracked by PwC as Black Artemis, behind an espionage campaign aimed at aerospace, defense and manufacturing firms. Its tactics include recruiter personas on LinkedIn, lookalike job sites that exploit browsers, and Word macros that drop an encoded payload and a renamed loader. The loader fetches a backdoor and persists through a scheduled task, which gives defenders a concrete pattern to hunt for.\n\nA second North Korea-linked actor, Black Alicanto, is financially motivated and focuses on cryptocurrency and finance firms. Its phishing uses password-protected archives and link files that launch mshta to pull JavaScript from a remote server, with persistence placed in the startup folder. Link file machine IDs and shared server header patterns help cluster its documents and infrastructure. The speakers note that one fake job description reused text from a real defense contractor's careers page, a template also seen in the earlier campaign.\n\nThe Iran-focused section covers Yellow Dev 13, which runs fake recruiting firms with AI-generated personas. Its online interview executable prompts victims for credentials, which the speakers believe the operator supplies to evade sandbox analysis and keep the rest of the intrusion chain hidden. The talk closes with advice to check networks for the named recruiting domains, to treat unsolicited recruiter contact as a risk, and to build a culture where staff feel safe reporting suspected social engineering.",
       "durationSeconds": 2181,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -795,7 +812,9 @@
       "youtubeId": "JUfWaT6EyXk",
       "slug": "stalloris-rpki-downgrade-attack",
       "title": "Stalloris: RPKI Downgrade Attack",
-      "speakers": [],
+      "speakers": [
+        "Philippe Eitner"
+      ],
       "track": "blue-team",
       "topics": [
         "stalloris-rpki",
@@ -840,7 +859,9 @@
       "youtubeId": "X6CiUD3EcfQ",
       "slug": "pwning-cloud-vendors-with-untraditional-postgresql-vulnerabiliti",
       "title": "Pwning Cloud Vendors with Untraditional PostgreSQL Vulnerabilities",
-      "speakers": [],
+      "speakers": [
+        "Shield"
+      ],
       "track": "cloud",
       "topics": [
         "pwning-cloud",
@@ -862,7 +883,10 @@
       "youtubeId": "Vr0gohwlxvE",
       "slug": "perimeter-breached-hacking-an-access-control-system",
       "title": "Perimeter Breached! Hacking an Access Control System",
-      "speakers": [],
+      "speakers": [
+        "Steve Pavolney",
+        "Sam Quinn"
+      ],
       "track": "blue-team",
       "topics": [
         "perimeter-breached",
@@ -872,7 +896,7 @@
         "perimeter"
       ],
       "teaser": "Examines perimeter Breached! Hacking an Access Control System and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines the HID Mercury access control panel, specifically a Lenel 4420 board that sits in a server closet and can manage up to 64 doors. The researchers explain why access control is under-audited and why a marketing claim about government certification motivated their work. They report eight vulnerabilities, four of them zero-days, affecting nine panels from more than 20 OEM vendors, and they cover three of them in detail.\n\nStarting from a root shell obtained through hardware analysis, the team found a hostname command injection that ran as root during DHCP at boot, with character filters bypassed using command substitution and tabs. A session check on POST requests only tested that a session ID existed, so any post succeeded without authentication. A segmentation fault in a CGI binary triggered a reboot through the core dump handler, giving a denial of service. A later firmware update removed that reboot path, but a diagnostics firmware page skipped session checks, and an attacker-controlled signature size in an uploaded file caused a heap overflow.\n\nChaining these issues gave unauthenticated code execution and a proof-of-concept that toggled a door relay through an ioctl call on the GPIO pins. The main takeaway is that a certification does not show that the code is secure, and that legacy endpoints and unchecked user-supplied sizes are common flaws in physical security devices that deserve review and prompt patching.",
       "durationSeconds": 2085,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -883,7 +907,10 @@
       "youtubeId": "KQb3gv4AgVg",
       "slug": "no-one-is-entitled-to-their-own-facts-except-in-cybersecurity",
       "title": "No One Is Entitled to Their Own Facts, Except in Cybersecurity?",
-      "speakers": [],
+      "speakers": [
+        "Tara Wheeler",
+        "Victoria"
+      ],
       "track": "blue-team",
       "topics": [
         "entitled-their",
@@ -893,7 +920,7 @@
         "entitled"
       ],
       "teaser": "Analyzes no One Is Entitled to Their Own Facts, Except in Cybersecurity and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk asks why cyber incidents do not get investigated the way plane crashes do. The speakers contrast the NTSB's structured, public accident reports with the fragmented, often marketing-driven reports the security industry produces. They use the Boeing 737 Max crashes as an example of an investigation that identifies several contributing failures, including Boeing's assumptions and the FAA's oversight, rather than a single cause.\n\nThey then present a playbook from the Harvard Belfer Center, modeled on the NTSB aviation investigations manual, that helps city, state, county, tribal and national governments convene an incident investigation board. The process runs in three phases: the board opens the investigation and names an investigator in charge, a technical team analyzes the incident, and the board reviews the findings and agrees on facts and recommendations. Boards should mix cybersecurity individuals, government agencies, academics and disinterested companies, and the technical team must explain its findings in plain language. A \"crisis mode\" section gives officials who have never run an investigation quick actions, such as finding outside experts through local security chapters or university computer science departments.\n\nThe speakers argue that final reports should avoid single root causes like a shared default password, be written for the public, and be hosted on stable sources such as public libraries, so that shared history does not disappear behind paywalls. The playbook is maintained as an open GitHub project, and the presenters invite the community to improve it through pull requests.",
       "durationSeconds": 1919,
       "conference": "black-hat",
       "difficulty": "beginner",
@@ -984,7 +1011,7 @@
         "from-here"
       ],
       "teaser": "Discusses keynote: Black Hat at 25: Where Do teams Go from Here and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Marking Black Hat's 25th anniversary, former CISA director Chris Krebs looked back at the conference's origins as briefings on what attackers were doing, then turned to where security is heading. He noted global attendance and scholarship programs meant to bring more varied voices into the field. He argued that the problems stem from four areas: technology built insecure and growing more complex, criminal and state actors exploiting that exposure, government regulation that is uneven and checklist-driven, and a shortage of leaders and skilled workers.\n\nThe middle of the talk focused on \"super-empowered\" individuals and organizations. He cited a database project that removed Russian projects from its hub and a domain registrar that stopped processing payments in Russia after sanctions, as examples of private groups making broad decisions. He proposed a shared sanctions list that operators could apply to specific entities rather than whole populations. He also said ransomware gangs have drawn attention away from top-tier nation-state threats, and that software supply chains are attractive because one compromise reaches many customers.\n\nTo close, he urged organizations to set clear principles, fund fixes to core infrastructure rather than edge patches, and run executive exercises on scenarios such as a disruption in the Taiwan Strait. He suggested governments act as buyer, enforcer, defender and enabler, and floated rethinking how federal digital functions are organized. He ended with career advice: find purpose, build support networks and seek honest feedback.",
       "durationSeconds": 3922,
       "conference": "black-hat",
       "difficulty": "beginner",
@@ -995,7 +1022,10 @@
       "youtubeId": "XAGTnJZwLtQ",
       "slug": "smishmash-text-based-2fa-spoofing-using-osint-phishing-technique",
       "title": "Smishmash - Text Based 2fa Spoofing Using OSINT, Phishing Techniques and a Burner Phone",
-      "speakers": [],
+      "speakers": [
+        "Thomas Olafson",
+        "Mike"
+      ],
       "track": "social-engineering",
       "topics": [
         "smishmash-text",
@@ -1093,7 +1123,10 @@
       "youtubeId": "Pe9nJLZvABM",
       "slug": "rce-as-a-service-lessons-learned-from-5-years-of-real-world-ci-c",
       "title": "RCE-as-a-Service: Lessons Learned from 5 Years of Real-World CI/CD Pipeline Compromise",
-      "speakers": [],
+      "speakers": [
+        "Ian",
+        "Victor"
+      ],
       "track": "supply-chain",
       "topics": [
         "rce-as-a-service-lessons",
@@ -1103,7 +1136,7 @@
         "years-real-world"
       ],
       "teaser": "Examines RCE-as-a-Service: Lessons Learned from 5 Years of Real-World CI/CD Pipeline Compromise and evaluates key implications for security practitioners.",
-      "summary": "Black Hat session on RCE-as-a-Service: Lessons Learned from 5 Years of Real-World CI/CD Pipeline Compromise.",
+      "summary": "The speakers explain why CI/CD pipelines are attractive targets: they hold credentials, reach several environments, and run code from anyone who can change a repository. Their engagements used no zero-days, only configuration gaps across Jenkins, CircleCI and cloud-hosted pipelines.\n\nA developer with access to one repository swapped a Maven dependency for an attacker-hosted payload and got a shell on a Jenkins runner. An SSH key left on that runner reached control nodes holding project secrets and a kubeconfig with production rights. A GitHub authentication plugin set to grant read access to all authenticated users let any GitHub account log into Jenkins. Terraform output printed an AWS key into build logs, and base64-encoded secrets slipped past masking and left through a Slack webhook. In a Kubernetes case, a service account allowed editing a config map to gain cluster admin on a dev cluster, and an in-cluster pull of a poisoned image reached production. A CircleCI config change let any branch use production keys, and a Jenkins build role allowed Groovy execution.\n\nRecommendations include removing unneeded credentials, filtering egress, accepting dependencies only from internal sources, testing what plugins actually do, least privilege with separated duties, limiting secrets to protected branches, and using a secrets manager with rotation. Monitoring matters because ephemeral runners lose their evidence. The speakers also urge threat modelling pipelines early, noting that artifact signing does not help if the pipeline was compromised before signing.",
       "durationSeconds": 2336,
       "conference": "black-hat",
       "aiSummary": "## Overview and Speakers\nThe talk, titled *\"RCE-as-a-Service: Lessons Learned from 5 Years of Real-World CI/CD Pipeline Compromise,\"* discusses the security risks, attack surfaces, and breakout experiences associated with Continuous Integration and Continuous Deployment (CI/CD) systems. \n\nThe speakers presenting the session are:\n* **Ian**: Containerization Practice Lead at NCC Group, with approximately six years at the company focusing on breaking out of containers, cloud environments, and CI/CD pipelines.\n* **Victor**: Cloud Research Group Leader and Jenkins Security MVP, with seven years of industry experience.\n\n## Fundamentals and CI/CD Architecture\nThe speakers establish baseline terminology and describe how modern pipelines function:\n* **CI (Continuous Integration)**: Automates processes when developers push code commits to version control systems (e.g., GitHub, GitLab). This typically involves automated unit testing, static security analysis, and compiling artifacts.\n* **CD (Continuous Deployment / Continuous Development)**: Automatically takes code or compiled artifacts and releases them to production environments for end users to access.\n* **Triggers and Workflows**: Execution runs sequentially and can be triggered by developer actions (e.g., commits, merge requests) or scheduled timers (e.g., monthly rebuilds).\n* **Artifact Generation**: Pipelines produce artifacts ranging from static analysis reports destined for ticketing systems to compiled binaries and Docker container images deployed across cloud, on-premises, or serverless infrastructure.\n\n## Attacker Perspective and Attack Surface\nCI/CD systems present an unusually broad attack surface due to the trust, access, and infrastructure converged within them:\n* **Multi-Environment & Network Reach**: By merely submitting or manipulating code, an attacker can pivot execution into various network zones and environments, including testing, pre-production, and production environments across both cloud and on-premises systems.\n* **Secrets and Credential Storage**: Pipelines and supporting infrastructure store high-value secrets (such as API keys, passwords, and SSH keys) needed throughout intermediate steps.\n* **Supply Chain and Dependency Interactions**: Pipelines pull external dependencies (e.g., third-party Docker images, JavaScript packages) and push built artifacts and web applications directly into deployment targets.\n* **Free Resource Abuse**: Beyond targeting credentials and code, attackers can leverage the underlying compute resources of CI/CD runners for unintended tasks, such as running cryptocurrency mining applications.\n\n## Real-World Findings and Misconfigurations\nThe speakers note an increasing number of client engagements assessing CI/CD security. Rather than zero-day exploits, significant compromises in real-world environments routinely stem from the failure to apply core security principles to pipeline design, even in client environments initially described as locked down.",
@@ -1149,7 +1182,7 @@
         "conditions-with"
       ],
       "teaser": "Reviews catch Me If You Can: Deterministic Discovery of Race Conditions with Fuzzing and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk addresses why race conditions are hard to find with fuzzing. Such bugs depend on thread preemption, and random preemption creates an exponential search space that is hard to control or reproduce. Cooperative scheduling is deterministic and easy to fuzz, but replacing threads by hand breaks down when code blocks. The speaker describes a deterministic threading library that runs all threads on one CPU, with an executor and a scheduler that owns the threads and mutexes.\n\nThe key idea is that the scheduler draws its choices from fuzzer input, so the fuzzer mutates the thread schedule alongside the system calls. Yield points are added only around lock acquisition and release, based on the view that bugs tend to appear near synchronization points. This was built into an iOS kernel fuzzer that runs the XNU kernel in user space. Examples included an Android binder use-after-free from a Linux patch, where preemption at two points around a lock release was enough to reproduce it; a new XNU Mach port reference-counting use-after-free found by the fuzzer and similar to a teammate's report; and a BSD socket use-after-free involving setsockopt and disconnectx that crashed deterministically on a February 2022 kernel.\n\nThe speaker compares the approach to deterministic record and replay and to Microsoft CHESS, which enumerates interleavings systematically. Here the fuzzer explores schedules instead, and coverage guidance makes random schedules effective. The main takeaways are that few preemption points may be needed and that better concurrency tooling is needed beyond security. A first draft was planned for release in an open-source project.",
       "durationSeconds": 2466,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1172,7 +1205,7 @@
         "mitigating"
       ],
       "teaser": "Presents castGuard: Mitigating Type Confusion in C++ and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk introduces CastGuard, a mitigation Microsoft built and is rolling out to stop illegal static downcasts in C++, a form of type confusion. The speaker explains why the team now focuses on killing bug classes rather than exploit techniques, and why type confusion is hard to address generically: it does not break a clear memory contract, so detecting it requires knowing developer intent. Dynamic_cast is ruled out for broad deployment because it depends on runtime type information, which bloats binaries and adds overhead.\n\nCastGuard reuses the vtable pointer that polymorphic objects already carry as an identifier, so no ABI change is needed. With link-time code generation, the compiler places the vtables valid for each downcast target into one region, ordered depth first so that legal vtables sit next to one another. A check reads the vtable pointer, computes its distance from a base vtable, and performs a single range comparison, failing open only for objects created in other binaries. Multiple inheritance comes down to choosing the right vtable hierarchy. Identical COMDAT folding and the curiously recurring template pattern caused size regressions, which were addressed by excluding certain vtables from folding and statically proving some casts safe.\n\nThe per-cast check is about seven instructions, and binary size impact is typically under one percent. One WinRT binary's regression was brought to zero, while comparable clang CFI and XFG work showed much larger bloat on the same pattern. CastGuard is enabled in telemetry mode in Hyper-V preview builds with no failures so far, and has been switched to enforcement mode with more Windows components planned. The takeaway is that deterministic downcast checks can be fast and broadly deployable, which matters as type confusion grows in importance alongside hardware defenses.",
       "durationSeconds": 2408,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1245,7 +1278,7 @@
         "bounty"
       ],
       "teaser": "Reviews bug Bounty Evolution: Not Your Grandsons Bug Bounty and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines why modern bug bounty programs have not delivered their promised security and workforce benefits. It traces the idea from early rewards for software and book errors through Mozilla and Google payouts to Microsoft's 2013 program, which paid for reports during beta periods when researchers otherwise held their bugs. Many organizations, the speaker argues, launch programs before they have the processes and staff to fix what arrives.\n\nSeveral cases illustrate the gaps. One social audio startup ran a private program with a single person handling security, and it pushed the researcher toward non-disclosure terms. The speaker also flags labor concerns: a hunter who reports a bug someone else already found earns nothing, much like unpaid gig work. Growing duplicates, rising rewards for basic flaws, and missing metrics point to weak internal capability. The proposed hybrid model uses a time-limited penetration testing contract so a researcher can enumerate every instance of a recurring bug class, with an NDA suited to that setting.\n\nThe practical takeaways focus on measurement and staffing. Track mean time to repair, duplicates per bug, reopened cases and shared root causes, and watch platform service levels. Plan for turnover in internal security roles, since key people often leave after a few years. Bounties should complement a mature process, not cover for its absence.",
       "durationSeconds": 2254,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -1268,7 +1301,7 @@
         "learning-enhanced"
       ],
       "teaser": "Analyzes malware Classification With Machine Learning Enhanced by Windows Kernel Emulation and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Dmitrijs Trizna presents a way to improve machine learning malware classification by adding dynamic behavior to the static file features that most public models use. Static classifiers built on PE features such as sections, imports and byte histograms work well on general threats, but adversarial tricks like injecting benign sections into packed malware can evade them. Running samples in virtual machines is too costly at scale, so the team uses the Speakeasy emulator to record API calls, network, registry and file activity without booting an operating system.\n\nThe hybrid model has three branches: the existing static features, a branch that embeds and convolves API call sequences, and a branch covering the file paths where samples sat on disk. A fully connected meta model combines them. On roughly 100,000 training and validation samples, and a test set of about 27,500 collected three months later, file paths plus emulation reached around 77 percent detection at a very low false positive rate, better than either signal alone. The static features remained the strongest single component. Against section-injection adversarial samples, adding emulation cut the number that evaded the static model by about 90 percent.\n\nThe takeaways are that behavioral logs such as Sysmon can be modeled the same way, giving security operations teams a path beyond vendor-only research. Machine learning is a tool to add alongside rule-based detection, not a replacement for analysts. Future work includes modeling network, registry and file system reports and adding context such as parent process and mark of the web. The emulation reports were released as anonymized JSON, while the samples could not be shared.",
       "durationSeconds": 1627,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1329,7 +1362,11 @@
       "youtubeId": "U1x2MGdIWkA",
       "slug": "uwb-real-time-locating-systems-how-secure-radio-communications-m",
       "title": "UWB Real Time Locating Systems: How Secure Radio Communications May Fail in Practice",
-      "speakers": [],
+      "speakers": [
+        "Roya Gordon",
+        "Andre Palanca",
+        "Luca Cremona"
+      ],
       "track": "wireless",
       "topics": [
         "real-time",
@@ -1339,7 +1376,7 @@
         "secure-radio"
       ],
       "teaser": "Details UWB Real Time Locating Systems: How Secure Radio Communications May Fail in Practice and evaluates key implications for security practitioners.",
-      "summary": "Black Hat session on UWB Real Time Locating Systems: How Secure Radio Communications May Fail in Practice.",
+      "summary": "Researchers Roya Gordon, Andre Palanca and Luca Cremona from the Nozomi Networks research team examine ultra-wideband (UWB) real-time locating systems (RTLS), which track people and assets in factories, hospitals and buildings. They explain that a 2020 IEEE update strengthened the radio link, but left synchronization and location traffic between the anchors and the server to individual vendors.\n\nThe team reverse engineered the proprietary binary protocols of two commercial UWB kits, working from the server software and dissecting the traffic in Wireshark. They found that location and timestamp data travelled in clear text, and that integrity checks were weak, using a CRC16 in one kit and a byte-wise sum in the other. Wi-Fi backhaul relied on a default pre-shared key documented publicly, and an ARP spoofing man-in-the-middle attack went unnoticed by the system. They showed that a remote attacker could estimate anchor coordinates from signal power levels, then calculate tag positions. Demonstrations covered covert tracking of a worker, fake contact-tracing alerts, and a manipulated geofence that stopped and restarted a production line with a worker nearby.\n\nTo close, the speakers reviewed mitigations. Segregating the RTLS network is quick to deploy but has limits, intrusion detection struggles with crafted traffic that mimics real movement, and an SSH tunnel encrypts the traffic at the cost of latency and reduced synchronization accuracy. Their main message is that safety-critical location systems need defined security requirements, and that the whole attack surface, including the anchor-to-server links, must be assessed.",
       "durationSeconds": 2135,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1360,7 +1397,7 @@
         "light-samsung"
       ],
       "teaser": "Outlines trust Dies in Darkness: Shedding Light on Samsungs TrustZone Keymaster Design and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines Samsung's Keymaster implementation inside the TrustZone trusted execution environment on Android phones, which is meant to protect cryptographic keys used for payments, logins and other sensitive tasks. The researchers reverse engineered the firmware and trusted applications, focusing on how key blobs are encrypted before being returned to Android. They found that the encryption used AES-GCM with a derived key whose salt and initialization vector could be influenced by the client, and that a hidden API allowed the encryption version to be set.\n\nReusing an IV in GCM let them recover the key material of an encrypted blob. By importing a known key with the same IV and salt, they could combine the two ciphertexts and recover the unknown key. On Galaxy S9-class devices this bypassed key restrictions such as biometric or confirmation requirements. A downgrade to an older encryption version extended the attack to newer phones. The speakers showed cloning a FIDO2 platform authenticator on a Galaxy S10, using their tooling with an unmodified sample web authentication application to sign in to a remote server over the internet. Samsung first rejected the downgrade issue, then patched the IV problem, later fixed the rest and removed the legacy key blob implementation.\n\nThe main takeaways are that the root cause was API misuse and hidden functionality inside a security-critical component. Developers should use nonce-misuse-resistant authenticated encryption and publicly reviewed designs rather than relying on secrecy. Attestation certificates do not reveal the encryption method, so relying parties cannot detect flawed devices. Google later changed its key attestation protocol to allow refusing certificates from known compromised devices.",
       "durationSeconds": 1749,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -1393,7 +1430,10 @@
       "youtubeId": "TqMjMpvspJ4",
       "slug": "the-open-threat-hunting-framework-enabling-organizations-to-buil",
       "title": "The Open Threat Hunting Framework: Enabling Organizations to Build, Operationalize, and Scale Threat",
-      "speakers": [],
+      "speakers": [
+        "John Neil",
+        "Samir"
+      ],
       "track": "policy",
       "topics": [
         "open-threat",
@@ -1436,7 +1476,9 @@
       "youtubeId": "tDUYny5SXi4",
       "slug": "the-growth-of-global-election-disinformation-the-role-methodolog",
       "title": "The Growth of Global Election Disinformation: The Role Methodology of Government-linked Cyber Actors",
-      "speakers": [],
+      "speakers": [
+        "Dr Q"
+      ],
       "track": "blue-team",
       "topics": [
         "growth-global",
@@ -1446,7 +1488,7 @@
         "role-methodology"
       ],
       "teaser": "Evaluates the Growth of Global Election Disinformation: The Role Methodology of Government-linked Cyber Actors and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This case study follows a Spanish-language Twitter account, active from late 2018 until its suspension in March 2022, that presented itself as a community while amplifying Venezuelan, Russian, Iranian and Cuban state-linked media. The speaker, an open-source intelligence analyst, explains how human rights research surfaced the account during the 2021 protests in Colombia. Its round-the-clock activity, mix of true and false posts, and use of local hashtags pointed to coordinated human operators rather than an automated bot.\n\nThe investigation followed the account's own links. A Telegram channel listed in its bio led to an admin tied to a Venezuelan digital marketing firm, whose chief executive had earlier run social media for a Venezuelan government ministry. Archived web pages showed a university-linked newspaper project that was registered by that ministry and listed contributions from Fidel Castro and Hugo Chavez. The team assessed that the Venezuelan government likely used this firm to influence the 2022 Colombian presidential election in favour of a leftist candidate, who was then elected. Earlier examples included a false denial of a real car bomb and a network of lookalike accounts pushing a \"5 million votes\" hashtag, which were later suspended for inauthentic behavior.\n\nAfter the March 2022 report, the account was suspended, and its operators moved their output to a Telegram channel under a slightly changed name. The speaker's takeaways were to distrust sources you cannot identify, to examine who is behind content rather than the content alone, and to use historical account data to find leads. The talk also stressed political neutrality in research and support for analysts who are exposed to disturbing material.",
       "durationSeconds": 1795,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1519,7 +1561,7 @@
         "breaking"
       ],
       "teaser": "Explores breaking the Chrome Sandbox with Mojo and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk walks through Chrome's Mojo inter-process communication layer, where renderer processes that handle untrusted web content talk to privileged utility processes such as the network service. The speaker explains the background first: nodes connect through a broker in the browser process, and each port is addressed by a random 128-bit name. Assuming a compromised renderer, two logic flaws in the node introduction flow are covered. In the first, the browser accepted an introduce message from any node, letting a renderer sit in the middle of a connection between another renderer and the network process; a later patch dropped such connections. The second flaw was a similar missing broker check, this time on the add-broker-client message.\n\nThe third bug is the main focus and is a multi-step race. The attacker crashes the network process so its node name can be reused, floods the network process with fake nodes to stall its I/O thread, and leaks a privileged port name through port-closed events. Several escape routes failed, including an unsandboxed V8 worklet service and an HTTP authentication library path. The working route wrote attacker-controlled text into a cookie SQLite file that a Linux shell then executed, and the demo showed this by launching a calculator.\n\nThe takeaway is that deep, target-specific knowledge of a protocol can reveal bugs that fuzzers are unlikely to find, and the same knowledge makes exploitation possible. The speaker also notes that a sandbox escape of this kind still depends on first having code execution in a renderer.",
       "durationSeconds": 2148,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1545,7 +1587,7 @@
         "pre-efi-exploiting"
       ],
       "teaser": "Outlines breaking Firmware Trust From Pre-EFI: Exploiting Early Boot Phases and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Alex Matrosov presents his research team's findings on vulnerabilities in the early UEFI boot phases, before the DXE stage where most protections are enabled. He explains that the PEI phase runs before many defenses, such as SMM isolation and Boot Guard-related safeguards, are active, so bugs there can undermine the whole protection chain. He reviews earlier work on Boot Guard and security boundaries, and notes that Intel's Authenticated Code Modules have grown from about 32 KB to 256 KB, enlarging the attack surface. The team reported around twelve CVEs, with public advisories.\n\nHe walks through several cases. One involved a firmware variable holding an ACPI S3 performance table pointer, where changing the pointer and triggering S3 sleep gave an arbitrary write and code execution. Another was an SMM BIOS ELOG callback with an overflow. An overclocking SMI handler was found in a new platform because a build script carried over an outdated module, a clear supply chain failure. A GetVariable issue in PEI was used for a PPAM bypass, and symbolic execution helped find it. He also showed that S3 sleep can be triggered on servers through Linux rtcwake, which contradicted vendor claims that the issue affected only clients.\n\nFor PPAM, the talk describes its three phases and notes that its policy manifest is signed, but certificates on about 200 systems checked were outdated, so attestation fails. The speaker recommends that vendors keep reference code consistent, treat SPI flash and NVRAM as attack surface, and use static and symbolic analysis tools. The team's scanner is open source on GitHub. The key message is that complexity is the enemy of security.",
       "durationSeconds": 2176,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1578,7 +1620,9 @@
       "youtubeId": "ERaRNsvCBrw",
       "slug": "xmpp-stanza-smuggling-or-how-i-hacked-zoom",
       "title": "XMPP Stanza Smuggling or How I Hacked Zoom",
-      "speakers": [],
+      "speakers": [
+        "Ivan Fratrich"
+      ],
       "track": "blue-team",
       "topics": [
         "xmpp-stanza",
@@ -1634,7 +1678,7 @@
         "hyper-v"
       ],
       "teaser": "Reviews directX: The New Hyper-V Attack Surface and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines the DirectX component that Microsoft added to Hyper-V in 2020 to give virtual machines GPU paravirtualization. A Linux guest runs a kernel module that forwards DirectX graphics commands over VMBus to the host's graphics kernel, following the same path as the native display driver model. The speakers show how to attach a virtual GPU to a VM with PowerShell and how to confirm the component is active from the guest kernel log.\n\nOn the host side, the attack surface is a set of command handlers reached through tables keyed by channel and command IDs, around 87 in total across several driver components. The speakers walk through four bugs with proof-of-concept structure and live debugging: a bad pointer reference in the signal sync object from CPU command, an uninitialized structure reached through the submit command path that a guest can steer with a history token, an arbitrary address read in the wait for sync object from GPU command, and an arbitrary address write in the submit present history token command.\n\nTo find these bugs, the researchers built a fuzzer with a guest-side driver and a user-mode component that mutates DirectX kernel command data before sending it to the host. The talk closes by arguing that this attack surface is large, still changing, and under-researched, with relevance to Windows Sandbox, WSL and possibly gaming inside VMs. The takeaway for practitioners is the architecture overview, a method for fuzzing the interface, and the four bug write-ups as references for hunting similar flaws.",
       "durationSeconds": 1702,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1734,7 +1778,7 @@
         "evaluation-spacex"
       ],
       "teaser": "Investigates glitched on Earth by Humans: A Black-Box Security Evaluation of the SpaceX Starlink User Terminal and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines the user terminal of SpaceX's Starlink satellite internet service as a possible way into the wider network. Starting from a purchased dish, the speaker walks through the hardware revisions, the board layout, and the system-on-chip. The serial console accepted no input, and the login prompt was locked to non-development units. Extracting the storage chip through test points showed that the firmware partitions were cryptographically protected, so direct modification was not possible.\n\nThe main attack targets the boot chain. Voltage glitching with some decoupling capacitors removed produced occasional logins on a running system, but the success rate was too low to be practical. Side-channel traces then helped time a glitch into the ROM bootloader's signature check, which skipped verification of the next stage and let a modified loader run. Simulating a single-instruction-skip fault failed because the bootloader includes control-flow checks, so the fault model had to be corrected. Later, a firmware update blew an e-fuse that silenced the serial output, and the setup was adapted to watch the storage data line instead. A custom modchip driven by a microcontroller made the glitching portable.\n\nThe speaker concludes that the device is well designed, with no obvious low-hanging software flaws, and that even a root shell does not give a scalable attack. The work shows that fault injection countermeasures are only as good as the fault model behind them. The talk also notes that the firmware reveals telemetry and geofencing of development hardware, and that the vendor's incident response team was responsive when hardware was damaged during testing.",
       "durationSeconds": 1979,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1808,7 +1852,7 @@
         "exploits-using"
       ],
       "teaser": "Evaluates eliminating Triage Intermediaries for Zero-day Exploits Using a Decentralised Payout Protocol and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk starts from bug bounties, where a hacker who finds a zero-day exploit may struggle to disclose it safely, negotiate a fair price, or reach small firms that lack resources. Triage intermediaries help by evaluating exploits and negotiating payouts, but they are slow, expensive, and need detailed knowledge of each company. The speaker presents TrueSec, a decentralized payout protocol that aims to remove the middle person by automating triage and payment on a blockchain.\n\nUnder the protocol, companies pool bounties into a smart contract that records the total staked, the minimum disclosure time for patching, and payout terms for different exploit types, such as read or write access. A decentralized virtual machine runs the affected software stack, with a hidden secret that an exploit must compromise. A hacker who finds a zero-day stores it in a time-locked vault, covers the evaluation cost, and submits a contract that checks the exploit automatically. Stakeholders can read the exploit early to patch in time. After the disclosure window closes, the exploit is run against the unpatched stack, and a successful compromise triggers an automatic payout.\n\nThe speaker is candid about limits. The scope covers only deterministically verifiable zero-days, not social engineering or most real attacks, and the all-or-nothing contract specification leaves no room for error. Running evaluations on-chain was costly, around fifty dollars per transaction at the time of the white paper. The total staked should not be read as a full measure of security. The team asks the community for input on compliance needs and exploit types, and plans a platform choice, a minimum working example, a security audit, and gradual live deployment.",
       "durationSeconds": 1355,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -1907,7 +1951,7 @@
         "protect-itself"
       ],
       "teaser": "Explores how Firefox Uses In-process Sandboxing To Protect Itself From Exploitable Libraries and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk starts from the problem that much of the memory safety risk in large applications comes from native libraries pulled in as dependencies, such as image decoders and XML parsers. Rewriting everything in a safe language is impractical given the amount of existing C and C++ code, and running each library in a separate process adds inter-process communication overhead and forces the application to be re-architected. In-process sandboxing offers a middle path: untrusted libraries are compiled to WebAssembly, which uses runtime checks to confine their memory accesses to their own region, while they run inside the same process.\n\nThe main difficulty is the engineering work. Using libjpeg as a running example, the speaker shows that sandboxing it by hand means decoupling its code, marshalling data across different calling conventions, and validating every output the application now treats as untrusted. Such changes touch nearly every line, and one mistake can defeat the sandbox. To address this, the team built RLBox, a C++ framework that hides the low-level interface details behind types, marks data coming out of the sandbox as tainted, and refuses to compile until that data is checked.\n\nAcross applications such as Firefox, Node.js and Apache, the team sandboxed libraries for image and font rendering, audio and video playback, and XML parsing. RLBox removed hundreds of lines of glue code, and each case typically needed only two to four lines of validation. Firefox has shipped RLBox since February 2020, starting with one library on Mac and Linux and now covering all supported platforms, including Android. Measured overhead for XML parsing and font decompression was around 10 percent. Remaining work includes threading support, virtual memory limits on 32-bit platforms and API modernisation. Firefox's bug bounty also covers escaping a sandboxed library.",
       "durationSeconds": 1360,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1930,7 +1974,7 @@
         "incident-response"
       ],
       "teaser": "Provides do Not Trust the ASA, Trojans and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines Cisco ASA adaptive security appliances, the edge firewall and VPN devices that administrators manage with the ASDM desktop client. The speaker shows that the ASDM client never verifies the appliance's server certificate, so a man-in-the-middle can alter the session, and that the SGZ file it downloads can carry injected Java classes that run on the administrator's Windows machine. A related advisory, CVE-2021-1585, describes the same code execution through an attacker-controlled endpoint.\n\nThe talk then turns to the appliance itself. ASDM packages are checksum-only rather than signed, so anyone can upload a modified package that serves a malicious SGZ file. Default blank ASDM credentials, basic authentication that exposes passwords to a man-in-the-middle, and leaked credentials in client logs all provide access. A command injection in the session command for the Firepower services module gives a root shell on that virtual machine. On the Firepower boot image, hard-coded root credentials open a root shell, and the speaker built a bootable ISO and an install package in an insecure checksum format that persists across reboots.\n\nThe main takeaway is to avoid using ASDM over the internet and to disable it where possible. Practitioners should audit who logs in, rotate passwords, and restrict access to the appliance, since several of these issues were unpatched or not treated as vulnerabilities by Cisco at the time. The speaker also recommends retiring the Firepower root shell feature and reviewing the YARA rules released with the talk to detect malicious packages, unsigned installers and credential leaks.",
       "durationSeconds": 1943,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -2024,7 +2068,7 @@
         "pakes"
       ],
       "teaser": "Presents demystifying Key Stretching and PAKEs and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk covers key stretching, the deliberately slow processing applied to passwords before they are hashed or turned into keys, and why it matters. It opens with the Ashley Madison breach, where bcrypt hashes were strong but salted case-insensitive MD5 hashes stored beside them were cracked quickly, with millions recovered within ten days. Common implementation flaws follow, including bcrypt silently truncating input past 72 bytes and PBKDF2 misuse that enables denial of service through very long passwords.\n\nThe speaker describes computationally hard, memory-hard and cache-hard approaches and proposes a three-step design: hash the inputs, do work on the resulting seed, then expand the output with a KDF. Defenders should tune settings so an attacker gets under about 10,000 guesses per second per GPU. The talk gives minimum parameters for bcrypt, scrypt and Argon2, based on the memory bandwidth of current GPUs, and notes that the best settings depend on the hardware in use.\n\nThe second half covers password-authenticated key exchange (PAKE), which lets a client and server prove knowledge of a password without sending it. The speaker compares balanced, augmented, doubly augmented and identity variants, and rates constructions such as OPAQUE and 3DH on properties like forward secrecy, precomputation resistance and secure registration. The talk closes with a cheat sheet of recommendations and API design advice for implementers.",
       "durationSeconds": 2383,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -2048,7 +2092,7 @@
         "uncovering"
       ],
       "teaser": "Evaluates Déjà Vu: Uncovering Stolen Algorithms in Commercial Products and evaluates key implications for security practitioners.",
-      "summary": "Black Hat session on Déjà Vu: Uncovering Stolen Algorithms in Commercial Products.",
+      "summary": "Patrick Wardle describes how his closed-source macOS utility, Oversight, was copied into several commercial products. Oversight alerts users when the microphone or webcam is accessed and identifies the responsible process. It does this with undocumented techniques: parsing lsmp output, reading IORegistry keys, and sampling candidate processes for a specific CMIO call. Because these steps are brittle, copies inherit the same quirks and bugs, which makes them a strong fingerprint.\n\nBug reports and a YARA rule surfaced several products that looked similar. Tom McGuire then compared them side by side with Oversight. One product matched the lsmp parsing and registry queries, a Swift rewrite shared those steps, and a third included the sampling check, despite changes such as regex parsing. The matching logic was presented as conclusive proof of copying.\n\nPatrick then covered how the cases were resolved. He advised deciding goals first, whether money, code removal or public exposure, and presenting proof in plain terms for legal teams, ideally with a lawyer of one's own. Companies generally wanted an amicable deal, often a retroactive license. All three acknowledged the issue and removed the code, and one made a large donation to the Objective-C Foundation. Developers should check whether their closed-source work is being copied, and companies should ask where new code came from.",
       "durationSeconds": 1574,
       "conference": "black-hat",
       "aiSummary": "## Overview\n\nPresented by Patrick Wardle (founder of The Objective-C Foundation) and Tom McGuire (instructor at Johns Hopkins), this presentation addresses the systemic issue of closed-source algorithms being misappropriated into commercial products. The primary victim highlighted is **OverSight**, a free, closed-source security utility developed and released by Patrick Wardle in 2016 for macOS. OverSight was designed to monitor microphone and webcam activity to detect stealthy zero-day malware and surveillance attempts without requiring prior knowledge or signatures. Its proprietary methodology was ultimately identified inside at least three separate, unrelated commercial software products.\n\n## The Core Challenge: Process Attribution\n\nWhile macOS natively enables developers to receive notifications when the microphone or webcam is activated (achievable in approximately ten lines of code), standard operating system notifications provide no metadata regarding which process triggered the hardware. \n\nOverSight’s core innovation and \"killer feature\" was solving this attribution gap: determining the exact active process responsible for hardware access. Attribution is vital to distinguish legitimate applications (such as Zoom, Skype, or FaceTime) from unauthorized or malicious background access (such as nation-state surveillance implants). In addition to catching malware and zero-day vulnerabilities in tools like Zoom, this mechanism uncovered instances of legitimate software behaving poorly, such as discovering that Shazam for macOS was continuously recording audio even when toggled off.\n\n## Technical Methodology: Mach Message Enumeration via `lsmp`\n\nTo attribute hardware access without public, documented APIs, OverSight relied on a multi-step sequence utilizing undocumented macOS internals:\n\n1. **Mach Message Detection**: When an application accesses audio or video hardware, the underlying system frameworks dispatch Mach messages directly to the dedicated macOS microphone or camera system daemons.\n2. **Permission and Entitlement Workaround**: Apple does not permit arbitrary third-party processes to enumerate Mach messages belonging to other processes.\n3. **Execution of `lsmp`**: To bypass this limitation, OverSight programmatically invokes `lsmp` (*List Mach Ports*), a native command-line utility bundled with macOS that possesses the internal system entitlements required to query and enumerate system-wide Mach ports and messages.\n4. **Output Parsing**: Because `lsmp` was developed for manual command-line inspection rather than machine consumption, OverSight implements custom text-parsing logic to extract target process IDs (PIDs) that have communicated with the camera and microphone daemons.\n\nUnderstanding this specific architecture, its reliance on `lsmp`, and the associated parsing logic provided the deterministic technical baseline necessary to detect, trace, and formally prove unauthorized reuse within closed-source commercial applications.",
@@ -2097,7 +2141,7 @@
         "code-management"
       ],
       "teaser": "Provides controlling the Source: Abusing Source Code Management Systems and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines how attackers can abuse source code management platforms (GitHub Enterprise, GitLab Enterprise and Bitbucket Server) that store the code feeding later devops stages. It explains why these systems are attractive, since tampering with source affects every downstream build, and why they can also serve as a pivot into CI/CD and distribution systems. Reconnaissance, user impersonation, site admin promotion and persistence through tokens and SSH keys are covered per platform, along with the logs each one leaves behind.\n\nThree demonstrations follow. In the first, a site admin API key found on a file share promotes a normal user, who then takes over a private repository and modifies its code as part of a software supply chain attack. In the second, a user with access to a GitLab runner edits the pipeline configuration so the job output reveals Artifactory credentials, which then grant access to that package repository. In the third, a changed Jenkinsfile in a Bitbucket-linked repository runs on the Jenkins server and installs an attacker's SSH key, giving a pivot to that build host.\n\nFor defenders, the recommendations include forwarding the relevant platform logs to a SIEM, setting expiration dates on tokens and keys, keeping administrator accounts to a minimum, enabling multi-factor authentication, disabling user impersonation, and requiring approval and signed commits for changes to pipeline configuration files. Detection rules and full log queries are published in an accompanying white paper.",
       "durationSeconds": 2193,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -2120,7 +2164,7 @@
         "chasing"
       ],
       "teaser": "Details chasing Your Tail With a Raspberry Pi and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk starts with a request from a government contact who needed to know whether someone was following them after meeting a confidential informant, since a follower could later endanger that person. Existing tools were hard to find, so the speaker built a passive surveillance detection device for use while driving. It watches for nearby Wi-Fi and Bluetooth devices without connecting to them.\n\nThe build uses a cheap Raspberry Pi, an external Wi-Fi adapter placed in monitor mode, and Kismet, which logs to an SQLite database. Because Kismet stores only first and last seen times, the scripts keep rolling lists of devices seen in five-minute windows going back 20 minutes, and raise an alert when a device reappears across those windows. An ignore list built from devices present at the start of a session filters out the driver's own phones. Field tests showed that phones randomize MAC addresses, so the approach also matches probe requests by the names of networks the devices are searching for. Those names are often unique, and a probe for a distinctive network name can hint at who or what organization the device belongs to.\n\nThe large, simple interface was intentional for use while driving, and battery packs ran the unit for many hours. The talk closes with planned additions such as tire pressure sensors and GPS to map where a suspicious device was first seen. The main takeaway is that devices and network names leak identifying information, and that surveillance detection can be done with inexpensive hardware.",
       "durationSeconds": 1670,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -2195,7 +2239,7 @@
         "truemu"
       ],
       "teaser": "Investigates truEMU: An Extensible, Open-Source, Whole-System iOS Emulator and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "iOS researchers usually depend on physical hardware, and each option brings friction. Security research devices require reporting findings to Apple, leaked internal units raise legal problems, and jailbroken consumer phones are hard to instrument. Commercial emulators are expensive, Apple's virtual machine offers little customization, and existing open-source emulators support few iOS versions and devices. The talk presents TruEMU, an open-source whole-system iOS emulator targeting releases from iOS 14 to iOS 16, with kernel debugging and fuzzing as goals.\n\nPeripherals are modeled from the device tree in the firmware, which provides compatible strings, interrupt numbers, and MMIO ranges. Unmodeled devices start as stubs that log every access, letting researchers trace driver behavior before writing real emulation code. The speaker described Apple's GXF privilege layer, where guarded-mode page permissions are indexed through a system register, allowing JIT code to flip write and execute permissions without costly page-table changes. USB support emulates Synopsys controllers and bridges to a host over a Unix socket; demos restored an emulated device with idevicerestore and opened an SSH shell. A preliminary iBoot demo showed recovery-mode interaction.\n\nFor fuzzing, snapshot restore reduced cycle time roughly tenfold, and coverage comes from QEMU's TCG backend, with AFL driving USB and kernel-side inputs. Open problems include interrupts that make coverage nondeterministic and the lack of sanitizers on iOS. Planned work covers a framebuffer, touchscreen, secure enclave processor and GPU emulation. The takeaway is that emulation could make iOS research more accessible, and the project invites contributions.",
       "durationSeconds": 2091,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -2220,7 +2264,7 @@
         "nasty-dirty"
       ],
       "teaser": "Discusses cautious: A New Exploitation Method! No Pipe but as Nasty as Dirty Pipe and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Dirty Pipe (CVE-2022-0847) is a Linux kernel bug in the pipe subsystem that affects kernel 5.8 and later. The speakers describe its exploitation as data-only: it does not hijack control flow, it sidesteps KASLR and CFI, and it can overwrite any file the attacker can read. Its limits are that it is tied to one bug and cannot actively escape a container. They present a generic data-only method that escalates privilege by swapping kernel credentials, replacing an unprivileged credential object of the attacker's task or open file with a privileged one.\n\nThe talk walks through both targets. For task credentials, the attacker frees its own credential object and spawns privileged tasks so the allocator reuses the slot. For open files, the file structure is freed after the permission check but before the write, and reopening a root-only file such as /etc/passwd read-only fills the slot, redirecting the write. Since many bugs only reach generic caches, the authors turn invalid writes and double frees into credential frees. They also obtain privileged credentials deterministically from setuid binaries, daemons or kernel workers, and widen the race window using page faults or inode file locks.\n\nDemonstrations covered an Ubuntu system on kernel 5.4, a CentOS system on kernel 4.18, and an Android device with CFI enabled, where the password file was overwritten to gain root. The proposed defense isolates privileged credentials into a separate memory region so they cannot be swapped with unprivileged ones, and a prototype implementation was presented.",
       "durationSeconds": 1870,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -2299,7 +2343,7 @@
         "calibration-validation"
       ],
       "teaser": "Examines fault-Injection Detection Circuits: Design, Calibration, Validation and Tuning and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk looks at fault injection detection on an Intel client platform, focusing on non-invasive attacks such as voltage and clock glitching, electromagnetic fault injection and thermal attacks. The attacker's goal is to push circuit timing past its limit without crashing the whole platform, so that data latches early. A typical example is turning a jump instruction into a no-op during firmware authentication. Laser and invasive attacks are placed out of scope.\n\nThe core mechanism is the tunable replica circuit, a small digital circuit made of a launch flop, a tunable delay chain and a capture flop. It compares a reference signal with a data line calibrated to worst-case timing, and raises an error when the data line arrives too late. The circuit was first built to track silicon aging. It was then integrated into the converged security and manageability engine on the shared voltage rail. When it fires, that engine is reset, while the platform itself is not. Calibration is done per part: a delay value is fused into each chip, derived from a voltage-delay slope because the glitch voltage cannot be generated on testers. Calibration must avoid both false positives and missed attacks.\n\nValidation used matrices of glitch voltages and pulse widths. An early batch showed a gap because the glitch voltage had been set too low. After correcting the value and fusing a second batch that passed false-positive and fault-injection testing, the design was locked for 12th generation Alder Lake processors. An independent third-party firm reported that it could not glitch the engine. The takeaway is that a purely digital, standard-cell detector can cover several attack types and is cheap to port between process nodes.",
       "durationSeconds": 2126,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -2324,7 +2368,7 @@
         "incidents-drive"
       ],
       "teaser": "Evaluates the Cyber Safety Review Board: Studying Incidents to Drive Systemic Change and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The panel reviews the first report from the Cyber Safety Review Board, a public-private body created under a 2021 executive order to study major cyber incidents and publish its findings. The board's inaugural review covered the Log4j vulnerability. It gathered input from more than 80 organizations and researchers, including open source foundations, security vendors, and foreign government representatives.\n\nThe discussion covers several findings. A researcher at Alibaba reported the flaw through coordinated disclosure, but a visible fix in an open repository likely alerted attackers before the public advisory. Information moved quickly on Twitter but was hard to verify, so CISA's public GitHub inventory of affected products became a useful reference. Repeated patching surges caused fatigue among defenders. The board found no evidence of exploitation before public disclosure, but it raised concern about Chinese rules requiring early reporting of zero-days, after Alibaba was reportedly punished. SBOMs were not yet usable in practice, though the board sees promise in them. Log4j exposure is expected to linger for years, similar to Heartbleed.\n\nThe recommendations focus on basic asset inventory, using federal procurement to demand software transparency, and supporting open source code audits, fuzzing, and incentives such as OpenSSF scorecards. Longer-term research into self-defending software is also proposed. The panelists say the board is building permanent staff and will carry out future reviews. The practical takeaway is to know what software and assets you run, and to prepare for automated, safe-by-default software rather than relying on manual emergency patching.",
       "durationSeconds": 2544,
       "conference": "black-hat",
       "difficulty": "beginner",
@@ -2347,7 +2391,7 @@
         "ebpf"
       ],
       "teaser": "Demonstrates eBPF ELFs JMPing Through the Windows and evaluates key implications for security practitioners.",
-      "summary": "Black Hat session on eBPF ELFs JMPing Through the Windows.",
+      "summary": "The talk introduces eBPF, a sandboxed virtual CPU that began as a Linux network packet filter and grew into a general extension environment for kernel code. Programs are written in C, compiled to bytecode, and checked by a static verifier. The speaker then covers Microsoft's effort to bring eBPF to Windows, which re-implements the stack with the uBPF virtual machine and the Prevail verifier across user mode, a protected service, and a kernel driver.\n\nFuzzing covered each layer. A crafted ELF file triggered a heap corruption in the program destructor, caused by a mis-sized allocation during relocation parsing, which the speaker said could give remote code execution as an administrator. AFL++ runs against the Prevail verifier and uBPF produced many crashes, some flagged as likely exploitable. Kernel IOCTL fuzzing with WTF and later Nyx, using serialized sequences of requests, found a uBPF destroy bug in kernel mode and several robustness crashes, while a code audit of the network extension module found nothing new.\n\nThe security argument is that unsigned code running in the kernel means any verifier or JIT break would bypass driver signing. Access is currently limited to administrators, so the real goal is kernel code execution. The speaker concludes that the Windows implementation is young, Microsoft is actively fuzzing it, and its growing use in telemetry tools makes it worth close scrutiny.",
       "durationSeconds": 2423,
       "conference": "black-hat",
       "aiSummary": "## Overview\n\nIn this presentation, Richard Johnson (Senior Researcher at Trellix Products Lab) introduces research conducted alongside interns Casimir and Andrea into extended Berkeley Packet Filter (eBPF) technology and its implementation on the Windows platform. The research focuses on analyzing the attack surface, auditing code, and engineering fuzzing harnesses across each architectural layer of the Windows eBPF stack to uncover vulnerabilities.\n\n## Origins and Architecture of eBPF\n\n* **Evolution from Classic BPF:** BPF originated in the Linux kernel in 1992 as a specialized tool for network packet filtering (used under the hood by tools such as `tcpdump` and Wireshark via dynamically generated and JIT-compiled filter strings). Linux kernel 3.18 (approximately eight years prior to the talk) expanded this into eBPF—transforming it into a general-purpose execution environment for kernel extensions.\n* **Instruction Set & State:** The architecture evolved from 32-bit to 64-bit instructions and introduced persistent state structures (such as arrays, linked lists, and hash tables) that allow data retention across separate program invocations.\n* **Virtual CPU & Toolchain:** eBPF operates as an emulated, software-based virtual CPU architecture. Programs are typically written in standard C with specialized header files and compiled into bytecode using the LLVM compiler toolchain.\n* **Kernel Integration & Safety:** On Linux, eBPF is driven through a single multiplexed system call interface functioning similarly to device IOCTL dispatching. To provide security and execution guarantees, Linux implements an in-kernel static verifier performing static analysis to ensure bounded execution runtime (termination within a short time) and memory safety before programs are loaded into kernel context.\n\n## Applications and Security Ecosystem\n\n* **Production Use Cases:** eBPF is widely adopted across production environments for high-speed network packet inspection and modification, load balancing, network monitoring, code instrumentation callbacks, and system telemetry. It is integrated into security and infrastructure platforms such as Cilium (for Kubernetes) and Microsoft Defender for Endpoint.\n* **Language Backends:** The mature Linux ecosystem interfaces with the core eBPF system call through varied language bindings and runtimes, including C, Go, Rust, and Python.\n* **Offensive and Defensive Research:** Security researchers and red teams have increasingly targeted eBPF. Demonstrated applications include rootkit development, defensive tripwire-style application whitelisting for binary execution, and runtime code injection into launching executables.\n\n## Windows Implementation & Research Scope\n\nWhile Linux processes all eBPF execution, verification, and dispatch directly within the kernel, the port of eBPF to Windows introduces a distinct architectural attack surface. The talk sets up an in-depth security review of this new Windows implementation, examining how user-mode and kernel-mode APIs differ, detailing the fuzzing harnesses constructed to test the stack, and discussing vulnerabilities discovered across its verification and execution components.",

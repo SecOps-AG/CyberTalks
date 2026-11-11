@@ -1998,7 +1998,9 @@
       "youtubeId": "ihElrBBJQo8",
       "slug": "securi-tay-2017-advanced-attack-detection",
       "title": "Advanced Attack Detection",
-      "speakers": [],
+      "speakers": [
+        "Advanced Attack Detection"
+      ],
       "track": "hardware",
       "topics": [
         "detection",
@@ -2006,7 +2008,7 @@
         "attack",
         "securi"
       ],
-      "summary": null,
+      "summary": "The talk argues that signature-based tools such as antivirus, IPS/IDS and SIEMs miss many in-memory attacks, so threat hunting has to look for behaviour instead. It explains the Windows process model, including threads, loaded modules and page permissions, and then three injection methods: shellcode injection, standard DLL injection through LoadLibrary, and reflective DLL loading, which avoids writing to disk.\n\nUsing Metasploit's Meterpreter as a case study, the speakers trace a staged attack from a malicious document to a live session. They locate the injected thread, an unbacked region of read-write-execute memory holding shellcode that connects back to the attacker, and the reflectively loaded DLLs, using Volatility plugins on a memory dump. For Cobalt Strike's Beacon they describe similar injected threads, wiped PE headers, and suspicious rundll32 processes that spawn and exit, plus networking and crypto DLLs appearing inside notepad.\n\nAt scale, the speakers apply frequency analysis across endpoints, where a suspicious thread or injected module that appears on only one host out of many stands out. Such hits can be false positives, including a legitimate Nvidia driver that manipulates memory, so they use results for hunting rather than alerting, then feed confirmed techniques back into automated detection. The main takeaway is that these techniques have been used for about a decade, so knowing them and hunting across thousands of endpoints makes them far easier to find.",
       "durationSeconds": 2905,
       "viewCount": 2400,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
@@ -2014,7 +2016,10 @@
       "eventLabel": "Securi-Tay 2017",
       "enrichmentGaps": {
         "teaser": "Generated line repeated the event label; dropped when the real title was recovered."
-      }
+      },
+      "difficulty": "advanced",
+      "teaser": "Shows how memory forensics and Windows internals expose Metasploit and Cobalt Strike injection that signature-based tools tend to miss.",
+      "publishedAt": "2017-02-27"
     },
     {
       "youtubeId": "lvPH7ouHd3M",
@@ -2070,8 +2075,8 @@
         "angularj",
         "securi"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Securi-Tay 2017 - How secure is AngularJS?.",
-      "summary": null,
+      "teaser": "Examines AngularJS's built-in defenses against common web risks and shows how template and plugin flaws reopen injection paths.",
+      "summary": "This talk examines how secure AngularJS is as a client-side JavaScript framework. The speaker maps the OWASP Top Ten onto Angular applications, noting that SQL and command injection do not apply in the browser, while cross-site scripting, data kept in local storage, and vulnerable third-party components do. Authorization checks placed only in the browser are flagged as a common mistake.\n\nNext, the built-in defenses are reviewed: contextual output encoding, strict contextual escaping through the sanitizer module, a Content Security Policy mode that avoids eval and inline styles, and CSRF token handling that still needs server-side checks. The sandbox that once limited expressions is covered as a history of escapes, removed in Angular 1.6. Remaining weaknesses include DOM-based injection through element helpers, unsafe translation and rich text plugins, and unvalidated autocomplete input taken from the URL. Demos show a URL parameter evaluated as an Angular expression, and a sandbox escape that logs a user out in the browser while the server session stays active.\n\nThe takeaway is that Angular's core defaults are sound, and most demonstrated problems come from plugins or from mixing server-side templates with Angular templates. Developers should vet third-party modules, avoid trusting untrusted input, and keep authorization and CSRF validation on the server.",
       "durationSeconds": 3674,
       "difficulty": "intermediate",
       "viewCount": 1600,

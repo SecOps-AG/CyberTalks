@@ -45,7 +45,7 @@
         "finding-exploiting"
       ],
       "teaser": "Outlines cloudy With a Chance of Vulnerabilities: Finding & exploiting vulnerabilities in cloud and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk looks at how researchers find cross-tenant vulnerabilities in cloud managed services, where one provider bug can expose the data of many customers at once. Customers cannot fix such flaws through their own configuration. The speakers describe how managed services separate tenants, using shared virtual machines with per-customer containers or databases, or dedicated virtual machines, and note that stronger barriers are harder to break.\n\nThey then lay out a three-step methodology: run code on a managed instance through a built-in feature or an unexpected route such as extensions or package installs; escalate privileges and remove local barriers to gain better visibility; then move laterally toward other tenants, the control plane, pre-built configuration or internal APIs. ChaosDB started from a notebook feature, gained root, reached an internal orchestration layer and listed other customers' API keys. ExtraReplica showed that Azure PostgreSQL instances were reachable across the internal network, and a permissive certificate pattern let the researchers forge a certificate for a replication user.\n\nThe main takeaways are to stop once another customer's data is reachable, report findings responsibly, and apply variant analysis to take published bugs to other services and providers. The presenters also argue that CVSS is an imperfect way to rate cloud issues.",
       "durationSeconds": 2812,
       "conference": "fwd-cloudsec",
       "viewCount": 1500,
@@ -112,11 +112,12 @@
         "using-privacy"
       ],
       "teaser": "Outlines evading AWS GuardDuty and Network Firewall using Privacy Enhancing tech and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This talk shows how encrypted DNS and encrypted client hello can let outbound traffic slip past AWS detection and filtering services. It opens with GuardDuty, which raises an alert when an instance queries a known bad domain. When the same lookup is sent over DNS-over-HTTPS by pointing curl at a DoH endpoint, no resolver log line is created, so GuardDuty's DNS-based finding never fires. VPC flow logs still record the connection, but only at the IP, port and protocol level, not the payload.\n\nThe same approach gets around Route 53 Resolver DNS Firewall, because queries sent straight to an external resolver never pass through the VPC resolver. The speaker then turns to AWS Network Firewall, which is built on Suricata and checks the TLS server name against an allow list. Connecting to a provider's IP address while setting the host header and the TLS server name to an allowed domain got the connection past the filter, and custom tooling can do the same. Encrypted client hello, still an IETF draft, moves the real server name into an encrypted inner extension, leaving only a generic outer name visible to inspection.\n\nTo close, the speaker released a free threat feed of known DoH server addresses for GuardDuty, arguing that large providers' IPs are stable and that few businesses should legitimately use DoH. Suggested defenses include blocking outbound UDP and TCP port 53, blocking DoH addresses, and using TLS-terminating proxies, since allow-listing by name alone is weak. The speaker also urged practitioners to take visibility concerns to the IETF TLS working group as ECH is standardised.",
       "durationSeconds": 1402,
       "conference": "fwd-cloudsec",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "3q3x7jK31VI",
@@ -222,11 +223,12 @@
         "trails-problematic"
       ],
       "teaser": "Examines auditing PassRole: Finding Hidden Trails of Problematic Privilege Escalation Permission and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk looks at iam:PassRole, the AWS permission that lets a user hand a role to a service such as EC2 or Lambda. Because a user with PassRole can launch a workload that runs with a more powerful role, the permission is a common privilege escalation path, and it is often over-provisioned. The speaker explains why it is hard to right-size: PassRole does not generate its own CloudTrail event, Access Advisor does not report it, and AWS documentation covers only a small fraction of the actions that need it.\n\nTo close those gaps, the research crawled the AWS SDK schemas for parameters that look like role names or ARNs, then matched them against role parameters seen in CloudTrail request logs. The two lists overlapped heavily. Each candidate action was then tested with a role that had admin access but an explicit deny on PassRole, so any action that needed PassRole failed with an access error. A cross-account role trick also produced a specific error message that revealed the requirement. Fuzzing with malformed parameters was less reliable, because schemas are only approximations and some checks run before authorization while others run after. The mapping eventually covered 331 actions and was contributed to an open dataset used by permissions tooling.\n\nThe practical takeaways are to remove unused roles, since the highest unused role sets the real blast radius, and to provision carefully. Service-linked roles do not need PassRole, and wildcard PassRole grants should be removed wherever possible. The iam:PassedToService condition key helps but does not stop escalation to other services. The speaker also asked AWS for embedded API documentation of PassRole dependencies and for logging of PassRole use in CloudTrail.",
       "durationSeconds": 1282,
       "conference": "fwd-cloudsec",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "KwDo6KG76_c",

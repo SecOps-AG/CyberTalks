@@ -5703,7 +5703,7 @@
         "penetration"
       ],
       "teaser": "Reviews reconnaissance for Physical Penetration Testing - Billy Graydon and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This talk covers the reconnaissance phase of a physical penetration test, when an assessor learns what an attacker would know before entering a site. The speaker argues that the exterior of a building reveals much of its interior: its overall massing, rooftop utilities, window placement and floor count. Half-height windows and lit columns can mark stairwells, while roof structures can show where elevator machine rooms and structural columns sit. From these cues, an assessor can predict the floor plan and estimate where server rooms and network risers are likely to be.\n\nOther sources include watching staff at different times of day, counting entries and exits, noting how people badge in, and inspecting locks and alarm hardware. Telecom cable counts and gas meters hint at occupancy, and the number of phone lines sets an upper bound on how many offices a building was designed for. Case examples from Toronto, a warehouse, a storefront and prison cell blocks show how plumbing, windows and loading docks constrain layouts.\n\nThe closing advice applies in both directions. Testers should map escape routes, hiding spots, and alert or armed people on site, and they should watch what a crowd is doing to spot anyone out of place. Defenders are reminded that floor plans are hard to hide, so the focus should be on moving high-value assets away from obvious risers, funneling intruders toward a single route, and duplicating critical systems.",
       "durationSeconds": 4042,
       "conference": "ekoparty",
       "difficulty": "intermediate",
@@ -6784,7 +6784,7 @@
         "pedrazzoli"
       ],
       "teaser": "Reviews from survey.js to RCE in Meta - Adrian Pedrazzoli and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk walks through how the speaker found a remote code execution in a Meta-owned online academy site. The entry point was a registration code that blocked sign-up on the main portal. Checking the certificate to confirm scope, the speaker found a sibling subdomain that allowed account creation without the code. Reviewing the client-side JavaScript revealed an upload endpoint tied to course feedback features.\n\nThe core of the talk is how the upload handling was probed. A multipart request carries a file name, an extension, a content type and the file body, and each one needs server-side validation. Here the checks were inconsistent: an allowed image extension passed while the declared content type and body were accepted as HTML, and later a server-side script extension got through. The resulting web shell ran commands on the host, and error responses leaked the upload path in a stack trace, which helped locate the file. A cross-site scripting proof of concept came first, before escalation to code execution.\n\nAfter the report, the company took the site offline for maintenance within about a day, and the bounty and a Hall of Fame entry followed weeks later. The speaker's takeaways: confirm certificate scope before testing, examine every part of a multipart request together, treat error messages as a source of paths and details, and check sibling subdomains or staging hosts that may share the same server. Manual, measured testing also matters, since bursts of automated requests can trigger a WAF block and end the session.",
       "durationSeconds": 1680,
       "conference": "ekoparty",
       "difficulty": "advanced",
@@ -7219,7 +7219,10 @@
       "youtubeId": "XK4MXMjb-CI",
       "slug": "ekoparty-webinars-introduccion-al-reversing-i-ricardo-narvaja-y",
       "title": "\"Introducción al Reversing\" I Ricardo Narvaja y Daniel Kazimirow",
-      "speakers": [],
+      "speakers": [
+        "Ricardo Narvaja",
+        "Daniel Kazimirow"
+      ],
       "track": "blue-team",
       "topics": [
         "introducci",
@@ -7227,7 +7230,7 @@
         "ricardo"
       ],
       "teaser": "Reviews ekoparty Webinars: Introducción al Reversing practitioners Ricardo Narvaja y Daniel Kazimirow and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This introductory webinar, presented by Ricardo Narvaja and Daniel Kazimirow as a preview of a longer intensive course, explains software reverse engineering to people without a programming background. Reverse engineering means starting from a finished executable and working out how it was built and how it behaves. The speakers contrast dynamic analysis, which steps through code while it runs in a debugger, with static analysis, which studies the file on disk without executing it, and mention uses such as malware analysis, forensics and vulnerability discovery.\n\nThe main exercise is a compiled program that asks for a name and refuses to continue until hidden checks pass. Daniel first locates the relevant message in the disassembly, then uses a debugger to force past a conditional jump, and patches the executable by replacing jumps and padding with jmp or NOP instructions while keeping byte lengths matched. A second message is removed the same way. Ricardo then works statically, tracing the logic to a file-existence check, a read of a text file into a buffer, and a loop comparing each byte with the letter Z, where the tenth byte decides the final message. Creating a suitable file next to the executable solves it without changing the binary.\n\nThe session closes with practical advice: a beginner needs only basic computer skills, some familiarity with assembly instructions and the tools, and persistence. Keep a backup copy before patching anything. The speakers encourage viewers to experiment on small programs, noting that the full course covers assembly, IDA and these techniques in depth.",
       "durationSeconds": 4175,
       "conference": "ekoparty",
       "difficulty": "intermediate",
@@ -7279,7 +7282,9 @@
       "youtubeId": "Qy1qny2a3cc",
       "slug": "hacking-the-way-t02e03-como-construir-un-futuro-hacker",
       "title": "Hacking The Way - T02E03: ¿Cómo construir un Futuro Hacker?",
-      "speakers": [],
+      "speakers": [
+        "Sabrina Paota"
+      ],
       "track": "community",
       "topics": [
         "t02e03",
@@ -7926,7 +7931,7 @@
         "bountie"
       ],
       "teaser": "Details haciendo el camino: Mis 2 primeros Bounties - Bronxxi // Bug Bounty Village and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The speaker describes his first months hunting for paid bug bounties, starting in May. Many of his reports were informational or duplicates, since much of the community ran the same automated tooling. About five months in, he received his first valid report: an HTML injection in a team application used to share data and secrets.\n\nForm fields accepted HTML tags but did not render them on the site, yet the tags did render in the team invitation email. He explained how an attacker could use that to place a deceptive link in the email. The vendor first closed the report as normal webmail behavior, so he pushed back with examples from other email clients. The report was reopened, rated low, and paid a small reward. His second finding was an account takeover through email verification. A six-digit code with no effective rate limit let an attacker verify any address. He outlined three impact scenarios and used the one about impersonating members of a company. After he sent roughly 700 requests without being blocked, the vendor rated it medium and paid a larger reward.\n\nHe closes with three recommendations: focus on one vulnerability until you can produce a valid report with it, measure progress against your own earlier self rather than peers, and treat searching time as practice rather than waste. A brief question-and-answer noted that some researchers treat HTML injection as a form of cross-site scripting.",
       "durationSeconds": 1042,
       "conference": "ekoparty",
       "difficulty": "beginner",
@@ -10952,7 +10957,9 @@
       "youtubeId": "U895lzRczJs",
       "slug": "barnaby-jack-jackpotting-automated-teller-machines",
       "title": "Barnaby Jack - Jackpotting Automated Teller Machines",
-      "speakers": [],
+      "speakers": [
+        "Barnaby Jack"
+      ],
       "track": "blue-team",
       "topics": [
         "jackpotting",
@@ -11741,11 +11748,12 @@
         "t02e12"
       ],
       "teaser": "Analyzes MEET THE HACKER con Fede Pacheco practitioners T02E12 practitioners Michael Hudson and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This Ekoparty episode of the Meet the Hacker interview series has Fede Pacheco talking with Michael Hudson about how he came to security. The conversation starts with his teenage years selling remote administration tools on underground forums, and how his family reacted to that early side income. It then moves through a run of abandoned university and military paths, before he settled on medicine and later returned to security research.\n\nThe middle section covers the research that set his reputation: vulnerabilities in hospital medical protocols and devices, where plaintext data moving between equipment and servers could be intercepted, and earlier work on extracting private metadata from a social network. He also describes the disciplinary consequences he faced at his university, and how being seen as a former underground figure shaped his reception in professional circles. He contrasts the collaborative spirit he found among colleagues in Argentina with what he saw in Chile.\n\nThe closing part turns to advice. Hudson argues that people should not expect a linear path into security, that some understanding of how the underground works helps defenders, and that persistence and tolerance for failure matter more than any single credential. The episode ends with where to find him online.",
       "durationSeconds": 2590,
       "conference": "ekoparty",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "5p1Zl9ADc3c",
@@ -12537,7 +12545,9 @@
       "youtubeId": "V7aadN58_No",
       "slug": "roberto-fresca-ingenieria-inversa",
       "title": "Roberto Fresca - Ingeniería Inversa",
-      "speakers": [],
+      "speakers": [
+        "Roberto Fresca"
+      ],
       "track": "blue-team",
       "topics": [
         "roberto",
@@ -17307,7 +17317,8 @@
       "durationSeconds": 2490,
       "conference": "ekoparty",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "WrE34AXXNCw",
@@ -19335,7 +19346,9 @@
       "youtubeId": "AkdF2c2zxIY",
       "slug": "eko2020-workshops-dhiraj-mishra-introduction-to-fuzzing",
       "title": "Dhiraj Mishra: Introduction to fuzzing",
-      "speakers": [],
+      "speakers": [
+        "Dhiraj Mishra"
+      ],
       "track": "blue-team",
       "topics": [
         "fuzzing",
@@ -21274,7 +21287,7 @@
         "pollock"
       ],
       "teaser": "Explores #EkoTV Bill Pollock from No Starch Press Interviews OccupyTheWeb, Author of Linux Basic for Hackers and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The interview opens with the author's decision to appear only as an avatar. He says his security work sometimes places him and the people he works for at risk, and he recalls a national intelligence agency telling him it knew who he was, which he took as a warning. He also turned down an FBI training request because he could not stay anonymous.\n\nMuch of the conversation centers on Linux Basics for Hackers, which grew out of years of training mostly young military and intelligence personnel who had never worked at a command line. The author says the book condenses the most essential Linux commands for security work into roughly 200 pages that a reader can finish in days or weeks. He argues that typing commands is far more efficient than clicking through menus, and that newcomers should also build a solid grounding in TCP and other networking protocols, understanding how they work internally rather than only using them.\n\nThe pair also discuss open source intelligence, with the author noting that public Venmo transactions can reveal where people go and whom they pay, and that users often do not realize their activity is visible. He repeats the point that when a service is free, the user is often the product. For practitioners, the takeaways are to master Linux and networking fundamentals and to recognize how much personal data is already public.",
       "durationSeconds": 1670,
       "conference": "ekoparty",
       "difficulty": "beginner",
@@ -21780,7 +21793,7 @@
         "comunidad"
       ],
       "teaser": "Provides Óscar Toledo G. - Cómo mi curiosidad revitalizó una comunidad and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk recounts how the speaker, a long-time programmer, began porting a game he had written for the Atari 2600 to the Intellivision, a console from the early 1980s. He found almost no technical documentation online, so he searched the source package of an Intellivision emulator and found a compressed archive with hardware references for the CP1610 processor, the graphics chip and the sound chip. He chose to work from these published specifications rather than from the original ROMs, because the rights holders were known to pursue people who shared that material.\n\nHe then compared the two consoles. The Atari 2600 offers more colors and flexible sprites, but only with heavy code and flicker. The Intellivision builds its screen from 8x8 blocks, each with two colors out of sixteen, and can place eight sprites without flicker. His later, larger port exposed how slow 16-bit code becomes when it is written in the style of 8-bit routines. Frustrated by assembly, he set out to build a simpler path into the machine, which led to a command-line BASIC compiler for the Intellivision. It was designed with only one way to perform each task, so that tutorials stay clear, and it was built on routine libraries he had written for his earlier games.\n\nThe compiler attracted hobbyists on the community forums, and the number of new homebrew releases grew from a few per year to between ten and seventeen. Programming contests followed in 2015 and 2018, and the speaker wrote a book that teaches BASIC through complete game examples. He closes by noting that sharing documentation, tools and techniques brought new programmers to the platform. The main lesson for practitioners is that accessible documentation and approachable tooling can revive an old platform's community.",
       "durationSeconds": 1322,
       "conference": "ekoparty",
       "difficulty": "beginner",
@@ -21847,11 +21860,12 @@
         "spanish"
       ],
       "teaser": "Reviews #EkoPodcast Live Chat with HD Moore (Spanish subs available!) and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "HD Moore reflects on his career in this Ekoparty podcast interview, from scanning networks as a teenager to a job offer that came through an IRC contact at a military base. He describes feeling like an outsider in that scene and later running a small pentest team whose scripts became Metasploit. He recounts years of criticism from old-school hackers and vendors, and says his goal was to make exploit development as routine as port scanning.\n\nThe interview then turns to tooling choices. Moore explains that Metasploit moved from Perl to Ruby because Ruby was better at handling bytes and network connections and avoided any suggestion of copying code from commercial Python frameworks, though it made contributor onboarding harder. For newcomers he suggests starting with Python 3 and, for backend or system software, Go. He also recalls WarVox, a war dialing tool that recorded the audio from every number it dialed and grouped similar recordings to spot modems and voicemail systems, and notes that US law has made war dialing close to illegal.\n\nMoore ends by describing Rumble, his current product for internal network discovery. Rather than only asking whether a host is vulnerable, it correlates small identifiers such as an SMB banner seen on two addresses to reveal multi-homed devices and pivot paths without credentials. He credits user feedback from a rough early beta for shaping the product, and advises newcomers to put real effort into a problem before asking for help, noting that much of the internet outside the web remains under-examined.",
       "durationSeconds": 3445,
       "conference": "ekoparty",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "Ok2wQvnHHvE",
@@ -22369,7 +22383,7 @@
         "berta-pentesting"
       ],
       "teaser": "Analyzes ekoparty Training Brief | Sheila Berta: Pentesting and Securing Docker, Swarm & Kubernetes and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This Ekoparty live-stream interview introduces a three-day training on container security that Sheila Berta teaches at the conference with a co-trainer. One day covers Docker, the Swarm orchestrator and Kubernetes fundamentals, and the other two days focus entirely on security. Berta explains that the format mixes short theory with hands-on lab work, and that having two instructors keeps students who get stuck on an exercise moving.\n\nBerta describes how the training frames attacks by the access an assessor starts with. A black box scenario begins when an attacker unexpectedly lands inside a container after compromising a web application, so the first task is recognising that they are not on a host, then checking for escape options and neighbouring containers. A gray box scenario assumes some access to the cluster, such as an exposed Kubernetes API, while a white box scenario assumes the manifests that define containers, networks and namespaces are available for direct review.\n\nThe conversation also covers her path from malware and web research through wireless work and car hardware research to cloud. She says she has moved into a defensive angle because many talks show how to break out of containers, while fewer explain how to secure them in production. Her main advice for practitioners is to learn the attack side first, since knowing where an environment can be attacked makes defensive controls easier to understand. She adds that the training is open to people with no prior container experience.",
       "durationSeconds": 2420,
       "conference": "ekoparty",
       "difficulty": "intermediate",
@@ -23182,7 +23196,9 @@
       "youtubeId": "XkKud0jAzCg",
       "slug": "dan-borgogno-free-rides-sube-redbus-satbus-and-others-ekoparty-2",
       "title": "Dan Borgogno ▪️ Free rides! SUBE, REDBUS, SATBUS and others ▪️ Ekoparty 2019",
-      "speakers": [],
+      "speakers": [
+        "Dan Borgogno"
+      ],
       "track": "blue-team",
       "topics": [
         "borgogno",
@@ -23192,11 +23208,12 @@
         "redbu"
       ],
       "teaser": "Provides dan Borgogno ▪️ Free rides! SUBE, REDBUS, SATBUS and others ▪️ Ekoparty 2019 and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This talk examines the contactless cards used for public transport in Argentina, mainly SUBE in Buenos Aires and similar systems in Córdoba and Río Cuarto. The speaker explains how these proximity cards store a balance in protected memory sectors, and how the older MIFARE Classic format, with default or weak keys, allowed him to read and change a balance on a card.\n\nThe middle of the talk covers newer cards that seemed to use unique keys. A known weakness in the MIFARE family let the speaker recover keys from an older card, and those keys also worked on newer cards after a key update. He then looks at MIFARE Plus cards, whose lower security level mirrors the classic format, and at a phone app whose traffic he analysed. He discusses the card's decrement-only counter and its consistency checks, and outlines abuse scenarios that involve a relay setup with two NFC readers and a snapshot replay, plus a counter bug that could leave a card unusable.\n\nThe closing part argues that the system depends on card-side secrets that are not robust, while the operator can still spot misuse by comparing daily transactions with loaded balances and blocking outlier cards. The speaker withheld the actual keys and full working steps, and suggests the backend and mobile apps need deeper study. The lesson for practitioners is that a transit card's security cannot rest on secrets stored on the card alone.",
       "durationSeconds": 2596,
       "conference": "ekoparty",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "adAhY5JjfzY",
@@ -23247,7 +23264,9 @@
       "youtubeId": "RDY1pzq2_aU",
       "slug": "alex-matrosov-modern-secure-boot-attacks",
       "title": "Alex Matrosov - Modern Secure Boot Attacks",
-      "speakers": [],
+      "speakers": [
+        "Alex Matrosov"
+      ],
       "track": "blue-team",
       "topics": [
         "secure-boot",
@@ -23257,11 +23276,12 @@
         "boot"
       ],
       "teaser": "Provides alex Matrosov - Modern Secure Boot Attacks and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk looks at how hardware roots of trust are built in enterprise firmware, using a Lenovo P50 laptop as the target. The speaker argues that vendors lock a few bits in silicon but rely on firmware for most of the chain. Intel Boot Guard does not cover the microcode or the authenticated code module, so an attacker could downgrade them to vulnerable versions.\n\nLenovo's Windows management interface lets the operating system change BIOS settings such as Secure Boot, TXT and VT-d, and the setup driver exposes many SMI handlers reachable from the OS. The main case study was Computrace. Its permanent disable option left the component present and reactivatable, and the secret key guarding that change was a single byte checked by a comparison whose timing leaked information, making it brute-forceable. Other cases included a recovery path whose hash check lived in BIOS software, an unprotected padding region in the firmware image, and a hidden Lenovo check that disabled Boot Guard when a configuration value was set. A Gigabyte embedded controller updater that flashed firmware without authentication was also described.\n\nThe takeaway is that a hardware root of trust is partly software in practice. Sleep, hibernate and recovery flows often skip the full verification chain, and vendors trade checks for boot speed and support convenience. Practitioners should check every stage, including microcode and firmware padding, and treat hidden or permanent-disable options as attack surface.",
       "durationSeconds": 2189,
       "conference": "ekoparty",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "SkxlnjbLDio",
@@ -23946,11 +23966,12 @@
         "door"
       ],
       "teaser": "Discusses nahuel Grisolía - Knocking Down the Big Door and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines how shared secrets and weak token design can let attackers move from test environments into production. After a primer on federated identity, JWTs and SAML, the speaker describes a multi-tenant web application with user impersonation functionality. A passkey value returned for a regular user was accepted by the login endpoint, and swapping in an admin identifier produced an administrator session. Because test and production shared keys, a token generated in testing also worked against production, giving full site admin access.\n\nThe central case is an authentication bypass in Auth0, a federated identity platform. Found while testing a client's development environment, the research showed that a signed login result could be replayed against a production instance using the same signing keys. Further work on the management console revealed that an internal user ID could be obtained by inviting and removing a target from a tenant, and that custom database action scripts could act as a signing oracle, producing valid tokens for any user. The vendor fixed the issue after several months.\n\nThe last section reports observations on Azure App Service and classic IIS hosting ASP.NET applications with SAML. Apps deployed without custom configuration reportedly share machine keys across a resource group, including deployment slots such as staging and production. In the speaker's tests, a staging authentication cookie was accepted by production, and a modified SAML audience still validated. The takeaways are to separate environments, avoid sharing secrets, verify token audiences, and keep credentials out of public repositories.",
       "durationSeconds": 2790,
       "conference": "ekoparty",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "MyT9X84Iwnw",
@@ -24286,11 +24307,12 @@
         "chao"
       ],
       "teaser": "Presents andres Blanco - 802.11 Protocol Chaos and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This talk looks at 802.11 management frames, which are sent before a client associates and are often unencrypted, so they can leak information even when WPA2 holds. The speaker argues that the wider attack surface matters more than cracking keys, and that vendors keep adding protocol extensions that expose data.\n\nExamples cover enterprise Cisco access points, whose vendor information elements in beacons and reassociation replies reveal access point names, client counts and internal controller addresses. An injected reassociation request from a sender that was never associated still drew a response. WPS and Wi-Fi Direct frames disclose device models, serial numbers and configuration state, and some Apple devices broadcast device names in AirDrop-related frames despite randomized MAC addresses. Wi-Fi Direct on printers, media centers, smart TVs and an air conditioner sometimes accepted connections and exposed unauthenticated web, print and file services. On the firmware side, a malformed Wi-Fi Direct frame led to a crash in the Android framework after it reached the supplicant, and Broadcom Wi-Fi chipsets were described as lacking modern memory protections.\n\nPassive observation in a Buenos Aires neighborhood turned up a group of roughly 100 air conditioners, several Apple TVs and Wi-Fi Direct devices, and open enterprise controllers. The live demo was dropped for time. The takeaway is that Wi-Fi exposure goes well beyond key cracking: practitioners should disable unused Wi-Fi Direct, keep controllers off the internet, and check what their devices broadcast.",
       "durationSeconds": 3089,
       "conference": "ekoparty",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "wN_2JKS0Dso",
@@ -24341,7 +24363,9 @@
       "youtubeId": "L2Mo8WcmmZo",
       "slug": "daniel-komaromy-unbox-your-phone-exploring-and-breaking-samsungs",
       "title": "Daniel Komaromy - Unbox Your Phone - Exploring and Breaking Samsung's TS",
-      "speakers": [],
+      "speakers": [
+        "Daniel Komaromy"
+      ],
       "track": "blue-team",
       "topics": [
         "daniel",
@@ -24350,11 +24374,12 @@
         "phone"
       ],
       "teaser": "Provides daniel Komaromy - Unbox Your Phone - Exploring and Breaking Samsungs TS and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Samsung's TrustZone secure world is heavily marketed but rarely examined at the implementation level, unlike Qualcomm's. The speaker set out to reverse engineer its Trustonic-based microkernel from the firmware alone. He located the firmware inside the bootloader by its OS name, found the entry point from boot logs, and traced the monitor interface, which turned out to be just two SMC calls with everything else passed through shared memory. Using leftover debug strings and matching code paths, he mapped about thirty system calls, most of the inter-process calls, and roughly 150 trusted APIs with a symbolication script.\n\nIsolation largely held: trustlets stayed confined while privileged drivers could map any memory. From Android, a service called TLC server exposed trustlets over binder, and one shared-memory path lacked authentication, which Samsung fixed after disclosure. Other findings included a stack overflow in the eSE communication trustlet's certificate install path, reachable without Android privileges. The client certificate manager logged its 64-bit session IDs to a world-readable log, letting an attacker reuse a logged-in session to use stored private keys without any memory corruption. A driver also failed to verify its caller, letting another trustlet read Android kernel memory and recover the KASLR slide.\n\nThe takeaway is that a closed TEE can still be reverse engineered in depth, and that sharing the method should spare future researchers from starting from zero. TrustZone is a poor place to escalate from no privileges, but its attack surface grows for components like DRM services that can already reach it.",
       "durationSeconds": 3121,
       "conference": "ekoparty",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "UFVua21Sh6o",
@@ -24417,11 +24442,12 @@
         "exploit-development"
       ],
       "teaser": "Details george Nosenko - How to cook Cisco: Exploit Development for Cisco IOS and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This talk is a practical recipe for executing arbitrary code on Cisco IOS, using a Catalyst 2960 switch built on a PowerPC 405 processor as the research target. The speaker first explains why IOS exploitation is unusual: a single statically linked image, a shared address space, cooperative scheduling, and a device reboot whenever an exception occurs. The speaker then reviews the mitigations in place, including non-executable memory, heap integrity checks, code integrity checking and a watchdog timer.\n\nThe exploit chain is presented step by step. Control is first gained through a stack overflow triggered by a malicious network packet. A return-oriented chain then disables memory protection, using a PowerPC gadget that changes the ZPR register. Because stack space is tight, a multi-stage shellcode is used: an egg hunter searches heap or I/O memory for the second stage, reassembling it when it is split across packets. Caches are invalidated by abusing an IOS routine that copies interrupt handlers, and the integrity check is avoided by placing code in an unchecked gap between memory regions. Demonstrations showed a takeover of a switch, including creating a user and changing its configuration, followed by intercepting traffic from a client.\n\nThe main takeaway is that the platform resists exploitation well, but arbitrary code execution remains achievable with significant work tailored to each device and firmware image. The steps are offered as recipes rather than a complete solution, since success depends on the specific vulnerability and hardware.",
       "durationSeconds": 2696,
       "conference": "ekoparty",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "s4oreYAKikg",
@@ -24788,11 +24814,12 @@
         "generation"
       ],
       "teaser": "Evaluates rolf Rolles - Synesthesia: Automated Generation of Encoding-Restricted Machine and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk addresses shellcode that must be built under input restrictions, such as no null bytes, no lowercase letters, printable-only, or alphanumeric-only bytes. Such limits remove most of the instruction set, and existing encoders need hand-built decoders that can expand the payload, miss valid solutions, or leave recognizable byte patterns.\n\nThe speaker presents Synesthesia, a tool that treats this as a symbolic program synthesis problem. Instructions are modelled as components in a formula, and an SMT solver is asked for an instruction sequence that produces the desired register effects while every encoded byte satisfies the restriction. Demonstrations include zeroing a register with a borrow-based trick, a byte pattern that alternates between even and odd values, and enumerating alternative solutions or the shortest one. The tool can also recompile an existing snippet under a restriction, and an experimental mode generates a matching decoder.\n\nThe speaker is clear about the limits. Synthesis slows sharply beyond roughly five or six instructions, memory operations are not handled in the current setup, and loop-based decoders remain unfinished. The work is framed as early research, with source code planned for release. The practical takeaway is that for short sequences, an encoding restriction can be stated as a formula instead of being handled by a special case.",
       "durationSeconds": 3695,
       "conference": "ekoparty",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "1DCR1BEpvSA",
@@ -25877,11 +25904,12 @@
         "msp430-based"
       ],
       "teaser": "Analyzes braden Thomas - Exploitation of a Hardened MSP430-Based Device and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This talk walks through reverse engineering a Bluetooth and infrared lockbox that real estate agents use to hold house keys. The speaker started with the companion Android app, finding that unlock messages are protected by AES-based message authentication codes, so they cannot be forged without a region-wide key. Getting that key meant extracting firmware from the lockbox's MSP430 microcontroller, and the older infrared model was chosen as the easier target.\n\nSeveral extraction routes were tried. Voltage glitching against the bootloader could not be reproduced, and a published timing attack on its password check failed because clock drift swamped the single-cycle difference it relied on. A third route worked: the decapped chip was exposed to camera flashes, which bypassed the JTAG security fuse and revealed the bootloader password, allowing firmware to be read out.\n\nThe firmware showed keys derived from a device key and a region key, plus three authentication modes. An unauthenticated visitor log, a hardware back door enabled when two peripherals disagree, and a hidden memory write command that could be abused to leak the region key were all found. PIN brute forcing was also practical, because the lockout counter sat in writable memory. The takeaway is to keep secrets out of microcontroller flash and use dedicated secure elements. The manufacturer was notified and was working on fixes.",
       "durationSeconds": 2452,
       "conference": "ekoparty",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "Zeq6pqGw-Gg",
@@ -26028,11 +26056,12 @@
         "vulnerabilitie"
       ],
       "teaser": "Explores rahul Sasi - Security vulnerabilities in DVB C networks and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk covers attacks on cable television networks, beginning with analog systems. The speaker walks through the headend chain of satellite receivers, modulators and QAM equipment, and explains that analog signals carry no encryption. Using inexpensive converters and a signal injector, an attacker placed between the headend and homes can replace a channel by transmitting on its frequency, though the original carrier must be cut to avoid collisions.\n\nDigital DVB-C networks encrypt their streams, so the focus shifts to management systems. Small operators relied on central billing and middleware servers that were reachable from the internet. One bypass came from a PHP string comparison flaw that let the speaker skip an access key check and move set-top boxes between operators, exposing customer records. A second flaw stored a CSRF token in JavaScript, which a cross-domain script could override, so a logged-in admin's page visit could trigger remote shutdown of boxes.\n\nOn the device side, fuzzing the MPEG transport stream parser caused set-top boxes to crash and restart. Flipping header bits that flag encryption made boxes treat injected streams as clear, enabling injection on an encrypted network. Chaining this with the DSM-CC firmware update process, the team pushed a modified firmware that replaced the boot logo. The talk closes by stressing unauthenticated updates and internet-exposed billing systems as weak points, while noting that some issues remained unfixed.",
       "durationSeconds": 3214,
       "conference": "ekoparty",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "F6gfJJ8ERjU",
@@ -26611,11 +26640,12 @@
         "javadi"
       ],
       "teaser": "Outlines keith Howell and Babak Javadi - 4140 Ways Your Alarm System Can Fail and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk looks at how common alarm systems are built and where they fail, using Honeywell-family panels as the main example. The speakers explain the wired keypad bus, the copper zone loops that connect door, motion and glass-break sensors, and the 345 MHz wireless receivers that take signals from remotes and sensors. They describe how each wireless transmission carries a fixed device serial number, a loop status and a checksum whose algorithm they had not fully worked out. Because the messages have no timestamp, recorded transmissions can be replayed. They also demonstrate a USB interface that exposes the bus as serial data and provides a virtual keypad.\n\nThe middle of the talk covers design and configuration weaknesses. Default installer codes often stay active after installation, and an unused second keypad address may remain enabled. Master PINs are fixed at four digits, a function that reports a user's access level needs no authentication, and no brute-force detection exists. Jam detection is unreliable and is off by default, and the wired bus is unencrypted. The speakers also note that the dial-up link to the monitoring center depends on an account number and a central station identifier, and that providers can remotely lock out a system when service is cancelled.\n\nThe closing advice is practical. Hide and conduit wiring, avoid wireless devices where security matters, remove default codes, and protect the power source, because a power cycle can re-enable the default installer code. The speakers stress that their research is ongoing and limited to the hardware they could buy.",
       "durationSeconds": 4048,
       "conference": "ekoparty",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "GglxzW89Kn8",
@@ -27836,7 +27866,9 @@
       "youtubeId": "XfG1lu1oqrE",
       "slug": "directx-direct-way-to-microsoft-windows-kernel-nikita-tarakanov",
       "title": "DirectX: Direct way to Microsoft Windows Kernel ▪ Nikita Tarakanov ▪ Ekoparty 2015",
-      "speakers": [],
+      "speakers": [
+        "Nikita Tarakanov"
+      ],
       "track": "blue-team",
       "topics": [
         "directx-direct",
@@ -27846,11 +27878,12 @@
         "kernel-nikita"
       ],
       "teaser": "Outlines directX: Direct way to Microsoft Windows Kernel ▪ Nikita Tarakanov ▪ Ekoparty 2015 and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk examines the kernel side of Windows graphics, centred on the Windows Display Driver Model introduced with Vista, where much of the video stack moved into a shared kernel component and vendor drivers sit behind user-mode proxies. The speaker traces a call from the application through the graphics runtime into the kernel and identifies the escape call as the main attack surface, since it passes a vendor-specific buffer to the driver.\n\nReverse engineering of Nvidia and ATI escape dispatchers revealed hundreds of function IDs inside very large drivers. Random-input fuzzing produced null pointer dereferences, out-of-bounds writes, and pool and stack overflows. One null dereference was shown to allow execution hijacking on 32-bit Windows 8 but not on 64-bit systems. Because a live demo crashed the machine, a recorded video showed a deep crash stack instead. The buffers were flat, without pointers, which the speaker said made arbitrary writes less likely. Rendering command streams for the GPU were described as a harder, undocumented target, with an Android Qualcomm driver bug cited as an example of a command not marked privileged that allowed arbitrary memory writes.\n\nThe main lesson is that vendor kernel drivers, some around 15 megabytes, need strict size and index checks on data coming from user mode. The speaker reported about 50 issues to Nvidia and ATI, with no confirmed fixes, and planned to publish a fuzzer and invited collaboration.",
       "durationSeconds": 1766,
       "conference": "ekoparty",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     }
   ]
 }

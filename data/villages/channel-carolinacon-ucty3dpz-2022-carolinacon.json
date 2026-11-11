@@ -808,8 +808,8 @@
         "system",
         "alex"
       ],
-      "teaser": "Kernel Mod Rootkits on Modern Linux Systems (by Alex Caceres).",
-      "summary": "CarolinaCon talk on kernel mod rootkits on modern Linux.",
+      "teaser": "Shows how a kernel-mode rootkit on modern Linux can hide a keylogger and its processes from normal system tools.",
+      "summary": "The talk looks at how malware on modern Linux systems can hide itself using kernel-mode rootkits. It opens with a custom keylogger, walking through how it reads keyboard events from the input device nodes, decodes them, and stores the output in a hidden folder that could be sent to a remote server. Running it shows that the keylogger's processes are easy to spot in a process listing, which is the problem a rootkit is meant to solve.\n\nThe middle of the talk covers loadable kernel module rootkits, which assume the attacker already has elevated privileges. Such a module replaces an entry in the system call table so that calls like write or mkdir reach attacker code first, and that code can then call the original function so nothing looks wrong. A live demo loads a rootkit that hides its own module from lsmod, hides files with a chosen prefix, and hides processes when they receive signal 31, which makes the keylogger disappear from ps. A second module is shown that makes mkdir silently do nothing. The speaker notes that the syscall table address can be read from the System.map file, so address space layout randomization does not stop this.\n\nThe closing part turns to detection. Checking the integrity of the syscall table is one of the main approaches, although a common rootkit checker missed the speaker's simple rootkit during testing. Legitimate software, including some vendor-installed tools, also hooks system calls, so banning anything that looks like a rootkit would break normal systems. The takeaway is that kernel-level rootkits are effective and hard to detect, and defenders should not rely on a single checker.",
       "durationSeconds": 2414,
       "conference": "carolinacon",
       "difficulty": "advanced",
@@ -1240,8 +1240,8 @@
         "because",
         "reason"
       ],
-      "teaser": "Reverse Engineer iOS apps because reasons - twinlol.",
-      "summary": "CarolinaCon talk on reverse engineering iOS apps.",
+      "teaser": "Shows how to reverse engineer an iOS app cheaply, covering traffic analysis, jailbreak checks and binary patching.",
+      "summary": "The talk walks through reverse engineering an iOS app without expensive hardware or software. The speaker used a refurbished, jailbroken iPad 2 running an older iOS version, dumped the app binary with Clutch, and noted that 64-bit binaries were awkward to handle, so the 32-bit slice was pulled from a temporary file instead.\n\nThe test subject was a free email client with a paid tier. Traffic analysis showed its API key sent over HTTPS during normal use, but after an account was added the connection fell back to plain HTTP, exposing the email address, API key and session ID, and the session token did not reset. The app also shared the advertising identifier with third parties despite showing no ads, which the speaker said breaks Apple's rules and slipped past App Store review. In Hopper, the speaker located a jailbreak check, patched the boolean return value to zero and handled both Thumb and ARM instruction modes, using Hopper's undo function to recover from mistakes. The patch made little visible difference in this app.\n\nThe talk closed with briefer examples: location spoofing in a dating app that sent location over HTTP, and banking apps that send device data when run on a jailbroken phone. Beginners were advised to avoid heavily protected apps such as Twitter. The practical takeaways were to check traffic and binary behaviour together, be careful when changing global variables, and recognise that reverse engineering alone rarely earns a bug bounty without a real, reportable vulnerability.",
       "durationSeconds": 2990,
       "conference": "carolinacon",
       "difficulty": "advanced",
@@ -1474,13 +1474,13 @@
       "speakers": [
         "Benjamin Brown"
       ],
-      "track": "community",
+      "track": "threat-intel",
       "topics": [
         "money",
         "problem",
         "cashout"
       ],
-      "teaser": "Coverage of Mo Money Mo Problems: The Cashout from the conference program.",
+      "teaser": "Maps how criminals turn stolen cards, accounts and identities into cash, and what defenders can do about it.",
       "summary": "Benjamin Brown covers cybercrime cashout: converting stolen payment data, retailer accounts, credit card data, and fullz into money. Examines tools, techniques, and procedures e-launderers use as fraud controls tighten.",
       "durationSeconds": 3096,
       "conference": "carolinacon",
@@ -1718,7 +1718,7 @@
         "Howard Payne",
         "Deviant Ollam"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "howard",
         "payne",
@@ -1727,8 +1727,8 @@
         "elevator",
         "obscura"
       ],
-      "teaser": "Howard Payne & Deviant Ollam: Elevator Obscura: Industry Hacks.",
-      "summary": "CarolinaCon talk on elevator obscura industry hacks.",
+      "teaser": "Explores how elevator controls, fire service modes and key switches can be abused, and why the industry's security falls short.",
+      "summary": "The talk opens with a set of disclaimers: most elevator trips are safe, but tampering with the hoistway, car top or machine room can cause injury, entrapment and felony-level property damage. The speakers then walk through how elevators work, from traction and hydraulic drive systems to relay-logic and microcontroller controllers, floor selectors and limit switches, and the safeties that stop a car that overspeeds or loses its ropes.\n\nThe middle of the talk covers operating modes that can be abused. Independent service turns one car into a private elevator that ignores hall calls and can reach restricted floors, a technique the speakers have used on penetration tests. Fire service is the most significant: firefighter phases one and two override security lockouts by design, and the keys that trigger them are often sold online with little control. Key sets for several states were shown, along with a penetration test where a fire service switch let the team drive a back-of-house elevator to a restricted floor within seconds. They also described remote monitoring software whose default credentials appear in a public manual, elevator telephone lines that can be dialed and monitored, and hoistway doors that have no locks.\n\nThe closing advice is aimed at building owners and facility staff. They should hire qualified elevator technicians and security consultants, treat elevator access as a security boundary that needs a vestibule, and press code officials to retire the shared tubular fire key standard. Anyone trapped in a car should wait for trained responders rather than climbing out through the top hatch.",
       "durationSeconds": 5120,
       "conference": "carolinacon",
       "difficulty": "intermediate",
@@ -2119,14 +2119,14 @@
       "speakers": [
         "Omar Santos"
       ],
-      "track": "community",
+      "track": "policy",
       "topics": [
         "network-security",
         "network",
         "networks"
       ],
-      "teaser": "The Evolution of Network Security How Networks Are Still Getting Hacked - Omar Santos.",
-      "summary": "CarolinaCon talk on evolution of network security.",
+      "teaser": "Traces how network security has evolved and why networks keep getting compromised despite modern defenses.",
+      "summary": "The speaker, a product security leader at Cisco, traces how networks have grown from simple diagrams into virtualized, cloud-based and increasingly connected environments. He argues that this complexity, bring-your-own-device policies, cheap rented cloud services and connected home devices widen the attack surface, and that firewalls and intrusion prevention alone will not stop a determined attacker. Software-defined networking adds risk too, since a compromised controller can expose the whole virtual network.\n\nThe talk then covers attacks that still work. The Red October espionage campaign ran for about five years and used vulnerabilities dating back to 2009. In another case, a dictionary attack against Cisco devices with weak passwords succeeded at a high rate, and attackers went further by correlating passwords and hostnames kept in spreadsheets to recover an SNMP password. A distributed denial-of-service campaign against financial institutions used rented cloud machines and compromised data centers, reaching around 100 Gbps, and some of that infrastructure was paid for with stolen credit cards.\n\nOn the defense side, network devices lag behind endpoints in automated patching. Cisco is publishing advisories in machine-readable formats such as OVAL and CVRF, though automating the wrong steps can add risk. The speaker closes by urging better collaboration among vendors and researchers, noting that a few large companies account for most disclosed vulnerabilities over five years, and that researchers who report flaws should get credit rather than be pushed toward brokers.",
       "durationSeconds": 2733,
       "conference": "carolinacon",
       "difficulty": "intermediate",
@@ -2268,14 +2268,14 @@
       "speakers": [
         "Joe Seanor"
       ],
-      "track": "community",
+      "track": "policy",
       "topics": [
         "pwning",
         "pedophile",
         "seanor"
       ],
-      "teaser": "Coverage of Pwning the Pedophile - Joe Seanor from the conference program.",
-      "summary": "CarolinaCon talk on pwning the pedophile.",
+      "teaser": "Explains how civilian investigators can collect and package online predator evidence so that prosecutors can use it.",
+      "summary": "The speaker runs a nonprofit that provides free reporting software to police and the public. He argues that officers often lack the funding, training and time for online predator cases, and he draws on years of investigations at a large internet provider and in private computer forensics to explain why civilian reports often fail.\n\nMuch of the talk covers what makes evidence usable in court. He outlines what prosecutors look for, including possession or trading of illegal images, solicitation of a minor, and intent, and he explains that entrapment turns on whether the suspect was already predisposed. His practical advice includes capturing web addresses rather than downloading images, preserving email headers and chat logs, hashing every file, and storing the case on a dedicated portable system with a plain-language written report. He says that encountering images of children means stopping work and contacting the FBI or NCMEC. He also cites a Colorado case in which an unencrypted Wi-Fi network was held against the defendant, and he summarizes a North Carolina law that bars registered sex offenders from certain social networking sites.\n\nHe closes by urging attendees to build relationships with local sheriffs and cyber units before bringing them a case, and to avoid posing as minors in ways that could be seen as inducement. He points listeners to his free tools and invites help with development and bug fixing.",
       "durationSeconds": 3890,
       "conference": "carolinacon",
       "difficulty": "intermediate",
@@ -2422,13 +2422,13 @@
       "speakers": [
         "Terminal Cornucopia"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "terminal",
         "cornucopia",
         "treefort"
       ],
-      "teaser": "Coverage of Terminal Cornucopia - treefort from the conference program.",
+      "teaser": "Shows how everyday items sold in airport terminals can be turned into improvised weapons, with a build-by-build walkthrough.",
       "summary": "CarolinaCon Terminal Cornucopia talk.",
       "durationSeconds": 2501,
       "conference": "carolinacon",
@@ -2440,14 +2440,16 @@
       "youtubeId": "Gv-QyfyrxHE",
       "slug": "intro-to-lockpicking-smrk3r",
       "title": "intro to lockpicking - smrk3r",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "smrk3r"
+      ],
+      "track": "hardware",
       "topics": [
         "lockpicking",
         "intro",
         "smrk3r"
       ],
-      "teaser": "Coverage of intro to lockpicking - smrk3r from the conference program.",
+      "teaser": "Explains how pin tumbler and wafer locks work and how basic picking, shimming and bump-key methods defeat them.",
       "summary": "CarolinaCon intro to lockpicking talk.",
       "durationSeconds": 2189,
       "conference": "carolinacon",

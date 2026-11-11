@@ -88,11 +88,12 @@
         "security-operations"
       ],
       "teaser": "Explores andy Nguyen and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk walks through a remote kernel exploit for the PlayStation 4, whose FreeBSD 9-based kernel carries Sony's closed custom drivers and lacks most modern mitigations, with only kernel address space randomization present. The speaker first reviews earlier local routes: a use-after-free in the packet options handling of a system call, and a heap overflow in Sony's exFAT driver that a malicious USB drive can trigger. The main focus then moves to PPPoE, a protocol code path borrowed from NetBSD. A heap overflow in parsing rejected LCP options had already been fixed upstream years earlier, but the console still shipped it. Analysis of the rejected-options reply also exposed a kernel heap pointer, because the PPPoE host-unique tag is echoed back to the peer.\n\nThe middle of the talk covers defeating randomization remotely, which the speaker says took about a month of work because a wrong guess reboots the console. The leaked pointer points to the PPPoE control structure, which holds attacker-controlled fields. The chain sprays many IPv6 neighbor cache entries, then uses the overflow to corrupt one entry's state and interface pointer. This causes the kernel to send back a neighbor solicitation carrying a data-segment pointer as the MAC address, which reveals the kernel base. The final stage overwrites a free function pointer on a corrupted neighbor entry to pivot into a ROP chain. The chain disables write protection, patches the kernel to allow executable memory and runs a second-stage payload that can be any size.\n\nThe closing takeaway is that upstream FreeBSD commits and fixes without advisories can expose unpatched console code, so diffing them against vendor kernels is a practical audit method. Remote kernel attacks also depend on heavy reliability work, since a single wrong memory guess crashes the target. The exploit can be triggered during boot because the console connects to Sony servers.",
       "durationSeconds": 2267,
       "conference": "romhack",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "0l1lBPUtEyA",

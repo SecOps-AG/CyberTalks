@@ -539,7 +539,7 @@
       "speakers": [
         "Ananda Dhakal"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "bypass",
         "stripe",
@@ -548,8 +548,8 @@
         "e-commerce",
         "payment"
       ],
-      "teaser": "Hacking Stripe Integrations To Bypass E-Commerce Payments.",
-      "summary": null,
+      "teaser": "Walks through logic flaws in Stripe payment integrations that let attackers reuse saved cards and skip payment.",
+      "summary": "The talk looks at how Stripe payment integrations on e-commerce sites can be abused. The speaker began with a bug bounty competition that had Stripe in scope. After little turned up in Stripe's main dashboard, they turned to the in-scope GitHub repositories and a Magento extension that adds Stripe payments to online stores.\n\nThe walkthrough covers four issues. Saved-card payment method IDs followed a pattern that could be guessed, and the Magento backend took the customer from the payment method rather than from the logged-in account, so one user could charge another user's saved card. An Amazon Pay express checkout shipping endpoint accepted any amount, because the server only checked that the payment status was successful. Orders could also be created before payment completed, and the amount-mismatch check ran before the status check, so the order went through with an overpayment message instead of an unpaid status. Last, a Stripe API endpoint for retrieving saved card details required only the merchant's public key and no authentication, exposing card and billing data.\n\nEach flaw was fixed by adding an ownership, amount, status or authentication check. The main takeaway is that complex integrations can hide simple logic bugs, and that values coming from the client, such as IDs, amounts and payment status, should be verified on the server before an order or charge is accepted.",
       "durationSeconds": 2060,
       "conference": "steelcon",
       "viewCount": 1400,
@@ -1172,7 +1172,7 @@
       "speakers": [
         "Ayu"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "hunting",
         "bug",
@@ -1180,8 +1180,8 @@
         "mis",
         "waf"
       ],
-      "teaser": "Hunting For Bugs That Scanners Miss, And WAFs Fail To Detect by Ayoub Safa.",
-      "summary": null,
+      "teaser": "Shows how mobile app traffic, predictable UUIDs and shared JWT secrets expose bugs that scanners and WAFs overlook.",
+      "summary": "The talk covers web application and API vulnerabilities that automated scanners and web application firewalls often miss. The speaker argues that testers should look beyond a site's JavaScript files and also examine its mobile apps, since those apps can call backend endpoints the web front end never loads. In one case, an endpoint reached through a mobile app accepted the same credentials as the login flow without enforcing the second factor. In another, a simple Boolean SQL injection was reachable only through the mobile interface.\n\nThe middle of the talk covers authorization and token weaknesses. One case involved an indirect variant of insecure direct object reference, where a background request tied the victim's asset to the attacker's account and could be replayed. The speaker then explains that UUID version 1 values embed a timestamp and the MAC address of the generating machine. An attacker who knows roughly when a password reset token was created can therefore generate candidate values and guess the victim's token. A further case involved JSON Web Tokens whose payload held only an integer user ID and whose signing secret was shared between staging and production. Accounts created on staging yielded IDs matching real production users, which exposed more than 12,000 accounts.\n\nFor practitioners, the takeaways are to include mobile apps when enumerating endpoints, to keep signing keys separate for each environment, and to avoid sequential IDs or email addresses as token identifiers. Identifiers should be random version 4 UUIDs, and email ownership should be verified before trusting an account.",
       "durationSeconds": 1523,
       "conference": "steelcon",
       "viewCount": 1300,
@@ -1427,13 +1427,14 @@
         "stupid",
         "author"
       ],
-      "teaser": "2019: How Not To Be As Stupid As Ransomware Authors.",
-      "summary": null,
+      "teaser": "Walks through real ransomware families' cryptographic mistakes, from key reuse to leaked keys, and what developers should avoid.",
+      "summary": "The talk opens with a primer on cryptography: plaintext and ciphertext, symmetric and public-key ciphers, stream versus block ciphers, and block modes such as ECB, which leaks patterns, compared with modes that use an initialization vector. It also covers pseudo-random and true random number generators and why seeding and insecure generators matter.\n\nThe speaker then walks through ransomware families that got these details wrong. Early low-effort strains only renamed files, while one custom XOR-style scheme let a single known plaintext and ciphertext pair reveal its key in seconds. Others kept static keys inside the executable, derived keys from machine details, or used a weak random generator that left only about four billion possible keys. Key reuse with a stream cipher let one recovered keystream unlock many files, and a shared campaign key meant one victim's private key could decrypt others. A Windows-based family left its RSA key pairs on disk because a flag was missing from sample code, and another leaked its private key by rearranging ECB blocks in its key file.\n\nThe closing advice is to avoid rolling your own cryptography, avoid copying code you do not understand, and read documentation carefully. Developers should choose well-reviewed, easy-to-use libraries, match block modes and key handling to the cipher, and use a strong source of randomness. The speaker also stresses that infrastructure matters as much as the algorithm, and that victims without good backups may still face paying the ransom.",
       "durationSeconds": 1990,
       "conference": "steelcon",
       "viewCount": 1400,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2019
+      "year": 2019,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Bclx3ngV90w",
@@ -1495,7 +1496,8 @@
       "conference": "steelcon",
       "viewCount": 1200,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2019
+      "year": 2019,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "US9WiocWLJU",
@@ -1699,20 +1701,21 @@
       "speakers": [
         "Connor Morley"
       ],
-      "track": "community",
+      "track": "malware",
       "topics": [
         "equation",
         "group",
         "remained",
         "sight"
       ],
-      "teaser": "2019: How The Equation Group Remained Out Of Sight Over The Years.",
-      "summary": null,
+      "teaser": "Traces how the Equation Group's KillSuit framework installs, persists through a bootkit, and can be detected and removed.",
+      "summary": "The talk examines KillSuit, a post-exploitation framework from the Equation Group that was leaked by the Shadow Brokers in 2017 and is loosely linked to the NSA. Its modules offer man-in-the-middle redirection, full packet capture, Wi-Fi exfiltration from air-gapped machines, and custom TCP/IP stacks that avoid the Windows networking API.\n\nInstallation left several indicators. The implant repeatedly checked a setup-in-progress registry value, and its hashing calls inside a calculator process were anomalous. Each installation also wrote encrypted module records under randomized 32-character registry paths built from two combined lists, which the team could not recover from the binaries because of anti-debugging and runtime protections. A cryptographic provider type 23, absent from Microsoft's default list, appeared on first installation and served as a consistent marker. For persistence, the bootkit variant that worked up to Windows 7 rewrote the master and volume boot records, hid its kernel driver inside a TrueType font file located through an NTFS object ID index, and checked its integrity before handing control to the boot manager.\n\nFor detection, the team wrote a check that flagged unexpected no-operation bytes in boot records before a jump, which identified every bootkit installation they tested. Removing the encrypted registry database disabled the running modules and the bootkit's dependency on them. Firmware-level persistence was harder to address, and Secure Boot on UEFI systems and Windows 8 and later blocked the boot-record changes. The main takeaway is to hunt for registry artifacts and boot record anomalies.",
       "durationSeconds": 2508,
       "conference": "steelcon",
       "viewCount": 1700,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2019
+      "year": 2019,
+      "difficulty": "expert"
     },
     {
       "youtubeId": "n1eC-ImCcFk",
@@ -2283,14 +2286,14 @@
       "speakers": [
         "Dan Caban"
       ],
-      "track": "community",
+      "track": "blue-team",
       "topics": [
         "mail",
         "caban",
         "muk",
         "hirani"
       ],
-      "teaser": "2018 You’ve Got Mail! by Dan Caban and Muks Hirani.",
+      "teaser": "Walks through real incident response cases where nation-state attackers abused Exchange servers, Outlook clients and email for espionage.",
       "summary": "### Overview\nIn this talk, Dan Caban, an incident responder at Mandiant (part of FireEye) based in Dubai, discusses how targeted threat actors—particularly suspected nation-state groups in the Middle East such as APT34—exploit enterprise email infrastructure across every stage of the attack lifecycle. Moving beyond initial spear-phishing, Caban presents real-world incident response case studies demonstrating how adversaries abuse email trust relationships, bypass two-factor authentication (2FA), compromise desktop clients, deploy persistent server-side backdoors, and leverage built-in Exchange and PowerShell features for surveillance and exfiltration.\n\n### Key Topics\n- **Initial Access & Trust Abuses:** Attackers use confusingly similar domains, lookalike domains for harvesting misdirected emails, and compromised partner accounts or OWA access to insert malicious payloads into active, trusted email threads. Caban also highlights Google OAuth abuse via strategic web compromises.\n- **Two-Factor Authentication Flaws & Bypasses:** Organizations frequently implement 2FA poorly. Threat actors bypass SMS-based one-time passwords (OTP) by modifying user mobile numbers via compromised domain admin rights, intercept RSA soft tokens sent via unencrypted email, spoof MAC addresses, or circumvent OWA 2FA entirely by targeting alternate protocols like Exchange ActiveSync or Exchange Web Services (EWS).\n- **Client-Side Attacks & Outlook Persistence:** Adversaries manipulate Outlook settings synchronized with Exchange. Tools like Ruler allow attackers to configure Outlook homepages (e.g., executing commands via living-off-the-land binaries like certutil or PowerShell) and inbox rules. Caban also examines stealthy client backdoors, including a malicious .NET Outlook add-in and a DLL targeting multiple clients (Outlook, Outlook Express, Thunderbird, The Bat!), both utilizing steganography inside images to conceal command-and-control (C2) traffic.\n- **Exchange Server Persistence (Web Shells, Modules & Agents):** Attackers exploit Exchange servers due to high uptime requirements. Techniques range from aspx web shells (with evasion such as offset indexing, credential-harvesting via modified logoff scripts, and dynamic in-memory compilation) to low-level IIS managed/native modules (e.g., `Microsoft.Exchange.Clients.Auth.dll`, `http_parser.dll`) and Exchange transport agents capable of intercepting, modifying, or blocking emails.\n- **PowerShell Post-Exploitation & Forensic Discovery:** Attackers utilize built-in cmdlets (`New-InboxRule`, `New-MailboxExportRequest`, `New-MailboxSearch`) to forward sensitive emails, dump executive PSTs, and run e-discovery queries across organizations targeting terms like 'password' or 'VPN access'.\n\n### Technical Details\n- **Case Study (APT34):** In one 2015 breach, a macro-enabled document from a trusted hardware supplier led to credential dumping with Mimikatz, lateral movement, and web shell deployment on Exchange within three hours. Stolen data was staged as massive RAR files disguised as GIFs (triggering 206 partial download status codes).\n- **IIS Modules:** Adversaries use `appcmd.exe` or GUI to install native or managed modules. Native modules exported `RegisterModule` and parsed specific parameters (such as inspecting the 25th HTTP header for `default-windows` before triggering RC, UF, or DF routines).\n- **Forensics:** Caban notes that Exchange mailbox auditing is disabled by default, but defenders responding to Office 365 / Outlook 365 incidents can utilize Microsoft's activity/management REST API to review unlogged activity.\n\n### Takeaways\nDefenders must secure email gateways, harden attachment policies, and sandbox files. Organizations must require VPNs for remote and guest networks, transition away from insecure SMS-based OTP or MAC filtering, enforce 2FA across all protocols (including EWS and ActiveSync), monitor for lookalike domains, employ file integrity monitoring (FIM) and application whitelisting on Exchange servers, inspect parent-child process anomalies (IIS/Word spawning PowerShell), and proactively hunt for suspicious inbox rules, mailbox exports, and e-discovery queries.",
       "durationSeconds": 3107,
       "conference": "steelcon",
@@ -2635,13 +2638,13 @@
       "speakers": [
         "Neil Lines"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "samurai",
         "neil",
         "line"
       ],
-      "teaser": "Coverage of Samurai Of The West by Neil Lines from the conference program.",
+      "teaser": "Shows how chaining email harvesting, password spraying and phishing gets past defences that would stop any single technique.",
       "summary": "Neil Lines frames Western-themed physical penetration tests, polling practitioners on social engineering, web, and mobile focuses while sharing cowboy-flavored engagement stories.",
       "durationSeconds": 2524,
       "conference": "steelcon",
@@ -2993,18 +2996,19 @@
       "speakers": [
         "Juan J. Güelfo"
       ],
-      "track": "community",
+      "track": "purple-team",
       "topics": [
         "network-defense",
         "network",
         "training"
       ],
-      "teaser": "Improving Computer Network Defense Analysis Training.",
-      "summary": null,
+      "teaser": "Shows how replayed network traffic and customizable malware profiles can make blue team training realistic, reusable and low risk.",
+      "summary": "Many organizations struggle to build and keep blue team skills, and realistic training is expensive. The talk argues that training sessions face four pressures: how hard an attack scenario is to set up and reuse, what it costs, the risk of running live malware on production networks, and how realistic the scenario is. These pressures usually force trade-offs, so teams often choose cheap or safe sessions over realistic ones.\n\nThe speaker presented the Blue Team Training Toolkit, a Python project with a Metasploit-style command line that focuses on adversary replication and traffic replay. In the first demo, Maligno (version 3) ran a simulated infection whose HTTP requests and responses were built from indicators in a published report on a remote access trojan. The monitoring sensor raised an alert, and the headers largely matched the report. In the second demo, Pickup Teller replayed a recorded ransomware capture, first as a near-instant burst and then with real-time timing that keeps the original gaps between packets. It also rewrote IP and MAC addresses so the traffic fit the lab network.\n\nThe closing section covered red team uses, including Maligno version 2 as a standalone tool with payload injection, and traffic replay as a diversion during an engagement. The main takeaway is that reusing recorded traffic and shareable profiles can reduce preparation effort and cost while keeping scenarios realistic and away from production systems.",
       "durationSeconds": 2710,
       "conference": "steelcon",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "tGyBFOWsFbk",
@@ -3019,8 +3023,8 @@
         "please",
         "stand"
       ],
-      "teaser": "Would the real imposter please stand up?.",
-      "summary": null,
+      "teaser": "Explores impostor syndrome in cybersecurity, why the industry breeds it, and practical ways individuals and teams can cope.",
+      "summary": "This talk looks at impostor syndrome, the persistent sense of being a fraud despite real success, and how it shows up in the security industry. The speaker, a sociologist who works on the human side of cybersecurity, based much of the talk on an informal Twitter poll that drew over 800 responses. Most respondents said they felt this way often or daily, and the replies showed that many well-known practitioners struggle with it too, with some saying the more successful they became, the more they felt it.\n\nThe talk then turns to causes. Research points to personality and to family dynamics, such as being compared with a more successful sibling. Factors specific to the field are also discussed: a huge range of specialisms that makes colleagues seem like unreachable experts, an ego-driven and introverted culture where feelings are rarely discussed, and a critical culture that can slide into bullying. Long hours and the drive to keep proving oneself feed burnout, and the cycle reinforces itself. The speaker also warns that people who fear seeming arrogant can overcorrect into self-doubt, and that calling users stupid harms both user engagement and the people doing it.\n\nFor coping, the speaker recommends talking about the problem in groups or with colleagues, keeping a record of completed work, scheduling real breaks, and building interests outside the job. Acting confidently can, over time, shift how someone feels, and swapping constant apologies for thanks can help. Looking after sleep, exercise and general health is also key. Imagining the realistic worst outcome of a situation can put anxiety in perspective. The core takeaway is that feeling like an imposter is common and does not mean someone lacks a place in the industry.",
       "durationSeconds": 2867,
       "conference": "steelcon",
       "viewCount": 1400,
@@ -3040,12 +3044,13 @@
         "offensive",
         "anti-analysi"
       ],
-      "teaser": "Coverage of Offensive Anti-Analysis from the conference program.",
-      "summary": null,
+      "teaser": "Shows how malware can recognise online antivirus scanners, act benign inside them, and smuggle data out of them.",
+      "summary": "The talk opens with a critique of antivirus marketing, especially next-generation products that promise algorithm-based protection without explaining how they work. Vendors dispute each other's demonstrations, and most organisations lack the skills to test products independently.\n\nThe main case study is online scanning services such as VirusTotal, which execute uploaded files. The presenter shows that a sample can fingerprint a scanner using details like its username, running processes, planted files and short uptime, then behave benignly when it detects one. A wrapper around a credential-dumping tool was also shown displaying a harmless message in place of its real activity. Data could be extracted from scanning nodes through their output, raw sockets, DNS lookups, ICMP payloads and UDP hole punching past stateful firewalls, which could even host a command-and-control server. The vendor responded that the behaviour was working as intended.\n\nThe closing part covers why these weaknesses persist. Scanners keep uploaded samples indefinitely, so testing with sensitive malware is risky. Simple evasion checks could be fixed using existing research, while hardware-level detection is harder. The practical takeaways are to harden scanners, deploy controls such as application whitelisting despite false-positive complaints, and recognise that users clicking links or plugging in USB devices bypass the perimeter.",
       "durationSeconds": 2823,
       "conference": "steelcon",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "BK4QgJNUXXs",
@@ -3166,8 +3171,8 @@
         "gentle",
         "intro"
       ],
-      "teaser": "0wning the Internet of Trash: A gentle intro to IoT Ownage.",
-      "summary": null,
+      "teaser": "Introduces breaking into consumer routers and embedded devices through serial consoles, firmware extraction and a multi-device case study.",
+      "summary": "The talk is billed as a gentle introduction to attacking embedded devices such as home routers and set-top boxes, which run firmware on dedicated hardware. It starts with where to get firmware: vendor download sites, archived FTP mirrors, or pulling it straight off a device. It then covers finding a UART serial console on a board, identifying the ground, power and transmit pins with a multimeter, avoiding damage to USB-to-serial adapters, and detecting the baud rate so that boot output or a shell can be reached. Dumping a root filesystem over TFTP or by copying files from a root shell is shown as the way to get the contents for analysis.\n\nThe main case study covered roughly 108 firmware images from one vendor's device family. Binwalk was scripted to unpack the root filesystems in bulk, and diffing filesystems across versions was presented as a way to find bugs that had been patched. A quick review of the web interface turned up Shellshock in CGI scripts across every image, and many services were configured to run as root. The speaker also reported hard-coded SSH host keys, identical private SSL keys and shared password hashes across devices. These could be used to fingerprint products and to search the internet for matching hosts.\n\nThe talk then moved to post-exploitation on embedded systems, which often lack standard libraries and lose state on reboot. The speaker suggested cross-compiling small tools, using lightweight shells and file transfer, and favouring callbacks or Tor over a traditional command-and-control server. Worm and botnet examples on routers were discussed. The practical takeaway is that default configurations and unpatched firmware leave many devices exposed, so anyone responsible for such equipment should inventory it, test it carefully, and expect vendor fixes to be slow.",
       "durationSeconds": 3070,
       "conference": "steelcon",
       "viewCount": 1500,
@@ -3358,12 +3363,13 @@
         "noob",
         "pitfall"
       ],
-      "teaser": "Steve Armstrong - Avoiding the Noob’s pitfalls of Incident Response.",
-      "summary": null,
+      "teaser": "Covers common incident response mistakes, from missing asset documentation to poor evidence handling, using real-world cases.",
+      "summary": "The speaker, a former military analyst who now runs an incident response firm, frames incident response around the OODA loop: observe, orient, decide and act faster than the attacker. He argues that teams lose when they do not understand what an adversary is trying to achieve. He outlines the main attacker groups, from hacktivists and cybercriminals to state-linked espionage crews, each with different tools and goals, and suggests that knowing the likely attacker tells responders where to look next.\n\nThe middle of the talk walks through common failures. A long, unread incident plan is worse than a short one people will actually use. Missing network diagrams, asset registers and documentation leave responders guessing, as in one case where an organisation had hundreds of machines it could not log into. Tribal knowledge and unexplained extra SSH servers slow triage. Restoring systems from backups without checking for leftover web shells, or returning rebuilt laptops without current patches, lets attackers return. Poor communication, such as sending incident details over broad email threads, and tracking cases in spreadsheets add further risk. The speaker recommends running analysis on separate, trusted systems rather than a domain-joined laptop.\n\nTo close, the speaker urges teams to review and improve after every incident and to document procedures so lessons persist. Executive backing and proactive hardening, such as build baselines, can cut detection time sharply. He also warns that outsourcing monitoring does not transfer the risk, citing a case where a single outsourced analyst's change turned four incidents into about forty.",
       "durationSeconds": 3179,
       "conference": "steelcon",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "HJVNDArhs74",

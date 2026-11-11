@@ -10,7 +10,9 @@
       "youtubeId": "gGh_mn77NFg",
       "slug": "stealthy-persistence-in-enterprise-environments-alexander-anders",
       "title": "Stealthy Persistence in Enterprise Environments - Alexander Andersson",
-      "speakers": [],
+      "speakers": [
+        "Alexander Andersson"
+      ],
       "track": "appsec",
       "topics": [
         "persistence",
@@ -19,8 +21,8 @@
         "alexander",
         "andersson"
       ],
-      "teaser": "2026 details Stealthy Persistence in Enterprise Environments - Alexander Andersson.",
-      "summary": null,
+      "teaser": "Shows how attackers keep access in Windows and enterprise environments through persistence that evades common forensic tools and EDR.",
+      "summary": "Alexander Andersson defines persistence as the methods an attacker uses to keep access they already hold, even at admin, root or domain admin level. He notes that MITRE ATT&CK lists 22 techniques, but many more exist, from Windows startup apps and Linux profile scripts to Azure enterprise app secrets and web shells. Triggers can be event-based, scheduled or manual. Investigations are hampered by limited scope and short log retention.\n\nHe walks through several cases. A real incident used a scheduled task with layered obfuscated PowerShell, which he judges poor because the final payload still lands on disk. Remote management tools such as AnyDesk or TeamViewer are common and hard to separate from legitimate use. In a demo, a PowerShell profile in the Documents folder launched a calculator, and Autoruns did not flag it. He also shows that a stolen IIS machineKey from web.config, as on SharePoint or Exchange, allows repeated deserialization-based code execution. A custom WinRM PowerShell plugin, loaded when someone runs remoting to the host, produced an EDR record of its registration but not of the DLL load.\n\nHe closes by arguing that simple techniques work best, and that time-stomping and log clearing often expose attackers. Defenders should start with MITRE but look beyond it, learn what legitimate tools and traffic should look like, and check for persistence at all, since many organisations restore backups that still contain attacker footholds.",
       "durationSeconds": 2407,
       "conference": "security-fest",
       "viewCount": 1900,
@@ -124,12 +126,13 @@
         "practical",
         "required"
       ],
-      "teaser": "Security researchers examine technical aspects of Practical Exploitation - No CVE Required.",
-      "summary": null,
+      "teaser": "Shows how to spot repeatable vulnerable patterns across codebases and build a working WordPress plugin file upload exploit.",
+      "summary": "The talk defines practical exploitation as following a vulnerability through the full chain, from discovery and a working exploit to a payload with a real use, against live targets rather than in a lab. The speaker argues that repeatable vulnerable patterns are the key. A streaming provider's paywalled content was reachable through a public CDN using a predictable request structure, so the same weakness could be searched for across similar services.\n\nThe main case uses a tool that maps an application's entry points and colors user-controlled input, dangerous sinks and dead ends. The speaker searches a large corpus of WordPress plugins for unauthenticated AJAX handlers where user input reaches a dangerous sink with no dead ends. One plugin's save handler accepted base64-encoded content and wrote an XML file into a web-accessible uploads directory. The obstacle was that the filename was trimmed by a basename call that strips the suffix, and pagination was appended to the name, so a PHP payload would not run. Removing the extension and the pagination suffix from the name let a PHP file be written and executed.\n\nThe exploit was then built in a reusable hacking framework, reusing its existing web shell payload through an arbitrary file upload delivery method. The takeaway is that a known bug class can be turned into a quick weapon by searching many codebases and install bases for the same structure, then verifying each candidate carefully.",
       "durationSeconds": 2249,
       "conference": "security-fest",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "2HZV-HFcV-8",
@@ -303,12 +306,13 @@
         "tobia",
         "ahnoff"
       ],
-      "teaser": "SecurityFest2023 examines How to f*ck up at OAuth2 while following BCPs -Tobias Ahnoff, Pontus Hanssen.",
-      "summary": null,
+      "teaser": "Shows how OAuth 2 systems that follow current best practices can still leak tokens or expose admin endpoints.",
+      "summary": "The talk looks at how OAuth 2 and OpenID Connect systems can still go wrong even when their designers follow current best practices. The speakers, from Omega Point, say that many production systems they test still keep tokens in browser JavaScript, skip pushed authorization requests, or use basic client authentication. They recap the main specifications, including FAPI and OAuth 2.1, and point out that best practices change over time.\n\nA live demo compared a 2019-style single-page application with a backend-for-frontend design. In the older version, a cross-site scripting flaw in a search field let the presenter run a hidden iframe silent renew inside the victim's session, collect a fresh authorization code and exchange it for an access token that could call the orders API. In the newer version, the token stayed in an HTTP-only cookie and the client secret blocked the code exchange, so the stolen token approach failed. The attacker could still make requests within the session, and a catch-all proxy route let those requests reach an administrative endpoint that returned all orders.\n\nThe speakers listed four conditions that make this kind of attack work: a valid user session, reach to internal services, wildcard routing and an access control bug. Their mitigations were to enforce authorization in each API rather than relying on scopes alone, to list exact methods and paths in the proxy, to add a gateway and network segmentation as extra layers, and to keep fixing cross-site scripting. They closed by advising teams to test that logout and session timeouts actually end the single sign-on session.",
       "durationSeconds": 2031,
       "conference": "security-fest",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "U36hAneQeZM",
@@ -571,18 +575,19 @@
       "speakers": [
         "Hanno Böck"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "hanno",
         "sniff",
         "mime"
       ],
-      "teaser": "SecurityFest 2019 explores Hanno Böck - Don't Sniff the MIME.",
-      "summary": null,
+      "teaser": "Shows how MIME sniffing in servers and browsers turns uploaded files into cross-site scripting vectors across common platforms.",
+      "summary": "The talk starts with cross-site scripting as HTML injection and then turns to file upload XSS, where a server delivers an uploaded file as a full HTML document in its own origin. Browsers decide whether to render HTML from the Content-Type header, and when that header is missing or generic they may sniff the content instead. The starting point was an ACME response reflecting input, which Apache's mod_mime_magic could guess as HTML.\n\nThe core problem is that the mime.types file used to map extensions to types is not standardized, so unusual extensions fall through to content detection. The speaker walked through several cases: a WordPress media upload with an obscure video extension that passed validation but rendered as HTML in Firefox; Mailman's Pipermail archive, which renamed unknown attachments to .obj and could be abused on most distributions; and Joomla, which only partly mitigated the issue. Other findings included PHP and Apache disagreeing on a file named \".jpg\", Caddy sniffing content by default through Go's standard library, and X-Content-Type-Options: nosniff not stopping HTML sniffing in Firefox and Edge for direct navigation.\n\nThe takeaways were practical: disable mod_mime_magic, add and standardize mime.types entries, force safe types or downloads for uploads, avoid dot-prefixed filenames, and push browsers to fix or drop MIME sniffing. The strongest defense is serving user uploads from a separate domain with no accounts.",
       "durationSeconds": 2741,
       "conference": "security-fest",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "NI1N_yjH7dc",
@@ -633,7 +638,9 @@
       "youtubeId": "bQpPdT7RDqQ",
       "slug": "calle-svensson-software-obfuscation-with-llvm",
       "title": "Calle Svensson - Software Obfuscation with LLVM",
-      "speakers": [],
+      "speakers": [
+        "Calle Svensson"
+      ],
       "track": "malware",
       "topics": [
         "obfuscation",
@@ -641,8 +648,8 @@
         "svensson",
         "llvm"
       ],
-      "teaser": "SecurityFest 2019 investigates Calle Svensson - Software Obfuscation with LLVM.",
-      "summary": null,
+      "teaser": "Shows how LLVM compiler passes can obfuscate code across many languages, and how such protections get tested and countered.",
+      "summary": "This talk introduces software obfuscation as the practice of making compiled or interpreted programs harder to understand. It starts with everyday examples such as minified JavaScript, then surveys common techniques: control flow flattening, self-modifying code, dead code insertion, staged packers, droppers, anti-debugging tricks, and custom virtual machines. The speaker notes that these methods carry different performance costs, with an extreme single-instruction virtual machine shown as an example of heavy overhead.\n\nThe middle of the talk focuses on LLVM. Its front end, intermediate representation and back end mean that an optimization or obfuscation pass written once applies to every supported language and target. The speaker walks through an opaque predicate, an expression built from random values and prime numbers that always evaluates the same way but is hard to see through, and describes a small pass that shuffles a value through registers and the stack. An existing fork, Obfuscator-LLVM, is mentioned as a route with more freedom but a heavier maintenance burden. Motivations covered include DRM, protecting trade secrets, and malware authors hiding from antivirus.\n\nThe closing section covers testing and defense. Obfuscators can introduce subtle bugs, because other optimizer passes may remove the opaque values and change behavior, so the speaker suggests running large open-source test suites through an obfuscated build. On the analysis side, reverse engineers can write automated deobfuscators once a tool's pattern is known, lift binaries back to an intermediate representation to run optimizers that strip dead code, and apply symbolic execution, debugging, tracing and fuzzing. The main takeaway is to decide whether protection should target automated tools, human analysts, or both.",
       "durationSeconds": 2123,
       "conference": "security-fest",
       "viewCount": 1600,
@@ -960,7 +967,7 @@
       "speakers": [
         "Frans Rosén"
       ],
-      "track": "community",
+      "track": "cloud",
       "topics": [
         "fran",
         "breaking",
@@ -969,12 +976,13 @@
         "policie",
         "frans"
       ],
-      "teaser": "SecurityFest 2018 investigates Frans Rosén - Breaking and abusing specifications and policies.",
-      "summary": null,
+      "teaser": "Shows how a missing domain check and a Let's Encrypt validation method let an attacker obtain certificates and take over domains.",
+      "summary": "The talk starts with a source-code hosting company's static site feature, where the speaker found that customers could point any domain at the service without ownership checks. Trying to get a valid certificate for a claimed domain led the speaker to study the ACME validation methods used by Let's Encrypt. The TLS-SNI-01 method could be abused on shared hosting, because the validation request was routed by a server name the attacker controlled, and a cloud provider accepted uploaded certificates for names it did not check. The speaker obtained certificates for domains belonging to a major company, reported the issue, and the affected validation method was removed. Other cloud providers were also affected.\n\nThe second half covers browser-direct uploads to cloud storage using signed POST policies. The speaker walks through common mistakes: an empty or overly broad starts-with condition lets an attacker write files at the bucket root, which can enable a service worker on a sandbox domain. A content-type condition can be bypassed by supplying a second value, such as text/html, so files are served as HTML. Temporary credentials issued with wildcard permissions exposed entire buckets. Signed URL handling that normalised paths or accepted double slashes let the speaker read other objects, and one case exposed a whole company's files.\n\nThe main takeaway is that specifications and policies are easy to get wrong. Teams should test every condition of an upload policy, restrict keys to per-user prefixes, and scope credentials tightly. Several of the cases described led to fixes and payments to the speaker.",
       "durationSeconds": 2109,
       "conference": "security-fest",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "UCF1USRPCJI",
@@ -1225,7 +1233,9 @@
       "youtubeId": "BQpjSe9kdZM",
       "slug": "panel-debate-on-bug-bounties",
       "title": "Panel Debate on Bug bounties",
-      "speakers": [],
+      "speakers": [
+        "Mark"
+      ],
       "track": "red-team",
       "topics": [
         "panel",
@@ -1233,18 +1243,21 @@
         "bountie",
         "bounties"
       ],
-      "teaser": "2016 explores Panel Debate on Bug bounties.",
-      "summary": null,
+      "teaser": "Panelists debate whether bug bounties can replace penetration testing and how programs should handle noisy and low-quality reports.",
+      "summary": "The panel opens by asking whether bug bounties will eventually replace traditional penetration testing. The speakers first separate the two: a bounty gives researchers no set expectations or coverage, so a company cannot easily tell how much real effort went into its target. They also question whether finding individual bugs helps much when the same kinds of flaws keep appearing because of how software is designed and built.\n\nOne panelist who runs a bounty program described it as one tool alongside internal reviews and attack simulations carried out with trusted partners. The program raised its minimum payout from 50 to 250 to keep strong researchers engaged, and it runs as a private, invite-only program to reduce low-quality submissions. The speakers agreed that noise is a serious problem, with many reports coming from automated scanners, and they described a very high invalid-report rate as a sign of laziness rather than skill. One anecdote involved a marketplace engineer who argued that a bounty would only lead to single input fields being patched before a company had design-level security processes in place.\n\nThe discussion ended with careers and communication. Researchers who write reports that explain root causes and suggest proper fixes often move into defensive roles, and the panel argued that companies should be clear about scope and feedback. The main takeaway was that bounties improve security only when they sit on top of a mature internal process and reward researchers for explaining the cause, not just the symptom.",
       "durationSeconds": 2335,
       "conference": "security-fest",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "KDo68Laayh8",
       "slug": "frans-rosen-the-secret-life-of-a-bug-bounty-hunter",
       "title": "Frans Rosén The Secret life of a Bug Bounty Hunter",
-      "speakers": [],
+      "speakers": [
+        "Frans Rosén"
+      ],
       "track": "red-team",
       "topics": [
         "bug-bounty",
@@ -1253,12 +1266,13 @@
         "bounty",
         "hunter"
       ],
-      "teaser": "2016 analyzes Frans Rosén The Secret life of a Bug Bounty Hunter.",
-      "summary": null,
+      "teaser": "Traces a bug bounty hunter's path from early payouts to CSP bypasses, OAuth redirect abuse and browser quirks.",
+      "summary": "Frans Rosén, a researcher who works on the Detectify scanner, traces how he got into bug bounties after PayPal paid him for a report in 2013, when many companies began offering rewards for disclosed flaws. He recounts his early wins, including a long night of reporting issues from a phone while on holiday, and his largest payout, which came from an administrator login exposed publicly on GitHub.\n\nThe middle of the talk walks through his routine when a new program launches. He checks Flash files, numeric and hashed object IDs, and third-party tracking scripts whose query parameters can change the code they load. Facebook Connect redirect checks that only partly validated subdomains and paths let him send access tokens to attacker-chosen pages, helped by differences between browser and backend URL parsing. A trusted CDN hosting an old JSONP endpoint defeated a Content Security Policy, and dangling DNS records pointing at cloud hosting services allowed domain takeover. He also describes Firefox and Safari bugs that made some pages exploitable.\n\nHe closes with stories about unusual rewards, including donation-matching arrangements and a live bug hunting session at Defcon where a company paid out during one night. The practical takeaway is to examine trust boundaries that teams often overlook, such as allowlists, third-party code and forgotten DNS entries.",
       "durationSeconds": 3236,
       "conference": "security-fest",
       "viewCount": 34000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "gdH30pDMqeE",
@@ -1325,7 +1339,9 @@
       "youtubeId": "5qA0CtS6cZ4",
       "slug": "veit-hailperin-the-tale-of-a-fameless-but-widespread-web-vulnera",
       "title": "Veit Hailperin, The Tale of a Fameless but Widespread Web Vulnerability Class",
-      "speakers": [],
+      "speakers": [
+        "Veit Hailperin"
+      ],
       "track": "appsec",
       "topics": [
         "web",
@@ -1335,12 +1351,13 @@
         "fameles",
         "widespread"
       ],
-      "teaser": "2016 investigates Veit Hailperin, The Tale of a Fameless but Widespread Web Vulnerability Class.",
-      "summary": null,
+      "teaser": "Shows how cross-site script inclusion leaks sensitive data from JavaScript files, and how to find and prevent it.",
+      "summary": "Veit Hailperin explains cross-site script inclusion, a long-standing web flaw that receives little attention despite being widespread. The same-origin policy does not stop a page from loading a script hosted on another site, so when a script carries sensitive data and is served with the visitor's ambient authority, such as cookies, an attacker's page can read it. The talk traces the problem back to early JavaScript and a 2006 Gmail address book leak reported by Jeremiah Grossman.\n\nHe sorts the issues into four categories: static scripts that expose secrets, static scripts behind authentication that act as a login oracle, dynamic scripts whose contents vary by user, and non-script responses that browsers still treat as scripts. For dynamic cases he suggests fetching a file while logged in and again while logged out, then comparing the results. A live example on a high-traffic site leaked names, contact details, date of birth and precise location through a JSONP callback. Exploitation techniques included overriding global variables, functions and array constructors. A UTF-7 JSON breakout still worked in Internet Explorer and Edge.\n\nMitigations include keeping sensitive data out of JavaScript files, serving correct content types, sending the X-Content-Type-Options header, using anti-CSRF tokens, and adopting the new SameSite cookie attribute, which only Chrome supported then. The speaker closed with a reading list and a Burp Suite passive scanner extension he wrote to flag candidate scripts, noting that it sends unauthenticated requests.",
       "durationSeconds": 2056,
       "conference": "security-fest",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "_iZaZSKawLk",

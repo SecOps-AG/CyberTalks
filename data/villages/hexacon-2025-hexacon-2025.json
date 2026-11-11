@@ -61,12 +61,13 @@
         "0-click",
         "redi"
       ],
-      "teaser": "Security researchers examine technical aspects of From 2-Bit Reset to 0-Click RCE in Redis: A Pwn2Own Edition by Benny Isaacs.",
-      "summary": null,
+      "teaser": "Shows how a Lua garbage collector bug in Redis led to a zero-click remote code execution exploit.",
+      "summary": "The talk examines a memory-safety bug in Redis, the widely used in-memory database, which the speaker's team found and exploited at Pwn2Own Berlin, where Redis had a new AI category. Redis lets clients run Lua scripts in a restricted interpreter, and the speaker focuses on the Lua load function, which takes a reader callback that supplies code chunks and an optional chunk name.\n\nThe flaw involves the chunk name string, which sits only on the native stack and escapes Lua's garbage collector. Triggering a collection inside the reader callback frees that string while a parser structure still points to it, producing a use-after-free whose write only clears two bits of the freed object's header. The team reclaimed the memory with a Lua table, using heap shaping and retries to align a node pointer with the header. They then leaked an address through tostring on a crafted object, built faked Lua objects for arbitrary reads, and launched a ROP chain calling system through a fake C closure, which yielded a remote shell in a live demo.\n\nThe bug had been in Redis for about 13 years, and the full exploit ran to roughly 2,500 lines, built in about a week and a half from discovery to code execution. The speaker simplified the internals and did not release the exploit, since many deployments remain unpatched; a detailed write-up is planned. The takeaway is to upgrade Redis promptly and to recognise how objects hidden from a garbage collector can become memory corruption primitives.",
       "durationSeconds": 1515,
       "conference": "hexacon",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "qT3YFtGjiuQ",
@@ -237,7 +238,10 @@
       "youtubeId": "C-52Gwmce3w",
       "slug": "an-rbtree-family-drama-by-william-liu-and-savino-dicanosa",
       "title": "An RbTree Family Drama by William Liu & Savino Dicanosa",
-      "speakers": [],
+      "speakers": [
+        "William Liu",
+        "Savino Dicanosa"
+      ],
       "track": "cloud",
       "topics": [
         "rbtree",
@@ -247,12 +251,13 @@
         "savino",
         "dicanosa"
       ],
-      "teaser": "Security researchers examine technical aspects of An RbTree Family Drama by William Liu & Savino Dicanosa.",
-      "summary": null,
+      "teaser": "Shows how a Linux traffic control bug becomes a kernel privilege escalation via red-black tree manipulation across kernel CTF targets.",
+      "summary": "The talk walks through a Linux kernel exploit chain that starts in the network traffic control subsystem, where queueing disciplines can be nested into trees. The focus is HFSC, a scheduler that supports multiple children, combined with a netem child that has packet duplication enabled. Recursive enqueue calls insert the same class twice into the eligible red-black tree, so a node ends up pointing back at itself and the dequeue path loops forever. On its own this is only a denial of service.\n\nThe speakers turn that loop into a use-after-free. A TBF parent set to a very low rate blocks dequeue so the loop never runs, the class is freed through a traffic control command, and a dangling node stays in the tree. They then reclaim the freed slot with a page vector built from packet sockets and use red-black tree insertions and rebalancing to copy a page pointer into a second location. That gives a page use-after-free, which is turned into credential overwrite with a signalfd-style primitive. The same chain is demonstrated against the LTS and COS kernel CTF targets, and a later variant gets past newer hardening (split variable-size kmalloc, slab virtualization, randomized kmalloc caches) by type-confusing an HTB class with the tree node, then using a prefetch to defeat KASLR.\n\nThe talk also covers a contest detail: the team sped up the proof-of-work step in the bounty submission flow, and the organizers later removed that requirement. The practical takeaway is that composing separately developed kernel components creates invariant violations that are hard to reason about, and that allocator hardening raises the cost of exploitation without eliminating type confusion.",
       "durationSeconds": 2564,
       "conference": "hexacon",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "wYulofbUDqY",

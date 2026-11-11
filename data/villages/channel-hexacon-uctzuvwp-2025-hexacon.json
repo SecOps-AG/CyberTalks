@@ -10,20 +10,23 @@
       "youtubeId": "5vpkbRgxQkQ",
       "slug": "2023-the-two-sided-mirror-by-xerub",
       "title": "2023 - The two-sided mirror by xerub",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "xerub"
+      ],
+      "track": "mobile",
       "topics": [
         "two-sided",
         "mirror",
         "xerub",
         "sided"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding 2023 - The two-sided mirror by xerub.",
-      "summary": null,
+      "teaser": "Traces how iOS exploit mitigations evolved over fifteen years and how each one was bypassed in turn.",
+      "summary": "The talk compares offensive and defensive security, drawing on the speaker's experience on both sides. It argues that many common bugs in large codebases come from inherited assumptions, hard-to-verify state machines, unpatched third-party libraries, unusual coding styles and missing automated testing. Fuzzing is presented as useful but not sufficient, since some serious bugs were found by manual analysis.\n\nThe central case study is Apple's iOS. The talk traces mitigations from code signing and the sandbox through address space layout randomization, PAN, pointer authentication and hardware-enforced page table protection, and for each one it covers the bypasses that followed. Some mitigations broke others, and several were defeated quickly, which pushed exploitation toward data-oriented techniques. Newer changes such as allocator hardening, read-only kernel zones, volume integrity checks, developer mode and lockdown mode are also covered, with lockdown mode resisting a blast pass exploit that otherwise got through.\n\nThe conclusion is that exploitation has become far harder and costlier, and mitigations now affect post-exploitation as well. Vendors that control silicon, hardware and software have a structural advantage. The speaker points to memory tagging as a promising direction. For practitioners, the lesson is that removing dangerous functionality can beat hardening its code, and that testing and disciplined code hygiene matter most.",
       "durationSeconds": 2469,
       "conference": "hexacon",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "xSp38lFQeRE",
@@ -115,7 +118,9 @@
       "youtubeId": "gZujzty6O7o",
       "slug": "2023-a-year-fuzzing-xnu-mach-ipc-by-nguyen-vu-hoang",
       "title": "2023 - A Year Fuzzing XNU Mach IPC by Nguyen Vu Hoang",
-      "speakers": [],
+      "speakers": [
+        "Nguyen Vu Hoang"
+      ],
       "track": "red-team",
       "topics": [
         "fuzzing",
@@ -123,12 +128,13 @@
         "mach",
         "nguyen"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for 2023 - A Year Fuzzing XNU Mach IPC by Nguyen Vu Hoang.",
-      "summary": null,
+      "teaser": "Shows how a template-driven fuzzer for Apple's XNU Mach IPC subsystem surfaces kernel bugs, and how those bugs were exploited.",
+      "summary": "The talk looks at Apple's XNU kernel, focusing on the Mach IPC subsystem, which is large, feature-heavy and relies on many union structures. The speaker first revisits two public Mach bugs. One is a type confusion in which a special reply port could overwrite a field holding a kernel object, because a type check was missing. The other is a race that led to a use-after-free in user data element handling. Apple's fixes were a simple type check and a lock taken before a count is incremented.\n\nTo find new bugs, the speaker built a template-based fuzzer. Test cases are stored in a structured format, while a C template annotates function signatures with port type constraints and attributes. A Python processor turns both into C test programs, and mutators vary argument types, call order and call probabilities. The programs run in a macOS virtual machine under KVM on Linux, and a monitor reads kernel panic output from the serial console and saves the test case that triggered each one. Building the tool took over a month, and it produced many panics along with some useful crashes.\n\nThe main case study is a flaw in the port request handling function, where a table index is used without a bounds check. Triggering it requires a specific message option and port setup, and the speaker controlled the index by allocating and freeing ports to shape a table field. The crash was reproduced on an iPhone 11 running iOS 15.6, and Apple released a fix in iOS 15.6.1. The takeaway is that Mach's union-heavy code hides side effects, and generated test cases can reach deep states that hand-written tests tend to miss.",
       "durationSeconds": 1708,
       "conference": "hexacon",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "_CJmUh0_uOM",
@@ -193,7 +199,9 @@
       "youtubeId": "Jc0V30TOKao",
       "slug": "2023-remotely-exploiting-an-antivirus-engine-by-simon-scannell",
       "title": "2023 - Remotely exploiting an Antivirus engine by Simon Scannell",
-      "speakers": [],
+      "speakers": [
+        "Simon Scannell"
+      ],
       "track": "red-team",
       "topics": [
         "antivirus",
@@ -207,13 +215,16 @@
       "durationSeconds": 2297,
       "conference": "hexacon",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "J2QR58JAO7Q",
       "slug": "2023-finding-and-exploiting-an-old-xnu-logic-bug-by-eloi-benoist",
       "title": "2023 - Finding and exploiting an old XNU logic bug by Eloi Benoist-Vanderbeken",
-      "speakers": [],
+      "speakers": [
+        "Eloi Benoist-Vanderbeken"
+      ],
       "track": "red-team",
       "topics": [
         "finding",
@@ -222,18 +233,21 @@
         "eloi",
         "benoist-vanderbeken"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for 2023 - Finding and exploiting an old XNU logic bug by Eloi Benoist-Vanderbeken.",
-      "summary": null,
+      "teaser": "Shows how a devfd race in the macOS XNU kernel gave root and bypassed System Integrity Protection.",
+      "summary": "The talk recounts how the speaker searched for a logic bug in Apple's XNU kernel that would give root on macOS, without spending an iOS-shared bug or a memory corruption primitive. macOS lets unprivileged users mount many filesystems, ships setuid binaries, and has a weak sandbox, so its kernel attack surface is larger than iOS. After weeks of failing to turn a vnode use-after-free into a working exploit, the speaker turned to the devfd special filesystem.\n\nThe key finding was a time-of-check, time-of-use race in devfd. A chmod call on a path under /dev/fd checks permissions on the wrapper vnode, then applies the change to whichever underlying file the descriptor points to at that moment. Swapping the descriptor between those two steps lets an unprivileged user change permissions on any file they can open, such as making a root-owned binary setuid. The same flaw cleared the restricted flag on files protected by System Integrity Protection, because the policy check only sees the wrapper. That allowed editing the kernel extension user consent and policy databases. Loading a correctly signed kernel extension was not fully established.\n\nApple fixed the issue by rechecking permissions against the underlying vnode before setting attributes. The talk closes by arguing that logic bugs in macOS filesystem code remain valuable, that development kernels help researchers, and that both logic and memory corruption bugs are getting harder to exploit on Apple platforms.",
       "durationSeconds": 1639,
       "conference": "hexacon",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "7yxTI_4vPGk",
       "slug": "2023-xortigate-zero-effort-zero-expense-0-day-on-fortinet-ssl-vp",
       "title": "2023 - XORtigate: zero-effort, zero-expense, 0-day on Fortinet SSL VPN by Charles Fol",
-      "speakers": [],
+      "speakers": [
+        "Charles Fol"
+      ],
       "track": "privacy",
       "topics": [
         "vpn",
@@ -242,19 +256,23 @@
         "zero-expense",
         "0-day"
       ],
-      "teaser": "Security researchers examine technical aspects of 2023 - XORtigate: zero-effort, zero-expense, 0-day on Fortinet SSL VPN by Charles Fol.",
-      "summary": null,
+      "teaser": "Shows a pre-authentication remote code execution bug in a Fortinet SSL VPN's decryption routine and how it was exploited.",
+      "summary": "This talk presents XORtigate, a pre-authentication remote code execution bug in a Fortinet SSL VPN appliance, found by the speaker's team during a red team assessment. The work starts with a virtual demo appliance. A path traversal in how the data archive is extracted at boot lets an attacker plant a file that replaces an SSH binary, which yields a root shell and makes the large, unsymbolized init binary easier to reverse.\n\nThe core flaw is in the decryption of an encrypted HTTP parameter. Its size field is checked against the length of the hex-encoded payload rather than the number of bytes, so decryption runs past the end of the buffer and XORs adjacent heap memory with a keystream. The keystream is a chain of MD5 hashes, so the attacker can brute-force a seed that controls one chosen byte. Applying the overflow twice cancels out everything except that byte, giving a precise write primitive. The speaker used it to overwrite a function pointer in an OpenSSL SSL structure, arranging heap chunks with POST-based allocations and a freed chunk so the overwrite landed reliably. A first exploit built for 64-bit Intel was useless on the 32-bit ARM target, so the chain was rebuilt and tested through emulation.\n\nBecause a crash would disconnect users and raise suspicion, the final exploit was run at a quiet hour. It hooked the login routine to capture user credentials in cleartext, and a live demo showed root on the appliance. The speaker reports that many versions are affected, that one exploit was published, and that Fortinet issued an advisory. The main lesson is that old, forgotten parameters and heavily modified legacy components can hide severe bugs.",
       "durationSeconds": 1575,
       "conference": "hexacon",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "3Zs45Cl3HfQ",
       "slug": "2023-bug-tales-life-and-death-in-the-sahara-by-seamus-burke-and",
       "title": "2023 - Bug Tales: Life and Death in the Sahara by Seamus Burke & Aaron Willey",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Seamus Burke",
+        "Aaron Willey"
+      ],
+      "track": "hardware",
       "topics": [
         "tale",
         "life",
@@ -262,12 +280,13 @@
         "sahara",
         "seamu"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 2023 - Bug Tales: Life and Death in the Sahara by Seamus Burke & Aaron Willey.",
-      "summary": null,
+      "teaser": "Walks through a Qualcomm boot ROM stack-exhaustion bug, its exploitation over USB download mode, and the path to code execution.",
+      "summary": "Qualcomm's boot ROM is the first code that runs on the chip, executing at the highest ARM privilege level and loading the secure boot chain. The talk covers a bug in the Sahara emergency download protocol of 64-bit Qualcomm chipsets, reachable over USB. Each repeated reset command makes the handler call back into its entry routine without returning, so the stack keeps growing into a small, fixed block of on-chip SRAM.\n\nOn the SDM845, that stack sits beside crypto function tables. By sending a precise number of packets and a certificate chain with oversized fields, the speakers overwrote a modular exponentiation pointer and redirected execution. With no hardware debugger available, they built an emulator with Unicorn to trace the stack. Their return-oriented chain pivoted the stack, flushed the data cache before disabling the MMU, and fetched a larger payload over USB. Surviving later boot stages meant hooking the XBL SEC exit call and attaching a UEFI driver, which let them swap the ramdisk and gain root on a Pixel 3 during the live demo.\n\nThe talk closes with mitigations. Qualcomm fixed the bug on the Snapdragon 865 by programming ROM patch fuses instead of respinning silicon, and newer chips add a trust management engine that vets images before boot ROM proceeds. The speakers stress that a boot ROM bug alone no longer gets an attacker everything, so further bugs are needed.",
       "durationSeconds": 3128,
       "conference": "hexacon",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "YTyrBnXKrcg",

@@ -1840,12 +1840,13 @@
         "update",
         "enrichment"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for NIST’s National Vulnerability Database Update and the Vulnerability Enrichment Ecosystem.",
-      "summary": null,
+      "teaser": "Explains how the National Vulnerability Database is reprioritizing CVE enrichment amid rising volume and a growing backlog.",
+      "summary": "The talk traces how the National Vulnerability Database grew from a metadata layer on top of CVE identifiers into a source of product naming, weakness categorization and severity scores. It covers the addition of CPE product data, CWE classification and CVSS scoring, and how the expansion of CNAs from around 2016 let organizations publish CVE IDs directly. With roughly 502 CNAs now active, CVE volume has surged, and the speaker describes a backlog the NVD cannot keep up with, partly driven by more software hosted on GitHub.\n\nTo manage this, the NVD is moving to a risk-based model. CVEs on the KEV list are to be enriched within one business day, followed by software used across the federal government and critical software as defined under Executive Order 14028. Routine CVSS scoring of entries that already have a score will stop, with exceptions for scores that appear inconsistent with the evidence or when someone asks for a review. Older modified records are being set aside, and entries published before March 1 move to a \"not scheduled\" status. Work on LLM-based agents, deterministic automation and federated CPE management is underway.\n\nThe speaker stressed that data quality depends on its purpose, which is helping defenders decide what to patch first. Points raised include persistent reference links, consistent scoring and CNAs supplying more complete records at publication. The talk closed by asking the community for feedback, with a planned CPE workshop and a possible public GitHub channel for suggestions.",
       "durationSeconds": 2473,
       "conference": "first",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "qQ_n9_nbEE0",
@@ -3280,12 +3281,13 @@
         "industry",
         "problems"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Hard Problems in CWE, and What it Tells us about Hard Problems in the Industry.",
-      "summary": null,
+      "teaser": "Explains why mapping weaknesses to CWE entries is hard and how the CWE project is trying to improve its taxonomy.",
+      "summary": "The talk looks at the open problems facing the Common Weakness Enumeration (CWE) project, now nearly twenty years old. The speaker traces how its audience has shifted from code analysis tool vendors and researchers toward vulnerability management staff who publish CVE records every day. The taxonomy grew from an early collection of inputs into a layered structure of pillars, classes, bases and variants, and newer domains such as hardware, ICS and AI are being added through public community contributions.\n\nThe middle section focuses on mapping accuracy. The speaker explains why the same vulnerability can be classified differently: terms like buffer overflow, stack overflow and memory leak mean different things to different people, root cause analysis demands language and domain knowledge, and one weakness often sits downstream of another. Examples include choosing the broad CWE-77 when the narrower CWE-78 fits, and defaulting to CWE-20 for input validation when better children exist. Mapping usage notes that mark entries as allowed, discouraged or prohibited are presented as a way to steer users toward specific entries. Classification gaps, such as access control, and cross-cutting proposals that do not fit a single hierarchy are also covered.\n\nThe closing section outlines planned work: clearer intermediate entries, better recognition for newer technologies, retiring outdated entries with minimal disruption, and formalizing dimensions for a future major version. The speaker also answered audience questions about AI-assisted recategorization, forward compatibility and trend analysis. The takeaway for practitioners is to map to the most specific weakness available, and to treat a high-level mapping as a sign of a gap in the taxonomy rather than a simple error.",
       "durationSeconds": 3551,
       "conference": "first",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Hwyv9WHVyjg",
@@ -5008,19 +5010,22 @@
       "youtubeId": "TH1tGO15K24",
       "slug": "vulnerability-root-cause-mapping-with-cwe",
       "title": "Vulnerability Root Cause Mapping with CWE",
-      "speakers": [],
+      "speakers": [
+        "Chris Madden"
+      ],
       "track": "blue-team",
       "topics": [
         "root",
         "vulnerability",
         "cause"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Vulnerability Root Cause Mapping with CWE.",
-      "summary": null,
+      "teaser": "Explains how grounded LLMs and retrieval can map CVE records to CWE root causes, with cost and accuracy figures.",
+      "summary": "Root cause mapping links a CVE record to the CWE weakness behind it, which supports disclosure, vulnerability management and feedback into design. The speakers argue that the quality of CVE input data largely decides how good any mapping can be. Chris Madden walks through an LLM pipeline built on grounding: enrich each CVE with key phrases, reference summaries and consensus mappings, then use keyword, semantic and graph-based retrievers to narrow about a thousand CWEs to a short list of roughly ten before a model picks one or two.\n\nIn a run over about 7,000 records from a Top 25 review set, the pipeline cost around $15 in model usage plus about $2 for embeddings. Its output matched the expert CWE exactly in about 81% of cases and landed within two steps in the CWE graph in roughly 90%. Abstraction levels agreed well. Misses clustered around access control wording and records whose reference links could not be crawled, and when a record offered too little evidence the model said so instead of guessing. A three-agent analyzer, critic and resolver setup added cost without improving results.\n\nThe main takeaway is that complete, accurate and timely CVE data at the point of entry matters most. Presenters recommend that LLMs offer a short list with rationale and confidence for a subject matter expert to accept or refine, and that newly published CWEs be handled by updating the retrieval corpus rather than fine-tuning. They also propose a shared benchmark data set so that academic and industry tools can be compared, and they invite community input on it and on a planned CWE chatbot.",
       "durationSeconds": 3429,
       "conference": "first",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "hhq751ELIVw",
@@ -6820,8 +6825,8 @@
         "timesketch",
         "lets"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Lets Make Needles Glow in Timesketch.",
-      "summary": null,
+      "teaser": "Shows how threat intelligence such as hashes, Yara rules, Yeti indicators and Sigma rules can prune Timesketch timelines.",
+      "summary": "The talk addresses data overload in forensic timelines, where a fresh Windows Server 2022 install can produce about four million events and busier systems add many more each day. The speakers argue that threat intelligence can raise the signal-to-noise ratio, and they demonstrate this inside Timesketch, an open-source tool for collaborative timeline analysis.\n\nKnown-file classification comes first. Hasher stores hashes from operating system images in a database, and a Timesketch analyzer tags matching events, so a sample timeline of about 1.2 million events drops to roughly 300,000 once known files are filtered out. Yara rules run through Plaso can tag malicious or file-type matches, and in one demo a rule-specific query cut millions of events down to four. Indicators from the Yeti platform are applied through a regular expression analyzer that tags matches and links them to tracked intrusion sets. Sigma rules, maintained in an editor inside Timesketch, let teams share detection logic, although the speakers warn against loading entire public rule repositories.\n\nTo spread knowledge across a team, the speakers proposed investigative scenarios that turn an analyst's triage steps into questions and suggested queries, such as for a compromise assessment. They closed by noting open problems: timelines handle memory artefacts poorly, sandbox timing is relative, and anonymising timelines before sharing without altering evidence is unresolved. The practical takeaway is to layer hashes, Yara, indicators and Sigma inside the timeline before manual review.",
       "durationSeconds": 1652,
       "conference": "first",
       "viewCount": 1300,
@@ -7257,7 +7262,7 @@
         "workshop",
         "mitre-att-ck"
       ],
-      "teaser": "Security researchers examine technical aspects of Workshop: MITRE ATT&CK Fundamentals.",
+      "teaser": "Walks through the MITRE ATT&CK knowledge base, its structure, and how teams use it for threat-informed defense.",
       "summary": "Sean Whitley of MITRE leads a fundamentals workshop on the ATT&CK knowledge base, framing it as a community-driven map of adversary tactics, techniques, and procedures grounded in public reporting rather than lab hypotheticals. He walks the Enterprise, mobile, and ICS matrices; explains tactics versus techniques, sub-techniques, procedures, mitigations, and granular data sources; and ties the model to David Bianca’s pyramid of pain and threat-informed defense. Coverage spans contributor citations, STIX versioning, Navigator heat maps that overlay groups like APT28 and APT3, and workflows linking cyber threat intelligence, behavioral analytics, red-team emulation, and engineering scorecards. He closes by operationalizing layered detections for scheduled tasks, referencing MITRE evaluations and CAR analytics, and inviting attendees to deeper MAD courses beyond this timed FIRST session.",
       "durationSeconds": 6431,
       "conference": "first",
@@ -7364,7 +7369,7 @@
         "influence",
         "operation"
       ],
-      "teaser": "Security researchers examine technical aspects of Influence Operations.",
+      "teaser": "Explains the media effects, such as agenda setting, echo chambers and priming, that influence operations use to shape public opinion.",
       "summary": "Purdue FORCES fellow Christine Sutanov explains influence operations beyond Hollywood espionage—how the bulk of active measures are slow ideological subversion, with Russian Cold War examples and why defenders must study narrative campaigns separately from network intrusions.",
       "durationSeconds": 2281,
       "conference": "first",
@@ -7376,7 +7381,9 @@
       "youtubeId": "h4taXieI9Xo",
       "slug": "modern-threat-hunting-2",
       "title": "Modern Threat Hunting",
-      "speakers": [],
+      "speakers": [
+        "Viton Diaz"
+      ],
       "track": "blue-team",
       "topics": [
         "threat-hunting",
@@ -7384,12 +7391,13 @@
         "threat",
         "hunting"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Modern Threat Hunting.",
-      "summary": null,
+      "teaser": "Shows how analysts pivot from one malware sample to related files using YARA, similarity hashes, and infrastructure graphs.",
+      "summary": "This workshop starts from a common problem in threat hunting: analysts rarely see the whole picture, so they need a large searchable collection and a way to pivot from one artifact to related samples. The session begins with the easiest layer, community enrichment, where crowdsourced YARA hits, sandbox detections, antivirus verdicts and user comments help an analyst judge a file before deeper work. The speaker also warns that attribution built on early rules can echo and mislead, and that a campaign should be watched long after its first publication.\n\nThe middle section covers search techniques. Content search looks inside binaries for strings such as PDB paths, command strings or keys, and wildcards can tolerate small variations. Similarity methods follow, including fuzzy hashes, import hashes, TLSH, sandbox behavioural similarity and icon-based visual similarity, which can surface phishing PDFs that copy bank templates. Infrastructure pivoting through the relations graph is shown next, with a caution that a shared public download server may point to an attacker who merely borrowed it rather than one who runs the campaign.\n\nThe closing part turns findings into YARA rules. The speaker walks through a rule built from magic bytes, malware names and a PDB string, then shows rule generators that build candidates from common byte sequences. Rules can be run retrohunt across the collection and live as new samples arrive. The takeaway is to treat generated rules as a starting point, refine them by hand, and keep monitoring after each new publication.",
       "durationSeconds": 4899,
       "conference": "first",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "x_eHmHkYBHU",
@@ -7865,7 +7873,9 @@
       "youtubeId": "OMc8KJ6XVRI",
       "slug": "csaf-2-0-a-new-start-to-automate-advisories",
       "title": "CSAF 2.0 - A New Start to Automate Advisories",
-      "speakers": [],
+      "speakers": [
+        "Thomas"
+      ],
       "track": "blue-team",
       "topics": [
         "csaf",
@@ -7873,12 +7883,13 @@
         "advisorie",
         "advisories"
       ],
-      "teaser": "Security researchers examine technical aspects of CSAF 2.0 - A New Start to Automate Advisories.",
-      "summary": null,
+      "teaser": "Explains how the machine-readable CSAF 2.0 format can automate vendor security advisory handling for asset owners.",
+      "summary": "The talk starts from the burden of handling vendor security advisories. Organisations with dozens or hundreds of vendors receive advisories in HTML, PDF and text, signed or unsigned, each with its own layout. Teams must find, download, prioritise, check for affected assets and assess risk, repeatedly and by hand. Audience polls on vendor counts and advisory volumes showed how varied this is, and CVE numbers over the years have been climbing.\n\nThe proposed fix is CSAF, the Common Security Advisory Framework, currently at version 2.0. It is a JSON format built for automation and standardised through OASIS. Each document has tracking metadata, a product tree, and vulnerability entries linking products to scores and remediation steps. Software can match these products against an asset inventory, and users can add environmental context, such as whether a device is internet-facing, so the remaining advisories are fewer and ordered by real criticality. The specification also defines tests, distribution rules and conformance targets, and tools such as an editor and a visualizer are already available.\n\nOpen problems include unique product identifiers, which connect to SBOM naming work, and the lack of an API so far, since distribution is file-based. Aggregator services and configuration-dependent vulnerabilities are planned for later versions. Key takeaways: automate the routine steps, ask vendors for CSAF documents, and vendors and industry groups should publish them.",
       "durationSeconds": 1471,
       "conference": "first",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Np0q265MLFY",
@@ -8296,8 +8307,8 @@
         "mitre",
         "technique"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Adversary Emulation: Generating MITRE ATT&CK Technique Sequences.",
-      "summary": null,
+      "teaser": "Shows how promise theory can chain MITRE ATT&CK techniques into generated attack stages for emulation plans.",
+      "summary": "Adversary emulation plans let defenders test against realistic attacker behavior, but writing them by hand takes considerable time and expertise. The question is whether parts of that work can be automated. MITRE ATT&CK describes techniques but records nothing about the dependencies between them, which is the gap addressed here.\n\nThe speaker models each technique as an autonomous agent with required and provided promises, using promise theory. A shared vocabulary of promises was mapped onto every ATT&CK technique and sub-technique, then used by an open-source tool. Given a group or incident and an end objective such as exfiltration, the tool works stage by stage, unlocking techniques whose requirements are already met, and reports whether the objective is reachable. In a live demo, a chain for one threat actor stalled until techniques such as gathering victim identity information, developing capabilities, acquiring infrastructure and network service scanning were added, after which exfiltration became reachable.\n\nCaveats include long-lived group profiles that mix techniques from many years, so incident or campaign data gives a clearer timeframe. Output shows options available to an adversary rather than a predicted path, and the vocabulary and its mappings still involve analyst judgment. Some techniques describe what an adversary obtains rather than what it does, which complicates modelling. Future work includes an industry-wide promise vocabulary, defining promises when new techniques are added to ATT&CK, and eventually generating full emulation steps.",
       "durationSeconds": 1833,
       "conference": "first",
       "viewCount": 1600,
@@ -8318,7 +8329,7 @@
         "dridex",
         "malware-analysis"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Breaking Dridex Malware.",
+      "teaser": "Shows how the Dridex banking trojan's loader can be unpacked, decoded, and its API resolution abused to build a vaccine.",
       "summary": "### Overview\nPresented at the FIRST Conference 2021 by Gustavo and Felipe Dominguez of Immunity (part of Appgate), this presentation explores the internal mechanisms of the Dridex banking trojan—focusing specifically on the Dridex loader. The researchers outline Dridex's modular architecture, unpack the loader, decrypt internal strings and command-and-control (C2) configurations, automate IOC extraction using Python, and exploit weaknesses in the malware's dynamic Windows API resolution routine to create an effective host vaccine.\n\n### Key Topics\n- **Dridex Architecture and Infection Chain**: Delivery typically starts via an infected Microsoft Office file that drops or executes the Dridex loader. The loader communicates with C2 infrastructure to download the main bot (handling keylogging, web injections) and additional modules such as VNC or a SOCKS proxy.\n- **Unpacking the Loader**: Dridex loaders utilize custom packers where the payload is decrypted into memory without touching disk. Monitoring `VirtualAlloc` and `VirtualProtect` calls or using tools like Hollows Hunter enables analysts to dump the unpacked executable.\n- **Encrypted Strings and C2 Infrastructure**: Binary strings reside encrypted in the `.rdata` section using RC4, where the first 40 bytes serve as the key. C2 commands are stored as CRC32 hashes (e.g., the command string `bot`). In recent variants, C2 IP addresses and the botnet ID are held as structured byte arrays within the `.data` section, and initial check-ins transmit encrypted system reconnaissance data (computer name, installed software list, botnet ID).\n- **Automated Analysis Toolkit**: The authors developed the Python-based \"Dridex Analysis Toolkit\" alongside an IDA script. The toolkit parses PE headers, unmaps memory dumps to disk, extracts C2 IPs, and decrypts RC4 strings and network communication keys.\n- **Dynamic API Resolution**: To conceal API calls from the PE import table, Dridex resolves Windows APIs at runtime by computing CRC32 hashes of loaded DLL names and exported functions via the Process Environment Block (`PEB` -> `LDR_DATA`). If a required library is not yet loaded, Dridex searches the system directory (such as `SysWOW64`) and loads it using `ntdll!LdrLoadDll`.\n- **Developing a Vaccine via CRC32 Hash Collision**: Because Dridex identifies DLLs solely by 32-bit CRC32 checksums without verifying signatures or full paths, it is vulnerable to hash collisions. By brute-forcing a matching uppercase filename ending in `.dll` (targeting a library loaded by the malware, such as `shell32.dll`), researchers constructed a surrogate DLL exporting identical API names. Placing this collided DLL into `SysWOW64` forces Dridex to load the custom implant instead of the genuine library, triggering code that halts the thread and cleanly exits the process.\n\n### Technical Details\n- **String Encryption**: RC4 with a 40-byte prepended key stored in `.rdata`.\n- **Network & C2 Protocol**: Command strings identified by CRC32; initial telemetry encrypted using RC4 keys stored in decrypted string blobs.\n- **Dynamic Loader Weakness**: Dridex traverses `SysWOW64` comparing uppercase candidate DLL file names against hardcoded 32-bit CRC32 values.\n- **Vaccine Implementation**: Brute-forced custom DLL matching the CRC32 of `shell32.dll` with matching exported API names in `exports.def`, placed in the DLL search path to intercept loading, alert, and terminate execution.\n\n### Takeaways\nWhile not an overarching silver bullet across future malware variants or instances where target libraries are already pre-loaded into memory, deploying host-level vaccines against weak API hashing algorithms provides an effective containment and remediation tactic during incident response. In addition, automating the extraction of C2 servers, botnet IDs, and RC4 keys enables defenders to feed blacklists and accelerate triage without relying on manual dynamic analysis.",
       "durationSeconds": 1157,
       "conference": "first",
@@ -8535,12 +8546,13 @@
         "digging",
         "deeper"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Rapid7 | Velociraptor - Digging Deeper!.",
-      "summary": null,
+      "teaser": "Shows how Velociraptor hunts across thousands of endpoints to trace a vulnerable Dell driver through forensic artifacts.",
+      "summary": "The talk introduces Velociraptor, an open-source DFIR framework whose query language, VQL, drives collection, monitoring and response across endpoints that stay connected to a single server. The speaker frames the problem with a recent advisory about an old signed Dell driver that contains critical privilege escalation flaws. Dell's suggested remediation was to check specific temp folders by hand, which does not scale to fleets of ten or twenty thousand machines.\n\nUsing hunts, the speaker runs the file finder artifact across roughly 2,000 connected endpoints and finds one vulnerable copy in the expected location. A second hunt parses the NTFS master file table on each endpoint, filtered by file name, which reveals further copies in a user profile and the Windows directory without transferring the large MFT to the server. Querying the USN journal shows that the file was created in a desktop directory on one machine and later deleted. A custom VQL artifact matches on file size and hash, catching a renamed copy that name-based searches missed. A final query enriches driver installation events from the event log with PE metadata, so the loaded driver can be checked against known hashes and identifiers.\n\nThe main takeaway is that an advisory can be turned into a scoped search and detection within minutes, with the heavy parsing done on endpoints rather than the server. The speaker notes that Velociraptor also supports event tracing, WMI, PowerShell integration, real-time monitoring and remediation, though these were not demonstrated. Source code, a Discord channel and a mailing list are offered for those who want to try the tool.",
       "durationSeconds": 1524,
       "conference": "first",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "1YnhO6c4Hqo",
@@ -8622,7 +8634,7 @@
         "usage",
         "part"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding MISP General Usage Training - Part 1 of 2.",
+      "teaser": "Walks through creating MISP events, attributes, objects, and sharing settings in a hands-on training session.",
       "summary": "### Overview\nThis session, titled \"MISP General Usage Training,\" provides a comprehensive introduction and practical walkthrough of MISP (Malware Information Sharing Platform). Led by Alexandre Dulaunoy and Andras Iklody from CIRCL (Computer Incident Response Center Luxembourg), the presentation covers MISP's historical background, core architectural design, contextualization features, and collaborative sharing workflows, followed by a hands-on exercise modeling a phishing incident.\n\n### Key Topics\n- **History and Evolution**: MISP originated in 2012 as \"CyDefSIG,\" created by Christophe Vandeplas at the Belgian Ministry of Defence to solve information-silo issues among national and military CERTs. Initially built for reverse engineers to share raw malware indicators without duplicating work, it expanded over time into an open-source threat intelligence sharing platform supported by CIRCL and co-financed under the EU CEF project.\n- **Stakeholders and Expanding Use Cases**: Over time, MISP evolved from serving reverse engineers to supporting security operations analysts (feeding SIEMs, firewalls, and IDS), threat intelligence analysts (tracking threat actor infrastructure and TTPs), fraud teams in the financial sector (sharing mule account information), law enforcement/border control (seized goods, passenger data), and risk analysis teams.\n- **Balancing Detection, Blocking, and Intelligence**: Different consumers face conflicting requirements: detection teams want high fidelity but tolerate low false positives; ISPs require strict verification before blocking to avoid customer outage; threat intelligence teams value historical, non-fresh indicators to study adversary evolution. To resolve these conflicts, MISP emphasizes contextualization and false positive management tools (such as Warning Lists).\n- **Platform Architecture and Extensions**: MISP consists of four major pillars: core open-source software and modular components (`misp-modules`, `PyMISP` client library, `misp-dashboard`), knowledge bases (Taxonomies, Galaxies, Notice Lists, Warning Lists), open standards (IETF drafts, standardized object templates), and community resources (compliance documentation for GDPR/NIS directives, sharing best practices, OSINT feeds).\n- **Sharing and Interconnection Models**: MISP supports interconnected node synchronization, mesh topologies, air-gapped/island-mode instances, OSINT feeds, and localized enclaves (such as dedicated spam-collection clusters). To overcome reputation and trust concerns, MISP incorporates sharing groups, distribution levels, semi-anonymized delegation (e.g., via an ISAC or national CSIRT), and collaboration features like proposals and extended events.\n\n### Technical Details\n- **Core Data Structures**: MISP structures data into a container called an **Event**, containing **Attributes** (individual observables/indicators like IP addresses or file hashes), **Objects** (structured composites of attributes based on standardized templates, such as files or emails), and **References** (relationships linking entities into attack graphs).\n- **Attributes vs. Indicators**: An attribute's operational role is controlled by an IDS flag. Benign observables (e.g., connectivity check domains like `google.com`) keep the IDS flag unset to prevent false-positive alerts, whereas malicious indicators have the flag enabled for automated export to protective tools.\n- **Contextualization Tools**: MISP uses **Tags** (from standardized taxonomies like TLP or custom vocabularies), **Galaxies / Galaxy Clusters** (high-level threat intelligence concepts including MITRE ATT&CK matrix mappings, threat actors, and target sectors), and **Timelines** (leveraging first-seen/last-seen timestamps).\n- **Quality, Lifecycles, and Sightings**: Indicators can be tracked using Sightings (positive sightings, negative/false-positive sightings, and expiration dates). High-volume sightings can be offloaded to `sightingdb` (developed by Divo). MISP also features an indicator lifecycle management engine that calculates decay scores based on models (e.g., IDS decaying models) without modifying underlying indicator data.\n\n### Takeaways & Practical Walkthrough\nIn the hands-on segment, the speakers demonstrate logging into a training instance (`igloo.lu`) and stepping through event creation:\n- Setting distribution levels (e.g., restricting initially to \"Organization only\" before publishing to wider communities).\n- Selecting subjective threat and analysis levels, while keeping event descriptions concise, readable, and free of internal ticketing references or localized non-English terms.\n- Populating events using standardized object templates (demonstrated by modeling a spear-phishing scenario starting with an Email object) rather than flat indicator dumps.",
       "durationSeconds": 13371,
       "conference": "first",
@@ -9346,12 +9358,13 @@
         "active",
         "directory"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for ADTimeline - Threathunting with Active Directory Data.",
-      "summary": null,
+      "teaser": "Shows how Active Directory replication metadata and Windows event logs reveal privilege changes and Kerberoasting activity.",
+      "summary": "Defenders investigating an Active Directory domain need to know what changed in the directory and how privileged accounts were used. The presenter, a forensic analyst at a French national cybersecurity agency, walks through a collection workflow. An open-source PowerShell script exports directory objects and their replication metadata, while the DFIR ORC tool, deployed across member computers through group policy or in-place deployment tools, gathers Windows artifacts. Network logs are collected alongside them. The data is then indexed in Splunk and reviewed with an AD timeline app.\n\nThe replication metadata shows the last originating change time and version number for each attribute, so a group's creation, member additions and removals, and description edits can be read back as a timeline. The presenter stresses that this is a partial snapshot rather than monitoring, since only the latest change to each attribute is kept. Dashboards cover domain infrastructure and trusts, privileged account changes, and a time-frame investigation view mapped to MITRE ATT&CK techniques. In one example, a change to the default domain policy pointed to a scheduled task.\n\nThe hunting examples join directory object data with event logs using the SID. One query finds privileged accounts (adminCount set to 1) logging on to web and Exchange servers, which shows that tiering is not enforced. Another looks for bursts of Kerberos service ticket requests for accounts with service principal names from a single IP, a Kerberoasting pattern. A service account later appears performing RDP logons and launching unusual processes on a workstation. The takeaways are to enable Windows audit policies with event forwarding, use group managed service accounts instead of user-based service accounts, and use the timeline to add context to findings from BloodHound, AD control path or PingCastle audits.",
       "durationSeconds": 1653,
       "conference": "first",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "9x0ix6Zz4Iw",

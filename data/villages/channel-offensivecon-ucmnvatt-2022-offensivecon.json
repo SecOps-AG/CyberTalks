@@ -35,13 +35,13 @@
       "speakers": [
         "Xiaobye"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Coverage of 26 from the conference program.",
+      "teaser": "Shows how lifetime bugs in VirtualBox's emulated VMSVGA graphics device can lead to use-after-free conditions on the host.",
       "summary": "VirtualBox SVGA Attack Surface\n\nDevcore researchers Nini Chen and Xiaobai present \"Pedal to the Metal,\" motivated by Pwn2Own VirtualBox research after that category was dropped. They focus on VMware SVGA-compatible graphics virtualization in VirtualBox, where guest MOBs (memory objects) pass through PMIO/MMIO to a shared DirectX backend on Windows, Linux, and macOS.\n\nMOB Binding Mechanics\n\nGuests bind MOBs to DirectX components via commands like set COT table and DX bind shader. VirtualBox tracks bindings in a VMSVGA 3D DX context array of cot mobs. Shader binding validates bytecode before recording MOB IDs in shader entries.\n\nLifetime Bugs and Impact\n\nThe speakers show MOBs can be shared across components without enforcement. Failed shader validation frees GPU buffers but leaves dangling cot pointers—a use-after-free. Destroying a MOB while components still reference it creates one-directional binding bugs. Graphic flaws may affect many guest/host combinations.",
       "durationSeconds": 2866,
       "conference": "offensivecon",
@@ -175,11 +175,12 @@
         "remote"
       ],
       "teaser": "26 - Kaufi - From Samsung Account to RCE: A Journey to a Remote 0-Click Capability.",
-      "summary": null,
+      "summary": "The talk walks through research into a zero-click remote code execution path on Samsung Android phones, starting from the question of which features can deliver an image to a device without any user action. The speaker frames the work around three parts: a sink (the memory-corruption target), a source (an app feature that reaches that sink automatically), and covertness (no crash, notification or sound the victim would notice). The researchers chose a vendor-specific image codec library that remained on Samsung devices after earlier public work had removed it from the standard bitmap decoding path.\n\nTo find a source, the team mapped which Samsung packages call the vendor codec and focused on the Gallery app's shared albums feature. Traffic inspection and dynamic hooking showed that synced images were decoded automatically on the receiving side, but the invitation had to be accepted and displayed a visible notification. Further analysis found that a profile picture could point to an external host, and that the invitee's client then sent its account headers to that host, leaking credentials. Separately, push messages delivered through Firebase carried a field that the background service parsed as JSON. A malformed value, sent while a profile download was stalled, could restart the service and erase the pending invitation state, which suppressed the notification.\n\nThe speaker combined these pieces into one flow: hold the profile image response, send a malformed invitation to reset state, accept an album invitation on the victim's behalf, then sync a malicious image. A prepared demo showed a shell running in the context of the background service. The speaker notes that the issues have since been patched. The practical takeaway is that small logic flaws across app components and background services can combine with a parser bug to produce a silent capability.",
       "durationSeconds": 2563,
       "conference": "offensivecon",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "TogmH2HEIKM",
@@ -219,29 +220,33 @@
         "heap"
       ],
       "teaser": "26 - Hrvoje Misetic - 4-Byte Heap Overflow To RCE In Minecraft.",
-      "summary": null,
+      "summary": "The talk walks through a client-side remote code execution chain against Minecraft Bedrock Edition on Windows, triggered from a malicious server. The researchers focused on the server-to-client model. The client parses resource pack images with the open-source stb_image library, so they reused a known heap overflow in its GIF decoder. A fuzzing harness helped them find a crafted GIF with a zero width that causes a four-byte out-of-bounds write.\n\nExploitation relied on heap grooming. Sign text on the server allocates and frees chunks on demand, but a 512-byte limit blocked large allocations. The team patched the length check in the server executable so the client accepted 1024-byte buffers, which made a practical spray possible. They then used Molang, a scripting language delivered in resource packs, whose internal index and variable maps could be corrupted to reach out-of-bounds pointers. By splitting a pointer into 16-bit parts that stayed valid as floats, they leaked a vtable pointer and gained arbitrary read and write.\n\nFor control-flow hijack, they avoided Control Flow Guard by using OpenSSL code statically linked into the client, which lacked CFG. Overwriting a memory callback and a default key method let them stack pivot into a ROP chain that calls system. A demo showed a shell, though the heap spray was not made reliable. The takeaway is that old library bugs can persist in shipped software and that game clients are a viable attack surface.",
       "durationSeconds": 2213,
       "conference": "offensivecon",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "Pbdt5DQ6hAQ",
       "slug": "26-ollie-whitehouse",
       "title": "26 - Ollie Whitehouse",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Ollie Whitehouse"
+      ],
+      "track": "policy",
       "topics": [
         "ollie",
         "whitehouse",
         "vulnerability-research"
       ],
-      "teaser": "Coverage of 26 - Ollie Whitehouse from the conference program.",
-      "summary": null,
+      "teaser": "Argues that defense depends on high-caliber offense and that a transparent, functioning offensive market is needed.",
+      "summary": "This keynote presents a government cyber defence perspective on an unstable threat landscape. The speaker argues that every system is vulnerable and that reaching zero vulnerabilities is unrealistic on cost and usability grounds. He points to regional conflicts spilling into cyber operations, large numbers of end-of-life and unpatched network devices, and single supply chain compromises that reach many organisations at once.\n\nThe middle of the talk turns to AI and the offensive market. Tasks such as binary diffing, traffic analysis and building solvers, which once took days or weeks, can now be done in minutes with the right tooling, and a wave of patches is expected as latent bugs surface. The speaker says more than 80 countries had bought offensive cyber capabilities by 2023, and cites stolen tools sold through brokers as an example of how opaque markets cause harm. He describes a UK and France-led process that aims to set norms for the sale of such capabilities, and a risk to the talent pipeline if AI removes the hands-on learning that builds skill.\n\nThe closing takeaways are that defence is strengthened through high-caliber offensive work and that a functioning, aligned market is needed. The speaker recommends making attacks costlier through architecture, such as memory-safe CPUs, phishing-resistant multi-factor authentication, content disarming across domains and isolated administrator workstations. He asks researchers to share evidence of which defences actually work, and to know their customers and employers.",
       "durationSeconds": 2636,
       "conference": "offensivecon",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "KGbGU_MK9hY",
@@ -426,18 +431,19 @@
         "Rishika Hooda",
         "Xuan Xing"
       ],
-      "track": "community",
+      "track": "wireless",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Coverage of 25 from the conference program.",
-      "summary": null,
+      "teaser": "Explains how Android's red team found and exploited Bluetooth stack bugs in GATT and AVDTP, and what mitigations followed.",
+      "summary": "The talk comes from Android's offensive security team, which looks for Bluetooth bugs before attackers find them. It explains why Bluetooth is a valuable target: it is built into phones, watches, cars and IoT devices, its specification runs to thousands of pages, and the stack runs in a privileged process. The two-month engagement covered the open-source Bluetooth stack, prioritising pre-pairing components and some post-pairing protocols. Manual code review produced the hardest findings, supported by host-based fuzzing, CodeQL variant queries and symbolic execution with CLE.\n\nThe technical core covers two bugs. The first is in GATT running over Enhanced ATT. Large MTU values negotiated by an attacker flow into buffer size calculations that were written for the older, small-MTU protocol, causing 16-bit integer overflows in several read paths. The speaker walks through exploitation against Scudo heap protections, using heap grooming, retries after the Bluetooth service restarts, and corruption of a vtable pointer, with a demo of a shell running as the Bluetooth user. The second is a type confusion in AVDTP over Classic Bluetooth, reachable from a paired malicious audio device, where a temporary pointer is interpreted as different structures depending on a signal value. The attack targeted a callback in an A2DP linked list, and the team did not fully complete a randomization bypass.\n\nThe fixes were often one-line changes, but confirming a bug and checking for regressions took far more effort, and patches shipped through Android security bulletins. Longer-term work includes bounds-checked buffer types, interoperability tests, fuzzing in continuous integration, and evaluating compiler mitigations and safer languages. The main lesson is that code written under old protocol assumptions can become unsafe when a newer protocol reuses it.",
       "durationSeconds": 3231,
       "conference": "offensivecon",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "LAIr2laU-So",
@@ -474,11 +480,12 @@
         "streaming"
       ],
       "teaser": "25 - Angelboy - Frame by Frame, Kernel Streaming Keeps Giving Vulnerabilities.",
-      "summary": null,
+      "summary": "The talk presents new vulnerabilities in the Windows Kernel Streaming framework, which handles webcam and audio data flowing into memory. It begins by recapping last year's findings, where a driver trusted a request mode that an internal call had changed, letting user input reach privileged code. The focus then moves to frame handling, which accounts for most of the more than twenty bugs found, with about fourteen in streaming frames.\n\nThree bug classes are covered. The first is an MDL mismatch, where two layers decide independently whether to allocate a memory descriptor list, so frame headers can pair with the wrong buffer and a copy overflows. The second is an uninitialized MDL, where a partly locked chain is mapped with cache specified and reads stale page numbers. Spraying non-paged pool with named pipes lets the attacker control those values, giving arbitrary physical memory writes, which the buffer mode copy-back path turns into a kernel data overwrite. The demonstration alters a privilege check in the process-open routine. The third is an allocator alignment flaw: the default allocator accepts masks that are not power-of-two minus one, so a corrupted free-list pointer leads into user-mapped memory and yields an arbitrary write used to escalate to SYSTEM.\n\nThe closing takeaway is that these patterns, misused MDLs and unchecked allocator parameters, are not unique to streaming and deserve attention in other drivers. Kernel streaming is presented as a rich research target that likely still hides many undiscovered vulnerabilities.",
       "durationSeconds": 2831,
       "conference": "offensivecon",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "U1kc7fcF5Ao",
@@ -521,7 +528,7 @@
         "garbage"
       ],
       "teaser": "25 - Richard Abou Chaaya and John Stephenson - Garbage Collection in V8.",
-      "summary": null,
+      "summary": "The talk covers garbage collection in Chrome's V8 JavaScript engine and how memory-management design choices produce exploitable bugs. It starts with the basics of tracing collection, the generational hypothesis, and why the current design relies on handles for precise root tracking, which places a burden on developers. It then explains the trade-off behind a move toward conservative stack scanning and a non-moving young-generation collector called minor mark-sweep.\n\nThe first case is a left-trimming issue in array shift that was fixed as non-exploitable. The speakers show that under minor mark-sweep, a stale stack slot can keep a filler object marked, so the sweeper overwrites the length field of a JavaScript array. They use a heap spray of fixed double arrays with decreasing sizes so the corrupted length lands correctly, which gives out-of-bounds access over the JavaScript heap.\n\nThe second case targets the heap sandbox. External objects such as DOM API wrappers reference Blink heap objects through a C++ pointer table, and an unconditional black-allocation mark let a table entry survive collection. After reallocating objects of different types into the freed slots, the attacker swaps embedder fields to create a type confusion that escapes the sandbox. A live demo chains the stages together. The takeaway is that subtle details of root tracking and table marking make garbage collection a rich attack surface.",
       "durationSeconds": 2107,
       "conference": "offensivecon",
       "viewCount": 1600,
@@ -544,11 +551,12 @@
         "made"
       ],
       "teaser": "25 - Dino Dai Zovi - Keynote - How Offensive Security Made Me Better at Defense.",
-      "summary": null,
+      "summary": "This closing keynote argues that years of offensive work make a stronger defender, and that defenders should reason about attacks the way attackers choose their paths. The speaker traces a career from early capture-the-flag events and penetration testing, through a 2007 contest where a QuickTime for Java bug yielded a working exploit, into payment security and endpoint tooling. He argues that zero-days are scarce because they take real effort, and he uses public exploit price lists and vendor attendance figures to ground threat models in what attackers actually do.\n\nThe middle of the talk walks through a theft from the Bybit exchange, linked to the same threat actor that had earlier targeted a national bank. The attack began with a recruiter-style lure that asked developers to run a coding challenge. A YAML loader that parsed untrusted input gave code execution, and an in-memory payload harvested cloud keys. The attackers then modified the web front end served from a storage bucket so that a multisig transaction was swapped for a malicious one, which signers approved blind on hardware wallets. No zero-day or persistent malware was needed, so the speaker argues that endpoint tools would have had little to see.\n\nFor defense, the talk recommends treating detection and response as unreliable and building around it. Teams should apply fault-domain analysis to security boundaries, separate identity and software supply paths so one compromise cannot cross them, and add leverage close to the attacker's goal rather than chasing every technique. The speaker also warns that automated, parallel AI-driven operations could overwhelm response, and that defenders should build their own tooling rather than rely only on off-the-shelf products.",
       "durationSeconds": 2794,
       "conference": "offensivecon",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "8Uv6KdATePc",
@@ -566,11 +574,12 @@
         "webgpu"
       ],
       "teaser": "25 - Lukas Bernhard - Attacking Browsers via WebGPU.",
-      "summary": null,
+      "summary": "This talk looks at how Chrome's WebGPU implementation exposes shader compilers to web content. Requests pass from the renderer, which is tightly sandboxed, to a GPU process that is weakly sandboxed on Windows and unsandboxed on Android. There, shaders are translated and handed to the graphics driver's optimizing compiler, which was tuned for performance rather than security.\n\nThe speaker fuzzed the Windows DirectX shader compiler by extracting it, instrumenting it, and seeding it with shader files from the Chrome repository. Mutations ran on a statically typed intermediate representation so that generated shaders stayed valid. One self-assignment of a struct produced a double free, and a month-long run on roughly a thousand cores yielded many more crashes. Several of these had already been fixed upstream in LLVM without security advisories. For Android, the Qualcomm Adreno and ARM Mali compilers exist only as binaries, so the speaker used memory tagging on a Pixel device for heap errors and rewrote branches in memory to gain coverage feedback.\n\nThe fuzzing found four issues across two devices, two in each GPU stack. Vendor fixes reach users slowly, and Chrome's workarounds covered only one of four bug patterns. The talk closes with future directions: inputs with many function parameters, other backends from Nvidia, Intel and AMD, and WebGPU compatibility mode over OpenGL. In total, the work produced 21 bugs in web-exposed components.",
       "durationSeconds": 1642,
       "conference": "offensivecon",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "zoAITq7jUM8",
@@ -625,14 +634,14 @@
         "Eduardo Vela Nava",
         "Josh Eads"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Coverage of 25 from the conference program.",
-      "summary": null,
+      "teaser": "Explains how researchers loaded custom AMD CPU microcode by forging update signatures and recovering keys from the PSP.",
+      "summary": "The talk introduces CPU microcode, the layer that implements complex x86 instructions, and explains why it matters for security. Microcode was long stored in read-only memory, but on AMD processors it can be patched by root. Features such as measured boot and confidential computing treat root as untrusted, so writable microcode undermines that trust model.\n\nThe research started with public update files, where many AMD updates turned out to be unencrypted and therefore readable. Because the microcode instruction set is barely documented, the team inferred meaning by flipping bits and tracing execution with the processor's instruction-based sampling feature. The update signature proved to be RSA, but the hash was only 16 bytes, which matched CMAC built on AES-128. Recovering that key required reading protected memory through the platform security processor, after a firmware module was altered to add a memory-copy service. With the CMAC key, a chosen hash value could be forced, and a brute-forced RSA key with a matching hash let them sign custom updates.\n\nA demonstration on a Zen 1 system showed a custom update making RDRAND return a fixed value until the next reboot. The team also decrypted later encrypted updates using a small block cipher and its recovered key, which still worked on Zen 5. AMD's fix replaced CMAC with a standard Merkle-Damgård construction. For practitioners, the lesson is that microcode should be treated as part of the trust boundary, and its signing scheme deserves scrutiny.",
       "durationSeconds": 3368,
       "conference": "offensivecon",
       "viewCount": 2400,
@@ -692,18 +701,19 @@
       "speakers": [
         "Dillon Franke"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Coverage of 25 from the conference program.",
-      "summary": null,
+      "teaser": "Shows how fuzzing macOS Mach messages to a Core Audio daemon led to a type confusion and sandbox escape.",
+      "summary": "This talk walks through fuzzing macOS inter-process communication to find sandbox escapes from restricted processes such as browsers. It explains Mach ports, the bootstrap server and launchd service registration, then shows how to narrow targets to sandbox-allowed services. The Core Audio daemon was chosen for its many RPC-style handlers and its closed-source framework, which had to be pulled from the dyld shared cache.\n\nInstead of sending messages through the kernel, the harness calls the message handler directly in the same process, which is faster and makes coverage easier to read. Early crashes came from harness assumptions, such as missing initialization and handlers that expect earlier messages. Treating each input as a sequence of calls, with coverage revealing the required order, resolved many of these and made the fuzzer far more productive.\n\nThe main finding was a type confusion in an object lookup path, where a user-supplied ID returned an object whose pointer chain led to an attacker-chosen vtable. Exploitation used property list allocations to spray controlled CoreFoundation strings onto the heap, then restarted the daemon so the stored data was reloaded into a reused slot, followed by a ROP chain. Because the outcome was probabilistic, the exploit was retried until it worked. The bug was fixed by Apple in December 2024, and the talk closes with the case for knowledge-driven fuzzing that pairs automation with manual code analysis.",
       "durationSeconds": 2810,
       "conference": "offensivecon",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "Y1naY3gupRw",
@@ -796,7 +806,9 @@
       "youtubeId": "ngRN19A98jQ",
       "slug": "24-bill-demirkapi-booting-with-caution",
       "title": "OffensiveCon24 -Bill Demirkapi - Booting",
-      "speakers": [],
+      "speakers": [
+        "Bill Demirkapi"
+      ],
       "track": "red-team",
       "topics": [
         "bill",
@@ -805,7 +817,7 @@
         "caution"
       ],
       "teaser": "24 -Bill Demirkapi - Booting with Caution.",
-      "summary": null,
+      "summary": "Bill Demirkapi, a security engineer at the Microsoft Security Response Center, explains how UEFI Secure Boot decides what may run before the operating system starts. Signature databases (DB for allowed entries, DBX for denied ones) hold hashes or certificates, and authenticated variables let updates apply only when signed by the platform's keys. The talk explains why boot-time bypasses are treated as security feature bypasses and maps the attack surface, from OEM firmware and custom certificates to third-party images and the Linux shim.\n\nThe middle of the talk walks through several case studies. Reviewing the extra certificates one motherboard shipped with showed old, vulnerable Linux shim bootloaders still trusted through a certificate that remained in use, found by searching a malware-scanning platform by certificate thumbprint. Other examples showed process gaps: revoked UEFI images were not checked for variants, and a shim review approved a submission that still allowed loading old GRUB builds lacking SBAT version metadata. The speaker then described a shim bug in HTTP response handling, where a server-controlled content length led to an undersized allocation and an out-of-bounds write. Because the shim can be chain-loaded from local, adjacent or remote sources, the issue applies across those attack vectors, and a demo showed it crashing a test machine.\n\nThe closing section covers remediation and its limits. DBX has little space, and revoking whole certificates or old shims can break legitimate users, so the speaker proposed embedding version data in DBX entries and using BitLocker with measured boot. Practitioners are urged to hunt for revoked-image variants, review vendor-signed second-stage images and GRUB, and reduce exposure through narrower trust policies.",
       "durationSeconds": 3380,
       "conference": "offensivecon",
       "viewCount": 1700,
@@ -864,18 +876,19 @@
         "Magal Baz",
         "Octavian Guzu"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Coverage of 24 from the conference program.",
-      "summary": null,
+      "teaser": "Shows how a Bluetooth Low Energy overflow in Meta's smart glasses firmware was turned into code execution on FreeRTOS.",
+      "summary": "The talk walks through a security review of Meta's first-generation smart glasses, which found a zero-click memory corruption bug in the firmware of the microcontroller that handles Bluetooth Low Energy traffic. An attacker within roughly 100 metres could send a crafted write to an exposed characteristic. A frame length check allowed up to 384 bytes to overflow a 128-byte stack buffer on a FreeRTOS device with no stack canaries, no DEP and no ASLR.\n\nExploitation was harder than a classic stack smash. The vulnerable function never returned, and stack-guard assertions and the Cortex-M33 stack limit register got in the way. Instead of returning through the stack, the team overwrote the linked-list pointer in a task control block and injected a fake task whose saved context ran their shellcode on the next context switch. They used existing flash-write routines as gadgets to persist a changed Bluetooth name, leaked gadget offsets through an assertion message, and showed a demo in which the glasses' name changed to show compromise.\n\nFor defenders, the speakers described the mitigations adopted afterwards. These included static MPU regions that mark stacks and heaps as non-executable, which costs no runtime performance, and stack canaries seeded from a hardware entropy source. They also warned that some GCC versions emit a predictable canary value because of a missing reference, and noted that the vendor's bug bounty now covers these devices.",
       "durationSeconds": 1644,
       "conference": "offensivecon",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "VDhHSCsaByk",
@@ -908,18 +921,19 @@
         "Alexander Kozlov",
         "Sergey Anufrienko"
       ],
-      "track": "community",
+      "track": "wireless",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Coverage of 24 from the conference program.",
-      "summary": null,
+      "teaser": "Shows how researchers extracted a cellular modem's firmware and chained an SMS-triggered heap overflow into remote code execution.",
+      "summary": "The talk examines a cellular modem found in cars, medical equipment, payment terminals and industrial computers, where a compromise could be serious. Public research turned up only one minor CVE, so the team desoldered the module's NAND memory and dumped its unencrypted firmware. Rebuilding the flash layout revealed hidden folders holding installed Java midlets, whose JAR files were otherwise blocked from access. A JTAG attempt via undocumented pads went nowhere and was dropped.\n\nMidlet analysis found a public method that leaked system properties, including the hidden storage path, plus a path traversal that exposed undocumented directories. Combined, these let a user midlet overwrite its own permissions file and reach manufacturer privileges locally. Fuzzing the AT interface revealed over 300 user commands against fewer than 200 documented, and a static-buffer overflow that caused only denial of service. The critical bug was a heap overflow in SUPL message reassembly, triggered by crafted SMS fragments. The team leaked memory one crash at a time, built a fake thread structure for arbitrary writes, executed code, and finally installed a persistent midlet through an SMS-driven file system driver.\n\nThe core lesson is that the modem lacked firmware cryptography and isolation between processes, so a minor denial-of-service bug became remote code execution. Mitigations include disabling nonessential SMS features, enforcing signature checks, and controlling physical access. Two critical vulnerabilities were reported to the vendor, with a full white paper promised.",
       "durationSeconds": 2407,
       "conference": "offensivecon",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "t78x_vPuc7s",
@@ -972,18 +986,19 @@
         "Raphael Neveu",
         "Gabrielle Viala"
       ],
-      "track": "community",
+      "track": "mobile",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Coverage of 24 from the conference program.",
-      "summary": null,
+      "teaser": "Chains USB, bootloader and TrustZone bugs to take full control of low-end Samsung Galaxy A phones.",
+      "summary": "This talk presents a chain of four vulnerabilities that lets an attacker fully compromise a family of low-cost Samsung Galaxy A phones built on MediaTek chips, starting from the USB stack. The team began with the boot chain, beginning with Samsung's modified Little Kernel bootloader, which loads a logo image from an archive that is signed but never checked at boot. A heap overflow in that image loading path gave a write primitive and code execution in the bootloader. Because the affected partition survives resets and factory wipes, the access persists.\n\nNext, a flaw in the Odin download mode let the researchers flash partitions over USB without authentication, including the partition table and GPT. By redirecting partitions to a malicious image and patching Android verified boot checks in memory, they booted a modified system and obtained root on the normal world.\n\nFor the secure world, the team statically analysed the ARM Trusted Firmware secure monitor and found two SMC handlers reachable from the kernel. One reads memory at an attacker-chosen address, and the other maps arbitrary physical addresses. Chaining them leaked trusted application memory, and a demo recovered a key from the keystore by trying candidate byte sequences against captured ciphertext. The vulnerabilities have since been fixed, with vendor response times varying. The takeaway is that simple bugs and missing mitigations on low-end devices can expose the whole stack, including the secure world.",
       "durationSeconds": 2645,
       "conference": "offensivecon",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "U-xSM159YLI",
@@ -1024,11 +1039,12 @@
         "translator"
       ],
       "teaser": "24 - Nika Korchok Wakulich - UEFI and the Task of the Translator.",
-      "summary": null,
+      "summary": "The talk uses Walter Benjamin's essay \"The Task of the Translator\" as a framing device for UEFI exploit development. The speaker explains that UEFI \"coins\" are self-replicating UEFI applications, and shows one written first in C, then translated into x86-64 assembly for a binary golf contest, where the code shrank from about 177 KB to 1,480 bytes. The same program was then rebuilt for arm64 and for EBC, a rarely used bytecode format that still lingers in the reference codebase.\n\nThe second half turns to SMM callout vulnerabilities. It walks through how System Management Mode handles interrupts, how the EFI SMM communicate buffer carries data across the boundary, and how an SMI handler that calls a function pointer in the boot services table can be hijacked by overwriting that pointer. An initial proof of concept built on chipsec could not run on an M-series MacBook, so the approach was reimplemented by writing to I/O ports directly. That version bricked a test machine during a client engagement, so it was never validated on hardware, and testing moved toward a hardware-focused debugging approach.\n\nThe closing takeaways are to learn UEFI internals by walking from protocol to protocol, to reproduce earlier proofs of concept as templates, and to practice on a public firmware CTF challenge. A question in the Q&A about whether EBC runs with lower privileges than SMM was left unresolved.",
       "durationSeconds": 3646,
       "conference": "offensivecon",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "QlaJQEa3_zQ",
@@ -1091,11 +1107,12 @@
         "safari"
       ],
       "teaser": "24 - Quentin Meffre - Escaping the Safari Sandbox: A Tour of Webkit IPC.",
-      "summary": null,
+      "summary": "The talk looks at WebKit's multiprocess architecture, which splits browser work between a privileged UI process, the web content process, a GPU process and a network process. Web content is the most exposed of these and has a tightly restricted sandbox. The speaker focuses on the GPU process, which was the target of a recent exploit found in the wild that used it to escape the web content sandbox. Processes talk to each other over Mach messages, and each message header names the handler to invoke in the remote process.\n\nThe middle of the talk follows the hardening added to the Objective-C decoding that these messages rely on. Secure coding requires the decoder to declare the expected type, trust restrictions limit which collection classes can be decoded, and a strict mode blocks subclass decoding. The speaker then covers the allocator, where randomized bucketing was added but not enabled by default, and the dynamic loader, where its internal structures were moved to hardware-enforced write protection to close a pointer-authentication bypass. The GPU process also got a JavaScript-disabling change, but the speaker shows that one of its checks is never set, so an attacker can still restore the opcode map and run JavaScript there.\n\nThe closing point is that each new protection raises the cost of a full chain, which now needs an extra stage to reach the GPU process. Even so, the speaker notes that attackers were still able to build full chains starting from web content during the previous year.",
       "durationSeconds": 1744,
       "conference": "offensivecon",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "qllMa2UUPvY",
@@ -1137,11 +1154,12 @@
         "cracking"
       ],
       "teaser": "24 - Solar Designer - Keynote - Password Cracking: Past, Present, Future.",
-      "summary": null,
+      "summary": "The speaker, a long-time developer of John the Ripper, argues that passwords will remain important because no other authentication factor fully replaces them as a unique factor, and they also protect encrypted data. Offline password cracking is needed for penetration tests, security audits and recovering access to lost encrypted files. He notes that most alternative authentication methods still rely on a password somewhere, so the attack often moves to another place, such as the client device.\n\nThe talk traces password storage from plaintext in the 1960s through salted, deliberately slow hashing in the 1970s, then tunable cost and memory-hard functions such as scrypt and Argon2. It explains how cracking speed comes from amortizing work: comparing many hashes against each computed candidate, moving work out of loops, and running on GPUs and later FPGAs. Candidate ordering gets equal attention, covering wordlists, mangling rules, duplicate suppression, and probabilistic generators such as Markov chains. The speaker also reviews the decline of rainbow tables and the weakness of legacy Windows hashes.\n\nHe closes by expecting hardware to keep getting faster, while tuned defensive settings should keep guess rates low. He suggests open FPGA designs, better passphrase support and released pre-filtered datasets. For defenders, the takeaways are to choose memory-hard hashes, retire legacy formats, and screen new passwords against known breached-password lists.",
       "durationSeconds": 4327,
       "conference": "offensivecon",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "quw8SnmMWg4",
@@ -1173,18 +1191,19 @@
       "speakers": [
         "Pietro Borrello"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "pietro",
         "borrello",
         "vulnerability-research"
       ],
-      "teaser": "Coverage of 23 - Pietro Borrello from the conference program.",
-      "summary": null,
+      "teaser": "Shows how undocumented Intel instructions let software patch CPU microcode and reverse engineer its secret update algorithm.",
+      "summary": "The talk presents Custom Processing Unit, a software framework for reading and modifying Intel CPU microcode without an external hardware debugger. It builds on earlier research into red unlocked Goldmont CPUs, where undocumented instructions expose internal buffers. The framework includes a microcode compiler, assembler, patcher and tracer, and it works by programming the control register bus, which gives access to the microcode sequencer.\n\nThe speaker demonstrates several uses. A patched RDRAND returns a fixed string, and another patch dumps System Management Mode memory by temporarily disabling its protections. ARM-style pointer authentication is ported to x86 as a microcode feature, then attacked with a Pacman-style speculative brute force. That attack only worked on a weaker variant with fewer micro-operations, and faulting on invalid signatures was proposed as a fix. Other cases include a software breakpoint that runs about a thousand times faster, constant-time division patches, and microcode hooks that produce a full runtime trace of micro-operations.\n\nThe final part reverse engineers the microcode update algorithm, covering its RC4 decryption, RSA signature checks and metadata validation. No major vulnerability was found. Attacks on the hidden secure memory region, transient execution leaks and fault injection were explored without a practical break. The speaker published a parser and decrypted collected updates for Goldmont CPUs, and the framework is open source for readers with unlocked hardware.",
       "durationSeconds": 2940,
       "conference": "offensivecon",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "-nFWcKHIUN4",
@@ -1228,11 +1247,12 @@
         "advancement"
       ],
       "teaser": "23 - Samuel Groß & Carl Smith - Advancements in JavaScript Engine Fuzzing.",
-      "summary": null,
+      "summary": "The talk covers how the V8 security team has extended Fuzzilli, their open-source fuzzer for the JavaScript engine behind Chrome, since its original release. Fuzzilli mutates its own intermediate language, which makes targeted changes easy, and then converts the result back to JavaScript. Plain coverage guidance struggles with bugs that need several separate steps to combine, such as a 2016 case where a valueOf callback shrinks an array during a slice call and causes an out-of-bounds read.\n\nTo reach such bugs, the speakers added specialized mutators. The probing mutator wraps a value in a proxy that records which operations the engine performs on it, then tells the fuzzer what to install. The exploration mutator inspects unknown values at runtime and replaces an abstract step with a concrete operation. The latter found a type confusion in the optimizing compiler's inlining of an array add method. The second speaker then described later bugs that need roughly nine to fourteen steps, and introduced program templates: a researcher-written skeleton with build functions that let Fuzzilli fill in code using its own generators and splicing. Templates for a regular expression engine and a serialization API uncovered long-standing bugs.\n\nThe key takeaway is that coverage alone reaches only a small part of the enormous input space. Targeted mutators suit specific bug classes, and Fuzzilli works as a framework for quickly prototyping focused fuzzers against particular V8 components or APIs. The speakers reported that most of these bugs were found within a day on a single workstation.",
       "durationSeconds": 1374,
       "conference": "offensivecon",
       "viewCount": 2400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "rX8kfeksdi4",
@@ -1247,12 +1267,13 @@
         "brand",
         "name"
       ],
-      "teaser": "Coverage of 23 - Mark Brand - What’s in a Name? from the conference program.",
-      "summary": null,
+      "teaser": "Walks through a Chrome Mojo IPC type confusion bug and how it was escalated into a use-after-free.",
+      "summary": "The talk examines a Chrome bug in Mojo, the inter-process communication layer that carries messages between sandboxed renderers and privileged browser processes. Generated serialization code expects typed structures, and incoming messages are checked by validators before dispatch. The flaw was that replies were validated against the return type of the function they claimed to answer, while the callback was matched using only a request ID, so one reply could be read as a different return type from the same interface.\n\nUsing the blob registry as a worked example, the speaker shows how mismatched return types let a renderer read past the end of an allocation it controls, giving a targeted out-of-bounds read. Chasing a more capable primitive, the talk turns to a native structure return type that moves handles, leaving a zero written at a controlled offset. Disabling validation on other interfaces proves fiddly, since rejected messages kill the renderer, so the final approach zeroes a reference count in blob storage to create a use-after-free.\n\nThe speaker is candid that the resulting exploit is unreliable and fragile. The takeaway for practitioners is that validation must cover every response path, not only incoming request parameters, and that type confusion across generated IPC bindings can escalate from a logic error into memory corruption.",
       "durationSeconds": 1632,
       "conference": "offensivecon",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "oML1h3ic__0",
@@ -1270,7 +1291,7 @@
         "vulnerabilitie"
       ],
       "teaser": "23 - Pan Zhenpeng - Unearthing Vulnerabilities in the Apple Ecosystem.",
-      "summary": null,
+      "summary": "The speaker, a security researcher at STAR Labs, opens with the structure of Apple's XNU kernel: Mach, BSD and IOKit. He explains how IOKit drivers reach co-processors such as the Secure Enclave and the display processor through mailboxes and memory-mapped I/O, and why those co-processors have few modern software mitigations, which makes them attractive but hard targets.\n\nHis fuzzing setup first gathers entitlement checks from a kernel cache by tracing references to entitlement getters, recovering about 177 entitlements. It then enumerates reachable IOService classes and user clients through the IORegistry diagnostics dictionary, which roughly doubled the attack surface compared with his earlier method. Beyond input mutation and fault injection, he uses backward fuzzing: reusing the pattern of a public bug to search new code. Examples include a decades-old kernel address leak through a log print, found in an audio driver and then in Bluetooth and DCP firmware code; an integer overflow in Mach port reference handling; and user client initialization failures that return success and lead to null dereferences.\n\nThe main takeaway is that code audit and fuzzing reinforce each other, since some bugs are easy to trigger dynamically but hard to spot by reading code. Co-processor crashes are also hard to interpret from the application processor side, so triggering and debugging them requires dedicated tooling. Several of the reported issues were assigned or fixed by Apple, and the speaker argues co-processors will become more valuable targets.",
       "durationSeconds": 1712,
       "conference": "offensivecon",
       "viewCount": 1400,
@@ -1284,18 +1305,19 @@
       "speakers": [
         "Embedded Threats"
       ],
-      "track": "community",
+      "track": "wireless",
       "topics": [
         "marku",
         "vervier",
         "vulnerability-research"
       ],
-      "teaser": "Coverage of 23 - Markus Vervier from the conference program.",
-      "summary": null,
+      "teaser": "Shows how remotely provisioned eSIM profiles can carry custom SIM applets that serve as an out-of-band command and control channel.",
+      "summary": "The talk starts from a question about whether red teams need another command and control framework, since most implants share the same network transport that endpoint detection tools monitor. Embedded SIMs (eUICC) are soldered into many laptops and phones and can be provisioned remotely, which could give an operator a cellular channel that the target network does not control. The speaker explains how eSIM profiles are provisioned through activation codes and SM-DP+ servers, and why the GSMA certification process keeps independent researchers from provisioning profiles freely. GSMA test profiles offer a workaround for lab use.\n\nThe speaker showed that on Windows 10, an unprivileged user could install a test profile through the built-in cellular settings. The profile's remote-management keys were then used to install a custom Java Card applet on the SIM. Recovering weak challenge-response keys was also covered, with a brute-forcer built on insecure random number generators planned for release. A proof of concept then carried C2 traffic over SMS to a machine with no internet access. A separate demo ran a SIM application on an iPhone that displayed prompts over the phone's interface in a phishing-style scenario.\n\nThe takeaway is that the eSIM is an isolated execution environment that defenders rarely inspect, and that laptop and phone platforms exposing eSIM management to ordinary users widen the attack surface. The speaker also noted limits: an applet controls only its own security domain, and card behaviour varies between vendors. Tools were promised for release after the talk.",
       "durationSeconds": 3221,
       "conference": "offensivecon",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "YnxGW8Fvqvk",
@@ -1382,11 +1404,12 @@
         "dark"
       ],
       "teaser": "23 - Alex Matrosov & Alex Ermolov - A Dark Side of UEFI: Cross-Silicon Exploitation.",
-      "summary": null,
+      "summary": "The talk presents research into UEFI firmware on ARM systems, a platform the speakers say had seen little public work compared with x86. Starting from techniques used on x86, they tested a Qualcomm Snapdragon 8 based Windows development kit and found the attacks worked. They dumped the read-only BIOS region from the UEFI shell and used the platform configuration file to map memory regions and security settings.\n\nThe main findings are two bug classes in NVRAM variable handling, where a GET_VARIABLE call leaves the data size uninitialized or stale. One causes out-of-bounds reads that leak stack contents into NVRAM through a later SET_VARIABLE call. The other is a stack overflow which, on the test device, landed beyond the return address, so they built a return-oriented chain of three gadgets. The payload survived reboots once the variable existed. They also noted that stack canaries were applied inconsistently across modules, and described a brief window before SMRAM locks that a DXE-stage attacker could use to reach it.\n\nFor practitioners, the speakers argue ARM is harder to exploit than x86, but these flaws stem from the UEFI specification and reference code shared across vendors. Adding input checks would cost roughly 5 to 7 percent boot performance, which vendors have resisted. Static analysis tools miss these bugs because they lack firmware context. The team released an EFI Explorer plugin with ARM support and open detection rules for the known issues.",
       "durationSeconds": 3295,
       "conference": "offensivecon",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "9wgHENj_YNk",
@@ -1445,11 +1468,12 @@
         "lock"
       ],
       "teaser": "23 - Moshe Kol - Racing Against the Lock: Exploiting Spinlock UAF in the Android Kernel.",
-      "summary": null,
+      "summary": "The talk examines a use-after-free in the Android Binder kernel driver where the only code touching the freed object is a spinlock acquire and release. The question is whether such a weak primitive can be turned into a reliable, generic exploit that works across vendors, kernel versions and lock offsets. The bug is a race during handle-object translation: if the target process exits before the new reference is inserted, the driver later takes a lock on the freed binder node.\n\nThe core of the exploit is how the queued spinlock implementation can be abused. By pre-setting bytes of the lock, an attacker controls whether the lock spins, and a timed interrupt slows the spinning CPU so it catches a brief window where a kernel pointer is partially visible. This clears a byte of a file pointer in the file descriptor table, which is placed into a controlled slab using dup2. The attacker can then identify a fake file, free it to create a use-after-free on a TTY buffer, and reallocate that memory as pipe buffers. Leaking a pipe buffer pointer defeats KASLR, and a fake pipe buffer grants arbitrary kernel read and write.\n\nThe exploit was tested on a Galaxy S22, a Pixel 6 and a Galaxy S21 Ultra across several Android and kernel versions, with a success rate of roughly 70 to 80 percent. A demo on the Pixel 6 showed a root shell with SELinux disabled. The main takeaway for practitioners is that even a tiny, seemingly unexploitable use-after-free can be escalated to full privilege escalation, so such bugs should not be dismissed.",
       "durationSeconds": 2581,
       "conference": "offensivecon",
       "viewCount": 2400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "KAyfJt0CRVs",
@@ -1467,11 +1491,12 @@
         "bug"
       ],
       "teaser": "23 - Martijn Bogaard - New Phones, Software & Chips = New Bugs?.",
-      "summary": null,
+      "summary": "The talk traces an eight-month research effort into the Pixel 6, a phone built on custom silicon that markets security as a core feature. It explains how Android sits beside a secure world running the Trusty operating system, with a secure monitor routing calls between the two. Trusty is derived from Little Kernel and includes hardening such as control flow integrity and shadow stacks.\n\nThe first weakness was in the fast call handler that routes interrupts between the worlds. It never checked the interrupt ID, so an out-of-bounds index could set or clear bits in a global mask. Attempts to corrupt thread structures or handler tables mostly crashed the system, and control flow integrity blocked simple pointer hijacks. The working route abused a user-mode interrupt handler's argument chain to plant a fake thread, triggered through the reschedule interrupt, giving repeatable code execution in the secure world. A second bug involved the multiformat codec, a co-processor that can switch to a secure state. Unprotecting its firmware while the core kept running exposed the secure page tables, allowing fake mappings. The attacker then patched a secure monitor handler into a 32-bit read and write primitive over secure memory.\n\nGoogle's fix arrived with Android 13 in August 2022, alongside raised anti-rollback counters that block returning to Android 12. Key material has since moved to the security core, and the speaker sees stronger mitigations coming to the secure world.",
       "durationSeconds": 3600,
       "conference": "offensivecon",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "H03b0UaogVs",
@@ -1502,18 +1527,19 @@
         "Guillaume Teissier",
         "Quentin Minster"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Coverage of 23 from the conference program.",
-      "summary": null,
+      "teaser": "Walks through a remote kernel exploit chain against the Linux ksmbd SMB server, from info leak to root shell.",
+      "summary": "The talk examines ksmbd, the in-kernel SMB server merged into Linux 5.15, and explains why its split between kernel code and a root user-space daemon makes it a risky attack surface. It walks through how compound SMB requests are parsed, and how a mismatch in how the code locates the NetBIOS length field lets a crafted write bypass bounds checks. The result is an out-of-bounds read that leaks kernel heap data.\n\nThe speakers describe using that leak to defeat KASLR by matching pointers in leaked slab objects against profiled offsets, then to locate ksmbd connection objects. A second bug in the security descriptor query path gives a linear heap overflow, and a third bug in the TCP receive loop lets an attacker control the lifetime and contents of a buffer at a known address, allowing forged kernel objects. Combining these, they corrupt a session object, confirm the overwrite with a marker, and pivot the stack using a gadget that moves RSP, ending with a reverse shell as root on an Ubuntu 22.04 kernel 5.15 target.\n\nA live demo ran the chain end to end and returned a root shell. The speakers noted that the exploit is not fully reliable and that heavy concurrency crashes the server, so slab layouts and offsets must be profiled for each kernel version. Takeaways include scrutinizing mixed use of request pointers in compound command handling and treating in-kernel network parsers as high-risk. Most reported bugs were fixed upstream after disclosure through ZDI.",
       "durationSeconds": 2553,
       "conference": "offensivecon",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "BarJCn4yChA",
@@ -1602,11 +1628,12 @@
         "samsung"
       ],
       "teaser": "20 - Aristeidis Thallas - Emulating Hypervisors: A Samsung RKP Case Study.",
-      "summary": null,
+      "summary": "The talk looks at Samsung's proprietary hypervisor, Runtime Kernel Protection (RKP), which runs at ARM EL2 on the Galaxy Note 8 and guards the Android kernel at runtime. Because vendor-customised Android offers little public tooling, the speaker builds a minimal bare-metal framework under QEMU. It boots from EL3, sets up EL1 with the MMU enabled, and then drops into EL2 to initialise RKP. Along the way the talk explains exception levels, trapped system registers, stage-two translation, and the layout constraints RKP enforces, such as a fixed load address and kernel-matching structures.\n\nWith RKP initialised, the framework calls its hypercalls and shows how stage-two attributes can make kernel text read-only, using a custom page-table dump tool to confirm the change. Returning to an address not mapped at stage two produces a translation fault. For fuzzing, QEMU is modified to catch BRK instructions, which carry random command IDs and guest buffers into the hypercall handler. Aborts are logged as crashes, while policy violations and panics reset the system. A demo reproduced a data abort from one crafted command, which was reported to Samsung. Hangs are handled by address checks, and a teased AFL-based version was shown at about 6,000 executions per second.\n\nTakeaways are to match the original kernel's assumptions as closely as possible, satisfy every initialisation check, and plan for hangs and crash capture before fuzzing a closed hypervisor. The closing questions touched on EL1 SMC trapping and how RKP prevents re-initialisation, and were left for discussion offline.",
       "durationSeconds": 3132,
       "conference": "offensivecon",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "tS0eMrhCISM",
@@ -1674,7 +1701,9 @@
       "youtubeId": "YVnsIBlsM4s",
       "slug": "20-cedric-halbronn-how-cve-2018-8611-can-be-exploited-to-achieve",
       "title": "20- Cedric Halbronn- How CVE-2018-8611 Can be Exploited to Achieve Privilege Escalation",
-      "speakers": [],
+      "speakers": [
+        "Cedric Halbronn"
+      ],
       "track": "red-team",
       "topics": [
         "privilege-escalation",
@@ -1684,12 +1713,13 @@
         "exploited",
         "achieve"
       ],
-      "teaser": "20- Cedric Halbronn- How CVE-2018-8611 Can be Exploited to Achieve Privilege Escalation.",
-      "summary": null,
+      "teaser": "Walks through exploiting the CVE-2018-8611 KTM race condition in Windows to reach kernel-level privilege escalation.",
+      "summary": "Cedric Halbronn of NCC Group's exploit development team explains how CVE-2018-8611, a race condition in the Windows Kernel Transaction Manager, can be turned into local privilege escalation. The flaw had been seen exploited in the wild and described by Kaspersky, but the team had no exploit or detailed write-up, so they reverse engineered the KTM objects and compared the vulnerable and patched recovery routine to understand the bug.\n\nThe middle of the talk covers triggering the race. Releasing a mutex before a notification call lets an enlistment be finalized and freed while the loop still reads it. The team suspended the recovery thread at the exact moment while another thread congested the mutex, then used named pipe allocations to groom the non-paged pool so a fake enlistment replaced the freed object. Notification counts helped identify which enlistment had been freed and whether the race was won. They then obtained a limited increment primitive, leaked the resource manager address, and built arbitrary read and write, which they used to swap the process token for the SYSTEM token.\n\nThe closing part covers reliability and alternatives. The race proved highly reproducible, though the increment approach can crash the system if another process reads the pointer mid-write. A write-zero primitive combined with overwriting the thread's previous mode was also shown, but that route works only on 64-bit systems. The exploit is data-only and does not bypass CFG.",
       "durationSeconds": 3573,
       "conference": "offensivecon",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "YH8gPs8ZGHc",
@@ -1859,11 +1889,12 @@
         "subscribe"
       ],
       "teaser": "20 - b1ack0wl - Don't forget to SUBSCRIBE.",
-      "summary": null,
+      "summary": "The talk walks through a research effort against a consumer router, starting from the hardware. The researcher found debug pads on the board, wired a cheap microcontroller as a JTAG adapter, and used OpenOCD to halt the processor and watch memory during boot. By overwriting the kernel boot arguments, they got a root shell over serial. Dumping the firmware through a USB port gave them the binaries to analyze.\n\nFocusing on the UPnP event subscription code in a shared library, the researcher showed how repeated subscribe, renew and unsubscribe requests could shape the heap. Base64-encoded SOAP parameters let them place controlled data in freed chunks, and a subscription with an infinite timeout kept memory from being reclaimed. Because the binary's addresses contained null bytes, they hunted ARM Thumb gadgets by hand, then used them to call imported functions and run a command. The exploit reached a root shell on a live device after roughly thirty minutes.\n\nThe talk then moved to automation. The researcher built a Python fuzzer for UPnP services, with validators that marked responses as pass, fail or suspicious, and an ICMP listener to detect command injection. It surfaced an out-of-bounds information leak in a different UPnP daemon, caused by using the return value of snprintf as a copy length. The closing point was that a flaw in a widely reused library can reach many devices from different vendors, and that scripting test cases for known service logic speeds up finding such bugs.",
       "durationSeconds": 2797,
       "conference": "offensivecon",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "1xqAfvEJm9g",
@@ -1872,7 +1903,7 @@
       "speakers": [
         "Natalie Silvanovich"
       ],
-      "track": "community",
+      "track": "mobile",
       "topics": [
         "messaging",
         "natalie",
@@ -1881,8 +1912,8 @@
         "required",
         "finding"
       ],
-      "teaser": "20 -Natalie Silvanovich - No Clicks Required: Finding Remote Vulns in Messaging Apps.",
-      "summary": null,
+      "teaser": "Explores how zero-click remote vulnerabilities in messaging apps were found, focusing on iMessage's object deserialization flaws.",
+      "summary": "Natalie Silvanovich, a member of Google's Project Zero, asks whether fully remote, zero-click vulnerabilities exist in popular messaging apps and where they live. She defines the target: no user interaction, no proximity requirement, only a short wait, only common identifiers such as a phone number, and no need for a contact relationship. She explains that memory corruption bugs are hard to exploit in messengers with little remote native code, while logic bugs are rarer but can be useful if they expand attack surface so that riskier parsing happens without a click.\n\nShe describes the WhatsApp Android client, where a video signaling logic bug and a video stream bug each needed a click, and a Signal logic bug that could answer a call and open the microphone. The main case study is iMessage, which has a large native remote attack surface built on NSKeyedArchiver deserialization of message payloads. Reviewing init-with-coder methods across many classes, the research found a local file read caused by a flawed path check, a use-after-free from an array subclass that skipped creating object references, and out-of-bounds reads from cyclic object graphs in an optimized dictionary class.\n\nThe takeaway is that deserialization code pulled in by every linked library quietly widened the attack surface, and that secure coding checks did not stop these bugs. The speaker notes that an iOS 13 change disallowing subclassing during deserialization would have prevented most of the bugs found. Overall, the talk reports about ten remote bugs reported across messengers, with the exploitation of the iMessage bugs covered in a follow-up talk.",
       "durationSeconds": 1499,
       "conference": "offensivecon",
       "viewCount": 1900,
@@ -1907,7 +1938,7 @@
         "required",
         "exploiting"
       ],
-      "teaser": "20 Samuel Gross No Clicks Required: Exploiting Memory Corruption Vulns in Messenger Apps.",
+      "teaser": "Shows how a memory corruption bug in iMessage's archiver can be chained into remote code execution with no user interaction.",
       "summary": "**Overview**\nSamuel Gross presents a no-click exploitation technique for memory corruption vulnerabilities in iOS messenger apps (iMessage) that defeats ASLR and achieves code execution through a multi-stage attack chain.\n\n**The Vulnerability**\nThe core vulnerability is a memory corruption issue in NSKeyedArchiver's handling of shared key dictionaries. A shared key dictionary contains linked shared key sets, each with a rank table and keys array. The critical invariant is that num_keys must equal the length of the keys array. By creating cyclic references during decoding—making a child key set point back to a parent—this invariant can be violated. When the application looks up keys in the malformed structure, the rank table can index out of bounds, enabling arbitrary address dereference.\n\n**ASLR Bypass: Crash Oracle Side Channel**\nThe speaker constructs a crash oracle function: given an address, it succeeds only if the address is mapped and contains a valid Objective-C pointer. iOS's automatic delivery receipts provide the communication channel—if processing crashes, no receipt is sent; if successful, a receipt arrives. This creates a one-bit information leak. The exploit profiles the dyld shared cache (a ~1 GB prelinked binary of system libraries) offline to create an address validity bitmap. During exploitation, a linear memory scan within the fixed shared cache range (0x180000000–0x287000000) finds a candidate base address. Binary search then narrows from approximately 30,000–40,000 candidates to a single answer in roughly 20 queries, each query potentially eliminating half the remaining candidates.\n\n**Exploitation Stages**\n1. **Heap Spraying**: Allocate 256 MB of data over iMessage to place fake Objective-C objects at predictable addresses.\n2. **ASLR Bypass**: Use crash oracle queries and binary search to determine the shared cache base address, requiring ~10-second delays between crashes to avoid respawn penalties.\n3. **Object Construction**: Build fake Objective-C objects pointing to real, legitimately-signed classes.\n4. **Code Execution**: Call Objective-C methods to launch arbitrary applications.\n\nOn iOS 12.4, direct code execution is possible. On iPhone 10s and newer with pointer authentication codes (PAC), function pointers are signed and verified before use, preventing direct code pointer forgery. The bypass reuses existing classes with valid signed method pointers to achieve arbitrary Objective-C method invocation.\n\n**Live Demonstration**\nThe speaker demonstrates the attack on an iPhone running iOS 12.4, showing the linear scanning phase probing addresses in 256 MB increments, candidate reduction from 32,000 to roughly half with each query, heap spray setup, and eventual launch of the Calculator application.\n\n**Limitations and Improvements**\nThe current implementation requires approximately 25 messages to complete exploitation. The speaker notes better engineering could combine heap spray and exploit trigger into a single message, and identifies potential failure modes including incorrect handling of writable pages and allocation activity between messages disrupting heap layout.",
       "durationSeconds": 1624,
       "conference": "offensivecon",
@@ -1961,7 +1992,10 @@
       "youtubeId": "Qms328deZ68",
       "slug": "19-daniel-king-shawn-denbow-growing-hypervisor-0day-with-hyperse",
       "title": "OffensiveCon19 - Daniel King, Shawn Denbow - Growing Hypervisor 0day",
-      "speakers": [],
+      "speakers": [
+        "Daniel King",
+        "Shawn Denbow"
+      ],
       "track": "red-team",
       "topics": [
         "hypervisor",
@@ -1972,11 +2006,12 @@
         "growing"
       ],
       "teaser": "19 - Daniel King, Shawn Denbow - Growing Hypervisor 0day with Hyperseed.",
-      "summary": null,
+      "summary": "The talk covers fuzzing the Hyper-V hypervisor through its hypercall interface, which guests can reach from ring zero. The speakers first lay out the basics: root and child partitions, nested virtualization used to make test setups easy to reset, and virtual trust levels that separate the normal kernel from the secure kernel. They then explain the three hypercall calling conventions and the checks handlers apply to partition state and privileges. Fuzzing scenarios covered guest-to-host, root-partition, nested, and secure-service targets.\n\nThe second half presents hyper seed, a format-aware fuzzer. Buffers are first treated as arrays of quadwords, then specific hypercalls receive mutators that respect known field layouts such as partition IDs and flags. Primitive mutators for random values, rotation, bit flips and masking are layered together by a dispatcher. Findings include a guest-to-host use-after-free in the post-message hypercall path, triggerable from inside a guest, where the fix checks the channel open result and clears a cached monitor page reference.\n\nFor practitioners, the takeaway is that the hypercall interface is a real attack surface, and that Microsoft's TLFS specification and Linux integration services code are the most useful public references. Format knowledge makes fuzzing more efficient over time. The speakers said coverage guidance for nested setups was still unsolved and that a modified release of the tool was planned.",
       "durationSeconds": 2833,
       "conference": "offensivecon",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "YMHsuu3qldE",
@@ -2002,7 +2037,9 @@
       "youtubeId": "dWQRetMjS6Q",
       "slug": "19-eloi-benoist-vanderbeken-macos-how-to-gain-root-with-cve-2018",
       "title": "19-Eloi Benoist-Vanderbeken -macOS: How to Gain Root with CVE-2018-4193 in less than 10s",
-      "speakers": [],
+      "speakers": [
+        "Eloi Benoist-Vanderbeken"
+      ],
       "track": "appsec",
       "topics": [
         "macos",
@@ -2012,12 +2049,13 @@
         "maco",
         "gain"
       ],
-      "teaser": "19-Eloi Benoist-Vanderbeken -macOS: How to Gain Root with CVE-2018-4193 in less than 10s.",
-      "summary": null,
+      "teaser": "Walks through a macOS WindowServer root exploit that combines CoreFoundation heap tricks with a fast ASLR bypass.",
+      "summary": "The talk examines CVE-2018-4193, a flaw in the macOS WindowServer component that allows a write through a negative array index. The speaker explains the bug's constraints: the overwritten slot must hold a specific value and be followed by a null pointer. He also notes that earlier public exploits relied on predictable Mach port names to fill the overwritten fields, and that Apple randomized those names in later releases, which made that approach slow and unreliable.\n\nInstead of spraying memory to place Mach port names, the speaker aims to overwrite the pointer with a value he controls. He uses CoreFoundation's binary property list parser, which accepts a CFSet form that the public API cannot serialize, to craft tagged pointers that place chosen values at exact heap offsets. He then grooms the heap so that a freed application object is replaced by a forged CFSet. For address information, he uses a large out-of-line memory transfer through a MIG interface, which is copy-on-write and therefore quick, to map a page at a known address. That page holds a fake Objective-C class and a payload that jumps to a system call, letting execution continue normally afterward.\n\nThe exploit ran in about nine seconds and could be repeated without crashing. The speaker says building it took around eighteen days and roughly nine hundred lines of code, and he published the source. The main takeaway is that a fast, stable exploit can come from combining known primitives with close reading of open-source framework code, and that predictable allocator behavior and weak address randomization remain useful to attackers.",
       "durationSeconds": 3301,
       "conference": "offensivecon",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "OHjq9Y66yfc",
@@ -2105,11 +2143,12 @@
         "matrix"
       ],
       "teaser": "19 - Sergei Volokitin - Glitch in the Matrix: Exploiting Bitcoin Hardware Wallets.",
-      "summary": null,
+      "summary": "This talk examines whether a hardware wallet's protections hold up against physical fault injection. The target is the KeepKey, which uses an STM32 microcontroller with internal flash, signed firmware, and a clock-glitch countermeasure. Its PIN is entered on the computer by clicking positions in a scrambled grid shown on the device screen. The speaker explains why a general-purpose MCU that is not built to resist faults is a reasonable target, even when the open-source firmware has been well reviewed.\n\nThe speaker rejected voltage glitching, because removing the power capacitors needed to make it work also disrupted USB and the rest of the chip. Electromagnetic fault injection was used instead, with the case opened and a probe moved over the chip. Each position was scanned and sorted by outcome: normal response, no response, or a corrupted response. Glitching the memory copy in the ping command could shorten the echoed data or corrupt individual characters, and some glitches triggered CRC or clock-instability messages. One unexpected result looked like a program counter corruption that jumped into a different command.\n\nAttacking the change-PIN path failed because random delays and a physical button press made the PIN check hard to hit. The speaker then used the set-device path, where a glitch skipped the storage-initialized check and changed the PIN in RAM. Chaining that with a change-PIN command wrote a new PIN to flash, bypassing the PIN check. The lab success rate was about 1.2 percent per attempt. The takeaway is that a device without software vulnerabilities can still fall to physical attacks if it lacks hardware-level defenses, and that a single clock-glitch check does not cover this. Passphrase-protected wallets would still require extracting secrets and brute forcing them offline.",
       "durationSeconds": 2247,
       "conference": "offensivecon",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "_14Bx4arqic",
@@ -2187,13 +2226,13 @@
       "speakers": [
         "Reversing Without Reversing"
       ],
-      "track": "community",
+      "track": "malware",
       "topics": [
         "alex",
         "ionescu",
         "keynote"
       ],
-      "teaser": "Coverage of 19 - Alex Ionescu - Keynote from the conference program.",
+      "teaser": "Shows how Windows internals can be learned from symbols, headers, debugger plugins and other artifacts beyond the binary.",
       "summary": "### Overview\nIn this keynote address, Alex Ionescu addresses the misconception that his extensive knowledge of Windows internals and rapid vulnerability research stems from illicit access to proprietary Microsoft source code. Presenting the concept of \"reversing without reversing,\" Ionescu explains how reverse engineering extends far beyond staring at assembly code in tools like IDA Pro or Ghidra. Instead, researchers can dramatically accelerate their work and gain deep architectural insights by gathering context, utilizing publicly released artifacts, tracking incremental updates, and studying foundational materials.\n\n### Key Topics\n- **Beyond Disassembly:** Moving past standard decompilation to understand the architectural \"why\" behind operating system design choices rather than just the \"how.\"\n- **Public and Overlooked Artifacts:** Exploiting debugging symbols, assertion strings in checked builds, header files, and debugger extensions to discover undocumented structures and function prototypes.\n- **Accidental Disclosures and Official Releases:** Leveraging beta kits, SDK/WDK samples, driver source code, and symbols inadvertently bundled in public tools.\n- **Binary Diffing and Incremental Research:** Using frequent release cadences, such as the Windows Insider Preview program, to diff small weekly changes rather than tackling monolithic multi-year OS updates.\n- **Research Ethics and Personal Cost:** Maintaining professional boundaries, avoiding reliance on leaked code, honoring non-disclosure agreements, and acknowledging the severe personal trade-offs and burnout associated with intense research.\n\n### Technical Details\n- **Assertions in Checked Builds:** Historically (prior to Windows Vista), Windows checked builds included assert statements containing complete source file paths, line numbers, variable names, and comparison macros directly embedded as plaintext strings.\n- **Debugger Extensions and Support Tools:** Utilities such as WinDbg extensions (e.g., KTX files) often contain explicit `printf` statements formatting kernel structures, revealing offsets, field names, and data types not included in public symbol packages.\n- **Header Leaks and Cross-Component Symbols:** Internal definitions occasionally leak through build anomalies, such as internal MinWin headers bundled in early Windows 10 WDK releases or kernel structures exposed in private PDBs for COM and UI binaries due to shared precompiled headers.\n- **Official Sample Code:** Substantial reference implementations exist legally in the public domain, including Microsoft Research projects (e.g., Singularity's hypervisor headers and kernel debugger protocol KD), driver development kits, and sample networking/storage stacks on GitHub.\n- **Rapid Diffing:** Tools like NT Diff allow researchers to isolate granular modifications between Windows Insider builds, identifying newly introduced system calls or altered behaviors within days.\n\n### Takeaways\nReverse engineering efficiency is driven by building a cumulative body of knowledge, consulting foundational literature (such as classic PC architecture and BIOS references), and systematically analyzing peripheral resources. Ionescu emphasizes that high output does not rely on leaked code or unethical behavior, but requires significant time investment, curiosity, and ethical adherence to legal boundaries, while cautioning about the reality of industry burnout.",
       "durationSeconds": 2021,
       "conference": "offensivecon",
@@ -2208,18 +2247,19 @@
       "speakers": [
         "3rd Party Application Flaws"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "tyler",
         "bohan",
         "revisited"
       ],
-      "teaser": "Coverage of 19 - Tyler Bohan - OSX XPC Revisited from the conference program.",
-      "summary": null,
+      "teaser": "Walks through macOS privileged helper tools that expose root XPC services with missing authentication and weak code signing checks.",
+      "summary": "The talk examines privileged helper tools on macOS, which are third-party root services installed by applications, registered with launchd, and reached over XPC. The speaker explains the least-privilege reasoning behind them and how client-server IPC works on the platform. He then builds a threat model for a helper, arguing that a root listener must authenticate and authorize every caller before it acts.\n\nSeveral case studies follow. One VPN client's helper accepted connections without any authentication, and another validated callers with a code signing check that only confirmed a signature existed, so a re-signed copy of the client could pass and run commands as root. Other helpers ran commands from supplied arguments, let any client launch applications, or created folders and files with global permissions. A package-installer helper ran pre- and post-install scripts from attacker-controlled packages, and a malware-cleaning tool exposed its functions with no checks. Some helpers kept running after uninstall because they were never unregistered from launchd.\n\nThe speaker reviewed 16 helpers, found five vulnerable, and reported them to vendors, with some vendors responding poorly. He recommends verifying the team identifier of callers, checking that users are authorized for root actions, unregistering helpers when apps are removed, and inspecting packages before installing them. He closes by asking the community to test their own systems, submit new helpers, and help audit the growing list.",
       "durationSeconds": 2795,
       "conference": "offensivecon",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "xzG0pLM4Q64",
@@ -2258,11 +2298,12 @@
         "hardware"
       ],
       "teaser": "19 - Alex Matrosov - Attacking Hardware Root of Trust from UEFI Firmware.",
-      "summary": null,
+      "summary": "Alex Matrosov looks at how the hardware root of trust on modern x86 systems is often split between silicon and firmware, and how that split creates weak points. The main target is a Lenovo ThinkPad P50. The BIOS setup offers an option that appears to permanently disable the Computrace anti-theft component, but the talk shows that the setting is only a stored byte. Lenovo's Windows management interface reaches SMI handlers that let an administrator re-enable Computrace from the operating system without a kernel driver. The handler checks a one-byte secret, which the speaker brute-forced in under ten minutes on his own laptop.\n\nThe middle of the talk covers further findings. Lenovo's security configuration is kept in NVRAM variables, and the supervisor password prompt can be avoided on systems where no password is set, because the tries are counted. A platform configuration byte in an unprotected UEFI padding region can be changed to disable Boot Guard, which the speaker suggests is a manufacturing or recovery path. He also describes an embedded controller update flow where the vendor signs a SHA-256 hash but never checks the update payload against it, so a modified package with the same hash is accepted. A recovery path in one Intel-based firmware is another example, where a failed verification result did not stop the process.\n\nThe closing advice is to avoid trusting vendor claims about permanent disabling, to treat recovery and service features as attack surface, and to include firmware reverse engineering in threat models. The speaker argues that a root of trust handed off to software is only as strong as its weakest update or configuration path.",
       "durationSeconds": 3205,
       "conference": "offensivecon",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "r4J7Zu1RV40",
@@ -2280,11 +2321,12 @@
         "edge"
       ],
       "teaser": "19 - Bruno Keith - Attacking Edge Through the JavaScript Just-In-Time compiler.",
-      "summary": null,
+      "summary": "The talk explains how JavaScript engines work and why their just-in-time compilers are a rich source of memory corruption bugs. It opens with the open-source Chakra Core engine used by Microsoft Edge and the main parts of a typical engine, including the parser, bytecode interpreter, runtime and garbage collector. It then covers how Chakra encodes values with NaN boxing, and how objects separate their layout from their property values, which enables inline caching.\n\nThe middle of the talk walks through the JIT pipeline. The interpreter gathers profiling data, the compiler generates code that checks its assumptions, and failed checks lead to a slow path or a bailout. The forward pass of Chakra's global optimizer, along with its loop prepass, is the area of most interest for bugs. A worked example shows how a scalar object changes its internal layout when a fifth property is added, and how a compiler that fails to model this can skip a type check and overwrite the object's slot pointer.\n\nThe talk then turns that primitive into an exploit against a vulnerable build. Redirecting an ArrayBuffer's backing store gives arbitrary read and write through typed arrays. From there the exploit leaks a vtable pointer to find the engine's base address and a stack address, and it ends by running code in a demo. The takeaway is that JIT code must verify every assumption it makes, and that the same concepts apply to other JavaScript engines.",
       "durationSeconds": 2899,
       "conference": "offensivecon",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "pUa6nWWTO4o",
@@ -2314,8 +2356,12 @@
       "youtubeId": "UzMpw3-VZl8",
       "slug": "18-brian-gorenc-abdul-aziz-hariri-and-jasiel-spelman",
       "title": "18 - Brian Gorenc, Abdul-Aziz Hariri and Jasiel Spelman",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Brian Gorenc",
+        "Abdul-Aziz Hariri",
+        "Jasiel Spelman"
+      ],
+      "track": "red-team",
       "topics": [
         "brian",
         "gorenc",
@@ -2324,12 +2370,13 @@
         "jasiel",
         "spelman"
       ],
-      "teaser": "18 - Brian Gorenc, Abdul-Aziz Hariri and Jasiel Spelman.",
-      "summary": null,
+      "teaser": "Covers the VMware attack surface and three guest-to-host exploit case studies, ranging from a use-after-free to a stack bug.",
+      "summary": "The talk starts by mapping the VMware Workstation and Fusion attack surface, where guest software crosses a trust boundary into the vmx host process. The speakers cover five areas: the always-on backdoor I/O channel, guest RPC handlers, SVGA 2D and 3D graphics, the XHCI USB controller, and virtual printing through a third-party print library. They show how to reach the backdoor from a guest, trace RPC requests with a Python debugger script, and call RPC functions from Python using ctypes. They also explain that comparing the debug build of vmx with the release binaries, and using open-source VMware tools headers and driver code, makes reversing easier.\n\nThe middle of the talk covers three exploitation case studies, ordered from simpler to much more complex. The first is a drag-and-drop use-after-free triggered by switching protocol versions, where a crafted RPC payload reclaims the freed memory and a ROP chain is pointed to from a global variable and moved onto a writable and executable region. The second is a heap overflow during drag-and-drop fragment reassembly, where repeated allocations shape the heap so that a drag-and-drop object leaks a base address. The third is an uninitialized stack variable in SVGA 3D handling, which is turned into repeated use-after-free and type confusion to leak heap and code pointers before control is redirected. The speakers note this bug was part of a larger browser-to-host chain.\n\nThe closing section argues that VMware has a large, under-researched attack surface and that its vulnerability-specific mitigations lag behind modern browsers. The speakers also describe how vendor duplicate checks revealed how little the vendor knew about its own code, and they encourage researchers to pursue these bugs.",
       "durationSeconds": 3358,
       "conference": "offensivecon",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "dpG97TBR3Ys",
@@ -2372,11 +2419,12 @@
         "anyconnect"
       ],
       "teaser": "18 - Cedric Halbronn - Robin Hood vs Cisco ASA AnyConnect.",
-      "summary": null,
+      "summary": "The speaker, a vulnerability researcher at HCC Group, introduces Cisco ASA firewalls as widely used VPN gateways that run a single Linux-based binary with its own network stack. He explains how he found a pre-authentication bug by fuzzing the XML parser used by AnyConnect and clientless SSL VPN, using a simple template with mutated tags. He also walks through the patch timeline across ASA version branches, noting that fixes existed before the first advisory and that a later advisory widened the scope to other protocols that share the same parser.\n\nThe core of the talk is the root cause and the exploit. A dangling pointer left by one XML data handler leads to a double free of a 2000-byte chunk when a second crafted packet is sent. The exploit then uses IKEv1 IP fragment reassembly to shape the heap: creating holes, turning the double free into a repeatable free primitive, confusing a fragment length, and overflowing into adjacent chunks. Corrupting Cisco's mempool metadata yields a mirror write primitive, which the speaker uses to overwrite a function pointer and redirect execution to shellcode. The working demo targets an older 32-bit build without NX and without ASLR, and the speaker says newer releases would need a remote ASLR bypass.\n\nFor practitioners, the talk stresses that ASA branches live in parallel, so the right fix is the patched release on the branch in use rather than simply the highest version number. The speaker also shares the debugging and analysis tools his team released for firmware unpacking, GDB integration, heap inspection and IDA automation, and suggests that remote ASLR bypass and porting to 64-bit remain open next steps.",
       "durationSeconds": 3621,
       "conference": "offensivecon",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "VTIdiJO1r20",
@@ -2396,11 +2444,12 @@
         "bartoli"
       ],
       "teaser": "18 - Niko Schmidt, Marco Bartoli, Fabian Yamaguchi - Field Report on a Zero-Day Machine.",
-      "summary": null,
+      "summary": "This talk gives a ten-year progress report on an effort to build a system that finds vulnerabilities in source code by capturing what human analysts know. The speakers argue that fuzzing works in practice because it lets an analyst mark an interface as attacker-controlled and treats a crash as a security-relevant violation. Classic static analysis lacks that link to analyst knowledge, so reports are full of code that turns out to be dead or unreachable.\n\nTo close that gap, the approach represents code as a semantic code property graph that combines syntax, control flow and data flow. Operators and library calls are reduced to function calls with summary edges, so code that has already been analysed does not need to be re-analysed. Analyst knowledge is stored in a small, non-Turing-complete rule language that defines sources, sinks, transformations and the flows that should or should not be reported. A query shell lets users explore the graph interactively and script queries from the command line.\n\nThe live demos ran on a sample Spring application, where request parameters were traced to a deserialisation-style read, on a parameter injection path that could alter a file path, and on a CSV injection in the OpenCMS content platform, where exported spreadsheet cells carried formulas. The takeaway is that encoding expert knowledge as reusable rules scales better than one-off queries. The speakers note that reflection remains hard for static analysis and needs case-by-case modelling.",
       "durationSeconds": 3234,
       "conference": "offensivecon",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "D4Q_ad-ORq4",
@@ -2410,18 +2459,19 @@
         "Linux ASLR",
         "GNU Libc"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "ilya",
         "smith",
         "vulnerability-research"
       ],
-      "teaser": "Coverage of 18 - Ilya Smith from the conference program.",
-      "summary": null,
+      "teaser": "Shows how Linux mmap placement and glibc loading make ASLR predictable, and proposes kernel and loader fixes.",
+      "summary": "The talk examines how Linux address space layout randomization works on x86-64 and where it falls short, focusing on the kernel's mmap placement and the GNU C library loader. Starting from a process memory map, the speaker shows that shared libraries are packed next to each other and loaded in a fixed order. A single leaked pointer, or an out-of-bounds read or write, can therefore reveal the offsets of other regions, and distribution packages make those offsets easy to compute.\n\nSeveral weaknesses were presented. Gaps left by ELF segment handling can hold allocations near the main thread's TLS block, which holds the stack canary, and new thread stacks sit close to the libraries, so a small overwrite can reach the canary. glibc's aligned mmap for new heaps leaves little randomness, and freed stacks and heap chunks are cached and reused, so a leaked address stays useful. The loader also does not validate ELF program header order, letting a crafted file remap libc, and a kernel check against mmap_min_addr that assumes a hardcoded page size can cause permission errors and denial of service when the sysctl is raised.\n\nThe speaker proposed fixes: reserving unmapped holes with PROT_NONE, validating segment order in the loader, separating stack canaries from the stack, and choosing random free gaps in the kernel's mmap search. A kernel prototype was tested on a recent Ubuntu release, with added search overhead and limits to 64-bit systems. The takeaway is that predictable region placement turns small leaks into full layout disclosure, so defenders should treat loader and mapping behaviour as part of the exploit surface.",
       "durationSeconds": 2855,
       "conference": "offensivecon",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "Rh5lDM8O4MA",
@@ -2430,19 +2480,20 @@
       "speakers": [
         "Keynote Day 1"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "rodrigo",
         "branco",
         "inside",
         "machine"
       ],
-      "teaser": "18 - Rodrigo Branco - Inside the Machine.",
-      "summary": null,
+      "teaser": "Argues that mitigations should be proven against real exploits and that offensive research should drive defensive investment.",
+      "summary": "The keynote challenges how the industry talks about mitigations. Vendors often say a defense \"raises the bar\" without saying against whom, in which scenarios, or by how much, and the maintenance cost of a mitigation is rarely weighed when it is proposed or revisited in later product generations. The speaker suggests a baseline: a proposed mitigation should fully stop at least three real vulnerabilities before it is accepted.\n\nThe talk then argues that people who propose mitigations need to understand exploitation. Conference presentations usually show a successful technique and leave out failed attempts, non-exploitable cases and the engineering work behind a working exploit, so watching one exploit does not give that understanding. The speaker points to language-theoretic security, which favors validating input at the point it enters a program, as conflicting with common secure development advice to check input close to where it is used. Academic work on formalizing heap exploitation and on the theory of why exploits are possible is presented as a way to model mitigations mathematically. Microsoft buying exploits to inform mitigations and the academic naming of ROP after practitioners had used the technique are offered as examples.\n\nThe closing argument is that defensive investment should be led by offensive researchers rather than by architects who lack that depth. The speaker said a forthcoming paper will use set theory to model exploits and mitigations, so practitioners can reason about both more rigorously.",
       "durationSeconds": 1955,
       "conference": "offensivecon",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "yU1BrY1ZB2o",
@@ -2482,11 +2533,12 @@
         "bug"
       ],
       "teaser": "18 - James Forshaw - New and Improved UMCI, Same Old Bugs.",
-      "summary": null,
+      "summary": "The talk revisits User Mode Code Integrity (UMCI), a Windows allowlisting feature introduced in Windows 8 and used on Windows RT and Windows 10 S. The kernel checks signatures against a policy file, and enlightened script engines such as PowerShell receive extra restrictions. The speaker's goal was arbitrary code execution without admin rights, using only built-in components.\n\nThe first route used a compiled HTML help file, which runs in the local machine zone, but COM object creation was blocked there. Examining how the check worked showed that class IDs were compared against a short hard-coded allowlist before CoCreateInstance ran. Per-user Treat As registry links let an allowed class ID resolve to a banned one. The registry editors were blocked, so the built-in regini.exe tool wrote the keys instead. An HTML object tag then supplied the allowed class ID directly, which gave .NET code execution and then PowerShell. A second bypass targeted cached image signatures. Requesting one mode of the cache signing call needs no protected process, and a window existed between hashing a file and writing the cache attribute in which the file could still change. That let an unsigned copy of Process Explorer run.\n\nThe speaker judged most goals met, though drop-and-run still needed user clicks. Later builds such as 1709 blocked more binaries, but a demo on an updated system still showed one route working, with details left for public references. The takeaway is that an allowlist is only as strong as every step that resolves and verifies a component, especially when the check and the use happen at different times.",
       "durationSeconds": 1640,
       "conference": "offensivecon",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "kSQVGFbTfqE",
@@ -2559,14 +2611,14 @@
       "speakers": [
         "Dissecting QNX"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "wetzel",
         "abbasi",
         "vulnerability-research"
       ],
-      "teaser": "Coverage of 18 - Jos Wetzels and Ali Abbasi from the conference program.",
-      "summary": null,
+      "teaser": "Analyzes QNX 6 and 7 random number generators and exploit mitigations, finding weak entropy and broken defaults.",
+      "summary": "The talk examines QNX, a POSIX-style real-time microkernel operating system used in automotive infotainment, network routers and industrial and medical devices. Since QNX is closed source, the researchers worked from reverse engineering. They outline its attack surface, including local services, remote network services and a history of setuid and permission bugs, then focus on the random number generators and exploit mitigations of QNX 6 and 7.\n\nQNX 6 seeded its user-space generator from weak boot-time values and never fed runtime entropy back in, while the Fortuna-based redesign in QNX 7 still depends on weak runtime sources. QNX 6 ASLR offered about 4.5 bits of min-entropy, and a demo service was brute-forced to a root shell in seconds. Stack canaries averaged under eight bits, the stack stayed executable unless a startup flag was set, and the RELRO fix in 6.6 left the global offset table writable. Information leaks and QNET's trust of user IDs rounded out the findings.\n\nMany issues were fixed in QNX 7 and patched in 6.6, but embedded update cycles mean flawed devices will stay in the field for years. The takeaway for practitioners is to check startup flags, entropy sources and integration choices on any QNX firmware they assess.",
       "durationSeconds": 2980,
       "conference": "offensivecon",
       "viewCount": 1800,
@@ -2580,18 +2632,19 @@
       "speakers": [
         "Surprise Rant"
       ],
-      "track": "community",
+      "track": "policy",
       "topics": [
         "schneeweisz",
         "vulnerability-research",
         "threat-detection"
       ],
-      "teaser": "Coverage of 18 - Jörn Schneeweisz from the conference program.",
-      "summary": null,
+      "teaser": "Gives a tongue-in-cheek critique of the security industry, from persistent bugs to layered abstractions and rising software complexity.",
+      "summary": "The talk was an unscripted rant given in an opening slot after a scheduled keynote speaker could not attend. The speaker argues that the industry mostly patches individual holes instead of fixing root causes. Old bug classes such as cross-site scripting, SQL injection and memory corruption still turn up, and eliminating one of them would upset the bounty economy.\n\nSeveral examples support the argument. The speaker describes finding application secrets committed to GitHub and a disclosed flaw in an ISP customer management panel, where a follow-up check of session cookies suggested only about 80 percent of installations had been patched. Mitigations such as non-executable memory are portrayed as making exploitation harder rather than solving it, and antivirus software as adding its own attack surface. Layered abstractions, from compilers removing security checks to modern software growing with Moore's law, are contrasted with a Commodore 64 that one user could understand fully.\n\nThe closing section contrasts the lenient input-handling principle, often called Postel's law, with the strict parsing approach of LangSec, noting that developers often pick leniency to meet deadlines. The speaker sees no easy fix such as starting from scratch, since people will not abandon their devices. The takeaway is modest: treat abstractions as hiding risk, treat mitigations as partial, and expect these problems to persist.",
       "durationSeconds": 1833,
       "conference": "offensivecon",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "mpfKN1URqdQ",

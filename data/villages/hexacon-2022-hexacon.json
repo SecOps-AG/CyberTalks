@@ -73,8 +73,11 @@
       "youtubeId": "LxoHSrrGaNA",
       "slug": "2022-hara-kirin-dissecting-huawei-mobile-devices-by-maxime-peter",
       "title": "2022 - Hara-Kirin: Dissecting Huawei Mobile Devices by Maxime Peterlin & Alexandre Adamski",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Maxime Peterlin",
+        "Alexandre Adamski"
+      ],
+      "track": "mobile",
       "topics": [
         "mobile",
         "hara-kirin",
@@ -82,7 +85,7 @@
         "huawei",
         "device"
       ],
-      "teaser": "Security researchers examine technical aspects of 2022 - Hara-Kirin: Dissecting Huawei Mobile Devices by Maxime Peterlin & Alexandre Adamski.",
+      "teaser": "Dissects the privileged boot chain, security hypervisor and TrustZone components of Huawei Android phones.",
       "summary": "Why Huawei devices matter\n\nMaxime Peterlin and Alexandre Adamski of Impalabs walk through privileged components on Huawei mobile devices, motivated by the vendor's large market share and limited public research on high-end Kirin platforms. They cover boot chain, a security hypervisor, and TrustZone implementation.\n\nBoot chain exploitation\n\nStarting with a P30 Lite (Kirin 710), they recovered an signed but unencrypted X-loader from firmware updates. An X-modem USB recovery flaw allowed unverified payload addresses, yielding arbitrary write and code execution because boot-CPU memory was RWX. Emergency download mode via a test-point short enabled the attack path.\n\nHypervisor enforcement\n\nHuawei's hypervisor keeps a read-only copy of task credentials to detect privilege escalation on syscalls or file access, restricts executable pages to kernel and module code at EL1, and hides critical peripheral memory from EL0/EL1. It enforces policy through a second stage of address translation beyond the kernel's virtual-to-intermediate mapping.",
       "durationSeconds": 2346,
       "conference": "hexacon",
@@ -94,7 +97,9 @@
       "youtubeId": "4uZVw_rt0co",
       "slug": "2022-attacking-safari-in-2022-by-quentin-meffre",
       "title": "2022 - Attacking Safari in 2022 by Quentin Meffre",
-      "speakers": [],
+      "speakers": [
+        "Quentin Meffre"
+      ],
       "track": "red-team",
       "topics": [
         "attacking",
@@ -102,12 +107,13 @@
         "quentin",
         "meffre"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 2022 - Attacking Safari in 2022 by Quentin Meffre.",
-      "summary": null,
+      "teaser": "Explains how Safari's layered mitigations, from JIT write protection to the JIT cage, raise the cost of browser exploitation.",
+      "summary": "The talk examines how much harder it has become to gain code execution inside Safari's web content process on iPhone in 2022. It frames a browser exploit as a chain: a primitive that leaks object addresses and forges objects, an arbitrary read and write step, and then bypasses for mitigations before arbitrary code runs. The focus is the first stage, reaching code execution in the web content process.\n\nThe core of the talk is a timeline of the mitigations Safari gained from 2016 onward and how each was attacked. Early JIT write protection fell to code-reuse chaining without control flow integrity, and the hardware-enforced APR switch was bypassed by jumping into the function that set its register until shared read-only pages closed that route. The Gigacage separated typed-array buffers, but attackers moved to other object types for arbitrary writes. Structure ID randomization, pointer authentication, JIT code signing and the newer JIT cage each closed specific techniques, and the speaker notes that several bypasses were found and then fixed in hardware and software.\n\nThe closing message is that a 2022 Safari exploit needs a browser bug plus a fresh write primitive and bypasses for PAC, APR and the JIT cage, which may make a JavaScript-only next stage attractive. The speaker suggests attackers may eventually need an entry point other than the browser, though the JavaScript engine remains strong against these defenses.",
       "durationSeconds": 1533,
       "conference": "hexacon",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "TUHcZptN6Jk",
@@ -143,12 +149,13 @@
         "service",
         "ophir"
       ],
-      "teaser": "Security researchers examine technical aspects of 2022 - Discovering a 0-Day in MS-RPC service by Ophir Harpaz & Stiv Kupchik.",
-      "summary": null,
+      "teaser": "Shows how a cached security callback in a Windows RPC service let a remote client reach operations meant only for local callers.",
+      "summary": "The speakers examine Microsoft RPC, the decades-old remote procedure call system that Windows services use for local and network communication. They walk through interfaces, endpoints, transports and bindings, then the security model: connections are unauthenticated by default, and a server may register a security callback that checks each connection. The runtime caches that callback's result per interface, so an allowed call can let later calls skip the check.\n\nTo find candidates at scale, they built a scraper that scans binaries for RPC interface structures and reads registration flags and callback pointers, flagging servers with cached callbacks. The workstation service stood out because its callback restricts several operations to local callers. Since the service shares a host with services that register for authentication, a remote client could authenticate through a shared provider, have an allowed call cached, and then reach the restricted operations. A client flag that places the resulting network mapping in the global namespace made the effect visible. A demo showed a drive mapping created on a target that pointed to an attacker-controlled SMB server, capturing the victim's authentication.\n\nThe issue was classed as an elevation of privilege and has been patched. The team reports a few more bugs found with the same method, and over a hundred RPC servers with cached callbacks still left to examine. Future work includes automated callback analysis and fuzzing. For practitioners, the lesson is that older RPC interfaces can hide access-control gaps, and cached authorization decisions deserve scrutiny.",
       "durationSeconds": 2347,
       "conference": "hexacon",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "k_F4wHc4h6k",
@@ -215,19 +222,22 @@
       "youtubeId": "ffBuY7ON57g",
       "slug": "2022-a-journey-of-fuzzing-nvidia-graphic-driver-leading-to-lpe-e",
       "title": "2022 - A journey of fuzzing Nvidia graphic driver leading to LPE exploitation by Thierry Doré",
-      "speakers": [],
+      "speakers": [
+        "Thierry Doré"
+      ],
       "track": "red-team",
       "topics": [
         "fuzzing",
         "exploitation",
         "driver"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for 2022 - A journey of fuzzing Nvidia graphic driver leading to LPE exploitation by Thierry Doré.",
-      "summary": null,
+      "teaser": "Shows how snapshot fuzzing of an Nvidia Windows kernel driver uncovered bugs that chain into a local privilege escalation.",
+      "summary": "Thierry Doré explains why he targeted the Nvidia Windows graphics driver for fuzzing. Its entry points are simple enough to analyse without deep reversing, the attack surface is large but clearly bounded, and earlier research had already documented part of its communication protocol and found bugs. He used the WTF snapshot fuzzer, which runs code under coverage inside a virtual machine and restores memory between iterations. He chose its Bochs CPU backend because the tool is written in C++.\n\nThe kernel and user-mode components of the driver talk through the DxgkDDI escape interface, using messages with a magic tag, a size, a module tag and a command ID, with no public format. A corpus of recorded messages reached only about 40 percent coverage. To improve it, he used the Triton symbolic execution engine to invert branches in validation callbacks and generate valid messages, raising coverage to roughly 80 percent. The campaign turned up several bugs, including an out-of-bounds read that leaks data-section contents such as a stack cookie and driver pointers, and an out-of-bounds write through an unchecked array index.\n\nHe chained these bugs into a local privilege escalation. The leak let him recover the addresses he needed, and a reconstructed object redirected a function pointer, since the driver was built without control-flow guard. The final stage ran code from an executable buffer. A live demo on an RTX card under up-to-date Windows launched an elevated command prompt. Limitations included a process-ID check that forced a fresh process for each attempt. The takeaway is that snapshot fuzzing with a good input generator is within reach for non-specialists, and Nvidia fixed the reported bugs quickly.",
       "durationSeconds": 1427,
       "conference": "hexacon",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "CD8HfjdDeuM",

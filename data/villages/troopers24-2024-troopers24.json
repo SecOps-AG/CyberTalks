@@ -282,11 +282,12 @@
         "privilege"
       ],
       "teaser": "Evaluates 10 Years of Windows Privilege Escalation with Potatoes and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "This talk traces ten years of Windows privilege escalation techniques known as potatoes, starting with a 2014 local NTLM reflection issue. It explains how Microsoft separates security boundary violations, which it fixes, from safety boundaries and expected behaviour, which often are not. The common trigger is DCOM: a malicious client makes a privileged COM server resolve an attacker-controlled OXID resolver, letting the attacker capture and reuse its authentication.\n\nThe middle walks through the family of variants. Hot Potato and Juicy Potato abused service accounts holding impersonation rights to reach SYSTEM, and Juicy Potato's custom port was later closed. Rogue Potato worked around that with a redirector and a fake port mapper. Remote Potato Zero relayed the NTLM authentication of a user logged on in another session, limited by SMB signing. Local Potato abused a reserved field in local authentication to write files as SYSTEM, and its fix left HTTP variants working. Other cases activated AD CS and a licensing service reachable by members of the Distributed COM Users group, with a Silver Potato variant relaying CredSSP through a forged DNS name in the SPN. A newer local case, Fake Potato, was also described, reported to Microsoft and awaiting a fix.\n\nThe closing advice is that many fixes were partial or never implemented, and that relaying remains possible wherever signing or extended protection is missing. Defenders should disable NTLM where possible, enforce signing and extended protection, protect their endpoints, and treat the DCOM-related groups as tier zero.",
       "durationSeconds": 3273,
       "conference": "troopers",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "RY-Ta9bctEo",
@@ -395,7 +396,9 @@
       "youtubeId": "W1Tn_-OExIM",
       "slug": "the-almost-complete-ldap-guide",
       "title": "The (almost) complete LDAP guide",
-      "speakers": [],
+      "speakers": [
+        "Sapir"
+      ],
       "track": "blue-team",
       "topics": [
         "ldap",
@@ -405,11 +408,12 @@
         "almost-complete"
       ],
       "teaser": "Details the (almost) complete LDAP guide and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk is a broad walkthrough of LDAP as it is used in Active Directory. The speaker explains who relies on LDAP, including Windows itself, whose default behavior can resemble attacker activity and should be known as a baseline before writing detections. Core query parameters are covered: base object, scope, dereference, size and time limits, filters, attributes and controls. The talk also covers the ports involved, the bind types, and why traffic on port 389 is often GSS-API encrypted, while simple binds expose clear text credentials.\n\nThe middle section explains how to decrypt GSS-API sessions. For Kerberos, the chain runs from a TGT hash through the AS and TGS responses to the key that protects the bind response and then the LDAP message. For NTLM, the decryption uses a domain controller or user hash, derived session keys and RC4 in a fixed order. The speaker then covers ADWS, which carries LDAP-style queries inside SOAP messages on a different port and is unwrapped on the domain controller, so it is easy to miss in LDAP monitoring. A decryption tool is demonstrated that parses the messages and flags signatures of common enumeration tools, based on their filters and requested attributes. Examples include ADExplorer, BloodHound, Certify and SharpADWS.\n\nThe closing part turns to defense. Simple PowerShell LDAP queries can surface risky configurations, such as accounts with service principal names and Kerberos pre-authentication disabled, nested group memberships and GPO metadata. ETW providers on clients and domain controllers can record LDAP and ADWS queries once registry settings are changed, at the cost of large log volumes. The main takeaways are to decrypt or monitor encrypted LDAP and ADWS traffic, protect the hashes needed for decryption, and know the normal query patterns in your own environment.",
       "durationSeconds": 3075,
       "conference": "troopers",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "D_biIsaxaAY",
@@ -687,11 +691,12 @@
         "hood"
       ],
       "teaser": "Presents apple CarPlay - Whats Under the Hood and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The talk looks at how Apple CarPlay works internally, mainly through reverse engineering and protocol analysis. The speaker describes the test setup: a standalone head unit, a wireless adapter that bridges the iPhone to the head unit over Wi-Fi, and a notebook connected over Lightning to capture traffic. Testing in a real car was impractical, so the bench setup was chosen to make packet capture easier.\n\nThe middle of the talk maps the system. Several daemons, including the CarPlay application, accessory and media server processes, cooperate over XPC and Objective-C frameworks. Connection setup begins over Bluetooth Classic, after which data moves over Wi-Fi, and AirPlay carries the video stream. The iPod Accessory Protocol v2 handles accessory data and the MFi-based authentication, with both sides exchanging certificates. Touch input is sent back as hit reports, mapped onto a virtual display by the phone, and the rendered video is streamed to the head unit.\n\nOn security, the speaker reports that a simple flooding test made the head unit unresponsive. Replay attacks and extracting MFi keys were judged impractical. A finding was reported to Apple earlier in the year, but details were withheld at the time of the talk. The practical takeaway is that the design is hard to attack at the authentication layer, while the availability of the head unit and the video path remain the most exposed areas.",
       "durationSeconds": 1902,
       "conference": "troopers",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     }
   ]
 }

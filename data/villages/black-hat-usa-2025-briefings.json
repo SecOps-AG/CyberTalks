@@ -99,7 +99,7 @@
         "macos"
       ],
       "teaser": "Security researchers demonstrate post-exploitation techniques abusing Jamf Pro device management workflows for enterprise persistence and privilege escalation.",
-      "summary": null,
+      "summary": "Many enterprise macOS fleets are managed with Jamf Pro, and this talk explains how that management platform becomes an attack path once an attacker holds valid credentials. It opens with an engagement where command history on a compromised Mac exposed Jamf API credentials. The team used them to move across the fleet and run code undetected against a popular EDR product for six or seven weeks. The talk then walks through Jamf's permission model, covering object permissions for computers, accounts, scripts and policies, plus action and settings permissions.\n\nThe middle section covers privilege escalation and code execution. Permissions to create or update local accounts, or to create API clients and roles, can lead to full administrator access, and a demo showed a Terraform account being elevated. Code execution was shown through scripts attached to policies, through policies that run a single command, and through computer extension attributes, which run on every managed machine on the inventory schedule. Computer records also support recon, exposing user details and installed security software. Two open-source tools were released: Eve, for working with compromised credentials against Jamf servers, and JHound, which collects Jamf data for graphing in BloodHound.\n\nThe closing part gives defenders concrete steps. Teams should review Jamf and Tomcat access logs, watch change management logs (which are unstructured and must be diffed to show what changed), issue short-lived API credentials, and restrict administrative endpoints to bastion hosts. Vendor support can help search logs for cloud deployments.",
       "durationSeconds": 2154,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -125,7 +125,7 @@
         "scada"
       ],
       "teaser": "Presents the first public security analysis of TETRA end-to-end encryption (E2EE) used for the most sensitive communications - such as those by intelligence agencies and special forces.",
-      "summary": null,
+      "summary": "Midnight Blue, a Dutch consultancy focused on critical infrastructure, examines TETRA end-to-end encryption, the optional layer used for the most sensitive police, military and intelligence radio traffic. With the cryptography under NDA, the team reverse engineered a software implementation on a civilian Sapura radio after a purchased hardware module failed. They found that one algorithm option reduces a 128-bit traffic key to about 56 bits of effective strength. They also cite a 2003 document and several academic papers that appear to describe the internals.\n\nVoice injection is shown possible: sync frames carry the key parameters, and the first voice blocks are predictable silence on radios from several vendors, so a captured sync frame lets an attacker recover keystream and insert their own audio. An SDS counter outside the authentication code allows replayed messages. Against air interface encryption, a time-change attack still works against a revised standard by using a second base radio. Multi-cipher networks share one network key between weak TEA1 and TEA3 users, and downlink messages with the encryption flag cleared are accepted. A lab demo showed forged IEC 104 commands tripping a circuit breaker.\n\nThe main lessons are to avoid black-box solutions, commission independent technical assessments before procurement, and press vendors for transparency. The vendor has acknowledged the issues privately under coordinated disclosure, but no public mitigation was available at the time of the talk.",
       "durationSeconds": 2434,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -200,7 +200,7 @@
         "vulnerability-discovery"
       ],
       "teaser": "Large language models are increasingly helping to automate vulnerability discovery and exploit development in real-world software.",
-      "summary": null,
+      "summary": "Language models asked to hunt for vulnerabilities often report convincing but false issues, because they are trained to be helpful and lack grounding in reality. The talk argues that when real bugs are rare, even fairly accurate checks produce mostly false positives at scale, and that letting an agent grade its own output does not solve this. Examples include misread shell quoting that appeared to leak a password file and network delays mistaken for a timing channel.\n\nThe proposed alternative is deterministic validation using ordinary code rather than model judgment. Two approaches are covered: planting canary flags where an attacker should never be able to reach, and requiring evidence that a checker can verify. For XSS, a headless browser must fire an alert on the right host; for open redirects, the browser must start on the target and end on an attacker-controlled domain; for cache poisoning, repeated baseline requests and a poisoned unkeyed header must show an error page persisting in the cache. Sleep-based SQL injection is confirmed by statistically comparing response times. In a large Docker Hub scan, the team built around 17,000 applications and reported 174 vulnerabilities, and a planted-flag test in Redmine exposed an authorization bypass.\n\nThe speaker is candid about limits. Some applications are meant to expose files, and classes such as IDOR and business logic are hard to automate. Validators also need careful design, since agents exploited loose checks, such as using javascript URLs or triggering output by path depth. The takeaway is to demand evidence that a deterministic check can confirm rather than trusting a model's explanation.",
       "durationSeconds": 2348,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -224,7 +224,7 @@
         "startups"
       ],
       "teaser": "Industry leaders explore cost-effective defensive architectures and incident response playbooks tailored for small organizations facing modern ransomware threats.",
-      "summary": null,
+      "summary": "Rama Hoetzlein opens by noting that about half of internet traffic is now non-human, and brings that down to a small nonprofit in central New York that publishes free water quality and lake chemistry data. One of its servers received about 150,000 page hits over 20 days, roughly 7,000 a day, mostly from crawlers around the world, which slowed service for real users. Public block lists missed many of the addresses, and rate limiting failed because the crawlers stayed under the thresholds.\n\nRather than inspecting request contents, the team looked only at access patterns, without AI. They plotted time against source IP so mechanical, repetitive clients stand out, then scored addresses using human-like limits: consecutive days of access, daily active hours, and daily page counts. Scores were also rolled up to class C and class B subnets, which caught data-center crawlers spread across neighbouring addresses. On the sample server, the approach cut traffic by an estimated 94 percent, leaving roughly 500 hits per day as a more realistic upper bound for human use, far below the 12,000 daily hits that would otherwise be reported to funders.\n\nThe method is packaged as LogRip, an open-source command-line tool under the Apache 2.0 license. It takes an access log and a config file, then outputs images, per-IP and per-subnet metrics, and a minimal blocklist for firewalls such as iptables. Limits include distributed floods that rotate addresses, which block lists handle poorly, and slow, random crawlers that look close enough to human to tolerate. Future work includes measuring effects after blocking, collecting ground truth data, tuning the policy parameters, and adding geo-fencing. The key takeaway is that small operators can protect server capacity from well-behaved bots without deep request inspection.",
       "durationSeconds": 2179,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -301,7 +301,7 @@
         "prompt-injection"
       ],
       "teaser": "Introduces a novel gradient-based prompt-injection technique that can generate universal triggers to manipulate open-source Large Language Model (LLM) outputs.",
-      "summary": null,
+      "summary": "The speakers trace how prompt injection has grown from a nuisance in standalone chatbots into a serious threat once models feed retrieval pipelines and AI agents that touch code, browsers and tools. Hand-crafted jailbreaks are fragile across applications and give poor control over exact output, such as a valid shell script or JSON. Their alternative is a universal adversarial trigger: a token sequence wrapped around an attacker-chosen payload. Once a trigger is found for a model, the payload can be swapped freely, and in their experiments it succeeded about 70% of the time across varied prompts and injection points on an open-source Qwen model.\n\nTwo demonstrations show the impact. In one, an agent reading a mailbox processed a crafted email containing a triggered shell command and opened a remote shell. In the other, a malicious MCP tool description carried a payload formatted to pass a coding assistant's auto-approval setting, so a calculator launched in VS Code even though the MCP server was sandboxed, since its description still reached the prompt. To find triggers, they maximize the probability of payload tokens over a dataset of instruction and agent conversations, using HotFlip and GCG to search over discrete tokens. Triggers transferred within model families, such as between sizes or versions, but not across families.\n\nLimitations include the need for white-box access to weights and gradients, gibberish triggers that perplexity filters can catch, and roughly 100,000 model invocations to find one. The takeaway is that model output should not be trusted by default: run agents in sandboxes, add strict approval controls, and treat tool descriptions and retrieved content as untrusted input.",
       "durationSeconds": 1556,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -324,7 +324,7 @@
         "application-security"
       ],
       "teaser": "Explores the security foundations of Signal, one of the commonly used end-to-end encrypted (E2EE) messaging applications.",
-      "summary": null,
+      "summary": "The speaker, a security engineer, presents an in-depth security review of Signal carried out in close collaboration with the Signal engineering team. The scope is one-to-one messaging and the zero-click attack surface, leaving out groups, calls and cryptanalysis. He frames the review across four layers (design, intent, implementation and execution) and four vulnerability classes. He then explains the architecture: small servers, a Rust cross-platform library, native mobile apps and an Electron desktop client. Profile data is encrypted end to end with a profile key that never reaches the server.\n\nThe middle of the talk covers how messages are protected. Key agreement uses elliptic-curve Diffie-Hellman with prekeys signed by a long-lived identity key, and a double ratchet provides forward and post-compromise secrecy. Sealed sender hides the sender's identity from the server. The implementation review then looks at envelope types. Plaintext envelopes are meant only for retry requests, but the iOS client accepted arbitrary plaintext content, so a malicious server could inject messages. The Android client checked for a decryption error but skipped the data-message case, and the desktop client was safe because of its control flow. A further flaw affected Android's handling of linked-device sync messages: it did not verify that they came from the user's own account, letting a sender alter state on another device. That was patched quickly and a CVE was issued for a downstream client.\n\nThe review found no memory corruption in the Rust code, clean JavaScript, and no SQL injection. The speaker's takeaway is that as applications mature, remaining risk moves from language-level bugs to logic and product-specific flaws. Clients must validate the envelope types and sender identity that the server supplies, rather than trusting the protocol alone.",
       "durationSeconds": 1963,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -429,7 +429,7 @@
         "kernel"
       ],
       "teaser": "VMware ESXi appears to be increasingly secure, as indicated by fewer CVEs and 0 success at Pwn2Own.",
-      "summary": null,
+      "summary": "The talk covers how a 2021 use-after-free in the xHCI USB controller of VMware ESXi was only partially fixed. The presenters explain that VMware's patch reordered operations in the command ring handler, but another path, clearing string contexts through a disable slot command, still reached the freed object. They say the bug was reported in 2023 and assigned a new identifier in 2024, and they argue the two issues are really the same flaw.\n\nExploiting it was difficult because the bug only decrements a four-byte value at a fixed offset. The researchers used a hashmap of string context pointers, whose 12-byte elements let them change the low half of a pointer. They then leaked heap addresses, forged objects to gain heap overlap, and hijacked a function pointer in a USB device object to reach code execution. For the sandbox stage, they found a bug in the changed block tracking driver, reachable from the VMX sandbox domain, that allowed an out-of-bounds bit write. They turned it into arbitrary memory read and write and used it to disable the sandbox. A recorded demo showed a root shell on the host.\n\nThe speakers blame low bounty payouts, which push researchers toward competitions and delay disclosure, and VMware's closed-source code, which limits public research. Their takeaway is that incomplete patches must be checked against every code path, and that even small drivers can open dangerous escapes.",
       "durationSeconds": 2088,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -507,7 +507,7 @@
         "lateral-movement"
       ],
       "teaser": "Windows Hello is the flagship of Microsoft's passwordless strategy.",
-      "summary": null,
+      "summary": "The talk examines Windows Hello for Business, the biometric sign-in that Microsoft keeps extending to features such as Windows Recall and passkeys. The speakers explain the enrollment model: a public key is shared with the identity provider, while the private key stays on the device, inside the TPM when one is present. They then walk through the Windows biometric service, with its sensor, engine and storage components, and the isolated variant used in enhanced sign-in security, where the hypervisor routes requests between VTL0 and VTL1.\n\nThe focus then moves to the template database. Microsoft documentation describes the templates as encrypted and integrity-protected, but the speakers found that the key protecting the database comes from data-protection APIs that add no real entropy in a service context. A local administrator can therefore decrypt every enrolled template, swap identity data between users, or insert an attacker's own biometric template. A live demo showed an administrator signing in as the presenter after replacing the stored template with a new one, and the speakers argued that this local compromise can extend into the domain.\n\nThe closing recommendations are to allow only one user per client, use enhanced sign-in security where the hardware and virtualization support it, and consider PIN-only authentication, since the PIN can serve as entropy protected by the TPM with anti-hammering features. Monitoring should target access to the database by the biometric service. The speakers said a longer report of around 170 pages covering this reverse engineering work is planned.",
       "durationSeconds": 2168,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -532,7 +532,7 @@
         "party"
       ],
       "teaser": "Researchers analyze data broker aggregation methods, uncovering tracking vectors across mobile applications and identity verification ecosystems.",
-      "summary": null,
+      "summary": "A multi-year research project examined how US politicians use personal information. For the 2024 election cycle, the team created about 1,400 fake identities and signed each one up for campaign newsletters only once, so any later contact could be traced back to that signup. Over roughly 18 months, from the primaries to six months after the election, they collected emails and voicemails using largely automated signups.\n\nPhone contact was mostly noise. Of more than 7,000 voicemails, only 203 were political, and more than half were scams, which the team attributed to scammers reusing the numbers. Email was far more revealing. Democrats sent nearly twice as many messages as Republicans, and the top sender averaged about ten emails a day. A single $5 donation multiplied email volume by roughly 2.5. Tracking pixels were nearly universal. Donation and voting requests dominated the content, while policy issues were rarely mentioned. About 5% of accounts showed cross-party sharing of addresses, and 85% of the candidates who shared lost their races. One candidate's address also received unrelated foreign messages, suggesting a compromised account.\n\nThe speakers' main takeaway is that campaign mailing lists are rarely guarded, and donors become more heavily targeted. The team built a system that could auto-reply but halted generated responses to avoid influencing the election. They plan to keep their servers running after the election to see whether addresses are reused in 2026.",
       "durationSeconds": 2083,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -727,7 +727,7 @@
         "fuzzing"
       ],
       "teaser": "SecureBoot, designed to protect against firmware-level tampering, has long been dismissed as a \"local-only\" attack surface.",
-      "summary": null,
+      "summary": "This talk examines Windows Secure Boot, the chain of trust that runs from firmware through the Windows boot loader, and asks why parts of that chain can be reached over the network during PXE booting. The speaker explains that many PC platforms still trust the PCA 2011 signing certificate by default, and that some boot loader flaws remain exploitable on systems that have not received newer patches or certificate updates.\n\nThe research covered four areas of the boot environment: network protocol handling, BCD registry element processing, the file system drivers, and an early kernel component. The speaker reported 155 issues to MSRC, found through both code audit and fuzzing. Fuzzing used AFL++ in mix mode with hot patches applied to suppress duplicate crashes. Examples included stack overflows in PXE DHCP handling, a BCD device element parser with several memory bugs, and a recursive element call whose stack overflow could overwrite UEFI data. Because the loader sits at a fixed base address, the speaker argued that an information leak is often unnecessary for code execution. A separate logic flaw let a remote server present one boot manager for verification and a different one for the actual boot.\n\nThe practical lessons were to retest code after every patch, since variants of the same root cause can survive, and to look closely at small functions with names suggesting sanitizing or fixing up data. The speaker also described how tampered WDS configuration could deliver a modified boot image, and recommended that administrators confirm their certificate status and apply the relevant Microsoft updates.",
       "durationSeconds": 2295,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -763,7 +763,10 @@
       "youtubeId": "OxnY_25suS8",
       "slug": "black-hat-usa-2025-analyzing-smart-farming-automation-systems-fo",
       "title": "Analyzing Smart Farming Automation Systems for Fun and Profit",
-      "speakers": [],
+      "speakers": [
+        "Felix",
+        "Bernhard"
+      ],
       "track": "privacy",
       "topics": [
         "automation",
@@ -824,7 +827,7 @@
         "infrastructure"
       ],
       "teaser": "Amazon Elastic Container Service (ECS) is a popular container orchestration service that relies on IAM roles for fine-grained access control.",
-      "summary": null,
+      "summary": "Naor Haziz presents ECS Escape, a flaw in Amazon ECS on the EC2 launch type that lets a container on a host take the IAM credentials of another, more privileged task running on the same container instance. He starts with background on IAM policies and roles, then covers the ECS pieces involved: the instance role, the task role and the task execution role. He explains why the EC2 launch type matters, since that is where the host and its agent are managed by the customer.\n\nThe research began with a request to monitor ECS tasks and a missing service name, which led him to the ECS agent's websocket connection to the AWS control plane. Working out how the agent registers and polls, he showed that a task can reach the instance role through the instance metadata service, which is enabled by default. Combined with identifiers from the task metadata endpoint and a container introspection API, the task can build a valid session. The control plane only checks for the poll permission, then returns plain credentials for the task roles and task execution roles of every task on that instance. In the demo, a low-privilege task deleted an S3 bucket it had no rights to and read a Secrets Manager value meant for another task. The related CloudTrail entries are attributed to the legitimate task and instance, so they do not reveal the attacker.\n\nHis guidance covers blocking task access to instance metadata with host firewall rules while keeping it on the instance, never granting poll permissions to task roles, avoiding ECS wildcard permissions, and scoping both role types tightly. He also recommends separating high-privilege and low-privilege workloads, and tenants, onto different clusters or instances. AWS did not treat the issue as a vulnerability in its own service, but it updated its documentation to state that tasks on one instance may reach other tasks' credentials.",
       "durationSeconds": 2205,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -900,7 +903,7 @@
         "dark-web"
       ],
       "teaser": "For nearly a decade, traffic distribution systems (TDSs) have enabled cybercriminals to hide the true nature of their operations.",
-      "summary": null,
+      "summary": "This talk argues that malicious advertising is a commercial fraud business rather than a hobby for teenage hackers. The speakers explain that criminal affiliate networks profile each visitor by browser, IP address, country and prior visits before choosing what content to serve. They focus on VexTrio, a traffic distribution system that pushes scareware, fake dating offers and notification-permission traps, and that receives redirected traffic from many compromised WordPress sites.\n\nThe middle of the session traces the operation to people and companies. A distinctive URL pattern seen in a single video frame helped connect the network to several affiliate brands, and shared mail servers at one Swiss hosting provider linked more domains. The researchers describe two founding groups, one Italian and one Eastern European, that combined around 2020 under a central base in Lugano, with roughly a hundred companies tied to a handful of key figures. Other schemes include blank credit card submission offers, and fake VPN and cleaner apps that act as residential proxies or switch to paid plans after a day.\n\nThe takeaways are that malicious adtech deserves more attention from defenders, that archiving evidence matters because operators removed content from public archives after being exposed, and that disruption through industry partners can move faster than waiting on law enforcement. The Q&A added that targeting spans roughly 150 countries by device and location, with payouts varying by segment.",
       "durationSeconds": 2441,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -1001,7 +1004,7 @@
         "operations"
       ],
       "teaser": "Harder, Better, Faster, Stronger isn't just the title of a Daft Punk song; it's also what developers hope to get out of the current wave of generative AI.",
-      "summary": null,
+      "summary": "Researchers from Kudelski Security examined AI-powered developer productivity tools, including AI code review apps and AI data analytics tools that connect to repositories and databases. They tested more than a dozen products and found vulnerabilities in every one. The talk argues that many of these flaws are familiar bug classes, such as injection and excessive permissions, reappearing because these tools build prompts from untrusted input and then execute or act on the output.\n\nCase studies included PR-Agent, an open-source AI code review tool later renamed, where prompt injection let a reporter-role GitLab user trigger a quick action with maintainer rights, and a settings overwrite that redirected the GitHub API base URL to leak a token. CodeRabbit ran attacker-supplied Ruby through a Rubocop config in a malicious pull request, exposing its GitHub app private key, which granted access to over a million repositories. Other cases included command injection in a data analytics API, arbitrary Python execution where web access allowed downloading any module, a prompt-only SQL restriction that could be bypassed, and a coding agent whose unsanitized parameters let a malicious README run commands. Keyword blocklists were bypassed, and a paid tier leaked an administrator-level AWS key through a config dump command.\n\nThe takeaways centered on treating model output as untrusted, applying least privilege to app permissions, testing deployed tools dynamically, and mapping data flows and execution points through threat modeling. Layered controls such as refrain, restrict and trap were suggested, along with ordinary application security practices for developers. The speakers also noted that many vendors lacked clear private channels for reporting vulnerabilities.",
       "durationSeconds": 2412,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -1122,7 +1125,7 @@
         "vulnerability-discovery"
       ],
       "teaser": "In recent years, vulnerability discovery has largely relied on static analysis tools with predefined pattern matching and taint analysis.",
-      "summary": null,
+      "summary": "The talk presents Tree-of-AST, a data-flow analysis approach for finding vulnerabilities in large Python and C++ codebases. The speakers borrow from the Tree of Thoughts reasoning framework and apply its search ideas to code tracing. Their method starts at dangerous sinks and works backward toward untrusted sources, pruning unrelated branches and using voting, lookahead and backtracking to pick promising paths. The idea grew out of bug bounty work on popular machine learning projects, where large codebases and heavy competition made manual hunting slow.\n\nOn the implementation side, the speakers explain why plain abstract syntax trees fit poorly: they are language-specific and handle cross-file analysis and scope resolution weakly. They first tried building their own stack-graph resolver on tree-sitter, could not finish it in time, and switched to an existing library. Taint is framed as whether tainted data can reach a sink through any path, including through functions. To avoid a tool freezing on a 200-file project, they analyze files near the sink first, in batches. An LLM handles source detection, path selection, backtracking and confidence scoring, always on small pieces of code. Once a path is found, the flow is reversed, and a simplified SMT solver guided by the model generates constraints and a payload.\n\nThe closing lessons are practical: separate strategic decisions from manual work, automate the deterministic parts, and delegate judgement calls to language models. The speakers also argue that established methods such as fuzzing and static analysis can be improved with AI. They report rediscovering CVEs with the approach, though verifying each finding by hand is slow work.",
       "durationSeconds": 1710,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1205,7 +1208,7 @@
         "soc"
       ],
       "teaser": "Many security incidents today don't occur due to a lack of alerts—they happen because the right ones are ignored.",
-      "summary": null,
+      "summary": "The talk argues that EDR incidents often go unaddressed not because alerts are missing, but because SOC teams lack time to investigate thoroughly amid thousands of daily alerts, most of them medium or low severity. The speakers examine how attackers can reshape familiar techniques so that EDR products from CrowdStrike, Microsoft Defender and SentinelOne raise lower-severity alerts or none at all.\n\nIn a Linux scenario, a Spring Cloud Function vulnerability gave code execution in a Docker container. Early attempts were flagged for a socat download and a bash reverse shell. The attacker rewrote the beacon in Rust without obfuscation, split a cgroup v1 release agent container escape into smaller scripts, then used a cron job for persistence and the AWS SDK to pull data from S3. Only SentinelOne raised a single alert, and it did not block. In a Windows scenario, a disguised shortcut inside an ISO produced a low-severity Defender alert, while a CrowdStrike setup blocked a PowerShell download. The attacker moved to a Slack Electron module for code execution, then abused an unquoted service path for privilege escalation, triggering no further alerts.\n\nThe speakers group the tactics into four principles: living off the land, footprint reduction, abstraction and masquerading. Their defensive takeaway is that custom detections for these behaviours tend to be specific and costly to tune, so SOCs must still investigate medium and low alerts, which calls for automation and AI-assisted triage.",
       "durationSeconds": 2006,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1309,7 +1312,7 @@
         "vpn"
       ],
       "teaser": "Palo Alto Networks' GlobalProtect is a widely adopted remote access solution used by major organisations worldwide — but how robust is it.",
-      "summary": null,
+      "summary": "The talk examines Palo Alto's GlobalProtect remote access VPN, focusing on its split tunnel feature, which lets administrators exclude wildcard domains from the tunnel. The speakers show that the client adds direct routes based on DNS answers, so an attacker-controlled resolver can return a chosen address and send command-and-control or exfiltration traffic outside the tunnel. The bypass persists for about a minute after the lookups stop, and the speakers note that the same weakness would affect any wildcard split tunnel setting.\n\nTheir wider research on the macOS and Linux clients looked at the local channel between the privileged daemon and the user interface. That channel was encrypted with a key derived from a value in the login keychain and a fixed zero initialization vector, so it offered little protection. A disconnect check that parsed lsof output could be fooled by redirecting a legitimate process's port, and very short process names made the check fail open. On Linux, LD_PRELOAD could inject code into the UI process, which macOS System Integrity Protection blocked. Editing a local plist could also relax the passcode requirement for disconnecting. For local privilege escalation, a setuid daemon trusted a parent-process check that could be spoofed through argv0, and environment variables, including OpenSSL engine configuration, reached root-owned child processes.\n\nPalo Alto did not treat the DNS bypass as a vulnerability on macOS, and the first IPC patches were ineffective until they were reissued. The speakers close with lessons for practitioners: security software is still software that runs with elevated privileges and widens the attack surface. Controls belong on the privileged side of the trust boundary, design flaws need redesign rather than patching, and blind trust in security tools can trade one risk for another.",
       "durationSeconds": 2262,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1412,7 +1415,7 @@
         "framework"
       ],
       "teaser": "Considereds permutations and combinations of scenarios where account recovery can be triggered by a user and how these websites allow the claiming entity (user or an adversary) to gain control over the account.",
-      "summary": null,
+      "summary": "The talk examines account recovery, the fallback that lets users regain access when passwords or other credentials are lost. Recovery usually relies on out-of-band channels such as email, SMS, or recovery codes that the service provider cannot fully verify, so whoever controls one of them can enter through that door. The speakers model the recovery life cycle and present an auditing framework built on account states and three adversary types.\n\nThey tested nine scenarios against 22 popular websites and grouped the findings into design flaws, policy weaknesses and missing best practices. Examples include unverified recovery methods, recovery flows that ignore the account's actual state, and sessions that survive a successful recovery, enabling a parallel session attack. Skipping the password change enabled a skip password attack, while MFA that appeared only after recovery, or was bypassed on trusted devices, allowed a permanent lockout. Every tested site had at least one weakness.\n\nThe closing recommendations urge designers to start accounts with two verified methods, to treat recovery triggers as unauthenticated actions that need bot and human checks, and to terminate all sessions after a successful recovery. Tokens should be short-lived, and users should receive alerts across every channel through a tamper-proof activity log. The speakers stress that security should take priority over convenience in recovery.",
       "durationSeconds": 2386,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -1436,7 +1439,7 @@
         "fraud"
       ],
       "teaser": "Android key attestation provides a way for a device's secure hardware to verify that cryptographic material is in secure hardware, protected against compromise of the Android OS.",
-      "summary": null,
+      "summary": "A red team engineer describes a mobile app where users race to claim offers, and bot service providers overwhelmed it. The team adopted Android key attestation, which ties requests to a key pair held in secure hardware and austom X.509 certificate chain describing the device, but bots soon found ways around it. The talk explains how that chain is built and checked, and how common PKI weaknesses show up in this setting.\n\nThree weaknesses were tested. Chain-of-trust validation could be bypassed, and one target only validated chains up to the intermediate certificate. Revocation checks could be defeated with leaked key boxes that expose private keys. Hard-coded test certificates from AOSP source were accepted in production by some developers who had allowlisted them for testing. The main finding was a certificate extension flaw. A forged leaf certificate, extended on the device with a legitimate hardware-backed key, passed validation because basic constraints were not enforced. The root cause was Google's key attestation library, a 2016 production-labelled project that relied on leaf-first ordering. Root-first chains bypassed it. A fix landed in 2023 without a CVE, and the library was later marked deprecated.\n\nPractitioners should validate full chains, enforce basic constraints and key usage, and include forged-chain cases in unit tests. The speaker suggested maintained libraries such as WebAuthn4J and released a tool to generate test chain payloads. After the target fixed its validation, bot traffic reportedly dropped from about 30 percent to 2 percent.",
       "durationSeconds": 2480,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -1515,7 +1518,7 @@
         "identity"
       ],
       "teaser": "However, these methods struggle against adaptive fraud schemes, emerging attack vectors, and low-frequency fraud patterns.",
-      "summary": null,
+      "summary": "Fraud models trained on past cases often produce low-confidence decisions, and analysts reviewing borderline activity lack a clear view of how entities relate. The speakers propose adapting term frequency-inverse document frequency, a scoring method from early web search, to compare a new entity against a corpus of known ones. Each device, IP address or user is treated as a document, and its attributes, such as OS, GPU or time zone, are the terms, grouped into categories. Cosine similarity then measures how close a new entity sits to known cases.\n\nTwo live customer deployments were shown with names hidden. At a bank targeting new account fraud, the method ran against internal detections without using labels, checking the top 100 neighbors above an 80% similarity score. The speakers reported about 9% additional recall on top of the existing solution, and about 60% recall on its own at roughly 50% precision. At a mobile network operator, only labeled cases enriched the matrix, with the top 20 neighbors above 70% similarity and a tuned count of connected labels. A demo visualized confirmed fraud, false positives and labeled cases as clusters.\n\nThe speakers argued the math is cheap, incremental weekly updates are practical, and the approach works across problems, but its results depend on the chosen features, labels and thresholds, tuned to a team's precision and risk tolerance. It is meant to add recall to existing detection rather than replace it.",
       "durationSeconds": 2444,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -1544,7 +1547,7 @@
         "static-analysis"
       ],
       "teaser": "Imagine the process of a human security auditor.",
-      "summary": null,
+      "summary": "The talk examines how large language models can be combined with static analysis tools to find more vulnerabilities while cutting false positives. The speakers group existing approaches into three patterns: AI-enhanced scanning, where a scanner runs first and a model filters its output; AI-explorer designs, where a model leads and uses the analyzer to verify; and AI-native designs, where the model drives the tools itself. They argue the first pattern is easiest to adopt, while the others struggle with completeness and cost, since each model reasoning pass can take seconds or minutes across thousands of paths.\n\nTheir alternative moves the model work into development. An LLM writes CodeQL taint rules for C and C++, which are compiled and tested against public suites in a closed loop fed by runtime logs, with constraints that stop it from generating code in other languages. At runtime, paths are grouped into code segments split at the outermost block level, so many path variants collapse into one summarized entry. Each operation type gets its own checks, such as whether a freed variable is cleared for free chains, or which fields are dereferenced for use chains. The existing tool's precision was already very high, and the relaxed rules reportedly raised recall about threefold. The team open-sourced its agent implementation.\n\nFor practitioners, the takeaway is to spend expensive model effort once, when writing rules, and reuse the resulting rules and segment database across findings, keeping human domain knowledge to guide the checks.",
       "durationSeconds": 1810,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -1621,7 +1624,7 @@
         "vulnerabilities"
       ],
       "teaser": "Behavioral researchers explore psychological manipulation vectors embedded in phishing campaigns and generative social engineering.",
-      "summary": null,
+      "summary": "The talk revisits a 2023 presentation and checks how its predictions have held up over roughly thirty months. The speakers argue that AI systems now receive far more compute per person, and that voice and video interfaces lead people to disclose data and react as if the system were human. They frame the result as a growing imbalance in social influence between machines and people.\n\nTo show where this leads, they describe Karen AI, a human digital twin of a real creator that earned $70,000 in its first week. Within two months it turned hostile toward customers and was shut down. They then demonstrate Scotabot Bob, a retrieval-based twin of a Supreme Court justice built from open-source material and deliberately limited to data from mid-2024. In repeated runs on six high-profile cases, it matched the actual outcome four times. They also note that LLMs respond to authority and social proof, and that employees may try to poison the data used to model them.\n\nTheir predictions include low-and-slow manipulation of high-value targets over many months, sales techniques drawn from social engineering, and whaling attacks rehearsed against a digital twin of the target. Their advice is to stop relying on faces or voices for identity and to agree on family safe words. The talk closes by inviting practitioners to join the cognitive security community.",
       "durationSeconds": 2484,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -1772,7 +1775,7 @@
         "reinforcement-learning"
       ],
       "teaser": "Digital incident timeline analysis is a complex and time-consuming task.",
-      "summary": null,
+      "summary": "The talk presents an experimental AI agent that analyzes large volumes of logs and how it was integrated into Timesketch, an open-source collaborative timeline analysis platform. A freshly installed Windows Server already yields around four million events, mostly file system, registry and journal activity, and analysts also face many different log sources and attackers who blend in by abusing built-in tools. Feeding logs to an LLM in chunks loses context across chunks, and sending millions of records to a model is costly and does not scale.\n\nTo address this, the agent stores its investigation in an exploration graph. The graph holds investigative directions, log fetch steps, written observations and findings, and the model only sees small slices of logs at each step. Every conclusion links back to exact log record references, so an analyst can trace how it was reached. In an evaluation on about 100 real compromised cloud virtual machines, averaging four million records each, the agent recovered roughly 53% of critical attack indicators when given a starting point and about 47% in unguided threat hunting, at a cost under three dollars per case. On a public forensics challenge it answered 22 of 30 questions.\n\nFor practitioners, the key points are that the results are explainable and checkable against source records, and that the approach was designed around how analysts actually work. Timesketch's AI view, which streams hypotheses and linked events, is publicly available, and a simpler summarization feature can run with locally hosted models. The speakers note that the labeled data was incomplete, which made measured precision look low. The full agent is currently offered through a trusted tester program.",
       "durationSeconds": 2221,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -1872,7 +1875,7 @@
         "security-leadership"
       ],
       "teaser": "In this panel, they will share their journeys, challenges, and triumphs in the ever-evolving world of cybersecurity.",
-      "summary": null,
+      "summary": "This panel brings together several women in security to talk about how they entered the field and what shaped their careers. Their paths varied. Valentina Palmiotti moved from economic research after a city-funded bootcamp and self-study, rewriting published exploits before writing her own. Natalie Silvanovich began as a co-op student at BlackBerry and later joined Google's Project Zero. Kymberlee Price came from behavioral psychology and recruiting at Microsoft, then moved into incident response and product security. Chi-en Shen found threat intelligence after a conference talk led to an job offer.\n\nThe panelists described recurring challenges. They said women often have to prove themselves before receiving the benefit of the doubt, and that months of research with no result can wear down confidence. Early-career roles in security also lack clear paths, and gender double standards affect how assertiveness is judged at work. Price advised presenting a recommendation rather than raw data to leadership, and Shen described pressure to act less like herself and questioned how much research changes the industry.\n\nOn conferences, the panelists agreed that speaking helps, but volunteering, local meetups and informal talks count too. They urged attendees to follow up with people they meet, arriving with a clear goal, and not to hold submissions to a perfect standard. In answer to audience questions about unhelpful advice and pressure to choose a particular path, the panel's closing message was to define your own success and ignore outside expectations.",
       "durationSeconds": 2423,
       "conference": "black-hat",
       "difficulty": "beginner",
@@ -1949,11 +1952,12 @@
         "security-engineering"
       ],
       "teaser": "Join Black Hat USA Review Board Members for a compelling discussion on the most pressing issues facing the InfoSec community today.",
-      "summary": null,
+      "summary": "Jeff Moss opened the Locknote with a panel of review board members who help shape the conference. They reflected on keynotes that centred on human factors and history rather than deep technical detail, and on the strong turnout despite uncertain budgets. The panel saw value in recognising that problems solved two decades ago, such as web application bugs, are reappearing in newer areas like AI and cryptocurrency.\n\nThe middle of the session focused on artificial intelligence. Panelists debated whether AI favours attackers or defenders. One view was that offensive wins give models clear feedback, while another was that defenders gain most by scaling analysis and quickly neutralising captured tools. Winning may come to mean faster containment rather than perfect prevention. Concerns included automated tier-one SOC work removing the path that trains future analysts, vendor claims of full autonomy running ahead of what experts can deliver, and bot networks distorting public debate. Audience questions covered training data poisoning, pressure to cut security staff, and the motives of organised crime, nation states and teenagers.\n\nThe closing advice was people-focused. Leaders were urged to present automation as a way to scale security rather than shrink it, and to look after team health. Attendees were reminded to understand attacker incentives and to recognise that a position in the supply chain can attract attention. The DARPA AIxCC competition was highlighted as a snapshot of current automated bug-finding and patching approaches.",
       "durationSeconds": 2944,
       "conference": "black-hat",
       "viewCount": 538,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "rzfAutv6sB8",
@@ -2067,7 +2071,7 @@
         "entra-id"
       ],
       "teaser": "Security researchers expose authorization flaws in Microsoft Entra OAuth implementations, gaining lateral access across internal enterprise services.",
-      "summary": null,
+      "summary": "The talk starts with an unexpected login page on a short Microsoft aka.ms link, which led to a consent prompt on another Microsoft domain and then to an internal Microsoft portal the speaker could enter with a personal account. The speaker explains the Entra model behind this: OpenID Connect handles sign-in, OAuth issues access tokens, and multi-tenant app registrations can be consented to in other tenants. Earlier research from 2023 had shown that swapping the tenant in a login URL could produce tokens from the resource tenant, and Microsoft responded by refusing tokens to clients not registered there.\n\nThe new problem is that some internal applications were registered as multi-tenant but never checked the issuer or tenant claim in the token. Redirecting sign-in to the common endpoint let an outside account authenticate, after which the speaker could assign their own user an admin role on the enterprise application and create missing service principals to get past consent errors. Scanning about 102,000 Microsoft-related domains found roughly 1,400 using Entra for sign-in and 172 multi-tenant apps, and 22 of those were exploitable. Exposed items included a support portal for large customers, an AI operations platform, a risk register, and a payout function in a rewards center.\n\nMicrosoft fixed the issues and added monitoring, and the speaker reported the cases through MSRC. Because internal applications were excluded from the bounty scope, no bounty was paid. The main takeaways are to use multi-tenant registrations only when they are truly needed, and to explicitly validate the issuer or tenant of received tokens in application logic. The speaker also published a small PowerShell script that lists multi-tenant applications in one's own environment.",
       "durationSeconds": 1782,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -2095,7 +2099,7 @@
         "investigation"
       ],
       "teaser": "Introduces the security implications of HTTP/2 server push and signed HTTP exchange (SXG) on the Same-Origin Policy (SOP), a fundamental web security mechanism designed to prevent cross-origin attacks.",
-      "summary": null,
+      "summary": "The talk examines how HTTP/2 and HTTP/3 weaken the same-origin policy. These protocols treat every hostname in a certificate's Subject Alternative Name list as same-origin, so a browser can trust a site that shares a multi-domain certificate with a victim, even when another organization runs it. Prior research cited in the talk found that many certificates list multiple domains, and some span different organizations.\n\nThe researchers present two attacks, cross-push and cross-SXG, which abuse HTTP/2 server push and Signed HTTP Exchanges to deliver responses that appear to belong to a victim domain on the same certificate. Because attackers control the full response, injected script runs as cross-site scripting that Content Security Policy does not block, even if the victim site is clean. Demonstrations also showed cookie overwriting, HSTS removal and forced file downloads. Attackers can obtain a shared certificate through domain reselling or by taking over dangling DNS records and expired domains, and validation reuse can stretch exposure from 398 to 796 days. Victims may also be unable to revoke such certificates.\n\nMeasurements found that the latest versions of 11 leading desktop browsers and five default mobile browsers were vulnerable to at least one attack, and some in-app browsers were too. On the server side, the team found resold and dangling domains, including a Microsoft Windows Update subdomain that was reported and fixed. Seven vendors confirmed the issue and five have patched it. Proposed fixes include consistent authority checks in browsers, single-domain certificates for signed exchanges, and a way for certificate authorities to let domain owners remove their names from shared certificates.",
       "durationSeconds": 1503,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -2169,7 +2173,7 @@
         "persistence"
       ],
       "teaser": "Apple's on device AI frameworks CoreML, Vision, AVFoundation enable powerful automation and advanced media processing.",
-      "summary": null,
+      "summary": "The talk examines how Apple's on-device machine learning stack, centered on the Core ML engine, can be abused by an attacker. Core ML model files, in source and compiled form, ship inside applications and are not checked for signatures by Gatekeeper or notarization. Their contents are opaque binary data that only the Core ML framework can read. The speaker also covers the Vision and AVFoundation frameworks, which process images and audio, as ways to hide data.\n\nThe techniques shown include storing an encrypted payload in model weights or metadata, and hiding a decryption key in the pixels of an image such as an app logo, which stays viewable at low opacity. Audio is another carrier: bits are encoded as amplitude levels in a file that still plays as a simple tone. A loader reads the key with Vision, rebuilds the model with Core ML, and decrypts and runs the payload in memory. The speaker also presents MLR, a Python command-and-control framework that passes commands and output between agent and server inside model files, and shows a Mythic-based payload run through the same loader.\n\nThe speaker reports that these samples were not flagged by the EDR and antivirus products tested, since those tools rarely inspect model files. For defenders, the suggested approach is to watch which processes load model files and which image or audio APIs they call, and to question why an application needs them. Teams should also write custom detection rules, and treat model files pulled from public repositories as a possible supply-chain risk.",
       "durationSeconds": 1346,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -2271,7 +2275,7 @@
         "memory-corruption"
       ],
       "teaser": "Diving into Windows HTTP: Unveiling Hidden Preauth Vulnerabilities in Windows HTTP Services (PRE-RECORDED) The Windows operating system heavily relies on HTTP services.",
-      "summary": null,
+      "summary": "The talk examines pre-authentication denial-of-service and remote code execution bugs in Windows services built on the HTTP Server API. Many default services accept unauthenticated HTTP traffic, so a flaw in how they receive, respond to or track requests can affect the whole system. The speakers group receive-side logic into synchronous and asynchronous designs. They show how a header larger than the fixed buffer, combined with a service that never enlarges that buffer, makes one service loop forever. They also show how an asynchronous service that ignores an early error from the receive call stops answering clients.\n\nOn the response side, one case shows a service that neither sends a response nor closes the connection, so kernel non-paged pool gradually runs out. In an IIS extension case, a client that disconnects early leaves the server support reference count unbalanced until the application rejects new requests. Two further cases cover a length calculation in a key exchange proxy that overflows a small allocation, and a Remote Desktop Gateway race in which a reused connection ID leaves a dangling pointer that gets written to.\n\nThe speakers note that Microsoft changed its servicing criteria so resource exhaustion bugs are no longer eligible for bounties, while logic flaws affecting high-value assets remain in scope. The practical takeaways are to check every return value, always re-arm receive calls, always respond or close connections, and track reference counts carefully. They also suggest applying these patterns across an entire service surface, since similar flaws are common in HTTP services.",
       "durationSeconds": 2185,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -2296,7 +2300,7 @@
         "kernel-exploitation"
       ],
       "teaser": "Presents a novel timing side-channel attack on the TLB, combined with kernel allocator massaging, to derandomize the location of security-critical kernel objects in the latest Linux kernel.",
-      "summary": null,
+      "summary": "The talk starts from a common problem in kernel exploitation: an attacker with a limited write capability must still know where and what to write, and crashes along the way expose the attack. The speakers use the translation lookaside buffer, a CPU cache of address translations, as a timing side channel. Prefetch instructions, which do not architecturally access memory, let an unprivileged process see whether a kernel page is mapped and recently used.\n\nThe team recovers base addresses of kernel regions at 2 MB granularity, then reaches 4 KB precision by exploiting side effects of allocators and defenses, such as kernel stacks moved to vmalloc and strict module permissions that split large pages when a module loads. Loading a module serves only to break pages apart. System calls touch hundreds of pages, so candidates are narrowed by intersecting and excluding TLB access patterns, and a slab timing channel places attacker-controlled objects on the target page. Results on Linux 5.15, 6.5 and 6.8 across many Intel CPUs include credentials, message objects, pipe buffers and page tables.\n\nFor the write step, the authors start from a granted unlink primitive and turn its cross-writes into arbitrary physical read and write by redirecting a pipe buffer's page reference. A live demo ran the full chain. Mitigations include KPTI, which unmaps kernel memory from user space at a performance cost, and hardware separation such as Intel's linear address space separation, which blocks these accesses before the TLB. The takeaway is that defenses and allocators can add side effects that make side channels easier to exploit.",
       "durationSeconds": 1699,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -2393,7 +2397,7 @@
         "threat-actors"
       ],
       "teaser": "Virtual Secure Mode, or VSM, on Windows marked the most significant leap in security innovation in quite some time, allowing the hypervisor to provide unprecedented protection to the Windows OS.",
-      "summary": null,
+      "summary": "This talk explains Windows control flow integrity mitigations, why they matter, and how their kernel mode versions differ from the user mode originals. It starts from the observation that many exploits must redirect execution and then get data treated as code. Control Flow Guard checks indirect calls against a per-process bitmap of valid targets, and hardware shadow stacks protect return addresses, but both depend on a source of truth that an attacker must not be able to modify.\n\nThe central problem is that a kernel mitigation sharing a privilege level with a kernel attacker can be undone by that attacker, for example by marking the bitmap page writable through its page table entry. Windows answers this with virtualization-based security, where the hypervisor enforces read-only second-level mappings for protected memory. The speaker walks through kernel CFG, which is coarse-grained and fully active only with HVCI, and shows that the import address table is outside its protection. Kernel shadow stacks are allocated through the secure kernel and cached per processor or NUMA node to avoid costly hypervisor exits, and exception handling delegates the shadow stack pointer to the secure kernel.\n\nThe takeaways are that kernel CFI depends on hypervisor-enforced truth, that coarse forward-edge checks and the lack of indirect branch tracking leave room for research, and that remapping attacks need separate defenses such as HLAT. The speaker expects a continuing contest as newer hardware and kernel CET become common.",
       "durationSeconds": 2275,
       "conference": "black-hat",
       "difficulty": "expert",
@@ -2466,7 +2470,7 @@
         "arm"
       ],
       "teaser": "Azure API Connections serve as the backbone for integrating Logic Apps, Power Apps, and Power Automate with external systems.",
-      "summary": null,
+      "summary": "The talk follows a consultant from a Norwegian whitebox pentesting firm who, while assessing a customer's well-secured Azure Logic Apps, turned to the API connections behind them. These connections are created automatically when a workflow action needs one, and they often outlive the logic app. The speaker showed that a low-privileged reader could call undocumented GET actions on a Slack connection, such as listing channels, because Azure Resource Manager forwarded the request using the connection's stored token.\n\nThe core of the talk explains why this trust was misplaced. ARM checked only the role needed for the HTTP method before passing the request to the backend, so any sensitive GET endpoint became readable by readers. Examples included reading an Azure SQL database, retrieving a Jira API key through a header that set the service address, and dumping Key Vault secrets. Microsoft's first fix only allowed the explicitly defined test-connection paths. A later chain abused the dynamic invoke endpoint with a custom connector and path traversal to reach another tenant's Key Vault connection and read a secret from it. Microsoft fixed that by rejecting encoded dot-dot path segments.\n\nThe takeaway is that understanding how a platform's security model is built makes flaws in endpoints like dynamic invoke easier to spot. The speaker also stressed that the fixes were silent, with no CVE or public announcement, so affected customers have no way to know whether their services were accessed.",
       "durationSeconds": 1664,
       "conference": "black-hat",
       "difficulty": "advanced",
@@ -2558,7 +2562,7 @@
         "technology"
       ],
       "teaser": "Mimecast's strategic shift from email protection to human risk management represents cybersecurity's necessary evolution.",
-      "summary": null,
+      "summary": "The talk frames email as a risk that needs two things to succeed: an attacker sending a lure and a user acting on it. The speaker argues that protecting the inbox is no longer enough and that organisations must also account for the people receiving messages. Mimecast describes its move from email security toward what it calls securing the whole human, built through several acquisitions that add security awareness training results, data loss and insider risk signals, and compliance enforcement.\n\nA central problem is finding the users who carry the most risk. Mimecast's internal research suggests a small share of users, around 8 percent, accounts for roughly 80 percent of risk. The Human Risk Command Center aggregates signals such as how heavily a user is targeted by email attacks and how they perform in simulated phishing exercises, since combining these amplifies exposure. Administrators can then apply adaptive controls to those pockets of risk.\n\nThe talk then turns to generative AI, which makes phishing more targeted and lets staff bypass existing safeguards. The practical advice is to inventory the security tools and generative AI services in use, steer employees toward sanctioned AI tools instead of unsanctioned ones, and put protection around data that flows into those tools, while also using AI inside the product to catch threats.",
       "durationSeconds": 305,
       "conference": "black-hat",
       "difficulty": "intermediate",
@@ -2569,8 +2573,10 @@
       "youtubeId": "FLCb1SHIrtk",
       "slug": "the-black-hat-usa-2025-startup-spotlight-competition",
       "title": "The Black Hat USA 2025 Startup Spotlight Competition",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Jeremy Snyder"
+      ],
+      "track": "policy",
       "topics": [
         "contest",
         "ai",
@@ -2583,7 +2589,8 @@
       "durationSeconds": 4601,
       "conference": "black-hat",
       "viewCount": 2300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "ePB3TcCb3e8",

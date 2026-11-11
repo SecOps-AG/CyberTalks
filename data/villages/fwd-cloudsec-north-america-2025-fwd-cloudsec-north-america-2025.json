@@ -173,7 +173,9 @@
       "youtubeId": "oNpwtt1TEkQ",
       "slug": "i-spy-rethinking-entra-id-research-for-new-paths-to-global-admin",
       "title": "I SPy: Rethinking Entra ID research for new paths to Global Admin",
-      "speakers": [],
+      "speakers": [
+        "Katie Nolles"
+      ],
       "track": "cloud",
       "topics": [
         "entra-id",
@@ -181,8 +183,8 @@
         "entra",
         "path"
       ],
-      "teaser": "Security researchers examine technical aspects of I SPy: Rethinking Entra ID research for new paths to Global Admin.",
-      "summary": null,
+      "teaser": "Traces how Entra ID service principal credentials enable escalation from application admin to Global Admin through first-party apps.",
+      "summary": "Entra ID applications are split into two objects: the app registration, which defines the app, and the service principal, which is the identity that acts in a tenant. Credentials on these two objects do not synchronize, so anyone who can add a secret or certificate to a service principal can authenticate as that app in any tenant where it is installed. The talk traces this issue back to 2019, when Microsoft first-party applications were shown to allow privilege escalation, and to later changes that closed some cases but not all.\n\nThe research was done directly against Microsoft Graph in a test tenant. Secrets were rejected for many first-party apps, so the work moved to certificates added by patching the service principal, with tokens obtained through the client credentials flow. One app, Office 365 Exchange Online, held a powerful domain permission. Using it, a new domain was added and a federation configuration was set up to trust an attacker-controlled certificate. That allowed forged SAML tokens to target a synchronized user, such as a Global Admin, identified through the on-premises immutable ID, with MFA claims included.\n\nThe final twist was that the chain worked from a service principal holding Application Administrator but not from a user with the same role, because only Global Admins could add credentials to that Exchange service principal. Microsoft treated this as an edge case and did not plan a fix. The practical takeaway is to enable the app instance property lock on your own applications and to review credentials on service principals, not only on app registrations, since the portal does not show them the same way.",
       "durationSeconds": 1289,
       "conference": "fwd-cloudsec",
       "viewCount": 1600,
@@ -643,7 +645,9 @@
       "youtubeId": "oHlPGzpFT_c",
       "slug": "putting-workload-identity-to-work-taking-spiffe-past-day-0",
       "title": "Putting Workload Identity to Work: Taking SPIFFE past day 0",
-      "speakers": [],
+      "speakers": [
+        "Dave Sudia"
+      ],
       "track": "cloud",
       "topics": [
         "identity",
@@ -652,8 +656,8 @@
         "taking",
         "spiffe"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Putting Workload Identity to Work: Taking SPIFFE past day 0.",
-      "summary": null,
+      "teaser": "Explains how SPIFFE workload identities replace static secrets, and how teams can roll them out at scale.",
+      "summary": "The talk opens with the problem SPIFFE addresses: applications and CI pipelines need secrets to authenticate to a vault, which only moves the secret problem one step back. SPIFFE instead issues a short-lived cryptographic identity document to a workload, based on verifiable metadata about it. That metadata can come from an OIDC token in a CI pipeline, a cloud instance's assumed role, a TPM on premises, or Kubernetes pod labels. The document is usually an X.509 certificate carrying a SPIFFE ID, though it can also be a JWT. Workloads use it for mutual TLS and authorization decisions, and SDKs or proxies cover applications that cannot change.\n\nUse cases include replacing workload-to-workload API keys and certificates with continuously rotated credentials, easing the burden of rotating many long-lived database credentials, and restricting traffic by region. One identity can work across AWS, GCP, Azure and on-premises instead of separate key pairs for each cloud. A demo shows a GitHub Actions pipeline receiving a certificate that lasts about as long as the pipeline run. For rollout, the speaker urges choosing one goal, such as developer efficiency, then starting with a tightly scoped use case. One large financial organization began with GitLab CI, then moved services in a multi-tenant data center to workload identity.\n\nPractical advice includes keeping SPIFFE ID structures simple, since adding fields later is easier than removing them, and checking early that the design fits the internal PKI. Lack of native support is a major blocker for legacy databases, where translation proxies are one workaround. Revocation is mostly handled through short certificate lifetimes rather than explicit revocation. The speaker noted that the standard does not define authorization rules, so those remain bespoke. The main takeaways are developer efficiency, reduced breach risk and new capabilities.",
       "durationSeconds": 1540,
       "conference": "fwd-cloudsec",
       "viewCount": 1100,
@@ -723,7 +727,9 @@
       "youtubeId": "WXdB-9pTqAU",
       "slug": "ecs-cape-hijacking-iam-privileges-in-amazon-ecs",
       "title": "ECS-cape - Hijacking IAM Privileges in Amazon ECS",
-      "speakers": [],
+      "speakers": [
+        "Nao Haziz"
+      ],
       "track": "cloud",
       "topics": [
         "iam",
@@ -733,12 +739,13 @@
         "amazon",
         "cape"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning ECS-cape - Hijacking IAM Privileges in Amazon ECS.",
-      "summary": null,
+      "teaser": "Shows how a container task can impersonate the ECS agent to steal IAM credentials of other tasks on the same EC2 instance.",
+      "summary": "The talk explains how Amazon ECS runs containers on EC2 instances, with each task holding its own IAM task role, and how the ECS agent authenticates to the AWS control plane using the instance role. The speaker found an undocumented websocket channel that the agent uses to receive task credentials, and showed that a single container on the host could reach it and act as the agent.\n\nThe attack chain starts with the instance metadata service, which gives any task the instance role credentials. Those credentials are used to call the discover-poll endpoint API, and a container introspection endpoint supplies the identifiers needed to build the websocket request. The request is signed with SigV4 and, once accepted, returns the role credentials of every other task on the same instance. The speaker also noted that the same channel leaks metadata about the instance and other tasks. In a live demo, a task with a deny-everything role used a command-line tool to retrieve an administrator task's credentials and delete an S3 bucket.\n\nFor practitioners, the main lesson is that task-level hardening matters on EC2 launch-type ECS. Recommended steps include blocking metadata access for tasks while keeping it for the instance, never granting poll or discover-poll permissions to tasks, separating high- and low-privilege workloads and tenants onto different instances, and keeping task role permissions minimal. The speaker reported that AWS did not treat the issue as a security concern and planned documentation changes, and that AWS feedback pointed to Fargate as not exposed to this path.",
       "durationSeconds": 2229,
       "conference": "fwd-cloudsec",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "cugwipMXHp0",

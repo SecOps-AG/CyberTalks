@@ -2384,19 +2384,20 @@
       "speakers": [
         "Mainframe Hacking in 2019"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "mainframe",
         "philip",
         "young"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 2019 - Philip Young - Mainframe Hacking in 2019.",
-      "summary": null,
+      "teaser": "Shows how exposed IBM mainframes can be enumerated and taken over, from TN3270 logins to APF-based privilege escalation.",
+      "summary": "The talk opens with why mainframes still matter: they sit behind banking, payments, airlines and logistics, yet they are rarely discussed in security circles. The speaker, who teaches a mainframe pentesting class and runs an internet scanner that collects screenshots of exposed mainframe logins, gives a primer on the platform. He covers TN3270 terminals, VTAM as the routing layer, TSO as the interactive shell, JCL batch jobs, RACF as the access control database, APF-authorized libraries and UNIX System Services.\n\nThe middle of the talk walks through the attack path. Custom Nmap scripts enumerate VTAM application IDs, TSO user IDs and KICKS transaction IDs. Where KICKS is reachable, uploading JCL through the internal reader runs code under the KICKS region's identity, which yields a bind or reverse shell. Network Job Entry trust can be abused by impersonating a known node name, so jobs can be submitted as any user. Local enumeration reads control information from memory, which the speaker says generates few alerts. Writable APF libraries and dataset concatenation paths offer routes to special or operations attributes. A live demo then covers brute-forcing a TSO password, reading the RACF database to obtain password hashes for offline cracking, and escalating privileges through an APF library.\n\nThe takeaway for practitioners is that the mainframe is a largely unexplored attack surface. Defenders should tightly control who can submit jobs over FTP, restrict NJE node access and protect configuration files that may hold passwords. They should also audit APF library write permissions, RACF special and operations attributes, and dataset access rights.",
       "durationSeconds": 3315,
       "conference": "northsec",
       "viewCount": 2100,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2019
+      "year": 2019,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "k4Og-TUUH18",
@@ -2761,7 +2762,9 @@
       "youtubeId": "epcCzOrbp_U",
       "slug": "melanie-segado-brain-implants-and-mind-reading",
       "title": "Melanie Segado -- Brain Implants & Mind Reading",
-      "speakers": [],
+      "speakers": [
+        "Melanie Segado"
+      ],
       "track": "red-team",
       "topics": [
         "implants",
@@ -2771,8 +2774,8 @@
         "implant",
         "mind"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Melanie Segado -- Brain Implants & Mind Reading.",
-      "summary": null,
+      "teaser": "Surveys the security and privacy risks of consumer and implanted brain devices, from EEG headsets to brain stimulators.",
+      "summary": "The talk, given by Melanie Segado, is a big-picture tour of security and privacy issues in neurotechnology, focused on consumer devices that record electrical brain signals. It starts with how neurons produce small voltages that can be measured on the scalp with EEG, and how more invasive methods trade invasiveness for signal quality. Two recurring concerns are physical safety and privacy.\n\nDecoding examples come next. The P300 response shows what a person is attending to, which can be used in spellers or to reveal which face someone looks at, while the N400 familiarity response has been explored as a biometric password. Frequency analysis can reveal drowsiness, stress, clenched jaws, blinking, or sleep. A factory trial in China that monitors worker alertness with EEG-equipped safety helmets is cited as a privacy concern, since medical conditions such as epilepsy can leak out. Stimulation cases include a DARPA study that sped up drone pilot training, a retinal prosthesis with an onboard camera, a robotic arm driven by motor cortex implants, and closed-loop systems that help people recall words.\n\nThe closing takeaways are practical. Implanted signals are so tied to a person that anonymising them is hard, so metadata such as time and location should be minimised. Safety depends on hardware current limiting, keeping devices off the internet where possible, storing data locally, and securing every stage rather than only the database. Teams should also understand what their data may predict later and avoid hype that pushes people toward risky implants for marginal gains.",
       "durationSeconds": 2103,
       "conference": "northsec",
       "viewCount": 19000,
@@ -2903,7 +2906,7 @@
         "team",
         "charles"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Charles Hamilton - A Journey into Red Team.",
+      "teaser": "Walks through red team phishing tactics, target selection, and evasion tricks used to reach an internal network.",
       "summary": "### Overview\nIn \"A Journey into Red Team,\" Charles Hamilton from Mandiant/FireEye shares insights, methodologies, and custom tooling designed to execute stealthy red team engagements. Contrasting red teaming with noisy, automated internal penetration tests, Hamilton explains that red teaming focuses on evaluating client responsiveness and achieving specific objectives—such as accessing CEO emails or critical customer data—while evading detection. He emphasizes that red teamers do not necessarily need domain admin or zero-day exploits across dozens of machines; a sysadmin-like approach utilizing minimal footholds often achieves the desired mission objectives.\n\n### Key Topics\n- **Target Identification and Reconnaissance:** Hamilton explores techniques for gathering target information without alert generation. Methods include analyzing corporate Facebook photos to map employee names and roles, examining public password breach dumps (e.g., Adobe, Ashley Madison), finding exposed developer emails and credentials in GitHub, and scraping Pastebin. He highlights leveraging Outlook Web Access (OWA) and Office 365 APIs to leak the Global Address List (GAL) and perform password spraying (e.g., season plus year format like \"Summer 2018!\"), even bypassing MFA due to basic authentication support. Additionally, checking bounced SMTP error headers helps fingerprint defensive tools like Proofpoint, McAfee, or Microsoft filtering.\n- **Crafting Effective Phishing Campaigns:** Successful phishing relies on blending into corporate environments rather than using flashy lures. Hamilton advocates using boring, standard corporate topics—such as timesheets or code of conduct updates—which arouse less suspicion and reporting. Core rules include hosting payloads on external sites rather than attaching them to emails, avoiding typosquatting in favor of corporate-styled subdomains, utilizing HTTPS (e.g., Let's Encrypt), and employing categorized/aged domains.\n- **Evasion and Payload Delivery:** To defeat inline inspection and sandbox analysis, Hamilton generates download links dynamically with JavaScript so non-rendering automated scrapers miss the payload. He also recommends avoiding direct invocation of `powershell.exe` due to aggressive endpoint detection, suggesting unmanaged runspace alternatives instead.\n- **Internal Reconnaissance and Lateral Movement:** Once inside, red teamers should avoid noisy network-wide scans and default Windows command-line binaries like `net.exe`. Hamilton demonstrates dumping user and email directories via unmanaged LDAP queries, inspecting browser bookmarks, extracting Kerberos tickets, querying domain trusts, and leveraging WMI without spawning obvious child processes.\n\n### Technical Details\n- **Tooling Introduced:**\n  - *Powerless Shell:* Executes PowerShell scripts via a custom C# runspace environment without launching `powershell.exe` directly.\n  - *Malicious Macro Generator:* Creates obfuscated macros that trigger code via WMI (`WmiPrvSE.exe` / `winmgmt`) rather than `WScript.Shell` or standard shell execution, breaking the parent-child relationship with Microsoft Word (`winword.exe`).\n  - *ClickOnce Generator:* Packages applications into ClickOnce deployment wrappers equipped with environmental sandbox evasion (such as verifying `iexplore.exe` is running).\n  - *SCT Obfuscator & UniByAv:* Obfuscates COM scriptlets (`.sct`) and compiles heavily obfuscated executables from raw shellcode.\n  - *Don't Kill My Cat:* Implements polyglot files that function simultaneously as valid image files and valid shellcode.\n  - *Tundrashell:* A custom remote access trojan (RAT) using application-level RC4 encryption over HTTPS to bypass endpoint mini-filters performing TLS inspection, while avoiding plain-text second-stage DLL downloads.\n- **Sandbox Evasion Checks:** Payloads inspect system properties to detect sandboxes, such as verifying RAM (>4GB), disk space (>250GB), multiple CPU cores, system uptime, active clipboard data, domain-joined status, target timezone, and presence of targeted processes like Outlook.\n- **Lateral Movement & Kerberos:** Hamilton highlights using existing Kerberos tickets via unmanaged scripts (`remote_wmi_execute`) to move laterally. To maintain valid Kerberos ticket refreshing, he discusses migrating into processes like `explorer.exe` or `svchost.exe`.\n\n### Takeaways\nHamilton concludes that achieving true stealth requires understanding defensive tooling and adapting tactics accordingly. Avoiding common industry trends (like plain PowerShell commands or predictable binaries), querying Active Directory discreetly through LDAP, using boring corporate pretexts, and applying dual-layer payload encryption significantly reduce detection during red team operations.",
       "durationSeconds": 3179,
       "conference": "northsec",
@@ -3435,7 +3438,7 @@
         "vulnerability-research",
         "desaulniers"
       ],
-      "teaser": "Stupid RedTeamer Tricks details Laurent Desaulniers.",
+      "teaser": "Shows a collection of unconventional red team tricks for phishing, physical intrusion, command and control and exfiltration.",
       "summary": "### Overview\nIn this talk, Laurent Desaulniers presents a collection of practical, low-complexity penetration testing and red teaming techniques. Rather than relying on deep reverse engineering, assembly, or complex zero-day exploits, the speaker emphasizes pragmatic workarounds based on the philosophy that \"if it's stupid and it works, then it's not stupid.\" The session covers alternative methods for physical access, social engineering, email interception, command and control (C2), data exfiltration, geolocation, and hardware-based attacks.\n\n### Key Topics\n- **Physical Social Engineering & USB Drops:** Enhancing the traditional USB drop by attaching keys and organizational artifacts to appeal to human psychology.\n- **Email Interception & Phishing:** Abusing Outlook's Offline Address Book (OAB) autocompletion.\n- **Physical Security Bypasses:** Circumventing motion sensors and magnetic door switches with common household items and inexpensive tools.\n- **Command and Control (C2) & Side Channels:** Blending C2 communications inside legitimate services, multi-step web forms, wireless SSID side channels, and Outlook.\n- **Exfiltration Workarounds:** Using VirusTotal and media transfer protocols to bypass loss prevention and storage blocks.\n- **Reconnaissance & Hardware Attacks:** Finding target physical addresses via automated phone systems and deploying low-cost keystroke injection hardware.\n\n### Technical Details\n- **Enhanced USB Drops:** Traditional USB drops suffer from low success rates (~35%) due to awareness. The speaker pairs USB drives with actual keys bought in bulk by the pound, appealing to psychology and influence concepts studied by Stanley Milgram. Adding items like baby photos, Disney branding, or expired RSA VPN tokens prompts finders or sysadmins to plug the device in to locate the owner.\n- **Outlook Autocomplete Manipulation:** Outlook's Offline Address Book (OAB) autocompletes contacts based on prior replies. An attacker sends a passive-aggressive email from a spoofed name (e.g., \"John A. Smith\" to supersede \"John Smith\") asking if there are email delivery problems. Once the victim replies, the attacker's address appears first alphabetically in autocomplete suggestions.\n- **Bypassing Physical Sensors & Locks:**\n  - Motion detectors can be blinded during business hours by spraying them with Pam cooking spray (a technique attributed to the Antwerp diamond heist) or placing plants directly in front of sensors.\n  - Magnetic door alarm switches can be located through door seams using $5 magnetic viewing film, showing attackers precisely where to place shims.\n  - Floor plans and architectural blueprints can be sourced legally through building research firms such as \"Employees\" for around $15.\n- **C2 Mechanisms:**\n  - Leveraging client web infrastructure: Entering data into unauthenticated multi-step forms or forum fields on the victim's own web servers saves data server-side without completing the submission, allowing internal agents to poll these endpoints while bypassing outbound proxy inspections.\n  - Wireless side channels: Utilizing malware frameworks like \"GupT\" to receive commands broadcasted via nearby Wi-Fi SSID names.\n  - Email channels: Scripting Microsoft Outlook via documented TechNet interfaces to transmit and receive instructions over legitimate corporate email channels.\n  - Optical Character Recognition (OCR): Avoiding complex shellcode-in-image steganography by simply taking a screenshot of source text as a JPG and using PowerShell to perform OCR on the image.\n- **Data Exfiltration:**\n  - Uploading encrypted files as samples to VirusTotal and later retrieving them using a paid VirusTotal account, eliminating direct attacker-to-victim traffic links.\n  - Bypassing standard USB mass storage policy blocks by using Media Transfer Protocol (MTP) devices, such as Microsoft Zune players.\n- **Phone Spoofing & Keystroke Injection:**\n  - Discovering target home addresses by spoofing caller ID when calling automated, IVR-driven services (taxi dispatchers, energy outage hotlines, package tracking) that automatically prompt for or confirm registered service addresses.\n  - Replacing $50 Hak5 Rubber Duckies with cheap $1 ATtiny85 microcontrollers programmed for keyboard emulation, or injecting keystrokes wirelessly into vulnerable non-Bluetooth wireless keyboards and mice.\n\n### Takeaways\nAttackers and penetration testers often do not need advanced zero-days to achieve their objectives. Security teams frequently configure defenses against direct, sophisticated vectors while overlooking simple bypasses—such as non-storage USB device profiles, ambient physical controls, automated phone lookup interfaces, and human inclination to help return lost keys.",
       "durationSeconds": 1286,
       "conference": "northsec",
@@ -3504,12 +3507,13 @@
         "thing",
         "thomas"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Thomas Pornin - BearSSL: SSL For all Things.",
-      "summary": null,
+      "teaser": "Explains how a small, constant-time SSL/TLS library was built for embedded devices with about 25 KB of RAM.",
+      "summary": "The talk introduces BearSSL, an SSL/TLS library the speaker wrote from scratch in C for small embedded devices with roughly 25 KB of RAM and no operating system. Existing options such as OpenSSL and PolarSSL were either too large or relied on OS features like threads. The design avoids dynamic memory allocation, offers a non-blocking state machine API instead of blocking reads, keeps cryptographic primitives pluggable, and uses an MIT license.\n\nA large part of the talk covers constant-time cryptography, which guards against timing side channels that can leak secret keys over a network. The speaker explains three leak sources: secret-dependent branches, cache effects from table lookups, and variable-time operations such as division and some multiplications. For RSA, a masked table lookup reads the same memory on every step. For AES, bitslicing avoids secret-dependent lookups at about 55% of table-based speed, and OpenBSD adopted it as its default.\n\nThe X.509 part offers a no-key mode that trusts a preinstalled server key, and a minimal validator under 7 KB that checks chains, names, dates and constraints without storing whole certificates. Revocation and name constraints are unsupported. The closing section surveys known SSL attacks and mitigations, such as dropping SSL 3 and compression, and notes that small devices need up to 16 KB of incoming record buffer. The speaker argues that a new protocol would take years to be adopted.",
       "durationSeconds": 3884,
       "conference": "northsec",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "-n7oJqmTUCo",
@@ -3710,12 +3714,13 @@
         "antoine",
         "practical"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Sophia D’Antoine - Practical Uses of Program Analysis: Automatic Exploit Generation.",
-      "summary": null,
+      "teaser": "Shows how program analysis and symbolic execution can automatically find a memory bug and build a shell in a CTF binary.",
+      "summary": "Manual exploit development is slow, and modern mitigations plus larger attack surfaces make it harder still. The speaker uses CTF challenges as a small-scale stand-in for the larger programs that government and pentest tools must handle, and sets the goal of a tool that finds a bug and produces a shell without human help.\n\nAutomated exploitation was split into two steps: first defining the target bug in terms of read and write primitives and solving for inputs that reach it, then building a payload from gadgets, such as a ROP chain. The demo target was a randomly generated binary from pwnable.kr that had to be exploited within ten seconds. Two prototypes were compared. One used angr for concolic execution. The other was an LLVM pass that walked the control-flow graph through a dominator tree, tracked use-def chains and solved constraints with Z3. The angr run finished in under three seconds, and the static LLVM version was faster still, which the speaker linked to its path ordering. Locating the vulnerable path was the most time-consuming stage.\n\nThe talk closed with limits. Lifting machine code back into an intermediate representation is hard, and hardening makes binaries tougher to analyze. Bugs such as stack overflows and use-after-free are easy to express as primitives, while logic bugs need deeper program understanding. The speaker suggested that describing correctness formally could eventually let tools prove a program free of a bug class.",
       "durationSeconds": 2219,
       "conference": "northsec",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "RvOOgVrvWtY",
@@ -3733,12 +3738,13 @@
         "evaded",
         "cyberterrorism"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Gabriella Coleman - How Anonymous narrowly Evaded the Cyberterrorism Rhetorical Machine.",
-      "summary": null,
+      "teaser": "Examines why Anonymous largely escaped being labeled cyberterrorists despite government and media attempts to pin the term on it.",
+      "summary": "The talk asks why Anonymous has mostly avoided being branded cyberterrorists, even though \"terrorism\" has long been stretched to fit political goals. It opens with animal rights activists in the United States, where the SHAC Seven were jailed for running a website that promoted campaigns, and where a 2006 law made animal enterprise offenses explicitly terrorism. Documented animal rights crimes, the speaker notes, included no assassinations or murders.\n\nThe middle section traces the cyberterrorism frame back to a 1991 report and its intensification after 9/11. It then looks at why Anonymous could have been slotted into that frame: its high-risk hacking, including LulzSec and the HBGary attack, and a 2012 Wall Street Journal report citing a former NSA director's claim about power outages, which security professionals challenged for lacking evidence. The speaker argues that several factors worked against the label: mainstream coverage of Operation Payback framed the campaign as civil disobedience, the group joined social uprisings, the Guy Fawkes mask gained positive cultural meaning, Anonymous looked tame beside ISIS propaganda, and its name was used by many different groups.\n\nThe closing part argues that attribution of attacks on critical infrastructure is hard, so blaming an entire political movement is risky. It stresses that the terrorism label is largely controlled by governments and can silence dissent without being formally applied, as in the five-year sentence given to journalist Barrett Brown. Listeners are urged to challenge unsupported claims about hacking and infrastructure.",
       "durationSeconds": 3229,
       "conference": "northsec",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "rfmUcYGGrls",
@@ -3757,12 +3763,13 @@
         "hugo",
         "genesse"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Olivier Bilodeau & Hugo Genesse - Applying DevOps Principles for Better Malware Analysis.",
-      "summary": null,
+      "teaser": "Shows how Packer, Vagrant and Chocolatey can automate building reproducible Windows malware analysis virtual machines.",
+      "summary": "Malware analysts often build their virtual machines by hand, which the speaker describes as slow, repetitive and hard to reproduce. A fresh Windows VM has no user history, so each analyst must install tools and tweak settings from scratch, and templates are difficult to reuse. Newcomers face a steep learning curve, teamwork is awkward when VMs are passed around as loose files, and careless setups can leak licenses or expose the analyst's own network.\n\nThe talk borrows infrastructure-as-code ideas from DevOps and applies them to analysis machines. The stack uses Packer to build a base Windows image, which takes around half an hour, then Vagrant to start quick linked copies on VirtualBox, with PowerShell over WinRM handling provisioning. Chocolatey installs the analysis tools, such as WinDbg and Fiddler. A tool called Mailboxes lets users define profiles that add registry keys, documents, directories and packages, then builds a box and generates a Vagrantfile. The demo showed a prebuilt Windows 10 evaluation VM with the tools already installed.\n\nThe speaker also described cases where malware checked the environment before acting. One sample performed manual reconnaissance and exited once it judged the machine to be an analysis VM, and an exploit kit fingerprinted systems for shared drives and Active Directory. Making a VM resemble a realistic target could let malware show its real behaviour. Planned work includes anti-VM detection tricks, Active Directory integration, generated honey documents and documentation of the team workflow. The project was published in a public repository before the talk. The takeaway is to stop rebuilding analysis VMs by hand and to share versioned images instead.",
       "durationSeconds": 1593,
       "conference": "northsec",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "SGqUGHh3UZM",

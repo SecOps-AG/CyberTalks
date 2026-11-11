@@ -103,12 +103,13 @@
         "advanced",
         "with"
       ],
-      "teaser": "Dominik Maier explores Advanced Fuzzing With LibAFL.",
-      "summary": null,
+      "teaser": "Shows how the LibAFL fuzzing library drives coverage-guided fuzzing across binaries, emulators and many cores.",
+      "summary": "Fuzzing runs a target repeatedly with altered inputs and keeps the inputs that reach new coverage. The talk introduces LibAFL, a Rust fuzzing library, and compares executor designs such as fork servers, in-process harnesses and library-style calls, along with their speed and reproducibility trade-offs. It also covers mutators that go beyond random byte changes, including token-based, structure-aware and grammar-based mutation, and comparison logging that splits multi-byte checks into steps the fuzzer can solve one at a time.\n\nFor targets without source code, the talk covers binary instrumentation with QEMU, Frida and TinyInst, and what each costs in platform support and overhead. A worked example fuzzes a Samsung image codec on a Linux host by loading an Android library into QEMU user mode, stubbing system calls so the code runs without kernel interaction, and using snapshot resets with AddressSanitizer to catch a heap out-of-bounds write. Scaling is covered next: a shared-memory broker lets many cores exchange test cases, avoiding the kernel contention that stalls classic AFL beyond about 25 cores.\n\nThe closing section looks at fuzzing for injection flaws by hooking query functions and flagging inputs that reach them, and at future directions such as fuzzing web servers through REST grammars and using language models to suggest assertions or inputs. The main takeaway is that a fuzzer can be pointed at almost any target if the harness and instrumentation are built with care.",
       "durationSeconds": 3028,
       "conference": "ekoparty",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "CNw-hFJHu8A",
@@ -134,19 +135,23 @@
       "youtubeId": "Q6ivLhGK-M0",
       "slug": "make-atm-jackpotting-great-again-the-ocelot-way-jesus-dominguez",
       "title": "Make ATM Jackpotting Great Again, the Ocelot way! - Jesus Dominguez y Bryan Enrique Gonzalez Velez",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Jesus Dominguez",
+        "Bryan Enrique Gonzalez Velez"
+      ],
+      "track": "red-team",
       "topics": [
         "atm",
         "jackpotting",
         "ocelot"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Make ATM Jackpotting Great Again, the Ocelot way! - Jesus Dominguez y Bryan Enrique Gonzalez Velez.",
-      "summary": null,
+      "teaser": "Shows how an offensive team pairs PCILeech DMA with custom kernel modules to drive an ATM's cash dispenser through XFS.",
+      "summary": "The Ocelot team from Metabase Q, an offensive security research group, walks through building a lab ATM for jackpotting research. They explain how to choose a model with accessible vault, fascia and BIOS, and why the bank's encrypted deployment image and the vault-gated dispenser synchronization make the old hard-drive-swap attacks harder. The middle of the talk covers the XFS API that controls the cash dispenser, including the info and execute commands malware uses to count notes per cassette, the per-transaction note limit, and a cassette fault that was cleared with the exchange commands.\n\nTo get code onto a machine with USB and SATA ports disabled, the team uses PCILeech, a DMA tool that reads and writes memory over PCI Express without installed drivers. They load a kernel module that patches a function in the Windows kernel to run a command loop, then build a module that receives shellcode in chunks larger than the tool's 4 KB limit and injects it into a 32-bit process. An EDR blocked injection into Notepad, so they describe two bypasses: renaming the EDR executables and their parent process, and injecting into a whitelisted 32-bit vendor binary on the ATM.\n\nA recorded lab demonstration shows the sequence from booting the ATM to dispensing notes. The speakers close by noting that a whitelisted process should not be able to touch the dispenser when the security solution is properly configured, which points defenders toward restricting which processes can reach XFS services and protecting endpoint agents from tampering.",
       "durationSeconds": 2993,
       "conference": "ekoparty",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "m01kTU0I-sA",
@@ -200,8 +205,11 @@
       "youtubeId": "M_QPvazEii0",
       "slug": "facebook-messenger-bug-hunting-a-bugs-e2e-lifecycle-samuel-cohen",
       "title": "Facebook Messenger Bug Hunting - A Bug's E2E Lifecycle -Samuel Cohen y Luke McLaren",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Samuel Cohen",
+        "Luke McLaren"
+      ],
+      "track": "mobile",
       "topics": [
         "facebook",
         "messenger",
@@ -210,12 +218,13 @@
         "samuel",
         "cohen"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Facebook Messenger Bug Hunting - A Bug's E2E Lifecycle -Samuel Cohen y Luke McLaren.",
-      "summary": null,
+      "teaser": "Walks through Messenger bug bounty findings, from a branded-link spoof to client-side crashes found by fuzzing native code.",
+      "summary": "The speakers introduce Meta's bug bounty program, which they describe as a final safeguard after internal reviews and automated tooling. Rewards follow the company's own impact guidelines rather than CVSS, and a loyalty program called Hacker Plus adds bonus multipliers and invitations. They then outline Messenger's clients and its native libraries, noting that end-to-end encryption introduced in late 2023 pushed much of the message validation onto the client.\n\nThe first case is a branding flaw. A check for a Threads domain matched any host that merely contained that string, so crafted links appeared as Threads links inside encrypted chats. It paid a $1,000 base. Next, AR effect payloads carry a URL that a native validator checks. Memory-corruption fuzzing found nothing, so the speaker fuzzed the validator's logic instead, comparing its verdicts with the domain they expected. After about 44 million iterations, 13 unexpected inputs appeared, and one malformed URL repeatedly crashed a receiving Android client, a low-impact issue. Separately, negative offsets in mention and word effect data crashed recipients' clients, leaving affected group chats unusable. Two such reports paid a $3,000 base each.\n\nThe talk shows how edge-case features in large messaging apps widen the attack surface, and how payouts weigh realistic user impact as much as technical difficulty. The fixes were typically simple, such as adding delimiters or bounds checks.",
       "durationSeconds": 2255,
       "conference": "ekoparty",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "_8RxffDdivU",
@@ -311,7 +320,7 @@
       "speakers": [
         "Dirk-jan Mollema"
       ],
-      "track": "community",
+      "track": "cloud",
       "topics": [
         "windows",
         "window",
@@ -319,12 +328,13 @@
         "abuse",
         "sequel"
       ],
-      "teaser": "Dirk-jan Mollema examines Windows Hello abuse, the sequel.",
-      "summary": null,
+      "teaser": "Shows how Windows Hello for Business keys and primary refresh tokens in Entra ID can be phished, abused and used for persistence.",
+      "summary": "Windows Hello for Business is Microsoft's passwordless sign-in for Entra ID. A private key sits in the device's TPM and is unlocked with a PIN or biometrics. The talk, a follow-up to earlier research, examines how that key lifecycle can be abused. Registering a new key normally requires a fresh MFA check and a token tied to a known device, and the speaker shows where those checks fall short.\n\nStarting from phishing, the speaker shows that a victim's login can be turned into a registered device, a primary refresh token and a new key that keeps working after a password reset. With malware on a user's endpoint, the user-level key can sign requests without admin rights. Other cases include a timestamp that could be stretched to years before a server-side nonce fix, a remote desktop session to a machine without a TPM exposing a session key, and an older key derivation function that could be forced back in. That last weakness was reported to Microsoft, and the speaker says it was not fully fixed at the time. The hybrid key trust feature can also sync keys created in Entra into on-premises Active Directory, which opens a cloud-to-on-prem path.\n\nThe practical takeaway is that a password reset alone is not enough after a suspected account compromise, because attacker-added passwordless credentials stay valid. Defenders should review new keys and devices, and think carefully before syncing highly privileged on-premises accounts to the cloud. The tools used are open source.",
       "durationSeconds": 2960,
       "conference": "ekoparty",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "WGtRLqwlkaY",
@@ -505,14 +515,14 @@
       "speakers": [
         "Marc"
       ],
-      "track": "community",
+      "track": "wireless",
       "topics": [
         "lado",
         "vulnerability-research",
         "threat-detection"
       ],
-      "teaser": "Security researchers investigate LADO B and analyze defensive countermeasures.",
-      "summary": null,
+      "teaser": "Shows how learning-code car alarm remotes can be brute-forced over radio and how a tool automates the attack.",
+      "summary": "This B-side compilation opens with a talk on car alarm remotes. The speaker began with a curiosity about why a pinball machine could not detect his car's 370 MHz keyfob signal. Captures showed the same unlock code repeating, which pointed to a learning-code alarm chip with roughly one million possible codes instead of a rolling code. By capturing the signal and reading the chip datasheet, he decoded the scheme: short pulses are zeros, long pulses are ones, and the 20-bit learning code and mode bits are sent in 4-bit groups. He then built a GNU Radio block to transmit candidate codes.\n\nHe wrote a brute-force tool that sends candidate codes with a set repeat count and delay, and tested it on parked cars in Quito. In one lot, three of four cars were vulnerable. He explained that the installer, not the dealer alone, determines the risk, since an aftermarket alarm can carry an extra code. He also demonstrated a scanner for finding hidden learning codes and a jamming-plus-replay option for rolling-code systems.\n\nThe rest of the compilation covers a MIFARE transit card analysis using an Android app and a Proxmark, where sector and token exchange findings were still a work in progress, plus interviews about the Latino Village at Ekoparty and the Future Hacker school outreach program. The practical takeaways are to prefer official alarms, insist on rolling codes, and push manufacturers to publish chip and security details.",
       "durationSeconds": 31951,
       "conference": "ekoparty",
       "viewCount": 2200,
@@ -529,8 +539,8 @@
         "vulnerability-research",
         "threat-detection"
       ],
-      "teaser": "Security researchers investigate LADO B and analyze defensive countermeasures.",
-      "summary": null,
+      "teaser": "Offers a nearly nine-hour day-two stream from the Ekoparty Security Conference's 2024 event.",
+      "summary": "This entry is the day-two recording of \"LADO B,\" a stream published on the Ekoparty Security Conference YouTube channel as part of its 2024 event. The video was streamed live on November 14, 2024, and runs for about eight hours and fifty-two minutes. At capture time it had roughly 2,083 views, and the uploader left no written description.\n\nThe captured material contains only the page metadata, so the individual sessions, speakers, and topics inside the stream cannot be identified from it. The title is the only label tying the recording to the conference's day-two schedule. The other Ekoparty-branded videos listed alongside it are separate uploads, not segments of this one.\n\nFor a practitioner, the useful takeaway is limited. This is a long-form conference recording rather than a single presentation. Anyone looking for a specific talk should check the event's published schedule or the timestamps in the video itself before relying on it.",
       "durationSeconds": 30487,
       "conference": "ekoparty",
       "viewCount": 2000,

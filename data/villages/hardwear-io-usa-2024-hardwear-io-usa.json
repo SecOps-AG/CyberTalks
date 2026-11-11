@@ -102,12 +102,13 @@
         "toolkit",
         "analysis"
       ],
-      "teaser": "Hash Salehi analyzes Building A Silicon Analysis Toolkit.",
-      "summary": null,
+      "teaser": "Shows how a hobbyist makes fuming nitric acid and builds a controlled decapping and microscope imaging rig at home.",
+      "summary": "The talk covers how to remove the package from an integrated circuit to expose the silicon die, so it can be imaged and checked for things like counterfeiting or an embedded ROM, using equipment a home lab can afford. The speaker starts with making fuming nitric acid by distilling commonly sold chemicals. Safety guidance covers the workspace layout, fume extraction, choosing gloves that suit each chemical, and face protection. For storage, the speaker describes a two-container arrangement with a neutralizing bicarbonate layer and pH test strips as a leak indicator.\n\nNext, the talk moves from pouring acid over chips to controlled etching. An industrial jet decapper worked but was poorly suited to one or two chips, and Kapton tape with a cut-out let acid creep under the adhesive. Viton O-rings seated in small PVC cups, held in a machined brass fixture, gave clean circular and rectangular openings, and PVC held up better than the speaker expected. Chips can sometimes still run after decapping, and gold bond wires tolerate the process better than copper.\n\nFor imaging, the build uses a top-down metallurgical microscope with a motorized stage. A 3D-printed Delta stage was stiff enough only after the mount was replaced with aluminum, and custom kinematics firmware on a low-cost microcontroller was written to accept standard motion commands. Focus stacking over a grid reduced roughly 8,000 raw frames to 675 images, which were stitched in ImageJ in blocks. The takeaway is that a modest setup can produce a high-resolution die image for inspection.",
       "durationSeconds": 2158,
       "conference": "hardwear",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Q9IQuEkiaTI",
@@ -252,12 +253,13 @@
         "reng",
         "boot"
       ],
-      "teaser": "Brian Ledbetter analyzes Secrets Of Simos18: REng The Secure Boot Mechanism Of An ECU.",
-      "summary": null,
+      "teaser": "Shows how a Volkswagen engine control unit's secure boot is bypassed through two exploit chains to run custom firmware.",
+      "summary": "The talk examines the engine control unit in a 2016 Volkswagen Golf 7R, a TriCore microcontroller module whose firmware is protected by secure boot and signed updates. The speaker explains the setup used for the work: a Raspberry Pi acting as a CAN bus interface, the UDS reprogramming flow used by dealer tools, and the seed-and-key unlock. Early attempts to read memory, use calibration protocols, and find memory safety bugs in CAN handling turned up nothing usable. The immobilizer also meant the module had to stay installed in the car to be reprogrammed at all.\n\nStatic analysis of a partial firmware dump led to the customer bootloader, which held an AES key and IV in plain flash. With the decrypted image in hand, the speaker found that erasing one block and writing to another left the signature flag of the application block intact. That allowed code to be written over unerased flash, and a payload patched a sample-mode check so signature validation was skipped. A second chain targeted the supplier bootloader, reached through a timer-based pulse pattern on two pins. Its seed was an RSA challenge built from random bytes seeded by a 31-bit system timer, which could be enumerated. A CRC routine that could be pointed at protected flash, combined with reading RAM after a fast reset, exposed the stored flash unlock passwords.\n\nThe main takeaways are that signature checks are only as strong as the erase and write logic around them, that challenge randomness must not come from a predictable timer, and that secrets should not sit in plain flash. The speaker notes that newer ECUs use TrustZone, and the research tools were published on GitHub.",
       "durationSeconds": 2488,
       "conference": "hardwear",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "nsunVfRLivg",
@@ -363,8 +365,8 @@
         "countermeasure",
         "state"
       ],
-      "teaser": "Scott Best analyzes State-of-the-Art Anti-Counterfeiting: Attacks And Countermeasures.",
-      "summary": null,
+      "teaser": "Explains how anti-counterfeiting chips are attacked and which countermeasures slow key extraction and cloning.",
+      "summary": "The talk looks at how authentication chips used in printer cartridges, batteries and medical consumables are built and attacked. The speaker argues that a valuable aftermarket makes these chips a target, and that a stolen production lot can be worth a large sum to a cloner. He describes staged key provisioning across design, wafer sort and final test, along with provenance tracking so that duplicate chip identities could be spotted.\n\nAttacks are grouped by invasiveness, from passive probing to glitching, laser fault injection and invasive work. Power analysis can reveal keys from challenge-response operations, and differential fault attacks can extract them when a computation is corrupted. For non-volatile memory, the speaker shows how a test readback path or rewired bond pads could expose secret data, and suggests blocking readback, returning a CRC instead, and keeping secret data at a wider width than the user data path so a redirected read yields only a fragment.\n\nDefenses discussed include mutual authentication, so the chip releases nothing until the verifier proves it knows the expected answer, and timing-based proof-of-work checks that act as a second factor. Physically unclonable functions are presented as weaker than often assumed, since their outputs and helper data can be copied, though they hold no secrets when powered down. The closing advice is to make reverse engineering slow and costly, forcing custom silicon, and to watch how chiplet designs complicate trust and supply chain control.",
       "durationSeconds": 2630,
       "conference": "hardwear",
       "viewCount": 1100,

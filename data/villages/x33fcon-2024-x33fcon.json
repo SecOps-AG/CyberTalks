@@ -187,7 +187,8 @@
       "durationSeconds": 2568,
       "conference": "x33fcon",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "5zchtoMCnw8",
@@ -264,7 +265,7 @@
         "busting"
       ],
       "teaser": "Explores 6. Sebastian Feldmann and Philipp Schmied: Busting Redteam Trends with Style and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "The speakers, both former red teamers who now work on the defensive side, begin by arguing that third-party sensors such as Sysmon and MDE limit what defenders can trust and customize. Sysmon event IDs cannot be extended, MDE samples events on criteria the defender cannot see, and neither gives reliable call stack data. Their goal was a sensor they control that runs in userland alongside MDE and emits events compatible with existing Sysmon-based SPL rules.\n\nThey first tried building that sensor directly on ETW and largely failed. Hashing for image load events was CPU-heavy, a home-grown cache raced with DLL changes on disk, and some fields such as the working directory and logon ID were missing and had to be read from the process, which was not always possible. Named pipe and timestomping events had no usable provider. A signed kernel-level provider in the Windows security stack supplied raw telemetry, but opening it required a Microsoft-signed binary. They worked around this with an Autologger started at boot, forked an open-source trace library to open existing sessions, and used a Defender behavior provider where registry telemetry was absent.\n\nThe resulting sensor, called Weasel, uses that provider as its baseline, enriches events with parent process context, and supports Sysmon-like filters written in JSON. It adds events such as AMSI and RPC activity and built-in detections for direct and indirect system calls, module proxying through thread pool work items, and sleep masks found by checking call stacks and enumerating pending timers. The main takeaway is that defenders gain more by controlling their own endpoint telemetry and analysing call stacks on the host, which catches evasion that log-based rules miss.",
       "durationSeconds": 2009,
       "conference": "x33fcon",
       "viewCount": 1300,
@@ -275,7 +276,10 @@
       "youtubeId": "KhdzIPPW4W0",
       "slug": "7-melvin-langvik-and-oddvar-moe-red-team-oops",
       "title": "7. Melvin Langvik and Oddvar Moe: Red Team Oops!!",
-      "speakers": [],
+      "speakers": [
+        "Oddvar Moe",
+        "Melvin Langvik"
+      ],
       "track": "red-team",
       "topics": [
         "melvin",
@@ -285,11 +289,12 @@
         "oop"
       ],
       "teaser": "Analyzes 7. Melvin Langvik and Oddvar Moe: Red Team Oops and evaluates key implications for security practitioners.",
-      "summary": null,
+      "summary": "Oddvar Moe and Melvin Langvik present a lighthearted set of red team stories about their own failed engagements, using each one to draw out lessons and any techniques that came from it. Oddvar starts with a client who would only accept phishing as the way in. His early attempts, including a macro-enabled document and a cloned login page, drew sandbox shells or blue team attention. A survey-themed payload finally gave a real shell, but the target never came back, which led him to explore sending encrypted attachments through Azure Information Protection so that only one named user could open them.\n\nMelvin describes his first red team engagement, where a fake information protection prompt led staff to an Excel file that side-loaded a DLL through Teams. Teams repeatedly spawned processes, flooding him with shells, and a long Cobalt Strike sleep setting meant tasks never ran. He replaced the DLL with one using a process mutex and shorter callbacks. Against a hardened client later, he found an old domain with pre-created computer accounts whose passwords matched their names, which led to a certificate-based compromise, a blog post and the pre2k tool. His last story covers QR code phishing a client insisted on: CSS-based codes failed in Outlook, but table-based codes in EML format worked. They demoed their lightweight generator, The Crucible.\n\nThe takeaways are to check payload configuration before sending, replicate the client environment in a lab, key payloads to the target, research likely detection, and keep techniques simple.",
       "durationSeconds": 2289,
       "conference": "x33fcon",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "To36b7rDEbA",
@@ -483,7 +488,9 @@
       "youtubeId": "JOxnNyduvoA",
       "slug": "18-marc-smeets-innovate-navigate-elevate-a-journey-into-offsec-e",
       "title": "18. Marc Smeets: Innovate, Navigate, Elevate: A Journey into OffSec Entrepreneurship",
-      "speakers": [],
+      "speakers": [
+        "Marc Smeets"
+      ],
       "track": "blue-team",
       "topics": [
         "entrepreneurship",
@@ -497,7 +504,8 @@
       "durationSeconds": 2896,
       "conference": "x33fcon",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "JTt0kXkw5s8",

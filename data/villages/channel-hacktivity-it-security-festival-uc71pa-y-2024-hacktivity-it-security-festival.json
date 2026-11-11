@@ -210,19 +210,22 @@
       "youtubeId": "IFRX6rUDXyY",
       "slug": "hacktivity2023-ai-security",
       "title": "#Hacktivity2023 // AI Security",
-      "speakers": [],
+      "speakers": [
+        "Craig Balding"
+      ],
       "track": "ai-security",
       "topics": [
         "hacktivity2023",
         "vulnerability-research",
         "threat-detection"
       ],
-      "teaser": "Security researchers examine technical aspects of #Hacktivity2023 // AI Security.",
-      "summary": null,
+      "teaser": "Gives security practitioners a broad overview of generative AI, its risks like prompt injection, and practical uses in daily work.",
+      "summary": "The talk starts for people who have not followed AI developments closely, placing machine learning inside a wider AI field. The speaker covers how quickly ChatGPT grew, studies reporting faster writing and coding with AI assistance, and why hosted models can give different results over time, which makes reproducible security decisions hard. Image generation is shown along with its limits, such as garbled text, and the risk that deepfakes and fabricated media will make fraud and phishing harder to spot.\n\nThe middle section explains that an AI system is more than its model. The speaker walks through the surrounding pipeline, including training data collection and cleaning, where poisoning or exposed datasets create risk, and agent loops that execute generated commands and therefore need sandboxing. Other risks discussed are model stealing through large volumes of queries, bias, and misaligned goals, with a call for security people to join AI red teams.\n\nThe final section shows applied examples: having a model explain password strength to users, turning WHOIS output into JSON, building a small glossary website, writing Burp Suite BChecks, and generating a script that finds the minimum set of cookies a site needs. The takeaway is to check and challenge AI output through repeated rounds rather than accept the first answer, and to test vendor claims before relying on them.",
       "durationSeconds": 2446,
       "conference": "hacktivity",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "sYYmet2WxUE",
@@ -365,12 +368,13 @@
         "modern",
         "fake"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding #Hacktivity2023 // SIEM Slam: Tricking Modern SIEMs with Fake Logs and Confusing Blue Teams.",
-      "summary": null,
+      "teaser": "Shows how an attacker with root on a Splunk forwarder can intercept and rewrite log traffic to mislead blue teams.",
+      "summary": "The talk starts from a red team scenario: after gaining root or SYSTEM on a host, an attacker has little time before defenders respond, so simply killing the SIEM agent may draw attention. The speaker argues that changing what the SIEM records can buy more time. Splunk is used as the example, with forwarders sending data to an indexer, and the speaker notes that this traffic is plain text by default.\n\nUsing an iptables NFQUEUE rule, the research intercepts outgoing forwarder packets, parses them, and rewrites fields such as host name, IP address and executed command before reinjecting them. A companion tool watches live traffic while harmless commands run on the compromised host, so matching events are altered or new ones are generated. In the demo, a made-up host appears in the Splunk web interface running a download and execute sequence that never happened there. On Windows, the speaker says Echo Mirage can inject into the Splunk process for the same effect.\n\nFor defenders, the main advice is to encrypt forwarder-to-indexer traffic with TLS and manage certificates carefully, despite some latency and expiry risk. Splunk's default certificates are shared across installations, so custom ones are needed. The speaker also suggests protected process light as a hardening step. Planned work includes a Cobalt Strike module. The takeaway is that SIEM data should not be trusted blindly.",
       "durationSeconds": 2343,
       "conference": "hacktivity",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "aFIdt6H5aSE",
@@ -621,12 +625,13 @@
         "hacktivity2023",
         "environment"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in #Hacktivity2023 // Get Deception In Your Environment Now!.",
-      "summary": null,
+      "teaser": "Shows how free deception tools like Canary Tokens and honey accounts can expose attackers inside your environment.",
+      "summary": "The talk argues that predictable defenses make life easy for well-resourced attackers, since many organizations run the same firewalls, EDR and SIEM products. The speaker presents cyber deception as one part of the answer, pointing to the MITRE Engage framework for planning it. He is skeptical of threat intelligence feeds built on IP addresses and domains, because attackers change infrastructure quickly and those indicators are often stale.\n\nMost of the session is a live demonstration of free tools, mainly Canary Tokens. Planted items include AWS keys in a code repository, a spreadsheet named passwords on a file share, and a token in cloned login-page code that reports who copies a website before a phishing run. Honey user accounts in Active Directory, set with no logon hours, raise an alert when an attacker sprays passwords. Other examples include a decoy Kerberoastable service account, Word documents with embedded content that calls back to reveal where they were opened, and a honey share built with Impacket that captures authentication attempts. The speaker also shows that IP-based geolocation is unreliable and that tracing to the ISP edge router gives a closer fix.\n\nThe core takeaway is that deception is cheap, quick to deploy, and can change attacker behavior, since adversaries who fear being caught may back off. The speaker closes by pointing to free online labs for practicing these techniques and a free card game about the attack lifecycle.",
       "durationSeconds": 2224,
       "conference": "hacktivity",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "8EDchweJQpI",
@@ -1205,19 +1210,22 @@
       "youtubeId": "qfSGt8PgCB8",
       "slug": "hacktivity2022-fault-injection-fi-attacks-against-embedded-syste",
       "title": "#Hacktivity2022 // Fault Injection (FI) Attacks Against Embedded Systems by András Kabai",
-      "speakers": [],
+      "speakers": [
+        "András Kabai"
+      ],
       "track": "hardware",
       "topics": [
         "embedded",
         "fault-injection",
         "injection"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for #Hacktivity2022 // Fault Injection (FI) Attacks Against Embedded Systems by András Kabai.",
-      "summary": null,
+      "teaser": "Shows how voltage glitching and electromagnetic pulses bypass read protection on a crypto wallet and an automotive diagnostic ECU.",
+      "summary": "Fault injection deliberately pushes a chip outside its specified operating range, for example with a brief voltage drop or an electromagnetic pulse, so that a precisely timed disturbance can skip an instruction or flip a bit. The talk explains why this matters for software security: checks such as signature verification or authentication can be bypassed when the weakness sits in the hardware underneath them. Affordable DIY kits and FPGA-based timers are enough to build a working setup.\n\nThe first demo targets a Trezor One hardware wallet, whose microcontroller uses read data protection levels. The speaker removes decoupling capacitors to expose the core voltage, then times glitches from the reset line against the window in which the boot ROM reads option bytes and flash. After many automated attempts, a glitch downgrades protection from level 2 to level 1, restoring debug access and allowing memory to be dumped. The wallet's current firmware held no sensitive data in that dump, but the same weakness could expose secrets on other products built on this microcontroller.\n\nThe second demo uses electromagnetic fault injection against an automotive ECU in a car-hacking training setup. The attacker sends authentication attempts with a wrong key over the diagnostic protocol and fires a pulse at the chip to skip the result check. Once the glitch lands, the ECU accepts the session and a privileged routine opens a simulated door lock. The takeaway is that software-only defences fail when the underlying hardware is vulnerable. Redundant checks and stored complemented values can make such faults easier to detect, but they do not protect the boot code or silicon itself.",
       "durationSeconds": 2767,
       "conference": "hacktivity",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "aKTjXcH9cuA",
@@ -1521,8 +1529,8 @@
         "automating",
         "analysi"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for #Hacktivity2022 // Automating Binary Analysis with Ghidra's P-Code by Gergely Révay.",
-      "summary": null,
+      "teaser": "Shows how Ghidra's P-code intermediate representation and scripting API can automate binary analysis tasks.",
+      "summary": "The talk looks at automating reverse engineering with Ghidra, the open-source framework released by the NSA, with a focus on its intermediate representation, P-code. It covers the scripting options: Java is the native language and has the best development support, Python works through Jython or the Ghidra Bridge, and headless mode runs a script on binaries without the graphical interface. The flat API is kept stable across versions, while the wider SDK exposes nearly everything Ghidra itself uses, which is powerful but takes time to learn.\n\nThe core idea is that P-code expresses each assembly instruction as generic operations, so a script written against it can work across every architecture Ghidra's decompiler supports. Raw P-code maps closely to individual instructions, while high P-code, produced by the decompiler, exposes function arguments and variables that can be queried directly. Demonstrations include a script that lists imported functions as a quick triage step, and a second that scans a binary for COM usage, a technique malware uses to hide network communication, by finding calls to CoCreateInstance and their cross-references.\n\nA third example reads the CLSID and IID arguments passed to that call from high P-code, avoiding manual backtracking to recover them. The identifiers can then be looked up in the Windows registry or online to reveal which COM component the binary uses. The takeaway is that Ghidra scripting and P-code suit repetitive analysis work, and the right tool depends on the task at hand.",
       "durationSeconds": 2257,
       "conference": "hacktivity",
       "viewCount": 1400,
@@ -3267,7 +3275,7 @@
       "speakers": [
         "Zsombor Kovács"
       ],
-      "track": "community",
+      "track": "mobile",
       "topics": [
         "mobile",
         "banking",
@@ -3276,12 +3284,13 @@
         "everything",
         "minesweeper"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Zsombor Kovács - Cheaters for Everything from Minesweeper to Mobile Banking Applications.",
-      "summary": null,
+      "teaser": "Shows how Frida runtime hooks let an attacker alter Android game and banking app behavior, from minesweeper to blackjack.",
+      "summary": "The talk opens with a story about speaking to teenagers who only cared about game cheats, and uses that angle to introduce writing cheats for Android apps. It explains that an Android app relies on its runtime environment to reach hardware, local files and network endpoints. That layer can be attacked in several ways: intercepting traffic, patching the binary, editing files in the app sandbox, spoofing sensors such as GPS, or changing the runtime that wraps the app code.\n\nThe speaker compares three runtime manipulation tools. Xposed was the way to add permission controls and modules on rooted devices before Android built them in. Cydia Substrate is abandoned and only works on old Android versions. Frida is presented as the most capable option, with a scriptable API and a stable runtime. A typical workflow is to decompile an APK, find the relevant classes and methods, write a Frida script, and attach it to the running process. Obfuscated names can still be targeted by using their minified identifiers.\n\nThe demonstrations show several cases. A static AES key was recovered by logging the inputs to an encrypt method. A PIN check was brute-forced across 10,000 values by calling the app's own comparison function. A root detection routine was overridden so the device always looked clean. A minesweeper cheat read mine positions from a two-dimensional array, and a blackjack app had its deck enumerated, then rigged so the player received blackjack and bets could be stacked with a loop. The takeaway is that these changes needed little programming skill, and that checks performed on an attacker-controlled device, such as PIN screens or root detection, give weak protection, including in banking apps.",
       "durationSeconds": 2302,
       "conference": "hacktivity",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "OfIxaI390SU",
@@ -3299,12 +3308,13 @@
         "enterprise-grade",
         "biometric"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Matthias Deeg - Bypassing an Enterprise-Grade Biometric Face Authentication System.",
-      "summary": null,
+      "teaser": "Shows how a printed photo can fool Windows Hello face login through its near-infrared camera.",
+      "summary": "Matthias Deeg presents research he carried out with a colleague in 2017 on Windows Hello face authentication, the near-infrared biometric login included in Windows 10. Public information about its security was scarce, so the work took a black-box approach, testing the sensor and its image processing from the outside.\n\nThe researchers captured raw infrared frames with their own small tools and adjusted brightness and contrast in Python. Screens, glossy photo paper, inkjet printouts and an old cathode ray tube produced nothing the infrared camera could read, while a high-quality offset magazine print and a laser printout worked. An inexpensive USB infrared camera allowed the bypass on every Windows 10 version tested. On a Surface Pro 4, the attack worked on version 1607 but failed on 1703 and 1709 once the enhanced anti-spoofing setting was enabled. A live demo and a recorded video showed the attack.\n\nThe attack needs a frontal, eyes-open face image captured in near-infrared, and its success depends on the camera hardware and Windows build. Practitioners should use cameras that support enhanced anti-spoofing, enable that poorly documented setting, and re-enroll after enabling it, since older enrollments stayed vulnerable. Further ideas, such as a two-printout attack, had not yet succeeded.",
       "durationSeconds": 2561,
       "conference": "hacktivity",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "bLJvTzZBY20",
@@ -3322,12 +3332,13 @@
         "hashing",
         "their"
       ],
-      "teaser": "Security researchers examine technical aspects of Csongor Tamás - Examples of Locality Sensitive Hashing & their Usage for Malware Classification.",
-      "summary": null,
+      "teaser": "Compares fuzzy hashing methods like ssdeep, sdhash and TLSH for finding ransomware samples similar to a seed corpus.",
+      "summary": "The talk tackles a practical bottleneck in malware research: building a fresh, relevant ransomware corpus. Collecting samples from news reports and hash lookups took months, and YARA rule matching, though common for finding related files, is slow and needs many similar samples to write good rules. The speaker proposed locality-sensitive hashing, where similar files yield similar digests that can be compared by a distance score.\n\nThree fuzzy hashing schemes were compared: ssdeep, sdhash and TLSH. sdhash was judged unsuitable and its scores were poorly scaled. TLSH digests stay around 70 bytes, so a 300 million sample database needs roughly 30 GB, and comparisons take about a millisecond. On a daily feed of about 35,000 unlabeled binaries, three clustering approaches were tried; the best required a new file to be close to several group members, since closeness to a single member produced one giant group. Groups were checked manually through disassembly and sandbox reports.\n\nSearches of a 477-sample corpus across 15 ransomware families were run against the 300 million sample database. Results differed by method: for one sample ssdeep found matches that TLSH missed, and for another TLSH found matches that ssdeep missed. The speaker concluded that fuzzy hashing can rapidly expand a corpus, but these methods can be deliberately evaded. Future work includes parallelization, broader family coverage and better LSH implementations.",
       "durationSeconds": 1079,
       "conference": "hacktivity",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "-eAR6qduVWY",
@@ -3403,7 +3414,7 @@
       "speakers": [
         "Zoltán Balázs"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "ethereum",
         "zolt",
@@ -3411,8 +3422,8 @@
         "contract",
         "explained"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Zoltán Balázs - Ethereum Smart Contract Hacking Explained like I’m Five.",
-      "summary": null,
+      "teaser": "Explains Ethereum and smart contracts in plain terms, then walks through famous hacks like the DAO and Parity wallet bugs.",
+      "summary": "The talk introduces Ethereum and smart contracts for an audience with little blockchain background. It explains how mining solves hard puzzles, how public transactions are signed by wallets, and how Solidity code is compiled to bytecode that runs on the Ethereum Virtual Machine. A live walkthrough shows buying a CryptoKitties collectible through the MetaMask extension, and the speaker notes that the approval screen did not clearly show which function and parameters a user was authorising.\n\nSeveral incidents follow. The DAO lost roughly 250 million dollars in 2016 to a reentrancy flaw, because funds were sent before the balance was updated. The community's hard fork produced Ethereum Classic, where the attacker kept the funds. In 2017 a shared multi-signature wallet library in Parity had an unprotected initialisation function reached through delegatecall, which let an attacker take control of wallets. Later, an accidental call to kill that library left about 300 million dollars permanently locked. A separate integer underflow in a scam contract cost about two million dollars.\n\nThe conclusion is that deployed contracts cannot be patched easily, so secure coding is hard and developers need outside help. Practical advice includes using safe math libraries against overflow and underflow, testing on test networks, and practising with tutorials and capture-the-flag style challenges.",
       "durationSeconds": 2792,
       "conference": "hacktivity",
       "viewCount": 1200,
@@ -3499,12 +3510,13 @@
         "offensive",
         "defining"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Rodrigo Branco - How Offensive Security is Defining the Way We Compute // Keynote Speech.",
-      "summary": null,
+      "teaser": "Argues that exploit mitigations should be judged by evidence from real exploit work rather than vague claims of raising the bar.",
+      "summary": "The keynote opens with a disclaimer that the views are personal, then focuses on how exploit mitigations are designed and judged. Threat modeling is presented as a mature practice, while mitigation design lacks a comparable process and claims of \"raising the bar\" go unquantified. The speaker proposes three tests: a mitigation aimed at a bug class should hold against at least three real instances where bypass is impossible; mitigations should be judged together with the ones they depend on; and designers should understand exploitation, either by writing exploits or by pairing with someone who does.\n\nThe middle section examines missing data. Write-ups rarely record time spent, failed attempts or reusable tooling, and mitigations tend to become legacy instead of being retired. Vendor exploit statistics are cited as useful but hard to verify without raw data. The speaker also covers attempts to formalize exploit primitives and notes conflicts with established guidance: LangSec's push to parse input early differs from advice to validate input close to its use. Memory encryption without authentication is described as only probabilistic protection, showing that implementation details can matter as much as architecture.\n\nThe closing argument is that formalization can move exploit work from art toward engineering and bring in more people. The main takeaways: demand evidence for mitigation claims, understand the problem before proposing a fix, and let offensive research guide defensive investment.",
       "durationSeconds": 2489,
       "conference": "hacktivity",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "aU4ULr3Lwt8",
@@ -3744,12 +3756,13 @@
         "tool",
         "diffing"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Joxean Koret - Pigaios: A Tool for Diffing Source Codes against Binaries.",
-      "summary": null,
+      "teaser": "Presents Pigaios, a tool that matches functions in C source code to compiled binaries using AST artifacts and machine learning.",
+      "summary": "The talk starts from a common reverse engineering problem: a team holds source code for a program but cannot build it, and needs to map its functions onto a compiled binary. The speaker describes trying to rebuild an old source release, where missing headers, libraries and outdated compilers blocked the build, and how manually matching functions by strings and neighbouring code does not scale.\n\nThe middle of the talk explains how Pigaios works. Source files are parsed with the clang Python bindings, which produce a syntax tree even when code has errors or cannot be compiled, while binaries are read with IDA. Both sides yield comparable artifacts such as string constants, loop, condition and switch counts, and called functions. These are stored in SQLite databases and matched first with strict queries that return few results with almost no false positives. Further matches come from iterative heuristics based on call graphs, neighbouring functions and rare string constants. The speaker explains why compiler-optimised output differs from source-level control flow, and why a hand-written scoring function was replaced by a multi-classifier ensemble of decision tree, gradient boosting and random forest models that produces a similarity ratio.\n\nThe talk closes with demos: matching a small program, then a BusyBox source tree against a MIPS binary, where the tool reported many matches. Planned work includes importing structures and enumerations into IDA and sharing prebuilt databases of open-source projects. The project was published during the talk. The takeaway is that artifact-based diffing of source against binaries is workable, while reliable parsing of compiler-specific C dialects remains the hardest part.",
       "durationSeconds": 2197,
       "conference": "hacktivity",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "5y28U1F-sOQ",
@@ -3896,12 +3909,13 @@
         "permission",
         "system"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Julien Thomas - Limitations of Android permission system.",
-      "summary": null,
+      "teaser": "Explores how Android's permission model can be bypassed through shared user IDs, package updates, and app virtualization.",
+      "summary": "The talk examines the limits of Android's permission system and the UID-based model beneath it. The work grew out of a software VPN project, where the team could not reliably determine which installed apps were allowed to reach the internet. The speaker outlines the change at Marshmallow, when dangerous permissions moved from install-time grants to runtime requests, and explains how UIDs protect files while kernel-level group IDs gate network and other resources.\n\nA live demo on a Nougat phone showed two apps that requested nothing gaining access to contacts and calendar after one was updated to define a custom permission and share a user ID with the other. The talk then covered several cases: permissions granted through shared user IDs that the system never displays, a flag mismatch between pre- and post-Marshmallow API levels, a revocation flaw that leaves group IDs in place, and a permission-definition update that silently grants dangerous permissions. Google treated some reports as working as intended, fixed others, and left some pending.\n\nThe speaker also argued that UID-based isolation gives users little visibility, since shared user IDs and app virtualization let one app control another and reach its data without the user knowing. Play Protect would likely struggle to flag this. The takeaway is that kernel enforcement is robust, but security apps should not rely on the package manager's view of permissions and need their own checks.",
       "durationSeconds": 2380,
       "conference": "hacktivity",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "ovKGoK6f4aw",
@@ -3919,8 +3933,8 @@
         "locky",
         "anti-analysi"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Roland Kamarás - Locky: anti-analysis techniques used by the ransomware.",
-      "summary": null,
+      "teaser": "Shows the layered anti-analysis tricks Locky ransomware uses to hide its payload from reverse engineers and sandboxes.",
+      "summary": "The talk looks at Locky, a ransomware family spread through phishing emails with malicious Office macros. The macros fetch a downloader, which retrieves the encryption payload from a command-and-control server and loads it into memory. The speaker walks through the outer 32-bit executable, which is packed in an NSIS installer whose script is padded with junk lines and builds Windows API names from substrings before calling them.\n\nThe encrypted payload sits behind several decryption layers. The speaker counts eight in total, with each stage differing mainly in its length and XOR key values, and shows how an assembly trace can recover those parameters. The embedded DLL is then decrypted with a simple XOR keyed by a Unicode string. Its imports are resolved by matching a modified CRC32 checksum against export tables, and it is mapped into a suspended process through shared memory using direct system calls. Control is redirected by changing the entry-point register of the suspended thread.\n\nThe speaker then compares Locky with Hockey, a Hungarian ransomware family that looks similar at first glance. Unlike Locky, it is written in Visual Basic .NET, uses Hungarian identifiers, hard-codes its RSA public key instead of fetching it remotely, and asks victims to contact an email address rather than use Tor. The conclusion is that the techniques themselves are well known, but their combination shows deliberate effort to frustrate static analysis, debugging and automated sandboxes. The talk also notes that copycat families often reuse the behaviour of successful ransomware.",
       "durationSeconds": 1976,
       "conference": "hacktivity",
       "viewCount": 1000,
@@ -4008,12 +4022,13 @@
         "tool",
         "effortles"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Kirils Solovjovs - Tools for effortless reverse engineering of MikroTik routers.",
-      "summary": null,
+      "teaser": "Presents tools for jailbreaking, unpacking and analysing MikroTik RouterOS devices and their proprietary file formats.",
+      "summary": "RouterOS runs on a Linux kernel, but its startup scripts and binaries are proprietary, so researchers need a jailbreak before they can examine a device. The speaker recalls an older built-in login backdoor and contrasts an earlier jailbreak method, which relied on a VirtualBox appliance and netboot, with a newer one. The script-based jailbreak works from any Linux machine regardless of CPU architecture, can run remotely and is much faster, though it does not recover lost passwords.\n\nThe toolset also downloads older RouterOS packages by probing candidate URLs, unpacks NPK package files into ordinary folders, and collects kernel sources and configuration files. The talk explains the NPK layout and the boot sequence, in which a loader starts services and a watchdog reboots the router if the loader fails. Decoders for support output files reveal configuration, memory and log data. A crafted support file was shown to trigger cross-site scripting in the vendor's web interface, which was fixed within about a day. Other scripts parse the binary configuration store and recover the admin password, which is reversible from a static key. A backup-file weakness that allows files to be written under arbitrary names was also demonstrated, though it requires admin credentials.\n\nThe main takeaway is that these tools let researchers inspect and interoperate with devices they own. The speaker said the new jailbreak and backup tools would be published on GitHub after the event.",
       "durationSeconds": 2263,
       "conference": "hacktivity",
       "viewCount": 2200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "U2PuH0tuVn4",
@@ -4073,12 +4088,13 @@
         "heaven",
         "breaking"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Mehmet Ince - A heaven for Hackers: Breaking Log/SIEM Products.",
-      "summary": null,
+      "teaser": "Shows how researchers breached log and SIEM products through source review, SQL injection and unauthenticated command execution.",
+      "summary": "The talk looks at log management and SIEM products, which gather logs from firewalls, web application firewalls, databases and servers into one place. Because they hold broad privileges across a network, they are attractive targets. The speaker describes one risk where a WAF forwards full HTTP requests, including session cookies, to the SIEM, so anyone who reaches its console can read them. The research method starts with the documentation and product features, then gets a trial or access, and then compares source code between old and new versions to find what changed in security fixes.\n\nEach case is handled separately. In an AlienVault USM build, the older release used PHP unserialize where the newer one used a different decode, and a session check accepted requests based on a user-agent value. This led to SQL injection that evaded the built-in WAF by swapping in a different function. The attacker pulled an administrator session token from the database, then used the product's own response actions and a policy triggered by failed SSH logins to run operating system commands. In a second product, default admin credentials worked, a query endpoint allowed database access, and stored host passwords were encrypted with a static key shipped inside a bundled library. In a third, a Python API endpoint lacked its authentication annotation and passed POST data into a command line call, allowing unauthenticated command injection. The speaker also showed that an attacker could delete their own entries from the local log database.\n\nThe main takeaway is that these products need strict access control, no default or static secrets, and isolation of their components. Teams that run them should treat them as high-value assets and monitor for changes to their configuration and logs.",
       "durationSeconds": 1560,
       "conference": "hacktivity",
       "viewCount": 2300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "wdPkY7gykf4",
@@ -4198,11 +4214,12 @@
         "ancient"
       ],
       "teaser": "Penetration Testing Oracle Forms details Bálint Varga-Perke (Buherátor) - Corrupting Ancient Spirits.",
-      "summary": null,
+      "summary": "Oracle Forms is a long-established Oracle technology for building enterprise database front ends, still found at banks and government offices. Its client-server traffic is a serialized, event-driven protocol wrapped in RC4, so ordinary web testing tools struggle. The server holds the user interface state, so editing or replaying a single request breaks the session, and injected bytes desynchronise the client and server keystreams.\n\nEarlier attempts included a Burp extension that reused the vendor's Java classes for serialization, which proved fragile, and approaches that tried to set cipher state through a debugger or a patched client. What worked was stripping encryption from the client by patching the vendor's jar, then running a man-in-the-middle proxy that handles plaintext messages and re-encrypts them for the real server. The cipher use also had weaknesses: no integrity checks, keystream reuse between directions, and a short key exchange that makes passive decryption practical. In a demo against a login form, an automated scan with a post-request macro found a SQL injection login bypass.\n\nThe practical advice is to focus on vulnerability classes that matter in a Java-based client rather than running irrelevant scanner checks, define insertion points manually, and use a single scanning thread. Because much of the application logic is generated PL/SQL, source review is worthwhile where code can be obtained, and authorization deserves close attention since it is often handled poorly. Where possible, enable HTTPS instead of relying on the built-in encryption.",
       "durationSeconds": 2494,
       "conference": "hacktivity",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "34qX6f0OSCk",
@@ -4211,14 +4228,14 @@
       "speakers": [
         "Leigh-Anne Galloway"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "atm",
         "leigh-anne",
         "galloway",
         "money"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Leigh-Anne Galloway - Money makes money: How to buy an ATM and what you can do with it.",
+      "teaser": "Explains how a used ATM was bought and moved, and how its software, hardware and vault can be attacked.",
       "summary": "### Overview\nIn this presentation, Leigh-Anne Galloway discusses her experience acquiring a physical ATM for research and exhibition purposes at InfoSec 2017 on behalf of Positive Technologies. Coming from an incident response and payment card investigation background without prior ATM hardware experience, she explores the market landscape for purchasing ATMs, the intense logistical challenges of handling heavy cash machines, and the physical, hardware, OS-level, and network attack surfaces present in modern automated teller machines.\n\n### Key Topics\n- **History and Market of ATMs**: Tracing ATM development from John Shepherd-Baron's 1967 prototype in Enfield (Barclays) to modern deployment of roughly 3.8 million units worldwide, Galloway outlines key manufacturers such as NCR and Wincor Nixdorf.\n- **Procurement Paths**: Galloway evaluated four avenues for obtaining a machine: grey market (eBay listings, medical used-goods liquidators), black market inquiries, a wildcard road-trip option importing an ATM from Russia to the UK, and legal procurement through ATM maintenance companies such as Testlink or SPC International.\n- **Logistics and Physical Handling**: Freestanding ATMs weigh between 700 and 1,000 kilograms (near a ton) due to reinforced steel vaults with concrete and steel fibers. Moving, powering, and storing an ATM posed extreme challenges, including destroyed concrete floors, outdoor power rigging, and courier lift limitations.\n- **Attack Vectors and Security Flaws**: Examination of brute force physical attacks, operating system vulnerabilities, application control bypasses, hardware tampering, and network exploitation.\n\n### Technical Details\n- **Procurement Specifics**: Galloway purchased a refurbished freestanding machine from maintainer Testlink for approximately £3,200 (including VAT). She emphasizes understanding the distinction between \"tested\" units (no component guarantees) and \"refurbished\" units (every component refurbished), as well as ordering necessary internal cash cassettes holding roughly 1,800 to 2,000 notes per cassette across four denominations.\n- **Operating System Attacks**: ATMs predominantly run Windows XP (with newer models moving to Windows 7). Galloway demonstrated bypassing kiosk mode interfaces via hotkey combinations and keyboard navigation to reach the underlying OS and file system, noting that disabled mouse pointers can be easily circumvented with keys. Software-level malware frequently targets XFS (Extensions for Financial Services), which utilizes an open API. Application whitelisting controls can frequently be bypassed using vulnerable whitelisted executables.\n- **Hardware & Physical Attacks**: While vaults are heavily fortified, front facades are often made of weak plastic that can be cut through with basic household drills or bare hands to access internal PC cabling (such as USB connections). Galloway also highlighted connecting embedded systems (e.g., Arduino, Teensy) directly to the dispenser or PC inside the rear service area (via lockpicking without cosmetic damage) to issue direct dispensing commands. Network access vectors include intercepting unencrypted 3G/4G or leased-line infrastructure, deploying malware via OS update channels, or compromising VPN credentials.\n\n### Takeaways\nAcquiring and compromising an ATM does not require elite or prohibitive skill, but handling the physical logistics and weight of the machine represents the biggest real-world obstacle. Galloway highlights that ATM security relies heavily on the physical bulk of the vault rather than robust internal computing protections, and points out that responsibility disputes between hardware vendors and banks often leave older hardware inadequately secured despite config-level hardening possibilities.",
       "durationSeconds": 2038,
       "conference": "hacktivity",
@@ -4240,12 +4257,13 @@
         "literate",
         "disassembly"
       ],
-      "teaser": "Security researchers examine technical aspects of Travis Goodspeed - Some Thoughts on Literate Disassembly and Symbol Porting.",
-      "summary": null,
+      "teaser": "Explains how to run reverse engineering as a maintained project using text symbol files, version control and CI.",
+      "summary": "The talk argues that reverse engineering projects should be built and maintained like software projects. It starts from a common pattern: an analyst accumulates names, comments and function boundaries inside a single disassembler database. That works for a small, one-off target, but it becomes hard to share with teammates, hard to compare across firmware versions and tied to one tool. Opening someone else's database can show only a few names, or fail on licensing.\n\nThe proposed alternative is plain text. Symbols are kept in simple flat files of address and name pairs, in formats that disassemblers and GNU ld can read, and each guess is marked so it can be filtered out before anything is linked against. Version control records who named what and when. The speaker describes porting symbols between firmware revisions with a small tool that matches byte-identical functions while ignoring linker relocations, then fixing the few functions that changed by hand. Structural patterns, such as a module's address range or the Thumb function prologue, can label large parts of an image in one pass, though these hold only for some programs. Emulation can exercise embedded code on a development machine, and headless Binary Ninja scripts can validate imports in continuous integration.\n\nThe main takeaway is to choose one file format, use clear file names, write down findings, and add tests that run against every target version. Keeping the project clean lets a new collaborator catch up quickly, and keeping the data in text lets it move to other tools and targets later.",
       "durationSeconds": 2136,
       "conference": "hacktivity",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "7sL1pShqj78",
@@ -4294,7 +4312,9 @@
       "youtubeId": "UXgFqaqOzgc",
       "slug": "costin-raiu-keynote-apt-paleontology-in-the-age-of-cyber",
       "title": "Costin Raiu / keynote - APT Paleontology in the age of cyber",
-      "speakers": [],
+      "speakers": [
+        "Costin Raiu"
+      ],
       "track": "threat-intel",
       "topics": [
         "apt",
@@ -4302,12 +4322,13 @@
         "raiu",
         "paleontology"
       ],
-      "teaser": "Security researchers examine technical aspects of Costin Raiu / keynote - APT Paleontology in the age of cyber.",
-      "summary": null,
+      "teaser": "Walks through Kaspersky's APT hunts, from a Silverlight zero-day caught with YARA to the Wild Neutron espionage group.",
+      "summary": "Costin Raiu, who leads the global research and analysis team at Kaspersky, frames advanced persistent threat investigation as paleontology. Analysts often hold only a few fragments of a campaign, so they keep collecting samples, tracing lateral movement and mapping command-and-control domains until the full picture takes shape. He used the Regin espionage platform as an example: his team began tracking it around 2008 and 2009 but published only in 2014, once the scattered early samples formed a complete structure.\n\nThree investigations follow. The first began with a Russian seller offering exploits to the surveillance vendor Hacking Team. Raiu noticed that the seller's Silverlight exploit code left debug strings behind and wrote a YARA rule to match them. Months later the rule flagged a Silverlight exploit used against a victim in Laos, which Microsoft confirmed as a zero-day. The second covers the Wild Neutron group, which avoided government targets and went after law firms, Bitcoin companies and investment-linked businesses. Its tactics included watering-hole sites, stolen code-signing certificates, a Java zero-day, a versioned backdoor and an SSH-based tool for bulk data theft. Attribution stayed unresolved, with several apparent false flags.\n\nThe talk closes by returning to the seller's unsold iOS zero-day. Raiu argues that anyone can do this kind of hunting by learning YARA, a rule language he still uses most days and which Apple has built into macOS antivirus. He also argues that defenders should give their own networks as much attention as offensive research.",
       "durationSeconds": 2627,
       "conference": "hacktivity",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "QoE0M7v84ZU",
@@ -4335,19 +4356,22 @@
       "youtubeId": "AtPFBXHpZxk",
       "slug": "daniel-komaromy",
       "title": "Dániel Komáromy",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Dániel Komáromy"
+      ],
+      "track": "mobile",
       "topics": [
         "niel",
         "romy",
         "vulnerability-research"
       ],
-      "teaser": "Offense wins games analyzes Dániel Komáromy.",
-      "summary": null,
+      "teaser": "Argues that defenders protecting mobile and embedded products start at a structural disadvantage against attackers.",
+      "summary": "The keynote challenges the view that large companies get breached only because they do not care. Drawing on years of product security work at a chip maker, the speaker argues that attackers hold the edge in mobile and embedded systems. Defenders have little telemetry on local, proximity and carrier-network attacks, so they cannot see what is being exploited. Exploit prices have also kept pace with rising target difficulty, so the cost of attacking has not really gone up for attackers.\n\nThe middle of the talk looks at why defenders' usual advantages erode. Products are often assembled from black-box components supplied by others, such as a phone's baseband or a car's key-fob chip, and vendors inherit their flaws. Examples include a remotely reachable baseband interface on iPhones, an outdated key-fob chip still shipping in cars, and poor early-boot entropy that made a car's onboard Wi-Fi passwords easy to crack. Other problems include debug interfaces that work as back doors, long product tails that keep old bugs alive, misaligned patch cadences, and disclosures that give attackers reusable older bugs.\n\nThe closing advice is to choose priorities and state known gaps openly instead of chasing rare research showcases. The speaker warns that obscurity and firmware encryption can slow fixes and create safe havens for attackers. Security work should also run in parallel with development rather than being squeezed in after a product is finished.",
       "durationSeconds": 3425,
       "conference": "hacktivity",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "UdZDlt2dlqM",
@@ -4356,7 +4380,7 @@
       "speakers": [
         "Kelly Shortridge"
       ],
-      "track": "community",
+      "track": "policy",
       "topics": [
         "kelly",
         "shortridge",
@@ -4364,12 +4388,13 @@
         "behavioral",
         "model"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Kelly Shortridge - \"The Art of Explanation: Behavioral Models of InfoSec\".",
-      "summary": null,
+      "teaser": "Applies behavioral economics such as prospect theory to explain why defenders and attackers make irrational security decisions.",
+      "summary": "Kelly Shortridge uses the familiar Keynes observation about financial markets to frame security defenders as people whose irrational habits can outlast their uncompromised status. The talk introduces prospect theory, which holds that people judge outcomes against a reference point, feel losses more strongly than gains, and overweight small probabilities.\n\nApplying that model, the speaker argues that attackers act from a gain-seeking posture and tend to be risk-averse, while defenders sit in a loss posture and take risky bets to return to their baseline. This helps explain why simple, high-certainty controls such as two-factor authentication and Microsoft's EMET see low adoption, while flashy anti-APT products sell well. The talk also covers time inconsistency, the fast intuitive versus slow deliberate thinking described by dual system theory, and how group decisions can amplify biases through groupthink and escalation of commitment.\n\nFor practitioners, the suggested responses include raising attacker costs by eliminating low-hanging fruit, reducing the value of a breach through segmentation and separated data stores, and using data and individual accountability to counter bias. The speaker closes by calling for more empirical research on defender behavior and more sharing of unbiased metrics.",
       "durationSeconds": 2120,
       "conference": "hacktivity",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "RxsDat882IY",
@@ -4424,7 +4449,7 @@
       "speakers": [
         "Lock Impressioning"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "weyer",
         "vulnerability-research",
@@ -4435,7 +4460,8 @@
       "durationSeconds": 2747,
       "conference": "hacktivity",
       "viewCount": 39000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "SLkYZjOAtiA",
@@ -4703,12 +4729,13 @@
         "nikolic",
         "vulnerability-research"
       ],
-      "teaser": "Guided Fuzzing explores Aleksandar Nikolic.",
-      "summary": null,
+      "teaser": "Shows how closed-source Linux binaries can be instrumented with Dyninst to get fast, coverage-guided fuzzing like AFL.",
+      "summary": "The talk opens with a primer on guided fuzzing, contrasting blind mutation with coverage feedback. It covers AFL's core ideas: compile-time instrumentation, a shared-memory bitmap that records edge transitions as a fitness signal, and a fork server that keeps process creation cheap. The speaker then reviews ways to fuzz closed-source binaries, such as Pin- and DynamoRIO-style dynamic instrumentation, which is slow, and AFL's QEMU user-mode mode, which must instrument either only the main binary or every linked library.\n\nThe core of the talk is a small tool built on the Dyninst static rewriting framework. It instruments each binary once, adds AFL-compatible coverage hooks and a fork server, and can target individual functions or libraries. Control-flow recovery in mixed code and data is heuristic, and Windows support is weak. In a live comparison on a PNG library, native AFL ran at roughly 2,600 executions per second, QEMU mode at 600 to 700, and the rewritten binary at about 1,700, with coverage growing during the run.\n\nThe last part covers bugs found over the past year. A month or two of runs on a twelve-core machine against an Oracle document-filtering SDK and HP KeyView produced thousands of crashes, leading to automated triage and roughly 20 patched Oracle bugs. Examples include an XML integer overflow that needs precise byte conditions, a stack overflow from a tiny unknown-format input, and a TIFF heap overflow. Takeaways: speed matters, good corpora carry over between parsers, and narrow instrumentation keeps fuzzing focused.",
       "durationSeconds": 2347,
       "conference": "hacktivity",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "_tnMI90Fgj4",
@@ -4878,12 +4905,13 @@
         "zsolt",
         "szalay"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Levente Buttyán, András Szijj, Zsolt Szalay - Hacking cars in the style of Stuxnet.",
-      "summary": null,
+      "teaser": "Shows how a compromised workshop diagnostic PC can use a proxy DLL to intercept and alter a car's OBD traffic.",
+      "summary": "The talk argues that attacking a car through the diagnostic software on a workshop PC is easier than the remote attacks that dominate car-hacking research. The speakers, from the Budapest University of Technology and Economics, frame this as a Stuxnet-style approach: infect a poorly maintained PC that is often connected to the internet, then manipulate the application that talks to the vehicle over the OBD port. They note that remote attacks need a specific exploitable bug for each interface and brand, which makes them hard to scale.\n\nFor a proof of concept, the team examined a widely used third-party diagnostic application against an Audi TT used for teaching. The application's DLLs were not effectively checked for signatures, so the team loaded a proxy DLL ahead of the original, which let them log, replay and modify messages before passing them on. They reverse engineered the proprietary cable protocol, including its message format, a checksum, and XOR-based encryption driven by a static table, and recomputed checksums after each edit. An inexpensive clone cable passed the license check. Using replayed and modified messages, they switched off the airbag while the software kept showing it as on.\n\nThe takeaway is that the application's protections, such as signing and obfuscation, were not sufficient. The speakers recommend verifying every third-party component with signatures and CRCs before loading and periodically during runtime, and using proper cryptography rather than simple XOR. They close by raising an open question about IoT devices managed from PCs, where an infection could remove itself and leave the devices compromised.",
       "durationSeconds": 2505,
       "conference": "hacktivity",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "AN3DIa8dVjY",
@@ -4912,20 +4940,23 @@
       "youtubeId": "ayboWBdvgis",
       "slug": "varadi-tamas-tarcsas-zarak-nyitasanak-eszkozei-es-modszerei",
       "title": "Váradi Tamás– Tárcsás zárak nyitásának eszközei és módszerei",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Váradi Tamás"
+      ],
+      "track": "hardware",
       "topics": [
         "radi",
         "nyit",
         "eszk",
         "dszerei"
       ],
-      "teaser": "Security researchers examine technical aspects of Váradi Tamás– Tárcsás zárak nyitásának eszközei és módszerei.",
-      "summary": null,
+      "teaser": "Shows how disc detainer locks are identified, how their discs work, and how a specialised pick is used to decode them.",
+      "summary": "The talk covers disc detainer locks, which can be recognised by a circular keyway with a rectangular or butterfly-shaped cut and by their key profiles. The speaker explains how the internal discs and spacer rings determine a lock's complexity, and how the number of notches and their angles reveal how many discs a lock has. He recounts the history of the method, beginning around 2007 when a young Finnish picker claimed he could decode Abus Granit locks. The manufacturer responded by sending him locks to open, and his solution became the basis for the decoding approach presented.\n\nThe method works from the back of the lock. All discs are first turned to the end position, then each one is manipulated in reverse. The pick's tip is under half a millimetre thick so it can move between the discs without disturbing them. The tool is scaled in 18-degree steps, which the speaker's group subdivided into tenths. They found that false cuts allow a much narrower movement of a disc than correct cuts, which makes the two distinguishable. Once a lock is opened, its key code can be read directly, because such keys are cut from the code rather than from an existing key.\n\nThe speaker contrasts these locks with cheaper Chinese disc locks, whose plastic sleeves give unreliable feedback, and with newer designs that place a rotating disc at the top or middle, which requires a three-part tool. He stresses steady practice on many different locks, and notes that opening locks is prohibited in Hungary. He closes by saying that the Abloy Protec has not yet been opened publicly.",
       "durationSeconds": 1991,
       "conference": "hacktivity",
       "viewCount": 18000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "xZuYUCaMNo0",
@@ -5085,7 +5116,9 @@
       "youtubeId": "RGD9txwkxFk",
       "slug": "glenn-ten-cate-owasp-security-knowledge-framework-survival-is-no",
       "title": "Glenn Ten Cate - OWASP Security knowledge Framework",
-      "speakers": [],
+      "speakers": [
+        "Glenn Ten Cate"
+      ],
       "track": "appsec",
       "topics": [
         "owasp",
@@ -5095,12 +5128,13 @@
         "knowledge",
         "survival"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Glenn Ten Cate - OWASP Security knowledge Framework - Survival is not mandatory.",
-      "summary": null,
+      "teaser": "Shows how the OWASP Security Knowledge Framework guides developers through requirements, checklists and continuous integration checks.",
+      "summary": "The talk opens with an analogy between aviation and software security. Airlines rely on long training, checklists, manuals, in-depth testing and quick sharing of incidents between operators and manufacturers, and the speaker argues that software development should work the same way. He points to the large number of web application breaches and to the OWASP Application Security Verification Standard, a checklist of web security controls, now in its 3.0 revision, with levels meant for everything from simple to critical applications.\n\nThe main part is a walkthrough of the Security Knowledge Framework, an open source web application. Its knowledge base holds around 200 items, each explaining an attack and its mitigations, and its code examples cover PHP and .NET, with Python and Java in progress. In the pre-development view, a team selects planned features such as file upload or forms and receives the matching attack vectors and a downloadable report before any code is written. After development, the ASVS checklist is answered control by control, and each \"no\" answer is linked to a knowledge base item that explains the impact and the fix. The speaker describes running this as a workshop, reviewing code with the development team on screen.\n\nThe closing section covers continuous integration for the framework project itself. Travis CI builds each commit, Coveralls tracks unit test coverage, and a code quality service grades the code, so a developer sees problems within minutes. The speaker stresses that automated scanners still need manual validation and that expert penetration testing comes last. He ends by asking practitioners to contribute code examples, checks and project help.",
       "durationSeconds": 2372,
       "conference": "hacktivity",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "VTf49sT4vHY",
@@ -5282,15 +5316,17 @@
       "youtubeId": "p-Njhwp5PZA",
       "slug": "joernchen-of-phenoelit-your-web-app-those-hackers-and-you",
       "title": "joernchen of Phenoelit - Your Web app, those hackers & you",
-      "speakers": [],
+      "speakers": [
+        "joernchen"
+      ],
       "track": "appsec",
       "topics": [
         "web",
         "joernchen",
         "phenoelit"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for joernchen of Phenoelit - Your Web app, those hackers & you.",
-      "summary": null,
+      "teaser": "Shows recurring web app flaws like predictable password reset tokens and argument injection, and how developers can prevent them.",
+      "summary": "The talk examines recurring flaws in web applications and the habits that let them reach production. The speaker, who focuses on Ruby on Rails, starts with password reset flows, which often break in surprising ways. In one case, MySQL treated a numeric zero as matching a string token, letting an attacker reset another account. In an ownCloud case, reset tokens were built from a predictable time-based identifier, and PHP type casting made the value even easier to guess. A third example, a Rails challenge modeled on Discourse's reset code, let a user-supplied session key choose which account was reset.\n\nThe middle section moves to other classes of bugs. A Git-backed wiki's search passed user input to git grep as separate arguments, so a query beginning with a dash could inject the -O option and run a shell command, even though shell metacharacters were blocked. GitHub's SSH frontend was another case, where a crafted username injected environment variables into a second SSH process. The Debian OpenSSL case, where a fix for an uninitialized variable weakened key generation, shows why scanner output needs checking.\n\nThe closing advice is aimed at developers. Treat each disclosure as free audit work: find the root cause, add a regression test, search for the same pattern elsewhere, and confirm the fix with the reporter. Follow public vulnerability mailing lists, and use threat modeling with trust boundaries to question assumptions about user input and the environment.",
       "durationSeconds": 2580,
       "conference": "hacktivity",
       "viewCount": 1100,
@@ -5461,7 +5497,7 @@
       "speakers": [
         "Axelle Apvrille"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "fitness",
         "axelle",
@@ -5470,12 +5506,13 @@
         "tracker",
         "hack"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Axelle Apvrille - Fitness Tracker: Hack in Progress.",
-      "summary": null,
+      "teaser": "Shows how a popular fitness tracker can be tricked into logging fake steps and how its sync protocol was probed.",
+      "summary": "The talk opens with the popularity of entry-level fitness trackers, with sales estimated between 40 and 70 million units, and asks whether their step counts can be faked. Steps come from a three-axis accelerometer, and the speaker shows how a tracker mounted on a desk fan can log steps while the wearer sits still. Earlier researchers had done the same with a tracker on a car wheel. Some step-reward and betting platforms pay out for step goals, which gives attackers a clear motive.\n\nThe research then moves to the software side. The speaker wrote a small Python utility that talks to the tracker through a Bluetooth dongle, lets it synchronize data and makes its LEDs blink. The packet formats were reversed by hand, and the synchronized data sent to the vendor's servers was shown to be encrypted. Using the device channel, the speaker injected a short string of up to 17 bytes that came back in every later reply, even after a reset. This relies on a flaw reported to the vendor, which treated it as a bug. The tracker's output was also tested as a random number source with statistical suites, and it showed weaknesses.\n\nThe talk closes with its limits. The injection was a proof of concept with no real payload, and getting code to run on the synchronizing computer was left for future work. Replaying recorded step traffic with corrected counters failed, which suggests the encryption involves more than a simple counter. Probing the hardware was the next planned step, and the speaker expected a firmware update to close the flaw.",
       "durationSeconds": 2713,
       "conference": "hacktivity",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "OBIH6DOzr7Q",
@@ -6007,7 +6044,7 @@
       "speakers": [
         "Philip Young"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "mainframe",
         "philip",
@@ -6015,12 +6052,13 @@
         "smashing",
         "prison"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Philip Young - Smashing the Mainframe for Fun and Prison Time.",
-      "summary": null,
+      "teaser": "Walks through a 2012 breach of a Swedish government mainframe and the z/OS attack techniques that enabled it.",
+      "summary": "The talk is a primer on IBM mainframes for people new to the platform. It explains z/OS concepts such as logical partitions, TSO sessions, data sets, Unix System Services and RACF, the central database that controls access and stores password hashes. JCL job control and REXX scripting are introduced so the later attack details make sense.\n\nThe main case study is a 2012 breach of a Swedish government mainframe run by a third-party contractor. The attacker abused a web server CGI weakness to run commands, submitted JCL through an exposed FTP interface, and used a setuid-root REXX script to reach root. He then planted root-shell backdoors and SSH keys that survived account deactivation, and copied the RACF database for offline password cracking. An operator's notice of unusual workload first exposed the intrusion.\n\nThe speaker then demonstrates tools he has built for mainframe testing, including an Nmap patch and screenshot script, an Ettercap module that captures TSO logins from 3270 traffic, a user enumeration script, and an EBCDIC-aware netcat replacement. He warns that password guessing can lock out entire user populations. The talk closes by pointing to the free Hercules emulator as a way to practise safely and by urging more researchers to examine the platform.",
       "durationSeconds": 2676,
       "conference": "hacktivity",
       "viewCount": 22000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "uRyJCje_Ze0",
@@ -6117,19 +6155,20 @@
       "speakers": [
         "Hacking CCTV systems"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "cctv",
         "benjamin",
         "system",
         "systems"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Benjamin Tamási - Hacking CCTV systems.",
-      "summary": null,
+      "teaser": "Shows how a CCTV video recorder's hidden telnet service and firmware-stored password hash let an attacker gain root access.",
+      "summary": "The talk looks at closed-circuit television recorders, the DVRs that store footage from security cameras, and how a widely used model can be compromised. It starts with a recorder whose admin password had been forgotten, where a simple default code opened the web interface. The speaker then found an undocumented telnet service on a second port and noted that weak default passwords were common across the devices they had examined.\n\nThe main technique was firmware analysis. The firmware file was a renamed archive containing a U-Boot image with a 64-byte header, and stripping that header with dd made it mountable as a compressed filesystem. The password file held an unshadowed DES hash for root, which was cracked quickly with hashcat and then used to log in over telnet as root. The speaker showed that binwalk, with its extraction option, could automate these steps. A separate account file in the configuration directory could be deleted to reset the admin password on reboot, and debug ports on the board offered console root access without any firmware work.\n\nThe impact is that a shared master credential exists across the vendor's products, so an attacker on the local network could wipe recorded footage or clear logs. The speaker argued that vendors should avoid master passwords, remove the hidden telnet access or tie it to a physical reset control, and consider custom firmware where vendors will not change their builds.",
       "durationSeconds": 2785,
       "conference": "hacktivity",
       "viewCount": 759000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "-ojeC2RClx4",
@@ -6411,8 +6450,8 @@
         "bittorrent",
         "providing"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Tamás Jós, Attila Bogár - is BitTorrent really providing anonymity?.",
-      "summary": null,
+      "teaser": "Shows how BitTorrent trackers, DHT nodes and magnet links leak peer IPs, persistent node IDs and download history.",
+      "summary": "The talk asks whether BitTorrent actually provides anonymity. The speakers start with the history of peer-to-peer systems, from early file sharing and the Arpanet to Skype and Facebook's update distribution, then explain how a torrent file works. It holds tracker information, file names and a SHA-1 hash of each piece, and the info hash identifies the torrent. Magnet links expose that info hash and the trackers as plain text, and a small tracker can run in about 90 megabytes of disk space.\n\nTo show what an observer can learn, the speakers built a proof-of-concept logger that monitored the network without downloading content. Over the study they collected around 16,000 torrents and roughly 140,000 peers, then enriched the IP addresses with reverse DNS and GeoIP data. Tracker announces reveal uploaded and downloaded totals, and on private trackers a passkey ties activity to one account. In the DHT, each client has a persistent random node ID, which let them link a user across home, work and mobile addresses. They also found users who started a torrent client before their VPN, so the same node ID appeared under a new IP. Routing attacks on the DHT were described as possible in theory, though attempts to disrupt it had not succeeded in practice.\n\nThe speakers also described rights holders monitoring torrents and sending letters to IP owners, including one cam-recording download that cost 2500 euros. Their conclusion is that BitTorrent is not anonymous. Users should choose what they download, start the VPN before the torrent client, and remove the torrent client from autostart. Employers and governments should expect this traffic to be traceable.",
       "durationSeconds": 2853,
       "conference": "hacktivity",
       "viewCount": 1300,
@@ -6709,7 +6748,7 @@
       "speakers": [
         "Hype vs. Reality"
       ],
-      "track": "community",
+      "track": "mobile",
       "topics": [
         "mobile",
         "charlie",
@@ -6717,12 +6756,13 @@
         "threat",
         "threats"
       ],
-      "teaser": "Hype vs. Reality examines Charlie Miller - Mobile Threats.",
-      "summary": null,
+      "teaser": "Compares iOS, Android and desktop attack costs to show why mobile threats are rarer than headlines suggest.",
+      "summary": "The talk opens by questioning alarming mobile security headlines, arguing that most describe researcher demonstrations rather than attacks criminals actually run. It explains that code reaches a device either through malware a user chooses to run or through exploits that fire without user intent. Defenders can mostly make exploitation harder, limit what code can do, restrict persistence, and detect it afterwards.\n\nThe speaker contrasts iOS and Android. iOS requires code signing for every binary and library and relies on Apple's review and removal process, which makes persistence after a reboot hard. Android lacks mandatory signing, so an app can pass review with no permissions and fetch exploit code at runtime. Two personal cases are described, in which apps were pulled from each store after the speaker's research. The jailbreakme 3 exploit is walked through as an example of an iOS chain combining a browser memory bug with a kernel bug to disable code signing. Malware volumes and browser traffic shares suggest desktops remain the easier target, while mobile attack surfaces such as SMS, baseband and NFC are rarely abused in practice.\n\nThe talk argues that bigger everyday risks are lost unlocked phones, user jailbreaking, and Android fragmentation, where carriers and manufacturers slow updates while iOS versions spread quickly. For organisations, it recommends focusing on MDM controls such as passcodes, encryption and remote wipe rather than costly defenses against rare exploits. The closing point is that the picture could change if PCs become as hard to attack as phones, and that determined state actors are the main concern for mobile exploitation.",
       "durationSeconds": 2636,
       "conference": "hacktivity",
       "viewCount": 2300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "uxFjimoDqEk",
@@ -7059,7 +7099,7 @@
       "speakers": [
         "Vivek Ramachandran"
       ],
-      "track": "community",
+      "track": "wireless",
       "topics": [
         "wpa2",
         "hacktivity",
@@ -7067,14 +7107,15 @@
         "ramachandran",
         "cracking"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Hacktivity 2012 - Vivek Ramachandran - Cracking WPA/WPA2 Personal and Enterprise for Fun and Profit.",
-      "summary": null,
+      "teaser": "Explains how WPA and WPA2 personal and enterprise networks are cracked, from handshakes to rogue access points.",
+      "summary": "The talk covers attacks on WPA and WPA2 in both personal (pre-shared key) and enterprise (802.1X with RADIUS) modes, beginning with why WPA was designed as a stopgap for WEP-era hardware. It explains how a passphrase is stretched into a key and how the four-way handshake exposes enough values to test passphrase guesses offline. Captured handshakes are checked against a wordlist, so the attack only succeeds when the passphrase appears in that list.\n\nSpeed is the next focus. Precomputing master keys for a specific SSID turns each check into a lookup, and rented cloud instances make large wordlists affordable. The speaker also shows AP-less capture, where a rogue access point that answers a client's probe requests for a remembered network collects a usable handshake without knowing the key. Other cases include WPS PIN brute forcing with Reaver, which older firmware without lockout is vulnerable to, and an insider abusing the shared group key to spoof traffic.\n\nFor enterprise networks, a rogue WPA2-Enterprise honeypot with a fake certificate captures PEAP MS-CHAPv2 challenge-response exchanges when clients accept any certificate or trust any certificate authority, and those responses can then be dictionary attacked per user. The takeaways are to avoid WPA-Personal for shared environments, since any insider who knows the passphrase can decrypt others' traffic, to use long random passphrases, to pin trusted server names in client profiles, and to consider EAP-TLS where certificate management allows.",
       "durationSeconds": 3788,
       "conference": "hacktivity",
       "viewCount": 180000,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2012,
-      "eventLabel": "Hacktivity 2012"
+      "eventLabel": "Hacktivity 2012",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "0uC7UxWH9lo",
@@ -7200,21 +7241,22 @@
       "speakers": [
         "László Tóth Ferenc Spala"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "database",
         "hacktivity",
         "ferenc",
         "spala"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Hacktivity 2012 - László Tóth Ferenc Spala - Think differently about database hacking P..",
-      "summary": null,
+      "teaser": "Shows post-exploitation and network hijacking of Oracle and MS SQL sessions, including credential theft from the OCI client driver.",
+      "summary": "The talk moves beyond SQL injection to ask what an attacker can do once they are already positioned around Oracle databases. The first part targets the Oracle OCI client driver: by hooking the functions that receive connection parameters and execute statements, the speakers showed that a user's username and clear-text password can be captured from the next query they run, and that credential material stays in memory after logout. A Metasploit extension automated this during a live demo on a Windows client.\n\nThe network section revisited TNS poisoning, which abuses the unauthenticated registration messages an Oracle listener accepts to redirect a share of client connections through an attacker's proxy. Their Python proxy then hijacks an established session, so queries run under the victim's identity; in the demo this was a DBA account. They also published a Metasploit module that supports service identifiers longer than the six characters the public proof of concept handled. With a privileged session, they showed how a debugging command could disable auditing, run operating system commands, and load a payload into Oracle's process memory.\n\nThe same hijacking approach was applied to Microsoft SQL Server through a TDS proxy, where a client that opens several connections lets an attacker take over one of the spares. Metasploit modules then ran queries and xp_cmdshell through the hijacked thread. The main lesson is that database clients, listeners and connection paths are part of the attack surface, and that a database's own controls can be bypassed once an attacker reaches the process or the wire.",
       "durationSeconds": 2589,
       "conference": "hacktivity",
       "viewCount": 1000,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2012,
-      "eventLabel": "Hacktivity 2012"
+      "eventLabel": "Hacktivity 2012",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "1XPmtZ1_2B8",
@@ -7231,14 +7273,15 @@
         "farrah",
         "fowler"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Hacktivity 2012 - Judit Varga - Amy Farrah Fowler, or the geek girl's case with the tiara.",
-      "summary": null,
+      "teaser": "Traces how the geek girl stereotype formed, from homeschooling and typewriters to TV sitcoms, and why girls leave science.",
+      "summary": "The talk examines the geek girl, starting with how the terms geek, nerd and hipster have changed meaning over time. Drawing on interviews with women in geek circles, the speaker argues that geek culture has become less gendered, yet girls still often feel they must choose between being geeky and being feminine.\n\nThe historical section traces how girls were steered away from science. In past centuries, homeschooling taught boys mathematics and physics while girls learned embroidery and languages, and new technologies such as the telephone were seen as threats to morals. The typewriter was first marketed to men and flopped, then to middle-class women, becoming a symbol of a modern, fashionable working woman. Using Marshall McLuhan's idea that each invention extends a bodily function at some cost, the talk reads that shift as both upward mobility and loss. Television sitcoms are then examined, with The Big Bang Theory's Bernadette and Amy Farrah Fowler presented as feminine scientists, unlike earlier shows that portrayed science girls as unattractive loners.\n\nThe closing section covers the leaky pipeline: about 60 to 70 percent of girls enter technology-oriented schools, but only 30 to 40 percent remain in science. Losses cluster in childhood, adolescence, college and job entry, when feedback from teachers and parents matters. Suggested fixes include visible role models with clear practical goals, hands-on programs such as a project where girls around twelve built and documented games in C or C++, corporate social responsibility awards, and spaces like hackerspaces where girls can socialise with similar peers.",
       "durationSeconds": 2129,
       "conference": "hacktivity",
       "viewCount": 1800,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2012,
-      "eventLabel": "Hacktivity 2012"
+      "eventLabel": "Hacktivity 2012",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "zS5WM8igoFw",
@@ -7300,14 +7343,15 @@
         "zombie",
         "browser"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Hacktivity 2012 - Zoltán Balázs - Zombie Browsers, spiced with rootkit extensions.",
-      "summary": null,
+      "teaser": "Shows how malicious browser extensions can act as a botnet client, hide from users and evade antivirus detection.",
+      "summary": "The talk examines malicious browser extensions as a persistent foothold on victim machines. The speaker downloaded publicly available malicious Firefox extensions from Mozilla's add-on site and found that over ninety percent were built to spam Facebook. The speaker argues they can be far more dangerous: they poll a master server for commands, run on Firefox, Chrome and Safari across several operating systems, and slip past firewalls and application whitelisting because they use ordinary HTTP and plain JavaScript.\n\nThe demonstrations begin with a fake YouTube page that persuades a Safari user to install a fake Flash plugin, after which the attacker runs arbitrary JavaScript in the browser. Further demos show installing extensions through remote code execution, hiding them from the extension list with a Firefox configuration flag, and concealing a Chrome extension with a custom stylesheet. The browser is also used as a proxy to reach an internal web application and test it for SQL injection. Other examples include distributed SHA-1 password cracking through Chrome Native Client, a Flash configuration that grants webcam access, and altered currency rates shown on a Hungarian news site.\n\nAntivirus products did not detect the sample extensions, and the speaker doubts behavioral detection would help. Recommendations include that antivirus vendors analyze and block public malicious extensions, that Mozilla refuse installs from outside its official store, and that website operators bind sessions to the client IP. Users should keep banking on a separate operating system, and companies should control which extensions are installed, for example through Group Policy in Chrome.",
       "durationSeconds": 2167,
       "conference": "hacktivity",
       "viewCount": 1000,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2012,
-      "eventLabel": "Hacktivity 2012"
+      "eventLabel": "Hacktivity 2012",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "VDK-Pl_HwpU",
@@ -7348,14 +7392,15 @@
         "veres-szentkir",
         "universal"
       ],
-      "teaser": "Security researchers examine technical aspects of Hacktivity 2012 - András Veres-Szentkirályi - USB = Universal Security Bug?.",
-      "summary": null,
+      "teaser": "Shows how a cheap AVR microcontroller can move data out of a locked-down Windows PC using only keyboard LED signals.",
+      "summary": "The talk looks at moving data out of a tightly restricted computer with no network link, data loss prevention controls, and only a keyboard, mouse and display allowed. The speaker builds a custom USB device around a cheap ATmega328 microcontroller running a software USB stack, so the chip can present itself as a keyboard. Along the way the speaker points out that USB's voltage levels and timing make it a poor fit for hobbyist hardware, so the design relies on workarounds rather than a compliant implementation.\n\nGetting code onto a Windows 7 machine was the first hurdle, since the default shell offers only batch files and the old debug tool caps executables at 64 kilobytes. The workaround was to encode a binary as base64 inside a Visual Basic script that rebuilds the file, with the keystrokes typed by the device. A small PNG was delivered this way and opened correctly. For the return path, the keyboard's Num Lock and Caps Lock LEDs carried two bits per frame, with Scroll Lock acting as a clock. The stolen file was stored in the chip's EEPROM and read back by shorting two pins to trigger a hex-output mode. An audio modem and an SD card over SPI were also tried, and the SD card conflicted with USB timing.\n\nMeasured throughput was slow: about 10 bytes per second when typing and about one byte per second over the LEDs. The speaker concludes that PS/2 ports are no safer than USB, and that allow-listing USB identifiers does not stop a keyboard-emulating device. The prototype lacks encryption and integrity checks, and a packaged version could use more storage and be made smaller.",
       "durationSeconds": 2574,
       "conference": "hacktivity",
       "viewCount": 1700,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2012,
-      "eventLabel": "Hacktivity 2012"
+      "eventLabel": "Hacktivity 2012",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "TkilRlaowI4",
@@ -7372,14 +7417,15 @@
         "stampar",
         "spot"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Hacktivity 2012 - Miroslav Stampar - Spot the Web Vulnerability.",
-      "summary": null,
+      "teaser": "Walks through real PHP code examples showing how common web injection flaws arise and how to fix them.",
+      "summary": "The talk is aimed at both defenders and attackers who read web application source code, and it focuses on the vulnerability classes that attackers exploit most often. To ground this, the speaker counted names of public vulnerabilities in a large exploit database and found that SQL injection, followed by cross-site scripting and various file inclusion flaws, dominated the list, with WordPress and PHP applications heavily represented. The talk then defines the main classes: SQL injection, cross-site scripting in persistent and non-persistent forms, local and remote file inclusion, file disclosure, directory traversal and remote code execution.\n\nThe core walks through real-world PHP examples, each tied to the application it came from. Several show filters that looked sufficient but were not, such as an escaping routine that ignored numeric input, an HTML encoding call that left single quotes untouched because the quote flag was missing, and a prepared statement built by concatenating the query. Others cover an insert statement with an unchecked field, a WordPress comment URL stored unfiltered, a shout box whose tag stripping could be bypassed with a null byte, and a settings file that user input could write into executable PHP.\n\nThe closing section lists remedies: validating input with anchored regular expressions, casting numeric values to integers, sanitizing with proper escaping functions, encoding output, and using PDO prepared statements where the query text and parameters are passed separately. The speaker stresses that prepared statements only protect when variables are bound rather than concatenated.",
       "durationSeconds": 3252,
       "conference": "hacktivity",
       "viewCount": 1700,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2012,
-      "eventLabel": "Hacktivity 2012"
+      "eventLabel": "Hacktivity 2012",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Yrg2h0GftBw",
@@ -7531,13 +7577,14 @@
         "theory"
       ],
       "teaser": "Pentesting high security environments examines Hacktivity 2012 - Joe McCray - Big Bang Theory.",
-      "summary": null,
+      "summary": "This demo-driven session runs on a lab setup with a wireless access point, a Snort-based intrusion detection box, and vulnerable ASP.NET applications, one of them guarded by a web application firewall. The speaker starts with the basics of testing a parameter for SQL injection, showing how simple arithmetic on the parameter can reveal injection even when the application suppresses its error messages. From there he moves through error-based enumeration of database and table names, union-based injection with column counting, and inference and time-based blind techniques.\n\nThe demos then turn to defenses. Re-enabling a disabled command-execution feature on the database server sets off the IDS, which the speaker uses to argue that signature products mostly catch noisy, simple attacks. He shows how a WAF built on outdated rule sets can be probed and sidestepped, and points to default exclusions copied between products, rules written for old Windows and IIS versions, and a file-read logic flaw on a contact page that a scanner had rated as low. He also describes getting past 802.1x network access control by spoofing a printer's MAC address, and an exploit that evaded a host intrusion prevention signature after a single keyword change.\n\nThe closing message is that understanding how a defense decides what to block is usually more useful than buying more products. Tools are only as good as the people who configure, tune and monitor them, so staffing and training matter as much as the purchase.",
       "durationSeconds": 3053,
       "conference": "hacktivity",
       "viewCount": 195000,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2012,
-      "eventLabel": "Hacktivity 2012"
+      "eventLabel": "Hacktivity 2012",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "bA8qtfWVTwU",
@@ -7860,13 +7907,13 @@
       "speakers": [
         "Security Code Review"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "hacktivity",
         "kriszti",
         "ffer"
       ],
-      "teaser": "Security Code Review examines Hacktivity 2012 - Krisztián Schäffer.",
+      "teaser": "Explains how security code review finds vulnerabilities, using a MySQL authentication bug caused by a memcmp return-value mismatch.",
       "summary": "### Overview\nIn this Hacktivity 2012 presentation, code auditor Krisztián Schäffer discusses the role and practice of security code reviews and code auditing within software development. He notes that security code review is often treated like an unwelcome byproduct of development or a neglected quality assurance activity, particularly in commercial business applications where speed and low cost are prioritized over code quality. In contrast, large open-source projects like the Linux kernel, Firefox, and Google's Chromium integrate code review directly into their development lifecycles. Schäffer breaks down code review into three primary areas: vulnerability research, security code auditing methodologies, and building a security culture through quality assurance.\n\n### Key Topics\n- **Code Review in Practice:** Examining peer review systems (such as Chromium's Gerrit-based model) where developers read delta changes, debate security and typing implications, and require supervisor approvals before committing code.\n- **Vulnerability Research vs. Weaknesses:** Distinguishing between actual exploitable vulnerabilities and underlying code weaknesses. Schäffer emphasizes that code auditors should focus on finding and eliminating bad patterns rather than spending excessive time proving whether an issue is immediately exploitable.\n- **White-Box Auditing vs. Black-Box Testing:** Comparing the strengths and trade-offs of black-box testing (behavioral testing, simulating attackers with limited time, building client trust) versus white-box code auditing (root-cause identification, better developer feedback, deep structural visibility).\n- **Auditing Methodologies:** Exploring practical code reading strategies, including control-flow sensitive and data-flow sensitive analysis, threat modeling with business stakeholders, developer interviews, and static analysis tools.\n- **Metrics and Security Culture:** Implementing metrics such as lines of code reviewed per hour (LOC/h), defect density, and detection rate, alongside secure coding standards and developer training.\n\n### Technical Details\n- **MySQL Authentication Bypass Case Study:** Schäffer analyzes a major bug involving MySQL authentication and the C standard library `memcmp` function. The code compared password hash blocks using `memcmp` and assigned the return value to a `my_bool` type (defined as a signed `char`). While `memcmp` returns an integer (zero for a match, non-zero for differences based on byte comparison), casting non-zero results (such as multiples of 256 or values where the lower byte truncates to 0) into a signed byte can cause a non-zero integer to evaluate to zero, incorrectly bypassing authentication roughly every 256 attempts. He critiques automated tools (like Clang static analysis and Splint) and explains how static analyzers either missed the bug or suggested casts that silenced warnings without fixing the root cause.\n- **XML Injection via Session Cookies:** An example from an authorization module demonstrated an XML payload constructed by concatenating user session cookies directly with string addition (`+`). This allowed attackers to craft session cookie values containing injected XML tags to request unauthorized actions or resources.\n- **Java Class Loading Flaw:** A Java zero-day example illustrated fallback code where, after failing standard permission checks, the code attempted an alternative class-loading path, inadvertently allowing an app to load unauthorized classes.\n- **Custom Crypto Experiments:** The speaker references an example where custom, poorly understood code generation tools were introduced into a cryptography module, violating standard security principles against unapproved tools and experimental cryptography.\n\n### Takeaways\n- **Audit Speed and Metrics:** Reviewing more than 400 lines of code per hour significantly reduces the likelihood of finding subtle security bugs. Teams should track defect density and detection rates.\n- **Don't Waste Time on Exploitability During Audits:** If a dangerous pattern or weakness (such as raw string concatenation into XML) is identified, flag it for remediation immediately rather than spending audit time proving exploitability.\n- **Pair Auditing as Training:** Sitting down face-to-face with developers to review code acts as an effective, hands-on secure coding training session.\n- **Early Static Analysis:** Static analysis should be integrated early; running it late produces unmanageable volumes of warnings, whereas using it incrementally educates developers on typing and coding standards.\n- **Adherence to Approved Tools:** Security-sensitive components (especially cryptography) must rely strictly on well-understood, approved tools and established coding codices rather than experimental approaches.",
       "durationSeconds": 2345,
       "conference": "hacktivity",
@@ -7880,21 +7927,24 @@
       "youtubeId": "HjMngGSEtfo",
       "slug": "hacktivity-2012-varadi-tamas",
       "title": "Hacktivity 2012 - Váradi Tamás",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Váradi Tamás"
+      ],
+      "track": "hardware",
       "topics": [
         "hacktivity",
         "radi",
         "vulnerability-research"
       ],
-      "teaser": "Impressziótechnika analyzes Hacktivity 2012 - Váradi Tamás.",
-      "summary": null,
+      "teaser": "Shows how impressioning opens pin-tumbler locks by filing a blank key, using binding pin marks as a guide.",
+      "summary": "The talk introduces impressioning, a non-destructive lockpicking method that produces a working key without the original. The speaker explains that manufacturing tolerances mean that when the cylinder is under rotational tension, only one pin binds at a time. Each binding pin can be located and marked on a blank key, so the marks show where filing is needed. Before starting, the speaker noted that Hungarian law restricts possessing such tools for people who are not authorised to use them.\n\nThe core method is to polish the blank key's cutting edge to a uniform, non-reflective finish with a fine, well-cut file. The key is inserted and rocked back and forth under light tension, so the binding pins leave small bright marks on the blank. The key is then filed to the depth matching each marked pin, checked, and filed again until the marks change and the lock opens. The speaker stressed that file quality matters, recommending a Swiss No. 4 cut, and that UV light, soot or wax coatings can make the marks easier to see. A volunteer worked on a key on stage during the demonstration, and the speaker showed magnified images of the marks and the finished key.\n\nThe speaker also covered alternatives. Aluminium foil or soft fillers such as two-part epoxy can be used on a prepared key so pins erode the material, though such keys usually cannot be removed intact. Custom impression tools exist for specific lock types, but they are costly and fragile, and a commercial set can reach thousands of euros. The talk closed with an invitation to a two-day lockpicking workshop and a pointer to a follow-up talk on weak, inexpensive locks common in Hungary.",
       "durationSeconds": 1899,
       "conference": "hacktivity",
       "viewCount": 1600,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2012,
-      "eventLabel": "Hacktivity 2012"
+      "eventLabel": "Hacktivity 2012",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "2lqPev7nP9g",

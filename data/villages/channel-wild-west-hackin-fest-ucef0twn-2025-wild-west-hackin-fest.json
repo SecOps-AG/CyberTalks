@@ -1094,7 +1094,9 @@
       "youtubeId": "gGDrtN3rtxY",
       "slug": "everything-is-a-proxy-if-you-try-hard-enough-old-rfcs-new-exploi",
       "title": "\"Everything is a Proxy if You Try Hard Enough\"- Old RFCs, New Exploits | Ken Pyle",
-      "speakers": [],
+      "speakers": [
+        "Ken Pyle"
+      ],
       "track": "red-team",
       "topics": [
         "everything",
@@ -1104,8 +1106,8 @@
         "rfc",
         "exploit"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding \"Everything is a Proxy if You Try Hard Enough\"- Old RFCs, New Exploits | Ken Pyle.",
-      "summary": null,
+      "teaser": "Shows how loosely specified HTTP and DNS behavior lets requests tunnel SMTP and turn web proxies into SSRF pivots.",
+      "summary": "The talk starts with a look back at early internet standards, arguing that RFCs left gaps that only became exploitable decades later. The speaker points to vague rules around HTTP methods, default port assignments, and DNS name limits, and describes how many protocols are simply text parsed over raw sockets. Because a service is largely a parser, the port and the processing logic matter more than the nominal protocol.\n\nThe core demonstration sends an HTTP TRACE request with an SMTP conversation in its body to port 587. One side treats the message as a malformed HTTP request, while the other parses the SMTP commands and delivers an email. The same parser mismatch is shown through public web proxies that fetch arbitrary URLs, a content delivery service that can be coaxed into requesting arbitrary ports, a Windows Spotlight endpoint, and an Exchange Online draft-preview request that acts as server-side request forgery. Changing a DNS record's address to a loopback or private address lets the attacker reach internal hosts and scan ports, and short TTLs help evade caching. Recursive DNS lookups triggered by many subdomains are shown to multiply outbound requests.\n\nThe speaker closes by arguing that these problems are built into the protocols and are hard to fix with patches alone. He urges designers and defenders to think through the consequences of a standard before shipping it, and says the findings were responsibly disclosed to Microsoft.",
       "durationSeconds": 3233,
       "conference": "wwhf",
       "viewCount": 1700,
@@ -1580,12 +1582,13 @@
         "sight",
         "technique"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Hiding in Plain Sight: Shellcode Obfuscation Techniques | Mike Saunders.",
-      "summary": null,
+      "teaser": "Compares shellcode obfuscation methods like XOR, delta encoding, and jigsaw shuffling by how often antivirus engines flag them.",
+      "summary": "The talk looks at why shellcode loaders need to hide their payloads from antivirus and EDR, and how the speaker tested a range of obfuscation approaches. Each sample held an obfuscated payload and its decoding routine, with nothing executed, and was scored by how many of 72 VirusTotal engines flagged it. An unobfuscated Meterpreter payload was caught by 27 engines, while simple Base64 drew 18 and ROT13 drew 7.\n\nStronger-looking options did not always fare better. A single-byte XOR was flagged by 8 engines, a multi-byte XOR key by 2, and AES by 8, which the speaker linked to the high entropy that encryption adds. Because high entropy can get a binary blocked, the talk also covered mixing payload bytes with word-based data to lower overall entropy. Other methods included reversing byte order, storing bytes as UUIDs, IPv4, IPv6 or MAC addresses, shuffling bytes with a position map, and delta encoding, which was flagged by only 2 engines. Many detections targeted the decoding routine rather than the bytes, so changing the console subsystem or adding junk code could break those signatures.\n\nThe main takeaway is that no technique beats every product. A practitioner should identify which engines the target environment uses, then test candidate methods in a lab before relying on them. Storing the payload in a resource section or a separate file, and hiding data with steganography, were also raised as ideas to explore.",
       "durationSeconds": 2259,
       "conference": "wwhf",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "quk0EfcBVzU",
@@ -1906,12 +1909,13 @@
         "shirer",
         "charles"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Abusing API Security | Charles Shirer.",
-      "summary": null,
+      "teaser": "Walks through pentest methods against GraphQL APIs, from schema discovery to batched login brute force and injection.",
+      "summary": "The talk covers attacking GraphQL APIs from a penetration tester's point of view. It starts with the basics of how GraphQL queries, mutations, fields and objects work, and why developers favor it, since clients receive only the fields they request. The recon phase covers finding GraphQL endpoints through Nmap's detection script, endpoint wordlists and proxied traffic in Burp, plus scanning with graphql-cop to get a picture of the API's weaknesses.\n\nWhen introspection is enabled, the full schema can be dumped and mapped in GraphQL Voyager, which the speaker compares to BloodHound for its view of objects and permissions. When introspection is disabled, the talk shows how field suggestion messages can be abused, with Clairvoyance automating the process of rebuilding the schema from them. Attacks follow: batching many login attempts into one mutation to get around rate limits, OS command injection through a debug field whose only argument is a string, reading a password file that way, and SQL injection in a query filter, confirmed by a SQLite error message.\n\nThe speaker stresses that introspection and suggestions are often treated as features rather than vulnerabilities, that authentication must be coded by the developer, and that staging and production configurations can differ. The takeaway is to assume an API sits behind any web application, internal ones included, and to test each endpoint for schema exposure, batching and injection.",
       "durationSeconds": 2233,
       "conference": "wwhf",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "W-cmCFdQS5k",
@@ -2756,12 +2760,13 @@
         "mitre",
         "risk-based"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Magnets for Needles in Haystacks: Using MITRE ATT&CK w/ Risk-Based Alert | Haylee Mills | WWHF 2023.",
-      "summary": null,
+      "teaser": "Shows how aggregating low-fidelity observations into risk scores can cut noisy SOC alerts and surface attacker behavior.",
+      "summary": "Mills presents risk-based alerting, which she also calls aggregated abstraction alerting. Traditional one-to-one detections fire on routine activity and bury analysts in false positives. Instead, individual observations from many log sources are written into a shared risk index with scores, and an alert fires only when scores pile up against one object within a time window.\n\nShe walks through building it with Splunk's collect and lookup commands, though she says any tooling can do the job. Each observation carries a risk object, a threat object, source type, original event time, risk message, and ATT&CK tactic. Scores can be adjusted by asset priority or critical vulnerability counts. Two cases illustrate the point. An Acrobat process spawning a browser was harmless alone, but paired with a proxy connection to an uncategorized site within five minutes it reliably caught phishing. Reconnaissance commands scored low individually, and when several ran on one host they signaled a red team or a real compromise.\n\nReported results include alert volume drops of 30 to 90 percent, with one deployment going from about 1,500 alerts a week to 100. Purple teaming also improved, since red team fingerprints justified requests for new data sources. Mills advises a phased rollout, often taking three to six months to reach production, and suggests reviewing threat objects to spot noisy or rare behavior.",
       "durationSeconds": 3050,
       "conference": "wwhf",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "OOH2NDSKLw0",
@@ -2850,7 +2855,9 @@
       "youtubeId": "Cuw9ks7ohDQ",
       "slug": "cybersecurity-for-the-have-nots-of-the-world-jake-williams-wwhf",
       "title": "Cybersecurity for the \"Have-Nots\" of the World | Jake Williams | WWHF 2023",
-      "speakers": [],
+      "speakers": [
+        "Jake Williams"
+      ],
       "track": "hardware",
       "topics": [
         "have-not",
@@ -2858,12 +2865,13 @@
         "william",
         "wwhf"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Cybersecurity for the \"Have-Nots\" of the World | Jake Williams | WWHF 2023.",
-      "summary": null,
+      "teaser": "Gives small and mid-sized organizations with little security staff a budget-conscious way to prioritize their defenses.",
+      "summary": "Jake Williams opens by contrasting security advice written for large enterprises with the reality of small and medium businesses, often 1,000 to 2,500 employees with fewer than ten IT staff and no dedicated security team. He argues that generic best practices and costly consulting engagements, such as a risk assessment that produces an unaffordable remediation list, rarely fit these organizations. He frames the problem as limited time and money, where every build-or-buy choice means giving up something else.\n\nHe then walks through steps he considers realistic at this scale. These include an affordable EDR product, moving off on-premises Exchange and file shares to hosted services, and disabling DNS over HTTPS so that monitoring stays useful. For visibility he describes running Security Onion on inexpensive hardware fed by a network tap, enlarging Windows event logs, and enabling print server logging to answer insider questions. Other suggestions include rotating network storage units to keep one offline backup, using a third-party patching tool, and disabling USB mass storage. He advises against managed threat hunting from an EDR vendor, commercial awareness training, phishing simulations and CTI feeds for these organizations.\n\nHe closes by urging realistic goals, with detection valued over prevention when resources are thin. When constraints leave no workable set of controls, he says consultants should tell the client so rather than sell an plan the organization cannot carry out.",
       "durationSeconds": 3320,
       "conference": "wwhf",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "LWF93F41mgU",
@@ -3727,16 +3735,18 @@
       "youtubeId": "oXmapqLkZd0",
       "slug": "workshop-advanced-passive-dns-search-techniques-for-cyber-invest",
       "title": "WORKSHOP: Advanced Passive DNS Search Techniques for Cyber Investigations | DomainTools | WWHF '22",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Daniel Schwalbe"
+      ],
+      "track": "osint",
       "topics": [
         "dns",
         "investigations",
         "workshop",
         "passive-dns"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for WORKSHOP: Advanced Passive DNS Search Techniques for Cyber Investigations | DomainTools | WWHF '22.",
-      "summary": null,
+      "teaser": "Shows how to pivot through passive DNS data using time fencing, wildcards and regex for investigations.",
+      "summary": "This hands-on workshop introduces passive DNS as an investigation tool and explains how it differs from ordinary DNS lookups. Passive DNS records observations collected above recursive resolvers at cache misses, which makes it possible to go from an IP address to the domains that pointed at it over time, and from a name server or record value to related domains. The speaker walks through the DNSDB dataset and the Scout web interface, with attendees using API keys issued for the session.\n\nThe exercises start with standard searches by record type and the difference between left-hand and right-hand matching. Participants pivot from name servers, SOA contact emails, and SPF and DKIM values in TXT records to find domains that appear unrelated but share infrastructure. Wildcard subdomain enumeration is used to find lookalike login domains tied to phishing, and the speaker shows how public zones can expose internal IP addresses. Advanced options are covered next: time fencing to narrow results to an incident window, offsets for paging through large result sets, and de-aggregation to see how observation counts change over time, such as spikes that match a campaign.\n\nThe later section covers flexible search with keyword, glob and POSIX regular expression queries that match any label in a name. Examples include enumerating domain generation algorithm patterns and searching for brand names embedded in domains or text records. The speaker advises anchoring expressions, starting in standard search and pivoting, and using the command-line client for larger result sets. The main takeaway is that passive DNS adds enumeration and correlation value for threat hunting and red teaming, but its results carry no risk scoring, so analysts must judge what they find.",
       "durationSeconds": 6130,
       "conference": "wwhf",
       "viewCount": 1200,
@@ -3798,8 +3808,8 @@
         "adversary",
         "polite"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Adversary Emulation or How I Learned to Stop Being Polite and Get Real Results | Adam & Katie.",
-      "summary": null,
+      "teaser": "Compares red team testing habits with real threat actor behavior and offers ways to make adversary emulation more realistic.",
+      "summary": "The talk argues that many offensive security exercises are shaped by goals that differ from how real threat actors operate. It reviews common testing approaches such as assumed compromise and penetration testing, and places them alongside the Pyramid of Pain and MITRE ATT&CK. The speakers note that climbing those models does not automatically make an exercise realistic, because real adversaries pursue intent such as theft or destruction, and techniques serve that goal.\n\nA trade-off model of accurate, fast and inexpensive testing follows, where teams can usually choose only two. Next, detection data from a managed detection provider is compared across confirmed tests and confirmed malicious activity. Tools such as Empire, BloodHound and Metasploit showed up more often in testing, while reflective code loading, AutoIt, JavaScript and encoded PowerShell appeared more in criminal activity. Testers also tended to fire bursts of discovery commands in short windows, and some obscure living-off-the-land binaries were seen almost only in tests.\n\nFor solutions, the speakers recommend agreeing on goals, speed, accuracy and cost before an engagement, and deciding which behaviors matter to the organization. They suggest treating public test libraries as starting points that can be chained together, and using threat intelligence from internal incidents and external reporting to pick realistic behaviors. They close by urging testers to vary tooling, tempo and techniques so exercises better resemble real adversaries.",
       "durationSeconds": 2822,
       "conference": "wwhf",
       "viewCount": 1100,
@@ -3932,20 +3942,23 @@
       "youtubeId": "7EpYRK7Jxb0",
       "slug": "gone-in-60-seconds-minutes-hours-learning-from-3-live-realistic",
       "title": "Gone In 60 {Seconds,Minutes,Hours} Learning from 3 live, realistic end-to-end breaches | WWHF '22",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Jeff"
+      ],
+      "track": "red-team",
       "topics": [
         "second",
         "minute",
         "hour",
         "learning"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Gone In 60 {Seconds,Minutes,Hours} Learning from 3 live, realistic end-to-end breaches | WWHF '22.",
-      "summary": null,
+      "teaser": "Follows three live, end-to-end breaches from exposed spreadsheets to Exchange exploitation and a phone-based domain takeover.",
+      "summary": "The talk walks through three end-to-end breaches, each staged live, to show how real attackers differ from the scripted behavior of many penetration tests. The first breach needed no exploit: a search of an index of publicly exposed cloud storage turned up a spreadsheet holding student IDs, Social Security numbers and dates of birth, which opened with a plain download.\n\nThe second breach targeted on-premises Exchange servers exposed to ProxyNotShell. A scan found many unmitigated hosts, and an exploit script used credentials from combined breach data to gain code execution. The speaker then used a built-in Windows transfer tool to fetch a payload that altered the boot loader. The third breach started with a phone call that talked an employee into opening Quick Assist and sharing a six-digit code. The attacker used built-in OpenSSH to build a SOCKS proxy into the network, cracked a Kerberoastable service account hash offline, reached a domain controller over RDP, and pushed a Group Policy script that forced BitLocker encryption at reboot.\n\nThe takeaways are that attackers often rely on simple, scalable methods, so internet-facing services and single-factor remote access deserve priority. Severity scores alone are a weak guide; the speaker suggested asking whether a flaw gives an attacker a shell and whether an exploit exists. Defenders should restrict remote assistance tools, watch for unusual use of built-in administrative commands, deploy canary tokens, and pair prevention with detection and response.",
       "durationSeconds": 3138,
       "conference": "wwhf",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Gni_JpO69Sk",
@@ -4061,7 +4074,9 @@
       "youtubeId": "aoUZQkbbJ3g",
       "slug": "connor-mcgarr-hey-cortana-do-we-still-care-about-binary-exploita",
       "title": "Connor McGarr | “Hey Cortana - Do We Still Care About Binary Exploitation?\" | WWHF Deadwood 2022",
-      "speakers": [],
+      "speakers": [
+        "Connor McGarr"
+      ],
       "track": "red-team",
       "topics": [
         "exploitation",
@@ -4070,12 +4085,13 @@
         "mcgarr",
         "cortana"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Connor McGarr | “Hey Cortana - Do We Still Care About Binary Exploitation?\" | WWHF Deadwood 2022.",
-      "summary": null,
+      "teaser": "Surveys how Windows mitigations like CFG, CET, ACG and HVCI have reshaped exploitation and why red teams use it less.",
+      "summary": "The talk asks why binary exploitation has become less common in red team work on modern Windows. It starts with the early years, when stack overflows could be exploited with hard-coded addresses in memory that was readable, writable and executable. It then covers DEP and ASLR, which pushed attackers toward code reuse and information leaks, and notes that exploitation volume still peaked around 2010, years after those defenses arrived.\n\nThe middle section examines defenses against control-flow hijacking. Control Flow Guard checks indirect calls against a bitmap of valid targets, but it allows exported functions and so can be bypassed. Extended Flow Guard adds prototype hashing to narrow this, though it currently falls back to CFG. For return addresses, the hardware shadow stack in Intel CET compares the stack copy against a protected copy, replacing the abandoned software RFG. For shellcode, Arbitrary Code Guard blocks writable-executable memory in user mode, and HVCI applies similar rules in the kernel, enforced by the hypervisor through extended page tables. The speaker also shows how a data-only attack can copy the SYSTEM token into a command shell, and how kernel data protection guards some static and dynamic data.\n\nThe closing takeaway is that these mitigations make exploitation tedious. Attackers must build payloads from return-oriented programming or rely on data-only corruption, which is harder for EDR to flag, so red team research has shifted toward C2 frameworks and social engineering. The mitigations are free on supported hardware, though ACG adoption is limited by JIT engines and poorly written drivers.",
       "durationSeconds": 2823,
       "conference": "wwhf",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "rWoOooI8bWk",
@@ -4231,7 +4247,9 @@
       "youtubeId": "ERSecYxFHTY",
       "slug": "six-things-no-one-and-told-me-about-pentesting-jason-downey-wwhf",
       "title": "Six Things No One !@#$%^& Told Me About Pentesting | Jason Downey | WWHF Deadwood 2022",
-      "speakers": [],
+      "speakers": [
+        "Jason Downey"
+      ],
       "track": "red-team",
       "topics": [
         "pentesting",
@@ -4240,18 +4258,21 @@
         "downey",
         "wwhf"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Six Things No One !@#$%^& Told Me About Pentesting | Jason Downey | WWHF Deadwood 2022.",
-      "summary": null,
+      "teaser": "Offers a pentester's candid career lessons on reporting, imposter syndrome, Active Directory skills and client trust.",
+      "summary": "Jason Downey, a consultant at Red Siege, presents six lessons from his first years as a penetration tester after moving into security from network engineering. He starts with how early work tends to go badly, how entry-level postings and imposter feelings discourage newcomers, and why prior experience from networking, development or sysadmin roles still adds value. He argues that even experienced testers cannot master every domain, so specializing and playing to existing strengths matter more than trying to know everything.\n\nThe middle of the talk covers what the work looks like in practice. In one internal engagement, a domain controller that had not been patched since 2017 was found within hours of starting. In another, a client wanted to know whether its customer service process could stop money being withdrawn, and the speaker obtained funds using a colleague's name and publicly available details, which required long waits on hold with the bank. He stresses that real environments rely on Active Directory and multi-step kill chains rather than single-box puzzles. He recommends learning networking fundamentals, password spraying, recon, and practicing in home labs such as Game of Active Directory and DetectionLab, plus comparing command and control frameworks. He also urges writing reports as you go, respecting scope and rules of engagement, especially in hospitals, and understanding a client's environment early.\n\nHe closes by noting that red and blue teams share the same goal of making environments safer, and that reputation, friendships and relationships with clients shape a career in the field.",
       "durationSeconds": 2822,
       "conference": "wwhf",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "epBR-9jF4r8",
       "slug": "how-i-was-bored-one-night-and-found-two-cves-joe-helle-wwhf-dead",
       "title": "How I Was Bored One Night and Found Two CVEs | Joe Helle | WWHF Deadwood 2022",
-      "speakers": [],
+      "speakers": [
+        "Joe Helle"
+      ],
       "track": "community",
       "topics": [
         "bored",
@@ -4260,8 +4281,8 @@
         "helle",
         "wwhf"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in How I Was Bored One Night and Found Two CVEs | Joe Helle | WWHF Deadwood 2022.",
-      "summary": null,
+      "teaser": "Walks through finding web vulnerabilities in open-source projects and filing them as CVEs to build a security career.",
+      "summary": "The speaker argues that entry-level security roles are hard to reach and that certifications and blogs have lost their signal as more people earn them. A published CVE, in contrast, shows initiative, a repeatable research method, and the ability to communicate with vendors. The talk began as a spare-time project aimed at helping mentees get into penetration testing.\n\nThe method starts with picking open-source projects that can be installed locally, such as desktop applications or Docker-based tools, and staying within your own systems administration skills. In one example, a hotel management application produced reflected cross-site scripting and several SQL injection issues in under an hour, tested with Burp Suite Pro and then with a free alternative. The speaker then covered the disclosure path. Before filing, check whether the vendor is a CVE Numbering Authority, since those vendors handle their own CVEs. Notify the maintainer first, confirm the issue is not already known, and request an identifier from MITRE with a public reference. For GitHub repositories, a bug bounty platform that acts as a CNA can manage the process, and the speaker described a Rails rate-limit bypass found in the Rack Attack library that way.\n\nThe closing advice was to treat CVEs as proof of work that employers can see, to publish the write-up, and to help others follow the same path. The question period covered contract developers, what happens when a vendor disputes a finding, and how security policies on repositories make disclosure easier.",
       "durationSeconds": 1160,
       "conference": "wwhf",
       "viewCount": 1100,
@@ -4397,19 +4418,22 @@
       "youtubeId": "TvPE5EAObHw",
       "slug": "roll-for-stealth-intro-to-av-edr-evasion-mike-saunders-wwhf-dead",
       "title": "Roll for Stealth Intro to AV EDR Evasion | Mike Saunders | WWHF Deadwood 2022",
-      "speakers": [],
+      "speakers": [
+        "Mike Saunders"
+      ],
       "track": "blue-team",
       "topics": [
         "evasion",
         "edr",
         "edr-evasion"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Roll for Stealth Intro to AV EDR Evasion | Mike Saunders | WWHF Deadwood 2022.",
-      "summary": null,
+      "teaser": "Walks through practical ways to get payloads past AV and EDR static checks, including strings, entropy, and compiler optimization.",
+      "summary": "The talk introduces how antivirus and EDR products flag payloads before they run, focusing on the static stage when a file is written to disk or loaded into memory. The speaker sets aside runtime evasion, unhooking and command-and-control traffic obfuscation, and concentrates on brittle signatures triggered by default templates, variable and function names, suspicious strings, and DLL import declarations.\n\nSeveral fixes are demonstrated. Renaming imported functions through an entry point alias and using generated two-word names avoids common signatures. A multi-byte XOR loader was flagged only after the compiler optimized the routine into a known pattern, and turning optimization off cleared the detection. Shellcode was disguised as UUID-formatted strings, split into even and odd index arrays, or stored as dictionary words that map back to bytes at runtime. Because encrypted shellcode has high entropy, a machine-learning engine blocked one loader until low-entropy padding was added. The speaker also released a tool called jargon that encodes shellcode as English words, and reported using it on an engagement against a Cobalt Strike beacon.\n\nThe takeaway is that many detections are fragile, so small structural changes can restore a payload, though results need retesting after every update. The speaker notes that rebuilding the Cobalt Strike artifact kit can change file signatures, and points to vendor training for deeper evasion topics.",
       "durationSeconds": 2962,
       "conference": "wwhf",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "ICc-PnrHLSo",
@@ -4954,12 +4978,13 @@
         "robinson",
         "team"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning WWHF | Breaking and Entering - Tyler Robinson | Red Team Roundup.",
-      "summary": null,
+      "teaser": "Walks through physical penetration testing tactics, from badge reader attacks to door bypasses, and the business case for them.",
+      "summary": "The talk opens with a primer on physical penetration testing, which looks at what an attacker could reach through badge systems, network jacks, and building technology. The speaker explains that physical access often provides initial access in red team work, since a device hidden inside a facility can be hard for responders to find. Physical tests can also show executives the business risk when security teams struggle to win support.\n\nThe middle covers tools and examples. A device wired behind an HID badge reader can capture badge data, and USB drop boxes can record activity at a reception desk. At one New York bank, a sheet of paper triggered a motion-based exit sensor and opened a secure door. At a financial firm, white stickers placed over motion sensors that were armed only during the day enabled a night entry through a parking garage and roof hatch. Reconnaissance from sign-in sheets, digital directories, and fire-escape maps supported these efforts, while knowledge of fire-safety and elevator terminology opened restricted areas. Implants with cellular links were left in place to keep persistent access.\n\nThe takeaways center on planning and culture. Rules of engagement, local laws, and armed guards all shape the risk, and the speaker advises against physical tests for immature organizations. Defenders should treat janitorial, maintenance, and building-automation staff as part of security awareness, since legacy building systems are often reachable from corporate networks. Positive reinforcement, rather than blame, helps teams improve.",
       "durationSeconds": 3039,
       "conference": "wwhf",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "n191-QV3HyA",
@@ -4987,7 +5012,9 @@
       "youtubeId": "XE9JZOC-SCE",
       "slug": "wwhf-why-we-red-team-the-real-value-of-threat-emulation-joe-vest",
       "title": "WWHF | Why We Red Team : The Real Value of Threat Emulation | Joe Vest",
-      "speakers": [],
+      "speakers": [
+        "Joe Vest"
+      ],
       "track": "red-team",
       "topics": [
         "emulation",
@@ -4996,12 +5023,13 @@
         "value",
         "threat"
       ],
-      "teaser": "Security researchers examine technical aspects of WWHF | Why We Red Team : The Real Value of Threat Emulation | Joe Vest.",
-      "summary": null,
+      "teaser": "Argues that red team tests should measure how security operations prevent, detect and respond to threats.",
+      "summary": "Joe Vest opens by noting that the red teaming community cannot agree on a definition, so the talk starts from the problem security operations is trying to solve. He describes security programs shaped by compliance, customer pressure and limited resources, which are then validated mostly through audits, patching and standard vulnerability assessments. Vest argues that a threat is not just a tool or a flaw but a threat actor combining intent with tools and techniques across a long chain of steps, so single exploits rarely tell the whole story.\n\nHe separates common test types by what they deliver. Vulnerability assessments reduce attack surface, penetration tests map relationships between flaws, and threat-based tests measure how security operations prevent, detect and respond. Vest urges prevention first but detection always, and encourages challenging defensive assumptions. One engagement he describes started quietly, then escalated to a loud phase; the defenders' response was poor, and restoring the network took over eight hours because recovery procedures were not followed.\n\nHis takeaways are to give threats a voice in security planning, decompose public threat reports into test scenarios, and report results as an attack diagram with missed detection opportunities mapped to detection strategies. He also recommends training defenders with live-fire exercises on production systems, while warning that overworked blue teams can be pushed too hard.",
       "durationSeconds": 4880,
       "conference": "wwhf",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "pIUMd0X1rIg",
@@ -5138,19 +5166,22 @@
       "youtubeId": "RDB8HH0DbZw",
       "slug": "wwhf-why-the-basics-are-hard-aws-cloud-security-fundamentals-and",
       "title": "WWHF | Why the Basics are Hard - AWS Cloud Security Fundamentals Andrew Krug",
-      "speakers": [],
+      "speakers": [
+        "Andrew Krug"
+      ],
       "track": "cloud",
       "topics": [
         "cloud-security",
         "aws",
         "fundamentals"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding WWHF | Why the Basics are Hard - AWS Cloud Security Fundamentals Andrew Krug.",
-      "summary": null,
+      "teaser": "Walks through core AWS security fundamentals, from IAM policy logic and organization guardrails to auditing and incident response.",
+      "summary": "This session previews an AWS cloud security course and frames \"fundamentals\" around the security pillars of the Well-Architected Framework. It opens with a review of well-known cloud breaches from about 2014 to 2021. The cases include a leaked privileged access key pushed to a public code repository, a private git server compromise that exposed access keys, a publicly reachable Kubernetes console holding an overly permissive key pair, and a server-side request forgery that let an attacker reach instance credentials. The speaker argues that the same basic failures recur, and that least privilege, multi-factor authentication and simpler system design would have blocked many of them.\n\nThe middle of the session focuses on identity and access management. It explains how IAM evaluates policies, how condition keys such as MFA session age and tag-based attributes can limit what a stolen credential can do, and how permissions boundaries and service control policies act as guardrails even against a careless or rogue administrator. Multi-account design is recommended to contain blast radius. The speaker demonstrates generating a least-privilege role policy from CloudTrail activity, and describes CloudMapper, an open-source auditing tool whose reports cover IAM linting and resource inventory. Running audits continuously and moving security group changes into CI/CD are presented as practical steps.\n\nThe closing portion covers detection and incident response, emphasizing centralized, tamper-resistant CloudTrail logging and preparation before an incident occurs. The main takeaway is that many serious AWS breaches come from basic gaps that configuration, guardrails and logging can close, and that a tested response plan matters when prevention fails.",
       "durationSeconds": 4069,
       "conference": "wwhf",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "XtEzeHSxBZs",
@@ -5323,8 +5354,8 @@
         "abusing",
         "microsoft"
       ],
-      "teaser": "1 Hour examines WWHF | Abusing Microsoft Office for Post-Exploitation - Kyle Avery.",
-      "summary": null,
+      "teaser": "Shows how Microsoft Office add-ins, templates, DCOM and document poisoning support persistence, lateral movement and credential theft.",
+      "summary": "Kyle Avery, a penetration tester, argues that Microsoft Office, which is installed on many corporate workstations, is useful to attackers well beyond the macro-based initial access it is usually known for. He organizes the talk around persistence, lateral movement and credential gathering, and pairs each technique with detection and defense ideas.\n\nFor persistence, he shows Word add-ins packaged as renamed DLLs, which load at startup from trusted locations without an enable-content prompt. Excel needs a registry change to load XLL add-ins, but XLAM add-ins work without one. Document templates such as Normal.dotm and Personal.xlsb run when a user opens a document, and roaming profiles can carry them to other workstations. For lateral movement, he covers Excel's DDE initiate method and Outlook's CreateObject call to ScriptControl, both reached over DCOM, with Visio as a similar option. He also shows in-memory shellcode delivery through Excel XLM macro API calls. For credential gathering, he runs a WebDAV listener on a high port, uses a netsh URL ACL entry to listen on port 80 without administrator rights, and forces authentication through Outlook signature images or poisoned Word hyperlinks.\n\nHe closes with detection points: file writes to trusted locations, Office processes spawned by the DCOM launch service, Office started with embedding command-line flags, and suspicious API calls. Defensive measures include Attack Surface Reduction rules, disabling automatic image downloads, and restricting which ports users can listen on.",
       "durationSeconds": 3162,
       "conference": "wwhf",
       "viewCount": 2000,
@@ -5614,7 +5645,9 @@
       "youtubeId": "D8uMsXJWuRI",
       "slug": "intro-to-git-for-security-professionals-ian-lee-deadwood-2020-wo",
       "title": "Intro to Git for Security Professionals - Ian Lee - Deadwood 2020 Workshop",
-      "speakers": [],
+      "speakers": [
+        "Ian Lee"
+      ],
       "track": "community",
       "topics": [
         "workshop",
@@ -5623,12 +5656,13 @@
         "deadwood",
         "professionals"
       ],
-      "teaser": "2 Hours details Intro to Git for Security Professionals - Ian Lee - Deadwood 2020 Workshop.",
-      "summary": null,
+      "teaser": "Teaches security practitioners core Git concepts, from commits and branches to pushing changes and contributing to open source.",
+      "summary": "This workshop introduces Git to security professionals who write scripts or tools but have never used version control. It opens with why tracking changes matters, how distributed systems like Git differ from centralized ones such as Subversion, and how to set a user name and email for commit metadata. The speaker then walks through initializing a repository, staging files, committing, and reviewing work with status, diff, log and show.\n\nThe middle section covers correcting and organizing work. Attendees see how to amend a commit, how partial staging with interactive patch mode lets you commit only some changes, and how a reset can move a branch back past a commit. The speaker notes that the old commit remains in the repository until garbage collection, which matters for anyone reviewing a developer's machine for leaked credentials. Branching is introduced as movable pointers, followed by a merge that produces a conflict resolved by hand, with rebase mentioned as a more powerful but riskier option.\n\nThe final part covers remotes: cloning, fetching, pulling and pushing against a hosted server. It closes with contributing to open source projects through forks and pull requests, using a small documentation fix as an example. The takeaway is that modest fixes to documentation or typos help projects, and that keeping even personal notes and scripts under Git builds habits that pay off later.",
       "durationSeconds": 7322,
       "conference": "wwhf",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "IkQNNsq8faI",
@@ -6285,7 +6319,9 @@
       "youtubeId": "5mdsV2FTDR8",
       "slug": "everything-youve-been-told-about-threat-hunting-is-a-lie-lesley",
       "title": "Everything You've Been Told About Threat Hunting is a Lie | Lesley Carhart | WWHF Deadwood 2020",
-      "speakers": [],
+      "speakers": [
+        "Lesley Carhart"
+      ],
       "track": "blue-team",
       "topics": [
         "threat-hunting",
@@ -6293,12 +6329,13 @@
         "threat",
         "hunting"
       ],
-      "teaser": "Security researchers examine technical aspects of Everything You've Been Told About Threat Hunting is a Lie | Lesley Carhart | WWHF Deadwood 2020.",
-      "summary": null,
+      "teaser": "Clarifies what threat hunting really means, how it differs from alert triage and incident response, and how to build testable hypotheses.",
+      "summary": "Threat hunting is used loosely across marketing, products and training, so this keynote sets out a working definition. The speaker, an incident responder working on industrial control systems, traces attacks from manual intrusions to automated malware and then to living off the land, using stolen credentials and legitimate tools that slip past signature detection. Machines spot known patterns well, but a valid account misused by a human needs analyst judgment.\n\nHunting is proactive, so the talk separates it from alert triage, indicator sweeps, threat intelligence and incident response. It stresses groundwork first: an asset inventory, a network map, vulnerability tracking, basic detection, risk modeling around crown jewels and knowledge of available data sources. Good hypotheses draw on situational awareness, threat intelligence and domain expertise, and must be falsifiable and scoped in time and space. One example is an adversary moving laterally over SMB during a network merger week.\n\nThe hunt lifecycle runs from purpose and scoping through testing and feedback. Outcomes are evil found, which becomes incident response, a disproved hypothesis, or an inconclusive result exposing logging or training gaps. Failures come from skipped prerequisites, oversized scope, vague hypotheses and expecting a product to hunt for you.",
       "durationSeconds": 3858,
       "conference": "wwhf",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "4EyjAdVdN-E",
@@ -6341,7 +6378,9 @@
       "youtubeId": "8D3c70Yv4jo",
       "slug": "enumerating-azure-ad-and-arm-leron-gray-the-december-roundup-clo",
       "title": "Enumerating Azure AD and ARM | Leron Gray | The December Roundup-Cloud Pentesting",
-      "speakers": [],
+      "speakers": [
+        "Leron Gray"
+      ],
       "track": "cloud",
       "topics": [
         "azure",
@@ -6349,12 +6388,13 @@
         "pentesting",
         "azure-ad"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Enumerating Azure AD and ARM | Leron Gray | The December Roundup-Cloud Pentesting.",
-      "summary": null,
+      "teaser": "Walks through Azure AD and Azure Resource Manager concepts, then shows enumeration and privilege escalation with Storm Spotter.",
+      "summary": "The talk gives an overview of Azure Active Directory (Azure AD) and Azure Resource Manager (ARM), the identity and deployment layers of Microsoft's cloud. It covers Azure AD objects such as users, groups, applications, service principals, devices and directory roles, and explains how an application relates to its service principals. For ARM, it walks through tenants, subscriptions, resource groups, resource providers and role-based access control, including why control plane and data plane permissions differ.\n\nThe speaker reviews the tools used to query these services, including the Azure CLI, several PowerShell modules and REST APIs, and points out that the CLI stores access and refresh tokens in the user's home directory. The main focus is Storm Spotter, a beta project that is not an official Microsoft product. It enumerates Azure AD and ARM and loads the results into Neo4j to draw an attack graph. In a live demo, enumeration with a sales employee's credentials shows that the account holds contributor rights over an entire subscription, not just the resources the department needs.\n\nFrom there, the demo follows the graph to a resource group holding a virtual machine. Contributor rights allowed the demo account to reset the local administrator password on that machine. A cached Azure CLI folder on the virtual machine contained a refresh token belonging to a global administrator, which was copied over to take on that identity. The talk closes with defensive advice: apply least privilege, scope roles to single resources rather than whole subscriptions, audit and log permission changes, and use just-in-time access for sensitive machines.",
       "durationSeconds": 2997,
       "conference": "wwhf",
       "viewCount": 2300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "hlIX_lFRC2A",
@@ -6496,12 +6536,13 @@
         "dream",
         "boyle"
       ],
-      "teaser": "Security researchers examine technical aspects of Play to Win: Getting Your Dream Cybersecurity Job | Kip Boyle | 1 Hour.",
-      "summary": null,
+      "teaser": "Gives job seekers a hiring manager's view on choosing, preparing for, and landing a cybersecurity role.",
+      "summary": "The talk takes a hiring manager's perspective on breaking into cybersecurity and becoming a candidate that employers want to hire. The speaker frames the search as four blockers: not knowing the exact job title and the kind of employer that suits you, unrecognized skill gaps, convincing a manager to take a chance on you, and weak job-hunting habits. To tackle the first, he suggests a career mind map, the CyberSeek site for demand and career paths, and a DISC personality assessment to clarify preferred working conditions.\n\nFor skill gaps, he recommends choosing three target employers, comparing their job postings with your own experience in a matrix, and writing the gaps down. Certifications should be picked from job descriptions because applicant tracking systems screen on them, and a home lab, ideally built in a cloud free tier, provides hands-on practice. Hiring managers mainly ask whether a candidate can contribute on day one and shows real passion, which can be demonstrated through transferable experience, volunteering, open-source work or conference involvement.\n\nFor job hunting, he advises defining work conditions, filtering LinkedIn job listings, and applying even when you match only about half the requirements. He also suggests finding an insider at the target company, then posting about the role and tagging that person with a tailored resume attached. In the Q&A, he advises a small, low-pressure question when following up with a contact, and notes that entry-level security jobs often expect more than people assume, so feeder roles can serve as stepping stones.",
       "durationSeconds": 4313,
       "conference": "wwhf",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "2bled0_E5Hk",
@@ -6612,15 +6653,17 @@
       "youtubeId": "p9swoG62oqc",
       "slug": "the-secret-thoughts-of-a-successful-hacker-nadean-tanner-1-hour",
       "title": "The Secret Thoughts of a Successful Hacker | Nadean Tanner | 1 Hour",
-      "speakers": [],
+      "speakers": [
+        "Nadine Tanner"
+      ],
       "track": "community",
       "topics": [
         "successful",
         "nadean",
         "tanner"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in The Secret Thoughts of a Successful Hacker | Nadean Tanner | 1 Hour.",
-      "summary": null,
+      "teaser": "Explores imposter syndrome and pluralistic ignorance among security practitioners, with practical mindset advice for overcoming self-doubt.",
+      "summary": "Nadine Tanner opens by describing imposter syndrome as a widespread experience among skilled security professionals, noting that high achievers feel it especially strongly. She sketches several forms it takes, including the perfectionist, the expert, the soloist and the multitasker, each of which measures competence differently. She also introduces pluralistic ignorance, where people in a room assume they alone are lost while everyone else seems to understand.\n\nThe middle of the talk points to public figures who admitted to feeling like frauds, including Albert Einstein, a civil rights activist and poet, actress Emma Watson and former WHO head Margaret Chan. Tanner presents a four-stage model of competence, from unconscious incompetence through to unconscious competence, and warns that complacency is a danger for experienced people. Her practical advice is to drop self-limiting words such as \"but\", \"never\", \"impossible\" and \"try\" from internal dialogue, to take stretch assignments, and to treat mistakes as part of learning. She also shares her own doubts around writing books and sitting certification exams.\n\nShe closes by encouraging listeners to find a mentor and to become one, reminding them that a little self-doubt keeps people grounded. In the question session she argues that apparent overconfidence often hides a fear of looking incompetent. The main takeaway is that awareness and open conversation with trusted peers make the feeling easier to manage.",
       "durationSeconds": 3756,
       "conference": "wwhf",
       "viewCount": 1900,
@@ -6760,7 +6803,10 @@
       "youtubeId": "T06CeZ1kiNE",
       "slug": "intro-to-tabletop-exercises-with-amanda-berlin-and-jeremy-mio-1",
       "title": "Intro to Tabletop Exercises with Amanda Berlin & Jeremy Mio (1 Hour)",
-      "speakers": [],
+      "speakers": [
+        "Amanda Berlin",
+        "Jeremy Mio"
+      ],
       "track": "wireless",
       "topics": [
         "intro",
@@ -6770,12 +6816,13 @@
         "berlin",
         "jeremy"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Intro to Tabletop Exercises with Amanda Berlin & Jeremy Mio (1 Hour).",
-      "summary": null,
+      "teaser": "Walks through building tabletop exercises, playbooks and after-action reports, with a short PowerShell detection scenario.",
+      "summary": "The session introduces tabletop exercises as a way to test defensive detection and response. The speakers say a useful exercise can be as short as fifteen minutes, with a clear goal, a scenario read aloud to everyone, and an after-action report that records gaps and action items. They suggest starting with IT staff and bringing in business units such as HR, legal and executives gradually, framing the scenario around each group's own impact. A sample scenario involves a backdoor found on surveillance cameras in an executive conference room, which raises questions about asset inventory, firmware, vendor support and internet exposure.\n\nPlaybooks are the next topic, presented as flexible guidance rather than rigid procedure. Useful playbooks include an objective statement, a defined scope, escalation paths, and a split between high-fidelity playbooks that must be followed closely and investigative ones that allow judgment. As teams mature, playbooks can point to hunting queries, detection rules and MITRE ATT&CK techniques, so a procedural exercise can grow into a technical one. One technical example covers a PowerShell execution policy bypass dropper, where module logging and event viewer entries reveal the activity. In the Q&A, the speakers suggest tying risk to compliance or business impact to win management sign-off, with short- and long-term recommendations.\n\nThe multi-day class version uses role-played companies in sectors such as healthcare, manufacturing and banking, where budgets, weaknesses and dice rolls shape outcomes. The main takeaways are to start small, keep the tone constructive by recording strengths, and connect every playbook to the controls it depends on. Management should also approve the gaps the organization accepts.",
       "durationSeconds": 3814,
       "conference": "wwhf",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "X0A-kWQOyew",
@@ -6790,12 +6837,13 @@
         "security-operations",
         "operations"
       ],
-      "teaser": "Security researchers examine technical aspects of Excellent Architecture : Avoid Common Mistakes in Security Operations w/ Chris Crowley (1 Hour).",
-      "summary": null,
+      "teaser": "Outlines a reference architecture for security operations centers and the common design failures that undermine them.",
+      "summary": "The talk walks through how security operations centers should be organized and where they commonly go wrong. It opens with a threat model that sorts adversaries by resources: a low-cost group reusing public vulnerabilities, a mid-tier group that discovers its own, and a well-funded group that can exploit almost anything. From there it lays out a reference architecture of functional components, including a steering committee, command center, monitoring, threat intelligence, incident handling, forensics, and self-assessment.\n\nEach component gets practical guidance. The steering committee sets success criteria and gives the center one consistent direction, with system owners rating each system's impact on function, information, and recoverability. Incident handling is split into janitorial cleanup, firefighting during active incidents, and early identification of sophisticated attackers. Self-assessment covers configuration monitoring, vulnerability management measured by patching rather than scan counts, penetration testing that demonstrates impact, and regular exercises. For maturity, he points to a free SOC-CMM spreadsheet and a MITRE ATT&CK defensive gap analysis.\n\nThe main failures are having no architecture vision, skipping the steering committee, and never self-assessing. The takeaways are to agree on an architecture before buying technology, involve constituents early, embed pen testers with defenders, schedule short daily training, and try a self-assessment before paying for a third-party audit.",
       "durationSeconds": 3416,
       "conference": "wwhf",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "1wSISA0IHQM",
@@ -6825,7 +6873,9 @@
       "youtubeId": "dOjKMF-oA9E",
       "slug": "zoom-isnt-insecure-so-why-is-it-so-insecure-w-doc-blackburn-1-ho",
       "title": "Zoom isn’t Insecure! So Why is it so Insecure w Doc Blackburn 1 Hour BHIS HEVC",
-      "speakers": [],
+      "speakers": [
+        "Doc Blackburn"
+      ],
       "track": "hardware",
       "topics": [
         "zoom",
@@ -6835,12 +6885,13 @@
         "bhi",
         "hevc"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Zoom isn’t Insecure! So Why is it so Insecure w Doc Blackburn 1 Hour BHIS HEVC.",
-      "summary": null,
+      "teaser": "Argues that security means managing insecurity, using Zoom's default settings and meeting exposure as a case study.",
+      "summary": "When many organizations moved to video conferencing during the pandemic, the speaker used Zoom as a case study for a wider point: asking whether a product is secure is the wrong question. Products ship with many features enabled by default, and each added feature tends to reduce security. Since no one can guarantee full protection and attackers need only one weakness, defenders are really managing levels of insecurity within a limited budget.\n\nThe Zoom examples show how this plays out. Short numeric meeting IDs could be found by automated number-guessing tools, which let uninvited people join meetings and led to \"zoom bombing\"; waiting rooms and required passwords were added later. Early encryption used a weak mode with a 128-bit key, and stronger options were rolled out afterward. A personal meeting ID never expires, so anyone who has it can join at any time, and a default password was reused for new meetings unless it was changed each time. The speaker also counted more than 100 settings, many with sub-options, which took hours to review. The vulnerabilities did not change as the product grew; the threat around it did.\n\nThe practical takeaways start with understanding the use cases, the data classification and how users behave, then turning off features the business does not need. Defense in depth and an assumption of compromise matter more than any single product setting, and patching needs a timely plan rather than ad hoc fixes. When the business accepts a risk, the residual risk should be documented and signed off by the person who owns the budget. Security decisions are business decisions, and communicating risk with clear stories and cost estimates is part of the job.",
       "durationSeconds": 3640,
       "conference": "wwhf",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "rWuSDvKVflY",
@@ -6983,7 +7034,8 @@
       "viewCount": 1100,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2020,
-      "eventLabel": "WWHF 2020"
+      "eventLabel": "WWHF 2020",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "gKjH7LK_rBo",
@@ -6992,15 +7044,15 @@
       "speakers": [
         "Philip Young"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "network",
         "wwhf",
         "virtual",
         "evil"
       ],
-      "teaser": "Philip Young investigates WWHF 2020 (Virtual): Not Just Evil: Hacking Mainframes with Network Job Entry.",
-      "summary": null,
+      "teaser": "Shows how Network Job Entry on IBM z/OS mainframes can be abused to run jobs as other users across trusted nodes.",
+      "summary": "The talk opens with a moment the speaker saw at a payments company, where a developer on a development system created a user on production by submitting a job. It then gives a primer on z/OS batch processing, covering Job Control Language (JCL) job cards, steps and data definitions, and the JES2 subsystem that queues and runs jobs. Jobs run under the submitter's identity unless another user is named and the security system permits the switch.\n\nThe central section covers Network Job Entry (NJE), which passes jobs and results between mainframes. The speaker explains the node configuration, the TCP connection on port 175, the framing of blocks and records with their control bytes, and the sign-on record that can carry node passwords. Captured traffic can be decoded from EBCDIC for inspection. The attack path involves learning the local and remote node names, using an Nmap script to find remote nodes that accept connections, and impersonating a trusted node. Many sites trust every node, so a connected peer can submit JCL as other users, which the speaker demonstrates by running Unix and TSO commands on a remote system.\n\nThe speaker releases a Python library with tools to send NJE commands, enumerate active TSO users, submit JCL under a chosen user, and analyze captured packets. For defenders, the takeaway is to use certificate authentication and TLS rather than plaintext passwords, remove decommissioned nodes from configurations, and limit which nodes and users are trusted.",
       "durationSeconds": 2783,
       "conference": "wwhf",
       "viewCount": 1200,
@@ -7368,20 +7420,21 @@
         "Mike Poor",
         "Larry Pesce"
       ],
-      "track": "community",
+      "track": "wireless",
       "topics": [
         "gps",
         "wwhf",
         "virtual"
       ],
-      "teaser": "Mike Poor examines WWHF 2020 (Virtual): KEYNOTE - Time Travel & GPS F*ckery.",
-      "summary": null,
+      "teaser": "Explains how GPS and other satellite navigation signals can be spoofed and presents Whelan, an open-source sensor for detecting it.",
+      "summary": "The keynote gives a high-level look at satellite navigation, where satellites broadcast their position and transmission time and a receiver uses signals from several of them to work out location. It explains that civilian signals are unauthenticated and weak, so they can be spoofed with inexpensive software-defined radio hardware and open-source tools. Many industries, from financial trading to shipping and trucking fleets, depend on these signals for time and position.\n\nThe speakers reviewed reported spoofing incidents. Fishing boats on the Black Sea and facilities around Moscow saw false positions, and Syria was described as an area where spoofing was reportedly used to protect locations from guided munitions. Anomalies near the port of Shanghai involved both satellite navigation and AIS vessel data. They also noted that the US Navy reinstated celestial navigation training after two Pacific ship incidents, a link they framed as speculation. Few civilian tools existed to detect such manipulation, which motivated their project.\n\nThe project, called Whelan, is an open-source sensor built on a Raspberry Pi with three GNSS receivers that compare position and time across GPS, GLONASS and Galileo. Readings are stored in InfluxDB, processed with Grafana, and alerts go to Discord when values drift beyond expected bounds. Planned work includes a shared site for crowdsourced data, more RF inputs such as ADS-B and AIS, and faster alerting. The closing call was for listeners to identify other unauthenticated RF signals their organizations depend on and build detection for them.",
       "durationSeconds": 2690,
       "conference": "wwhf",
       "viewCount": 2300,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2020,
-      "eventLabel": "WWHF 2020"
+      "eventLabel": "WWHF 2020",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "oi7xdbKflXM",
@@ -7415,20 +7468,21 @@
       "speakers": [
         "Wade Wells"
       ],
-      "track": "community",
+      "track": "purple-team",
       "topics": [
         "network",
         "wwhf",
         "virtual"
       ],
-      "teaser": "Wade Wells details WWHF 2020 (Virtual): Mapping and Testing Your Network to ATT&CK with Free Tools.",
-      "summary": null,
+      "teaser": "Shows how a small team maps detection coverage to MITRE ATT&CK using free tools and validates alerts with Atomic Red Team.",
+      "summary": "The speaker's manager asked what the team could detect and how that coverage would be tracked. An early attempt to document alerts across eleven Confluence pages, with Sigma rules for about 60 techniques, did not scale. The speaker then turned to the free MITRE ATT&CK Navigator, which renders coverage as JSON-driven layers that can be embedded in other pages, and to ATT&CK's publicly available group and tool data for threat intelligence, checked against the update dates shown on each entry.\n\nThe core of the talk is a Python 3 tool that turns hand-written YAML files into Navigator layers. The first file grades data sources, such as file monitoring, on completeness, timeliness, consistency and retention. The speaker found this the hardest part, since colleagues were slow to respond. The second file lists verified alerts with dates, confidence scores and EDR locations, producing a layer that separates logged techniques from detected ones. Overlaying techniques used by Iranian groups on that coverage gave a gap analysis the speaker used when that threat was in the news. Atomic Red Team then tested the alerts by ATT&CK ID, with the speaker running tests by hand first to understand them.\n\nThe takeaways are that a documented grading rubric makes the inventory repeatable, and that testing works better in small sections than by firing everything at once. Alerts can also be pulled from security tools by script to keep the detection file current. The speaker estimated the whole effort took a small team about a month.",
       "durationSeconds": 1068,
       "conference": "wwhf",
       "viewCount": 1700,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2020,
-      "eventLabel": "WWHF 2020"
+      "eventLabel": "WWHF 2020",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "2TQPc3Zvlkk",
@@ -7644,7 +7698,9 @@
       "youtubeId": "HMee8OqCn0A",
       "slug": "develop-technical-recall-skills-spaced-repetition-with-anki-w-jo",
       "title": "Develop Technical Recall Skills: Spaced Repetition with Anki w/ Josh Wright (1-Hour)",
-      "speakers": [],
+      "speakers": [
+        "Josh Wright"
+      ],
       "track": "community",
       "topics": [
         "develop",
@@ -7652,12 +7708,13 @@
         "spaced",
         "repetition"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Develop Technical Recall Skills: Spaced Repetition with Anki w/ Josh Wright (1-Hour).",
-      "summary": null,
+      "teaser": "Shows how spaced repetition and the Anki flashcard app can build long-term recall of technical skills.",
+      "summary": "Josh Wright opens with a familiar problem: a steady stream of new tools, commands and techniques that he keeps looking up because he forgets them within minutes. He explains the forgetting curve and spaced repetition, the idea that reviewing material at increasing intervals, in short sessions, builds lasting recall. Before starting, he asks attendees to decide why they want a skill, whether for a certification, deeper expertise or career goals.\n\nThe core of the talk is a live walkthrough of Anki, a free flashcard app that schedules reviews based on how well a learner answered each card. Wright builds a deck of Linux command line cards, using cloze deletions with screenshots or formatted command output as visual aids, and rates his recall as easy, good or no. He keeps the app open all day and adds items as he learns them. In the Q&A he says he writes cards by hand rather than generating them automatically, because each learner understands a concept differently, and he keeps separate decks for each subject.\n\nWright stresses that the app does not solve motivation or time. He recommends finding enjoyment in the work, building a daily routine and being patient with frustration, and suggests trimming small blocks of other activities to make room for short study sessions. He closes by reminding listeners that security work matters, citing a school whose files were lost to ransomware.",
       "durationSeconds": 3884,
       "conference": "wwhf",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "cmOAKLQnybk",
@@ -7681,7 +7738,9 @@
       "youtubeId": "BWpulINkzJ8",
       "slug": "hackin-cast-how-to-sell-security-to-c-levels-w-chris-brenton",
       "title": "Hackin' Cast: How to Sell Security to C Levels w Chris Brenton",
-      "speakers": [],
+      "speakers": [
+        "Chris Brenton"
+      ],
       "track": "hardware",
       "topics": [
         "hackin",
@@ -7691,12 +7750,13 @@
         "chri",
         "brenton"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Hackin' Cast: How to Sell Security to C Levels w Chris Brenton.",
-      "summary": null,
+      "teaser": "Explains how security leaders can frame projects in business terms to win executive funding and shorten sales cycles.",
+      "summary": "The talk opens with a common problem: security projects such as better patching or threat hunting lose budget fights because executives weigh them against sales, product and support needs. The speaker argues that security should be pitched in business terms, as a way to remove obstacles and grow revenue rather than as overhead. Problems should be traced to process gaps instead of blamed on individuals, which leads to fixes that last.\n\nFor a newly hired security lead, the suggested first steps are to learn the company's biggest business risks and to align with sales and legal, not only IT. Long customer security questionnaires can add months to deals, so a measured sales-cycle metric makes a stronger case than anecdotes. Compliance frameworks such as SOC 2, PCI DSS, ISO 27001 and EU privacy rules act as a shared reference that builds customer trust, and the Cloud Security Alliance control matrix helps find overlaps between them. The speaker also notes that contradictory questionnaire answers can expose vendors who are simply checking boxes.\n\nDelivery advice centers on a short deck of about ten slides with a high-level plan, backup slides for technical detail, and a rehearsed pitch to a manager first. Budget requests should include a small buffer, since timelines and staffing usually run longer than planned. In the Q&A, a case where recorded incidents rose after a new leader arrived was reframed around how long attackers stayed undetected before removal.",
       "durationSeconds": 3442,
       "conference": "wwhf",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "qPqlz75lzwo",
@@ -7728,7 +7788,7 @@
       "speakers": [
         "Tim Medin"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "hackin",
         "cast",
@@ -7736,12 +7796,13 @@
         "redux",
         "dumberer"
       ],
-      "teaser": "Tim Medin investigates Hackin' Cast: Hacking Dumberly Redux - More Dumberer.",
-      "summary": null,
+      "teaser": "Shows how simple, well-known techniques like default passwords and replayed requests keep producing real breaches.",
+      "summary": "The talk argues that real attackers usually start with the simplest route that works, so testers should try basic techniques before building custom exploits. The speaker cites the 2017 Equifax breach, which used a known Apache Struts flaw about two months after it was announced, and a case in which a teenager reportedly breached Apple. Recurring findings from testing include accounts whose password matches the username, predictable passwords shaped by 90-day rotation rules, passwords printed in help screens or welcome letters, cleartext passwords stored in an Active Directory attribute, and forgotten test accounts.\n\nSeveral device and app examples follow. Using an online guide, the speaker extracted firmware from a TRENDnet camera, split it with binwalk and dd, and found a factory test account in the password file whose credentials were only base64 encoded. A second camera yielded the same result. In an Apple TV and Amazon Prime case, a configuration flag had AirPlay disabled, and the signature check passed once the signature was deleted. A colleague bypassed MFA by requesting a page that should only be reachable after authentication. A MySQL login succeeded roughly one attempt in 256, which the speaker called a \"soccer trophy\" flaw.\n\nThe longest story involves a contest where points came from sending an app's registration request. Replaying captured requests worked until organizers blocked replay. The team decoded a base64 payload, read the Android app's bytecode to learn how its signature was calculated, and scripted forged values, including a platinum status multiplier. Reusing persistent HTTP sessions sped things up further. The talk ends by encouraging testers to try simple steps first, guess boldly, admit when they do not know, and share their work with others.",
       "durationSeconds": 3010,
       "conference": "wwhf",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "dDmW8_aFI6o",
@@ -7759,12 +7820,13 @@
         "guide",
         "mitre"
       ],
-      "teaser": "Adam Mashinchi investigates Hackin' Cast: Quickstart Guide to MITRE ATT&CK: the Do's and Don'ts.",
-      "summary": null,
+      "teaser": "Explains how to use the MITRE ATT&CK matrix as a shared language and for behavior-based testing, with common pitfalls.",
+      "summary": "The talk opens with a problem: MITRE ATT&CK is cited constantly by vendors, yet many people know it only secondhand. The speaker gives a fast primer on the Enterprise matrix, organized by platform such as Windows, macOS, Linux and cloud, and explains that its technique IDs give red, blue and purple teams a shared vocabulary for adversary behavior.\n\nThe core guidance is a set of do's and don'ts. Treat the matrix as a common language rather than a checklist, so one detected technique does not mean a whole category is solved. Seek out behaviors rather than signatures: system time discovery can be carried out with net time or PowerShell Get-Date, and matching one specific command misses the underlying behavior. Decouple techniques from named threat actors, since actors change their ordering and tooling. The attacker's choice is likened to a game of minesweeper, where each technique risks triggering a defender's alert.\n\nFor testing, open-source resources help. Caldera suits teams that want a GUI and agent-based emulation, while Red Canary's Atomic Red Team offers command-level tests for those comfortable with PowerShell. Both are baselines, and each command should be understood before it is run. Prioritize tests by value against difficulty, such as screenshot capture for data an organization considers critical, and remember that ATT&CK sits alongside standards like the NIST functions. The takeaway is to use the matrix as a baseline and to get involved in its community.",
       "durationSeconds": 1761,
       "conference": "wwhf",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "g-1l9ZPhc2A",
@@ -7988,7 +8050,7 @@
       "speakers": [
         "Matthew Toussain"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "emulation",
         "evil",
@@ -7996,12 +8058,13 @@
         "tier",
         "threat"
       ],
-      "teaser": "Matthew Toussain examines Be Evil: A Toolset for Tier 1 Threat Emulation.",
-      "summary": null,
+      "teaser": "Presents Ravenclaw, a Rust-based backdoor for tier 1 threat emulation that supports CLR, Win32 API and PowerShell-style post-exploitation.",
+      "summary": "The talk separates threat emulation from ordinary red teaming. The speaker argues that a red team should make the blue team better, while threat emulation tests whether an organization's defenses hold up against the behaviour of a specific intrusion set. He ties this to the ransomware economy, describing an incident-response case in which one group reportedly held domain admin access for months before launching its attack. FBI figures he cited for a single group suggested ransom demands in the range of hundreds of thousands to millions of dollars, across more than a hundred compromises.\n\nOn the offensive side, the talk covers why post-exploitation activity often gets caught. Windows Server 2008 R2 is described as still common on internal networks, and credential theft from LSASS is treated as an early priority once an attacker has a foothold. Well-known command-and-control tools are often detected through their known signatures, and PowerShell is increasingly visible through script block logging. The speaker suggests that a backdoor should offer flexible execution paths, such as Win32 API calls, the .NET CLR and Python, rather than depending on one tool or one interpreter.\n\nThe talk closes by introducing Ravenclaw, an open-source backdoor written in Rust that is designed to run CLR assemblies, Win32 API calls and PowerShell-style execution. It is paired with a control interface meant to manage several backdoors from one server. The practical takeaway is to measure whether defenders actually detect the emulated activity, treating a detection as a successful outcome rather than a failure of the test.",
       "durationSeconds": 3304,
       "conference": "wwhf",
       "viewCount": 1900,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "nEZ4oqn17PE",
@@ -8038,12 +8101,13 @@
         "exploitation",
         "post-exploitation"
       ],
-      "teaser": "Derek Rook analyzes Post Exploitation: Striking Gold with Covert Recon.",
+      "teaser": "Explains how to map an environment quietly by mimicking user activity and mining logs, caches and configs instead of noisy scans.",
       "summary": "### Overview\nIn this presentation, the speaker explores stealthy post-exploitation reconnaissance techniques, cautioning offensive security professionals against noisy, default actions such as immediately running Nmap upon gaining a foothold. Grounded in a systems administration background, the speaker advocates for adopting a \"packet economy\" mindset—minimizing network packets and blending in with standard user behaviors to avoid alerting blue teams and anomaly detection systems.\n\n### Key Topics\n- **Packet Economy and Avoiding Noisy Scanning:** Why relying immediately on tools like Nmap, full port scans, or heavy VM installations gives away an attacker's presence, and why testing detection monitoring requires discreet behavior.\n- **Mimicking Normal User Activity:** Understanding normal operational hours, system local time, and baseline tools so post-exploitation activity does not stand out as anomalous.\n- **Passive Network and Host Discovery:** Utilizing existing host artifacts—such as DNS caches, ARP tables, and mounted remote file systems—to map architecture and vendors without transmitting excessive traffic.\n- **Internal OSINT and Data Mining:** Extracting metadata from internal documents (using concepts behind tools like FOCA and PowerMeta) and hunting credentials across logs, shell histories, and scripts.\n- **Cloud Post-Exploitation Hygiene:** Caution regarding cloud metadata endpoints and API logging, advocating for checking scripts and cron jobs before making direct API calls.\n- **Purposeful Escalation of Noise:** Transitioning from stealthy reconnaissance to intentionally raising noise levels once objectives are met in order to test and improve defensive detection capabilities.\n\n### Technical Details\n- **Activity Baseline Analysis:** Checking local system time, update/application logs (e.g., yum, apt, crontabs), and authentication records to pinpoint manual user interaction versus automated cron tasks. Application logs also reveal server usage peaks.\n- **Host Footprinting via Built-in State:** Reading DNS caches to discover hostnames and domain naming conventions. Querying ARP tables (`arp -a`) exposes MAC addresses, allowing identification of hardware vendors (e.g., Cisco, Juniper) or hypervisors like VMware to detect virtualized/sandbox environments without slinging packets.\n- **Credential Harvesting Artifacts:** Examining developer/debug logs for leaked credentials or failed password entries typed into username fields (such as seasonal passwords like `summer2019!`), reviewing `.bash_history` for passwords or S3 bucket references, and inspecting unencrypted SSH keys, `known_hosts`, and SSH config aliases to map pivoting paths.\n- **Mounted File Systems and Query Methods:** Exploiting remote mounts (NFS, SMB via `mount` or `/etc/fstab`) to inspect remote systems without triggering active network inspection. On Linux, tools like `netstat`, `lsof`, and `ss` query network state differently (`proc` filesystem vs. direct kernel system calls), providing different operational visibility.\n\n### Takeaways\nCovert reconnaissance centers on patience, gathering context before acting, and looking for \"permission\" within the environment before running commands like Windows `net` utilities or specialized offensive tools. Offensive operators should conserve network packets, leverage built-in OS artifacts to infer network architecture, and throttle file downloads or search scripts. Finally, after silently meeting objectives, operators should systematically ratchet up their noise profile to help defenders benchmark their monitoring and response controls.",
       "durationSeconds": 2421,
       "conference": "wwhf",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "MlxCjc6V_lc",
@@ -8181,19 +8245,20 @@
       "speakers": [
         "Travis Palmer"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "cache",
         "poisoning",
         "ipv4",
         "ipv6"
       ],
-      "teaser": "Travis Palmer examines First try DNS Cache Poisoning on IPv4 and IPv6.",
-      "summary": null,
+      "teaser": "Shows how off-path DNS cache poisoning becomes practical in one attempt by combining IP ID collisions with fragmentation.",
+      "summary": "This talk covers off-path DNS cache poisoning and why it is becoming practical again. Randomized source ports made the classic Kaminsky-style attack much harder, but large DNSSEC responses still get fragmented, and the second fragment carries no DNS identifiers, so it can be matched by its IP ID. The speaker reviews these fragmentation attacks, then shows how Linux's per-destination IP ID handling, which uses a keyed hash into a limited set of bins, can be probed to find collisions.\n\nThe new technique finds bin collisions by sending spoofed IPv6 echo fragments from a large pool of source addresses, such as a cloud provider's IPv6 allocation. Because the hash key only changes at reboot, a collision can be reused for a long time. Once one is found, the attacker sends a burst of spoofed fragments that can poison a resolver in a single attempt. The talk also notes that timing the attack around predictable resolver activity, such as morning traffic, makes targeting corporate networks easier. The findings came out of a pen test and were disclosed to the affected vendors before being shared more widely.\n\nSuggested mitigations include lowering the advertised EDNS buffer size to about 1220 bytes so responses avoid fragmentation and fall back to TCP, watching for unsolicited echo replies, and limiting how ICMP is handled. The speaker acknowledges that these measures are imperfect, that the DNS flag day changes are still pending, and that rebooting or rekeying gives only temporary relief. Practitioners should review resolver configuration and should not rely on small DNSSEC signing keys.",
       "durationSeconds": 2988,
       "conference": "wwhf",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "rQW4vjOabI8",
@@ -8230,12 +8295,13 @@
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Jonathan Ham explores S1/E3: Do you C2? If you do, ICU..",
-      "summary": null,
+      "teaser": "Hunts for a red team operator's command-and-control traffic in half-duplex network captures using Zeek and BPF filters.",
+      "summary": "Jonathan Ham returned for the third installment of his threat hunting series, opening Wild West Hackin' Fest. This time the target was command-and-control traffic built by Jake Williams, sent over a communications channel he said he had never used before. Ham received one hour of packet captures from a busy enterprise network, with the implant hidden among ordinary activity. The capture held only inbound, half-duplex traffic, so outbound sessions were missing and full content inspection was not an option. Early attempts with Snort, Rita and other tools failed, and hours of manual packet filtering led nowhere.\n\nThe turning point came when Zeek was run over the capture. Its connection log recorded sessions even when only the returned SYN-ACK and later traffic had been seen. Checks for DNS tunneling showed no suspicious pattern. Ham then examined TLS certificates, looking first for unusually short issuer fields and then for issuers with no common name field. One issuer contained base64 text that decoded to a short message, which identified the endpoint. Several other anomalies turned out to be false positives that the network owner cleared as normal.\n\nThe takeaways are to instrument networks before an incident and to confirm that a tool behaves as expected on known traffic before trusting its output. Ham pointed to Security Onion as a free, quick-to-deploy platform that bundles Snort, Zeek and the ELK stack. He also stressed that threat hunts are never truly finished and end only when time or budget runs out.",
       "durationSeconds": 3883,
       "conference": "wwhf",
       "viewCount": 1400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "kqMLJp-svbQ",
@@ -8325,7 +8391,9 @@
       "youtubeId": "cQdMUg-F6ps",
       "slug": "story-time-with-johnny-long",
       "title": "Story time with Johnny Long",
-      "speakers": [],
+      "speakers": [
+        "Johnny Long"
+      ],
       "track": "community",
       "topics": [
         "story",
@@ -8333,12 +8401,13 @@
         "time",
         "with"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Story time with Johnny Long.",
-      "summary": null,
+      "teaser": "Traces a hacker community member's move from burnout to service, and profiles peers using their skills for charity.",
+      "summary": "The talk opens with the speaker's career peak in the mid-2000s, when he led red team work and public speaking but felt empty and out of balance. A turning point came through extended family trips to Uganda, where he used technical skills to repair donated computers for local nonprofits, which eventually led to a training center and a hacker space. Members of the hacker community funded much of that work, which inspired him to found Hackers for Charity to link community skills with real needs.\n\nThe middle of the talk is a series of short profiles of community members doing service work. Mubix and Ben 10 started Hackers in Education, which teaches online safety in schools alongside police officers. Canadian robotics teachers trained a Ugandan hacker space's robotics team, and those students now teach younger kids. Matt Svensson founded We Defend Charities to help nonprofits with security, and Amanda Berlin started Mental Health Hackers, which brought stress relief to conferences. Chris Sanders' Rural Tech Fund donates equipment to remote schools, Chris Cox's Operation Safe Escape helps abuse victims, Bill Pollock's No Starch Press Foundation funds STEM education, and the Innocent Lives Foundation helps law enforcement track down child predators.\n\nThe stories share a pattern: a small personal step spreads as others pick it up. The speaker urges attendees to match their skills to existing organizations through a website and Slack channel, or to launch a new project under a 501(c)(3) shelter that Hackers for Charity offers.",
       "durationSeconds": 2527,
       "conference": "wwhf",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "ZS-YWKH_hT4",
@@ -8375,12 +8444,13 @@
         "model",
         "penetration"
       ],
-      "teaser": "Mike Saunders details Assumed Breach: A Better Model For Penetration Testing.",
-      "summary": null,
+      "teaser": "Explains why assumed breach testing from a compromised user better mirrors real attacks than traditional internal pentests.",
+      "summary": "The speaker argues that typical internal penetration tests, where a tester drops a Kali box on the network and runs loud scans and exploits, do not reflect how real attackers operate. As an alternative, the talk presents assumed breach testing, which starts from a user who is already compromised, uses a representative workstation and a real user account, and looks for high-value data rather than domain admin rights. Two models are described: a compromised user who ran a payload, and a malicious insider who wants to cause damage.\n\nThe middle of the talk walks through tradecraft used in these engagements. Initial code execution can come from HTA files, with obfuscation through tools such as Unicorn and Invoke-Obfuscation, or from environmental keying that only decrypts a payload on a matching host. Command-and-control traffic can be disguised with malleable profiles. Access is gained through targeted password spraying and low-and-slow Kerberoasting, which avoids the flood of event 4769 entries that gives away scripted requests. Further credentials come from group policy preference files, Active Directory description fields, web.config files, file shares, and SSH keys. Tools such as BloodHound, PowerView, and PowerLine are mentioned for mapping access and running PowerShell when it is restricted.\n\nThe closing section covers trade-offs. Attackers may have months rather than weeks, so assumed breach tests often have to be noisier, and they rarely include vulnerability scanning. Whether to test against AV and EDR should be agreed with the client in advance. The main takeaway is that clients get more value when their test uses realistic users and systems and when scoping focuses on what would hurt most. Defenders can use the same techniques to find weaknesses in their own environments.",
       "durationSeconds": 3004,
       "conference": "wwhf",
       "viewCount": 2000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "k5iGChgEBqA",
@@ -8431,19 +8501,20 @@
       "speakers": [
         "Jake Williams"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "windows",
         "elevating",
         "window",
         "privilege"
       ],
-      "teaser": "Jake Williams examines Elevating your Windows Privileges Like a Boss!.",
-      "summary": null,
+      "teaser": "Covers common Windows misconfigurations that enable privilege escalation, from weak file permissions to unquoted service paths.",
+      "summary": "The talk covers privilege escalation on Windows through misconfigurations rather than binary exploits or unpatched bugs. The presenter argues that vulnerability scanners rarely flag these problems because they have no simple signature, and that many of the techniques are the ones used routinely on red team engagements. Much of the problem comes from administrators making their own jobs easier, and from vendor and installer defaults that leave directories open.\n\nThe middle of the talk walks through permission and configuration checks. Directories where ordinary authenticated users can create files or append data let an attacker drop a DLL into the path of a privileged third-party program, and a proxy DLL or a simple add-user payload keeps the service from crashing afterward. The presenter recommends icacls, since the default GUI hides special permissions. Other cases include writable entries in the system PATH, where a service calling netsh would run a planted binary first; writable service image path values; unquoted service paths containing spaces; the AlwaysInstallElevated policy, which lets a crafted MSI run as system; unattended install answer files holding plaintext passwords; and leftover COM registrations. Process Monitor helps reveal services that look for missing executables.\n\nThe closing advice is to audit directory and registry permissions under Program Files and similar locations, and to put confidentiality and integrity into system administrator job descriptions so they are rated on them. The presenter also urges red teams to work with incident response teams, since attackers use these same tricks and defenders should recognise them.",
       "durationSeconds": 2988,
       "conference": "wwhf",
       "viewCount": 26000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "3lQTvQlBddw",
@@ -8452,18 +8523,19 @@
       "speakers": [
         "Bryson Bort"
       ],
-      "track": "community",
+      "track": "adversary-emulation",
       "topics": [
         "emulation",
         "adversarial",
         "vulnerability-research"
       ],
-      "teaser": "Bryson Bort examines Adversarial Emulation.",
-      "summary": null,
+      "teaser": "Argues that red team exercises should emulate real adversaries using bounded, repeatable attacks that help validate defenses.",
+      "summary": "The talk argues that red team engagements often leave a business without a clear answer about whether its defenses work, since they are one-off snapshots and defenders tune against the same tools each time. The speaker proposes a bounded attack space: instead of covering the whole kill chain, a team constrains a test to a part it can repeat and measure. Cheap shortcuts, such as whitelisting a tool to see what happens further down the chain, let teams test later stages without costly exploit development.\n\nThreat intelligence built on hashes, IPs and domains goes stale quickly, so the speaker urged describing adversary behaviour instead, ideally in machine-readable form. MITRE ATT&CK is useful as shared vocabulary but often becomes a checklist, when the order and context of techniques is what matters. On the network, attackers must blend into normal traffic, so defenders should understand their own pattern of life and use segmentation to add friction at each lateral movement step.\n\nThe talk closed with an open-source project evaluating about 30 command-and-control frameworks, with a planned decision tree and public walkthroughs for emulating specific threat groups. The main takeaways were to build repeatable scenarios that blue teams can replay to validate detections, to bring defenders into the exercise, and to show executives how a real adversary gathers information over time.",
       "durationSeconds": 2898,
       "conference": "wwhf",
       "viewCount": 1700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "DgxZ8ssuI_o",
@@ -8529,8 +8601,11 @@
       "youtubeId": "7n7ULol1yzo",
       "slug": "aggressive-autonomous-actions-operating-with-automation",
       "title": "Aggressive Autonomous Actions - Operating with Automation",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Chris Hunter",
+        "Harley LeBeau"
+      ],
+      "track": "red-team",
       "topics": [
         "automation",
         "aggressive",
@@ -8539,12 +8614,13 @@
         "operating",
         "autonomous"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Aggressive Autonomous Actions - Operating with Automation.",
-      "summary": null,
+      "teaser": "Demonstrates how Cobalt Strike Aggressor scripts can automate post-exploitation, phishing alerts, EDR detection, persistence and reporting.",
+      "summary": "The talk looks at using Cobalt Strike's Aggressor language, an event-driven scripting layer, to reduce manual work during red team engagements. The speakers frame automation as a way to handle repetitive steps that need no analysis, keep operators consistent, and limit user error, rather than as a replacement for creative offensive work. They walk through the main event types, such as beacon initial, heartbeat timers and SSH initial, and the functions and hooks that let scripts act on beacon metadata, read command output and extend the client GUI.\n\nThe demonstrations cover several use cases. A heartbeat-triggered script dumps credentials whenever an administrator beacon is present on a jump box. A phishing helper sends a text message through email gateways the moment a new beacon checks in. Another script lists the system driver directory for known EDR minifilter driver files, then highlights security tools in process listings so the operator knows what to avoid. Further examples add registry, scheduled task and WMI persistence through pop-up menus, generate payloads in batches across HTTP, SMB and DNS listeners, and run commands remotely through MSBuild with unmanaged PowerShell. The talk closes with a custom report generator that collects compromised hosts and accounts for the final deliverable.\n\nThe speakers point to a public GitHub repository with the scripts organized by engagement phase, so attendees can adapt them to their own work. The main takeaway is that automating predictable, non-analytical steps helps keep access and evidence consistent while operators step away from the keyboard.",
       "durationSeconds": 2951,
       "conference": "wwhf",
       "viewCount": 2400,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "wJDxAaeWPCE",
@@ -8624,8 +8700,10 @@
       "youtubeId": "AayXf5aRFTI",
       "slug": "copying-keys-from-photos-molds-and-more",
       "title": "Copying Keys from Photos, Molds & More",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "deviant"
+      ],
+      "track": "hardware",
       "topics": [
         "copying",
         "key",
@@ -8633,8 +8711,8 @@
         "mold",
         "keys"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Copying Keys from Photos, Molds & More.",
-      "summary": null,
+      "teaser": "Shows how an intruder can duplicate a key from brief access, phone photos, lock pins or molds, and why the entry may leave no trace.",
+      "summary": "The talk looks at how a physical intruder can copy a key without stealing it, and why the resulting entry can be almost impossible to detect. The speaker separates overt, covert and surreptitious entry, explaining that a surreptitious attack leaves no evidence even for a trained specialist. Duplicating a key is presented as one of the few realistic ways to reach that level, because a copy cuts and wears the lock the same way the original does.\n\nThe middle of the talk covers several methods, each with its own trade-offs. Calipers and key gauges read cut depths when a key is in hand for a short time, while a clay or mold impression captures the full profile for later analysis. When someone is only briefly distracted, a phone photo of a key on a grid overlay, ideally against a dark background, can be decoded into bitting values. Stamped direct or blind codes on keys and packaging can be reversed with lookup tables or software. Without any key access, a lock can be removed and its pins extracted by rear shimming. A punch machine or a cast metal key can then produce a working copy in the field. A demonstration showed a cylinder being swapped at a data center door after a door sensor was masked.\n\nThe takeaway is practical. Keys visible in photos, on social media or hanging from a belt can leak enough data to reproduce them, so people should keep keys out of view and avoid posting them. For defenders, the talk shows that a key-based intrusion may leave marks that only a specialist would ever find.",
       "durationSeconds": 2910,
       "conference": "wwhf",
       "viewCount": 468000,
@@ -8654,30 +8732,34 @@
         "android",
         "penetration"
       ],
-      "teaser": "Security researchers examine technical aspects of Android App Penetration Testing 101.",
+      "teaser": "Walks through Android app pentesting setup, tooling, file system and intent analysis, and embedding a payload into an app.",
       "summary": "### Overview\nIn this presentation, Jeff (Yoda66) and Derek Banks from Black Hills Information Security deliver an introductory overview of Android mobile application penetration testing. The speakers discuss the Android security model, market share landscape, key architectural components, required tooling, and practical testing methodologies. The session culminates in a technical explanation and live demonstration showing how to disassemble, modify, back-door, recompile, and sign a legitimate Android application with an embedded Metasploit Meterpreter payload.\n\n### Key Topics\n- **Android Market Share and Risk Landscape**: Android commands over 80% worldwide market share, featuring an open ecosystem where users frequently run older operating system versions (such as Lollipop, Marshmallow, or Nougat). Risks include enterprise data stored in applications, insecure dependencies, cleartext credential storage, and malicious or modified side-loaded apps.\n- **Testing Environment and Tooling**: Setting up a dedicated mobile testing workbench requires tools like Android Studio (with AVD), Genymotion (x86-based emulator with VirtualBox), real rooted hardware devices (such as Google/Motorola Nexus devices), Jadx/Jadx-GUI for decompilation, Drozer for inter-process communication assessments, apktool for smali disassembly, and Mobile Security Framework (MobSF) for automated static and dynamic analysis.\n- **Testing Methodology**: Pen testing mobile apps encompasses reconnaissance, filesystem analysis, network communication interception, and code review. Common methodology references include the OWASP Mobile Top 10 and Josh Wright's mobile device report cards.\n- **Inter-Process Communication and Intents**: Android apps communicate via intents and broadcast receivers. Improperly filtered intents or vulnerable upstream libraries can expose internal functionality—such as accidentally exposing debug logging containing sensitive session cookies to the system log (logcat).\n\n### Technical Details\n- **Filesystem and Storage Analysis**: Android applications install by default into `/data/data/<app-package-name>/`. Testers can use `adb pull` before and after authenticating or interacting with an app, then run a diff to identify insecure data storage, including cleartext credentials and session tokens.\n- **Network Traffic Interception**: Web traffic can be proxied using Burp Suite by generating its CA certificate, pushing it via `adb` (e.g., to `/sdcard/Download`), and installing it into the device's trusted credentials. Full packet capture can also be conducted using a software AP combined with Wireshark, tcpdump, or Bro.\n- **Intent Exploitation with Drozer**: By port-forwarding TCP port 31415 using `adb forward tcp:31415 tcp:31415`, testers connect a host Drozer console to an on-device Drozer agent to stimulate exported activities, broadcast receivers, and services.\n- **Backdooring APKs**: Disassembling an APK with `apktool` produces smali assembly files and extracts the binary `AndroidManifest.xml`. Meterpreter stagers generated by Metasploit can be disassembled into smali, copied into the target app's package structure, and called inside `onCreate` in the main activity file. Jeff demonstrated his Python automation script (`Android_EmbedIT` on GitHub) which decompiles both APKs, parses the XML to find the main activity entry point, injects the stager call, randomizes directory paths to evade simple detection, merges permissions, reassembles the app, and signs it with a newly generated keystore before launching a live reverse TCP Meterpreter handler.\n\n### Takeaways\nAndroid's openness and decoupled components provide substantial attack surface, especially when apps accept uncontrolled intents or rely on third-party libraries. Manual checks via ADB, decompilers like Jadx, and tools like MobSF and Drozer allow testers to rapidly locate serious flaws such as cleartext storage, leaky log files, and tampering opportunities. Organizations and users must exercise caution with side-loading APKs outside official app stores, and developers should use practice targets like DIVA (Damn Insecure Vulnerable App) to learn secure coding and validation practices.",
       "durationSeconds": 2973,
       "conference": "wwhf",
       "viewCount": 53000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "cVO1thIcbVI",
       "slug": "integrated-security-testing",
       "title": "Integrated Security Testing",
-      "speakers": [],
+      "speakers": [
+        "Morgan Roman"
+      ],
       "track": "hardware",
       "topics": [
         "security-testing",
         "integrated",
         "testing"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Integrated Security Testing.",
-      "summary": null,
+      "teaser": "Shows how to fold security payloads into existing Selenium integration tests so QA teams can catch XSS, SQLi and XXE bugs.",
+      "summary": "Morgan Roman, who works on application security at DocuSign, argues that dynamic web scanners struggle with business logic and produce many false positives. The talk proposes reusing the test framework that QA teams already run, such as Selenium with Gherkin or Cucumber, and adding security payloads to existing workflows. A payload is sent in during a test, the test runs through its full multi-step flow, and the output or failed assertions reveal the problem.\n\nThe examples cover several bug classes. For XSS, the payload logs to the browser console with console.error rather than alert, because an alert would stop Selenium. Angular injection uses very large numbers so that evaluated math is a reliable signal instead of a coincidence. SQL injection is checked by sending quote-heavy input through API automation and tracing the errors through a proxy. XXE is detected by watching file system access in a test environment, and CSV injection is prevented by prefixing cells with a single quote so Excel does not evaluate formulas. Cookie checks confirm the Secure and HttpOnly flags, and a browser monitoring snippet records outgoing calls to catch scripts loaded from unexpected hosts. A live demo ran a sample note-taking app through these tests, and a proxied run through ZAP produced passive scan findings that could feed a CI/CD pipeline.\n\nThe talk closes with authorization testing, using a matrix of users, such as Alice, Bob and an attacker named Eve, to check sharing and access rules on every deploy. The practical takeaway is that functionality outlives the features that implement it, so tests that already run in the pipeline catch regressions. Making QA staff allies by giving failures clear messages that name a security contact helps push these checks earlier in development.",
       "durationSeconds": 2185,
       "conference": "wwhf",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "wBK1fTg6xuU",
@@ -8748,12 +8830,13 @@
         "open",
         "source"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Open Source Intelligence 101.",
-      "summary": null,
+      "teaser": "Shows how public posts about one employee can build an attack profile, and how to reduce that exposure.",
+      "summary": "The talk introduces open source intelligence as the reconnaissance stage of an attack on people. Information gathered from publicly available sources is not secret, yet it can still be valuable to an attacker, and the details people share on social media can expose them, their employers and their friends. The speaker separates this passive research from pretexting, befriending targets or reaching private data, which can be illegal or breach terms of service.\n\nA single public photo of a new office badge became the starting point for profiling one employee. Linking posts, tagged friends, a repeated username and a people-search listing revealed the employer and job role, a likely email format, the software in use, and personal interests that could support a tailored lure. A birthday was confirmed against a leaked license photo after conflicting posts gave different dates. The talk also covers job listings that name firewall brands, Wayback Machine snapshots, breach lookup services, credential dumps, exposed cameras, and map imagery.\n\nThe closing section turns to defense through operational security. Practical steps include auditing what is posted, removing background details and photo location data, not relying on privacy settings alone, reviewing third-party app permissions and contact uploads, teaching friends and family about their own exposure, trimming LinkedIn details, and opting out of people-search sites. The takeaway is that anything public today may stay visible and be combined with other data later.",
       "durationSeconds": 2810,
       "conference": "wwhf",
       "viewCount": 57000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "yXe4X-AIbps",
@@ -8916,7 +8999,10 @@
       "youtubeId": "aJatJZI__V4",
       "slug": "what-to-expect-when-you-are-expecting-a-penetration-test",
       "title": "What to Expect When You Are Expecting...a Penetration Test",
-      "speakers": [],
+      "speakers": [
+        "Suzanne Pereira",
+        "Larry Pesci"
+      ],
       "track": "red-team",
       "topics": [
         "expect",
@@ -8924,12 +9010,13 @@
         "penetration",
         "test"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for What to Expect When You Are Expecting...a Penetration Test.",
-      "summary": null,
+      "teaser": "Explains how scoping, paperwork, communication and reporting determine whether a penetration test succeeds for both sides.",
+      "summary": "The talk, from two penetration testing consultants with more than 20 years of combined field experience, examines why engagements stall or disappoint and how both testers and clients can prevent it. Before issuing a request for proposal, buyers should define what a pen test means to them, since vendors may read the term differently, and review sample reports. Buyers should also inventory in-scope hosts and domains, identify stakeholders, set blackout windows and decide how testers will connect, whether on-site, by VPN or by drop box.\n\nOnce the contract is signed, the speakers recommend confirming dates, third-party hosting approvals, purchase orders and test credentials early, so access problems do not push back the start. For phishing or red team work, pretexts should be approved in advance, and only a small circle of people should know the test is happening. The kickoff call should include every stakeholder. During testing, both sides should agree on contacts for critical findings, a way to separate the testers' traffic from real attacks, and a reporting cadence, without over-communicating in ways that distract the team.\n\nScope that is too narrow can hide real risk, so realistic restrictions matter. The speakers argue that the final report should be clear and actionable rather than raw scanner output, and that clients should expect to review findings and discuss severity with the testers afterwards. Their core advice is to set expectations early and prepare paperwork and access ahead of time.",
       "durationSeconds": 2945,
       "conference": "wwhf",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "dq-hSl-uVbw",
@@ -8967,12 +9054,13 @@
         "help",
         "problem"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning The Top 10 Reasons It's GREAT to Be a Pen Tester... And How You Can Help Fix that PROBLEM.",
-      "summary": null,
+      "teaser": "Argues that pen tests should deliver business value and offers tips on reports, verifying fixes and blocking SMB abuse.",
+      "summary": "The talk opens with a lighthearted list of reasons penetration testing is appealing, then turns to the industry problems those perks can hide. The speaker argues that too many engagements are weak: the term pen test is loosely defined, some vendors sell vulnerability scans as pen tests, and many customers only want a checkbox. He urges testers to tie findings to business goals, be transparent about how they got in, and write reports that help defenders act.\n\nThe central case study is a WebEx flaw found during a customer engagement. The WebEx installer registers a Windows service that can be controlled over SMB on TCP 445. A domain user without admin rights could use the service control command to point that service at arbitrary commands and run them as SYSTEM on other machines, though on Windows 10 an admin login was needed. The team worked with Cisco, which shipped a patch before the details were published, and then released Nmap scripts and a Metasploit module. The speaker also described testing from a standard employee laptop image over VPN, which cuts travel costs while still reaching internal systems.\n\nFor practitioners, the closing advice focuses on what happens after the test ends. Ask testers how they will help you verify that a fix works, and reject reports that cannot be understood or that simply paste scanner output. On the defensive side, block client-to-client SMB where possible, remove Java and Flash when feasible, and consider offensive countermeasures that raise the cost of an attack.",
       "durationSeconds": 3924,
       "conference": "wwhf",
       "viewCount": 21000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "fni8XPWUghk",
@@ -9036,8 +9124,11 @@
       "youtubeId": "fo4I-EPNYE4",
       "slug": "windows-operating-system-archaeology",
       "title": "Windows Operating System Archaeology",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Casey Smith",
+        "Matt"
+      ],
+      "track": "red-team",
       "topics": [
         "windows",
         "archaeology",
@@ -9045,12 +9136,13 @@
         "operating",
         "system"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Windows Operating System Archaeology.",
-      "summary": null,
+      "teaser": "Walks through COM object hijacking, moniker abuse and scriptlet execution for persistence, evasion and AV bypass.",
+      "summary": "The talk starts with background on the Component Object Model (COM) for attendees who have not worked with it. It explains how COM classes are registered in the registry, how Windows resolves them at runtime, and how monikers such as scriptlet URLs let a script be fetched and executed. Scriptlet (SCT) files, which are XML-based, are presented as a way to run code in memory when dropping an executable or DLL is not an option.\n\nThe middle of the talk covers techniques built on that resolution process. Hijacking a class ID that Explorer loads at logon gives a persistence mechanism, and a TreatAs key can redirect a legitimate object so its code runs without anything suspicious on the command line. The speakers show how a Microsoft-signed script can be abused for command injection through a scriptlet moniker, how a hijacked scripting dictionary object can run a payload while still behaving normally, and how redirecting an anti-malware scan interface COM class can make scanning fail open. They also cover registration-free COM through activation context manifests, dotnet-to-jscript for Win32 API access, and remote DCOM launch of Outlook on a host where the user is a local administrator.\n\nThe closing section points defenders toward registry changes under COM keys, unusual scriptlet URLs, and processes running under an unexpected user. Enumeration with OleView, Process Monitor and certutil-style inspection helps find hijack candidates. The speakers argue that COM is a large attack surface that few products monitor well, and they encourage researchers to keep examining it.",
       "durationSeconds": 2654,
       "conference": "wwhf",
       "viewCount": 2300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "sBnftld3llE",
@@ -9066,12 +9158,13 @@
         "coming",
         "financial"
       ],
-      "teaser": "Security researchers examine technical aspects of Bitcoin At The Gates Cybersecurity & The Coming Global Financial Revolution.",
-      "summary": null,
+      "teaser": "Connects cryptocurrency metadata, capital controls and monetary policy to how hacking shapes the global economy and inequality.",
+      "summary": "Tara Wheeler opens by framing the talk around how cybersecurity is reshaping the global economy. She argues that finance and information security are converging as banks pursue frictionless transfers, and that metadata from cryptocurrency transactions can be worth more than the payments themselves. She contrasts this with cash, which reveals little about where it has been.\n\nThe middle of the talk walks through monetary theory. The unholy trinity holds that a government cannot control monetary flows, capital controls and fiscal or interest-rate policy all at once. Wheeler suggests cryptocurrency can move value across borders beyond the reach of capital controls, using Venezuela as an example, and points to local currencies as a more fungible alternative. She links recurring Bitcoin price swings to manipulation, and notes that its fixed supply means it cannot be priced or managed like fiat money. She also describes a bridge currency created by a startup and used by IBM, which keeps transaction data away from regulators.\n\nShe closes by pointing to shrinking middle classes and growing inequality, citing a comparison that 3.6 billion people hold as much wealth as eight men. Her takeaway is that people building and using these systems should understand their economic effects and help design better solutions.",
       "durationSeconds": 1698,
       "conference": "wwhf",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "rnmcRTnTNC8",
@@ -9088,12 +9181,13 @@
         "tester",
         "tactics"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding I'll Let Myself In: Tactics of Physical Pen Testers.",
-      "summary": null,
+      "teaser": "Shows how physical testers get through doors with cheap tools and common installation mistakes, and how to fix each one.",
+      "summary": "This talk argues that physical penetration testers rarely pick locks; most entries come from poor door installation and overlooked hardware. The speaker walks through common weak points, including hinge pins that can be knocked out of a frame, oversized strike plates on retrofitted electronic doors, and latches that were never set up as dead latches. Reaching through gaps to hit crash bars, frameless glass doors with exposed thumb turns, and gaps under doors also appear as repeated entry routes.\n\nOther cases involve a passive infrared exit sensor tripped by a canned gas cloud, an under-door tool that pulls a lever handle, and a door bottom bypassed with thin film. Access panels from several vendors share one widely known key, and a postal switch on one panel can be bridged to release a door. Long-range badge readers, a posed elevator repair technician, and an armed guard desk that yielded only a single read round out the stories, each with a different outcome.\n\nThe practical takeaway is that most of these failures are cheap to fix. Jamb pins can turn a standard hinge into a security hinge, correctly fitted dead latches and shrouds stop slipping, dynamic door bottoms block tools beneath doors, and dual-technology motion sensors resist gas and balloon tricks. Staff should also avoid shared keys and confirm that door hardware matches the frame. The speaker adds that confident, belonging-looking behavior helps intruders, so training should cover both hardware and people.",
       "durationSeconds": 2696,
       "conference": "wwhf",
       "viewCount": 2900000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "j_3EDQ5TSNE",
@@ -9276,16 +9370,18 @@
       "youtubeId": "fBUMVPx1K-Y",
       "slug": "programming-with-google",
       "title": "Programming with Google",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Robin Wood"
+      ],
+      "track": "appsec",
       "topics": [
         "google",
         "vulnerability-research",
         "programming",
         "with"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Programming with Google.",
-      "summary": null,
+      "teaser": "Shows non-developers core programming basics, then builds a short Ruby script that enumerates user profiles in a web app.",
+      "summary": "The talk aims to bring non-developers up to a basic level of programming so they can write small helper scripts for testing or everyday work. Robin Wood, who has spent much of a career developing and has published more than fifty small, single-purpose tools, starts with fundamentals: variables and common data types such as strings, integers, floats, lists and objects; the difference between equality checks and assignment; conditionals; boolean logic grouped with brackets; loops; code blocks, including how Python relies on whitespace; and functions that return values.\n\nFor the live part, the speaker works against a test web app where profile pages expose user IDs once logged in. Starting from a Ruby HTTP request example found through a search, the script runs into problems that are worked through one at a time: a missing library import, a redirect because the request was not authenticated, which is fixed by sending the session cookie, and a type error when joining a number to a string. A loop then walks IDs one to one hundred and prints the page that contains the admin level. The finished script is about fifteen lines.\n\nThe closing advice is to be careful with code found online: only use code you can read and understand, prefer answers from the first page of results, and never run code blindly, since a published exploit can hide destructive commands. Keep working scripts in a private repository so they can be adapted later, and practise regularly.",
       "durationSeconds": 2729,
       "conference": "wwhf",
       "viewCount": 1600,
@@ -9348,8 +9444,8 @@
         "audit",
         "tool"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Domain Password Audit Tool.",
-      "summary": null,
+      "teaser": "Shows how a Python tool turns domain controller hash dumps and cracked passwords into an interactive HTML password audit report.",
+      "summary": "Carrie Roberts presents the Domain Password Audit Tool, a Python script that builds an interactive HTML report on password use in an Active Directory domain. She starts with why LM hashes matter: they split a password into two uppercase seven-character halves, are only stored for passwords of 14 characters or fewer, and appear as a fixed blank-hash value when a domain does not store them. Keeping them is a weakness because they are far quicker to crack than NT hashes.\n\nThe core of the talk is a walkthrough of the sample report. It covers total hashes, unique hashes, cracked percentages, LM hash counts, password length breakdowns, top passwords and password reuse. One example shows domain admins whose regular and admin accounts share a password, which undermines separation of duties. Optional group files, such as domain admins or enterprise admins, add membership details to the report.\n\nRoberts then demonstrates the workflow on a fresh Kali install. She copies the NTDS database and the SYSTEM registry hive from a domain controller with ntdsutil, extracts the hashes with secretsdump, and cracks them with John the Ripper. The tool recombines cracked LM halves into full passwords and runs in seconds on roughly 88,000 entries. She closes with sanitized reports, a SQLite export for custom queries, and her use of the tool on pivot tests, where hash extraction is offered once a tester reaches domain admin. Defenders should disable LM hashes, separate admin and daily accounts, and check for shared passwords.",
       "durationSeconds": 3050,
       "conference": "wwhf",
       "viewCount": 1700,
@@ -9380,18 +9476,19 @@
       "slug": "a-google-event-you-wont-forget",
       "title": "A Google Event You Won't Forget",
       "speakers": [],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "google",
         "event",
         "forget"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding A Google Event You Won't Forget.",
-      "summary": null,
+      "teaser": "Shows how calendar event injection and personalized phishing pages can defeat Google's two-factor options in enterprise attacks.",
+      "summary": "The talk looks at how Google Workspace accounts can be attacked in an enterprise setting, and argues that none of Google's two-factor options is bulletproof. The presenters compare SMS codes, time-based one-time passwords, phone prompts and hardware security keys. They say SMS is the weakest choice, and that security keys are undermined when they fall back to weaker backup methods.\n\nThe attack path starts with reconnaissance, collecting contacts from professional networking sites and creating lookalike Gmail accounts. Their tool, Cred Sniper, checks which second factor a target uses and personalizes a fake login page with the victim's profile image, authenticator app name or partial phone number. SMS codes stayed valid for hours and were not tied to a session, so they could be phished and used later. A non-Chrome user agent made Google skip the security key and fall back to SMS. Calendar event injection let attackers place invites with a lure into a user's calendar without sending one, and an API call could make the event look accepted. Once inside, they searched mail, exported account data and authorized an app for persistence.\n\nFor defenders, the takeaways are to move away from SMS, avoid security keys with a weak default backup, and train staff on behavior rather than specific red flags. Admins can review Google admin console login logs and search by IP address to find other compromised accounts. The calendar injection issue had been reported to Google, which later added a setting limiting automatic events, but the presenters said the API route still worked.",
       "durationSeconds": 2232,
       "conference": "wwhf",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "oVdYhiYSl54",
@@ -9420,24 +9517,27 @@
       "speakers": [
         "Data Exfiltration via Faraday's Law"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "vapor",
         "trail",
         "vulnerability-research"
       ],
       "teaser": "Data Exfiltration via Faraday's Law examines Vapor Trail.",
-      "summary": null,
+      "summary": "The presenters introduce Vapor Trail, a tool that moves data out of a network over FM radio. The idea grew out of consultants on client sites who had physical access to a network but found that normal egress paths were inspected, while cellular modems and prepaid SIMs added cost and detection risk. Radio offered a channel that few organizations monitor.\n\nThe device is a Raspberry Pi with a length of wire as its antenna. It toggles a GPIO pin using pulse width modulation to place a signal on an unused FM channel, which US rules allow at low power without a license. A cheap software-defined radio receives the signal. Each bit is set by how far the signal sits from a center frequency, so timing jitter on the Pi matters less. Data is split into 128-byte blocks with parity blocks added, so any half of the set rebuilds the file, and SHA-256 checksums confirm integrity. At roughly 2,000 bits per second, compression and filtering help. The limits include an encoder that does not yet run on the Pi Zero and no way for the receiver to request retransmission.\n\nA live demo sent a short file and a larger one that needed two parity groups, and the receiver confirmed both by matching hashes. A gzip-compressed log transfer was also shown. Future ideas include a repeater, a custom board combining transmit and receive with a band-pass filter, and encrypting data before transmission. In the Q&A, the presenters reported a range of about three city blocks and reception through several walls.",
       "durationSeconds": 3036,
       "conference": "wwhf",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "NhepfRz0W0I",
       "slug": "morphing-to-legitimate-attack-patterns",
       "title": "Morphing to Legitimate Attack Patterns",
-      "speakers": [],
+      "speakers": [
+        "Tim Kennedy"
+      ],
       "track": "red-team",
       "topics": [
         "morphing",
@@ -9446,12 +9546,13 @@
         "pattern",
         "patterns"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Morphing to Legitimate Attack Patterns.",
-      "summary": null,
+      "teaser": "Shows how attackers can blend into normal behavior to slip past PowerShell and lateral movement detections, with a new C2 proof of concept.",
+      "summary": "The talk looks at how offensive tradecraft is being squeezed as defenders get better at spotting malicious activity. The speaker argues that obvious PowerShell use, encoded commands, and workstation-to-workstation traffic are now easy to flag, so operators need to make their actions look like ordinary behavior. He points to baselining an environment and watching for deviations, such as a server script reaching out to the internet, as a signal defenders can act on quickly.\n\nThe middle of the talk covers specific evasion ideas. One example uses MSBuild to load the PowerShell automation assembly without launching powershell.exe, which the speaker says often avoids detections keyed to that binary. A demo of an updated Unicorn generator showed how splitting strings and chunking variables hides commands, though he notes such patterns are still fairly easy to spot. He then introduces Trevor C2, a proof of concept that makes command traffic resemble a normal browsing session on a cloned website, with data carried in image filenames and randomized beacon intervals. A short Python demo showed commands being sent to a client and results returned.\n\nThe closing advice mixes both sides. Defenders should use application control, block unneeded workstation-to-workstation SMB and RPC, enable script block logging, and monitor DLL loading and network connections with Sysmon, while watching east-west logon events. Attackers need to adapt to these controls by emulating user behavior. The speaker presents the progress on both sides as a sign that defense is improving, while noting there is still a long way to go.",
       "durationSeconds": 2427,
       "conference": "wwhf",
       "viewCount": 2200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     }
   ]
 }

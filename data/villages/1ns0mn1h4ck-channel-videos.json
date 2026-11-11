@@ -19,7 +19,7 @@
         "azure",
         "azure-ad"
       ],
-      "teaser": "Elias Issa examines Device Code Phishing Is Dead, Long Live New Azure AD Attacks!.",
+      "teaser": "Shows how attackers can skip the password and abuse the Microsoft Authenticator number prompt to hijack Azure AD sessions.",
       "summary": "Overview: Elias, head of red team at Orange Cyberdefense, presents at Insomni'hack on new Azure AD attack vectors beyond device code phishing, including techniques validated in four red team operations.\n\nKey Topics: Azure AD authentication mechanisms and their attack surfaces; device code phishing limitations; new social engineering vectors for token theft; password spraying effectiveness; and coordination with Microsoft on disclosure.\n\nTechnical Details: Elias demonstrates attack flows where victims receive codes to enter on legitimate Microsoft sites, completing authentication including MFA. He also covers password spraying against valid email lists with common passwords, noting its continued effectiveness despite visibility.\n\nTakeaways: Azure AD's diverse authentication options create multiple attack paths beyond device code phishing. Organizations should monitor for anomalous authentication patterns and enforce strong password policies.",
       "durationSeconds": 3039,
       "difficulty": "intermediate",
@@ -86,7 +86,7 @@
         "laptop",
         "farm"
       ],
-      "teaser": "Mauro Eldritch analyzes Livestreaming From North Korea's IT Workers Laptop Farm.",
+      "teaser": "Documents a fake laptop farm built to record North Korean IT workers from first login through their job interviews.",
       "summary": "North Korean IT worker threat\n\nMauro and Einar Garcia Perez at Insomnihack detail Famous Chollima, a Lazarus-linked unit conducting remote IT worker fraud, corporate espionage, and revenue generation for the DPRK regime across finance, healthcare, engineering, and expanding sectors including real estate and pharma.\n\nHoneypot operation\n\nIn a first-of-its-kind sting with Finers, BCIT, and ANY.RUN, they built a fake laptop farm/sandbox mimicking contractor environments, monitored GitHub recruitment spam, infiltrated handler networks, and recorded operatives from initial login through job-scam attempts.\n\nGitHub tradecraft\n\nStage one tracked GitHub spammers using repetitive outreach templates, cloned profile images, rapid follower inflation, and clustering of related accounts. Stage two containment observed full attacker behavior inside isolated ANY.RUN laptop sandboxes, yielding technical indicators for defenders hiring remote developers.",
       "durationSeconds": 3217,
       "difficulty": "intermediate",
@@ -207,7 +207,9 @@
       "youtubeId": "MGiZSdLUaBc",
       "slug": "shift-happens-uncovering-two-built-in-command-injections-in-wind",
       "title": "Shift Happens: Uncovering Two Built-In Command Injections In Windows Context Menus -@Poda",
-      "speakers": [],
+      "speakers": [
+        "Remi Gazcue"
+      ],
       "track": "appsec",
       "topics": [
         "windows",
@@ -217,7 +219,7 @@
         "built-in",
         "command"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Shift Happens: Uncovering Two Built-In Command Injections In Windows Context Menus -@Poda.",
+      "teaser": "Shows how Windows context menu command templates let crafted folder names inject PowerShell commands.",
       "summary": "Overview: This research uncovered two command injection vulnerabilities in the built-in Windows context menu system that simple and legitimate user interactions can trigger. Shift Happens - Uncovering Two Built-in Command Injections in Windows Context Menus Two long-standing command injection vulnerabilities were found in the Windows Explorer \"Open PowerShell window here\" extended context menu , triggered by crafted folder names such as \"folder; calc\". Slides The slides of this talk can be found here: Spe\nDetails: cterOps - Shift Happens - Uncovering two builtin command injections in Windows context menus .pdf Slides The slides of this talk can be found here: SpecterOps - Shift Happens - Uncovering two builtin command injections in Windows context menus .pdf In this talk, we reveal two previously unknown command injection vulnerabilities in Windows context menus , affecting both",
       "durationSeconds": 1931,
       "difficulty": "advanced",
@@ -881,12 +883,13 @@
         "identity",
         "azure-ad"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Breaking And Fixing Azure AD Device Identity Security by Dirk-jan Mollema.",
-      "summary": null,
+      "teaser": "Explains how Azure AD device identities and TPM-protected primary refresh tokens work, and how attackers abused them.",
+      "summary": "The talk looks at how Azure Active Directory device identities are created and why they matter in zero trust setups that only allow compliant, corporate-owned Windows devices to sign in. It walks through the device join flow, in which the device generates device and transport keys, the private keys are protected by a TPM, and the device then receives a primary refresh token (PRT) for single sign-on.\n\nThe middle of the talk covers three attacks against that design. The first targets PRT cookies: because the TPM derived signing keys from random context bytes alone, an attacker with administrator rights could pre-calculate derived keys without the session key. Microsoft addressed this by binding the key derivation to a server-issued nonce. The second shows that a single sign-on token obtained from a user session can register a new device, giving the attacker a PRT that carries an MFA claim without the victim performing MFA. The third abuses device tickets cached in the user's registry hive to overwrite an Autopilot-registered device with attacker-held keys. Overwriting the device initially kept its Intune compliance state, and the speaker reported that the later fix removed that compliance claim on overwrite.\n\nThe takeaway for practitioners is that TPM protection alone does not secure device trust when token flows can be replayed, pre-computed or re-registered. Device registration permissions and Intune enrollment restrictions should be reviewed as separate controls. The speaker closes by pointing to open-source tooling for experimenting with devices and tokens, and notes that further research into bypassing TPM protection is saved for another talk.",
       "durationSeconds": 3256,
       "difficulty": "advanced",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "publishedAt": "2023-04-11"
     },
     {
       "youtubeId": "x5IyXJthNo0",
@@ -1443,7 +1446,9 @@
       "youtubeId": "BiMU2CalCqU",
       "slug": "forging-golden-hammer-against-android-app-protections-by-georges",
       "title": "Forging Golden Hammer Against Android App Protections by Georges-Bastien Michel",
-      "speakers": [],
+      "speakers": [
+        "Georges-Bastien Michel"
+      ],
       "track": "mobile",
       "topics": [
         "android",
@@ -1452,8 +1457,8 @@
         "hammer",
         "protection"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Forging Golden Hammer Against Android App Protections by Georges-Bastien Michel.",
-      "summary": null,
+      "teaser": "Shows how Android runtime protection tools detect hooking and debugging, and how those checks can be bypassed with Frida.",
+      "summary": "The talk looks at runtime application self-protection (RASP) in Android apps, the layer of checks that commercial protection tools add to detect tampering, hooking and debugging. The speaker explains why these products are common in payment and certified applications, and why security assessments need to test them. He outlines the layers such tools use: integrity checks on resources, anti-tampering, anti-hook and anti-debug threads, emulator and root detection, and network protections such as certificate pinning.\n\nTo study these products, the speaker reversed native libraries from certified tools, wrote detection rules from them, and used those rules to collect more than 300 protected APKs. He then walked through the protection workflow, including early hook checks, fork-based anti-debugging and periodic re-checks. He also described how vendors have made their work harder to follow: replacing plain string comparisons with hashes, hashing bytes one at a time, using the link register as a stack pointer to hide code, loading dex files from memory through a custom app component factory, and self-modifying code that decrypts regions at runtime. Anti-hook checks compare the memory map and symbol addresses against a clean load of the library.\n\nFor bypasses, he showed Frida techniques to recover hashed strings, dump decrypted memory, filter the process memory map output, and neutralise ptrace and prctl calls, along with hooks placed early through Java and native entry points. His main advice is to keep every hook consistent, because protections cross-check results across native and Java paths, and to follow each thread when tracing native code.",
       "durationSeconds": 4084,
       "difficulty": "advanced",
       "viewCount": 1700,
@@ -1519,12 +1524,13 @@
         "webhook",
         "abhay"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Hook, Line And Sinker: Pillaging API Webhooks by Abhay Bhargav.",
-      "summary": null,
+      "teaser": "Shows how webhook consumers can use HTTP 303 redirects to turn SSRF against the provider's cloud metadata.",
+      "summary": "Webhooks are callbacks that a provider sends to a consumer application, usually as JSON POST requests, and they appear in payment processors, CI/CD systems and marketing tools. Most attention goes to attacking the consumer, but this talk asks whether a consumer can make the provider attack its own internal infrastructure. The talk calls this a webhook boomerang, built on server-side request forgery (SSRF).\n\nThe main obstacle is that classic SSRF relies on GET requests, while providers send POST or PUT. An HTTP 303 See Other response makes the client fetch a new location after such a request, and common clients, including popular Python and Go libraries, follow redirects by default. Redirecting to a cloud metadata address lets the attacker retrieve credentials, and since providers store webhook delivery traces, the response can be read in their dashboards. In a Docker Hub case, this exposed an AWS IAM role and was fixed within hours of reporting. A live demo against a CouchDB instance showed similar exfiltration of user records. Azure and GCP metadata endpoints need a custom header, which some providers let customers configure, so the technique can extend there.\n\nDefences centre on not following redirects, which the speaker called the most important control. Other layers include network policies that block metadata access, DNS proxies that check resolved addresses because IP blocklists can be bypassed by domains that resolve internally, URL validation, and secure-by-default HTTP clients shared across teams. The speaker urged teams to include webhooks in threat models and to test CI systems and marketing automation tools.",
       "durationSeconds": 2580,
       "difficulty": "intermediate",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "publishedAt": "2022-04-05"
     },
     {
       "youtubeId": "wfdjOE_MTnY",
@@ -1692,8 +1698,8 @@
         "liba",
         "assaf"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Breaking SecureBoot With SMM by Itai Liba & Assaf Carlsbad.",
-      "summary": null,
+      "teaser": "Shows how flawed System Management Mode handlers in x86 firmware let an attacker disable Secure Boot on a Dell laptop.",
+      "summary": "The talk examines System Management Mode (SMM), the highly privileged x86 CPU mode that firmware uses, and the software SMI handlers that accept attacker-controlled data through a communication buffer. It focuses on a recurring bug class in which a handler uses a pointer nested inside that buffer without checking that it stays outside SMRAM. The speakers present Brick, an open-source static analysis tool built on IDA that automates the search for this pattern. In a demo against an SMM binary extracted from a Dell laptop, the tool flagged a handler that skipped this check. The speakers report that Brick has produced 13 CVEs across several large vendors.\n\nThe second part follows the exploitation of that handler. A flash-read routine that writes to an unvalidated destination gives an arbitrary write primitive, which the team turned into a read primitive by inserting their own handler into the SMI handler list in the PI SMM core and then dumping SMRAM. A ROP chain then cleared the write-protect bit in CR0, which let shellcode be copied into SMM code. That shellcode changed the Secure Boot mode variable through the SMM variable service, bypassing its write protection, so an unsigned OS loader could boot on the demo system. The speakers traced the root cause to Intel's reference BIOS code, which was reported with two CVEs.\n\nFor defenders, the talk points to a few changes. Newer Intel vPro platforms add a CR0 write lock that would have blocked the code-patching step. The speakers also recommend that edk2 verify that SMI entries and handler pointers reside in SMRAM, and they say they are pushing that change upstream. The talk closes with tooling notes and references, including a multi-part blog series on UEFI and SMM security.",
       "durationSeconds": 2832,
       "difficulty": "expert",
       "viewCount": 1400,
@@ -1706,15 +1712,15 @@
       "speakers": [
         "Karim Sudki"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "thi",
         "gtfo",
         "karim",
         "sudki"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Stop This Car || GTFO by Karim Sudki.",
-      "summary": null,
+      "teaser": "Shows how a vehicle GPS tracker was dumped, reverse engineered and controlled remotely over SMS.",
+      "summary": "The talk looks at aftermarket vehicle trackers that sit in a car's fuse box, report GPS position over a 4G network and fall back to SMS when connectivity drops. The research targeted one device sold under the Spyron name. Before any teardown, public material such as FCC filings, user manuals and sales documents revealed the feature set and the supported extended AT commands.\n\nThe microcontroller's debug port was unprotected, but its firmware held nothing useful. The cellular module's flash was desoldered and read instead. Its Qualcomm embedded file system 2 format was unsupported by existing tools, so the speaker built an extractor and reconstructed the files. The main binary turned out to be a real-time OS module, loaded into Ghidra with a custom loader, that exposed an AT command handler on a UART. The device's UDP ports could then be found and its extended commands reached on the local network.\n\nTraffic between device and server was plain UDP with no encryption or authentication, so reports could be decoded and position data forged, and the reporting server could be redirected by SMS. The financing relay wired between the key and starter could also be switched on by a single text message, which the speaker demonstrated by blocking an LED-simulated engine start. Disclosure to the vendor took months. The firmware appears reused across several rebranded models. Practitioners should treat remotely configurable trackers with unauthenticated telemetry as a serious risk.",
       "durationSeconds": 2963,
       "viewCount": 1000,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
@@ -1933,7 +1939,10 @@
       "youtubeId": "8lPZswplFd0",
       "slug": "practical-bruteforce-of-military-grade-aes-1024-by-sylvain-pelis",
       "title": "Practical Bruteforce Of Military Grade AES-1024 by Sylvain Pelissier and Boi Sletterink",
-      "speakers": [],
+      "speakers": [
+        "Sylvain Pelissier",
+        "Boi Sletterink"
+      ],
       "track": "red-team",
       "topics": [
         "military",
@@ -1943,12 +1952,13 @@
         "aes-1024",
         "sylvain"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Practical Bruteforce Of Military Grade AES-1024 by Sylvain Pelissier and Boi Sletterink.",
-      "summary": null,
+      "teaser": "Shows how a USB vault's weak key derivation and malleable encryption undermine its marketed AES-1024 claim.",
+      "summary": "The talk began with a USB vault made by SanDisk's SecureAccess software, whose password had been written on a sticky note, so the researchers went after the software itself. An option to use an unstandardized \"AES-1024\" mode raised their interest, so they reverse engineered the packed Windows binary, using function signature matching and Process Monitor to find where the password was checked.\n\nThe key derivation was a PBKDF2-like design built on MD5, with 1000 iterations and a salt hardcoded in the code and shared across several vendors. Its structure let a precomputable part be reused, so longer keys added little strength. The so-called AES-1024 mode was eight AES-128 rounds, while AES-256 used two. A John the Ripper plugin tested about 7,300 candidates per second, against about 30 for PBKDF2 at 310,000 iterations. The file encryption used unauthenticated counter mode, so ciphertext could be altered predictably, and with known plaintext the effective strength fell to about 128 bits.\n\nThe vendor, ENC Security, then worked with the researchers on coordinated disclosure and received two CVEs. A fixed key derivation function shipped in a December release, while the malleability fix was deferred because a MAC clashes with random-access file handling. The takeaway is that marketing numbers say little about real strength, and that cooperative disclosure can work well.",
       "durationSeconds": 3208,
       "difficulty": "expert",
       "viewCount": 1100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "publishedAt": "2022-04-05"
     },
     {
       "youtubeId": "7oXUIRCt8s8",
@@ -1966,12 +1976,13 @@
         "characterization",
         "antonio"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Ransomware Encryption Internals: A Behavioral Characterization by Antonio Cocomazzi.",
-      "summary": null,
+      "teaser": "Breaks down how ransomware encrypts files and maps shared behaviors that could support generic, detection-friendly signals.",
+      "summary": "The talk looks at the data encryption stage of ransomware, the step that locks victim files and drives extortion. The speaker argues that static indicators miss packed or evolving families, so behavioral indicators are needed. The research covered four prominent families active during the study period, and it grouped their behavior into four features: file and directory enumeration, file encryption, encryption optimization and parallelization.\n\nKey shifts included a move from RSA to elliptic curve cryptography, so the private key never lands on disk and only a public key is appended to each file. Families also avoided the Windows CryptoAPI in favor of custom or open-source code. Enumeration varied: one family queried Active Directory over LDAP for machines, while another read the ARP table. Operators used multithreading with I/O completion ports, killed processes that held file locks through the Restart Manager, and removed shadow copies.\n\nMapping the Win32 and NT API calls showed overlapping implementations that could support generic detection. Proposed signals included wildcard file enumeration seen at kernel level across all drives, including remote shares, and repeated end-of-file appends of a fixed-size footer that cross a count threshold. Restart Manager usage and bulk random key generation were also discussed as weaker options. The speaker stressed that thresholds need tuning against false positives, and that these detections raise the cost for developers rather than eliminating ransomware.",
       "durationSeconds": 3297,
       "difficulty": "advanced",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "publishedAt": "2022-04-05"
     },
     {
       "youtubeId": "-sjM0k0hvMU",
@@ -2133,15 +2144,15 @@
       "speakers": [
         "Erik Bussink"
       ],
-      "track": "community",
+      "track": "cloud",
       "topics": [
         "architecture",
         "nsx-t",
         "erik",
         "bussink"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for NSX-T Architecture & Benefits by Erik Bussink, VMware.",
-      "summary": null,
+      "teaser": "Walks through VMware NSX-T's overlay networking, distributed firewalling and multi-cloud micro-segmentation, with recorded demos.",
+      "summary": "The talk introduces VMware NSX, a network virtualization platform, and its current NSX-T version. It starts with the problem that stretched layer 2 networks created when virtual machines move between racks or sites with different subnets, along with traffic hairpinning through physical firewalls and load balancers. NSX answers this by building a logical broadcast domain in each hypervisor, with hosts exchanging traffic over Geneve-encapsulated IP tunnels. The only physical network requirements are IP connectivity and an MTU of at least 1600 bytes.\n\nThe speaker then covers the NSX-T architecture: a distributed virtual switch on each host, a manager cluster that stores desired state, and controllers that push configuration and track which MAC address sits behind which tunnel endpoint. Support extends beyond ESXi to KVM, Ubuntu, RHEL, SUSE, bare-metal servers and containers. Distributed firewall rules apply at the virtual NIC, and east-west routing happens in the host kernel. Stateful services such as north-south firewalling, NAT, load balancing and DHCP run on edge nodes, which can be virtual machines or bare-metal servers.\n\nThe final section shows a recorded multi-cloud demo: an application with web servers in AWS and Azure and its database in an on-premises data center. Tags group the workloads, and distributed firewall rules are applied across clouds from one management console. The talk closes with use cases and the takeaway that micro-segmentation can be rolled out step by step, with policy managed centrally across on-premises and cloud environments.",
       "durationSeconds": 3131,
       "difficulty": "beginner",
       "viewCount": 48000,
@@ -2224,12 +2235,13 @@
         "attack",
         "simulation"
       ],
-      "teaser": "Security researchers examine technical aspects of Secure Boot Under Attack: Simulation to Enhance Fault Attacks & Defenses by Martijn Bogaard, Riscure.",
-      "summary": null,
+      "teaser": "Shows how a fault simulator built from open-source parts can locate glitch points in secure boot code.",
+      "summary": "Secure boot is a core protection in modern embedded devices, but even when no easy logic flaws remain, attackers can defeat it with fault injection, commonly called glitching. These weaknesses are hard to spot in source code, so reviewers often have to read the disassembled binary one instruction at a time.\n\nThe talk presents a fault simulator assembled from existing open-source components that works without modelling the hardware in detail. The speaker covers the difficulties of simulating real-world targets and how many of them can be worked around. The simulator emulates the boot code and models the effect of a glitch, such as skipping an instruction or flipping a bit, to show where a glitch would compromise the boot process.\n\nApplied to several real-world targets, the simulator found glitch locations that could bypass authentication of the next boot stage or allow arbitrary code execution during boot. In one case, that access could reveal the cryptographic keys protecting the system or supply information needed for a more scalable attack that does not require fault injection. For developers, the same approach can check whether countermeasures such as redundant checks or randomized control flow hold up against specific fault types. The speaker also shows hardware-side glitching and notes that simulation simplifies reality, so it complements rather than replaces physical testing.",
       "durationSeconds": 3389,
       "difficulty": "expert",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "publishedAt": "2019-04-10"
     },
     {
       "youtubeId": "P7P2NC5cjY8",
@@ -2589,8 +2601,10 @@
       "youtubeId": "I7xl7DcKbEg",
       "slug": "growing-hypervisor-0day-with-hyperseed-by-shawn-denbow-sdenbow-m",
       "title": "Growing Hypervisor 0day with Hyperseed by Shawn Denbow (@sdenbow_), Microsoft",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Shawn Denbow"
+      ],
+      "track": "red-team",
       "topics": [
         "hypervisor",
         "growing",
@@ -2599,8 +2613,8 @@
         "shawn",
         "denbow"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Growing Hypervisor 0day with Hyperseed by Shawn Denbow (@sdenbow_), Microsoft.",
-      "summary": null,
+      "teaser": "Shows how a format-aware fuzzer found 16 Hyper-V hypervisor bugs by targeting hypercalls exposed to guest partitions.",
+      "summary": "The talk examines Hyper-V's hypercall interface, which a guest partition can invoke from kernel mode, making it a clear security boundary and a meaningful attack surface. The speaker first gives a high-level tour of the architecture: the type 1 hypervisor, the root partition that hosts the virtualization stack, nested virtualization, and virtual trust levels that separate normal and secure mode. He covers the three calling conventions, the simple and repeat hypercall classes, and the checks handlers apply, such as partition privileges, partition state, root-only restrictions and virtual processor state.\n\nThe middle section presents Hyperseed, a fuzzer that invokes hypercalls through a kernel driver proxy. It layers generic mutators for call codes and calling conventions over a coarse default mutator, with per-hypercall classes that encode each input structure so test cases get past basic validation. The team ran it from child partitions, from the root partition, through nested hypervisors and against secure calls. Over roughly a year it produced 16 findings: eight privilege escalation or remote code execution and eight denial of service. One case walked through an out-of-bounds index in a repeat hypercall, where a shifted APIC ID indexed a static virtual processor set array; the fix was a one-line bounds check.\n\nThe speaker closes by warning that fuzzing from the root can crash the host before a hypervisor bug is reached, so monitoring must be careful. He argues that format-aware fuzzing built on public documentation was effective, and explains that patching was slow because the cloud fleet had to be updated first. Planned work includes adding Intel PT tracing to coverage-guided fuzzing.",
       "durationSeconds": 2637,
       "difficulty": "expert",
       "viewCount": 2000,
@@ -2642,12 +2656,13 @@
         "attacking",
         "vulnerability-research"
       ],
-      "teaser": "Alvaro Muñoz analyzes Attacking .NET deserialization.",
-      "summary": null,
+      "teaser": "Explains how .NET serializers enable remote code execution, with real vulnerable cases and the fixes that stop them.",
+      "summary": "The talk examines how .NET serializers can lead to remote code execution when an application rebuilds objects from attacker-supplied data. Serialized payloads name the types to recreate, and an attacker who controls that name can reach gadgets, which are existing classes whose setters or constructors end up performing dangerous calls. BinaryFormatter, NetDataContractSerializer and some third-party JSON libraries are vulnerable in default settings, while others become dangerous through configuration choices.\n\nReal cases make this concrete. A web application stored serialized state in an unsigned cookie. A pre-authentication flaw in Azure Active Directory Application Proxy was confirmed with a DNS callback from Microsoft's servers. A content management system let users choose the expected type for an XML serializer, and the Breeze framework enabled type name handling in Json.NET, where a demo gadget launched a calculator. For detection, the speaker covered searching traffic for serializer signatures, black-box timing or DNS probes, and static analysis of untrusted data flows.\n\nThe fixes follow four approaches: stop deserializing untrusted input, sign or encrypt client-side state using HMAC or the data protection API, and keep machine keys secret, including by encrypting web.config, since leaked keys let attackers forge ViewState. If a binder is needed, use strict allow lists rather than block lists or broad namespace prefixes, because trusted types can contain bypass gadgets. Schema-based formats without type information are presented as the safer option.",
       "durationSeconds": 2327,
       "difficulty": "advanced",
       "viewCount": 17000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "publishedAt": "2018-04-28"
     },
     {
       "youtubeId": "pnPuwBtW2_4",
@@ -2817,12 +2832,13 @@
         "history",
         "brief"
       ],
-      "teaser": "Jordan Wiens investigates A Brief History of CTF.",
-      "summary": null,
+      "teaser": "Traces the history of CTF competitions through custom hardware, dirty tricks, real-world impact and community lessons.",
+      "summary": "Jordan Wiens, a retired player and former organizer, traces how capture the flag competitions grew over about two decades. He cites CTFtime data showing roughly 140 events in 2017, enough to run one nearly every other day. He explains why attack-defense formats are hard to score and how teams often game them, such as redirecting traffic to other teams' services.\n\nThe middle of the talk surveys memorable cases. A DEFCON badge game used a hand-built radio protocol and an off-by-one bug that only one team managed to exploit. The Clemency architecture, with nine-bit middle-endian words, forced teams to write tooling within a day. The Pony Adventure games moved from a Unity MMO to an Unreal Engine title, then to a 6502 zombie game inspired by tool-assisted speedruns. Other stories include a Wireshark bug exposed to opponents, a flag submitter that allowed command injection, and a crypto backdoor without nonces that could be replayed.\n\nThe final section covers community contribution. Wiens urges listeners to archive old challenges, release tools after they stop playing, mentor newcomers and organize events. His practical takeaways include testing challenges with people who lack prior knowledge and building redundancy into infrastructure, since a single loose power connector once took down a visualization scoreboard during a live event.",
       "durationSeconds": 3031,
       "difficulty": "beginner",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "publishedAt": "2018-03-28"
     },
     {
       "youtubeId": "FWMFToOw0zs",
@@ -2837,11 +2853,12 @@
         "machine",
         "learning"
       ],
-      "teaser": "Craig Gibson details 5G Machine Learning.",
-      "summary": null,
+      "teaser": "Maps how software-defined 5G networks open new fraud, wiretap and identity risks, and how machine learning could model them.",
+      "summary": "Craig Gibson, of Trend Micro's forward-looking threat research group, opens by arguing that 5G differs fundamentally from earlier mobile generations. Earlier networks run on fixed hardware, while 5G is software-defined, with virtualised network functions that can come from many vendors. He argues that this portability, together with perimeterless design and carrier-to-carrier trust, makes castle-and-moat models and traditional identity assumptions a poor fit, and that supply chain access can become a wiretap and data sovereignty concern.\n\nThe middle of the talk walks through telecom threat models. International revenue sharing fraud is presented as a laundering channel, since SIM cards behave like payment cards with no real spending ceiling. Emergency calls made without a SIM can be abused for break-ins to call centres, and bulk subscriptions tied to IoT fleets can hide misuse behind a procurement process. The speaker also describes an orchestration pipeline in which business requirements flow down to network slices. He proposes machine learning that combines unsupervised clustering of call and subscription data with supervised models, and that reuses investigation models to flag fraud rings and rogue base stations.\n\nThe closing section covers satellites, which the speaker treats as orbital IoT, and raises concerns about data processing outside any national jurisdiction. His practical points are that operators often lack visibility into their own traffic, that investigations may need law-enforcement relationships, and that simulating attack and cost scenarios can guide security priorities. Attendees are left with the idea that carrier trust and subscription management should be treated as security controls.",
       "durationSeconds": 3506,
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "fFaWE3jt7qU",
@@ -2910,7 +2927,7 @@
       "speakers": [
         "Snir Ben-Shimol"
       ],
-      "track": "community",
+      "track": "blue-team",
       "topics": [
         "operations",
         "unmasking",
@@ -2918,8 +2935,8 @@
         "operation",
         "super"
       ],
-      "teaser": "Snir Ben-Shimol examines Unmasking stealth operations using UBA super powers.",
-      "summary": null,
+      "teaser": "Shows how user behavior analytics and machine learning can expose stealthy attacks by learning normal activity.",
+      "summary": "The talk addresses stealth intrusions that move slowly and blend into normal activity. The speaker argues attackers keep changing their methods, so defenders should learn what normal looks like for users, service accounts and computers, then flag deviations. Before acting on an anomaly, the analyst should check whether it is truly wrong, since many unusual behaviors prove legitimate.\n\nThe speaker walks through a typical intrusion chain: a phishing document that leaks credential hashes over SMB, a fake VPN login page, a dropper that establishes persistence and beacons over HTTP and DNS, and DNS tunneling driven by a domain generation algorithm. Later stages include lateral movement through service accounts that hold service principal names, and exfiltration to legitimate hosting domains that reputation services are unlikely to flag. For data, he prioritizes Active Directory, Exchange, file activity, VPN, proxy, firewall and DNS logs, stressing noise reduction, vendor normalization and enrichment with location and identity.\n\nExample models include a VPN user whose session comes from an unusual country and tunnels RDP to another person's machine, Kerberos ticket requests spanning many hosts, encryption-type baselines per segment, and per-user upload volumes compared against history. Organization-wide statistics on domains and user agents help build trusted lists, and unusual reverse DNS lookups can reveal reconnaissance. The main takeaway is that per-entity baselines cut false positives from noisy but legitimate tools, and correlating weak signals across sources can expose slow attacks. Limitations include learning periods that may already contain an attack, and log parsing that must be done manually for each proxy vendor.",
       "durationSeconds": 3574,
       "difficulty": "intermediate",
       "viewCount": 1000,
@@ -3172,11 +3189,12 @@
         "hack",
         "trouble"
       ],
-      "teaser": "Amat Cama explores Insomni'hack 2017 - A new source of trouble.",
-      "summary": null,
+      "teaser": "Shows how a Source engine networking bug in game clients can be chained into code execution through a malicious server.",
+      "summary": "Game engines such as Valve's Source are reused across many titles, so a flaw in the shared engine can affect every game built on it. The talk looks at Source, which powers Team Fortress 2, Counter-Strike and older versions of Dota 2. Multiplayer in Source is client-server over UDP, with the server sending entity snapshots and clients returning their own messages. The talk covers the message types and the parsing code behind them.\n\nSeveral memory-corruption issues were examined. An overflow in the string table creation message and an out-of-bounds write in a user message were found in specific games, and exploitation was not pursued there. The most useful finding was in the engine core's packet entity handling, where a signed index check let a negative value reach a lookup that returns a C++ object pointer. The chain used a menu message to stage a fake object in a global buffer, leaked a vtable pointer to defeat ASLR, and overwrote a console variable's string pointer. A retry command queued after the malicious packet let the client reconnect automatically after a host error. In the demo, a client connecting to a rigged server opens the calculator.\n\nThe main takeaway is that game clients should not connect to unknown servers, and that engine-level bugs carry wide impact. The speaker also suggests attacking game servers to pivot to clients, and game consoles that run these engines as possible targets. Findings were said to be released, though fixes had not been independently verified.",
       "durationSeconds": 2214,
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "qpRoLF9_2hI",

@@ -112,8 +112,8 @@
         "gcpwn",
         "tool"
       ],
-      "teaser": "Scott Weston investigates GCPwn: A Pentesting Tool For GCP.",
-      "summary": null,
+      "teaser": "Shows how a pentester pivots through GCP service accounts and IAM impersonation paths using an open-source Python tool.",
+      "summary": "GCPwn is an open-source Python tool the speaker built over several months to help penetration testers work through Google Cloud Platform environments. It was modelled on how Pacu is used for AWS. It handles application default credentials, service account keys and standalone OAuth tokens, stores them in named workspaces, and runs enumeration, exploit and unauthenticated modules.\n\nThe live demo started with a user whose email and password had leaked in a text file. After loading those credentials, the enumeration modules listed the permissions the user held, using a test-permissions option that flagged the dangerous ones. The speaker then added a service account's project manually, used an exploit module to create a key for a service account there, and enumerated its storage buckets, downloading their contents. A note in the downloaded data pointed to further projects. Enumerating service accounts and their policy bindings revealed an implicit delegation chain, and a bindings-processing module condensed those bindings into readable summaries. The final step generated an access token along that chain, letting the tester act as a production service account. A Cloud Function demo was skipped for time.\n\nThe takeaway is that chains of service account impersonation and IAM bindings can turn one weak credential into access across projects. Practitioners can follow the tool's planned wiki for its modules and flags. In Q&A, the speaker said the tool does not yet check every impersonation method, beyond paths that end in an access token.",
       "durationSeconds": 1411,
       "conference": "fwd-cloudsec",
       "viewCount": 1400,
@@ -202,12 +202,13 @@
         "acces",
         "vector"
       ],
-      "teaser": "Nick Frichette details Trust Me Bro: Preexisting Trust is the New Initial Access Vector.",
-      "summary": null,
+      "teaser": "Shows how misconfigured IAM trust policies and an AppSync casing quirk let outsiders assume roles in victim AWS accounts.",
+      "summary": "The talk looks at how AWS IAM roles trust AWS services such as EC2, Lambda, and AppSync to assume them on a customer's behalf. Cross-account PassRole normally stops an outside account from attaching someone else's role to a service. The speaker argues that the pre-existing trust between a victim's role and a service can be hijacked as an initial access path, which matters as organizations retire long-lived IAM user keys.\n\nThe first case is a confused deputy flaw in AWS AppSync. The PassRole check was case sensitive in a way the service did not enforce, so changing the casing of a parameter bypassed the cross-account block. An attacker could then make AppSync assume a role in another account and invoke API calls, such as a DynamoDB scan. The second case involves Cognito identity pools and roles created by AWS Amplify. Roles whose trust policies lacked a source condition could be assumed by anyone holding a token from a Cognito identity pool using the basic flow. Amplify roles carried this flaw from 2018 until a later change removed the condition, and testing public GitHub role references revealed many vulnerable roles.\n\nAWS has since fixed both issues, though roles that already existed stayed exposed until owners changed them. Defenders should audit trust policies for service principals, add source account, source ARN, or organization conditions where they work, and review Cognito identity pools with the basic flow enabled. Service control policies can add an account-wide guardrail, but they should be tested carefully before production use.",
       "durationSeconds": 2406,
       "conference": "fwd-cloudsec",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "xifpJbTepCs",
@@ -288,12 +289,13 @@
         "open-sourcing",
         "pentest"
       ],
-      "teaser": "Lizzie Moratti investigates Open-Sourcing AWS Pentest Methodology.",
-      "summary": null,
+      "teaser": "Proposes an open AWS pentest methodology built around gathering context, mapping attack paths and testing multi-account setups.",
+      "summary": "The talk looks at why AWS penetration testing needs a shared, community-accepted methodology. The speaker reviews two existing resources: a 2019 Cloud Security Alliance framework built on STRIDE, which describes some cloud concepts oddly and assumes a single account, and a community wiki with service-specific guides that is hard to keep current. Neither addresses AWS Organizations or service control policies well.\n\nThe methodology described starts with meetings with the client, including one-on-one conversations, and a review of diagrams and documentation. With white-box access, the tester uses visualization tools and automated checks such as Scout Suite and Prowler, while noting that some services lack coverage. Manual work follows in layers: reviewing each service on its own, then how services depend on one another, then how accounts relate through Organizations, trust policies and service control policies. Each candidate attack path is treated as a hypothesis and confirmed or disproved through testing from an assumed-breach position.\n\nRecommendations should be practical and preventive, such as a control that stops IAM users from being created where the client's context allows it. The speaker names limitations, including the time needed at scale, the difficulty of keeping notes, and \"scan and rebrand\" vendors who pass automated reports off as full pentests. The speaker asks practitioners to help write, review and host an open-source version of the framework.",
       "durationSeconds": 1245,
       "conference": "fwd-cloudsec",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "FCqtqrEiSbg",
@@ -389,7 +391,9 @@
       "youtubeId": "HcNmkCRXFdE",
       "slug": "the-eks-hacking-playbook-lessons-from-3-years-of-cloud-security",
       "title": "The EKS Hacking Playbook: Lessons From 3 Years of Cloud Security Research",
-      "speakers": [],
+      "speakers": [
+        "Eli Basin"
+      ],
       "track": "cloud",
       "topics": [
         "security-research",
@@ -399,12 +403,13 @@
         "from",
         "year"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for The EKS Hacking Playbook: Lessons From 3 Years of Cloud Security Research.",
-      "summary": null,
+      "teaser": "Shows how attackers move from one EKS pod to AWS credentials, exposed EFS shares and other tenants through misconfigurations.",
+      "summary": "The speakers, security researchers on a cloud research team, open with a short primer on Kubernetes concepts such as containers, pods, nodes and clusters, then explain why Amazon EKS creates its own security questions, since it combines Kubernetes practices with AWS ones. Their first focus is EKS Pod Identity. The node-level agent maps a pod's Kubernetes identity to AWS credentials over plain HTTP, so any attacker who can run a pod in the same network namespace can sniff both the Kubernetes token and the returned AWS credentials.\n\nThe middle of the talk covers registry and storage exposure. Image pull secrets, obtained through the ECR login command, can be used to pull images from the internal registry. In a case study on an Alibaba Cloud database service, the credentials granted push rights as well, which would allow a supply-chain attack, and the registry was shared with other internal services. The speakers then turn to EFS file shares. In a dataset of tens of thousands of shares, about 85% had no access policy, and roughly 93% overall could be reached without authentication. In an undisclosed case at a large cloud company, a network-isolated pod bypassed a firewall and found EFS shares holding customer files, with the disclosure still in progress.\n\nThe final section looks at the instance metadata service. A pod that can reach the node's metadata endpoint can fetch the node's identity and use it against the Kubernetes API, exposing other pods and secrets. In a Hugging Face engagement, a malicious model gave code execution inside a pod, which led to access across customer environments. The bugs have since been fixed. The speakers stress that these issues are misconfigurations and can be prevented, with a metadata hop limit suggested as a mitigation. Their takeaway is that EKS must be reviewed through both the Kubernetes and AWS layers.",
       "durationSeconds": 1489,
       "conference": "fwd-cloudsec",
       "viewCount": 1600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "s6TYbNrmjtY",
@@ -916,12 +921,13 @@
         "insight",
         "lesson"
       ],
-      "teaser": "Korstiaan Stam explores From Intrusion to Insight: Lessons learned from of a month long AWS compromise.",
-      "summary": null,
+      "teaser": "Walks through a month-long AWS account compromise, from a leaked access key to email abuse, with lessons for cloud responders.",
+      "summary": "The talk recounts an AWS incident response case in which an attacker got in with a long-term access key that had been exposed, most likely through environment variables, build scripts or container images, although some evidence was already gone and the exact source could not be confirmed. The key carried administrator permissions, so the intruder created IAM users with console logins, extra access keys and policies, plus a small EC2 instance whose security group allowed inbound RDP. That backdoor meant removing the original key did not end the access.\n\nThe attacker then turned to Amazon SES to send mail and check sending quotas, and used Route 53 to host domains that imitated a payment brand. Further discovery covered Pinpoint SMS, SNS and RDS snapshots. A cross-account IAM role trusting an external AWS account gave another persistent path, and the intruder checked permissions with the IAM policy simulator, a technique that matched the CloudFox tool. A large machine learning instance was denied by a vCPU quota, and a Lightsail launch was blocked pending account verification. The case ended when repeated support requests to raise SES limits made AWS suspicious and it contacted the customer's technical account manager.\n\nFor responders, the lessons include deactivating credentials instead of deleting them, avoiding premature removal of VMs that may hold evidence, and centralising logs in advance. Athena can query CloudTrail and flow logs quickly, while budget alerts, IAM Access Analyzer and premium logging help catch misuse early. Billing spikes can also reveal data exfiltration. The speaker cautioned against leaving response entirely to an IT provider and against blaming developers for long-lived keys.",
       "durationSeconds": 1585,
       "conference": "fwd-cloudsec",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "PJAwa0G_NEU",

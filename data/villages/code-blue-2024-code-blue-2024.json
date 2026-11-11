@@ -411,8 +411,8 @@
         "webassembly",
         "exploiting"
       ],
-      "teaser": "Security researchers examine technical aspects of [CB24]WebAssembly Is All You Need:Exploiting Chrome and the V8 Sandbox 10+ times with WASM.",
-      "summary": null,
+      "teaser": "Traces WebAssembly type-system bugs in Chrome's V8 engine into sandbox escapes and JavaScript exploitation primitives.",
+      "summary": "The talk examines how bugs in WebAssembly's garbage collection type system in Chrome's V8 engine can become exploits. It starts with a universal type confusion that Manfred Paul demonstrated at Pwn2Own Vancouver 2024: a type-count check applied to recursion groups but not to standalone types let a type index alias the generic none type. The speaker explains the isorecursive type system, covering type equivalence, canonicalization and subtyping, so the mechanics of that bug are clear.\n\nBuilding on this, the speaker reports three further bugs found through variant analysis. In the first, canonical type indexes were squeezed into a 20-bit field at the JavaScript-to-Wasm boundary, so enough types caused truncation and confusion. The second came from a missing canonicalization step for exception signatures, which allowed confusion in both directions and went untested because the unit tests did not use GC types. The third was an 8-bit truncation of a memory index in TurboFan's cached memory logic, which broke bounds assumptions. On Android, the speaker described how the Wasm memory could be placed between the V8 cage and the partition allocator, with probing used to confirm an exploitable layout. The talk also surveys V8 sandbox bypasses in Wasm, such as signature confusion on table import and negative indexes that skip sandbox checks.\n\nThe takeaway is that one bug often points to a larger design problem, here a shared value type representation that mixes module-specific and canonical indexes. The speaker argues the V8 sandbox is not yet a strong security boundary, and that fuzzing and manual review lag behind the rapid addition of new Wasm features.",
       "durationSeconds": 2565,
       "conference": "code-blue",
       "viewCount": 2100,
