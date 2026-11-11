@@ -213,6 +213,11 @@ export type Speaker = {
 export type SearchEntry = TalkIndexEntry & {
   haystack: string;
   speakerSlugs: string[];
+  /** Lowercased title and speaker names, for relevance scoring. */
+  titleLower?: string;
+  speakersLower?: string;
+  /** Lowercased summary text, once that year's summary shard has landed. */
+  summaryLower?: string;
   matchedInSummary?: boolean;
 };
 
