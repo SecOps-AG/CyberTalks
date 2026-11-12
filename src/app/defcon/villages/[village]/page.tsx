@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import routes from "@/generated/page-routes.json";
-import { villageEditionPath } from "@/lib/hubs";
+import { villageEditionPath, villageSeriesPath } from "@/lib/hubs";
+import { pageMetadata } from "@/lib/page-meta";
 import { loadSeriesPage } from "@/lib/page-runtime";
 import { topicLabels } from "@/lib/topic-labels";
 
@@ -17,10 +18,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { village } = await params;
   const page = await loadSeriesPage(village);
   if (!page) return { title: "Village not found" };
-  return {
+  return pageMetadata({
     title: `${page.series.name} — DEF CON`,
     description: page.series.description,
-  };
+    path: villageSeriesPath(page.series.slug),
+  });
 }
 
 export default async function DefconVillageSeriesPage({ params }: Props) {

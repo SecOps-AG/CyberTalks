@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
 import routes from "@/generated/page-routes.json";
 import { inDefconVillage, villageEditionPath, villageSeriesPath } from "@/lib/hubs";
+import { pageMetadata } from "@/lib/page-meta";
 import { loadEditionPage } from "@/lib/page-runtime";
 import { topicLabels } from "@/lib/topic-labels";
 
@@ -21,10 +22,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const page = await loadEditionPage(event, village);
   if (!page) return { title: "Village not found" };
   const { edition } = page;
-  return {
+  return pageMetadata({
     title: `${edition.villageName} — ${edition.eventName}`,
     description: edition.description,
-  };
+    path: villageEditionPath(edition),
+  });
 }
 
 export default async function VillageEditionPage({ params }: Props) {

@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
 import { TalkBrowser } from "@/components/browser/TalkBrowser";
+import { HomeUrlTags } from "@/components/HomeUrlTags";
 import { HeroConferences } from "@/components/HeroConferences";
 import { MostWatched } from "@/components/MostWatched";
 import { TrackChart } from "@/components/TrackChart";
 import { homeJsonLd } from "@/lib/json-ld";
-import { SITE_DESCRIPTION, pageMetadata } from "@/lib/page-meta";
+import { SITE_DESCRIPTION, homeMetadata } from "@/lib/page-meta";
 import { loadHome } from "@/lib/page-runtime";
 import { topicLabels } from "@/lib/topic-labels";
 
-export const metadata: Metadata = pageMetadata({ description: SITE_DESCRIPTION, path: "/" });
+export const metadata: Metadata = homeMetadata(SITE_DESCRIPTION);
 
 const EXAMPLES = ["ransomware", "osint", "supply chain", "purple team"];
 
@@ -45,6 +46,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <HomeUrlTags />
       <JsonLd data={homeJsonLd()} />
       <TalkBrowser
         talks={initialTalks ?? []}

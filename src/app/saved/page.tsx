@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-meta";
 import { SavedPageClient } from "./SavedPageClient";
 
 export const metadata: Metadata = {
-  title: "Saved talks",
-  description: "Your bookmarked talks on Cyber Talks.",
+  ...pageMetadata({
+    title: "Saved talks",
+    description: "Your bookmarked talks on Cyber Talks.",
+    path: "/saved",
+  }),
   robots: { index: false, follow: true },
 };
 
