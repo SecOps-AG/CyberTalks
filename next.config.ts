@@ -75,7 +75,7 @@ const nextConfig: NextConfig = {
   // the query string over, so shared /talks?q=… links still land filtered.
   async redirects() {
     return [
-      { source: "/talks", destination: "/", permanent: false },
+      { source: "/talks", destination: "/", permanent: true },
       { source: "/villages", destination: "/defcon/villages", permanent: true },
       { source: "/villages/:village", destination: "/defcon/villages/:village", permanent: true },
     ];

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { homeJsonLd, isoDuration, jsonLdString, speakerJsonLd, talkJsonLd } from "./json-ld";
 import { llmsTxt } from "./llms-txt";
-import { pageMetadata } from "./page-meta";
+import { homeMetadata, pageMetadata } from "./page-meta";
 import { wwwRedirectTarget } from "./www-redirect";
 
 const baseTalk = {
@@ -50,6 +50,16 @@ describe("pageMetadata", () => {
     assert.equal(home.title, undefined);
     assert.equal(home.alternates?.canonical, "https://cybertalks.org/");
     assert.equal((home.openGraph as { title: string }).title, "Cyber Talks");
+  });
+});
+
+describe("homeMetadata", () => {
+  it("leaves the URL tags to the page so the root keeps its trailing slash", () => {
+    const home = homeMetadata("Site text.");
+    assert.equal(home.alternates, undefined);
+    assert.ok(!("url" in (home.openGraph as object)));
+    assert.equal((home.openGraph as { title: string }).title, "Cyber Talks");
+    assert.equal(home.description, "Site text.");
   });
 });
 

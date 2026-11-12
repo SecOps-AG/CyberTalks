@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { canonicalUrl } from "./canonical";
+import { villageEditionPath, villageSeriesPath } from "./hubs";
+import { pageMetadata } from "./page-meta";
 import { initialBrowse, INITIAL_FACET_LIMIT, PAGE_SIZE } from "./search";
 import { siteUrl } from "./site-url";
 import {
@@ -295,5 +297,20 @@ describe("canonicals", () => {
   it("points the homepage at the site root", () => {
     assert.equal(canonicalUrl("/"), `${siteUrl()}/`);
     assert.equal(canonicalUrl("/talks/keynote"), `${siteUrl()}/talks/keynote`);
+  });
+
+  it("gives edition, series, coverage and saved pages a clean absolute canonical", () => {
+    const paths = [
+      [villageEditionPath({ eventSlug: "black-hat-usa-2024", villageSlug: "black-hat-usa" }), "/black-hat-usa-2024/black-hat-usa"],
+      [villageSeriesPath("adversary-village"), "/defcon/villages/adversary-village"],
+      ["/coverage", "/coverage"],
+      ["/saved", "/saved"],
+    ];
+    for (const [path, expected] of paths) {
+      const meta = pageMetadata({ title: "T", description: "D", path });
+      assert.equal(meta.alternates?.canonical, `${siteUrl()}${expected}`);
+      assert.equal((meta.openGraph as { url: string }).url, `${siteUrl()}${expected}`);
+      assert.ok(!String(meta.alternates?.canonical).includes("?"));
+    }
   });
 });

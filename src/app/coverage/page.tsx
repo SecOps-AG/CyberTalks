@@ -1,10 +1,13 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-meta";
 import { loadCoverage } from "@/lib/page-runtime";
 
-export const metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Coverage Report",
   description: "Summary coverage across Cyber Talks events and villages",
-};
+  path: "/coverage",
+});
 
 export default async function CoveragePage() {
   const { editions, villageCoverage, eventStats } = await loadCoverage();

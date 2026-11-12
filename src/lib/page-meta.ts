@@ -24,6 +24,19 @@ type PageMetaInput = {
 };
 
 /**
+ * Home page metadata without `alternates.canonical` and `openGraph.url`.
+ *
+ * Next writes a root URL without its trailing slash, which would disagree with
+ * the sitemap entry. The home page renders both tags itself (see
+ * `HomeUrlTags`), so the Metadata API must not emit a second, conflicting pair.
+ */
+export function homeMetadata(description: string): Metadata {
+  const { alternates: _alternates, openGraph, ...rest } = pageMetadata({ description, path: "/" });
+  const { url: _url, ...og } = (openGraph ?? {}) as Record<string, unknown>;
+  return { ...rest, openGraph: og as Metadata["openGraph"] };
+}
+
+/**
  * Title, description, canonical, Open Graph and Twitter tags for a non-talk page.
  *
  * Next replaces the whole openGraph and twitter objects when a page sets them,
