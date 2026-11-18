@@ -2963,14 +2963,14 @@
       "slug": "brucon-0x06-thunderbolts-and-lightning",
       "title": "BruCON 0x06 - Thunderbolts and Lightning",
       "speakers": [],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "thunderbolt",
         "lightning",
         "thunderbolts"
       ],
-      "teaser": "Snare analyzes BruCON 0x06 - Thunderbolts and Lightning.",
-      "summary": null,
+      "teaser": "Shows how an FPGA attached over Thunderbolt uses PCI Express DMA to bypass macOS screen lock.",
+      "summary": "The talk covers DMA attacks over Thunderbolt, extending earlier FireWire techniques. The speaker explains that FireWire DMA is limited to the first four gigabytes of memory and is switched off by macOS when FileVault is enabled and the screen is locked. Thunderbolt carries PCI Express directly, so the research aimed to reach that bus without relying on a FireWire chipset.\n\nThe setup used a low-cost Xilinx FPGA development board, connected through a Thunderbolt PCI Express adapter, running a soft microcontroller to build PCI Express packets. To get macOS to load a driver, the device imitated an Apple SDXC slot that the system already accepts over tunneled PCI Express. The proof of concept scanned memory for the login authentication routine and patched it to always succeed. A recorded demo showed a blank space unlocking the screen.\n\nOn the defense side, the talk notes that VT-d access control blocks such requests on newer hardware. macOS configures it from 10.8.2, Windows 8 and later and Linux also configure it, while Ivy Bridge machines lack it and older operating systems stay exposed. Future work includes a smaller kit, bypassing VT-d, and triggering driver bugs by emulating device protocols. The takeaway is that Thunderbolt ports on unprotected systems remain a physical DMA risk.",
       "durationSeconds": 2574,
       "conference": "brucon",
       "difficulty": "advanced",
@@ -3028,7 +3028,7 @@
       "speakers": [
         "Jan Kadijk"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "lightning",
         "talks",
@@ -3036,12 +3036,13 @@
         "0x06",
         "talk"
       ],
-      "teaser": "Jan Kadijk details BruCON 0x06 - Lightning Talks.",
-      "summary": null,
+      "teaser": "Shows how an automated tool performs man-in-the-middle attacks on wired 802.1x port authentication and works around common failures.",
+      "summary": "The speaker presents a project that automates man-in-the-middle attacks against wired 802.1x port authentication. The setup places a BeagleBone between a client and a switch, so the device authenticates on the client's behalf. After authentication, the switch identifies the legitimate client only by its MAC address, so a device that fully impersonates that address goes undetected. The talk situates this against earlier work, including an older published method and a costlier commercial device, and notes that few scripts existed for the approach.\n\nThe speaker then lays out the problems with the original method. Routing all traffic through the default gateway generated many ICMP redirects that a network administrator could notice. Client communication broke, and port security was the hardest obstacle, since sending one wrong packet could shut the port down. Source port collisions could also disrupt the user's traffic. The tool automates discovery of the gateway MAC address, the user's IP and MAC addresses, and the network configuration. Fixes described include listening for ARP requests instead of sending them, disabling IPv6 because it is noisy, using iptables rules and SSL-based techniques to target the client, and identifying the gateway by TTL values that are not one or 255.\n\nThe speaker closes by listing open issues: source port collisions, detection of the internal DNS configuration, and power over Ethernet, which was not solved yet, along with physical detection. The code is published on GitHub, and the speaker offered an SD card image of the setup to anyone who asks.",
       "durationSeconds": 255,
       "conference": "brucon",
       "viewCount": 70,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "JXPMBamHI8c",
@@ -3069,19 +3070,22 @@
       "youtubeId": "X40qqdeW4XY",
       "slug": "brucon-0x06-lightning-talks-tunnelshade",
       "title": "BruCON 0x06 - Lightning Talks - tunnelshade",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "tunnelshade"
+      ],
+      "track": "appsec",
       "topics": [
         "lightning",
         "tunnelshade",
         "talks"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for BruCON 0x06 - Lightning Talks - tunnelshade.",
-      "summary": null,
+      "teaser": "A browser-based tool pairs static and runtime checks to spot cross-site scripting risks in legacy Flash files without uploads.",
+      "summary": "Legacy Shockwave Flash assets remain a weak spot when reviewers audit web application security. The usual workflow is to decompile a SWF for static review or lean on tools that automate decompilation and flag suspicious patterns. The speaker introduces Flashbang, a project aimed at broader Flash testing for cross-site scripting, positioned as something you can run by supplying a file rather than mastering Flash internals first.\n\nFlashbang sits on Mozilla’s open-source Shumway player, which runs Flash in the browser via HTML5 and JavaScript instead of the classic Adobe plugin. The approach hooks the virtual machine while the SWF loads, blending static detection (similar to decompile-and-review) with runtime detection for variable names computed only during execution, where pure static work fails. Because Shumway runs in the browser, the tool can simulate user events such as clicks and typing to reach code paths that only run after interaction. It supports both ActionScript 2 and ActionScript 3, and currently emphasizes finding eval-like calls tied to XSS risk.\n\nThe interface is a simple in-browser workflow: select a local Flash file, review variables and flagged calls, re-run analysis as needed, and read a verbose log of background steps. Nothing is uploaded; processing stays on the client. The speaker points contributors to issue trackers and offers to demo the tool after the session.",
       "durationSeconds": 334,
       "conference": "brucon",
       "viewCount": 203,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "0SJ7xxYoS7k",
@@ -3112,7 +3116,7 @@
       "speakers": [
         "Matt Erasmus"
       ],
-      "track": "community",
+      "track": "malware",
       "topics": [
         "lightning",
         "talks",
@@ -3120,12 +3124,13 @@
         "0x06",
         "talk"
       ],
-      "teaser": "Matt Erasmus details BruCON 0x06 - Lightning Talks.",
-      "summary": null,
+      "teaser": "Shows honeypot captures of an old PHP remote code execution flaw and the payloads attackers drop after exploiting it.",
+      "summary": "The talk walks through honeypot traffic from a 2012 PHP remote code execution flaw, which the speaker notes is old but still being scanned for. Ordinary Apache access logs show POST requests aimed at a PHP CGI path, but the useful content sits in the POST body. The speaker uses a honeypot that pretends to be vulnerable software, accepts everything sent to it, and returns a report that exposes that body.\n\nDecoded requests showed commands that call PHP's system function to run id, kill competing processes, clear and recreate a temporary directory, and then download a further payload onto the web server. Most other captures were denial-of-service scripts. One batch held six binaries, two each for ARM, x86 and a third architecture, believed to be DoS tooling though the exact purpose was not fully determined. A more recent sample hid three base64-encoded ELF binaries inside variables; decoding them and writing them to disk, setting permissions and running them showed a new DoS bot in circulation.\n\nThe main takeaway is that this old exploit is still easy to reuse and attractive to attackers, so affected PHP installations should be patched. The talk is a short tour of what a low-interaction honeypot can reveal about commodity attacks.",
       "durationSeconds": 280,
       "conference": "brucon",
       "viewCount": 108,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "2QLUhIGl_k8",
@@ -3134,7 +3139,7 @@
       "speakers": [
         "Gavin Millard"
       ],
-      "track": "community",
+      "track": "blue-team",
       "topics": [
         "lightning",
         "talks",
@@ -3142,19 +3147,20 @@
         "0x06",
         "talk"
       ],
-      "teaser": "Gavin Millard details BruCON 0x06 - Lightning Talks.",
-      "summary": null,
+      "teaser": "Shows how practitioners translate SANS Top 20 effectiveness metrics into executive-friendly dashboards tied to business risk.",
+      "summary": "Executives often ask whether the organization is secure, but fear and headlines—not technical literacy—usually drive the question. When security teams answer with firewalls, encryption, and vulnerability branding, leaders tune out because those details do not match how they run the company.\n\nThe speaker advocates reframing the conversation around measurements leaders already trust: things that can be tracked, compared, and improved. He highlights SANS Top 20 effectiveness metrics, broken out per business unit so internal competition encourages faster patching and better coverage. Examples include time to patch critical, easily exploitable vulnerabilities, percentage of systems with malware defenses, speed to find unknown assets and assess their flaws, and compliance with corporate security policy. Simple visual dashboards—presented with design-friendly tools rather than dense technical slides—help make those numbers understandable.\n\nThe talk closes by stressing that funding follows business risk, not abstract security concerns. Issues must be tied to business impact before executives will prioritize remediation. The speaker briefly notes outreach options for readers who want to discuss metric choices and communication with CISOs and CEOs.",
       "durationSeconds": 247,
       "conference": "brucon",
       "viewCount": 40,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "CGxENJABoLM",
       "slug": "brucon-0x06-lightning-talks-6",
       "title": "BruCON 0x06 - Lightning Talks",
       "speakers": [],
-      "track": "community",
+      "track": "blue-team",
       "topics": [
         "lightning",
         "talks",
@@ -3162,8 +3168,8 @@
         "0x06",
         "talk"
       ],
-      "teaser": "404 @JQuePublic details BruCON 0x06 - Lightning Talks.",
-      "summary": null,
+      "teaser": "A lightning segment walks through MySQL schema recovery and redo-log parsing using sample scripts and a playful example dataset.",
+      "summary": "The speaker opens a BruCON lightning slot with a tongue-in-cheek Pippi Longstocking theme, using an Animals table as a stand-in for real case data. When the database engine is unavailable, schema can still be recovered from on-disk FRM files; the presenter describes a small Python utility that decodes those hex dumps and reproduces the table layout shown in the live demo.\n\nPopulation and tampering come next. After inserting animals with implausible colors, the talk shifts to forensic review inside a running MySQL instance, pointing at ib_logfile and ibdata artifacts that retain insert, update, and delete activity. A second script attempts to walk those multi-megabyte files and rebuild statement history, though the demo shows incomplete field recovery when blue is updated to white.\n\nThe segment closes by admitting the tooling is rough and inviting bar-side help and code review. The scripts are published on GitHub, with a pointer to a longer Prague talk on MySQL and operating-system forensics. Practitioners get a sketch of where evidence lives on disk and a starting point for building more reliable parsers, not a finished product.",
       "durationSeconds": 244,
       "conference": "brucon",
       "viewCount": 45,
@@ -3287,8 +3293,8 @@
         "brucon",
         "0x05"
       ],
-      "teaser": "Lightning Talks Session examines BruCON 0x05.",
-      "summary": null,
+      "teaser": "Short talks in this session cover team habits, DNS amplification, responsible disclosure, HTTP/2 and threat patterns.",
+      "summary": "This recording is a lightning talks session with a run of short presentations on unrelated subjects. Casper opens with team dynamics, arguing that teams work better when members check in briefly, leave written messages instead of interrupting colleagues who are focused, and handle mistakes through a blameless root cause review that includes everyone involved. Martin describes an open project of Java code samples that set a secure and a deliberately vulnerable version of the same feature side by side, so developers can watch SQL injection attacks succeed and then fail, with tests to keep coverage intact.\n\nLucas explains DNS amplification, where small spoofed queries trigger much larger responses aimed at a victim. He points to open resolvers as the main enabler and to BCP38 source address filtering as the real fix, noting that providers have to deploy it together. A speaker on responsible disclosure shares experiences from running a program, including unusual reports and replies, and concludes that clear expectations for researchers matter more than the size of the reward. Thomas introduces HTTP/2, which is based on Google's SPDY, and covers header compression, server push and the binary framing that made analysis hard with existing tools.\n\nThe session closes with a talk on advanced persistent threats, arguing that the label loses its mystery once attacker behaviors are recorded as reusable patterns that can be searched for in large data sets. The audience then voted on the talks, and the DNS amplification talk won the free ticket.",
       "durationSeconds": 3604,
       "conference": "brucon",
       "viewCount": 177,
@@ -3361,7 +3367,9 @@
       "youtubeId": "cYPmbrsvfxw",
       "slug": "brucon-0x05-robert-graham",
       "title": "BruCON 0x05 - Robert Graham",
-      "speakers": [],
+      "speakers": [
+        "Robert Graham"
+      ],
       "track": "threat-intel",
       "topics": [
         "robert",
@@ -3369,12 +3377,13 @@
         "brucon",
         "0x05"
       ],
-      "teaser": "Data-plane networking investigates BruCON 0x05 - Robert Graham.",
-      "summary": null,
+      "teaser": "Argues that internet-facing servers need event-driven designs and walks through a fast DNS server and scanner built to bypass the kernel.",
+      "summary": "The talk opens with engineering disasters such as the Tacoma Narrows Bridge and the Titanic, arguing that engineers rewrite their textbooks after failures while software education does not. It cites SQL injection and buffer overflows as still poorly taught, and describes a small blog that falls over when crawlers hit an Apache and mod php stack. The root issue, he says, is that Apache does not scale: faster hardware only moves the point where it fails, while event-driven servers such as nginx hold up as connections grow.\n\nThe second half covers a DNS server and a port scanner he wrote, both bypassing the Linux kernel network stack with PF_RING so packets reach user-mode code directly. Techniques include one thread per core, giving each thread private counters instead of shared variables, ring buffers for passing work between threads, and huge pages to reduce cache misses from page tables. The scanner sends about 25 million packets per second on a quad-core desktop with a 10 gigabit card, and his DNS server handles about six million packets per second per core, versus 1.3 million for ZMap through the kernel.\n\nHe concludes that software from the 1990s should not face today's internet unchanged, and that textbooks should teach event-driven design, lock-free synchronization and direct network access, assuming hostile traffic.",
       "durationSeconds": 3118,
       "conference": "brucon",
       "viewCount": 310,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "z9UfoAyje-4",
@@ -3530,16 +3539,18 @@
       "youtubeId": "nZc_hiv6sO8",
       "slug": "brucon-0x05-vaagn-toukharian",
       "title": "BruCON 0x05 - Vaagn Toukharian",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Vaagn Toukharian"
+      ],
+      "track": "appsec",
       "topics": [
         "vaagn",
         "toukharian",
         "brucon",
         "0x05"
       ],
-      "teaser": "HTTP Time Bandit analyzes BruCON 0x05 - Vaagn Toukharian.",
-      "summary": null,
+      "teaser": "Presents a tool that finds resource-heavy web pages and tests how layer 7 flooding affects them, plus defenses.",
+      "summary": "The talk presents a method and open tool for stressing web applications with layer 7 denial-of-service load. The speaker explains that brute-force flooding is expensive and gives no feedback, while slow-connection attacks, costly SQL wildcards and misconfigured WebSocket servers can tie up a server with far less traffic. The approach aims to exploit the asymmetry between the work a request costs the client and the work it costs the server.\n\nThe tool crawls a site, repeatedly requests each discovered resource, and records average response times and standard deviations. Resources that are consistently slow with low variance are treated as likely CPU or database heavy and selected for attack. In a demo against a content management system installation, the heaviest resources included the sitemap and login pages, and five parallel threads drove the idle CPU of a four-core test server down to about one percent. A lab baseline showed a single laptop using about three percent CPU while the server stayed maxed out.\n\nFor defense, the speaker reviews load balancers, cloud DDoS protection services and Apache modules that cap requests per IP or limit CPU use. Rate limits can catch legitimate users behind shared networks, and some organisations hold back from commercial services for fear of degrading user experience. The main recommendation is to run the tool as a QA check on your own application, find and fix heavy resources, then add protective controls. Future work includes measuring how resources degrade under load and automating SQL wildcard testing.",
       "durationSeconds": 2764,
       "conference": "brucon",
       "viewCount": 141,
@@ -3612,15 +3623,17 @@
       "youtubeId": "7TCsOlRmYEQ",
       "slug": "we-have-you-by-the-gadgets",
       "title": "We have you by the gadgets",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Mickey"
+      ],
+      "track": "red-team",
       "topics": [
         "gadget",
         "vulnerability-research",
         "gadgets"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding We have you by the gadgets.",
-      "summary": null,
+      "teaser": "Explains how Windows Sidebar gadgets built on JavaScript can be abused to run code and take over machines.",
+      "summary": "The talk examines Windows desktop gadgets, small HTML and JavaScript packages that the Windows Vista and Windows 7 sidebar ran with the privileges of the logged-in user. It explains that a gadget could instantiate any installed ActiveX control without a UAC prompt, while antivirus products rarely looked inside gadget files. Enterprise policy could turn the sidebar off or require signed gadgets, but gadgets installed by hand were not covered.\n\nA legitimate gadget could be unpacked, altered and repacked to carry malicious code, and a few lines of script could launch calculator through simulated keystrokes or send a Gmail message by using keyboard shortcuts. Because gadgets share the browser cache, a gadget could also act inside an already logged-in web session, shown with a banking software demo page. Gadgets fetched JavaScript updates over plain HTTP, so a proxy in the middle could swap in a payload; a header on those requests revealed 64-bit Windows 7 machines. The final demo chained this into a reverse shell and used a batch file to bypass a PowerShell script restriction.\n\nThe speaker argues that JavaScript in a gadget is as dangerous as any binary, that developers should be restricted from dangerous functions, and that updates should require SSL. After private work with Microsoft, the company issued an advisory and a fix that removes the gadget platform from Windows. Legacy extensible platforms deserve the same scrutiny as native code.",
       "durationSeconds": 3289,
       "conference": "brucon",
       "difficulty": "intermediate",

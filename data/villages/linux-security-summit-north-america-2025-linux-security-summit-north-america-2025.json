@@ -56,17 +56,18 @@
         "Jacob Satterfield",
         "National Security Agency"
       ],
-      "track": "community",
+      "track": "blue-team",
       "topics": [
         "seabee",
         "vulnerability-research",
         "defense"
       ],
-      "teaser": "Alan Wandke examines SeaBee: Defense for the Defense.",
-      "summary": null,
+      "teaser": "Explains how an open-source eBPF LSM framework isolates privileged security tools from tampering by other privileged processes.",
+      "summary": "The presentation opens by describing how eBPF and the eBPF LSM let verified programs hook kernel security decisions to enforce custom access controls at runtime. It argues that this model breaks down for privileged actors: anyone with eBPF capabilities can unload LSM programs or rewrite shared maps, so one tool’s policy cannot reliably confine other privileged loaders.\n\nThe core project, CB, is framed as a user-space daemon plus eBPF LSM programs that scope policies to loader binaries and their descendants, label objects with integer boundaries, and enforce map, program, filesystem, and process protections through specific LSM hooks. Administrators and tool owners interact through a CLI that submits signed policies over a Unix socket, tying each policy to cryptographic keys so only the original signer can update or remove it.\n\nThe talk closes by contrasting BPF token delegation with post-creation object isolation, noting out-of-scope threats like kernel compromise, and outlining limits such as missing BPF helpers for map security fields and verifier quirks. Practitioners gain a concrete open-source pattern for hardening eBPF-based security stacks on Linux without rebuilding distribution-wide SELinux policies.",
       "durationSeconds": 1953,
       "viewCount": 615,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "ZNoESA7uwoM",
@@ -195,8 +196,10 @@
       "youtubeId": "_0nLxWhnvZY",
       "slug": "the-state-and-direction-of-lsm-stacking-casey-schaufler-the-smac",
       "title": "The State and Direction of LSM Stacking - Casey Schaufler, The Smack Project",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Casey Schaufler"
+      ],
+      "track": "blue-team",
       "topics": [
         "state",
         "direction",
@@ -205,11 +208,12 @@
         "schaufler",
         "smack"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding The State and Direction of LSM Stacking - Casey Schaufler, The Smack Project.",
-      "summary": null,
+      "teaser": "Survey of Linux kernel work to stack multiple security modules, from data blobs through audit, mount, and networking edges.",
+      "summary": "The talk revisits a long-standing goal: running more than one major Linux security module at once instead of treating modules such as SELinux, App Armor, and Smack as mutually exclusive. Built-in modules execute in a fixed order, exclusive modules conflict on shared interfaces, and much of the stack still assumes a single “major” LSM—constraints that block practical cases like Android containers on Ubuntu that want both SELinux and App Armor policies active.\n\nProgress centers on infrastructure cleanup rather than ad hoc patches. Security blobs are centralized so multiple modules can attach data to creds, inodes, and similar structures. LSM properties and LSM contexts replace brittle SEC ID assumptions and disambiguate textual contexts when two modules contribute labels. Auxiliary audit subject and object records avoid cramming multiple contexts into one field, with special handling when BPF LSM hooks are inactive until programs load. Mount option handling is being extended so unrecognized options can be claimed by another module, with dynamic blob allocation. Networking remains harder: secmark, NetLabel, CIPSO/CALIPSO, and getsockopt still effectively reserve one tag or mark for the first module in order, with proc-based UI clashes partly addressed via dedicated syscalls and per-LSM proc subtrees.\n\nShipping status includes merged or in-review work on properties, contexts, auxiliary audit records, and mount options, while NetLabel multi-tag and some context paths remain future work. Practitioners should expect ordering dependencies for audit rules, secmarks, and NetLabel until user space and tools catch up, especially for distributions and container stacks that must surface every module’s label in familiar utilities.",
       "durationSeconds": 2451,
       "viewCount": 151,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "5VMEabtUcj4",
@@ -218,7 +222,7 @@
       "speakers": [
         "Anna Trikalinou"
       ],
-      "track": "community",
+      "track": "cloud",
       "topics": [
         "binding",
         "tdisp",
@@ -226,11 +230,12 @@
         "attestation",
         "confidential"
       ],
-      "teaser": "Anna Trikalinou analyzes Binding TDISP & Platform Attestation Reports for Confidential VMs.",
-      "summary": null,
+      "teaser": "Proposes binding TDISP device attestation evidence to platform attestation so verifiers can trust confidential VM devices.",
+      "summary": "The talk opens with a short primer on confidential computing, which protects data in use inside hardware-backed trusted execution environments. It explains how TDISP lets a confidential VM attest a device and add it to its trusted computing base, so devices such as smart NICs can work on private memory directly instead of through encrypted bounce buffers. That removes the extra CPU work and cost of bounce buffers, though GPUs and crypto accelerators have been harder to support without it.\n\nThe speaker then sets platform attestation, a chain of trust from the CPU root of trust through firmware and the VM to the guest OS, against TDISP device attestation. The gap is that a remote verifier cannot tell whether device evidence came from the same CVM as the platform evidence, so an attacker could replay evidence from another VM and obtain secrets meant for a device-equipped one. The proposal extends a new virtual TPM NV index, which behaves like a PCR, with a digest of each device's evidence, records each extend in an event log, and signs the index with the vTPM attestation key already in the platform report. Defining the index in the platform hierarchy enables the delete-protection attribute so guests cannot redefine it.\n\nThe talk closes with open questions. Keeping a history of every device evaluated, including rejected ones, may bloat attestation requests and may need a configurable reset policy. It is also unclear where the event log and extend permissions should live, and whether only kernel drivers or applications too should be able to access them.",
       "durationSeconds": 2490,
       "viewCount": 464,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "AwzGCOwxLoM",
@@ -240,17 +245,18 @@
         "Stephen Smalley",
         "National Security Agency"
       ],
-      "track": "community",
+      "track": "cloud",
       "topics": [
         "selinux",
         "namespace",
         "namespaces"
       ],
-      "teaser": "Stephen Smalley explores SELinux All the Way Down: Namespaces for SELinux.",
-      "summary": null,
+      "teaser": "Explains kernel work that gives each container its own SELinux policy and enforcing mode, still confined by the host.",
+      "summary": "The talk presents a proposed design for SELinux namespaces, which would let a container run its own SELinux policy instead of inheriting the single system-wide policy of its host. Today a container usually sees SELinux as disabled, and the host treats every process in it as one label, so fine-grained labeling inside containers is not possible and developers must test with full virtual machines. The goal is to run stock distribution containers, and eventually Android, with enforcing policy while preventing escape to the host.\n\nEach namespace gets its own policy, access vector cache, enforcing mode and SELinux filesystem instance, and it stays confined by every ancestor up to the host's initial namespace. Permission checks walk up that chain, and per-namespace process labels are tracked through credentials, with global SIDs replacing per-policy identifiers. Namespace count and nesting depth are limited and can only be set from the initial namespace, and unsharing is requested through a SELinux filesystem node. The speaker demonstrated a systemd-nspawn proof of concept that booted an enforcing Fedora container, and reported that the kernel test suite passed in a child namespace apart from some labeled networking tests, with benchmarks showing no significant overhead.\n\nBefore upstreaming, two items remain: finalizing the unshare interface so user space does not break later, and minimizing overhead in the default case. Other gaps include per-namespace mount options, label mapping, network and audit namespacing, and untested Android, Ubuntu and Debian containers. Tested cases so far covered Fedora and Rocky containers on Fedora and Ubuntu hosts, so this is early-stage kernel work for practitioners to watch.",
       "durationSeconds": 2687,
       "viewCount": 732,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "24k-G7RTV1c",

@@ -428,16 +428,18 @@
       "youtubeId": "jbhRRXyMHT8",
       "slug": "catching-the-can-bus-car-hacking-on-a-budget",
       "title": "Catching the CAN Bus: Car Hacking on a Budget",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Rachel Velasco"
+      ],
+      "track": "hardware",
       "topics": [
         "can-bus",
         "car-hacking",
         "catching",
         "budget"
       ],
-      "teaser": "Catching the CAN Bus: Car Hacking on a Budget.",
-      "summary": "CarolinaCon talk on catching the CAN bus and car hacking on a budget.",
+      "teaser": "Explains how the CAN bus links car computers, demos a simulator, and outlines a low-cost car hacking workbench.",
+      "summary": "This introductory talk walks newcomers through car hacking, opening with the 2015 episode in which two researchers remotely took control of a journalist's Jeep Cherokee while he was driving. They affected the air conditioning, radio, wipers and engine, and the case led to a recall of more than eight million vehicles. The talk then covers keyless entry weaknesses, including a device that captured and replayed a remote's unlock signal, and points to lighter projects such as car automation tinkering, an open-source driver-assistance system and a car converted into a game controller.\n\nThe core concepts follow. Modern cars contain many electronic control units connected by the CAN bus, a shared network that is often unencrypted, and it can be reached through the OBD-II port, wireless interfaces, the infotainment system or mobile apps. The speaker demonstrates the Instrument Cluster Simulator on a Linux virtual CAN interface. By capturing traffic, filtering for message IDs that repeat often, and replaying them one at a time, she identifies the message that switches on the left turn indicator.\n\nFor a home workbench, she reviews open tools such as CaringCaribou and Kayak, alongside general tools like Wireshark. Budget options include an ELM327 Bluetooth dongle under $20 and interfaces in the $50 to $100 range, while a purpose-built testbed costs about $28,000. She suggests junkyard parts or bench-mounted ECUs over testing a daily driver. Resources include books, Craig Smith's Car Hackers Handbook, automotive research groups and the Car Hacking Village. The talk closes with practical ways to protect a vehicle: keeping software updated, locking down Bluetooth and Wi-Fi, and using a signal-blocking bag against relay attacks.",
       "durationSeconds": 1501,
       "conference": "carolinacon",
       "difficulty": "intermediate",
@@ -466,16 +468,18 @@
       "youtubeId": "ibRVf3NagBI",
       "slug": "dns-tunneling-down-the-rabbit-hole",
       "title": "DNS tunneling down the rabbit hole",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Tim Steiner"
+      ],
+      "track": "red-team",
       "topics": [
         "dns",
         "tunneling",
         "rabbit",
         "hole"
       ],
-      "teaser": "Coverage of DNS tunneling down the rabbit hole from the conference program.",
-      "summary": "CarolinaCon talk on DNS tunneling down the rabbit hole.",
+      "teaser": "Shows how DNS queries can carry covert command-and-control and data out of locked-down networks.",
+      "summary": "Tim Steiner, a consultant focused on offensive security, opens by explaining why DNS tunneling is hard to stop. Even when a network allows DNS only to its own internal server, that server still forwards lookups across the internet, so an attacker-run authoritative name server receives whatever data is encoded in the query names. He presents this as a covert channel for command and control and data exfiltration.\n\nThe demo uses a simulated Windows victim and an attacker-side server that logs incoming queries. A plain nslookup carries the computer name and username in clear text, then base64-encoded content sent through a batch file. Next, the dnscat2 PowerShell client opens an interactive session over CNAME and AAAA records, returning output from commands such as whoami and ipconfig. Switching to TXT records gives more room per query but produces traffic that stands out. He ties the technique to MITRE ATT&CK T1071 and to SolarWinds SUNBURST, which combined DNS CNAME queries with HTTP for command and control.\n\nOn defense, he points to NSA guidance on protective DNS but warns it is not a silver bullet: remote staff using DNS over HTTPS can bypass corporate resolvers, and encrypted queries cannot be inspected. For red teams, the advice is to blend in with domains that web filters already rate as low risk, and to vary timing and request sizes, for example with Cobalt Strike malleable profiles. The practical takeaway is that restricting DNS to an internal resolver does not by itself stop tunneling, so defenders must confirm they can actually see DNS traffic.",
       "durationSeconds": 1260,
       "conference": "carolinacon",
       "difficulty": "intermediate",
@@ -486,15 +490,17 @@
       "youtubeId": "CeTVYsDCrJc",
       "slug": "your-ipv6-is-showing",
       "title": "Your IPv6 is Showing",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Matt Schmidt"
+      ],
+      "track": "red-team",
       "topics": [
         "ipv6",
         "showing",
         "your"
       ],
-      "teaser": "Coverage of Your IPv6 is Showing from the conference program.",
-      "summary": "CarolinaCon talk on your IPv6 is showing.",
+      "teaser": "Shows how IPv6 widens attack surface, and how mitm6 with NTLM relay can compromise a Windows domain.",
+      "summary": "The talk takes a penetration tester's view of IPv6 and how common tools cope with it. Many scans miss IPv6 entirely, and an IPv6 address on a host can expose different ports than its IPv4 address. Nmap and Hydra accept IPv6 directly, while WPScan needs the address wrapped in brackets inside the URL. Tools without native support can be bridged with socat, though the traffic it produces is noisy.\n\nThe core of the talk is an internal attack. Windows hosts prefer IPv6 by default, so an attacker on the local network can answer DHCPv6 requests, become the DNS server, and serve a fake WPAD file. Using mitm6 with ntlmrelayx, the demo relayed credentials to LDAPS on a domain controller, created a user, and dumped domain information that included a password stored in a description field. The new account was then escalated to Enterprise Admin. A DCSync with secretsdump was shown as a way to pull domain password hashes.\n\nFor defenders, the suggested steps are to disable IPv6 where it is not needed, after testing for side effects. Other steps are requiring SMB signing, disabling WPAD and the WinHTTP auto proxy service, enabling LDAP signing and channel binding, and placing administrative accounts in the Protected Users group. The speaker also urged teams to check IPv6 firewall rules as carefully as IPv4 ones, and to build a lab to learn the protocol.",
       "durationSeconds": 1802,
       "conference": "carolinacon",
       "difficulty": "intermediate",
@@ -716,12 +722,13 @@
         "deviant",
         "ollam"
       ],
-      "teaser": "Coverage of Liverstrong (Deviant Ollam) from the conference program.",
-      "summary": null,
+      "teaser": "Walks through tasting Scotch, bourbon and cocktails, plus home methods for changing whisky's flavor.",
+      "summary": "Deviant Ollam opens with a lighter aside about homemade wine made in an Instant Pot, noting that aging changes a wine's character while its grape and yeast are already set. The main part is an introductory, guided tasting. Blended Scotch samples are placed on a simple chart of how loudly a drink speaks and how much a listener cares what it says, then passed around in order while the audience gives feedback on nose, palate and finish. The talk also covers water and ice, including why clear ice forms through directional freezing.\n\nThe middle of the talk explains where flavor comes from. The base sugar source sets the spirit type: fruit for brandy, agave for tequila, molasses for rum and grain for whisky. Malting, peat smoke, yeast, distillation cuts and barrel maturation add further character. Because the grain recipe and distillery choices are fixed before a buyer opens a bottle, the speaker focuses on changes a drinker can make afterward. A smoking box used at a bar, and oak whiskey sticks toasted at 400 degrees in foil, add wood and smoke notes. An ultrasonic cleaner, rewired to bypass its 30-minute timer so it runs continuously, was used to push bourbon into the wood. Treated samples at 24 and 48 hours were tasted alongside the untreated original.\n\nThe final section covers cocktails: an old-fashioned, a Sazerac and the history of its absinthe substitutes, an egg-white flip with a dry shake, the shifting gin-to-vermouth ratio in martinis, and a sidecar. The talk closes with a reflection on drinking mindfully and a toast. The practical takeaway is that a spirit's flavor can be changed in small, low-cost ways, and that tasting well mostly means slowing down and paying attention.",
       "durationSeconds": 4314,
       "conference": "carolinacon",
       "viewCount": 4500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "Uv0mlcOStpQ",
@@ -2244,8 +2251,10 @@
       "youtubeId": "pBkzvp7xuCI",
       "slug": "burp-suite-a-comprehensive-web-pen-testing-joshingeneral",
       "title": "Burp Suite: A Comprehensive Web Pen Testing - JoshinGeneral",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "JoshinGeneral"
+      ],
+      "track": "appsec",
       "topics": [
         "web",
         "burp-suite",
@@ -2253,8 +2262,8 @@
         "suite",
         "comprehensive"
       ],
-      "teaser": "Burp Suite: A Comprehensive Web Pen Testing - JoshinGeneral.",
-      "summary": "CarolinaCon talk on Burp Suite comprehensive web pen testing.",
+      "teaser": "Shows how Burp Suite's proxy, repeater and intruder tools probe web logins, then demos a NAS exploit.",
+      "summary": "The talk introduces Burp Suite as a proxy for inspecting and changing web traffic during a penetration test. The speaker covers installing the Java-based tool, pairing it with the FoxyProxy browser extension, and moving the listener off the default port. He tours the intercept and history views, the target sitemap, the spider (which he suggests configuring so it does not hit logout links), repeater, intruder with wordlists, decoder, comparer, and the extender API.\n\nThe main demonstration targets an older consumer network storage device on his home network, found through a script that scanned for open ports. In repeater, he changed a folder parameter in a GET request to reach directories outside the public share, then uploaded a shell script into the CGI directory to run commands. He later swapped in a netcat binary for an interactive shell, altered init scripts to enable telnet login, and reached a root shell. He said the underlying directory traversal was already publicly documented and that he built on it.\n\nThe closing segment covers log-cleaning ideas he had not yet built, such as removing the device's web access log entries for his own IP address. He recommends practicing on legal training platforms and mentions running sqlmap through Burp. The takeaway is that editing requests on the fly exposes trust failures in web interfaces, and that forgotten network devices make easy pivot points.",
       "durationSeconds": 2578,
       "conference": "carolinacon",
       "difficulty": "intermediate",
@@ -2310,15 +2319,17 @@
       "youtubeId": "IY3qM7XpBv0",
       "slug": "digital-energy-bpt-paul-coggin",
       "title": "Digital Energy -- BPT - Paul Coggin",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Paul Coggin"
+      ],
+      "track": "ics-ot",
       "topics": [
         "energy",
         "paul",
         "coggin"
       ],
-      "teaser": "Coverage of Digital Energy -- BPT - Paul Coggin from the conference program.",
-      "summary": "CarolinaCon talk on digital energy BPT.",
+      "teaser": "Shows how basic network flaws and vendor remote access let attackers pivot through utility and telecom networks.",
+      "summary": "The speaker, a network engineer who also does penetration testing, argues that many utility and telecom networks fall to basic, long-known weaknesses rather than advanced threats. He calls this category BPT and says the real danger lies in trust relationships: one small foothold can be used to pivot across interconnected systems. The talk walks through smart grid and broadband architectures, where vendor remote access, flat networks and single points of failure widen exposure.\n\nSeveral cases are presented separately. A utility's control system was reachable from a phone with no password. A billing vendor's firewall allowed any traffic, and a directory traversal flaw gave a server shell that could have reached provisioning and network management. A vendor's always-on VPN was used to get into a local integration system. In a South American incident, 6,000 DSL routers were redirected after their management interfaces were compromised. A collapsed fiber ring showed how a single cut could take down two cities. Layer 2 issues such as ARP poisoning and spanning tree manipulation were described as easy to abuse.\n\nThe practical advice is to document which systems must communicate and why, then restrict those flows with ACLs, private VLANs and IDS alerts for anything outside the approved set. Management traffic should use two-factor authentication, thorough logging and ideally a separate out-of-band network. Switch hardening such as BPDU guard, root guard and DHCP option 82 is recommended, and security requirements should be written into vendor RFPs.",
       "durationSeconds": 3062,
       "conference": "carolinacon",
       "difficulty": "intermediate",
@@ -2380,18 +2391,19 @@
       "speakers": [
         "Stephen Chapman"
       ],
-      "track": "community",
+      "track": "osint",
       "topics": [
         "stephenchapman",
         "vulnerability-research",
         "threat-detection"
       ],
-      "teaser": "Coverage of StephenChapman from the conference program.",
-      "summary": null,
+      "teaser": "Demonstrates how search engines surface exposed IDs, cards and databases, and which operators and tools reveal them.",
+      "summary": "The talk opens with the observation that ordinary web search can surface scanned identity documents, tax forms, payment card images and customer databases that were never meant to be public. The speaker, who works in search-focused web and information security, presents examples found through Google, Bing and niche search engines, including driver's licence and card scans, and a utility's plain-text customer records that were briefly exposed. The causes covered are careless administrators, end users who post sensitive photos online, and crawlers that index whatever they can reach.\n\nThe middle of the talk is a live walkthrough of the method. Searching image results for a payment card and filtering by size surfaces high-resolution scans, and reverse image search finds similar photos. Operators such as intitle, filetype and site are shown, with the warning that Google handles some of them unpredictably, so dropping one can bring better results. Searching for related file formats and directories, and checking DMCA notices published on Chilling Effects, are presented as ways to reach more material. Browser add-ons and tools such as Google Diggity are recommended.\n\nThe closing takeaway is that organisations should run these same queries against their own domains before attackers do, remove sensitive files from public directories, and review what they publish in documents. The speaker also argues that search engines should take more responsibility for what they index.",
       "durationSeconds": 2522,
       "conference": "carolinacon",
       "viewCount": 1300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "xRQjf_HH5mQ",
@@ -2619,16 +2631,19 @@
       "youtubeId": "LjfGwRE_DF8",
       "slug": "the-search-for-the-ultimate-handcuff-key-toool",
       "title": "The Search for the Ultimate Handcuff Key - TOOOL",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "dr. Tran",
+        "Dave"
+      ],
+      "track": "hardware",
       "topics": [
         "search",
         "ultimate",
         "handcuff",
         "toool"
       ],
-      "teaser": "The Search for the Ultimate Handcuff Key - TOOOL.",
-      "summary": "CarolinaCon talk on search for ultimate handcuff key.",
+      "teaser": "Explains how handcuffs lock, why cheap cuffs fall to shims and picks, and how a measured universal key came together.",
+      "summary": "The talk opens with a lighthearted segment before moving into the mechanics of standard handcuffs. The presenters explain how a ratcheting arm and pawl lock a cuff closed, and how a double-lock bar stops the pawl from moving. Heavy, bulky cuffs built to stop strong people from snapping them, they note, were never designed for finesse, so shims and picks can often open them.\n\nA European researcher, working with police, showed that a duplicated handcuff key could be made from plastic on a 3D printer, opening cuffs and passing a metal detector. Live escapes followed, including shimming and picking attempts on several makes. Higher-quality cuffs with split pawls and a ratcheting wheel resisted these methods much better, according to the presenters.\n\nThe presenters argued that keys differ between manufacturers, so cheap universal keys fail on multi-pawl cuffs. They measured keys from many makers with a digital caliper, looked at the range of blade widths and heights, and arrived at a dimension set they called the ultimate key: a 2.9 mm blade width and a 5.5 mm blade height. A Smith & Wesson key can be filed into that shape with a file or rotary tool. They may license the design to responsible organizations, and said others may make their own keys under fair use.",
       "durationSeconds": 2192,
       "conference": "carolinacon",
       "difficulty": "beginner",
@@ -2856,8 +2871,8 @@
         "hacker-culture",
         "gender"
       ],
-      "teaser": "Coverage of Gender In Hacking and Hacker Culture from the conference program.",
-      "summary": "CarolinaCon talk on gender in hacking and hacker culture.",
+      "teaser": "Examines how gender shapes participation, harassment and identity in hacker culture, drawing on forum posts and interviews.",
+      "summary": "The speaker, a researcher with a sociology and criminology background, asks why women are so underrepresented in hacking and what it is like for those who take part. The talk starts with the wider context: women are a small share of computing degrees and technical jobs. The speaker uses a deliberately broad definition of hacker that covers criminal and non-criminal activity, from penetration testing and hardware tinkering to posting in online forums.\n\nThe research has two parts. Across about ten public forums, fewer than one percent of posts dealt with gender at all. When it did come up, posters often questioned whether someone was really a woman, and some replies were flirtatious or dismissive. The speaker then interviewed 15 people, only two of them women. Men and women both got into technology through friends and self-directed learning, but the women were drawn in through communication tools such as IRC, while many men came through gaming. Both groups reported few hacker friends. The two women described being flamed, kicked from channels, and concealing their gender online. Definitions of hacking and views on its legality were broadly similar across the two groups.\n\nThe speaker stresses that the sample is too small to be representative and that international evidence is thin. Audience members shared their own experiences of harassment and workplace bias, and the discussion covered pay gaps, exposure to technology and historical parallels. The main takeaway is that the gender gap is visible, but its causes remain unproven, and the speaker invites people inside the culture to help shape better questions.",
       "durationSeconds": 3751,
       "conference": "carolinacon",
       "difficulty": "beginner",
@@ -2985,15 +3000,17 @@
       "youtubeId": "N85XpyYIzYE",
       "slug": "local-link-networking",
       "title": "Local Link Networking",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Chris grion"
+      ],
+      "track": "recon",
       "topics": [
         "networking",
         "local",
         "link"
       ],
-      "teaser": "Coverage of Local Link Networking from the conference program.",
-      "summary": "CarolinaCon talk on local link networking.",
+      "teaser": "Explains how zero-configuration protocols like mDNS and UPnP connect nearby devices without routers, and why they trust too much.",
+      "summary": "The speaker, who began studying these protocols after noticing UPnP broadcasts while sniffing a network at work, introduces local link networking: the set of protocols that let nearby machines find each other and work together without a router, a DHCP server or manual setup. He frames them as an older style of networking that TCP/IP pushed aside and that is now returning in zero-configuration form.\n\nHe then walks through the layers. For addressing, a device that finds no DHCP server picks a random address in a link-local range and checks with ARP that nobody else holds it. For naming, lookups go to a multicast address on port 5353, and whichever host owns the name answers; Bonjour and Avahi are the implementations he mentions, and both are open source. For service discovery, a client asks which machines offer a given service type and receives the host and port in reply. He compares Zeroconf, UPnP, which focuses on application behaviour and firewall rules, and SLP, which he says is being phased out. He also describes using a central server to share bookmarks across a local network.\n\nOn security he is blunt: these protocols accept what they hear, so names and answers can be spoofed, a single multicast request can reveal many services much like a port scan, and UPnP can alter firewall rules. Adding authentication, such as shared keys across devices, would be possible but would cut into the ease of use that makes the protocols appealing. His practical takeaway is to treat local discovery traffic as untrusted, and to be careful when enterprise networks run these protocols alongside established services.",
       "durationSeconds": 1335,
       "conference": "carolinacon",
       "difficulty": "intermediate",

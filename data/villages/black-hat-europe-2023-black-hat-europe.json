@@ -781,18 +781,19 @@
         "Jesse Chick",
         "Kasimir Schulz"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "something",
         "rotten",
         "state"
       ],
-      "teaser": "Security researchers examine technical aspects of Something Rotten in the State of Data Centers.",
-      "summary": null,
+      "teaser": "Details eight flaws in a DDI appliance and a KVM, chaining session cracking, firmware tampering and heap overflows.",
+      "summary": "Jesse Chick and Kasimir Schulz present research into device management software common in data centers, covering eight vulnerabilities across two appliances. The first target, called Project X, is a DDI product combining DNS, DHCP and IP address management. Its authenticated command injection came from a script hook with no input validation, but that required admin access, so the researchers reverse engineered how session IDs were created. The seed was set once at startup and updated deterministically, and a type conversion narrowed the search space to about 16.7 million combinations within a 1.9-day window. Fuzzing turned up a denial-of-service that crashed the web server, which restarted and regenerated the seed, making the cracking practical.\n\nThe second target is an Avocent KVM. The team unpacked the firmware, added a backdoor startup script, and found the upgrade rejected by an integrity check. Working under user-mode emulation, they located the CRC comparison, forged the value, and gained root command execution, though only after authentication. To bypass login, they exploited a heap overflow in the proprietary management protocol, overlapping connection objects to add an administrator account. A separate flaw let a null byte in the username log in as an anonymous session without a password.\n\nThe closing takeaways are that internal interfaces still need strong security, that convenience features enabled by default can be abused, and that one weakness can lead to a better attack chain. The speakers also note that the KVM vendor shipped a patch after disclosure and urge operators to update affected units.",
       "durationSeconds": 2427,
       "conference": "black-hat",
       "viewCount": 9000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "AvBO4f7blew",

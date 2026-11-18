@@ -307,8 +307,10 @@
       "youtubeId": "Rv2h0TWOi3E",
       "slug": "830-not-all-edges-are-equally-robust-evaluating-the-robustness-o",
       "title": "830 Not All Edges are Equally Robust Evaluating the Robustness of Ranking Based Federated Learning",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Ray Gong"
+      ],
+      "track": "ai-security",
       "topics": [
         "robustness",
         "edge",
@@ -317,8 +319,8 @@
         "evaluating",
         "robustnes"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for 830 Not All Edges are Equally Robust Evaluating the Robustness of Ranking Based Federated Learning.",
-      "summary": null,
+      "teaser": "Ranking-based federated learning resists common sorting attacks until edge analysis reveals a stronger client-side poisoning method.",
+      "summary": "The speaker introduces federated learning and why decentralized training invites client-side manipulation. The work centers on ranking-based federated learning, where clients exchange neuron edge rankings rather than full weight updates, the server fuses rankings by majority vote, and a lottery-ticket-style subnetwork becomes the global model. Two design properties are argued to limit classic point attacks: rankings live in a finite permutation space, and each malicious participant gets only one vote.\n\nInitial experiments with sorting-style attacks under varying malicious client rates show low impact, which motivates a deeper robustness study. The team gives the first systematic analysis of this framework and shows that not every edge matters equally. Some edges sit close enough to the top-k selection boundary that a bounded perturbation can flip inclusion. They formalize vulnerable-edge identification with layer-wise bounds, then optimize malicious rankings using a Gumbel-based relaxation because rankings are discrete. The resulting attack is evaluated against six prior attacks and seven defenses across architectures and datasets.\n\nReported results include about 53% attack impact, roughly 3.7 times higher than competing methods, with ablations over malicious-client fraction and data heterogeneity. The speaker notes limits to unargeted poisoning today and outlines targeted attacks, certified robustness evaluation, and settings with less cross-client visibility as next steps.",
       "durationSeconds": 656,
       "conference": "ieee-sp",
       "viewCount": 74,
@@ -371,7 +373,9 @@
       "youtubeId": "E7OfC7-yzzE",
       "slug": "128-pylingual-toward-perfect-decompilation-of-high-level-languag",
       "title": "128 PyLingual Toward Perfect Decompilation of High Level Languages",
-      "speakers": [],
+      "speakers": [
+        "Joshua Woodmire"
+      ],
       "track": "malware",
       "topics": [
         "decompilation",
@@ -379,19 +383,22 @@
         "perfect",
         "level"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding 128 PyLingual Toward Perfect Decompilation of High Level Languages.",
-      "summary": null,
+      "teaser": "PyLingual decompiles Python bytecode and checks each result by recompiling it to see if the bytecode matches the original.",
+      "summary": "Joshua Woodmire presents PyLingual, a Python decompiler offered as a free online service that now handles hundreds of bytecode files each day. Python malware and commercial programs are often distributed as compiled packages, creating demand that existing tools have struggled to meet for newer Python releases.\n\nThe central idea is perfect decompilation: recompile the recovered source with the original bytecode compiler and check that every instruction and key metadata table matches the original, code object by code object. This check is separate from the decompiler, so any mechanism that produces source can act as one and its quality is judged by the verifier. The core difficulty is that Python bytecode has no compatibility guarantee between releases; Python 3.11, for example, moved exception handling into a new metadata table. PyLingual's hybrid design uses version-specific machine learning to segment bytecode into statements and translate them, while program analysis rebuilds the control flow graph. In an evaluation of 3,000 packages across Python 3.6 to 3.12, it perfectly decompiled more files than the other tools tested.\n\nThe closing section covers planned work: a human-in-the-loop workflow where an operator refines imperfect output until it passes the equivalence test, supported by error localization and differential analysis tooling. The team also intends a large-scale study of Python malware and obfuscation using more than 130,000 uploaded bytecode files, of which over 2,000 have been confirmed malicious and over 500 use one particular obfuscator.",
       "durationSeconds": 459,
       "conference": "ieee-sp",
       "viewCount": 143,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "C-dYjb69xd0",
       "slug": "81-swiftsweeper-defeating-use-after-free-bugs-using-memory-sweep",
       "title": "81 SwiftSweeper Defeating Use After Free Bugs Using Memory Sweeper Without Stop the World",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Juno"
+      ],
+      "track": "appsec",
       "topics": [
         "swiftsweeper",
         "defeating",
@@ -399,8 +406,8 @@
         "bug",
         "memory"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 81 SwiftSweeper Defeating Use After Free Bugs Using Memory Sweeper Without Stop the World.",
-      "summary": null,
+      "teaser": "Covers on-demand marking and in-kernel eBPF page faults so memory sweepers curb use-after-free without stop-the-world stalls.",
+      "summary": "The presentation opens with how use-after-free arises when freed objects are reached through stale pointers, and why that class matters for browser and systems security. It positions memory sweeper defenses as quarantining freed allocations and reissuing pointers so reclaimed storage cannot be abused for control-flow hijacks, then explains why safe reclamation still needs a mark phase and why concurrent marking creates pointer reallocation hazards.\n\nTraditional sweeper designs pause every application thread during marking, which the speaker argues is unacceptable for latency-sensitive workloads such as databases. The proposed SwiftSweeper direction replaces stop-the-world marking with on-demand marking backed by an eBPF page-fault path called Express Memory Path, keeping marking logic in the kernel to avoid userfaultfd bottlenecks from queuing, context switches, and argument copying.\n\nEvaluation on SPEC CPU 2017 and Apache compares the approach with MarkSweep, MyZipper, and Pushback. The speaker reports competitive throughput relative to garbage collection on the web-server benchmark, while noting memory-overhead tradeoffs tied to a one-time allocator design, and closes by recapping mitigation of stop-the-world, pause, and scalability limits.",
       "durationSeconds": 474,
       "conference": "ieee-sp",
       "viewCount": 98,
@@ -441,18 +448,21 @@
         "centric",
         "tool"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 743 Growlithe A Developer Centric Compliance Tool for Serverless Applications.",
-      "summary": null,
+      "teaser": "Presents a tool that checks serverless data flows against access policies, mixing static analysis with runtime checks.",
+      "summary": "Serverless applications often handle personal, financial and credential data, yet they span functions in several languages, reuse containers across requests and depend on coarse identity tools that are hard to configure. This talk presents Growlith, a developer-focused compliance tool built with collaborators at the University of British Columbia. Given source code, cloud configuration and policies, it produces an updated application that enforces them.\n\nThe design has three stages. First, CodeQL analyzes each function into a per-function data flow graph in a common, language-independent form, which is combined with dependencies from the configuration into one end-to-end graph. Second, developers annotate the graph's edges with declarative policies, such as access rules based on time, region or environment, or flow rules that allow data only when it derives from an upstream bucket. Third, policies are allowed, denied or deferred statically, and deferred ones become inline runtime assertions with no infrastructure changes. The prototype covers Python and JavaScript on AWS and GCP.\n\nOn an image processing application with four functions, runtime-only enforcement added an average of 28 milliseconds per function, while the hybrid approach added 23 milliseconds, a 19% improvement. Cold-start overhead peaked around 180 milliseconds. Synthetic tests showed latency overhead growing linearly for linear chains and sublinearly for fan-out workflows. The takeaway is that compliance can be built into the serverless development lifecycle with modest overhead across platforms and languages.",
       "durationSeconds": 488,
       "conference": "ieee-sp",
       "viewCount": 35,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "dJx1gLcnOOk",
       "slug": "236-sorry-for-bugging-you-so-much-exploring-developers-behavior",
       "title": "236 Sorry for bugging you so much Exploring Developers' Behavior Towards Privacy Compliant Implemen",
-      "speakers": [],
+      "speakers": [
+        "Stefan"
+      ],
       "track": "privacy",
       "topics": [
         "sorry",
@@ -461,12 +471,13 @@
         "developer",
         "behavior"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 236 Sorry for bugging you so much Exploring Developers' Behavior Towards Privacy Compliant Implemen.",
-      "summary": null,
+      "teaser": "Shows how developers handled privacy requirements in a health app, and why compliance was rarely addressed.",
+      "summary": "Stefan presents a study of how software developers handle privacy when building software under laws such as GDPR and CCPA. Because legal expertise is costly, developers are often left alone with these requirements. Thirty participants were split into three groups of 10: a control group with no privacy instructions, a group told that user privacy mattered and that solutions had to be compliant, and that same group with a privacy expert available through chat.\n\nParticipants completed four tasks in a health booking app that held sensitive data: a backup fix as a warm-up, a deletion request that also had to reach backups, a doctor search limited to relevant patients, and advertising emails that required consent management. About 73% of solutions worked functionally, but privacy was addressed only 15% of the time, even though participants had around one and a half hours left on average. The prompted groups did slightly better, the expert group did best, yet compliance stayed low. Participants rated their confidence 1.5 out of five, and only four expert-group participants contacted the expert.\n\nInterviews revealed a functionality-first mindset, privacy sources written in hard legal language, and reluctance to bother the expert. The takeaways: consider privacy from the start, provide usable guidance for developers, improve communication between legal and development teams, and clarify whether AI tools can give reliable privacy answers.",
       "durationSeconds": 500,
       "conference": "ieee-sp",
       "viewCount": 47,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "WZt-Art99oM",
@@ -495,7 +506,9 @@
       "youtubeId": "Ifmhmu5tga8",
       "slug": "794-a-low-cost-privacy-preserving-wallet-for-humanitarian-aid-di",
       "title": "794 A Low Cost Privacy Preserving Wallet for Humanitarian Aid Distribution",
-      "speakers": [],
+      "speakers": [
+        "Eval Vis"
+      ],
       "track": "privacy",
       "topics": [
         "cost",
@@ -505,12 +518,13 @@
         "humanitarian",
         "distribution"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 794 A Low Cost Privacy Preserving Wallet for Humanitarian Aid Distribution.",
-      "summary": null,
+      "teaser": "Describes a privacy-preserving, offline smart card wallet that lets aid households spend allocated budgets at vendors.",
+      "summary": "This talk looks at humanitarian aid distribution by the Red Cross, where registration and allocation still run on pen and paper. That process is slow, gathers recipients in one place that can become a target, depends on error-prone manual work, and leaves records that reveal who received what. The workflow involves recipients, a registration station, vendors, a reclaim station that pays vendors in cash, and an auditor. Each household receives a budget that several members can spend through smart cards acting as tokens.\n\nThe core difficulty is keeping one household's remaining balance consistent across cards that cannot communicate, while the vendor stores that balance database and must not learn which household a shopper belongs to. The design treats the cards as secure elements and combines digital signatures, homomorphic commitments, authenticated encryption and message authentication codes. Balance updates use an oblivious RAM, and two versions are compared: a naive one that fetches, decrypts and re-encrypts the whole database, and a recursive tree-based one.\n\nEvaluation measures the cost of each transaction for both versions as the number of households grows. The reported figures put a single transaction below 20 seconds with up to 8,000 households, and below 1 minute for larger programs. The speaker concludes that the workflow meets the aid organisation's requirements for offline use, per-household budgets, auditability and recipient indistinguishability, and is practical for humanitarian settings.",
       "durationSeconds": 466,
       "conference": "ieee-sp",
       "viewCount": 76,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "rYU_R7pgDUQ",
@@ -556,7 +570,9 @@
       "youtubeId": "cUZjxpyI3qc",
       "slug": "901-open-sesame-on-the-security-and-memorability-of-verbal-passw",
       "title": "901 Open Sesame! On the Security and Memorability of Verbal Passwords",
-      "speakers": [],
+      "speakers": [
+        "Unsu Kim"
+      ],
       "track": "hardware",
       "topics": [
         "sesame",
@@ -565,12 +581,13 @@
         "password",
         "passwords"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 901 Open Sesame! On the Security and Memorability of Verbal Passwords.",
-      "summary": null,
+      "teaser": "Finds spoken passwords are guessable unless policies apply, and that word-count rules keep them secure and memorable.",
+      "summary": "Unsu Kim presents research on verbal passwords, spoken phrases proposed as an alternative to typed text in settings such as VR headsets and smart home devices, where typing is awkward. The study asks whether these passwords are both secure and memorable. Verbal passwords are already used in some financial and smart home systems.\n\nA user study with over 2,000 participants had people create and practise spoken passwords, then recall them during a bank transaction task after two days and after nine days. About 64% recalled their password after two days and 52% after nine. Those who failed mostly forgot the password entirely or remembered only part of it. For guessing attacks, two models built on GPT-2 and Llama 3, trained on over 25 million phrases from public sources, produced up to 1 billion guesses. They cracked nearly 40% of passwords with the GPT-based model and 30% with the Llama-based one. Most cracked passwords were under three words long, and simple choices fell while complex ones held.\n\nThe second part tested password creation policies. A four-word minimum had given the best balance in an earlier study. The follow-up compared a four-word minimum, the same rule with list-based filtering of weak phrases, and a text policy based on NIST guidance. The strictest verbal policy had the lowest guess rate at 7.5%, although the differences were not statistically significant. Recall was significantly higher for verbal passwords than for text ones at both the midterm and long-term tests. The takeaway is that unrestricted verbal passwords are weak, but simple policies make them much stronger while keeping them memorable. Some participants were worried about being overheard or having their voices recorded.",
       "durationSeconds": 433,
       "conference": "ieee-sp",
       "viewCount": 70,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "G1xl1WaljmU",
@@ -586,12 +603,13 @@
         "provable",
         "design"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 848 Asymmetric Mempool DoS Security Formal Definitions and Provable Secure Designs.",
-      "summary": null,
+      "teaser": "Presents a formal economic security definition for blockchain memory pools and a provably secure eviction policy.",
+      "summary": "Transactions on a blockchain wait in a memory pool, a buffer of unconfirmed transactions, until validators bundle them into blocks. If that pool is disrupted, validators lose revenue and users cannot get transactions confirmed. Earlier work described an arms race: one-step attacks prompted quick patches, and then multi-step attacks got past them. The talk argues that this race needs provable guarantees instead.\n\nThe talk opens with a formal economic security definition. In an eviction example, an attacker's transaction displaces a benign one and then turns out invalid, leaving the validator with an empty block and no revenue. The definition requires a lower bound on total fees in the final state, derived from the initial state, across possible attacker orderings. Because execution order is unknown when transactions arrive, the bound is expressed through transaction prices. A price-only policy lets the total price collapse to 10 in the example, while the proposed ancestor minimum price policy scores each transaction by the minimum price among its ancestors and evicts the lowest-scoring child, keeping total score at or below total price.\n\nThe policy was implemented by modifying existing client software, and eviction attacks were replayed over 90 blocks. Without attacks, it earned the same revenue as the default client. Under attack, the default client's revenue fell to zero, while the new policy's revenue did not drop. The takeaway is a formal economic security definition for public memory pools, a design with proofs presented on a poster, and an implementation.",
       "durationSeconds": 477,
       "conference": "ieee-sp",
       "viewCount": 77,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "sW7Q6aM0Jjo",
@@ -616,8 +634,10 @@
       "youtubeId": "OdFjDgJ5HqY",
       "slug": "268-iubik-isolating-user-bytes-in-commodity-operating-system-ker",
       "title": "268 IUBIK Isolating User Bytes in Commodity Operating System Kernels via Memory Tagging Extension",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Marius Mo"
+      ],
+      "track": "hardware",
       "topics": [
         "iubik",
         "isolating",
@@ -626,18 +646,21 @@
         "commodity",
         "operating"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 268 IUBIK Isolating User Bytes in Commodity Operating System Kernels via Memory Tagging Extension.",
-      "summary": null,
+      "teaser": "Arm's memory tagging extension isolates user-controlled kernel data to block same-cache, cross-cache, and overflow exploit primitives.",
+      "summary": "Commodity operating system kernels remain exposed to memory safety flaws because user-influenced data often lives in kernel objects that also carry security-sensitive metadata. The presentation traces a recurring exploitation pattern: attackers shape elastic allocations whose size they control, then trigger type confusion between user-data objects and objects holding function pointers or other critical fields. That pattern powers same-cache attacks, cross-cache attacks, and heap overflows that turn isolated bugs into reliable privilege escalation.\n\nThe UBK design addresses those primitives by using ARM Memory Tagging Extension hardware to maintain two heap isolation domains. User-derived bytes are placed on separately tagged physical pages, kmem allocation sites that handle user copies are steered with a dedicated allocation flag, and pages are retagged when they move between domains so stale pointers cannot cross boundaries. Structures that previously mixed flexible user arrays with destructors or similar metadata are rewritten so fixed kernel metadata and variable user buffers allocate from different domains. A dynamic user-copy profiler extends allocation profiling to record hundreds of privileged and unprivileged call sites that touch user data, guiding manual instrumentation.\n\nEvaluation on an MTE-capable Pixel 8 prototype reports small runtime overhead on most benchmarks, about 2.17% additional resident memory versus an unmodified kernel, and mitigation of roughly ninety percent of a set of thirty-one recent Linux heap exploits spanning use-after-free and overflow cases. Practitioners gain a concrete pattern for hardware-assisted segregation of user bytes in kernel heaps plus a profiling pipeline to find remaining risky allocation sites.",
       "durationSeconds": 726,
       "conference": "ieee-sp",
       "viewCount": 143,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "gzQDFARUkfQ",
       "slug": "402-follow-my-flowcolon-unveiling-client-side-prototype-pollutio",
       "title": "402 Follow My Flowcolon Unveiling Client Side Prototype Pollution Gadgets from One Million Real Worl",
-      "speakers": [],
+      "speakers": [
+        "Sungcom"
+      ],
       "track": "appsec",
       "topics": [
         "prototype-pollution",
@@ -647,12 +670,13 @@
         "client",
         "side"
       ],
-      "teaser": "Security researchers examine technical aspects of 402 Follow My Flowcolon Unveiling Client Side Prototype Pollution Gadgets from One Million Real Worl.",
-      "summary": null,
+      "teaser": "Shows how a dynamic analysis tool finds client-side prototype pollution gadgets by borrowing valid inputs from other websites.",
+      "summary": "Client-side prototype pollution becomes dangerous only when a gadget, a piece of JavaScript that looks harmless on its own, later reads the polluted properties and passes them to a sensitive sink such as document.cookie. The talk explains that many such gadgets sit behind format checks. In the motivating case, the value must contain four segments separated by three dots before it reaches the cookie sink. Existing tools either rely on predefined payloads or cannot solve the complex string constraints that such checks impose.\n\nThe authors present Gala, an open-source dynamic analysis framework. It first finds undefined properties on a target site that an attacker could pollute. It then crawls other sites or pages that use the same library to find a defined value that already passes the checks and reaches a sink. Finally, it feeds that borrowed value into the target so the target follows the same program flow. One case involved a Meta events script that let an attacker manipulate victim cookies on a site that was also polluted. Meta fixed the gadget after disclosure and paid a bounty, while the polluted site had not yet fixed its flaw at the time of the talk.\n\nAcross the evaluation, the speaker reported 133 zero-day gadgets found on more than 5,000 real-world websites. These included 56 cross-site scripting gadgets, 27 cookie manipulation gadgets and 50 URL manipulation gadgets. The talk left the other research questions to the paper. For developers, the main point is that a prototype pollution flaw should be judged together with the gadgets downstream of it.",
       "durationSeconds": 679,
       "conference": "ieee-sp",
       "viewCount": 33,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "bfJW6quhbj0",
@@ -682,16 +706,18 @@
       "youtubeId": "VKeFfghfLH0",
       "slug": "689-identifying-incoherent-search-sessions",
       "title": "689 Identifying Incoherent Search Sessions",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Runza Jang"
+      ],
+      "track": "blue-team",
       "topics": [
         "identifying",
         "incoherent",
         "search",
         "sessions"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 689 Identifying Incoherent Search Sessions.",
-      "summary": null,
+      "teaser": "COSAC classifies fraudulent search sessions end-to-end by measuring semantic incoherence across queries and ad clicks.",
+      "summary": "Pay-per-click search advertising invites attackers who automate ad clicks without buying anything, draining advertiser budgets and harming platform trust. Investigators can scrutinize IPs, headers, and account metadata, yet fraudsters often proxy, spoof profiles, and mimic legitimate traffic so single-request signals stay weak.\n\nThe work centers on search-query behavior within a session. Legitimate users tend to refine one thread of intent, while many fraud-driven queries are random and lack semantic connection. The COSAC framework ingests traffic logs, builds sessions with temporal slicing, and encodes literal semantics (language-model query embeddings), timing, and ad-click statistics. A sequence model classifies whole sessions as coherent or not. Ground truth comes from large-scale Bing traffic: on the order of 200,000 fraudulent and benign sessions each, with train-test splits and subsets labeled naive versus target-specific fraud.\n\nReported evaluation reaches roughly 94% accuracy with strong precision and recall, beating baselines and holding high true-negative rates on benign traffic. Ablations show temporal features help when data is scarce and literal semantics dominate at scale. Practitioners gain a session-level signal that complements per-request heuristics when mimicked traffic evades point checks.",
       "durationSeconds": 485,
       "conference": "ieee-sp",
       "viewCount": 54,
@@ -701,8 +727,10 @@
       "youtubeId": "Y9H7IxsTcgA",
       "slug": "80-cmasan-custom-memory-allocator-aware-address-sanitizer",
       "title": "80 CMASan: Custom Memory Allocator-aware Address Sanitizer",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Junahong"
+      ],
+      "track": "appsec",
       "topics": [
         "cmasan",
         "custom",
@@ -711,12 +739,13 @@
         "addres",
         "sanitizer"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for 80 CMASan: Custom Memory Allocator-aware Address Sanitizer.",
-      "summary": null,
+      "teaser": "CMASan finds heap bugs in apps with custom allocators without replacing them or patching source by hand.",
+      "summary": "AddressSanitizer catches many heap errors by wrapping allocations, but it only hooks standard allocators. When programs rely on custom memory allocators, objects often sit outside the sanitizer’s redzones, so overflows, use-after-free, and double frees on those paths can slip through unnoticed.\n\nThe presenters studied roughly one hundred real projects and found dozens of custom allocators linked to false negatives, mainly arena-style pools and recyclers that reuse memory without round-tripping through malloc. Prior mitigations such as allocator shims or manual poisoning APIs demand invasive changes and deep allocator knowledge. CMASan extends AddressSanitizer by spotting custom allocator APIs in source, instrumenting them, tracking objects with on-demand two-level metadata tables, and delaying frees through per-instance quarantine zones—without replacing the custom allocator or editing its internals. Heuristics limit false positives from legitimate allocator behavior and nested calls.\n\nOn large C++ codebases with custom allocators, the tool raises the share of instrumented accesses that actually cover custom-allocator objects and adds modest runtime and memory cost versus baseline AddressSanitizer. Applied to widely used applications, it reported numerous previously unknown memory bugs that baseline sanitization had missed for years.",
       "durationSeconds": 482,
       "conference": "ieee-sp",
       "viewCount": 227,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "jJ6uDBDn4_8",
@@ -743,7 +772,9 @@
       "youtubeId": "Ng6aD0QoVWg",
       "slug": "570-we-cant-change-it-overnight-understanding-industry-perspecti",
       "title": "570 We can’t change it overnight Understanding Industry Perspectives on IoT Product Se",
-      "speakers": [],
+      "speakers": [
+        "Priyanka Mandul"
+      ],
       "track": "hardware",
       "topics": [
         "iot",
@@ -753,12 +784,13 @@
         "industry",
         "perspective"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding 570 We can’t change it overnight Understanding Industry Perspectives on IoT Product Se.",
-      "summary": null,
+      "teaser": "Interviews with 17 IoT practitioners reveal how budget and liability shape their views on security certification.",
+      "summary": "The talk presents an interview study of 17 IoT practitioners about product security compliance and certification. The speaker explains that new policy initiatives, such as the US Cyber Trust Mark, are pushing vendors toward certification by labs, yet regulators license those labs on procedural criteria rather than on how well they find vulnerabilities. Earlier work by the same group found that certified IoT products could still carry common vulnerabilities covered by the standards. The study asks how practitioners view product security, what certification practices they follow, how they perceive certification and its challenges, and who they think is liable when failures occur.\n\nParticipants said limited budgets restrict hiring security experts, and tight deadlines can push security aside. Small and medium organizations face the sharpest constraints, lacking expertise and testing facilities, so the speaker warns they may choose cheap, lightweight labs and end up with certified but insecure products. Most participants were unaware of IoT-specific standards and had certified under general schemes such as ISO. They supported IoT-specific certification for the assurance it gives vendors and consumers, yet many said they would hesitate to certify unless it became mandatory. Participants placed responsibility on both developers and labs, rejected responsibility for flaws in third-party libraries, and saw the lab as the most liable party.\n\nThe takeaways are to plan certification early by involving a security expert and following compliance guidance, to make standards and tools accessible to developers, especially at smaller firms, and to establish a clear legal framework for assigning liability when compliance fails, since responsibility is hard to pin down given the many variables involved.",
       "durationSeconds": 472,
       "conference": "ieee-sp",
       "viewCount": 39,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "_rIC_ApohbQ",
@@ -787,7 +819,9 @@
       "youtubeId": "Kh6FaZ2Cx2w",
       "slug": "375-analyzing-ad-prevalence-characteristics-and-compliance-in-al",
       "title": "375 Analyzing Ad Prevalence, Characteristics, and Compliance in Alexa Skills",
-      "speakers": [],
+      "speakers": [
+        "Afak Sabir"
+      ],
       "track": "policy",
       "topics": [
         "compliance",
@@ -796,12 +830,13 @@
         "characteristic",
         "alexa"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding 375 Analyzing Ad Prevalence, Characteristics, and Compliance in Alexa Skills.",
-      "summary": null,
+      "teaser": "Shows how LLMs can detect ads in Alexa skill responses and check them against Amazon's policy at scale.",
+      "summary": "Third-party skills on Amazon Alexa run content generated by external servers that the platform cannot inspect directly. Alexa's policy bans advertisements in skill responses unless an exception applies, such as streaming skills, product ordering, a specific user request, or promotion of the skill's own product or service. Skills are vetted only when they are published, so a skill that passes can later drift out of compliance, and manual re-checks do not scale. The speaker argues for an automated vetting approach that works after publication.\n\nThe proposed framework uses large language models in two steps. The first step decides whether a skill response contains an advertisement and explains its reasoning. Detected ads then go to a second step, which checks them against the policy, the skill's metadata such as developer information and description, and the earlier reasoning. Prompts were refined empirically and models were fine-tuned. GPT-4o performed best, with about 88% ad-validation accuracy and about 94% compliance-validation accuracy.\n\nApplied to more than 45,000 live skills, the framework found promotional material in about 11% of skill responses, and roughly 29% of that material appeared to violate the policy. The violations fell into four intent categories, including promoting products or companies unrelated to the skill, promoting websites or media platforms, and promoting other Alexa skills. One example was a healthy cooking narration skill that promoted an unrelated company. The finding was reported through a bug bounty program. The takeaway is that one-time certification is not enough, and continuous automated checks are needed. The code and datasets are released as open source.",
       "durationSeconds": 464,
       "conference": "ieee-sp",
       "viewCount": 39,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "kF-tH8xbsVc",
@@ -895,8 +930,10 @@
       "youtubeId": "YrX3WeVT4SQ",
       "slug": "390-sailfish-towards-improving-the-latency-of-dag-based-bft",
       "title": "390 Sailfish: Towards Improving the Latency of DAG-based BFT",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Nebes Rusta"
+      ],
+      "track": "cloud",
       "topics": [
         "sailfish",
         "improving",
@@ -904,8 +941,8 @@
         "dag-based",
         "towards"
       ],
-      "teaser": "Security researchers examine technical aspects of 390 Sailfish: Towards Improving the Latency of DAG-based BFT.",
-      "summary": null,
+      "teaser": "Researchers present Sailfish, a DAG BFT protocol that adds per-round leaders and lowers commit latency for SMR systems.",
+      "summary": "State machine replication under partial synchrony has gained throughput from DAG-based Byzantine fault tolerant designs where every node proposes a vertex each round and reliable broadcast spreads it. Prior DAG protocols commit only the round leader’s vertex directly; other vertices ride the causal history of a later leader commit, which drives high end-to-end latency. Leaders every other round and commit paths that need multiple full RBC completions leave non-leader vertices waiting through several broadcasts.\n\nSailfish targets that gap. It supports a leader vertex every round without breaking the safety path invariant, using leader proposals that reference the prior round’s leader or carry proof that the prior leader could not have committed, plus timely delivery and “no board” attestations from 2f+1 parties when the previous leader was not committed. Leader commits drop to one RBC plus one network delay; non-leader ordering needs one further RBC. An early-commit rule keyed off the first RBC message and 2f+1 supporting echoes preserves safety when up to f parties are Byzantine.\n\nEvaluation on a geo-distributed deployment across five regions reports substantially lower latency than existing DAG baselines such as Bullshark and Bullshark-related predecessors referenced in the talk. Practitioners weighing consensus for replicated services should weigh Sailfish when commit latency—not just throughput—drives user-visible lag.",
       "durationSeconds": 483,
       "conference": "ieee-sp",
       "viewCount": 67,
@@ -915,8 +952,10 @@
       "youtubeId": "nojFy5AlVYY",
       "slug": "642-vitarit-paying-for-threshold-services-on-bitcoin-and-friends",
       "title": "642 VITARIT: Paying for Threshold Services on Bitcoin and Friends",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Ishwar"
+      ],
+      "track": "privacy",
       "topics": [
         "bitcoin",
         "vitarit",
@@ -925,8 +964,8 @@
         "service",
         "friend"
       ],
-      "teaser": "Security researchers examine technical aspects of 642 VITARIT: Paying for Threshold Services on Bitcoin and Friends.",
-      "summary": null,
+      "teaser": "Pay-on-delivery for threshold services on Bitcoin, with each server paid at most once and no trusted combiner.",
+      "summary": "The talk covers paying for threshold services, such as distributed verifiable random functions and oracles, on Bitcoin and similar chains. Smart-contract versions expose user inputs and outputs on-chain and verify computation there, which costs privacy and efficiency and does not suit Bitcoin. Three simpler payment designs are compared: paying every server, which invites free-riding; paying through a combiner, which must be trusted; and per-server atomic swaps, where a server in the UTXO model can collect several payments for one computation.\n\nThe proposed protocol, Vitar, works for any distributed verifiable threshold service and is shown with a distributed VRF. The client makes t+1 deposits, each worth one server payment, and each server locks a small auxiliary deposit so it can be paid at most once. Payment runs on adapter-signature swaps: the server sends an encrypted partial evaluation, the client returns a pre-signature, the server completes it and publishes the payment, and the client recovers the decryption key from the chain. To stop a malicious client learning more than the output, the authors add verifiable non-committing encryption, which uses public-key encryption over several ciphertexts with a cut-and-choose check.\n\nThe prototype uses a BLS-based DVRF for Bitcoin. The final client signature is 48 bytes, each server spends roughly 2004 milliseconds in the two-party computation and outputs a ciphertext of about 57 KB, and each client spends roughly 126 milliseconds. On Ethereum, a five-server DVRF realised with Vitar cut gas cost by roughly 68%, to about 298K excluding setup, and the saving grows with more servers as verification moves off-chain.",
       "durationSeconds": 412,
       "conference": "ieee-sp",
       "viewCount": 47,

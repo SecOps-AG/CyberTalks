@@ -192,7 +192,7 @@
       "speakers": [
         "KaiJern Lau"
       ],
-      "track": "community",
+      "track": "privacy",
       "topics": [
         "anti-censorship",
         "hitb2023am",
@@ -200,12 +200,13 @@
         "tale",
         "building"
       ],
-      "teaser": "KaiJern Lau details #HITB2023AMS D1T2 - A Tale Of Building A REAL Full Speed Anti-Censorship Router.",
-      "summary": null,
+      "teaser": "Shows how a custom open-source router setup gets around China's Great Firewall while keeping near full internet speed.",
+      "summary": "The talk, given by KaiJern Lau, opens with the speaker's experience of living in mainland China and how the country's internet controls work in practice. These include police registration for websites, human review of uploaded content, and DNS poisoning that varies by city, district or political event. It traces how circumvention moved from plain VPNs, which were quickly blocked, to proxy tools that disguise traffic as ordinary HTTPS and use IP-range routing to separate domestic and foreign traffic.\n\nThe middle of the talk walks through the build, moving from a VMware ESXi host to a custom x86 machine that runs containers and a virtual machine hosting a modified OpenWrt router. Traffic is split so domestic destinations go direct while international ones use a remote exit server, with per-service rules in a Clash-based client. Exit choice matters most: Hong Kong is preferred, and CN2 and GIA links are compared against cheap shared tunnels and pricier dedicated servers. Reported speeds on a one-gigabit line reached 948 to Hong Kong and 943 to Singapore.\n\nThe closing part covers what goes wrong. Shared exit servers accumulate many users, so their IPs get blocked, and a server that carries heavy traffic while serving a near-empty website draws attention, so obfuscation and a plausible front site help. In the Q&A, the speaker said that bypassing is not treated as a serious crime, that short-term visitors can rely on roaming or a commercial VPN, and that the custom hardware was being offered for sale. The main takeaway is that traffic patterns and IP reputation matter as much as encryption.",
       "durationSeconds": 3228,
       "conference": "hitb",
       "viewCount": 601,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "km6QTMDb8Yw",
@@ -420,7 +421,7 @@
       "speakers": [
         "Tao Sauvage"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "hitb2023am",
         "d2t1",
@@ -429,12 +430,13 @@
         "garmino",
         "monkeyc"
       ],
-      "teaser": "Tao Sauvage investigates #HITB2023AMS D2T1 - A Deep Dive Into GarminOS And Its MonkeyC Virtual Machine.",
-      "summary": null,
+      "teaser": "Dissects Garmin watch firmware and its Monkey C virtual machine, covering permission bypasses, memory bugs and a live exploit demo.",
+      "summary": "The talk examines the software on Garmin fitness watches, which runs a proprietary operating system rather than Linux or an off-the-shelf RTOS. Third-party watch apps are written in Monkey C, compiled into PRG files, and distributed through the Connect IQ store. The speaker explains how the PRG format is laid out, how the compiled bytecode can be read on the client side, and how firmware is pulled from Garmin's update packages and rebased by a 3000 offset so it disassembles sensibly.\n\nThe middle of the talk walks through bugs found in the virtual machine and the native SDK. These include an integer overflow in the font resource loader that leads to an undersized allocation and an out-of-bounds copy, out-of-bounds reads when string resources sit near the end of a section, and a cipher initialization routine that copies key data before checking its size, enabling a stack overflow. A burst payload add function is shown with a signed size check and type confusion that let an attacker overwrite neighbouring objects. A permission bypass is also covered: tampering with the version field in the PRG header, and redirecting a field pointer so the permission check on invoke is skipped. A live demo used one of these flaws on a newer device to dump firmware over HTTP to a phone.\n\nThe talk closes with disclosure results: 14 issues reported, more than 100 affected devices, a permission bypass present since the 2015 SDK, and some devices still awaiting patches at the time. The speaker notes that developer signatures are accepted on the watch without any warning, and lists open areas such as the notification Unicode conversion, the radio and USB stacks, and debugging. Companion tooling, a Kaitai structure and a Python helper, was announced for release.",
       "durationSeconds": 2901,
       "conference": "hitb",
       "viewCount": 3700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "C4HiS_2accs",
@@ -469,7 +471,7 @@
       "speakers": [
         "M. Balduzzi"
       ],
-      "track": "community",
+      "track": "ics-ot",
       "topics": [
         "hitb2023am",
         "d2t1",
@@ -478,12 +480,13 @@
         "numerical",
         "control"
       ],
-      "teaser": "M. Balduzzi examines #HITB2023AMS D2T1 - An Analysis Of Computer Numerical Control Machines In Industry 4.0.",
-      "summary": null,
+      "teaser": "Surveys CNC machine controllers from four vendors, showing how exposed protocols and weak access control enable sabotage.",
+      "summary": "The talk examines computer numerical control (CNC) machines used in modern factories and how they are exposed once connected to networks. The speaker explained that a controller is often built by one vendor and reused by many machine makers, resellers and integrators, so a flaw in the controller can spread along the whole supply chain. The team worked on controllers from four vendors, using simulators first and then real machines.\n\nFindings fell into groups such as leaked information, missing authentication and no separation of resources. One controller's firmware was dumped by booting a bootloader from a microSD card through a jumper, and program code was leaked in clear text by polling a data service during a job. Writing to memory could disable single-step debug mode so a program ran to the end, and a 0.25 millimeter compensation change moved a drilled depth from 5.05 to 4.80 millimeters. On a FANUC machine a program was swapped without the operator noticing, and on an Okuma controller an old exploit installed a malicious plugin acting as a backdoor.\n\nThe speaker said the findings were reported to the vendors with help from a US government agency, and that the problems were fixed or planned for fixes, though patching these machines is hard. Practitioners were urged to segment networks, count CNC equipment as critical assets in testing and inventories, and weigh security when buying machines, since some vendors support no authentication or leave it disabled by default.",
       "durationSeconds": 2835,
       "conference": "hitb",
       "viewCount": 159,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "vOqa-CxINDM",

@@ -161,7 +161,10 @@
       "youtubeId": "k_F4wHc4h6k",
       "slug": "2022-0-click-rce-on-the-tesla-model-3-by-david-berard-and-vincen",
       "title": "2022 - 0-click RCE on the Tesla Model 3 by David Berard & Vincent Dehors",
-      "speakers": [],
+      "speakers": [
+        "David Berard",
+        "Vincent Dehors"
+      ],
       "track": "red-team",
       "topics": [
         "rce",
@@ -170,18 +173,22 @@
         "model",
         "david"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 2022 - 0-click RCE on the Tesla Model 3 by David Berard & Vincent Dehors.",
-      "summary": null,
+      "teaser": "Shows a zero-click remote code execution chain against a Tesla Model 3 infotainment unit, from Wi-Fi to CAN bus commands.",
+      "summary": "The talk covers a zero-click remote code execution chain against the infotainment unit of a Tesla Model 3, researched for the Pwn2Own contest. The researchers bought a unit on eBay, dumped its eMMC storage by forcing a boot from the SPI flash, and studied its Linux system and the ConnMan network manager. They focused on the Wi-Fi connectivity check, where a crafted HTTP reply could write a null byte past the end of a heap buffer.\n\nTurning that weak primitive into code execution required heap shaping, using resized buffers and a double HTTP request trick to control neighbouring allocations. An information leak came from a DHCP hostname that ConnMan kept in memory, exposing a libc pointer and enabling further writes. A later Tesla update broke the earlier hooks, so the team switched to hijacking a timer callback to pivot the stack, then loaded a second-stage payload. For the sandbox, raw sockets bypassed iptables filtering, while netlink kernel bugs for privilege escalation were not finished before the contest.\n\nTo demonstrate impact, the team sent CAN messages through the gateway from the compromised process, opening the trunk, running the wipers and flashing the lights on a real car. ConnMan was patched weeks earlier and kernel advisories followed. The team did not win the car, as the rules did not favour their bug over an earlier entry with the same impact. The takeaway is how long a single heap bug can take to exploit and how vendor updates can break work in progress.",
       "durationSeconds": 2194,
       "conference": "hexacon",
       "viewCount": 1800,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "4pftjmKqeoM",
       "slug": "2022-fuzzing-rdpegfx-with-wtf-by-colas-le-guernic-and-jeremy-rub",
       "title": "2022 - Fuzzing RDPEGFX with WTF by Colas Le Guernic & Jérémy Rubert",
-      "speakers": [],
+      "speakers": [
+        "Colas Le Guernic",
+        "Jérémy Rubert"
+      ],
       "track": "red-team",
       "topics": [
         "fuzzing",
@@ -190,8 +197,8 @@
         "guernic",
         "rubert"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 2022 - Fuzzing RDPEGFX with WTF by Colas Le Guernic & Jérémy Rubert.",
-      "summary": null,
+      "teaser": "Snapshot fuzzing on RDPEGFX explains WTF harness work, coverage trials, and a bounds overflow confirmed via MSRC.",
+      "summary": "The presenters describe fuzzing Microsoft’s RDPEGFX graphics extension inside the RDP client with snapshot fuzzing in WTF, extending prior WinAFL work that struggled with unknown protocol states and unstable servers. They summarize how RDPEGFX surfaces and PDUs are structured, how WTF snapshots memory and CPU for stateful fuzzing, and their change to WTF so breakpoints work when page table entries are invalid.\n\nCampaigns hook the GFX client decoder just before the per-PDU dispatch loop, build dumps from live sessions, and refine the harness so bad command IDs and length checks no longer abort parsing. They run repeated 24-hour experiments with naive versus improved harnesses, edge and context-sensitive coverage, and dirty-page signals, and argue crash yield matters more than basic-block curves alone.\n\nAfter filtering noisy crashes, minimization isolates CreateSurface plus SolidFill PDUs that overflow a filled rectangle. Traces show the fault in the Windows software rasterizer used without 3D acceleration—an integer overflow on coordinate bounds—not in RDPEGFX parsing. They reproduce on a real client, report through MSRC, receive a bounty after validation, and offer a malicious FreeRDP proof-of-concept server without a full exploit.",
       "durationSeconds": 1759,
       "conference": "hexacon",
       "viewCount": 684,
@@ -243,7 +250,9 @@
       "youtubeId": "CD8HfjdDeuM",
       "slug": "2022-emulate-it-until-you-make-it-pwning-a-draytek-router-by-phi",
       "title": "2022 - Emulate it until you make it! Pwning a DrayTek Router by Philippe Laulheret",
-      "speakers": [],
+      "speakers": [
+        "Philippe Laulheret"
+      ],
       "track": "red-team",
       "topics": [
         "emulate",
@@ -251,12 +260,13 @@
         "pwning",
         "draytek"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 2022 - Emulate it until you make it! Pwning a DrayTek Router by Philippe Laulheret.",
-      "summary": null,
+      "teaser": "Shows how a DrayTek router's firmware is unpacked and emulated to find a pre-auth remote code execution bug.",
+      "summary": "The talk covers research into DrayTek routers, beginning with firmware downloaded from the vendor's website so that no device had to be opened. The speaker shows how an older image was loaded into IDA by guessing its architecture and load address, then how its decompression routine could be run inside the Unicorn emulator to recover the data. Newer images were encrypted, so a key was pulled from an early boot component and used to decrypt them. The result was a Linux system that ran QEMU to host the main bare-metal firmware.\n\nWith that environment running, the speaker focused on the web management interface and its login CGI. Credentials are base64-decoded into a stack buffer, and the expected decoded size is calculated by subtracting padding characters, so a long run of extra equals signs causes an overflow. There is no ASLR on this system, so fixed addresses could be used. The exploit sent commands to the host through a debug channel to gain a root shell, and a similar shell was reached on a purchased unit using a hidden console shortcut. The flaw appeared in firmware from mid or late 2018 and affected around 20 models, with about 200,000 devices reachable online.\n\nPost-exploitation risks included stolen settings, DNS tampering, traffic interception and pivoting into the internal network. The vendor patched within about 30 days of notification. The practical advice is to update affected routers, avoid exposing management interfaces to the internet, and watch for login requests with abnormal base64 padding.",
       "durationSeconds": 2604,
       "conference": "hexacon",
       "viewCount": 3300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "w8sEzhpHI1I",
@@ -281,7 +291,9 @@
       "youtubeId": "Q-N-LR_NoSY",
       "slug": "2022-hunting-for-cloudy-ssrfs-by-nicolas-joly",
       "title": "2022 - Hunting for cloudy SSRFs by Nicolas Joly",
-      "speakers": [],
+      "speakers": [
+        "Nicolas Joly"
+      ],
       "track": "cloud",
       "topics": [
         "hunting",
@@ -290,12 +302,13 @@
         "nicola",
         "joly"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 2022 - Hunting for cloudy SSRFs by Nicolas Joly.",
-      "summary": null,
+      "teaser": "Shows how SSRF flaws in Azure Kubernetes Service were hunted by tracing node-to-control-plane traffic.",
+      "summary": "Nicolas Joly argues that server-side request forgery (SSRF) is a practical target when cloud services are written in memory-safe languages such as .NET, Go and Rust. He focuses on Azure Kubernetes Service (AKS), which splits into a Microsoft-hosted control plane and customer nodes, and says the control plane was the scope of the review.\n\nHe starts with an earlier outside case against the control plane, then describes his own failed attempt to replay API server traffic through Burp. The missing requests led him to the kubelet's outbound connections, which he inspected on Windows nodes by setting WinDbg breakpoints on socket calls and dumping plaintext from the HTTPS traffic. Health and readiness probes sent from the control plane to the nodes showed SSRF; intercepting their responses let him redirect them. He reports similar issues in kube-proxy on Linux, where he could replace the process with his own web server, and in the metrics server extension, where patching a deployment exposed many control plane pods. Microsoft fixed the probe issue in about 50 locations.\n\nHe also covers an Office Online WOPI case reported by external finders, where DNS callbacks suggested a filter. Using DNS rebinding with a zero TTL to get past an IP allowlist, and an open redirect on an Office domain, he says he reached remote code execution. He closes by urging researchers to dig into cloud components and logs, since SSRF bugs can be devastating.",
       "durationSeconds": 1618,
       "conference": "hexacon",
       "viewCount": 542,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "QkKJOEmnzsk",

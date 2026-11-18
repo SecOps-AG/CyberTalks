@@ -53,18 +53,19 @@
       "speakers": [
         "Ricardo Narvaja"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "alto",
         "envenenamiento",
         "cache"
       ],
-      "teaser": "Ricardo Narvaja details Alto envenenamiento del cache.",
-      "summary": null,
+      "teaser": "Explains a Windows cache poisoning flaw that lets a medium-integrity process reach full administrator, shown with a live demo.",
+      "summary": "Ricardo Narvaja walks through a Windows privilege escalation that takes code from a medium-integrity process to full administrator. He presents it as the second half of a talk given at the same event the previous year by a colleague, who had shown a first stage that raised a process from medium to a limited high integrity level. That first stage used drive remapping with a symbolic link to a user-writable folder, so a service such as ctfmon loaded an attacker-controlled DLL by bare name.\n\nThe focus is the second stage, which poisons the activation context cache. The attack sends a hand-built message to the CSRSS activation server over LPC. The message has to match exact paths and offsets, and it embeds a manifest that points to a language-specific subdirectory under System32 that the attacker can write to. He described reversing the message layout and using a process-ID conditional breakpoint to isolate his requests on a busy server. He also explained a mitigation added in October 2022 that compares integrity levels, so poisoning only works when the target and the setup program share a level. In practice this works for local administrator accounts but not standard users.\n\nThe demo copied the files into System32 and ran the chain, ending with a command shell that could write into System32, which he used as proof of administrator rights. He said Microsoft disputes that this is a vulnerability, that it remained unpatched at the time, and that a proof of concept was published. The takeaway is that medium-integrity code running under a local administrator account can reach full system control, so defenders should not treat that boundary as protection.",
       "durationSeconds": 1877,
       "conference": "ekoparty",
       "viewCount": 618,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "z24Uf6Ihw3Q",
@@ -118,18 +119,19 @@
       "speakers": [
         "Dan Borgogno"
       ],
-      "track": "community",
+      "track": "wireless",
       "topics": [
         "sube",
         "later",
         "year"
       ],
-      "teaser": "Dan Borgogno details Sube: 5 Years Later.",
-      "summary": null,
+      "teaser": "Examines how NFC hacking tools and app reverse engineering expose weaknesses in a city transit card system.",
+      "summary": "The talk revisits an earlier presentation on the Sube transit card, a MIFARE Plus card, and checks how its weaknesses look with today's NFC tools. The speaker walks through the card's sector layout, with two keys per sector, and notes that the public keys used on Sube cards are already known, which makes cracking practical. Three devices are compared: the Proxmark3, the Chameleon Mini and the Flipper Zero. The Proxmark can crack a card in about 40 minutes and sniff reader traffic, the Chameleon emulates well but cannot crack, and the Flipper cracks offline after collecting nonces.\n\nDemos showed a cloned card being emulated on a bus reader for about a day before the system blocked it. A ping-pong style attack, which rebuilds keys by repeatedly querying a nearby reader, was described as possible but impractical. For the Sube phone and USB apps, the speaker reverse engineered the code with Frida, found an encrypted custom protocol to the backend, and reused an authentication library from the Android app to pull some sector keys in real time. Firmware extraction from the USB reader's chip did not succeed.\n\nThe Sube Digital phone app was examined through Proxmark traces of its card exchange, with a possible token-stealing or relay attack still under research. The conclusion is that the operator monitors card usage centrally and that mobile apps cannot keep secrets, while newer card security modes may close these gaps.",
       "durationSeconds": 3140,
       "conference": "ekoparty",
       "viewCount": 458,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "Q6ivLhGK-M0",
@@ -276,7 +278,7 @@
         "Paccella",
         "Laurence"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "alerta",
         "aerol",
@@ -285,12 +287,13 @@
         "vulnerabilidade",
         "amenazan"
       ],
-      "teaser": "Paccella investigates Alerta aerolíneas: cuando las vulnerabilidades amenazan la seguridad nacional.",
-      "summary": null,
+      "teaser": "Shows how weak airline booking lookups let attackers brute-force reservations, exposing passenger data and legal liability.",
+      "summary": "The talk, given in Spanish at Ekoparty 2024, explains how the speakers came to examine airline reservation systems. While working on a bug bounty program for one airline, they found that a booking lookup exposed other passengers' reservations, and they then checked dozens of carriers. The core weakness is that bookings are protected only by a record locator (PNR) and a passenger surname. The speakers noted that the locator is not case sensitive, has no special characters, is shared with agents and staff, and that some airlines issue sequential ticket numbers, which makes guessing practical.\n\nThe middle of the talk walks through live demos. Against Turkish Airlines' lookup, a brute-force run with Burp Suite found a real reservation without effective rate limiting; the speakers said this usually takes four or five minutes. On Avianca's refund-status page, only a ticket number was needed and no rate limit applied at all. Of 51 airlines audited, most lacked adequate protection. Some relied on captchas or IP-based limits that a determined attacker could work around, and Pegasus was the only one that required a one-time code as a second factor. Most carriers did not respond or cited design reasons. The speakers also said they had located bookings of well-known people, including a former US president, which led them to frame the flaw as a national security concern.\n\nOn legal impact, the speaker explained that unauthorized access to personal data conflicts with data protection rules such as the GDPR, which require active protection, breach notification within 72 hours, and fines of up to 4% of global turnover. The proposed fixes were rate limiting on every function, monitoring, and an OTP sent to the contact on file, with the note that the first two do not address the root cause.",
       "durationSeconds": 2408,
       "conference": "ekoparty",
       "viewCount": 551,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "v-y5OhxwAQQ",
@@ -494,7 +497,9 @@
       "youtubeId": "aPLymaZFRWc",
       "slug": "chema-alonso",
       "title": "CHEMA ALONSO",
-      "speakers": [],
+      "speakers": [
+        "Chema Alonso"
+      ],
       "track": "community",
       "topics": [
         "chema",
@@ -502,11 +507,12 @@
         "vulnerability-research"
       ],
       "teaser": "KEYNOTE DE APERTURA EKOPARTY 2024 investigates CHEMA ALONSO.",
-      "summary": null,
+      "summary": "Recorded at Ekoparty's 20th anniversary, this keynote by Chema Alonso follows his own life rather than one technical topic. He recalls the first Ekoparty in 2001, a meetup of hackers who knew each other only by IRC nicknames, and says its spirit has carried over as the event grew. He describes starting with computers as a teenager, a rocky university path, and a small company he ran with a friend, offering security and consulting work.\n\nThe middle section walks through milestones and the tools behind them. He describes a 2008 Blackhat Europe talk he delivered after memorizing an English script, with a colleague at his side, and how his Ekoparty talks in later years each showed a new technique, including connection string parameter pollution, the FOCA metadata tool, and IPv6 man-in-the-middle attacks. He then covers building cloud services at a large telecom group, a project on OAuth token theft, and an iPhone contacts-exposure demo that led to a fix in how the phone handled a Bluetooth handsfree profile. He also mentions a campaign asking translation tools to flag default gendered wording.\n\nHe closes by arguing that hackers are curious about technology rather than criminals, and he pushes back on a dictionary entry that calls them pirates. His advice is to keep learning, to lean on a close circle of family and friends, and to treat a technology career as a long haul rather than a sprint.",
       "durationSeconds": 2628,
       "conference": "ekoparty",
       "viewCount": 1500,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "sZREwrYAZ3Q",

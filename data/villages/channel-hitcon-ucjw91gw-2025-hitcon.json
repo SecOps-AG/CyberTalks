@@ -291,7 +291,10 @@
       "youtubeId": "O7QCr1ZsxYk",
       "slug": "reverse-engineering-and-hacking-ecovacs-robots-the-bad-and-the-r",
       "title": "Reverse engineering and hacking Ecovacs robots - the bad and the really bad",
-      "speakers": [],
+      "speakers": [
+        "Dennis",
+        "Brillin"
+      ],
       "track": "malware",
       "topics": [
         "reverse-engineering",
@@ -300,18 +303,21 @@
         "ecovac",
         "robot"
       ],
-      "teaser": "Security researchers examine technical aspects of Reverse engineering and hacking Ecovacs robots - the bad and the really bad.",
-      "summary": null,
+      "teaser": "Shows how Ecovacs robot vacuums and lawn mowers can be rooted through Bluetooth, cloud and firmware flaws.",
+      "summary": "The two speakers, independent researchers who work on robot and IoT hardware, explain why robot vacuums with cameras and microphones deserve scrutiny in the home. They describe about six years of private research into Ecovacs devices made after 2018, most of which run Linux, with the goal of gaining root access without opening the casing or breaking warranty seals. They also argue that certifications do not prove a device is private or secure.\n\nThe findings cover the cloud, the app and the device itself. Maps and pictures could be fetched from the vendor's database by object ID, and deleting an account left the home map on the servers and an access token valid for up to a week. The user data partition was unencrypted, a camera PIN was stored as an MD5 hash, and robot plugins accepted self-signed certificates, exposing account tokens on untrusted networks. A PIN check that lived only in the client could be patched out to open a live camera feed. The most serious issue was a Bluetooth provisioning protocol protected by a weak key, which failed input validation and let a nearby attacker run commands as root, at up to 50 m for vacuums and 130 m for lawn mowers. The speakers suggested this could spread from device to device. Root access was also possible through a root password derived from the serial number and model, encrypted but unsigned firmware, and writable root filesystems.\n\nThe vendor first gave a dismissive public response, then acknowledged that its product security team had overlooked reports from late 2023 and promised fixes. The takeaways are to be careful with used devices, factory reset them before selling, and remember that anyone with access to a shared home robot may be able to watch the home.",
       "durationSeconds": 2553,
       "conference": "hitcon",
       "viewCount": 300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "MGVh8FeSV7E",
       "slug": "from-surveillance-to-espionage-unraveling-the-latest-strategies",
       "title": "From Surveillance to Espionage: Unraveling the Latest Strategies of the Kimsuky Group",
-      "speakers": [],
+      "speakers": [
+        "Sonak"
+      ],
       "track": "privacy",
       "topics": [
         "surveillance",
@@ -321,12 +327,13 @@
         "strategie",
         "kimsuky"
       ],
-      "teaser": "Security researchers examine technical aspects of From Surveillance to Espionage: Unraveling the Latest Strategies of the Kimsuky Group.",
-      "summary": null,
+      "teaser": "Follows Kimsuky surveillance and espionage campaigns from a malicious Chrome extension to fake job-lure malware and attribution.",
+      "summary": "The talk, from a researcher who has tracked North Korean actors for about ten years, walks through two Kimsuky campaigns. The first is a surveillance operation. It began with an archive whose Windows executable ran a PowerShell script that posted victim details to a public GitHub repository. The repository was still live, and its history held a Chrome extension. The extension requested broad browser permissions, carried scripts that bypassed two-factor prompts on webmail services, captured credentials on a university login page, and read hidden commands from a blog post.\n\nThe second campaign was espionage aimed at defense contractors, with German targets dominating the decoys and infrastructure. A job-description lure, delivered as an encoded JavaScript file, opened a decoy PDF while installing a backdoor the speaker called HTTP spy. That backdoor used plain HTTP with a hardcoded login, a random four-byte victim identifier, and simple file, screenshot and remote-service commands. Later samples were written in Go and signed with a certificate from a German software developer. The speaker linked the activity to Kimsuky through shared tooling, a Pebble Dash malware overlap and naming habits in C2 servers, while noting overlap with other North Korean clusters.\n\nThe main takeaway is that North Korean clusters are often lumped together under one name, which hides real differences. The speaker argued that attribution should rest on the full infection chain, tooling, lateral movement, C2 design and TTPs rather than on a single script, and that tying new activity to older campaigns can mislead. Collaboration with vendors and national agencies was presented as essential. For enterprises, the Q&A advice centred on blocking unapproved extension installs by policy and using browser isolation.",
       "durationSeconds": 2531,
       "conference": "hitcon",
       "viewCount": 42,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Gbaz7OIcp04",
@@ -1054,19 +1061,22 @@
       "youtubeId": "cOMd9VA6sZY",
       "slug": "electronizing-macos-privacy-a-new-weapon-in-your-red-teaming-arm",
       "title": "ELECTRONizing macOS privacy - a new weapon in your red teaming armory | HITCON CMT 2023",
-      "speakers": [],
+      "speakers": [
+        "Wojciech Reguła"
+      ],
       "track": "privacy",
       "topics": [
         "privacy",
         "red-teaming",
         "macos"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in ELECTRONizing macOS privacy - a new weapon in your red teaming armory | HITCON CMT 2023.",
-      "summary": null,
+      "teaser": "Shows how Electron apps can be abused to inherit macOS privacy permissions, with a new tool and detection ideas.",
+      "summary": "The talk examines how macOS guards privacy-sensitive resources. System Integrity Protection limits even root, and the Transparency, Consent and Control (TCC) layer asks the user before an app reaches data such as the camera, contacts or the desktop folder. Decisions are stored in SQLite databases keyed by bundle identifier and a code signing requirement. Electron apps, which are embedded browsers bridged to native APIs, are widespread on Macs and often hold such permissions.\n\nTwo weaknesses are combined. Since macOS Ventura, installed Electron bundles are locked against changes by apps with a different team identifier, which blocks simple tampering. But permissions granted to an app pass down to the child processes it spawns. The Swift tool Electronizer launches Electron apps with the inspect flag, connects to the debugging WebSocket and runs injected JavaScript inside the app. Demos showed a shell from Visual Studio Code reading desktop files and a selfie taken through Microsoft Teams. Slack had disabled the inspect flag with an Electron fuse, but that fuse is checked by a sentinel string in the framework, which was edited to re-enable it. Since the code signing requirement only checks bundle ID and team ID, an older Slack build run from a mounted disk image still reached the newer app's screenshot permission.\n\nFor defenders, the speaker points to an Endpoint Security exec event filter that flags Electron apps started with the inspect argument. The key lesson is that TCC ignores app version, so a downgraded build keeps the newer app's rights. The speaker said this had been reported about a year earlier and still worked on current Macs.",
       "durationSeconds": 2288,
       "conference": "hitcon",
       "viewCount": 91,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "2NblXwBPDH8",
@@ -1098,12 +1108,13 @@
         "volte",
         "hitcon"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in How to hijack a VoLTE network | HITCON CMT 2023.",
-      "summary": null,
+      "teaser": "Shows how IMS APN misconfigurations let subscribers scan operator cores, tunnel data, and sidestep normal VoLTE charging.",
+      "summary": "The presentation frames VoLTE as voice carried over LTE through an IP multimedia subsystem, and explains why operators suddenly had to deploy it after major carriers shut down legacy 2G and 3G voice paths. A long evolution from circuit-switched voice through packet cores to 4G-only data planes left a messy mix of generations, with many calls still falling back to older radios when IMS is missing or immature.\n\nThe core findings come from assessing live networks: configuring a handset or LTE dongle to use the IMS access point name instead of the internet APN puts ordinary equipment inside operator IMS infrastructure. That exposure supports familiar scanning and reveals weak border controls, missing subscriber isolation between IMS clients, and billing logic that counts voice minutes rather than bytes. The team also describes attempting a man-in-the-middle fake IMS stack with open-source telephony software and proxies, the difficulty of steering phones to a rogue proxy call session control function, and a simpler workaround that tunnels internet traffic over IMS-linked paths.\n\nPractitioners hear that assessments found this class of mistake in more than half of examined networks, tied to fast rollouts and poor visibility inside IMS. Roaming and journal-style resolution are flagged as the next pressure points. A brief closing exchange distinguishes noisy internet-wide GTP echo responses from signs of real core exposure.",
       "durationSeconds": 2582,
       "conference": "hitcon",
       "viewCount": 142,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "VcfU2miUeQk",
@@ -1232,7 +1243,9 @@
       "youtubeId": "cDvzySoALoE",
       "slug": "advancements-in-javascript-engine-fuzzing-hitcon-cmt-2023",
       "title": "Advancements in JavaScript Engine Fuzzing | HITCON CMT 2023",
-      "speakers": [],
+      "speakers": [
+        "Carl"
+      ],
       "track": "red-team",
       "topics": [
         "fuzzing",
@@ -1241,12 +1254,13 @@
         "engine",
         "hitcon"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Advancements in JavaScript Engine Fuzzing | HITCON CMT 2023.",
-      "summary": null,
+      "teaser": "Explains how template-driven and specialized mutators help fuzzers reach deeper V8 JavaScript engine bugs beyond plain coverage.",
+      "summary": "This talk looks at why fuzzing JavaScript engines is difficult and how to get past the limits of plain coverage-guided fuzzing. The team's custom fuzzer builds full JavaScript programs through an intermediate language that is easy to mutate, then translates them to JavaScript and runs them against V8. Coverage alone finds bugs that sit one mutation away from the existing corpus, but bugs that need several combined steps, such as a callback that shrinks an array during a slice call, are rarely reached.\n\nTo reach those deeper bugs, the speaker described several mutators. Splicing copies the instructions a value depends on from one sample into another. Probing wraps an argument in a proxy to record how a built-in uses it, and exploration inspects an object's runtime type to discover methods the fuzzer does not know about. Exploration surfaced a type confusion in a newly added array method. Template-based hybrid fuzzing lets a researcher sketch the rough shape of a program, such as a function that gets optimized after being called repeatedly, while the fuzzer fills in the rest. One template converted from an internal C++ fuzzer found a long-standing V8 bug, and a serializer API template found another.\n\nThe closing argument is that the JavaScript search space is too large to cover by brute force, so a smaller team can still find bugs by writing targeted templates for components it suspects are complex. Coverage is a useful proxy but a weak signal for combining samples, and better feedback, possibly based on data flow, is an open research direction. The speaker also noted that the same ideas can reach browser APIs beyond the renderer, though that is harder to do than fuzzing V8 directly.",
       "durationSeconds": 2931,
       "conference": "hitcon",
       "viewCount": 320,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "braEp8K7Gq4",
@@ -1744,7 +1758,9 @@
       "youtubeId": "K4ab646Cah4",
       "slug": "cybersecurity-operation-and-management-birds-eye-view-from-japan",
       "title": "Cybersecurity operation and management bird's-eye view from Japanese financial industry experience",
-      "speakers": [],
+      "speakers": [
+        "chris kamata"
+      ],
       "track": "hardware",
       "topics": [
         "operation",
@@ -1753,12 +1769,13 @@
         "s-eye",
         "view"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Cybersecurity operation and management bird's-eye view from Japanese financial industry experience.",
-      "summary": null,
+      "teaser": "Walks through Japanese financial sector phishing, misconfiguration and ransomware cases, and the management lessons drawn from them.",
+      "summary": "The talk frames the Japanese financial sector around three layers: government regulators and public bodies, industry associations that publish guidelines, and operational teams that handle incidents. It argues that no single institution can cover everything alone, so banks, insurers and securities firms should help each other through shared tools, exercises and training.\n\nCase studies start with phishing sites, numbering more than ten thousand each month, which have moved from targeting banks and mobile carriers toward securities and insurance firms. Attackers concentrate on a few hosting providers, use dynamic DNS to point many links at one server, and rely on HTTPS. Fake sites demanded payment by gift card or at a physical ATM, and criminals used stolen personal details to pose as customers to support desks. A securities firm was hit by ransomware after a remote desktop port was opened by mistake when its network moved online, and a cloud configuration change exposed data at several institutions. Ransomware is rarer in the sector, but pay-or-not and continuity choices are still debated.\n\nResponses included a small working group building phishing-site detection from open-source intelligence and sharing findings across members, plus shared lists of suspicious addresses for smaller firms. Where hosting vendors will not cooperate, the sector turns to internet providers, national response teams and government agencies. The closing lessons: track the outside threat picture, turn policy into practice, explain cyber risk to top management in business terms, and remember that small misconfigurations can halt a business for months.",
       "durationSeconds": 2982,
       "conference": "hitcon",
       "viewCount": 99,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "94gi0jyUFLA",
@@ -1997,21 +2014,24 @@
       "youtubeId": "hHKMPj6qFxs",
       "slug": "freetalk-2022-and-ctf",
       "title": "FreeTalk 2022 - 烏俄網路戰 & CTF 經驗分享",
-      "speakers": [],
+      "speakers": [
+        "Splitline"
+      ],
       "track": "red-team",
       "topics": [
         "ctf",
         "freetalk",
         "vulnerability-research"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in FreeTalk 2022 - 烏俄網路戰 & CTF 經驗分享.",
-      "summary": null,
+      "teaser": "Mixes Ukraine-Russia cyber war context with a CTF web and crypto exploit story and conference paper tips.",
+      "summary": "This HITCON free talk session opened with context on how the war in Ukraine has spread into cyberspace, including influence operations, DDoS attacks, social engineering and attacks on critical infrastructure. The main technical talk, by Splitline, showed how a flaw in a web framework's session handling was turned into a CTF challenge. The chain began with an upload filename that allowed writing files to arbitrary paths, and session data stored on disk was deserialized when loaded, so controlling a session file could lead to code execution.\n\nThe harder step was forging the session identifier. It was encrypted with AES in CBC mode using a fixed IV and had no integrity protection, and the padding error handling could be used as an oracle to flip bytes. The speaker narrowed the target to a small range of candidate values, uploaded files to cover them, and needed two identical requests to trigger deserialization. A related cookie issue on a lab website was also shown, where arbitrary file writes gave access to the site.\n\nA later talk by review board members covered writing conference submissions. Their advice included naming the target audience in the title, spending a fifth to a quarter of the paper on the problem before the method, reviewing prior work, avoiding overclaiming language, and backing results with data or demos. Three short talks followed on red-team tooling for industrial environments, a malware builder, and SIEM correlation rules, each with reviewer feedback on novelty and clarity.",
       "durationSeconds": 7931,
       "conference": "hitcon",
       "viewCount": 1200,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2022,
-      "eventLabel": "FreeTalk 2022"
+      "eventLabel": "FreeTalk 2022",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "UwkDKMuMhmo",
@@ -2301,16 +2321,19 @@
       "youtubeId": "oYjksDJ8GNc",
       "slug": "2021-collaborate-from-home-japan-and-uk-edition",
       "title": "2021 - Collaborate from home: Japan and UK Edition",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Joshua Hopkins",
+        "Manabu"
+      ],
+      "track": "threat-intel",
       "topics": [
         "collaborate",
         "home",
         "japan",
         "edition"
       ],
-      "teaser": "Security researchers examine technical aspects of 2021 - Collaborate from home: Japan and UK Edition.",
-      "summary": null,
+      "teaser": "Covers how researchers across Japan and the UK shared findings on a DNS hijacking toolkit and an SMS Android malware campaign.",
+      "summary": "The talk follows two threat researchers, one from Japan and one from the UK, on how they kept collaborating while working from home during the pandemic. The first example is Ghost DNS, a DNS hijacking toolkit sold on the dark web for about 450 US dollars and built from open source tools. The speakers said upwards of a hundred thousand small office and home routers were compromised, mainly in South America, to harvest banking and shopping credentials. Activity spiked from last October to July, which they linked to people working from home.\n\nThe second example is an Android SMS campaign known by several names, which sent victims links and redirected iPhone users to phishing pages. Telemetry from second-stage command-and-control servers showed victims in Taiwan and in countries including France, Germany and Turkey. A reputable Japanese body helped analyse victim traffic, which rose during Japan's Golden Week holidays.\n\nThe talk is candid about what failed. A list of indicators sent to a Brazilian CERT without context got no reply, and a contact who posed as a researcher later published an article on the campaign under his own name. Successes came through existing relationships. The advice: share with context and a shared goal, be patient with CERTs, be wary of strangers, and use agreements such as NDAs.",
       "durationSeconds": 1564,
       "conference": "hitcon",
       "viewCount": 49,
@@ -2423,15 +2446,17 @@
       "youtubeId": "lRdRxliyrxQ",
       "slug": "freetalk-20210310",
       "title": "FreeTalk 20210310 - 近期供應鏈及勒索病毒事件剖析",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Zywu"
+      ],
+      "track": "malware",
       "topics": [
         "freetalk",
         "vulnerability-research",
         "20210310"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning FreeTalk 20210310 - 近期供應鏈及勒索病毒事件剖析.",
-      "summary": null,
+      "teaser": "Covers recent Taiwan ransomware campaigns and the SolarWinds supply chain attack, with defensive lessons for enterprises.",
+      "summary": "The session opens with a Taiwan segment by Taiwan Hacker Association board member PK on recent ransomware attacks against local companies. It describes a shift toward targeted \"big game hunting\" against listed firms, where operators steal data before encrypting it and threaten leaks to force payment. The ransomware-as-a-service ecosystem divides work among roles such as access, hosting and payment, and digital currency has eased the money flow. Backups on shared network drives were often lost, and the talk notes recent law-enforcement action against the Emotet and Trickbot botnets.\n\nA case study follows a company with about 6,000 computers, where 77 machines were flagged as high risk and 12 were infected, with a logic bomb set for New Year's midnight. The response team built a digital vaccine that reproduced the environmental conditions the malware checked, so the payload did not run. The speaker advises identifying the ransomware variant before any negotiation, keeping versioned backups separate from network sync, and leaving payment decisions to specialists.\n\nThe second segment, presented by Fox-IT analyst Zywu and CK, examines the SolarWinds Orion supply chain attack. Attackers reportedly had access to the build environment from September 2019, and a trojanized update shipped in early 2020 before the vendor learned of it in December 2020. The backdoor checked for certain domains and used DNS for staged command-and-control, so passive DNS could reveal targeted organisations. The presenters urge vendor security checks, monitoring for cloud identity abuse, and open sharing of indicators.",
       "durationSeconds": 5002,
       "conference": "hitcon",
       "viewCount": 1600,
@@ -2670,20 +2695,26 @@
       "youtubeId": "H8u2XTNamo4",
       "slug": "2020-4",
       "title": "2020 [人才培育] 疫情後資安人才培育的挑戰與契機",
-      "speakers": [],
+      "speakers": [
+        "Professor Wu",
+        "Professor Kim",
+        "Khanna",
+        "Professor Yang"
+      ],
       "track": "community",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 2020 [人才培育] 疫情後資安人才培育的挑戰與契機.",
-      "summary": null,
+      "teaser": "A cross-Pacific panel weighs how COVID-19 reshaped security conferences, CTF finals, and hands-on cyber education online.",
+      "summary": "The session opens on post-pandemic opportunities and challenges for security training and events, with educators and contest organizers from Taiwan, Korea, Japan, and the United States. Panelists praise inexpensive access to strong online presentations while noting gaps in hands-on labs, risks of unauthorized recordings, and the hardest loss: informal networking that sponsors and attendees alike expect from physical venues.\n\nDiscussion turns to virtual CTF finals. Korean and U.S. organizers highlight cheaper student participation and clearer team communication without noisy contest floors, alongside organizer headaches over cheating, VPN traffic, and weaker motivation compared with Las Vegas tables. Yang describes DEF CON’s Discord layout mimicking hotel hallways and daily public CTF briefings streamed to Twitch. Wu argues in-person finals build social coherence across countries; others agree after-parties where shy players share solutions are hard to replicate online.\n\nOn education, Wu rejects pure online teaching in favor of masked classrooms where he can read students’ reactions. Yang parallels ebooks with Pawn College: hundreds of practice problems, newly recorded short lecture videos, Twitch Q&A, and Discord voice channels for collaborative challenges. Kana cites rising virtual registrations and more female participation; Kim imagines Minecraft meetups. Practitioners should treat the crisis as a push toward durable streaming archives and broader access, not a permanent substitute for meeting talented peers face to face.",
       "durationSeconds": 3273,
       "conference": "hitcon",
       "viewCount": 168,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2020
+      "year": 2020,
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "z4ch0uHe7SU",
@@ -2989,21 +3020,22 @@
       "slug": "cmt-2019-another-one-bites-the-apple",
       "title": "CMT 2019 - Another one bites the Apple!",
       "speakers": [],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "apple",
         "another",
         "bite",
         "bites"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning CMT 2019 - Another one bites the Apple!.",
-      "summary": null,
+      "teaser": "Covers a Safari JavaScriptCore regex leak, scaled fuzzing on internal cloud VMs, and XNU bugs found via custom MIG message fuzzing.",
+      "summary": "The session frames Apple browser exploitation as combining an information leak with program-counter control, then walks through a Safari flaw tied to regular-expression backreferences in JavaScriptCore’s JIT. On vulnerable macOS and iOS builds, malformed patterns can read beyond source strings into heap and module text regions, supporting further address discovery for a fuller chain.\n\nDiscovery infrastructure spins up large fleets of virtual machines on an internal cloud service, fuzzing AddressSanitizer-built JavaScriptCore binaries in containers with orchestration for scale. Crash handling adapts Mozilla’s fuzz-manager workflow for Safari, automating collection and triage. One validated leak is demonstrated; exploitation strategy and memory layout on Apple platforms are spelled out in detail.\n\nA second thread targets the XNU kernel by fuzzing Mach interface generator RPC payloads instead of only high-level library calls, using dedicated VMs that reboot on crash. Analysis highlights an integer overflow leading to massive out-of-bounds zeroing in a virtual-memory page-range query path. Heap grooming ideas are sketched for turning the crash into exploitation, though that step remains open. Brief Q&A touches bounty motivation and research legality.",
       "durationSeconds": 2293,
       "conference": "hitcon",
       "viewCount": 127,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2019,
-      "eventLabel": "CMT 2019"
+      "eventLabel": "CMT 2019",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "NwCdGbRS1mY",
@@ -3017,14 +3049,15 @@
         "worm",
         "prevent"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in CMT 2019 - Spyware, Ransomware and Worms. How to prevent the next SAP tragedy.",
-      "summary": null,
+      "teaser": "Maps exposed SAP systems, then walks through an attack chain from script abuse to lateral movement, and how to defend.",
+      "summary": "SAP systems hold some of an organisation's most valuable data, and many are reachable from the internet. The talk describes mapping SAP services by combining public data sources, search dorks and server banners, which turned up more than 14,000 exposed services. Matching the versions against known flaws, the speaker reported that about 27 percent were open to critical or high-severity vulnerabilities. The talk then covered scripting in the SAP GUI, enabled on most companies, which lets a malicious script attached to an email run under a logged-in user's session.\n\nThe attack walkthrough followed a staged scenario. A default misconfiguration on an exposed Java system gave remote command execution. The secure storage file, encrypted with a hard-coded key recovered by reverse engineering a jar, exposed the master password and database credentials. Stored destination entries then reached a backend ABAP system, and the reused master password allowed SOAP-based calls that crossed the firewall from inside. A final stage pushed pop-up messages to connected users with a fake update link.\n\nDefence starts with asking whether a system needs direct internet exposure, with a web dispatcher placed in front of it. Patching is slow in SAP, and audit logging is often off by default, so teams should enable it before an incident. Restricting scripting per user and requiring confirmation prompts through group policy reduce the risk. The speaker also urged SOC staff to learn SAP basics, since SAP administrators and security teams rarely share knowledge.",
       "durationSeconds": 2865,
       "conference": "hitcon",
       "viewCount": 68,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2019,
-      "eventLabel": "CMT 2019"
+      "eventLabel": "CMT 2019",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "3AmREhGXR9o",
@@ -3075,21 +3108,26 @@
       "youtubeId": "axUertsVqTo",
       "slug": "cmt-2019",
       "title": "CMT 2019",
-      "speakers": [],
+      "speakers": [
+        "Turkey",
+        "LYC",
+        "Dabby"
+      ],
       "track": "community",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Security researchers investigate CMT 2019 and analyze defensive countermeasures.",
-      "summary": null,
+      "teaser": "Taiwan's DEF CON CTF finalists recount six years of finals trips, team logistics, scoring quirks, and memorable challenge wins and losses.",
+      "summary": "Members of Taiwan's HITCON-affiliated CTF team recount six straight years reaching the DEF CON CTF finals, highlighting their 2019 second-place run and the sponsors, professors, and logistics leads who keep the squad functioning abroad.\n\nOne segment explains how teams reach the sixteen-team final, how attack-defense differs from jeopardy-style events, and how post-2018 five-minute rounds reward automated exploit runners, patch helpers, and traffic analysis. Walkthroughs cover an LOA service with a custom scripting dialect and type confusion, a king-of-the-hill polyglot shellcode shortcut, and a game-service DOM challenge involving packet edits and in-game shooting.\n\nAnother segment compares 2017's Clemency architecture with nine-bit bytes and twenty-four-hour tool building, 2018 scoring and capacity failures, and 2019 stability under organizer ooo. A late Lisp-machine service reportedly flipped a two-hundred-point lead in roughly twelve hours. The team closes with recruitment hints tied to an upcoming qualifier.",
       "durationSeconds": 2602,
       "conference": "hitcon",
       "viewCount": 1900,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2019,
-      "eventLabel": "CMT 2019"
+      "eventLabel": "CMT 2019",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "4qgVZj-2TZg",
@@ -3182,15 +3220,15 @@
       "slug": "cmt-2019-the-cookie-monster-in-your-browsers",
       "title": "CMT 2019 - The cookie monster in your browsers",
       "speakers": [],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "cookie",
         "monster",
         "browser",
         "browsers"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding CMT 2019 - The cookie monster in your browsers.",
-      "summary": null,
+      "teaser": "Shows how cookie scoping quirks, cookie bombs and cookie tossing can turn a minor subdomain XSS into serious browser-side impact.",
+      "summary": "The talk looks at why a cross-site scripting bug on an out-of-scope subdomain can still matter, and argues that the way browsers store and send cookies is the lever. It starts with the history of cookie specifications, from the original Netscape draft through the 1997 and 2000 RFCs to the newer RFC 6265 and the cookie prefix drafts, and notes that browsers and servers have never fully agreed on the details.\n\nThe middle covers concrete techniques. A Domain attribute widens a cookie's scope to subdomains even when the leading dot is omitted, and some older Internet Explorer versions send cookies to every subdomain by default. A cookie bomb sets oversized cookies so the server rejects every later request, which the speaker demonstrated against a Twitter home page snippet and tied to shared-hosting domains and the public suffix list. Chaining it with an OAuth login flow lets an attacker read the authorization code, raising a low-severity XSS to account takeover. Cookie tossing uses same-name cookies that differ by domain or path to shadow HttpOnly values, enabling a site-wide CSRF case. Overflowing the cookie jar to evict a cookie, session fixation, and servers that split cookie headers on commas, including a Google Analytics referral value case, are also covered.\n\nThe closing takeaways are that a cookie's identity is its name, domain and path, and that servers which cannot see those attributes are exposed. Defenses include the __Host- prefix, following one current specification rather than mixing old and new, and SameSite. The speaker urged readers to study the specifications closely, since the gaps between them are where implementations slip.",
       "durationSeconds": 3550,
       "conference": "hitcon",
       "viewCount": 2100,
@@ -3548,18 +3586,19 @@
       "slug": "hitcon-cmt-2017-r1d204-az-seo",
       "title": "[HITCON CMT 2017] R1D204 - 郭璟塘 AZ - 看我如何搭配黑帽SEO玩轉網站排名流量",
       "speakers": [],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "hitcon",
         "r1d204",
         "vulnerability-research"
       ],
-      "teaser": "Security researchers examine technical aspects of [HITCON CMT 2017] R1D204 - 郭璟塘 AZ - 看我如何搭配黑帽SEO玩轉網站排名流量.",
-      "summary": null,
+      "teaser": "Shows how black-hat SEO schemes use hacked sites, site networks and cloaking to inflate search rankings and traffic.",
+      "summary": "The speaker, a first-time presenter, explains what search engine optimisation is and how rankings depend on keywords, indexing and page position. He contrasts white-hat SEO, which follows search engine rules over the long term, with black-hat SEO, which pushes rankings up quickly through manipulation. He notes that Google's Penguin and Panda updates target unnatural links and weak content.\n\nThe middle of the talk walks through common black-hat tactics: hidden text, cloaking through cached-page abuse, link injection, doorway networks built with content-generation software, spider pools, and mirror sites that copy popular pages to siphon visitors. Hacked government, school and news sites are prized because search engines trust them. He explains how XSS and the Struts2-045 flaw can be used to plant content, and reports that a scan of 112 sites included many government domains. He also outlines the underground market that links gambling and insurance clients with intermediaries and traffic sellers. A case study follows one site whose ranking rose from about 35,000 to about 29,000 over July and August, backed by analytics showing sudden traffic jumps.\n\nHe closes with practical checks: watch analytics for abrupt audience growth, search for copies of your own page titles, vet SEO vendors carefully, and remember that such schemes risk search penalties and legal exposure.",
       "durationSeconds": 2678,
       "conference": "hitcon",
       "viewCount": 898,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "8HqsQFFY3_I",
@@ -3620,12 +3659,13 @@
         "r1d201",
         "mimikatz"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in [HITCON CMT 2017] R1D201 - Tracking Mimikatz by Sysmon and Elasticsearch.",
-      "summary": null,
+      "teaser": "Shows how Sysmon image-load logs and a common DLL list can flag Mimikatz activity across Windows hosts.",
+      "summary": "The talk looks at how to spot Mimikatz, a credential-dumping tool attackers use to move through Active Directory networks. The speakers note that Windows event logs alone do not reliably reveal its use, so they turn to Sysmon, a Microsoft monitoring utility that records which modules each process loads. An earlier report had listed DLLs that Mimikatz loads, but the researchers found that this list changes between Windows releases and Mimikatz builds.\n\nTo deal with that variation, the team compared loaded modules across several Windows versions and Mimikatz releases and extracted a set of DLLs that appeared regardless of environment. Their method checks Sysmon image-load events against this common list first, then against a list tailored to the specific Windows version, and flags a match for investigation when the process is mimikatz.exe. They wrote two Java tools for building these lists from exported event logs, and a Python tool that queries Elasticsearch, fed by Winlogbeat, for matches. In a live demo, a renamed Mimikatz binary was caught, and an in-memory variant launched from PowerShell was flagged by its parent process.\n\nAcross more than 3,000 processes tested, including Mimikatz and ordinary programs, the speakers reported no false positives, while stressing that not every case was tested. Sysmon's DLL logging produced heavy volume, with about ninety percent of events coming from event ID 7 in their setup, and configuration changes cut that to about twenty percent. The takeaway is that fast response depends on good detection, and that organisations should maintain DLL lists suited to their own environment rather than relying on a default list.",
       "durationSeconds": 2821,
       "conference": "hitcon",
       "viewCount": 370,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Xea6jJUrT90",
@@ -3975,15 +4015,17 @@
       "youtubeId": "IIg0FNsy5P8",
       "slug": "freetalk-20150109-2",
       "title": "freetalk 20150109 : 駭客如何弄垮企業？從索尼影業與南韓核電廠事件說起",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "GasGas"
+      ],
+      "track": "threat-intel",
       "topics": [
         "freetalk",
         "vulnerability-research",
         "20150109"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning freetalk 20150109 : 駭客如何弄垮企業？從索尼影業與南韓核電廠事件說起.",
-      "summary": null,
+      "teaser": "Uses Sony Pictures and South Korean nuclear plant breaches to question North Korea attribution and outline wiper tradecraft in both.",
+      "summary": "The presentation frames two high-impact intrusions to show how attackers can financially and operationally break large organizations. The first thread follows the Sony Pictures incident: public claiming by GOP, waves of leaked internal mail and departmental files, costly cyber insurance, and prior risk ratings that leadership reportedly sidelined, followed by official attribution to North Korea, cancelled release pressure, and U.S. economic sanctions.\n\nThe speaker then reconstructs attacker movement using published investigative diagrams and independent IP work, and argues the leaked volume and tight upload window are hard to reconcile with a leisurely external pull. Technical discussion contrasts the destructive malware with earlier Shamoon-like campaigns, noting behavioral differences such as modules that respond, disk wiping aided by a third-party driver, coordinated internal propagation after forced reboots, and techniques meant to blind endpoint protection during restart.\n\nThe second thread covers South Korea’s nuclear plant environment: suspicious document-driven access paths, a December operational surge affecting hundreds of systems, delayed business impact, staged exfiltration through VPN paths toward public social channels, and follow-on disclosure on blogs. The closing takeaway stresses assuming compromise will occur, tightening segmentation and visibility, building mature monitoring, and verifying attribution narratives against primary evidence instead of repeating headlines.",
       "durationSeconds": 2322,
       "conference": "hitcon",
       "viewCount": 1900,
@@ -4020,8 +4062,8 @@
         "hitcon2015",
         "20150109"
       ],
-      "teaser": "Security researchers examine technical aspects of FreeTalk 20150109 : 開場及 2014年度回顧 / HITCON2015.",
-      "summary": null,
+      "teaser": "A conference opening recaps HITCON's 2014 milestones and surveys major legacy vulnerabilities that defined the year's threat landscape.",
+      "summary": "The session opens a HITCON FreeTalk with housekeeping on photography, streaming, and venue limits, then frames what FreeTalk is: a fast, invite-oriented series that shares urgent technical briefings and defensive guidance when serious issues emerge. The presenter traces roughly a decade of conference growth, rapid event turnover every few months, and a push to keep material public and shareable online.\n\nThe middle surveys 2014 organizational highlights: the tenth HITCON split into enterprise and community tracks with combined attendance near thirteen hundred, a supported CTF team placing second at DEF CON, new Challenger and HITCON Girls programs, an upcoming university attack-defense contest, a national vulnerability reporting portal announced at noon, and plans to take talks outside Taipei through local partnerships.\n\nThe closing argues 2014 was an era of long-lived, high-impact flaws—not a decline in bug value—including record DDoS, massive data leaks, Heartbleed, persistent Office and IE issues, Shellshock, and additional logic flaws enterprises could not patch fast enough. The speaker previews same-day deep dives on Sony Pictures, suspected state-linked intrusions, and compromised popular game installers linked to cyber operators, with vendor help on remediation.",
       "durationSeconds": 1775,
       "conference": "hitcon",
       "viewCount": 1200,

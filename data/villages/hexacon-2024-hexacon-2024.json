@@ -32,8 +32,10 @@
       "youtubeId": "9t0Xt40RZEc",
       "slug": "hexacon2024-what-the-hell-is-windowss-clip-service-by-philippe-l",
       "title": "HEXACON2024 - What the hell is Windows's CLIP Service by Philippe Laulheret",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Philippe Laulheret"
+      ],
+      "track": "red-team",
       "topics": [
         "windows",
         "hexacon2024",
@@ -41,8 +43,8 @@
         "window",
         "clip"
       ],
-      "teaser": "Security researchers examine technical aspects of HEXACON2024 - What the hell is Windows's CLIP Service by Philippe Laulheret.",
-      "summary": null,
+      "teaser": "Explains how an obfuscated Windows licensing driver was reversed and where its kernel bugs were found.",
+      "summary": "Philippe Laulheret, a researcher at Cisco Talos, looks at the Windows CLIP service, a licensing and system policy component whose kernel driver ships without symbols and is protected by the Warbird obfuscator. The driver re-encrypts parts of itself after initialization, so a plain memory dump is not enough. The approach was to emulate the initialization routine with the Chilling framework, recover the arguments passed to the decryption function from cross-references, run each call, and dump the decoded memory back into IDA.\n\nUser-mode code reaches the driver through a system information query with a system policy class, and an encrypted, nested payload carries a command ID that picks the internal function. The license blob format is covered next, since other apps, including Notepad, rely on it. In the install path, the signature check misses data appended after the signature, and repeated tags overwrite earlier values, so forged fields can be accepted. A device ID routine also reads out of bounds because a size field is fetched twice, creating a race condition. A full exploit was not finished, largely because controlling pool allocations and winning the tight race proved hard, and a demo showed an edited license breaking Notepad.\n\nThe takeaways are that obfuscation can hide simple bugs, that this reversing workflow applies to similar targets, and that the attack surface includes other callbacks and features such as EFS-related code. The bugs were reported to Microsoft, fixed, and written up by Talos.",
       "durationSeconds": 2588,
       "conference": "hexacon",
       "viewCount": 978,
@@ -167,7 +169,9 @@
       "youtubeId": "bWPSyPyIH1g",
       "slug": "hexacon2024-tales-of-a-rce-in-a-video-game-by-thomas-dubier",
       "title": "HEXACON2024 - Tales of a RCE in a video game by Thomas Dubier",
-      "speakers": [],
+      "speakers": [
+        "Thomas Dubier"
+      ],
       "track": "red-team",
       "topics": [
         "rce",
@@ -175,12 +179,13 @@
         "tale",
         "thoma"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding HEXACON2024 - Tales of a RCE in a video game by Thomas Dubier.",
-      "summary": null,
+      "teaser": "Walks through a remote code execution chain in Neverwinter Nights, from a network info leak to a memory overwrite.",
+      "summary": "A reverse engineer explains why he studies old video games: many shipped on Windows XP without modern mitigations, and re-released versions often keep the original bugs while lacking newer protections. He focuses on bugs that could lead to arbitrary code execution. He reviews parts of a game engine and common bug patterns, such as stack overflows and format string misuse.\n\nThe main case is Neverwinter Nights, a 2002 RPG re-released in 2018. Its Linux build includes debug symbols. LAN matchmaking uses a simple UDP protocol, and the re-release added an encryption layer. Game traffic passes through three layers, ending in about 250 game message types. The speaker found a stack overflow in a class-level message, where an array length from the packet is never checked. A second bug, an out-of-bounds write in the appearance message, needed an information leak first. That leak came from an integer underflow in message setup, combined with a server-triggered portal feature that makes the client send its character file to an attacker-controlled server.\n\nWith the leak and the write combined, the attack overwrites a return address, then uses a Steam library gadget to pivot into the message buffer and run a chain. The conclusion is that the modding community is a useful resource, re-released games often lack security review, and hardware shadow stacks such as Intel CET would stop this kind of return address overwrite.",
       "durationSeconds": 1618,
       "conference": "hexacon",
       "viewCount": 527,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "FvIvChVoZZ8",
@@ -233,19 +238,22 @@
       "youtubeId": "iPMN9bQYmIU",
       "slug": "hexacon2024-hsm-security-and-exploitation-of-usb-over-spi-bug-by",
       "title": "HEXACON2024 - HSM Security and Exploitation of USB over SPI bug by Sergei Volokitin",
-      "speakers": [],
+      "speakers": [
+        "Sergei Volokitin"
+      ],
       "track": "hardware",
       "topics": [
         "exploitation",
         "usb",
         "hsm"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for HEXACON2024 - HSM Security and Exploitation of USB over SPI bug by Sergei Volokitin.",
-      "summary": null,
+      "teaser": "Walks through a USB-over-SPI buffer overflow in a hardware security module that exposed its private key.",
+      "summary": "The talk examines a hardware security module (HSM) built on a Ledger hardware wallet design, whose firmware was published as part of a bug bounty program. The speaker explains the device's split between an STM32 microcontroller that acts as a USB-to-SPI proxy and a secure element running a separate operating system, and sets out an attacker model in which only the secure element is trusted. While reading decompiled firmware, the speaker found USB protocol handling inside the secure element, which is unexpected because USB should be handled only by the microcontroller.\n\nThat code contained an out-of-bounds write into RAM, triggered by an SPI buffer index that the untrusted side controls. Remote control of the microcontroller could not be achieved, so the speaker used the board's debug port, which gives full code execution on the STM32 to anyone with a cheap debugger. The overflow was used to overwrite a callback pointer and redirect execution. Because RAM is not executable and application flash can be rewritten through a storage call, the exploit placed shellcode in flash and altered the public key command so that it returned the private key instead.\n\nThe proof of concept requested a public key and then obtained the private key from the same command. The speaker notes few mitigations on high-end, low-level devices, unnecessary complexity, and the problem of fixes not propagating to derived products, with patches largely ported from the Ledger SDK. The takeaway for practitioners is that vendor SDK fixes must reach every downstream product, and that physical debug access should be locked down on devices meant to resist tampering.",
       "durationSeconds": 1142,
       "conference": "hexacon",
       "viewCount": 2100,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "bxJhlwGjwWQ",
@@ -289,25 +297,32 @@
       "youtubeId": "dUdU0lp35xU",
       "slug": "hexacon2024-cross-cpu-allocation-to-exploit-preempt-disabled-lin",
       "title": "HEXACON2024 - Cross-CPU Allocation to Exploit Preempt-Disabled Linux Kernel by Mingi Cho & Wongi Lee",
-      "speakers": [],
+      "speakers": [
+        "Mingi Cho",
+        "Wongi Lee"
+      ],
       "track": "red-team",
       "topics": [
         "linux",
         "kernel",
         "linux-kernel"
       ],
-      "teaser": "Security researchers examine technical aspects of HEXACON2024 - Cross-CPU Allocation to Exploit Preempt-Disabled Linux Kernel by Mingi Cho & Wongi Lee.",
-      "summary": null,
+      "teaser": "Walks through two Linux kernel exploits that reuse freed objects across CPUs, one against a mitigated kernel.",
+      "summary": "The talk presents two Linux kernel vulnerabilities that the speakers exploited in a 2023 contest and in a kernel exploit reward program. The first is a use-after-free in the nf_tables packet filtering framework. A chain lookup by ID skips the activation check, so a chain that is being deleted can still be referenced, and freeing the referencing rule later triggers the bug. The second is a traffic control (TC) bug, where a recent commit mixed up two band variables and allowed an out-of-bounds write.\n\nThe central technique is cross-CPU allocation. The speakers explain how the SLUB allocator keeps per-CPU partial slabs and a node-level list, then show how to free enough objects on one CPU to push a freed object back to the shared list, so that another CPU allocates it. This gives them a double free on a chain object, a kernel address leak through namespace structures, and control of the instruction pointer through a fake operations table and a stack pivot. The nf_tables exploit ends with a root shell on an Ubuntu 22.10 system.\n\nFor the traffic control bug, the speakers bypass the hardened kernel's slab separation and randomized caches by moving the exploit to the page-level allocator, using per-CPU page lists and a race timed with a CPU-entry-area write. They finish with a demo of the exploit reading a flag. Their takeaway is that cross-CPU reuse still works against mitigations that target cross-cache attacks, whether the object comes from a slab or from the page allocator.",
       "durationSeconds": 2250,
       "conference": "hexacon",
       "viewCount": 643,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "beq7eXkLc1k",
       "slug": "hexacon2024-amd-sinkclose-universal-ring-2-privilege-escalation",
       "title": "HEXACON2024 - AMD Sinkclose Universal Ring -2 Privilege Escalation by E. Nissim & K. Okupski",
-      "speakers": [],
+      "speakers": [
+        "E. Nissim",
+        "K. Okupski"
+      ],
       "track": "red-team",
       "topics": [
         "privilege-escalation",
@@ -317,12 +332,13 @@
         "universal",
         "ring"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in HEXACON2024 - AMD Sinkclose Universal Ring -2 Privilege Escalation by E. Nissim & K. Okupski.",
-      "summary": null,
+      "teaser": "Demonstrates an AMD processor flaw that lets attackers reach System Management Mode and tamper with firmware.",
+      "summary": "The talk presents an AMD processor flaw that lets code with ordinary operating system privileges reach System Management Mode, a hidden, highly privileged mode below the OS and hypervisor. Unlike Intel, AMD lets software read the registers that protect this mode, and setting the T-Close bit redirects SMM data accesses to MMIO space, which in the simplest case hangs the machine.\n\nRemapping PCI device BARs and the top-of-memory register mostly failed. The team relocated an SPI controller's BAR over the SMM entry point, supplied a crafted descriptor table, and redirected execution to their payload. Multithreading and corrupted saved state caused crashes until they primed the SMM save state with an extra interrupt and used address wraparound. A demo on a 2023 laptop showed escalation followed by overwriting the boot logo in SPI flash.\n\nImpact depends on configuration: with ROM armor and platform secure boot enabled, attackers can still break secure boot and install a bootkit, while systems with neither feature allow firmware implants that survive OS reinstalls. AMD published an advisory and microcode update in August, and the speakers suggested entry-point checks or hypervisor trapping of the MSR for unpatched systems.",
       "durationSeconds": 2540,
       "conference": "hexacon",
       "viewCount": 353,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     }
   ]
 }

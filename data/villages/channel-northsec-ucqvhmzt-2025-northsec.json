@@ -97,7 +97,9 @@
       "youtubeId": "eXAYV7lKHHw",
       "slug": "nsec2023-roll-for-stealth-evading-av-edr-entropy-checks",
       "title": "NSEC2023 - Roll for Stealth: Evading AV/EDR Entropy Checks",
-      "speakers": [],
+      "speakers": [
+        "Mike Saunders"
+      ],
       "track": "blue-team",
       "topics": [
         "edr",
@@ -107,8 +109,8 @@
         "stealth",
         "evading"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for NSEC2023 - Roll for Stealth: Evading AV/EDR Entropy Checks.",
-      "summary": null,
+      "teaser": "Explains how AV and EDR entropy checks flag encrypted shellcode loaders, and ways to lower payload entropy.",
+      "summary": "The talk introduces AV and EDR evasion through entropy, a measure of how random data is. The speaker shows that random-looking data resists compression, using gzip as a rough proxy, and explains that encrypting shellcode raises entropy, which some engines treat as a sign that something is being hidden.\n\nThe speaker describes a test where a small shellcode loader that held encrypted data would not run on an endpoint with a machine-learning AV component, with no alert raised. Debugging pointed to entropy. Other pitfalls covered include default template values and random variable names, which can be flagged, while custom multi-word names avoid that problem. A multi-byte XOR key was flagged by Defender until compiler optimization was disabled, and compiling a word array into the payload lowered entropy. Padding a file past a size threshold can cause some engines to skip scanning, and a dictionary-based padding tool was presented to avoid the null or random padding patterns that other tools leave behind.\n\nThe main technique, called jargon, replaces each possible shellcode byte with one of 256 unique words, so the loader holds only word lists and a lookup table that rebuilds the bytes at runtime. A Cobalt Strike beacon was encoded this way and executed. The speaker warns that common crypto crates such as AES can be flagged on their own, and notes that this approach only addresses entropy and byte-level signatures, so the rest of the execution path still has to be handled carefully. The takeaway is that entropy is one signal among many that a defender may use.",
       "durationSeconds": 2049,
       "conference": "northsec",
       "viewCount": 380,
@@ -316,12 +318,13 @@
         "checkmate",
         "theory"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding NSEC2023 - Checkmate: using game theory to study the evolution of ransomware.",
-      "summary": null,
+      "teaser": "Applies game theory and clustering to 116 ransomware strains to find attacker techniques that stayed stable over time.",
+      "summary": "This talk presents preliminary results from a doctoral study that uses game theory to examine how ransomware has evolved. The speaker treats an attack as a zero-sum contest between attackers and defenders, but notes that real defenders face many attacker groups at once, which makes the model hard to apply. The research aimed to find which techniques stayed constant across the study period, on the reasoning that stable weak points could be prioritised for countermeasures.\n\nThe dataset came from more than 400 public reports, mapped to the MITRE ATT&CK framework, producing 116 strains: 51 crypto-ransomware and 65 leak-focused. Phishing remained the most common initial access technique throughout, with vulnerability exploitation second. Internal discovery stood out, as attackers searched for spreadsheets, documents and shared files and moved through the network. A cluster analysis of the 15 most-used tactics split the sample into two groups, about 56 and 44 percent. The larger group used few defense evasion techniques, while the smaller one spread activity across many. Sandbox evasion and disabling or modifying firewalls appeared in both groups.\n\nThe speaker acknowledged limits: findings depend on what the reports disclosed, strains vary by target, and the framework lacked several newer techniques. The takeaway for defenders is to know where valuable data sits, since attackers spend time searching for it, and to consider decoy devices in chosen locations that could raise an alarm and slow the search. Next steps include a qualitative review of defense evasion and mapping those tactics into a kill tree.",
       "durationSeconds": 1779,
       "conference": "northsec",
       "viewCount": 73,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Fdd4yrjwJws",
@@ -422,12 +425,13 @@
         "fundamental",
         "applications"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning NSEC2023 - Empowering Security with Generative AI: Fundamentals and Applications of GPT models.",
-      "summary": null,
+      "teaser": "Covers GPT model basics, then shows security experiments: email classification, summarization and retrieval over MITRE ATT&CK data.",
+      "summary": "The speaker, a security researcher who describes himself as an AI enthusiast, presents notes from months of personal experiments with generative AI, aimed at attendees without a data science background. The first part explains the basics in plain terms: artificial intelligence as algorithms that learn from data, machine learning and deep learning as subsets, and how neurons, weights, loss and backpropagation drive training. It then traces why recurrent networks struggled with long sequences and how transformers, with attention and parallel processing, enabled large language models. GPT is presented as a decoder-based foundation model that is pre-trained on large text corpora and then fine-tuned or instruction-tuned for specific tasks.\n\nThe middle of the talk moves to hands-on Jupyter notebooks that call a hosted GPT model through an API. One example uses few-shot prompting to label email subject lines as malicious or benign. Another asks the model to act as a reverse engineering analyst and summarize a threat report, pulling out behaviours such as disabling Windows Defender and deleting files. The speaker notes that such summaries could help junior analysts who lack deep background.\n\nThe final example uses retrieval augmentation. The speaker built a searchable store from MITRE ATT&CK group data, splitting documents into chunks, creating embeddings and retrieving the most relevant passages to answer a question about common phishing techniques. He points out that model knowledge stops at its training date and that chunking choices affect results. The main takeaway is that analysts can adapt these patterns to private knowledge bases, and the code and a dataset are being shared as a work-in-progress open-source project.",
       "durationSeconds": 2647,
       "conference": "northsec",
       "viewCount": 97,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "ucprsZkWvrY",
@@ -532,12 +536,13 @@
         "tip",
         "trick"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for NSEC2023 - Burp Suite Pro tips and tricks, the sequel.",
-      "summary": null,
+      "teaser": "Shows practical Burp Suite Pro shortcuts, extensions and workflow tweaks for faster web testing.",
+      "summary": "The session offers practical tips for Burp Suite Pro, aimed at people who already use the tool. It starts with Proxy history sorting so the newest requests appear first, tagging entries to follow a single user action, and jumping straight to matching text in a Repeater response after each resend. Tab groups and a tab search shortcut help when Repeater holds many tabs. In Intruder, extending the built-in wordlists is shown, along with a warning that placeholder values must be replaced before fuzzing or real paths may be missed.\n\nCollaborator gets a bypass for filters that look only for the public domain. DNS callbacks need the Collaborator domain, but HTTP interactions work with any domain that resolves to the Collaborator IP, so the identifier can sit in a parameter or the user agent. Extensions come next: Hackvertor transforms data on the fly, generates fake values and can build tokens or handle chunk sizes for smuggling work; Piper sends responses to local tools such as a JSON processor, a PDF viewer or Meld. BChecks, a scripting format for custom checks, is also introduced.\n\nThe closing section covers keyboard shortcuts to switch quickly between Proxy and Repeater, and a simple form of automation where a live scan task watches Proxy traffic while a fuzzer forwards results through Burp. The speaker argues that a capable computer is worth the cost and points to official channels for staying current.",
       "durationSeconds": 1845,
       "conference": "northsec",
       "viewCount": 5000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "NHaQdA-uUVY",
@@ -935,14 +940,15 @@
         "vulnerability-research",
         "threat-detection"
       ],
-      "teaser": "Red team block analyzes NSEC 2022 - Q&A.",
-      "summary": null,
+      "teaser": "Panelists debate exposed RDP, typosquatted domains, honeypot triage, and when red team exercises actually help organizations.",
+      "summary": "This panel question-and-answer session puts questions from a moderator to the researchers and the wider group on red teaming. The first topic is Remote Desktop Protocol. Panelists agree that RDP is widely built in and hard to replace, so exposing it directly to the internet is risky. The practical steps suggested are placing it behind a VPN, keeping systems patched, and monitoring access. Whether two-factor authentication would stop the presented attack was left open, since it depends on how it is implemented.\n\nThe discussion then moves to typosquatting. One researcher explained that misspelled lookalike domains collect misdirected email, and that a mail server can be stood up anonymously to receive it. Defenders can look for these domains with tools such as DNSTwist, inspect DNS records, and file takedown requests for brand infringement. Whether registering such domains is legal was debated, with intent seen as central, and no firm answer was reached. Honeypot work was also covered: a large weekly volume of nearly identical replay files, made unique by timestamps, makes triage hard, and a transfer bug slowed captured sessions.\n\nIn the final part, panelists argued that the industry needs more trained people and that tabletop exercises simulating a breach are a low-cost way to test response plans. They said red team engagements suit organizations that already have basic controls in place. The session closed with a debate on publishing offensive tools, where open sharing was valued but tool development was seen as costly, and a comparison to regulated firearms suggested future rules for offensive tooling.",
       "durationSeconds": 1999,
       "conference": "northsec",
       "viewCount": 73,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2022,
-      "eventLabel": "NSEC 2022"
+      "eventLabel": "NSEC 2022",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "7K95bzWnp4c",
@@ -1040,19 +1046,20 @@
       "slug": "2022-conference",
       "title": "2022 Conference",
       "speakers": [],
-      "track": "community",
+      "track": "policy",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Security researchers investigate 2022 Conference and analyze defensive countermeasures.",
-      "summary": null,
+      "teaser": "A policy briefing maps Canada's turn from hands-off internet rules toward streaming, news, and online-safety legislation.",
+      "summary": "The presentation traces how Canadian digital policy moved from a long pro-innovation posture—CRTC restraint on regulating online services, resistance to a Netflix tax, trade commitments, and high-profile tech partnerships—toward a legislative agenda centered on elections transparency, digital sales and services taxes, and three prominent reform tracks.\n\nBill C-11 expands broadcast-style obligations to large streamers and, despite ministerial assurances, retains authority that could reach user-generated content and algorithmic discoverability, with risks for digital-first creators whose global audiences depend on engagement signals. Bill C-18 follows an Australian-style model obligating major platforms to fund qualifying news outlets, defining compensation broadly enough to cover indexing, headlines, and link facilitation—not only full republication—raising concerns about encroachment on open information flows. A planned online harms or online safety package, informed by private consultations later released through access requests, envisioned proactive monitoring, rapid takedowns, and ISP blocking that many civil-society and industry submissions warned could itself create harm.\n\nElectoral advertising transparency requirements are held up as a comparatively light-touch success: Meta's ad library exposed spending patterns while dampening opaque third-party ads, though Google declined electoral ads rather than build compliance infrastructure. The speaker argues community experts should engage while hearings remain active, urging technically informed participation so policy choices reflect implementation consequences—not slogans alone.",
       "durationSeconds": 23163,
       "conference": "northsec",
       "viewCount": 600,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2022
+      "year": 2022,
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "hQwAmwnLYx4",
@@ -1101,37 +1108,43 @@
       "youtubeId": "PE-7JX3HchQ",
       "slug": "storytime-episode-3",
       "title": "StoryTime - Episode 3",
-      "speakers": [],
+      "speakers": [
+        "eric brava"
+      ],
       "track": "community",
       "topics": [
         "storytime",
         "vulnerability-research",
         "episode"
       ],
-      "teaser": "NorthSectoria examines StoryTime - Episode 3.",
-      "summary": null,
+      "teaser": "Episode three explores the Black Cat Tavern hub where NorthSec players receive forum-based quests as apprentice wizards in a medieval theme.",
+      "summary": "The third StoryTime capsule returns to the 2021 NorthSec CTF fiction in the medieval kingdom of North Sectoria. Participants are cast as apprentice wizards whose work goes beyond flag hunting: challenges are framed as quests inside a coherent story world rather than isolated puzzles.\n\nScenario designer Eric Brava focuses on the Black Cat Tavern, a deliberate play on “black hat” and the event’s animal-themed branding. In the physical conference tradition of a social bar, the tavern becomes the in-fiction hub where townsfolk meet. Patrons post jobs on an online forum; each thread is a track, with personas such as Elmira delivering tasks in their own voice. Submitting flags triggers new in-character posts that advance the storyline, much like an RPG quest log. Bartender Bob connects players to work around the city.\n\nOne example thread involves honey mead: Bob shares a public recipe cookbook and wants a legendary variant said to grant Viking-like strength. Players investigate a logic flaw in a PHP application to force disclosure of a recipe that should stay hidden. The tavern stays central for the whole competition; a stranger paying for the wizards’ services is teased for the next episode.",
       "durationSeconds": 323,
       "conference": "northsec",
       "viewCount": 53,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "etdfBJz4_Qw",
       "slug": "nsec2021-discussion-hardware",
       "title": "NSEC2021 - Discussion: Hardware",
-      "speakers": [],
+      "speakers": [
+        "Ben Garner"
+      ],
       "track": "hardware",
       "topics": [
         "nsec2021",
         "discussion",
         "hardware"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding NSEC2021 - Discussion: Hardware.",
-      "summary": null,
+      "teaser": "Panelists share practical advice for getting started in hardware hacking, from first tools to datasheets and languages.",
+      "summary": "The panel opens with how people move from software or general curiosity into physical devices. The panelists say the route is to pick something up and test it, since any gadget that talks to a network deserves investigation. They suggest starting with a development board or the conference badge, reading its sensor data, and then learning common buses such as I2C and SPI with a logic analyzer, because those skills carry over to other interfaces.\n\nOn tooling, a multimeter is named as the one essential item, with advice not to buy the cheapest model. Hackerspaces and community car garages are cited as affordable places to get bench time. For an unknown chip, the speakers suggest drawing a block diagram from traces and labels, searching many sources for datasheets, and accepting that NDAs can block documentation. They also note that vendors sometimes leave debug access enabled in products, which keeps producing findings. Recommended reading includes The Art of Electronics, Hacking the Xbox and The Car Hacker's Handbook, though much learning comes from online resources.\n\nNear the end, the panel argues that incremental improvements, such as a better form factor or pinout for an existing tool, are worthwhile. Asked about languages, they compare Python for scripting, C for legacy code, and Rust for longer-lived embedded and security-sensitive software. They close by recommending home routers as an easy entry point, since they often expose serial ports, JTAG or readable flash chips.",
       "durationSeconds": 1844,
       "conference": "northsec",
       "viewCount": 90,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "T0-83wB7ygU",
@@ -1200,15 +1213,17 @@
       "youtubeId": "bgzKZcQTqGw",
       "slug": "storytime-episode-2",
       "title": "StoryTime - Episode 2",
-      "speakers": [],
+      "speakers": [
+        "eric brava"
+      ],
       "track": "community",
       "topics": [
         "storytime",
         "vulnerability-research",
         "episode"
       ],
-      "teaser": "NorthSectoria examines StoryTime - Episode 2.",
-      "summary": null,
+      "teaser": "A scenario designer reveals how a medieval fantasy wraps modern CTF tasks, team onboarding, and hidden challenge categories.",
+      "summary": "This StoryTime episode unpacks North Sectoria, the fantasy setting used for NorthSec’s 2021 capture-the-flag competition. The scenario designer walks through a medieval kingdom where computers exist but most residents—including the king—treat them as magic. That layer lets organizers run challenges built on current security skills while players stay immersed in a consistent fiction.\n\nThe talk explains why the team avoids justifying every anachronism and instead leans on mysticism, comparing skilled operators to wizards in everyday life. Players act as magician apprentices. Before the main event, the Wizard Academy offers beginner-oriented, team-based tracks where challenge types such as cryptography, cross-site scripting, or reverse engineering are labeled clearly, because the wider competition hides categories and expects discovery—a hurdle for newcomers.\n\nIn-world security matters because the crown needs trusted people managing kingdom systems. Elmira, the head royal wizard, trains apprentices to find flaws and assigns missions during play. One highlighted task uses large-scale data analysis framed as alchemy—finding patterns to “transmute” lead into gold. The closing message is that story and persona can lower the barrier for new participants while preserving serious technical work.",
       "durationSeconds": 364,
       "conference": "northsec",
       "viewCount": 37,
@@ -1270,12 +1285,13 @@
         "discussion",
         "cloud"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in NSEC2021 - Discussion: Cloud Security.",
-      "summary": null,
+      "teaser": "Panelists trade views on request smuggling, Kubernetes secrets, identity federation and cloud storage forensics.",
+      "summary": "This closing question-and-answer session brings together several panelists who take audience questions on cloud security. It opens with a preview of a hands-on workshop that builds an EKS cluster from scratch on AWS, deploys a deliberately vulnerable web application, attacks it, and then adds countermeasures. Attendees are advised to use a separate AWS account rather than a work one.\n\nThe middle of the discussion focuses on identity and secrets. A password manager is described as solving password reuse, but it does not fully solve forgotten or zombie accounts unless it is tied to a centralized identity service. Kubernetes secrets are only base64 encoded by default, so the panel recommends an encryption configuration for the cluster data store or an external secret manager. Business-to-business identity federation is presented as a practical way to manage vendors, and zero trust is seen as more feasible in cloud settings, where policy can be enforced dynamically instead of through fixed firewall rules.\n\nThe web-attack questions cover HTTP request smuggling. One panelist explains that a proxy flaw may be unexploitable if the back-end server rejects the malformed request, noting that most web servers refuse duplicate Content-Length headers. A separate HTTP/2 upgrade technique was described as mainly bypassing URL filtering to reach blocked paths and internal hosts, rather than enabling cache poisoning or XSS. The session closes with advice to treat the four layers of cloud, cluster, container and code as one chain, to track supply chain exposure such as a recent runc issue, and to account for the retention and logging behavior of cloud storage services.",
       "durationSeconds": 1898,
       "conference": "northsec",
       "viewCount": 47,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "zvY5YkTZNL8",
@@ -1301,7 +1317,10 @@
       "youtubeId": "_lFjYTdrrWI",
       "slug": "nsec2021-discussion-malware-and-geopolitics",
       "title": "NSEC2021 - Discussion: Malware & geopolitics",
-      "speakers": [],
+      "speakers": [
+        "David",
+        "Warren"
+      ],
       "track": "ics-ot",
       "topics": [
         "geopolitics",
@@ -1310,18 +1329,22 @@
         "malware-analysis",
         "geopolitic"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning NSEC2021 - Discussion: Malware & geopolitics.",
-      "summary": null,
+      "teaser": "Panelists answer audience questions on botnets, underground markets, disclosure, and APT motivation after a malware-focused morning.",
+      "summary": "The session closes a malware-track morning with a moderated Q&A tied to earlier talks. Panelists field anonymous questions in presentation order, starting with server-side WordPress botnet research on Kashmir Black. They explain that bots use special HTTP headers when talking to command-and-control infrastructure rather than conventional authentication, that no in-bot kill switch was identified, and that the operation may have ended after disclosures or manual cleanup by hosts.\n\nDiscussion turns to underground access markets, responsible disclosure timing, and how analysts classify financially motivated groups tied to states. One researcher describes infecting machines abroad, credential pricing, and Genesis-style listings that can appear within hours of compromise. Another outlines a smooth NetApp Vision Pro patch cycle under a 90-day disclosure policy while noting limited ability to notify every affected school. On geopolitics, Lazarus and Kimsuki are treated as tier-one state-linked actors despite profit-seeking activity, and participants warn that telemetry bias, sensationalism, and journalism can misread motivation. They also compare crimeware engineering quality, staging and debugging practices, exam-proctoring software as a research target, and weaker visibility into Linux and server-side malware compared with endpoints.\n\nThe final minutes debate attribution. Some argue grouping campaigns matters for profiling and understanding motivation even when the ultimate actor is unknown; others stress that defenders should prioritize stopping compromise over naming countries, while a criminology-oriented view holds that knowing offenders supports prevention. The panel agrees private companies rarely hold complete attribution data and that community definitions of APT versus crimeware need to evolve.",
       "durationSeconds": 2209,
       "conference": "northsec",
       "viewCount": 55,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "cCHbuQPTsGQ",
       "slug": "nsec2021-warren-mercer-and-vitor-ventura-blurred-lines-the-mixin",
       "title": "NSEC2021 - Warren Mercer & Vitor Ventura - Blurred lines - The mixing of APTs with Crimeware groups",
-      "speakers": [],
+      "speakers": [
+        "Warren Mercer",
+        "Vitor Ventura"
+      ],
       "track": "malware",
       "topics": [
         "nsec2021",
@@ -1331,12 +1354,13 @@
         "ventura",
         "blurred"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning NSEC2021 - Warren Mercer & Vitor Ventura - Blurred lines - The mixing of APTs with Crimeware groups.",
-      "summary": null,
+      "teaser": "Argues that second-tier state-related groups look like crimeware, and uses two examples to show why defenders should adapt.",
+      "summary": "The speakers argue that the label \"state-sponsored\" lumps together actors that behave very differently. They propose separating first-tier APTs, which are directly tied to a government and run precise, tightly scoped operations, from a second tier of state-related groups that are aligned with a state without necessarily being directly sponsored by it. The second tier is hard to tell apart from crimeware, since its victim selection, infrastructure and techniques look criminal. The main visible difference is motivation: crimeware is driven by money, while these groups show no clear financial goal.\n\nTo illustrate, the first example group is described as active since 2013 with a Ukraine focus. Its later campaigns used document-template malware, with over a thousand variants of a first-stage implant, over 600 domains tied to command-and-control, and victims in 43 countries. The second example, Prometheium, also known as StrongPity, began with victims in countries with large Turkish-speaking diasporas but expanded worldwide, reused infrastructure after exposure and kept the same model. Both groups show little concern for deterrence, which the presenters read as a supporting role for first-tier units.\n\nThe takeaway is that defenders should stop treating all state actors the same. Top-tier groups are increasingly narrow in whom they target, while second-tier groups can reach ordinary organizations, so people and companies outside the obvious targets should update their threat models accordingly.",
       "durationSeconds": 1311,
       "conference": "northsec",
       "viewCount": 53,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "2u7Hr0E5qrg",
@@ -1715,12 +1739,13 @@
         "discussion",
         "application"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for NSEC2021 - Discussion: Application Security.",
-      "summary": null,
+      "teaser": "Panelists debate overlooked AppSec areas like build infrastructure, repo jacking, GraphQL risks and career paths into security.",
+      "summary": "This is a question-and-answer panel in which a group of application security practitioners takes audience questions. The discussion opens with the area they feel gets the least attention: the infrastructure around a deployed website, including build pipelines and deployment processes. The panelists say penetration tests often focus on code, APIs or front ends and skip this surrounding setup, even though a compromised build can lead to a full compromise. They also argue that scoped tests which stop at the first weakness can leave a false sense of security.\n\nOther questions cover JavaScript and repository jacking. The panel agrees the ecosystem is not inherently less secure, but its easy package publishing makes mistakes more likely, and its large community supplies many learning resources. One suggestion was to compare past commit emails to spot takeovers, though this is hard when many people commit to one repository. On GraphQL, the panel says it can be hardened, but denial of service and authorization flaws are common. Cross-platform frameworks such as Electron were discussed in terms of whether vendors document their risks clearly enough for threat modelling.\n\nFor newcomers, the panelists recommend learning web development first, building projects, contributing to open source and joining teams that value secure coding. The session closes with encouragement for people who find security material intimidating.",
       "durationSeconds": 1264,
       "conference": "northsec",
       "viewCount": 64,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "TBlOPdU7kEQ",
@@ -1813,15 +1838,18 @@
       "youtubeId": "WDGsX3-l48I",
       "slug": "2021-conference-organizers-interview",
       "title": "2021 Conference Organizers Interview",
-      "speakers": [],
+      "speakers": [
+        "Florencia",
+        "Hugo"
+      ],
       "track": "community",
       "topics": [
         "organizer",
         "interview",
         "organizers"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding 2021 Conference Organizers Interview.",
-      "summary": null,
+      "teaser": "Organizers recount how online editions widened global speakers, strained time zones, and turned stream crashes into running gags.",
+      "summary": "The conversation opens as a short break from conference challenges, with organizers reflecting on keeping the community engaged through screens during a year when in-person gathering was not possible. They contrast online work with the physical venue grind, where problems are visible and fixable in real time, versus coordinating streams and email where failures can stay hidden until something breaks.\n\nThe middle of the discussion focuses on what worked online. Reduced physical exhaustion and a much larger global speaker pool stand out, since travel budgets had previously forced hard choices about who could attend from places such as Australia, India, or the United Arab Emirates. Scheduling across continents became its own puzzle, with last-minute swaps affecting whole blocks. Behind the scenes, platform quirks, in-browser encoding, and tight five-minute transitions between talks amplified delays. Organizers turned repeated stream crashes into running gags with on-screen squirrels while trying to favor live discussion over a fully pre-recorded program.\n\nLooking ahead, they hope to reunite on site while still reaching international participants through calls for papers and possibly hybrid streaming. A planned community room would offer hands-on space tied to badges, small challenges, and tighter integration between talks, the CTF, and other conference threads rather than multiplying parallel tracks.",
       "durationSeconds": 698,
       "conference": "northsec",
       "viewCount": 163,
@@ -1873,26 +1901,29 @@
       "speakers": [
         "Yehuda Lindell"
       ],
-      "track": "community",
+      "track": "cloud",
       "topics": [
         "cryptography",
         "yehuda",
         "lindell",
         "path"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 2020 - Yehuda Lindell - Path to Software-Defined Cryptography via Multi-Party Computation.",
-      "summary": null,
+      "teaser": "Explains how splitting keys across machines with multi-party computation avoids a single point of theft.",
+      "summary": "The talk argues that cryptographic keys are the weakest link when they sit in ordinary software, and that hardware security modules are awkward to run in virtualized, cloud-based environments. The speaker proposes secure multi-party computation as a way to keep keys in software while guaranteeing that no single machine, and no subset of shares, ever reveals the key.\n\nThe explanation starts with a toy protocol in which three people compute an average salary without revealing their own values, then moves to RSA, where the private exponent is split between two servers, combined through partial operations, and re-randomised by a refresh step. For ciphers and hash functions with no algebraic structure, the speaker turns to garbled circuits, which let parties evaluate a boolean circuit over encrypted values. Deployment examples include a virtual HSM spread across a data center and several clouds, and a phone-based one-time password where a key share on the device is paired with a server and refreshed at each operation to detect cloning.\n\nThe closing section covers quorum policies for code signing, where several parties must take part in the computation before a signature can be produced. The speaker argues that the approach offers proven security and production-ready performance, while noting that building such systems still requires significant expertise.",
       "durationSeconds": 3095,
       "conference": "northsec",
       "viewCount": 272,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2020
+      "year": 2020,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "MVOyQCDjM9Q",
       "slug": "2020-bx-regions-are-types-types-are-policy-and-other-ramblings",
       "title": "2020 - bx - Regions are types, types are policy, and other ramblings",
-      "speakers": [],
+      "speakers": [
+        "Bex"
+      ],
       "track": "policy",
       "topics": [
         "region",
@@ -1900,13 +1931,14 @@
         "policy",
         "rambling"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for 2020 - bx - Regions are types, types are policy, and other ramblings.",
-      "summary": null,
+      "teaser": "Shows how treating memory regions as types can define write policies for boot loaders, using a BeagleBone case study.",
+      "summary": "The talk asks why flat labels and permissions often fall short when describing what low-level software should be allowed to do, and proposes treating memory regions as types. The speaker starts from boot loaders, which copy binary images from disk into memory and then jump into them, and argues that they can only be trusted if their behavior is predictable. Programming-language types, control-flow integrity, stack canaries, file permissions, SELinux and page permissions are presented as related forms of policy, each at a different granularity.\n\nAs a case study, the speaker examines the SPL stage of a boot loader on a BeagleBone board. An image on the SD card can name its own load address in its header, so a loader that follows that address blindly could overwrite memory-mapped hardware registers. By instrumenting memory writes, the speaker found roughly 400,000 write operations, about 10,000 of them block writes, and used these to group execution into phases such as loading, patching and bookkeeping. For each phase, the talk maps which memory regions are writable. The prototype tooling, written in Python 2, combines static analysis with instrumentation to support per-phase write rules.\n\nThe takeaway is that regions give a useful policy granularity for understanding and constraining low-level code. The speaker notes that formal analysis struggled with assembly and only verifies what is modeled, so region-based rules are better seen as an extra layer of assurance than a replacement for verification.",
       "durationSeconds": 2413,
       "conference": "northsec",
       "viewCount": 33,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2020
+      "year": 2020,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "bsjsO7mi3OQ",
@@ -1961,20 +1993,21 @@
       "speakers": [
         "Alyssa Miller"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "devsecops",
         "alyssa",
         "miller",
         "look"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 2020 - Alyssa Miller - Look! There's a Threat Model in My DevSecOps.",
-      "summary": null,
+      "teaser": "Argues threat modeling can fit DevOps by having product owners add business-focused threats to user stories.",
+      "summary": "The talk looks at why threat modeling is often seen as incompatible with DevOps. The speaker recalls a consulting engagement where a developer was glad threat modeling would end once the team moved to DevOps. Heavy data flow diagrams, STRIDE classifications and DREAD scoring feel technical and tied to a single point in time, which slows continuous delivery. The speaker offers a simpler definition: asking what could go wrong, identifying likely threats, and using them to inform security countermeasures.\n\nInstead of full-system diagrams, the approach moves threat modeling into the user story. Product owners name the critical business assets a story touches, such as personal data, financial assets, critical functions, people and trade secrets, and describe threats in plain language: theft, fraud, data exposure and interrupted service. Developers then design three kinds of control for each threat: detection to notice misuse, mitigation to slow an attacker down, and active defenses to stop an attack in progress. The aim is steady improvement with each sprint rather than a perfect system at once.\n\nIn the question period, the speaker says large architecture diagrams still have value but should not gate every release. She has not yet seen an automated threat modeling tool that works well, so human judgment remains central. PASTA can be adapted to a pipeline with some tweaks. The main takeaway is that DevOps is a culture of shared responsibility, and security should be part of each development phase rather than a gate between them.",
       "durationSeconds": 2500,
       "conference": "northsec",
       "viewCount": 212,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2020
+      "year": 2020,
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "u94ioghxKoc",
@@ -2363,19 +2396,20 @@
       "speakers": [
         "Post-Quantum Manifesto"
       ],
-      "track": "community",
+      "track": "privacy",
       "topics": [
         "philippe",
         "lamontagne",
         "vulnerability-research"
       ],
-      "teaser": "Post-Quantum Manifesto examines 2019 - Philippe Lamontagne.",
-      "summary": null,
+      "teaser": "Explains how quantum computers threaten public key cryptography and surveys lattice, hash, multivariate and code-based alternatives.",
+      "summary": "The talk starts with public key cryptography, from the 1970s ideas of digital signatures and public key encryption to the RSA scheme that made them practical. Certificate chains that secure software updates and websites rest on factoring and discrete logarithms being hard. Quantum computing is then sketched through superposition and the quantum Fourier transform, showing how Shor's algorithm finds periods to factor large numbers efficiently. That would break RSA, Diffie-Hellman and elliptic curve schemes, while symmetric ciphers and hash functions mainly need larger parameters.\n\nThe middle surveys replacement families built on problems believed to be hard even for quantum machines. Lattice-based encryption relies on shortest and closest vector problems, which are easy with a good basis and hard with a bad one. Hash-based signatures are demonstrated with Lamport one-time signatures, where each key can sign only once, and Merkle trees extend them at the cost of state. Multivariate schemes hide an easily inverted quadratic polynomial system behind two simpler transformations, and code-based cryptography decodes random linear codes, illustrated with a Hamming code.\n\nThe closing takeaways are that today's public key infrastructure is exposed to quantum attacks and that several alternatives already exist, with lattice-based schemes described as especially flexible. The speaker urges organizations to act now to implement and standardize post-quantum algorithms. The talk ends with Mosca's inequality: if the years data must stay secret plus the years needed to migrate exceed the years until a quantum computer breaks RSA, protected data is at risk.",
       "durationSeconds": 1693,
       "conference": "northsec",
       "viewCount": 38,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2019
+      "year": 2019,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "KXlmru_B-Uk",
@@ -2544,7 +2578,7 @@
         "Emilien Le Jamtel",
         "Ioana-Andrada Todirica"
       ],
-      "track": "community",
+      "track": "malware",
       "topics": [
         "emilien",
         "jamtel",
@@ -2552,13 +2586,14 @@
         "todirica",
         "trick"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in 2019 - Emilien Le Jamtel & Ioana-Andrada Todirica - Trick or treat?.",
-      "summary": null,
+      "teaser": "Maps Stratum mining pool servers through malware samples, internet scans and passive DNS to detect cryptojacking.",
+      "summary": "Two researchers from CERT-EU explain how to spot cryptocurrency miners on a network by focusing on the connection to the mining pool rather than the miner itself. Miners reach a pool over Stratum, a JSON-RPC protocol carried over plain TCP that replaced the older HTTP-based GetWork and is usually left unencrypted. The speakers argue that cryptojacking remains attractive to attackers because infecting many machines still pays even when coin prices fall.\n\nThe team combined four collection methods to build a list of pool servers. They analysed about 20,000 unique samples collected over more than a year, using YARA rules to find mining software and wallet patterns, and used sandbox reports and memory dumps to recover configurations. They also examined packet captures, searched internet scanning services for Stratum banners, and scraped mining pool websites for their settings. About 8,000 Stratum servers were identified, of which roughly 4,000 were active at the time of the scan, with around 1,000 unique IP addresses. Attackers also register random domains that point at pool IPs, which defeats domain-only DNS detection; passive DNS and certificate data exposed these, with some false positives on shared hosting.\n\nFor defenders, the talk turned these findings into controls: pool domains and IPs for proxy and DNS filtering, IDS lists, Sigma rules for mining command lines, and MISP sharing with tags for wallet addresses and ranges. The speakers also described a sample that removes rival miners before starting its own, and a persistence sample with three mechanisms mapped to ATT&CK. Planned work includes automating scans and building a historical dataset.",
       "durationSeconds": 2386,
       "conference": "northsec",
       "viewCount": 146,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2019
+      "year": 2019,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "XPrhn8AbJo8",
@@ -2659,7 +2694,7 @@
       "speakers": [
         "Eleanor Saitta"
       ],
-      "track": "community",
+      "track": "policy",
       "topics": [
         "eleanor",
         "saitta",
@@ -2667,12 +2702,13 @@
         "adversarial",
         "system"
       ],
-      "teaser": "Security researchers examine technical aspects of Eleanor Saitta - How to Think (About Complex Adversarial Systems).",
-      "summary": null,
+      "teaser": "Reframes security as a socio-technical property, offering principles on resources, trust, time and measurement in adversarial systems.",
+      "summary": "Eleanor Saitta argues that security is a property of socio-technical systems, like performance or reliability, and can only be judged in the context of the people it serves. Such systems are built from smaller components, run by actors with conflicting goals, and are too intricate for anyone to hold in their head. Breadth of experience with many systems is presented as the key to intuition about where to act. Adversarial problems are framed as resource conflicts, where the aim is to make problems asymmetric in your favour.\n\nThe middle of the talk covers recurring flaw types in components: weak primitives, subsystems that favour the attacker on resource use, invalid state transitions and interface mismatches. Every system has infrastructure, structure and superstructure, each with its own incentives, so attacks can be shaped at several layers. In one example, a team mapped the economics behind scammers abusing a free DNS hosting service and made the attack unprofitable rather than fixing every flaw. Other points include keeping a single canonical source of truth, treating trust as a spectrum, shortening response loops, keeping slack and a human in the loop, and removing excess capacity that an attacker could use.\n\nShe closes with measurement and planning. Exposure can be measured, but true risk estimates need statistical scale, and measuring a system changes how it behaves. Designs should assume compromise will happen, with a planned response, and teams should agree on a shared tolerance for exposure.",
       "durationSeconds": 2794,
       "conference": "northsec",
       "viewCount": 166,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "O8Q_xnYQRC4",
@@ -2681,19 +2717,20 @@
       "speakers": [
         "Mahsa Alimardani"
       ],
-      "track": "community",
+      "track": "privacy",
       "topics": [
         "mahsa",
         "alimardani",
         "tightening",
         "iran"
       ],
-      "teaser": "Security researchers examine technical aspects of Mahsa Alimardani - Tightening the Net in Iran.",
-      "summary": null,
+      "teaser": "Traces how Iran's internet controls have tightened since 2009, from filtering and surveillance to pressure on Telegram.",
+      "summary": "The talk traces how Iran's internet controls have been built up since the early 2000s. The speaker explains that the Supreme Leader holds final say over policy, that an elected government's ICT ministry oversees telecom infrastructure, and that the Revolutionary Guards gained a majority stake in the national telecom company after a 2009 privatisation. Blocking grew after the 2009 Green Movement protests, and a 2010 computer crimes law made concealing or encoding data that denies authorised access illegal, while creating a committee to decide what gets filtered.\n\nSeveral cases were covered. Redirect pages shown for blocked sites were archived across several versions, moving from religious references toward state messaging about internet policy. In 2015, fashion-focused Instagram accounts were seized after arrests and interrogations, which was possible partly because Instagram's mobile apps were not yet encrypted until May 2015. Registration rules for channels with over 5,000 followers led to arrests of administrators, and Telegram's later block followed a demand that services store data inside the country.\n\nThe closing section covered alternatives. State-backed replacements for Telegram were said to expose officials' personal phone numbers, while a separate platform built by two London-based researchers reached over a million users. The takeaway was that generic advice such as always using Signal or Tor may not suit users' context, and digital security must be weighed against physical risks like interrogation.",
       "durationSeconds": 3021,
       "conference": "northsec",
       "viewCount": 284,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "5ps7C2zFubQ",
@@ -2812,7 +2849,7 @@
       "speakers": [
         "Martijn Grooten -"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "martijn",
         "grooten",
@@ -2821,12 +2858,13 @@
         "elliptic",
         "curve"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Martijn Grooten -- Getting ahead of the elliptic curve.",
-      "summary": null,
+      "teaser": "Explains elliptic curve cryptography from point addition to key exchange and signatures, and common implementation pitfalls.",
+      "summary": "Martijn Grooten introduces elliptic curve cryptography as a mathematician rather than a cryptographer, aiming for a broad understanding instead of full mathematical rigour. He explains how points on a curve can be added geometrically, which gives a group where repeated multiplication is quick but reversing it, the discrete logarithm problem, is believed to be hard. That asymmetry powers key exchange: two parties keep secret numbers, swap public points and derive the same shared key. He stresses ephemeral keys, which protect past sessions if a long-term key later leaks, and shows a Wireshark capture of a TLS handshake that uses the P-256 curve.\n\nThe middle of the talk covers digital signatures, where reusing the random value for two messages lets an attacker recover the private key. Grooten cites a Sony PlayStation signing failure and repeated flaws in Bitcoin wallets as examples. He then explains why randomness matters, describing a pseudo-random generator, Dual EC DRBG, whose published constants could hide a backdoor that predicts its outputs. Another attack targets implementations that skip checking whether a received point lies on the curve, letting an attacker learn the secret through small-order points.\n\nHe closes by arguing that elliptic curves are easier to implement wrongly than RSA, because fewer people understand them, so their complexity is a weakness. Practitioners should rely on well-reviewed libraries and standard curves rather than coding the mathematics themselves, and watch the work on post-quantum alternatives.",
       "durationSeconds": 2731,
       "conference": "northsec",
       "viewCount": 284,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Zps-nz0f3qE",
@@ -2942,19 +2980,20 @@
       "speakers": [
         "Stupid Purple Teamer Tricks"
       ],
-      "track": "community",
+      "track": "purple-team",
       "topics": [
         "laurent",
         "desaulnier",
         "vulnerability-research",
         "desaulniers"
       ],
-      "teaser": "Stupid Purple Teamer Tricks details Laurent Desaulniers.",
-      "summary": null,
+      "teaser": "Offers cheap, offbeat tricks for physical intrusion, social engineering and tooling, plus simple indicators defenders can check.",
+      "summary": "The talk is a rapid-fire collection of unconventional tricks for penetration testers and defenders, covering physical access, social engineering and offensive tooling. On the physical side, dusting the keys of a PIN-based badge reader with UV-fluorescent dye reveals the digits being typed, and a fake room-reservation notice kept a team's presence in an open office unchallenged for a week. Renaming a device's hostname to resemble a printer convinced admins to approve it on the network access control system.\n\nFor social engineering, the speaker collects cheap lanyards to blend in at gated sites and favours auditors as a pretext, because staff tend to avoid talking to them. A caller who played confused about a slanted line in a prompt was treated as an ordinary forgetful user rather than a threat. Defenders get indicators too. A Bettercap instance was exposed by a hard-coded HTTP probe to a fixed video link, Empire listeners can be found by matching the hash of a default welcome image, Burp can be spotted by probing its default local ports, and Kali by its update-related DNS lookups.\n\nClosing with anti-debugging, the speaker showed that malware checking for a debugger can be fooled by renaming a copy of calc.exe to a debugger name and running it hidden at startup. The overall takeaway is that these are imperfect, low-cost checks that sometimes work, and that catching testers should be paired with catching real attackers.",
       "durationSeconds": 1131,
       "conference": "northsec",
       "viewCount": 462,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "vbXxt9RFRIY",
@@ -3029,7 +3068,7 @@
       "speakers": [
         "Dave \"gattaca\" Lewis"
       ],
-      "track": "community",
+      "track": "policy",
       "topics": [
         "dave",
         "gattaca",
@@ -3037,12 +3076,13 @@
         "breache",
         "barbarian"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Dave \"gattaca\" Lewis - Data Breaches: Barbarians in the Throne Room.",
-      "summary": null,
+      "teaser": "Reviews years of public breach disclosures to show why missed patches and misconfigurations keep repeating, and how to explain them.",
+      "summary": "The talk draws on the speaker's habit of reading publicly available data breach notifications, starting with 2016 and continuing through 2017. Across those disclosures he found no shared vocabulary, so lessons from one incident rarely carry over to the next. He argues the same failures keep recurring, from publicly exposed cloud storage buckets to SQL injection, which remains the top web attack type in his employer's quarterly reports.\n\nSeveral cases make the point. A remote database management tool meant to help administrators fuelled a wave of breaches. Default credentials on web portals tied to the Equifax breach and an unapplied Oracle patch bundle were highlighted as missed basics. He described a marketing WordPress site run outside the firewall that was compromised, and how failing to manage the narrative let the media take over. Verizon cut 350 million dollars from its Yahoo offer after undisclosed breaches, and a UK company's decision not to encrypt data cost it 400,000 pounds.\n\nHis takeaways focus on the business side. Breach costs should cover investigation, legal fees, penalties and lost customers. Compliance and audit teams should be treated as allies, and a clear narrative should be ready before bad news arrives. Practitioners should keep a risk register, prioritise patching, know what is leaving their network, apply zero trust and avoid hacking back.",
       "durationSeconds": 2605,
       "conference": "northsec",
       "viewCount": 43,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "LUsiFV3dsK8",
@@ -3098,7 +3138,7 @@
       "speakers": [
         "Marc-André Labonté"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "marc-andr",
         "labont",
@@ -3106,8 +3146,8 @@
         "project",
         "marc"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Marc-André Labonté - The Blackbear Project.",
-      "summary": null,
+      "teaser": "An OpenSSH fork delivers reverse shells with SOCKS, port forwarding, embedded keys, and polyglot deploy from web shells.",
+      "summary": "The presentation introduces the Black Bear project, a modified OpenSSH stack aimed at giving penetration testers a reverse connection that behaves like ordinary SSH rather than limited TCP, Python, or web shells. The speaker describes switching from long-running system administration to offensive work, and motivation that began with capture-the-flag war games: a hidden SSH path that still works if an opponent rotates passwords and authorized keys, plus full use of OpenSSH client features such as dynamic SOCKS proxying and local and remote port forwarding.\n\nDevelopment work centers on forking sshd for listen-back mode, embedding daemon configuration and an authorized public key inside the binary so the target needs no key files or sshd_config changes, disabling account lockouts such as AllowUsers, enabling GatewayPorts for remote -R binds beyond localhost, and generating ephemeral host keys at runtime. The talk explains OpenSSH privilege separation and demonstrates how cleartext credential traffic on the monitor socket can be captured with tracing tools when an operator already has root. A remaining weakness is trust of dynamic host keys, with compile-time key material described as a planned improvement.\n\nDeployment is streamlined via an ELF-and-bash polyglot: piping the uploaded artifact into bash runs an embedded script that sets execute permission and launches the daemon. A demo against a vulnerable web application shows -R listen mode, a connect-back, and a normal session where typical shell tools run as they would over standard SSH.",
       "durationSeconds": 1660,
       "conference": "northsec",
       "viewCount": 117,
@@ -3366,15 +3406,15 @@
       "speakers": [
         "Don’t Kill My Cat"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "charle",
         "hamilton",
         "vulnerability-research",
         "charles"
       ],
-      "teaser": "Don’t Kill My Cat details Charles F. Hamilton.",
-      "summary": null,
+      "teaser": "Shows how a payload can be hidden inside a valid bitmap image that also runs as shellcode, evading network and endpoint checks.",
+      "summary": "The talk presents a tool that hides a Windows payload inside an image file so it can pass IPS, IDS, sandbox and endpoint checks. The starting point is that scanners rarely parse image content, so a file that looks like a picture is seldom inspected closely. The speaker examines the BMP format and finds header fields that parsers ignore, then confirms with a test in PowerPoint that a file with altered header bytes still opens as a normal image.\n\nThe next step makes the same file also work as shellcode. The first bytes are chosen so they decode as harmless instructions, and a jump leads to the payload placed near the end of the file. Trimming the image height removes a visible line while the picture still loads. The payload is XOR-encrypted, and a small stub brute-forces the 32-bit key at runtime by checking a known magic value before decrypting the rest. The speaker notes that on an old server this search took about 20 minutes. For EXE and DLL files, the MZ header is handled the same way, and a loader placed in a code cave maps the sections in memory and calls the entry point. Delivery is shown with a PowerShell one-liner that downloads the image and runs it without writing to disk.\n\nThe talk closes with a walkthrough of the generator interface and a link to the tool, which had no readme at the time. The practical takeaway for defenders is that content treated as a harmless image can carry an executable payload, so image files should not be assumed safe just because they render correctly.",
       "durationSeconds": 1621,
       "conference": "northsec",
       "viewCount": 947,
@@ -3572,7 +3612,7 @@
         "Guillaume Ross",
         "Jordan Rogers"
       ],
-      "track": "community",
+      "track": "blue-team",
       "topics": [
         "guillaume",
         "ros",
@@ -3580,12 +3620,13 @@
         "roger",
         "solution"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Guillaume Ross & Jordan Rogers - Real Solutions From Real Incidents: Save Money and Your Job!.",
-      "summary": null,
+      "teaser": "Reverse breach replay shows owned controls that block phishing, droppers, credential theft, and lateral movement before data theft.",
+      "summary": "The presenters frame a deliberately silly fictional manufacturer, ASNA, and replay an intellectual-property theft incident in reverse—from leaked trade secrets and a breached manufacturing-resource-planning database back through domain-admin compromise, lateral movement, credential dumping, a two-stage dropper, and a targeted phishing message to accounts payable.\n\nEach step pairs what enterprises typically buy—next-generation firewalls, SIMs, sandboxes, and awareness training that often exists only for compliance—with what the speakers see fail in real response work: permissive defaults, uninspected encrypted traffic, executable downloads for every user, shared local-admin passwords, open workstation-to-workstation SMB, and domain-admin use on endpoints. They explain droppers, timing gaps before users click, and commodity tools recompiled to evade antivirus.\n\nThe closing argument favors shovel work over silver bullets: macro and Office hardening, EMET attack-surface reduction, prudent web filtering and link rewriting, SSL inspection where policy allows, least-privilege and LAPS, user-right assignments, workstation firewalls, privileged access workstations, database and egress controls, and DNS/proxy logging. Properly configuring tools already owned, they argue, shrinks attack surface and makes the next purchase worthwhile.",
       "durationSeconds": 3424,
       "conference": "northsec",
       "viewCount": 538,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "kWnCxyATyUY",
@@ -3843,7 +3884,7 @@
       "speakers": [
         "Mark Stanislav"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "mark",
         "stanislav",
@@ -3851,12 +3892,13 @@
         "kid",
         "family"
       ],
-      "teaser": "Security researchers examine technical aspects of Mark Stanislav - Hide Yo’ Kids: Hacking Your Family’s Connected Things.",
-      "summary": null,
+      "teaser": "Shows how baby monitors, a children's smartwatch and a smart toy leak video and child data through basic flaws.",
+      "summary": "This talk covers security research into internet-connected baby monitors, drawn from a study of nine devices, followed by two newer projects on a children's smartwatch and a smart toy. It opens with a primer on how embedded devices get studied: dumping firmware from flash chips with a cheap clip and open-source tooling, carving images apart with binwalk, and reaching a shell through serial consoles or JTAG. Decompiling companion mobile apps and watching network traffic are shown as ways to find hardcoded secrets and undocumented cloud endpoints.\n\nAcross the baby monitors, the findings include default and hardcoded credentials, telnet enabled by default, unencrypted video and API traffic, and firmware updates that were not signed. One camera kept streaming live video after the app showed the feature as off. Cloud alert clips could be reached by enumerating predictable camera IDs, and a serial account identifier let an unauthenticated request grant admin rights on a vendor's cameras. The toy exposed child profile data through object references and could be reached over a second, hidden USB port, while the smartwatch's family-invite flow let a test account be added to another user's family and see that person's data.\n\nThe speaker argues that IoT failures usually come from scale, since one flaw can expose a whole customer base, and that small vendors often lack security staff or crypto experience. Disclosure followed a 60-day window, and a simple scoring of the baby monitors produced one D with the rest receiving Fs. The closing section points to frameworks and a pro bono security initiative as practical ways vendors can improve.",
       "durationSeconds": 3514,
       "conference": "northsec",
       "viewCount": 476,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "edLXMm7m4bM",
@@ -3951,20 +3993,23 @@
       "youtubeId": "bDeflilkjy4",
       "slug": "2015-chris-prince",
       "title": "2015 - Chris Prince",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Chris Prince"
+      ],
+      "track": "privacy",
       "topics": [
         "chri",
         "prince",
         "chris"
       ],
-      "teaser": "Security researchers investigate 2015 - Chris Prince and analyze defensive countermeasures.",
-      "summary": null,
+      "teaser": "Traces North American privacy law, post-Watergate oversight, and how newer surveillance tech and lawful-access rules reshape accountability.",
+      "summary": "The session opens by framing privacy as a measure of trust in government and institutions, then walks through parallel North American scandals: Mark Felt’s disclosures that fed Watergate reforms and Canada’s RCMP barn bombing inquiry, which reshaped intelligence oversight and produced privacy and access statutes.\n\nIt contrasts that legal heritage with infrastructure built for resilience rather than anonymity, the explosion of commercial identity holders, and surveillance tooling from CCTV through drones. Using roughly four decades of Canadian federal court reporting, it shows warrant counts at historic lows while many names appear per order, narcotics investigations dominating electronic intercepts, and targets shifting from homes toward telecommunications and devices.\n\nThe closing arc ties 1990s encryption debates to recent lawful-access powers—preservation demands, metadata production at suspicion thresholds, and trace orders—and relates them to pending anti-terrorism information sharing across agencies. It closes on siloed accountability, gag-ordered telecom transparency reports, Supreme Court pushback on warrants for subscriber data, and building technical privacy into future systems.",
       "durationSeconds": 3352,
       "conference": "northsec",
       "viewCount": 627,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2015
+      "year": 2015,
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "C8ige2gQU6k",
@@ -3973,7 +4018,7 @@
       "speakers": [
         "CHEKS"
       ],
-      "track": "community",
+      "track": "privacy",
       "topics": [
         "jean",
         "francoi",
@@ -3981,13 +4026,14 @@
         "gagnon",
         "francois"
       ],
-      "teaser": "CHEKS investigates 2015 - Jean Francois Cloutier & Francois Gagnon.",
-      "summary": null,
+      "teaser": "Presents a research prototype that generates one-time keys from synchronized chaotic systems, along with its open problems.",
+      "summary": "This talk presents an early research project that applies chaotic systems to key management rather than to encryption itself. The speakers begin with a short history of complexity science, from early work on the three-body problem through the discovery of sensitivity to initial conditions, to the founding of a research institute for the field in the mid-1980s. They explain that chaotic systems are deterministic yet practically unpredictable, which is the property they want to exploit.\n\nEach of two communicating parties runs a matching copy of a chaotic system made of 48 agents, and the copies co-evolve so they stay in step. Key material is drawn from the 8-bit level of each agent, while the rest of the state drives the evolution, and each key is used once and then discarded. Message content feeds into the evolution, so an observer who holds only the initial state and a single message cannot catch up. Cloning the system lets the parties derive several keys, such as one for encryption and one for authentication, from one state. A simple chat prototype showed the scheme working, at roughly 3 milliseconds per key generation and evolution.\n\nThe speakers were candid that the work is early and the implementation is a proof of concept. Open problems include the acknowledgement step, which an attacker can abuse to desynchronise the two systems, the need for stronger message authentication, and how to resynchronise after a failure. Future work includes a redesigned architecture and a public challenge to predict key sequences, and the speakers invited contributors.",
       "durationSeconds": 1801,
       "conference": "northsec",
       "viewCount": 175,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2015
+      "year": 2015,
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "-q1ssWzy1Kg",
@@ -4065,7 +4111,7 @@
       "speakers": [
         "Rene Freingruber"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "rene",
         "freingruber",
@@ -4073,13 +4119,14 @@
         "armor",
         "curtain"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for 2015 - Rene Freingruber - EMET 5.2 Armor or Curtain ?.",
-      "summary": null,
+      "teaser": "Shows how Firefox exploit techniques bypass EMET mitigations and how well those bypasses carry over to version 5.2.",
+      "summary": "Rene Freingruber presents exploitation techniques aimed at getting past the mitigations of Microsoft's EMET toolkit. He explains that his earlier bypasses were developed for version 4.1, and he measures how much effort it took to migrate them to versions 5.0, 5.1 and 5.2. The examples target an older Firefox vulnerability from 2011, chosen as a workable case for exploit development.\n\nThe middle of the talk covers finding usable code inside a loaded Firefox module. He looks at jump, return and other instructions that can be chained together as gadgets, and describes searching the module's code to locate them. To stay reliable across builds, the exploit finds the start of the code section, steps back to the PE header, and reads the timestamp field to identify which version is running. He also discusses the export address table access filtering protection, which checks accesses triggered by specific instructions, and explains how that check can be sidestepped depending on which modules import the relevant functions.\n\nThe talk closes with a live demonstration in which Firefox runs with EMET protection enabled and the exploit is executed. The speaker notes that adapting the exploit to version 5.1 took about five minutes, because only the code section signature had changed. The takeaway is that bypasses vary in durability: some approaches still work after updates, while others no longer work in the current release.",
       "durationSeconds": 3086,
       "conference": "northsec",
       "viewCount": 748,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2015
+      "year": 2015,
+      "difficulty": "expert"
     },
     {
       "youtubeId": "7WnwSovjYMs",
@@ -4135,7 +4182,7 @@
       "speakers": [
         "Mathieu Lavoie"
       ],
-      "track": "community",
+      "track": "privacy",
       "topics": [
         "bitcoin",
         "mathieu",
@@ -4143,13 +4190,14 @@
         "putting",
         "pseudo"
       ],
-      "teaser": "Security researchers examine technical aspects of 2015 - Mathieu Lavoie - Bitcoin : Putting the \"Pseudo\" Back in Pseudonymous.",
-      "summary": null,
+      "teaser": "Shows how linking Bitcoin addresses through shared transaction inputs can expose a ransomware operator's wallets.",
+      "summary": "The talk explains how Bitcoin addresses, transactions and blocks fit together, then shows how addresses spent together as inputs in one transaction can be treated as belonging to a single entity. Addresses that are reused across transactions add further links. The speaker builds a graph in which nodes are these grouped entities and edges are money flows, and assumes multisignature transactions are rare enough to ignore.\n\nBuilding the graph proved hard. Early versions ran for months without finishing, produced addresses that never existed, and ran out of memory in both linked-list and hashmap-based code. The working version stored blocks in batches in MongoDB, needing about 30 GB of disk, 32 GB of RAM, 64-bit Python and roughly 24 hours to crawl. In a live demo, a partial address from a news report about a crypto locker victim matched one of about 780 million database entries. That entry linked to a node with four other addresses that had together received roughly 70 Bitcoin, at least $250,000 at about $600 per Bitcoin. A second case confirmed that two addresses cited in a security blog belonged to the same entity, which controlled over 60,000 addresses, suggesting a laundering scheme or automated service.\n\nThe takeaway is that Bitcoin's pseudonymity weakens once address reuse is combined with outside information. The speaker planned to release the crawler code and database, a second version to follow money movements between entities, and a third adding collaborative annotation of entities.",
       "durationSeconds": 1408,
       "conference": "northsec",
       "viewCount": 737,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2015
+      "year": 2015,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "XRLVilLLeVI",
@@ -4181,7 +4229,7 @@
       "speakers": [
         "Robert Wood"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "threat-modeling",
         "gaming",
@@ -4189,13 +4237,14 @@
         "wood",
         "threat"
       ],
-      "teaser": "Security researchers examine technical aspects of 2015 - Robert Wood - Threat Modeling for the Gaming Industry.",
-      "summary": null,
+      "teaser": "Walks through threat modeling a game platform, mapping assets, controls and attackers against business risk.",
+      "summary": "Robert Wood presents threat modeling as an assessment method that maps how an attacker could reach valuable assets through a system's components and trust boundaries. He argues that design flaws account for roughly half of a system's vulnerabilities, so testing alone misses a large share of the risk. He defines the core terms and describes threat actors by their capabilities, skill, resources and level of access, from point-and-click users to well-funded groups and insiders.\n\nThe method starts with an accurate system model built from interviews, code and documentation, since written docs are often out of date. Assets and controls are overlaid on that model, and an asset with no paired control can point to a design flaw. In one MMO example, a content delivery network pushed updates over cleartext HTTP to installers that ran as administrator, so compromising the CDN or the traffic on a shared network could give remote code execution on player machines. He then compares business risks across genres: account hijacking, cheating, fraud, piracy and downtime matter differently for a single-player title than for an online world with a virtual economy.\n\nHe closes with practical guidance: spread defenses across the whole system, never fully trust client software and validate backend input, bring threat modeling and abuse cases in early in development, and prioritise protection by business impact, since not everything needs the same level of security.",
       "durationSeconds": 2495,
       "conference": "northsec",
       "viewCount": 152,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
-      "year": 2015
+      "year": 2015,
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "0B26usqq_gg",

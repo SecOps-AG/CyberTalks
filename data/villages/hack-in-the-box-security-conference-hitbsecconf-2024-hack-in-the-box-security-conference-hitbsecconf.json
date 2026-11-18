@@ -31,7 +31,7 @@
       "slug": "hitb2024bkk-d1-dragon-slaying-guide-bug-hunting-in-vmware-device",
       "title": "#HITB2024BKK D1 - Dragon Slaying Guide: Bug Hunting In VMware Device Virtualization",
       "speakers": [],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "virtualization",
         "hitb2024bkk",
@@ -39,19 +39,20 @@
         "slaying",
         "guide"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for #HITB2024BKK D1 - Dragon Slaying Guide: Bug Hunting In VMware Device Virtualization.",
-      "summary": null,
+      "teaser": "A team maps VMware hypervisor internals via reverse engineering and details USB and SCSI virtualization vulnerabilities.",
+      "summary": "The talk walks through how a research group moved from IoT security into VMware virtualization, starting public study of hypervisor technology in late 2022 and later reporting issues across Workstation and ESXi. The opening half is a guided tour of reverse-engineering vmx and the monitor: debugging vmx startup on Windows, dynamic instrumentation, symbol recovery from related binaries and documentation, locating the main VM run loop, and following user-RPC, shared-area memory, VM blob layout, and cross-page state that tie the user-mode process to vmx86 and the guest monitor.\n\nFrom that model the speakers explain how port I/O and MMIO device access typically reaches registered handlers in vmx, while ESXi can route some devices through VMkernel instead of user RPC—so identical-looking stacks do not always share the same emulation path. They tried fuzzing virtual devices with DBI and guest-driven test cases but shifted to manual review after weak coverage and setup cost.\n\nThe second half catalogs concrete bugs: USB host-controller uninitialized memory in UHCI transmission, an xHCI use-after-free around transfer-ring teardown versus endpoint updates, and an out-of-bounds read in virtual smart-card backend code. For SCSI they contrast Workstation’s user-RPC disk path with ESXi’s VMkernel path, including an out-of-bounds write in disk verification heap handling and flawed unmap parameter validation in VMkernel. They close by treating VMkernel as a distinct escalation and VM-escape surface beyond classic vmx-focused attacks.",
       "durationSeconds": 2354,
       "conference": "hitb",
       "viewCount": 430,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "V_FOLFSLGYA",
       "slug": "hitb2024bkk-d1-revealing-microphone-nonlinear-behavior-and-build",
       "title": "#HITB2024BKK D1 Revealing Microphone Nonlinear Behavior and Building an Ultrasonic Jammer",
       "speakers": [],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "hitb2024bkk",
         "revealing",
@@ -60,12 +61,13 @@
         "behavior",
         "building"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning #HITB2024BKK D1 Revealing Microphone Nonlinear Behavior and Building an Ultrasonic Jammer.",
-      "summary": null,
+      "teaser": "Models and demos tie microphone nonlinearities to a custom ultrasonic jammer that beats commercial gear at blocking covert recording.",
+      "summary": "Covert listening through microphone-equipped gadgets remains widespread, from disguised bugs in meeting rooms to always-on smart home gear. The presentation frames technical surveillance countermeasures and argues that most practical eavesdropping still depends on ordinary microphones, which motivates defenses that do not drown out human conversation.\n\nThe core technical story is that real microphones are not perfectly linear. Loud audio clips and produces harmonics; ultrasonic energy outside the designed voice band can also fold distortion into the audible range. The work models MEMS, electret condenser, and piezoelectric capsules, simulates high sound-pressure behavior, and uses paired ultrasonic tones near 25 kHz and 40 kHz plus a dynamic intermodulation scheme to scramble captured spectra. Bench and room demos compare waveforms, spectrograms, and speech-to-text output against a roughly five-hundred-dollar commercial jammer, including phone orientations that mimic casual use. Two hardware generations—Arduino and smaller Nano builds with programmable generators, amplifiers, and optional voice control—culminate in a ceiling-mounted array for conference spaces.\n\nPractitioners should treat ultrasound as a useful but bounded layer: leather pouches and obstacles attenuate jamming, phone noise filters fight back, and higher drive levels risk audible leakage from nonlinear speakers. Ethics and deployment trade-offs belong in the same conversation as the physics.",
       "durationSeconds": 2975,
       "conference": "hitb",
       "viewCount": 595,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "sei7u4xnsdI",
@@ -180,8 +182,11 @@
       "youtubeId": "7ZLgDhY6phQ",
       "slug": "hitb2024bkk-d2-exposing-critical-threats-in-millions-of-connecte",
       "title": "#HITB2024BKK D2 - Exposing Critical Threats in Millions of Connected Devices",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Alexander",
+        "Sergey"
+      ],
+      "track": "hardware",
       "topics": [
         "hitb2024bkk",
         "exposing",
@@ -190,12 +195,13 @@
         "million",
         "connected"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding #HITB2024BKK D2 - Exposing Critical Threats in Millions of Connected Devices.",
-      "summary": null,
+      "teaser": "Researchers reverse engineer the Centurion modem, chaining heap overflows and midlet flaws into remote compromise of trucks and IoT gear.",
+      "summary": "Alexander and Sergey from Kaspersky’s ICS-focused research team examined the Centurion cellular modem after spotting it in heavy trucks, industrial PCs, medical gear, payment terminals, and other embedded roles. They mapped its four software layers—encrypted OS image, user and manufacturer Java midlets—and bypassed manufacturer assumptions about hidden midlet paths by dumping unencrypted NAND, rebuilding logical flash mapping, and abusing public APIs, FTP services, and path traversal for local privilege escalation when an attacker has physical access.\n\nFirmware analysis uncovered far more AT commands than public docs describe, including vendor RAM read/write hooks gated by a manufacturer flag. Fuzzing surfaced additional bugs, but the remote path centered on the SUPL stack: inconsistent fragment size checks enable a heap overflow triggerable by SMS. Crash dumps via AT+XLOCK leak CPU registers, yielding a byte-per-second read primitive; reversing the heap allocator enabled a write primitive and a four-message chain to gain execution, with a fifth SMS delivering payload such as CAN bus interaction in their truck scenario.\n\nAfter elevating privileges they unlocked protected AT namespaces, remapped MMU permissions, built an SMS-driven filesystem driver, and showed persistence via over-the-air provisioning and manufacturer midlet replacement—all reportable remotely. Practitioners should treat SMS to deployed modems as a serious attack surface, especially in automotive and OT where updates are infrequent, and coordinate carrier-side filtering with vendor patches for the disclosed local escalation and remote code execution issues.",
       "durationSeconds": 3153,
       "conference": "hitb",
       "viewCount": 295,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     }
   ]
 }

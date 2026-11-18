@@ -140,7 +140,9 @@
       "youtubeId": "_CJmUh0_uOM",
       "slug": "2023-exploiting-hardened-net-deserialization-by-piotr-bazyd-o",
       "title": "2023 - Exploiting Hardened .NET Deserialization by Piotr Bazydło",
-      "speakers": [],
+      "speakers": [
+        "Piotr Bazydło"
+      ],
       "track": "appsec",
       "topics": [
         "deserialization",
@@ -149,8 +151,8 @@
         "piotr",
         "bazyd"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 2023 - Exploiting Hardened .NET Deserialization by Piotr Bazydło.",
-      "summary": null,
+      "teaser": "Research on bypassing blocklists for hardened JSON.NET and MessagePack deserialization across SolarWinds, Exchange, and ICS products.",
+      "summary": "Hardened .NET deserialization often pairs full or partial type control with aggressive blocklists that aim to stop known ysoserial.net-style gadgets. The presenter walks through cases where vendors patched RabbitMQ JSON.NET abuse in SolarWinds, ProxyNotShell-style Exchange chains, and binary formatter replacements in Delta Electronics InfraSuite Device Master, and shows how fixes that rely on denylists still leave room for abuse when the serializer’s real behavior is understood.\n\nFor SolarWinds, a mis-keyed blocklist entry and JSON.NET constructor semantics enabled known and custom in-product gadgets, including process launch via WorkerController WCF proxy and webshell placement through log4net configuration changes. On Exchange, allowed types such as MultiValuedProperty became inner-deserialization primitives; inner types blocked globally could still be satisfied with in-box classes like System.Diagnostics.Process. MessagePack on Device Master shifted the problem toward insecure re-serialization: getters during outbound serialization could chain into binary formatter execution or leak secrets when the server echoed serialized objects.\n\nPractitioners should map each serializer’s full capability surface before hunting gadgets, prioritize manual review of vendor codebases and third-party NuGet dependencies, and chain arbitrary getter primitives with serialization-side gadgets when direct deserialization paths are closed. Several findings were contributed back to ysoserial.net via new plugins and gadgets for modern .NET versions where remote assembly load unexpectedly still works.",
       "durationSeconds": 2978,
       "conference": "hexacon",
       "viewCount": 3000,
@@ -160,16 +162,18 @@
       "youtubeId": "ToIn2bkD9yU",
       "slug": "2023-an-avocado-nightmare-by-stefan-schiller",
       "title": "2023 - An Avocado Nightmare by Stefan Schiller",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Stefan Schiller"
+      ],
+      "track": "red-team",
       "topics": [
         "avocado",
         "nightmare",
         "stefan",
         "schiller"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding 2023 - An Avocado Nightmare by Stefan Schiller.",
-      "summary": null,
+      "teaser": "Traces Apache Guacamole flaws from Java–C parser gaps and audio teardown races to credential theft and server-side code execution.",
+      "summary": "Stefan Schiller frames the work around two pressures on modern software: many interconnected technologies and heavy parallelism. Apache Guacamole, a browser-based remote desktop gateway often exposed on the internet, becomes the case study. He maps the Java web client and C server, the custom guacamole instruction format, and why the image handshake’s query parameter is the main attacker-controlled input during setup.\n\nFuzzing highlights a parser differential: Java’s string length counts UTF-16 code units while the C server counts UTF-8 Unicode characters, so four-byte UTF-8 sequences shrink the declared length. That mismatch allows injecting extra instructions during the handshake, forging an early connect command to steal routing tokens with sensitive RDP settings, or redirecting drive shares to read server files such as proc self maps. A separate use-after-free appears when a user disconnects while the RDP client thread still acknowledges audio input close on freed user and socket objects.\n\nThe talk chains injection into controlled RDP connections, reliable UAF triggering via xrdp, glibc heap layout tricks including tcache exhaustion and thread shutdown transfers, and arena reuse through repeated shared self-joins to regain allocation in the freeing thread’s arena. A demo ends in reverse shell on the guacd server. Practitioners are urged to compare specs across language boundaries, fuzz paired parsers, and treat concurrency around shared pointers as ongoing risk.",
       "durationSeconds": 2594,
       "conference": "hexacon",
       "viewCount": 580,
@@ -179,8 +183,10 @@
       "youtubeId": "QoXVuGhJAQw",
       "slug": "2023-turning-a-hyper-v-cache-miss-into-200k-cash-by-leo-adrien",
       "title": "2023 - Turning a Hyper-V cache miss into 200k cash by Leo Adrien",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Leo Adrien"
+      ],
+      "track": "red-team",
       "topics": [
         "hyper-v",
         "turning",
@@ -188,12 +194,13 @@
         "mis",
         "200k"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 2023 - Turning a Hyper-V cache miss into 200k cash by Leo Adrien.",
-      "summary": null,
+      "teaser": "A walkthrough shows how nondeterministic Hyper-V VMbus testing becomes a reproducible host use-after-free and a large Microsoft bounty.",
+      "summary": "The presentation opens with why Hyper-V matters for cloud and desktop virtualization, how Microsoft’s bounty program rewards guest-to-host issues, and where VMbus sits in the paravirtual device stack. The speaker planned to extend prior stateful hypervisor fuzzing toward the virtual storage path with a Rust generative SCSI fuzzer, but aggressive packet injection through Linux kernel stubs destabilized the guest and exposed misunderstood ring-buffer transport behavior.\n\nA unexpected host bugcheck shifted focus to the VMbus channel driver: triage pointed to list validation crashing on a compare during iteration, consistent with a use-after-free when a packet was freed without unlinking. Reverse engineering input fill queue and batch GPA validation clarified the bug, yet deterministic repro failed until lookaside-list caching and separate worker-thread frees were modeled. The working sequence sprayed valid packets on a quiet network channel, waited for background frees to refill lookaside depth, then delivered one malformed GPA descriptor so the bad buffer returned to the operating system while still referenced.\n\nPractitioners hear that tooling enthusiasm should not skip transport and allocator semantics, that multithreading turns simple kernel paths into state machines, and that custom allocators can mask use-after-free symptoms. The disclosure yielded bounty payment and vendor treatment as remote code execution, with a minimal fix: avoid freeing invalid packets on a path that halts the channel anyway.",
       "durationSeconds": 2089,
       "conference": "hexacon",
       "viewCount": 473,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "Jc0V30TOKao",
@@ -292,8 +299,11 @@
       "youtubeId": "YTyrBnXKrcg",
       "slug": "2023-unveiling-hidden-paths-by-junoh-lee-and-jeongoh-kyea",
       "title": "2023 - Unveiling Hidden Paths by Junoh Lee and JeongOh Kyea",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Junoh Lee",
+        "JeongOh Kyea"
+      ],
+      "track": "red-team",
       "topics": [
         "unveiling",
         "hidden",
@@ -301,8 +311,8 @@
         "junoh",
         "jeongoh"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning 2023 - Unveiling Hidden Paths by Junoh Lee and JeongOh Kyea.",
-      "summary": null,
+      "teaser": "Traces Windows AFD Fast I/O paths, a chunk-size race, and kernel local privilege escalation on Windows 11.",
+      "summary": "The speakers describe how they chose a Windows kernel attack surface after narrowing past driver vulnerabilities by structural weakness and prior exploitability, eventually focusing on the AFD network function driver and its large IOCTL surface. They highlight Fast I/O dispatch as an underexplored path beside standard IRP handling, where user buffers are touched without building an IRP—reviving classic double-fetch risk.\n\nThe core flaw sits in C-message handling: aligned chunk-size math can integer-overflow to zero, letting a second pass copy far beyond the small kernel buffer allocated during length calculation. A racing thread flips chunk sizes between the length and copy routines to win that window reliably. Exploitation then tackles a maximal copy length, kernel crashes on unmapped user pages, and deliberate guard pages to bound the memcpy safely.\n\nFor privilege escalation they heap-spray I/O completion context objects, overflow into a port pointer, and abuse reference-count decrements to adjust the current thread’s previous mode. The chain is shown working on Windows 11 with system privileges, and they note limits such as 32-bit reachability and sandbox constraints on 64-bit UDP endpoints.",
       "durationSeconds": 1626,
       "conference": "hexacon",
       "viewCount": 888,

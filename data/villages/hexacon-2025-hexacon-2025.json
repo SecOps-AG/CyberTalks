@@ -10,15 +10,17 @@
       "youtubeId": "Du8BbJg2Pj4",
       "slug": "keynote-by-ivan-krstic",
       "title": "Keynote by Ivan Krstić",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Ivan Krstić"
+      ],
+      "track": "purple-team",
       "topics": [
         "ivan",
         "krsti",
         "keynote"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Keynote by Ivan Krstić.",
-      "summary": null,
+      "teaser": "Explores how science and engineering advance Apple platform security through crypto proofs, SPTM, MIE, and integrated offensive research.",
+      "summary": "Platform security at the leading edge, the speaker argues, depends on two parallel pursuits: security science that models and verifies what defenses should exist, and security engineering that ships those defenses under tight performance, power, and schedule constraints. Progress accelerates when offensive research is embedded in the defense loop from the start, backed by tooling that makes stronger guarantees practical.\n\nThree Apple initiatives illustrate that pattern. Core Crypto’s post-quantum algorithms (ML-KEM and ML-DSA) pushed formal verification from standards through C to hand-tuned assembly, combining tools such as SAW, Cryptol, and Isabelle and a new equivalence checker for assembly. The move from the Page Protection Layer to the Secure Page Table Monitor replaced sprawling kernel-adjacent logic with least-privilege separation, frame-table state policies, compile-time invariant wrapping, and ongoing formal checks; offensive re-analysis found about ninety-five percent of known PPL issue classes architecturally blocked. Memory Integrity Enforcement (MIE) rests on a memory-corruption model framed by aggressor type, target type, and placement delta, with type sequestering, enhanced tagging, and silicon-aware mitigations; offensive teams could not rebuild six real-world chains, and a tuned classifier located custom allocators at roughly 98.8 percent accuracy before broad rollout.\n\nThe keynote ends with higher Apple Security Bounty tiers, programmatic target flags, open research-device applications, and donated iPhone 17 units for civil-society users at risk, plus a reminder that offensive capability should protect people rather than endanger them.",
       "durationSeconds": 2201,
       "conference": "hexacon",
       "viewCount": 4600,
@@ -28,7 +30,10 @@
       "youtubeId": "6RL3akTLHuQ",
       "slug": "pwning-firefox-by-settling-its-promises-by-tao-yan-and-edouard-b",
       "title": "PWNing Firefox by Settling its Promises by Tao Yan & Edouard Bochin",
-      "speakers": [],
+      "speakers": [
+        "Tao Yan",
+        "Edouard Bochin"
+      ],
       "track": "red-team",
       "topics": [
         "firefox",
@@ -38,12 +43,13 @@
         "edouard",
         "bochin"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in PWNing Firefox by Settling its Promises by Tao Yan & Edouard Bochin.",
-      "summary": null,
+      "teaser": "Walks through turning a six-year-old Promise.allSettled bug in Firefox's JS engine into a full renderer exploit.",
+      "summary": "The talk covers a six-year-old flaw in the Promise.allSettled implementation of Firefox's SpiderMonkey JavaScript engine, present since the API was first implemented in 2019. The speakers first explain promises and how earlier browser bugs in promise combinators followed a similar pattern. They then walk through the internals that run during a call to the API, including the values array and data holder, and show how calling a settle function after the values array had been trimmed produced an out-of-bounds write.\n\nBecause that write is highly restricted, the researchers explain how they made it useful. They describe SpiderMonkey's nursery and tenured heaps and how to force minor and major garbage collection from JavaScript, then arrange objects so the write overwrites a neighbouring object. Forcing a minor collection turns this into a use-after-free and then a type confusion. From there they leak a nursery address, fake an array shape to read metadata of other objects, and build fake-object, arbitrary read and arbitrary write primitives using typed arrays.\n\nFor code execution, they abuse WebAssembly's RWX memory: shellcode is encoded as floating-point constants so the compiler places it in executable memory, and a corrupted function entry base address redirects execution. The chain runs from out-of-bounds write to renderer code execution. A live demo on Firefox 138, with the sandbox disabled because the exploit targets only the renderer, closes the talk after several failed attempts. The takeaways: complex specifications often yield similar bugs across engines, and a bug that looks unexploitable may still be worth deeper analysis.",
       "durationSeconds": 2775,
       "conference": "hexacon",
       "viewCount": 691,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "-yT4sH_gvj4",
@@ -118,7 +124,9 @@
       "youtubeId": "eG8_2M9dups",
       "slug": "breaking-the-vault-usb-bugs-and-bug-bounty-failures-by-sergei-vo",
       "title": "Breaking the Vault: USB Bugs and Bug Bounty Failures by Sergei Volokitin",
-      "speakers": [],
+      "speakers": [
+        "Sergei Volokitin"
+      ],
       "track": "red-team",
       "topics": [
         "bug-bounty",
@@ -128,30 +136,34 @@
         "bug",
         "bounty"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Breaking the Vault: USB Bugs and Bug Bounty Failures by Sergei Volokitin.",
-      "summary": null,
+      "teaser": "Walks through a USB buffer overflow in a hardware wallet that leaks its PIN and seed, plus the bug bounty fallout.",
+      "summary": "A researcher examines a hardware wallet that splits its root secret across a vault and several smart cards using Shamir secret sharing, which also serves as a backup. The vendor said a compromised computer could never reach the keys, so the researcher went through the open-source code and found a missing length check on chunked USB packets. The device accepts USB data right after boot, before any PIN is entered, so the overflow in a global buffer could be triggered without user action.\n\nBecause the device had no basic memory protections, the overflow was used to corrupt neighbouring structures and redirect reads, letting a host PC pull memory out of the wallet. In a live demo, the PIN typed during normal use was captured from memory, and once the user's card was used, the 24-word root seed was recovered. The researcher also pointed to an unchecked length in an NFC command handler that was still present in the latest code.\n\nThe bug was reported in November with an unlisted video as proof. Replies were slow, and after about 186 days the vendor called it a known issue and offered a small payment and a warranty extension, which was declined. Analytics suggested the vendor watched the video, and a fix landed within two days. The talk closes with takeaways: USB remains a common and risky attack surface, many devices still lack basic mitigations, third-party audits depend heavily on scope, and bug bounties still pay out at some vendors.",
       "durationSeconds": 1040,
       "conference": "hexacon",
       "viewCount": 738,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "Ry4eOgLCo90",
       "slug": "deja-vu-in-linux-io-uring-by-pumpkin",
       "title": "Déjà Vu in Linux io_uring by Pumpkin",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Pumpkin"
+      ],
+      "track": "red-team",
       "topics": [
         "linux",
         "uring",
         "pumpkin"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Déjà Vu in Linux io_uring by Pumpkin.",
-      "summary": null,
+      "teaser": "Explains how Linux io_uring memory-sharing mitigations still allow a concurrent upgrade race that maps arbitrary kernel memory.",
+      "summary": "The presentation opens on a race condition in the Linux kernel io_uring subsystem, tied to how shared kernel buffers are registered, upgraded, and mapped. After a concise tour of io_uring architecture—submission workers, ring buffers, and kernel-backed buffers for zero-copy I/O—the speaker traces three earlier memory-sharing flaws and the mitigations that followed: deferred page release for mapped ring buffers, replacing a mutex with RCU to break a lock inversion, and reference-count checks in the mmap path.\n\nThose layered fixes closed specific use-after-free and wrong-mapping bugs yet still permitted concurrent access to the same io_buffer object. The core finding is CVE-2025-2136: an empty provided buffer can be upgraded to a ring buffer while another thread maps it, reference-count bookkeeping collapses, and the object is freed while still reachable—yielding a difficult but powerful primitive to remap freed metadata and expose arbitrary kernel pages with write access.\n\nThe walkthrough covers a six-stage KCTF exploit: threading the race, using mmap return values as a side channel, waiting for RCU teardown, reclaiming via message allocations, leaking kernel text where needed, and stretching timing with queued timer interrupts. A demo achieves root in the init namespace; the author notes low reliability in the CTF setup versus roughly 30% in GitHub Actions. Practitioners should treat shared-memory subsystems as lifetime nightmares: RCU prevents premature free but not concurrent field updates, and upgrade paths that reset reference counts without full synchronization remain hazardous.",
       "durationSeconds": 2378,
       "conference": "hexacon",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "TgwZQ6Ykgxw",
@@ -177,7 +189,9 @@
       "youtubeId": "DKYdC6WAV5A",
       "slug": "revault-compromised-by-your-secure-soc-by-philippe-laulheret",
       "title": "ReVault! Compromised by your Secure SoC by Philippe Laulheret",
-      "speakers": [],
+      "speakers": [
+        "Philippe Laulheret"
+      ],
       "track": "blue-team",
       "topics": [
         "soc",
@@ -186,18 +200,21 @@
         "philippe",
         "laulheret"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding ReVault! Compromised by your Secure SoC by Philippe Laulheret.",
-      "summary": null,
+      "teaser": "Traces bugs in a laptop's ControlVault secure chip firmware to a full compromise and Windows system shell.",
+      "summary": "The talk looks at ControlVault, a secure hub found in over 100 business laptop models that connects fingerprint readers, smart card readers and similar peripherals to a Broadcom system-on-chip running its own real-time firmware. With no public documentation, the research began by pulling host libraries with debug symbols, a certification document and the unencrypted secure boot image out of the installer. The main application firmware turned out to be decryptable using a default key and a custom IV routine.\n\nFrom there, the speaker mapped the command interface, where session handles leaked heap addresses and a forged session allowed an arbitrary free. Corrupting heap objects then made a copy routine in another command overflow a stack buffer, in firmware with no stack cookies or address randomization. Leaking the fuse-stored keys let the speaker reflash a self-signed secure code descriptor, and a modified firmware accepted any fingerprint. A host-side weakness, where the driver trusted reply formats sent back by the firmware, let a backdoored command overflow a Windows biometric service library and produce a SYSTEM shell. A demo also showed an external USB adapter that would enable physical attacks on an unattended laptop.\n\nDell published advisories in June with several CVEs, and more were said to be coming. The takeaway is that long-lived, undocumented hardware components inside everyday machines deserve auditing, since defenders rarely understand their firmware.",
       "durationSeconds": 2740,
       "conference": "hexacon",
       "viewCount": 213,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "BfnQ01BqFHo",
       "slug": "road-to-pwn2own-with-a-virtualbox-exploit-by-han-seo-kim",
       "title": "Road to Pwn2Own with a VirtualBox Exploit by Han-seo Kim",
-      "speakers": [],
+      "speakers": [
+        "Han-seo Kim"
+      ],
       "track": "red-team",
       "topics": [
         "pwn2own",
@@ -206,12 +223,13 @@
         "exploit",
         "han-seo"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Road to Pwn2Own with a VirtualBox Exploit by Han-seo Kim.",
-      "summary": null,
+      "teaser": "A young Korean team walks through finding a VirtualBox VGA bug and chaining it into a VM escape.",
+      "summary": "The talk starts with how South Korean students get into offensive security early and how the government's Best of the Best training program shapes them. A newly formed team used its four-month project on hypervisors to target VirtualBox for the Pwn2Own virtualization category.\n\nGuests reach a type-2 hypervisor through trapped port and memory-mapped I/O into virtual devices. The first bug is an integer overflow in the VGA rectangle copy routine, where guest-set width, height and pitch values make an offset calculation exceed its bounds and read or write outside the frame buffer. A second out-of-bounds write sits in the NAT network path, where a recalculated header length skips a size check; an information leak was omitted as unpatched. The team sprayed guest memory regions to place a USB request block beside the bad write, then redirected a root hub pointer and planted a function pointer to launch calculator on the Windows host. The demo used VirtualBox 7.1.8 with a Red Hat Linux guest on Windows 11.\n\nThe April Oracle patch fixed the network bug, and the competition guest changed from Ubuntu to Red Hat Linux, forcing a redesign. The team reached over 90% reliability and won at Pwn2Own Berlin 2025, though control-flow integrity blocked their planned ROP or JOP approach. The takeaway: simple integer overflows still hide in complex virtualization code, and senior mentors helped newcomers take on a major target.",
       "durationSeconds": 1617,
       "conference": "hexacon",
       "viewCount": 813,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "rk33Hzu0h38",
@@ -287,8 +305,11 @@
       "youtubeId": "Lvz2_ZHj3lo",
       "slug": "cuda-de-grace-by-valentina-palmiotti-and-samuel-lovejoy",
       "title": "CUDA de Grâce by Valentina Palmiotti & Samuel Lovejoy",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Valentina Palmiotti",
+        "Samuel Lovejoy"
+      ],
+      "track": "cloud",
       "topics": [
         "cuda",
         "valentina",
@@ -296,8 +317,8 @@
         "samuel",
         "lovejoy"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for CUDA de Grâce by Valentina Palmiotti & Samuel Lovejoy.",
-      "summary": null,
+      "teaser": "Researchers show how a raced NVIDIA GPU driver ioctl yields kernel compromise and cross-tenant risk on serverless AI cloud nodes.",
+      "summary": "The presenters from IBM X-Force offensive research explain why NVIDIA GPUs became a priority as AI workloads scale and Pwn2Own added AI infrastructure targets. They map the NVIDIA AI/ML stack from containerized workloads through the container toolkit, runtimes, and kernel drivers, then argue that a malicious GPU workload must reach the host kernel because GPU access keeps driver attack surface exposed regardless of container hardening.\n\nAfter a four-week timeline limited syzkaller fuzzing on virtualized and Azure GPU hosts, they focused on a race in the unlocked ioctl that attaches GPUs to a file descriptor, turning failed attach logic into a controlled double free of user-sized heap buffers. They dodge slab freelist hardening with large kmalloc paths, widen the race using hardware timers, reclaim pages through per-CPU list eviction and pipe spraying, and chain physical type confusion into arbitrary kernel read and write before copying an init task_struct for root and container escape. A live Azure serverless training job demo moves from an in-container shell to host root and visibility into other tenants' jobs.\n\nThey close with impact on immature GPU cloud providers, G Visor gaps around NVIDIA drivers, partial resistance from CONFIG_SLAB_VIRTUAL for heap targets, and a freshly disclosed heap overflow they could not exploit—inviting others to continue GPU driver work.",
       "durationSeconds": 2437,
       "conference": "hexacon",
       "viewCount": 3800,

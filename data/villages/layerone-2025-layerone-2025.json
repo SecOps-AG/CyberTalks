@@ -55,15 +55,17 @@
       "youtubeId": "9JcIHbmwV6w",
       "slug": "wine-for-video-game-hackers-jack-baker",
       "title": "WINE for Video Game Hackers (Jack Baker)",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Jack Baker"
+      ],
+      "track": "red-team",
       "topics": [
         "wine",
         "jack",
         "baker"
       ],
-      "teaser": "Security researchers examine technical aspects of WINE for Video Game Hackers (Jack Baker).",
-      "summary": null,
+      "teaser": "Explains how Wine on Linux shifts game anti-cheat assumptions and shows bypass and detection techniques for both sides.",
+      "summary": "The presentation opens by framing Wine as a compatibility layer that runs Windows PE binaries on Linux without Microsoft code, underpinning Valve Proton and Steam Deck gaming. As that audience grew, developers and anti-cheat systems faced environments where Windows APIs tell an incomplete story about what is really happening on the host.\n\nFor attackers, the middle of the talk walks through practical gaps. User-mode checks such as IsDebuggerPresent fail when a Linux debugger attaches, and VirtualQuery misreports memory allocated from the Linux side, hiding injected code. Kernel anti-cheat drivers do not run under Wine, so protected titles historically failed on Steam Deck unless vendors ship user-mode fallbacks—leaving defenders with less visibility than on native Windows. The speaker also notes the speculative idea of masquerading as Wine on real Windows to coax anti-cheat into disabling its kernel component.\n\nOn the defense side, reliable runtime identification matters more than hooking Steam’s deck-detection helper. Techniques include probing for Wine-only missing exports, issuing direct Linux syscalls (including ways around Proton’s seccomp filter), using ptrace to spot debuggers regardless of toolchain, and reading process maps through the Wine prefix Z drive. The closing argument is that neither side has fully adapted: cheaters gain blind spots in API-only detection, while anti-cheat still lacks a true kernel analogue on Linux unless platforms accept much heavier host monitoring.",
       "durationSeconds": 2063,
       "conference": "layerone",
       "viewCount": 130,
@@ -76,7 +78,7 @@
       "speakers": [
         "Vincent Benzoni"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "quantum",
         "conundrum",
@@ -85,8 +87,8 @@
         "challenge",
         "vincent"
       ],
-      "teaser": "Security researchers examine technical aspects of Quantum Conundrums: Conquering Quomputing Challenges (Vincent Benzoni).",
-      "summary": null,
+      "teaser": "Maps Shor's and Grover's risks to RSA and symmetric keys, hardware limits, timelines, and NIST post-quantum mitigations.",
+      "summary": "The presentation frames quantum computing as a targeted cryptographic risk rather than an instant end to all secrecy. It compares classical bits with qubits, explaining superposition and entanglement, then walks through Grover’s square-root speedup for unstructured search and Shor’s exponential impact on factoring—the mechanism that would break RSA, ECDSA, Diffie-Hellman, and much of today’s PKI, TLS, code signing, and ledger transaction verification.\n\nA live workflow connects through IBM’s cloud platform to run Shor’s algorithm against a toy four-bit RSA instance, factoring 15 into 3×5, while contrasting marketing terms like quantum supremacy and quantum advantage with noisy physical qubits, decoherence, and the gap between headline qubit counts and the thousands of error-corrected logical qubits needed for real RSA breaks. Hardware approaches such as superconducting, trapped-ion, and topological designs are sketched as an unsettled engineering race.\n\nThe closing sections stress harvest-now-decrypt-later collection of encrypted traffic today, uncertain timelines between optimistic vendor forecasts and skeptical research views, and NIST’s post-quantum finalists for key exchange and signatures. Practitioners are urged to plan algorithm agility, longer symmetric keys where Grover applies, and early adoption paths such as hybrid classical-plus-PQC stacks and quantum-safe SSH configuration rather than panic migration.",
       "durationSeconds": 3566,
       "conference": "layerone",
       "viewCount": 63,
@@ -140,15 +142,17 @@
       "youtubeId": "L3fLrQWzg7E",
       "slug": "amped-up-for-learning-radio-wasabi",
       "title": "Amped up for (Learning) Radio (wasabi)",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Wasabi"
+      ],
+      "track": "wireless",
       "topics": [
         "amped",
         "learning",
         "wasabi"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Amped up for (Learning) Radio (wasabi).",
-      "summary": null,
+      "teaser": "Surveys student radio competitions, cheap learning gateways, and design mistakes that block real RF education.",
+      "summary": "The presenter frames a skills gap in radio and embedded RF engineering as operators and chip designers age out, while everyday wireless feels like opaque magic. Ham voice service, Flippers, Meshtastic mesh nodes, and budget SDRs are compared on cost and approachability, with a quick tour of carriers, ISM bands, OOK, FSK, PSK, ASK, and I/Q concepts as the foundation students rarely get in school.\n\nMost of the session walks through competition builds on a shoestring budget. For CCDC, a cold-war-style number station used Apple text-to-speech over cheap transmitters so blue teams faced desk-side noise and red team volunteers hunted codes with improvised antennas. For CPTC’s airport year, Raspberry Pi baggage-claim kiosks with CC1101 radios challenged teams to capture traffic with RTL-SDRs, decode packets, and retransmit with assigned identifiers—some teams spoofed announcements successfully.\n\nThe closing critique is what failed pedagogically: one shared transmitter queue confused cause and effect, brittle tooling mixed bugs with student mistakes, and dumping modulation parameters without mastered basics led teams to tweak settings blindly. Takeaways favor HackRF-style academic tutorials, porta pack replay steps, layered bonus challenges, Jurassic-Park-style approachable scenarios over flashy but opaque radio puzzles, and reliable hardware so learners know whether they erred or the platform did.",
       "durationSeconds": 2726,
       "conference": "layerone",
       "viewCount": 57,
@@ -179,26 +183,31 @@
       "youtubeId": "dxyJaahkcCE",
       "slug": "well-do-it-live-experiments-in-self-modifying-code-b0t",
       "title": "We’ll Do It Live: Experiments in Self-Modifying Code (b0t)",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "b0t"
+      ],
+      "track": "malware",
       "topics": [
         "experiment",
         "self-modifying",
         "code",
         "experiments"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for We’ll Do It Live: Experiments in Self-Modifying Code (b0t).",
-      "summary": null,
+      "teaser": "A walkthrough of JVM infectors, instruction-level obfuscation, and genetic programming that evolves valid junk bytecode.",
+      "summary": "The speaker opens by contrasting Hollywood notions of self-modifying programs with constraints malware authors actually face, then outlines a years-long project to blend file infection, decentralized networking, and evolutionary code change into something small, dependency-free, and resistant to naive signatures. Large on-machine language models are ruled out as too visible and unreliable for serious complexity; instead, lightweight evolution is pitched as a scalable path with cost closer to opportunistic background CPU use.\n\nThe middle of the talk grounds the idea in a 2020 Java virtual machine virus—the first working JVM infector in decades—that copies itself through class-file parsing, constant-pool surgery, and a static invoke at program entry. Demonstrations show local jar spreading and sacrificial target binaries that keep running after infection. Polymorphism strips names and rewrites superficial structure; a bundled Samsara engine adds stack-balanced junk, goto noise, and reflective method calls, which forces a stack-map emulator so mutated bytecode still verifies. Peer-to-peer ideas use a virtual address space, small-world neighbor swapping after Sandberg’s routing work, and signed control messages.\n\nThe closing focus is genetic programming via PushGP: a fitness-weighted search that breeds runnable obfuscation from random genomes, illustrated with a short multi-generation run whose output preserves stack state while looking chaotic. Evolved PushGP is meant to translate into JVM instructions later, and the speaker sketches mapping genomes onto network addresses to hunt execution paths—including toward deserialization-friendly object states—while admitting full end-to-end integration remains in progress. Artifacts and publications are offered for follow-up discussion.",
       "durationSeconds": 2817,
       "conference": "layerone",
       "viewCount": 397,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "422s5Z-xbh8",
       "slug": "revenge-of-the-sol-stealers-cesi0",
       "title": "Revenge of the Sol Stealers (cesi0)",
-      "speakers": [],
+      "speakers": [
+        "Cesio"
+      ],
       "track": "malware",
       "topics": [
         "revenge",
@@ -206,18 +215,21 @@
         "cesi0",
         "stealers"
       ],
-      "teaser": "Security researchers examine technical aspects of Revenge of the Sol Stealers (cesi0).",
-      "summary": null,
+      "teaser": "Maps crypto drainers via Discord impersonation, fake airdrops, bookmarklets, clipboard lures, and stealer reverse engineering.",
+      "summary": "The presentation opens by defining wallets, seed phrases, and how drainers (or stealers) trick holders into surrendering keys, often through memecoin communities where impersonators pose as admins and push fake airdrop links. Victims who “connect” a wallet see failed connections and are steered to paste seed phrases, keystore JSON, or private keys into forms that POST credentials to attacker backends, including pages that mimic hardware-wallet security.\n\nMidway, the speaker dissects bookmarklets that hide withdrawal dialogs with CSS on exchange sites, Discord webhooks that alert operators to transfers, and fake streaming or Kick-style sites that abuse captcha flows to copy Base64 commands via the clipboard and Win+R execution. Follow-on payloads include obfuscated .NET samples decrypted with visible AES-256 keys, gzip-staged executables analyzed in CyberChef, and PureLog stealer caught in a sandbox—copying itself under AppData, adding startup persistence, querying Defender, and beaconing to RDP.sh hosts. A separate encrypted BAT sample logged keystrokes to temp files while blending in as “realtech” audio registry entries.\n\nPractitioners should treat any manual import prompt on a drainer site as theft, expect responsive scam “support,” and pivot infrastructure with URLscan, VirusTotal, and shared HTML markers (including matching scrapbook archive timestamps) that tied dozens of impersonation domains together across Twitch, Kick, TikTok, and similar brands.",
       "durationSeconds": 1972,
       "conference": "layerone",
       "viewCount": 55,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "NMfqGgNpHhg",
       "slug": "boo-boo-runs-wild-guerilla-open-source-manufacturing-machinist",
       "title": "Boo Boo Runs Wild: Guerilla Open-Source Manufacturing (machinist)",
-      "speakers": [],
+      "speakers": [
+        "machinist"
+      ],
       "track": "red-team",
       "topics": [
         "open-source",
@@ -227,12 +239,13 @@
         "guerilla",
         "machinist"
       ],
-      "teaser": "Security researchers examine technical aspects of Boo Boo Runs Wild: Guerilla Open-Source Manufacturing (machinist).",
-      "summary": null,
+      "teaser": "Walks through designing and printing a homemade sling bow with open CAD tools, slicers and FDM printers, plus practical print tips.",
+      "summary": "The speaker, who works in 3D printing and machine shops, explains that a bear trying to get into his home prompted him to build a self-defense device on general-purpose hardware. The talk follows up on an earlier one about using a desktop CNC machine for general manufacturing. This time the goal was a sling bow made on FDM printers, using a design that another maker had released as free files.\n\nMuch of the talk covers practical print decisions. The speaker says PLA softens at low temperatures, so he prefers PETG for most parts and carbon fiber or glass-filled nylon where loads are high. He suggests that infill above about 40 percent adds mass without much strength, and that very thin layers do not make parts more accurate in a useful way. For mating parts, he recommends offsetting the lines and allowing a set tolerance of plus or minus 125 microns. Tree supports are presented as a way to avoid scarring precision surfaces. He also explains why STEP files keep true curves while STL meshes flatten them, and demonstrates editing geometry inside the slicer and modifying vendor CAD parts in FreeCAD.\n\nThe talk ends with a comparison of FDM and resin printing. The speaker argues that FDM parts match resin in geometry at much lower cost and with less hazardous waste, while resin can give a nicer surface finish. He closes by saying that modern free tool chains make custom mechanical parts accessible, but that tolerance, material choice and test-fitting determine whether a part works under load.",
       "durationSeconds": 2591,
       "conference": "layerone",
       "viewCount": 29,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "S8oMrQJvCUU",
@@ -264,8 +277,8 @@
         "party",
         "ansi"
       ],
-      "teaser": "Security researchers examine technical aspects of ANSI Art Competition and Demo Party.",
-      "summary": null,
+      "teaser": "Judges announce ANSI art winners, then creators run live glitch-themed demos on custom boards with music and layered visual effects.",
+      "summary": "The session opens as the LayerOne 2025 demo party, moving straight into the ANSI art category. A presenter explains the format’s roots on bulletin board systems, how artists composed scenes from keyboard character sets, and how active groups still release monthly packs today, with archival work surfaced through community judges and online galleries.\n\nJudges then walk through submitted pieces, noting shading, negative space, typography, and portrait work, and announce placements for entries from artists tied to groups such as Lazarus and others. Praise goes to strong small-scale rendering, personality in pet portraits, and first-time use of the shared Mobius Art tooling.\n\nThe program shifts to the demo board category themed around glitch effects. Participants introduce first-time and returning builds: color and tile tricks from changing bit depth, screen-saver and game-recreation visuals, and experiments with audio and bootloader timing. A closing segment demonstrates “hyper mode,” pushing a simple GPU block to roughly double its clock until memory access fails and visuals dissolve unpredictably. The arc is cultural and hands-on rather than defensive security, but it shows how the conference celebrates maker craft alongside talks.",
       "durationSeconds": 1589,
       "conference": "layerone",
       "viewCount": 212,

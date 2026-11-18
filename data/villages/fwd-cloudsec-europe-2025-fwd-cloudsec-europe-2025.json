@@ -10,7 +10,9 @@
       "youtubeId": "CYYT581O67Q",
       "slug": "confidence-predicts-accuracy-and-other-lies-about-cloud-security",
       "title": "Confidence Predicts Accuracy and Other Lies About Cloud Security",
-      "speakers": [],
+      "speakers": [
+        "Cat Traxler"
+      ],
       "track": "cloud",
       "topics": [
         "cloud-security",
@@ -19,12 +21,13 @@
         "accuracy",
         "lie"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Confidence Predicts Accuracy and Other Lies About Cloud Security.",
-      "summary": null,
+      "teaser": "Applies behavioral economics to question posture-first cloud security habits and urges shared responsibility across organizations.",
+      "summary": "The talk argues that cloud security has become fixated on posture work: chasing misconfigurations and a perfectly least-privileged state, which the speaker calls pursuing posture perfect. Drawing on behavioral economics, Cat Traxler suggests this focus is driven by intuitive thinking, the appeal of quick wins and easy-to-count metrics, and the habit of trusting numbers that fit an existing story. She points to vendor statistics, such as the share of organizations with a root user lacking MFA, and a threat report trend line that jumped from 46th place to fourth, arguing that these figures lack context and invite misleading narratives.\n\nTo counter this, she recommends deliberately engaging slower analytical thinking with structured frameworks. She uses the NIST Cybersecurity Framework as an example, noting that its detect and respond functions force teams to accept that prevention will fail. She also proposes treating posture findings like missing patches, folding them into existing vulnerability management, and reviewing how each security function, such as incident response, changes in the cloud, with a shift toward hunting compromised identities.\n\nHer closing advice is a three-step plan: recognise diminishing returns from any single-pronged strategy, use frameworks to structure thinking, and stop relying on one dedicated cloud security team by making cloud security part of everyone's mission. She adds a fourth point: check decisions for present bias, since quick ticket closures are favored over the delayed gains of resilient backups and tested incident response.",
       "durationSeconds": 2592,
       "conference": "fwd-cloudsec",
       "viewCount": 128,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "zcmpGW61wm0",
@@ -51,7 +54,9 @@
       "youtubeId": "OL6Okw0fLuc",
       "slug": "azure-arc-from-a-heartbeat-to-heart-attack",
       "title": "Azure Arc: From a Heartbeat to Heart Attack",
-      "speakers": [],
+      "speakers": [
+        "Sharon Patil"
+      ],
       "track": "cloud",
       "topics": [
         "azure",
@@ -59,12 +64,13 @@
         "heart",
         "attack"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Azure Arc: From a Heartbeat to Heart Attack.",
-      "summary": null,
+      "teaser": "Shows how a flaw in Azure Arc's local agent let a server be hijacked from one Azure tenant into another.",
+      "summary": "Sharon Patil presents Azure Arc, Microsoft's product for managing on-premises servers from Azure, and explains why its hybrid design matters to both attackers and defenders. The local agent has a metadata service that stores access-token keys in a folder restricted to administrators, and an extension service that runs as SYSTEM and can deploy extensions such as custom script execution from the Azure portal.\n\nThe middle of the talk walks through a local privilege escalation chain against that agent. The metadata service accepts metadata for a host enrolled in a different tenant without validating it, so once it is stopped and replaced, the attacker can sit in the middle. By posing as the metadata service, the attacker can get the extension service to read a key file and return an access token. The speaker then used port squatting during the agent's repair process to take over the extension flow and install a custom script extension that ran as SYSTEM. Keys were invalidated on each metadata service restart, so timing mattered.\n\nThe issue was partly fixed in version 1.53 in June, when the local API moved to HTTPS with certificate pinning. The speaker's takeaways are to treat extension and tenant configuration as sensitive, protect secrets used by onboarded machines, watch the verbose agent logs, and recognise that Microsoft-signed binaries can be used for command and control.",
       "durationSeconds": 1449,
       "conference": "fwd-cloudsec",
       "viewCount": 260,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "8c3unhWyFGA",
@@ -164,12 +170,13 @@
         "entra",
         "connect"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding SyncJacked - Hijacking Identities Through Entra Connect Synchronization.",
-      "summary": null,
+      "teaser": "Shows how attackers abuse Entra Connect attribute matching to take over privileged cloud accounts from on-prem AD.",
+      "summary": "Microsoft Entra Connect syncs on-premises Active Directory users into Entra ID and links each on-prem account to a cloud account. It offers two matching methods. Soft matching relies on the UPN and proxy address, while hard matching relies on the source anchor, the ms-DS-ConsistencyGuid attribute, which holds a converted object GUID that is stored in the cloud as the immutable ID.\n\nThe talk presents two attacks. In the soft-matching case, an unsynced cloud user who holds an eligible, not active, global administrator role can be claimed by creating an on-prem account with the same UPN and proxy address. Once sync runs, the on-prem password is carried over to the cloud account, so the attacker can sign in and activate the role. The second attack, syncjacking, uses hard matching. An attacker with write access to an unsynced on-prem account and delete rights on a synced one copies the immutable ID of an actively assigned global administrator onto a new account, deletes the original, and takes over that account. In both cases the cloud audit log shows only display name and password change events.\n\nSuggested defenses are to disable soft matching, require MFA for role activation and sign-in, and never sync privileged cloud users to on-prem accounts. The speaker described reporting the hard-match issue to Microsoft in 2022, receiving hardening guidance, and seeing the case closed as by design. It was reopened in 2025, confirmed as a privilege escalation vulnerability, and is being addressed by Microsoft.",
       "durationSeconds": 1174,
       "conference": "fwd-cloudsec",
       "viewCount": 317,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "oq9aGH792CA",
@@ -217,7 +224,10 @@
       "youtubeId": "9OY6LtamqRQ",
       "slug": "ransomware-protection-with-immutable-aws-backup-its-complicated",
       "title": "Ransomware protection with immutable AWS Backup - it's complicated",
-      "speakers": [],
+      "speakers": [
+        "Curtis Mash",
+        "Paul Schwarzenberger"
+      ],
       "track": "wireless",
       "topics": [
         "ransomware",
@@ -227,12 +237,13 @@
         "backup",
         "complicated"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Ransomware protection with immutable AWS Backup - it's complicated.",
-      "summary": null,
+      "teaser": "Explains how an archive built immutable, centralised AWS Backups against ransomware, and where the service falls short.",
+      "summary": "The National Archives UK set out to protect its digital records from ransomware with a backup service that attackers, and even AWS organisation administrators, could not quietly erase. Their requirements were immutability, central storage in a dedicated account, one repeatable deployment for every workload, and as little day-to-day operation as possible. Native AWS Backup looked like the obvious answer, but several sharp edges came up along the way.\n\nThe main complications concerned encryption and vault locks. Vault Lock in compliance mode stops deletion even for administrators, but copying backups across accounts requires customer managed KMS keys, and those keys can be scheduled for deletion, which would leave the copies unreadable. Their workaround chains backups through a local vault, an intermediate vault re-encrypted with a customer key, and a final immutable vault using an AWS managed key. Logically air-gapped vaults help where resource types support them. Not every service is covered, RDS multi-AZ snapshots cannot be copied across accounts, and costs depend on vault choice, data volume and API calls.\n\nThe design is deployed with Terraform from a delegated backup account, using CloudFormation StackSets for workload accounts and organisation backup policies for plans. The speakers showed a manual restore and a compliance-locked vault in a live demo, then published the module as open source. Next steps include automated restore testing and backup auditing, and they asked for feedback, including on multi-region support.",
       "durationSeconds": 1548,
       "conference": "fwd-cloudsec",
       "viewCount": 380,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "-hA0B8nvY5I",
@@ -261,7 +272,9 @@
       "youtubeId": "B2BIvs1pUmQ",
       "slug": "console-hero-to-iam-zero-learn-from-temporals-just-in-time-journ",
       "title": "Console Hero to IAM Zero: Learn from Temporal's Just-In-Time Journey",
-      "speakers": [],
+      "speakers": [
+        "Brandon"
+      ],
       "track": "cloud",
       "topics": [
         "iam",
@@ -271,12 +284,13 @@
         "learn",
         "temporal"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Console Hero to IAM Zero: Learn from Temporal's Just-In-Time Journey.",
-      "summary": null,
+      "teaser": "Shows how one team replaced standing cloud credentials with just-in-time access, along with the approvals, automation and pitfalls.",
+      "summary": "The talk argues that most cloud breaches begin with static credentials, and that the fix is to stop issuing them. The speaker, who works at Temporal, explains why trimming permissions alone was not enough: some infrastructure users legitimately need a combination of powerful rights, so access has to be granted only when needed. His team moved toward just-in-time access, adding approvals, required reasons, and session lengths that grew from eight hours to ten after users pushed back, plus a ticket requirement with its own failure cases.\n\nAlong the way the speaker described practical tactics: enrolling only new hires in just-in-time access so existing users gradually gave up standing rights, alerting on IAM user creation and reaching out to the requester rather than simply blocking it, and insisting that vendors support role assumption. One CRM connector that only accepted IAM users was solved with IAM Roles Anywhere. For automation, GitHub Actions authenticated through OIDC removed static keys, and resource control policies limited which repositories could assume roles. Terraform plans attached to pull requests gave an audit trail.\n\nPitfalls included IAM Identity Center generating role names with random suffixes that broke KMS keys and EKS clusters, fixed with an intermediate role that has a static name, and slow eventual consistency in Google Cloud permission changes. The speaker's closing advice was to remove unused accounts first, such as those untouched for 100 days, and to keep building reusable patterns. At the time of the talk, three static IAM users remained, one of them a break-glass account.",
       "durationSeconds": 2754,
       "conference": "fwd-cloudsec",
       "viewCount": 108,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "WlQqQ_0kAjs",
@@ -341,25 +355,30 @@
       "youtubeId": "ECNOXCe034c",
       "slug": "pods-without-borders-lateral-movement-in-azure-kubernetes-servic",
       "title": "Pods Without Borders: Lateral Movement in Azure Kubernetes Service",
-      "speakers": [],
+      "speakers": [
+        "Nishant"
+      ],
       "track": "cloud",
       "topics": [
         "azure",
         "lateral-movement",
         "kubernetes"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Pods Without Borders: Lateral Movement in Azure Kubernetes Service.",
-      "summary": null,
+      "teaser": "Shows how a foothold in one AKS pod led to data exfiltration, internal network access and cloud identity abuse.",
+      "summary": "This talk follows assumed-breach reviews of Azure Kubernetes Service (AKS) clusters carried out for banks and critical infrastructure clients. The speaker explains that clusters ship without network policies, that administrators must write them, and that Azure supports Calico, Cilium or its own policy manager. Azure also lacks cluster-wide policy, so each namespace needs its own rules.\n\nEgress from pods was blocked by Azure Firewall for direct requests, yet Azure service IP ranges and a storage blob in the tester's own subscription let files leave the cluster. Allowlisted sources also let tools in: the entire Fastly CDN range was permitted, so an apt update fetched packages from a Debian mirror hosted there. Scanning subnets found open ports almost everywhere, enabling password spraying against domain controllers and anonymous LDAP binds. Pods could reach the metadata endpoint, and in one case a kubelet identity held contributor rights in other subscriptions, while another engagement showed VM contributor rights allowing code execution on virtual machines. A pod could read and write an identity federation database, and a BusyBox netcat went unflagged where nmap was detected.\n\nThe takeaways are a policy-driven approach using Azure Policy across all clusters, network policies applied estate-wide, and no implicit trust in cluster networking. DNS monitoring is hard at scale but gives visibility into suspicious outbound traffic. In Q&A, the speaker said the client resisted large redesigns and adopted only DNS monitoring and blocking, and that these scenario tests took two to four weeks.",
       "durationSeconds": 1396,
       "conference": "fwd-cloudsec",
       "viewCount": 109,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "EQLyD9ZdQIk",
       "slug": "lurking-in-the-documentation-shadows-why-we-built-the-aws-securi",
       "title": "Lurking in the (documentation) shadows: Why We Built the AWS Security Changes Project",
-      "speakers": [],
+      "speakers": [
+        "Leo"
+      ],
       "track": "cloud",
       "topics": [
         "aws",
@@ -369,12 +388,13 @@
         "built",
         "change"
       ],
-      "teaser": "Security researchers examine technical aspects of Lurking in the (documentation) shadows: Why We Built the AWS Security Changes Project.",
-      "summary": null,
+      "teaser": "Traces how silent AWS documentation edits revealed ALB authentication flaws, and how a tool tracks such changes.",
+      "summary": "The talk opens with an authentication bypass in ALB's built-in login feature. ALB signs tokens with keys published on a regional key server that all applications in a region share, and the documented URL pattern varies only by key ID, so one application could be given keys belonging to another. An issuer forgery step made the bypass complete. After the report in April 2024, AWS first changed the documentation to require validating the signer field, then to restrict traffic so only the load balancer reaches the application, without notifying customers. Later, AWS sent proactive notices and a health dashboard item.\n\nThe same design in Verified Access, a zero trust service, was patched through a documentation edit too, which suggested such silent fixes would recur. The speaker's team built the AWS Security Changes project to watch the documentation. It crawls the docs periodically, normalizes pages to Markdown so trivial edits are ignored, diffs versions with git, and sends the changes to a reasoning model to judge security impact before storing them in a searchable site.\n\nUsing the project, the team found seven issues. One involved an ELB logging example: the updated policy required the account ID in the S3 bucket name and no wildcards, whereas the earlier version let any account grant write access to a shared log delivery service, a confused deputy flaw. Four more confused deputy issues surfaced this way. The takeaway is that documentation edits can quietly signal security fixes, and searching IAM policy examples for permission and principal keywords is a practical way to spot them.",
       "durationSeconds": 1158,
       "conference": "fwd-cloudsec",
       "viewCount": 175,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "wzr2EIBuYqU",
@@ -399,7 +419,9 @@
       "youtubeId": "6u97AYYXiqM",
       "slug": "strifebot-attacking-and-defending-snowflake-data-lakes",
       "title": "STRIFEBOT: Attacking and Defending Snowflake Data-lakes",
-      "speakers": [],
+      "speakers": [
+        "James Henderson"
+      ],
       "track": "cloud",
       "topics": [
         "strifebot",
@@ -408,12 +430,13 @@
         "snowflake",
         "data-lake"
       ],
-      "teaser": "Security researchers examine technical aspects of STRIFEBOT: Attacking and Defending Snowflake Data-lakes.",
-      "summary": null,
+      "teaser": "Shows how to simulate attacks on a Snowflake data lake and which preventive and detective controls catch them.",
+      "summary": "The talk argues that purple team exercises should now cover cloud data lakes, using Snowflake as the worked example. The speaker points to a widely reported wave of customer breaches that began with an infostealer on an administrator's workstation rather than a platform flaw, with data then leaving through native features. The proposed approach is threat modelling, planning an attack path, then executing it against your own tenant alongside defenders.\n\nThe offensive section follows an intrusion from initial access through persistence to exfiltration. Access routes include password spraying where MFA is missing, cookie theft from a laptop after SSO sign-in, and credentials in local config files, version control or serverless code. Persistence covers password resets, added MFA methods, backdoor users, changed IP allowlists and scheduled functions that re-add an admin for a short window. Exfiltration examples include downloads, copies into cloud storage buckets, external stages, outbound calls from functions and sharing data to an attacker-controlled account.\n\nDefensive guidance centres on least privilege, federated sign-in with conditional access, MFA for any native passwords, restricted egress, IP restrictions, tokenising sensitive fields, and limiting integration and sharing rights to a few admins. For detection, the speaker urges forwarding Snowflake logs to the security platform, watching login and session tables, new stages pointing to unfamiliar buckets, data transfer records and query history, which needs fuzzy matching. Human-led threat hunting is preferred over brittle alerts until baselines are trusted. In the Q&A, response playbooks and disabling or resetting a compromised identity were suggested.",
       "durationSeconds": 1530,
       "conference": "fwd-cloudsec",
       "viewCount": 124,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "R75ZTBnUwXk",
