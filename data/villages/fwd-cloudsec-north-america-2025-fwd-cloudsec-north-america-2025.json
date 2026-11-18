@@ -153,7 +153,9 @@
       "youtubeId": "_W4NHw-4P8A",
       "slug": "shared-gpu-security-learnings-from-fly-io",
       "title": "Shared-GPU Security Learnings from Fly.io",
-      "speakers": [],
+      "speakers": [
+        "Matt Braun"
+      ],
       "track": "hardware",
       "topics": [
         "shared-gpu",
@@ -162,8 +164,8 @@
         "shared",
         "learnings"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Shared-GPU Security Learnings from Fly.io.",
-      "summary": null,
+      "teaser": "Explains how a bare-metal cloud hardens multi-tenant GPU pass-through with VFIO, IOMMU, ACS, ATS controls, and BAR monitoring.",
+      "summary": "Matt Braun describes why Fly.io treated customer-accessible data-center GPUs as a remote physical-access threat comparable to Thunderbolt-style DMA attacks, and why Firecracker’s lack of PCIe passthrough pushed the fleet toward cloud-hypervisor with a dual-hypervisor operational cost.\n\nAfter MIG’s platform limits and vGPU licensing made NVIDIA’s partition models unusable for ephemeral HTTP-driven workloads, the team chose full passthrough via VFIO, leaning on IOMMU groups and IOVA remapping as the primary DMA boundary. The talk walks through BAR layout on host versus guest, MMIO exposure, and hardening options such as eBPF or shimming the VFIO PCI driver when hardware partitioning is unavailable.\n\nFurther risks include PCIe peer-to-peer when ACS is missing or misconfigured, ATS allowing devices to embed physical addresses in transaction packets, and unexpected NVLink cabling that bypasses PCIe controls. Firmware on the card (VBIOS, info ROM, GSP drivers supplied from the guest) adds persistence and parsing concerns. Takeaways stress verifying IOMMU grouping and VFIO bindings, disabling ATS when possible, monitoring BARs, fuzzing GPU drivers, and preferring dedicated hardware when shared GPUs are unavoidable.",
       "durationSeconds": 1348,
       "conference": "fwd-cloudsec",
       "viewCount": 306,
@@ -273,7 +275,9 @@
       "youtubeId": "b-MF3yGk3zQ",
       "slug": "taming-llms-to-detect-anomalies-in-cloud-audit-logs",
       "title": "Taming LLMs to Detect Anomalies in Cloud Audit Logs",
-      "speakers": [],
+      "speakers": [
+        "Yuga El Berger"
+      ],
       "track": "ai-security",
       "topics": [
         "taming",
@@ -283,12 +287,13 @@
         "cloud",
         "audit"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Taming LLMs to Detect Anomalies in Cloud Audit Logs.",
-      "summary": null,
+      "teaser": "Shows how a small language model, trained on cloud audit logs, flags unusual events to cut false positives.",
+      "summary": "Cloud environments change constantly, and an administrative action in an audit log can look the same whether a DevOps engineer or an attacker performs it. The talk argues that rule-based detection piles up false positives in this setting. Prompting a general-purpose LLM directly over raw log data helps, but such a model knows nothing about what is normal in one particular environment.\n\nThe presenter's method trains a small GPT-2 style model, roughly 100 million parameters, on about 100,000 normalized log records. Each CloudTrail row is reduced to a few fields: zone, event name, source and response code. The model learns which sequences are common, so every token gets a surprise score that can be displayed as a heat map. Rare combinations stand out, such as an access denied response following a list-buckets call from an unusual zone. Training needs no manual labels, and the speaker estimated about an hour on a single GPU.\n\nThe flagged events are then added to an off-the-shelf LLM prompt as extra context, which the speaker says gives better triage with fewer false positives than prompting alone. Questions covered why not a classic classifier: the approach needs less machine learning expertise and can be retrained as the environment shifts. For multi-account AWS organizations, the speaker suggested one model per organization, sized somewhat larger than GPT-2.",
       "durationSeconds": 1238,
       "conference": "fwd-cloudsec",
       "viewCount": 995,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "eq2FY0PPUow",
@@ -313,7 +318,10 @@
       "youtubeId": "NgrpxhCDdrM",
       "slug": "double-agents-exposing-hidden-threats-in-ai-agent-platforms",
       "title": "Double Agents: Exposing Hidden Threats in AI Agent Platforms",
-      "speakers": [],
+      "speakers": [
+        "Michael Kachinsky",
+        "Hegy Kessenberg"
+      ],
       "track": "ai-security",
       "topics": [
         "double",
@@ -322,18 +330,21 @@
         "threat",
         "agents"
       ],
-      "teaser": "Security researchers examine technical aspects of Double Agents: Exposing Hidden Threats in AI Agent Platforms.",
-      "summary": null,
+      "teaser": "Shows how static agent IDs in embedded HTML snippets let outsiders reach supposedly protected AI agents.",
+      "summary": "This talk looks at conversational AI agents built on low-code platforms from major cloud providers and smaller vendors, and at how those agents get published on websites. The presenters used Google's Vertex AI agent builder as their main example. An anonymous agent is embedded with an HTML snippet that holds only a project ID and an agent ID, with no token or login flow. They argued that builders often assume an agent is safe because it sits on an internal or authenticated site, but those protections do not apply at the agent level.\n\nThe researchers described an attacker workflow. Searching GitHub turned up hundreds of public repositories exposing these snippets. Pasting a snippet into a basic HTML editor was enough to talk to some anonymous agents, which returned internal data within minutes. For search agents, which require an allowed-domain list, they found a domain that kept appearing in the repositories and spoofed it by mapping it to localhost through the hosts file, which got past the check. From there they probed the agent's tools and connected data sources and asked it to share its content. They also noted that attackers could overload agents to cause denial of service or drive up costs.\n\nOn disclosure, Google said it does not treat the allowed-domains setting as a security control, and it documents public access as open to anyone, so it did not count the bypass as a vulnerability. The presenters said similar snippet patterns appeared on other platforms, including IBM Watson X and a WordPress AI platform. Their recommendations were to minimise public endpoints, treat agent identifiers as secrets and scan for them, keep a living inventory of agents and the data they touch, and educate users, since non-technical staff can deploy agents in minutes.",
       "durationSeconds": 1372,
       "conference": "fwd-cloudsec",
       "viewCount": 323,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "8cScKAzuEz0",
       "slug": "what-do-you-mean-resource-not-found-demystifying-gcp-error-codes",
       "title": "What Do You Mean, ‘Resource Not Found?’ Demystifying GCP Error Codes for IR & Detections",
-      "speakers": [],
+      "speakers": [
+        "Gabriel Freed"
+      ],
       "track": "cloud",
       "topics": [
         "gcp",
@@ -341,18 +352,21 @@
         "resource",
         "demystifying"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for What Do You Mean, ‘Resource Not Found?’ Demystifying GCP Error Codes for IR & Detections.",
-      "summary": null,
+      "teaser": "Shows how GCP error codes and error details can expose probing and misuse, and how to turn them into detections and response steps.",
+      "summary": "Gabriel Freed argues that error responses in Google Cloud audit logs deserve the same attention as successful actions, since they can reveal reconnaissance and misuse before or during an incident. He explains that GCP services use gRPC with the AIP-193 error model, where each error carries a numeric code, an optional message, and a details section with type, domain, and reason, plus error info naming the affected resource. Freed maps these codes to familiar HTTP status equivalents to help analysts read them.\n\nHe gives examples of what different errors might mean. Many not-found responses across random bucket names could suggest dictionary-based enumeration, repeated already-exists errors on firewall names could point to an offensive tool reusing names, and a zone resource pool exhausted error could hint at cryptojacking. Permission-denied details can show exactly which permission was missing, and for long-running operations with a null principal, the operation ID can be used to trace back the initiating user.\n\nThree pseudo-code detections follow, covering reconnaissance through resource-not-found bursts, probing across several service accounts for disabled services, and a user checking permissions with a stolen key. Each begins naive and adds context such as user, project, error reason, and thresholds to reduce false positives. The takeaways are to map error codes into fields, baseline callers and their error rates, and stitch operation IDs so no entity is missed.",
       "durationSeconds": 1390,
       "conference": "fwd-cloudsec",
       "viewCount": 155,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "AccsDqmHPdU",
       "slug": "challenges-around-ai-as-a-service-logging",
       "title": "Challenges around AI-as-a-Service logging",
-      "speakers": [],
+      "speakers": [
+        "Jeremy Snyder"
+      ],
       "track": "ai-security",
       "topics": [
         "challenge",
@@ -361,18 +375,22 @@
         "logging",
         "challenges"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Challenges around AI-as-a-Service logging.",
-      "summary": null,
+      "teaser": "Shows why logs from AI-as-a-service platforms and browsers are inconsistent and hard to centralise for monitoring.",
+      "summary": "Jeremy Snyder explains why his team began examining how AI-as-a-service usage gets logged. Generative AI is moving into production quickly, often before security teams know which services and data are involved. He splits AI consumption into workload, meaning applications that call an LLM, and workforce, meaning employees using chat tools, since each produces different logs.\n\nOn the server side, the team reviewed Amazon Bedrock logs. They arrived as JSON but varied in metadata, stop sequences and where one interaction ended and the next began. Some models relied on cross-region processing, so data could be handled outside the expected region, a concern for sovereignty requirements. Agent logs also revealed system instructions the team had not written. Guardrail behaviour differed by provider, and one model processed encoded content that a guardrail should have blocked. With no CloudTrail-style service for these logs, centralising them meant routing through S3 or CloudWatch and a Lambda function, multiplied across accounts and regions.\n\nOn the client side, browser plugins were the easiest way to capture employee prompts, but endpoint agent logs were often truncated and browsers usually blocked response payloads. The team also found chat interfaces sending file contents before the user clicked submit. He noted log formats changed rapidly and that SaaS AI providers have not yet built audit features for security teams. His advice is to start from the monitoring goals, such as knowing who uses AI and with what data.",
       "durationSeconds": 1431,
       "conference": "fwd-cloudsec",
       "viewCount": 136,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "DCZtNldY5iI",
       "slug": "logs-dont-mean-a-thing-unraveling-iac-managed-identity-ownership",
       "title": "Logs don't mean a thing: Unraveling IaC-Managed Identity Ownership",
-      "speakers": [],
+      "speakers": [
+        "Dan Abramov",
+        "Eliav Livneh"
+      ],
       "track": "cloud",
       "topics": [
         "identity",
@@ -382,12 +400,13 @@
         "unraveling",
         "iac-managed"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Logs don't mean a thing: Unraveling IaC-Managed Identity Ownership.",
-      "summary": null,
+      "teaser": "Shows how to find the human owner of cloud identities created by infrastructure-as-code pipelines.",
+      "summary": "Owning a non-human identity means being the person who rotates its keys, adjusts its permissions and handles incidents. When infrastructure-as-code creates a cloud role, the activity log names the automation tool instead of a person, and the identity's name is assembled from variables spread across several files. The speakers set out to trace these identities back to the people who change the code.\n\nThey compared three approaches. The first clones the code and tags each resource with the file that produced it, which needs no logs but requires executing the IaC engine against environments the team does not control. The second matches a cloud creation event to the CI/CD run whose output contains the same name, then uses the GitHub API to find the pull request author. It works across tools and platforms but is limited by log retention. The third sends code and pipeline files to an LLM, which hallucinated and never produced reliable file links, so it was not finished.\n\nThe team picked the log-based method because it required no access to client environments. Q&A added that creation timestamps from the cloud API still help beyond retention windows, that owner tags are awkward when identities have several owners, and that manually kept owner lists go stale. The takeaway: combine several artifacts, keep logs as long as possible, and tag resources in your own environments.",
       "durationSeconds": 1392,
       "conference": "fwd-cloudsec",
       "viewCount": 165,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "rQxc9N4gBqA",
@@ -462,7 +481,9 @@
       "youtubeId": "dTUeAhzmIu8",
       "slug": "rebuilding-roadrecon-for-the-modern-entra-environment",
       "title": "Rebuilding ROADRecon for the Modern Entra Environment",
-      "speakers": [],
+      "speakers": [
+        "Thomas Burn"
+      ],
       "track": "recon",
       "topics": [
         "rebuilding",
@@ -471,12 +492,13 @@
         "entra",
         "environment"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Rebuilding ROADRecon for the Modern Entra Environment.",
-      "summary": null,
+      "teaser": "Explains how the Entra enumeration tool Road Recon was rebuilt for Microsoft Graph and what defenders can detect.",
+      "summary": "Road Recon is a Python tool that enumerates users, groups, service principals and permissions in an Entra tenant, stores them in an SQLite database and offers a front end for browsing the results. It depends on the Azure AD Graph API, which Microsoft is retiring, so the speaker set out to move it to Microsoft Graph. Microsoft Graph access requires a client that already holds enough preconsented permissions, so the work began by finding first-party applications that could authenticate with the needed scopes through a password grant.\n\nNot every first-party client works in that flow, and some need redirect URLs that are poorly documented. The Microsoft Office client worked best, although conditional access policies can block it, so alternative clients are sometimes needed. Some clients also lack permission to read conditional access or authorization policies. A demo showed the Graph-based version gathering tenant data and displaying it in the interface. The speaker also covered undocumented internal APIs used by the Azure portal, which generate no logs and can be used for enumeration. They are still being mapped, so that route is described as a work in progress and less stable than Graph.\n\nFor detection, the default Python user agent is an easy indicator but can be changed. Behavioural analytics on unusual request volumes, attempts across uncommon client and resource pairs, and sign-ins from anomalous network locations may help. Because read-only enumeration is hard to spot, the speaker argued that defenders should focus on sensitive or state-changing actions and collect telemetry across the estate.",
       "durationSeconds": 1450,
       "conference": "fwd-cloudsec",
       "viewCount": 795,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "g-XCNobgvaM",
@@ -504,7 +526,9 @@
       "youtubeId": "hHe9cKfSfqI",
       "slug": "i-didnt-register-for-this-whats-really-in-googles-artifact-regis",
       "title": "I Didn’t Register for This: What’s Really in Google’s Artifact Registry?",
-      "speakers": [],
+      "speakers": [
+        "Moshe Bernstein"
+      ],
       "track": "cloud",
       "topics": [
         "didn",
@@ -512,12 +536,13 @@
         "thi",
         "google"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in I Didn’t Register for This: What’s Really in Google’s Artifact Registry?.",
-      "summary": null,
+      "teaser": "Shows how scanning Google-owned container images in Artifact Registry turned up thousands of vulnerabilities and hard-coded secrets.",
+      "summary": "The research began when the speaker and a colleague, studying Cloud Composer 3, found a Kubernetes configuration pulling an image from a Google project. Its tags and parent organization ID suggested Google owned and deployed it. A permission gap hid other images in that project, but the legacy gcr.io domain still exposed them, giving a pipeline of discovery, ownership check, pivot and scan.\n\nImages fell into three groups: vetted marketplace images from third parties, offered Google base images, and used images Google runs in its own services. Across more than 3,000 images from 32 repositories, the scan found about 1.7 million vulnerabilities, around 350,000 unique CVEs, and roughly 70,000 unique high or critical ones. Flaws such as Log4Shell, Zerologon and Spring4Shell appeared on several images. One marketplace image had 24 critical findings, nine of them potentially leading to remote code execution. Almost 3,000 secrets turned up, all in the vetted group, including cloud keys, an OpenAI key and hard-coded admin logins.\n\nGoogle judged the used-category issues non-exploitable or irrelevant, but said it could not assess exploitability for the vetted images. The speaker argues that an upload by Google is not proof of trust, that shared responsibility leaves gaps between vendors and marketplace review, and that users should scan for secrets, use built-in scanning and audit where images come from.",
       "durationSeconds": 1490,
       "conference": "fwd-cloudsec",
       "viewCount": 276,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "ilnOvSV0QtY",
@@ -563,7 +588,9 @@
       "youtubeId": "k3DBur7iEHM",
       "slug": "not-so-secret-the-hidden-risks-of-github-actions-secrets",
       "title": "Not So Secret: The Hidden Risks of GitHub Actions Secrets",
-      "speakers": [],
+      "speakers": [
+        "Amiran Alavidze"
+      ],
       "track": "supply-chain",
       "topics": [
         "github-actions",
@@ -572,12 +599,13 @@
         "github",
         "action"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Not So Secret: The Hidden Risks of GitHub Actions Secrets.",
-      "summary": null,
+      "teaser": "Shows how GitHub Actions secrets can expose cloud credentials to write-access users, and how environments and OIDC trust rules limit it.",
+      "summary": "Many teams keep cloud credentials in GitHub Actions secrets, trusting that repository and organization secrets are well protected. The talk begins with a common pattern: a pipeline that hard-codes credentials is moved to repository secrets, which seem safe because their values cannot be read back in the interface and Actions masks them in logs. A user with write access can create a branch, edit the workflow to print the values in encoded form, and run it. Branch protection on the default branch does not prevent this, because the workflow definition comes from the branch being run and repository secrets are available to every run in that repository.\n\nThe next part moves the credentials into a named environment with a protection rule that allows only runs from the main branch. The same modified workflow then fails on a feature branch. The speaker applies the same test to OpenID Connect, where an AWS role trusts any workflow in the repository. Short-lived credentials can still be exported that way, so the fix is to restrict the subject claim to the main branch. When environments are used, the trust policy must reference the environment in the subject, which blocks a run that drops the environment reference.\n\nThe takeaways are to assume anyone with write access can read repository secrets, avoid storing them where possible, and use environments as the enforcement point for both static secrets and OIDC roles. Workflow triggers also matter, since their configuration is read from the default branch. Fork-based pull requests, which inject secrets differently, were left out.",
       "durationSeconds": 1307,
       "conference": "fwd-cloudsec",
       "viewCount": 524,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "l5lpIF_QZCE",
@@ -668,7 +696,10 @@
       "youtubeId": "EDQfmtwa49A",
       "slug": "inside-microsofts-battle-against-cloud-enabled-deepfake-threats",
       "title": "Inside Microsoft's Battle Against Cloud-Enabled Deepfake Threats",
-      "speakers": [],
+      "speakers": [
+        "Stephano",
+        "Bruce"
+      ],
       "track": "cloud",
       "topics": [
         "deepfake",
@@ -677,18 +708,22 @@
         "battle",
         "cloud-enabled"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Inside Microsoft's Battle Against Cloud-Enabled Deepfake Threats.",
-      "summary": null,
+      "teaser": "Shows how stolen cloud AI keys and reverse proxies power deepfake generation, plus Azure-side defenses and runtime logging.",
+      "summary": "The talk opens with what deepfakes are and three recent cases: a closed site that sold on-demand synthetic content, a British engineering firm that lost $25 million after a video call impersonated senior management, and a fake video aimed at a candidate in a Slovak election. The presenters report about two years of research into attacks on cloud AI APIs, where deepfake generation was one of the main goals. Attackers obtain cloud credentials through vulnerable applications or secrets left in code repositories, then the compromised account owner pays for the usage.\n\nThe middle section covers a reverse proxy used to resell access to stolen keys across several cloud providers, often behind a Cloudflare domain that hides the origin. The speakers link the proxy's developers and sellers to people named in Microsoft's December 2024 lawsuit, and show an earlier attack record that matched those details. They describe D3U, a Python web interface for image generation that can route requests through the proxy. It offers a jailbreak option that wraps prompts to bypass Azure's prompt rewriting, and it strips C2PA content credentials that mark AI-made images.\n\nFor defenders, they walk through Microsoft's AI shared responsibility model, where customers own access management, data governance and application design. Recommended controls include role-based access instead of API keys, private networking, image-aware guardrails and runtime monitoring. Because Azure OpenAI does not log model events by default, traffic should pass through API Management and stream diagnostics to an event hub for detection rules, such as watching image generation calls. The talk closes by arguing that content labeling and regulation also need a shared effort.",
       "durationSeconds": 1353,
       "conference": "fwd-cloudsec",
       "viewCount": 110,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Pd6rbBjiXaA",
       "slug": "data-perimeter-implementation-strategies-lessons-learned-rolling",
       "title": "Data Perimeter Implementation Strategies: Lessons Learned Rolling Out SCPs/RCPs",
-      "speakers": [],
+      "speakers": [
+        "Ben Joyce",
+        "Agnel Amodia"
+      ],
       "track": "appsec",
       "topics": [
         "lessons-learned",
@@ -697,12 +732,13 @@
         "strategie",
         "lesson"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Data Perimeter Implementation Strategies: Lessons Learned Rolling Out SCPs/RCPs.",
-      "summary": null,
+      "teaser": "Walks through rolling out AWS data perimeter SCPs and RCPs at scale, including the policy limits and developer coordination hurdles.",
+      "summary": "Vanguard's cloud identity team describes how they defined a data perimeter across hundreds of AWS accounts. They set three boundaries: resource, network and identity. Resource boundaries keep non-production and production apart and block outside resources; network boundaries admit only trusted VPCs and corporate address ranges; identity boundaries admit only trusted internal identities. They applied SCPs and RCPs at account level rather than organizational unit level so exceptions could be tuned per team.\n\nAWS offers no dry-run mode, so the team analysed CloudTrail with Python scripts to find requests that enforcement would break, then sent lists of risky identities and resources to development teams before rollout. Network controls began with privileged identities, and Lambda functions were moved into VPCs under a detective control first. Incomplete CloudTrail logging, and hardcoded VPC IDs and CIDR ranges that pushed policy size toward AWS limits, required workarounds. S3 buckets did not support resource tag conditions, so the team used a coarser principal account condition instead. After rollout, CloudTrail dashboards tracked access-denied spikes, and policies were rolled back when they appeared.\n\nExceptions were enforced in CI/CD: a policy granting an external account failed the build until a risk was logged and approved, after which a data perimeter tag could be applied. Key takeaways were to start small, win developer buy-in early, focus first on the riskiest identities, design for policy size limits, prefer tag-based approaches, and engineer around unsupported AWS features. In the Q&A, onboarding new accounts was still a manual policy deployment step.",
       "durationSeconds": 1420,
       "conference": "fwd-cloudsec",
       "viewCount": 442,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "WUO_-Agpcxs",
@@ -751,19 +787,23 @@
       "youtubeId": "cugwipMXHp0",
       "slug": "patience-brings-prey-lessons-learned-from-a-year-of-threat-hunti",
       "title": "Patience brings prey: lessons learned from a year of threat hunting in the cloud",
-      "speakers": [],
+      "speakers": [
+        "Greg Foss",
+        "Anthony Renzazzo"
+      ],
       "track": "cloud",
       "topics": [
         "cloud",
         "threat-hunting",
         "lessons-learned"
       ],
-      "teaser": "Security researchers examine technical aspects of Patience brings prey: lessons learned from a year of threat hunting in the cloud.",
-      "summary": null,
+      "teaser": "Shows how a year of cloud threat hunting produced new detections, with a compromised-workload case and LLM API abuse findings.",
+      "summary": "Greg Foss and Anthony Renzazzo describe the threat hunting program their detection engineering team runs across many customer environments. They separate hunting, which looks for unknown behaviour with a wide net, from threat detection, which codifies known activity, and explain that hunt results feed new detections shipped in their product. Inputs include critical security signals, detection maintenance, a backlog of hypothesis-driven hunts, and quarterly cross-team hunting sessions.\n\nThe first case began when tuning a noisy image-download rule exposed a workload compromise. The attacker waited about nine days before deploying a crypto miner and also set up proxyjacking to monetise traffic. The actor had exploited a PHP FastCGI flaw against a Magento site and deployed a rootkit that hid its executables from standard listings. The second case was a hypothesis-driven hunt for LLM API abuse after exposed access keys were seen used against Bedrock. Hunting Azure and Google Cloud turned up little, and the Bedrock query over cloud audit logs produced only two hits, both malicious, which gave indicators to pivot from.\n\nAcross the year, the speakers said leaked long-term access keys were the most common route into the cloud management plane, ahead of business email compromise and credential stuffing. Their lessons were to retire hunts that never return results, vary the attack surface to avoid bias, and not dismiss atomic indicators, since much malicious infrastructure stayed unchanged. Findings loop back into detections and AI-assisted workflows that depend on curated, confirmed data.",
       "durationSeconds": 1515,
       "conference": "fwd-cloudsec",
       "viewCount": 288,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "1rfB0Pb0t2o",
@@ -816,25 +856,30 @@
       "youtubeId": "9-e4VVPlWB8",
       "slug": "securing-remote-mcp-servers",
       "title": "Securing Remote MCP Servers",
-      "speakers": [],
+      "speakers": [
+        "Jake Burkowski"
+      ],
       "track": "hardware",
       "topics": [
         "remote",
         "server",
         "servers"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Securing Remote MCP Servers.",
-      "summary": null,
+      "teaser": "Explains how to harden remote MCP servers with server-side checks for sessions, OAuth flows and gateways.",
+      "summary": "The talk covers the server side of Model Context Protocol (MCP) deployments, since many headline attacks come from client-side tool isolation. The speaker treats local servers as executables that need the usual code scanning, dependency checks and private repositories, and recommends running scans often because these projects change quickly. For remote servers, the speaker discusses streamable HTTP and the older SSE transport, advising origin-header checks against DNS rebinding and avoiding cookie-based authentication to limit CSRF exposure.\n\nAuthorization is the central concern. The spec requires OAuth and forbids passing tokens through, yet many implementations put tokens in URLs or forward them downstream, which hampers auditing and rate limiting. Session IDs should be high-entropy, bound to the user and validated on every request, and OAuth flows carry confused-deputy risk around third-party consent screens and dynamic client registration. The speaker favours a platform approach with API gateways so that one well-tested implementation handles tokens and logging.\n\nThe closing section covers logging, since agent-driven requests vary more than fixed application calls. Logs should capture tokens, inputs, outputs, user context and both client and server identities. The speaker lists existing FastMCP releases, commercial gateways and open-source gateways as options, and cautions against the original FastMCP 1.0 code. In the Q&A, the speaker said standard API security still applies to the services behind MCP servers.",
       "durationSeconds": 1456,
       "conference": "fwd-cloudsec",
       "viewCount": 527,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "L-Y2UKnaLAM",
       "slug": "beyond-the-big-three-mastering-oracle-cloud-security-in-a-multi",
       "title": "Beyond the Big Three: Mastering Oracle Cloud Security in a Multi-Cloud World",
-      "speakers": [],
+      "speakers": [
+        "Danny Kaganovich"
+      ],
       "track": "cloud",
       "topics": [
         "cloud-security",
@@ -843,12 +888,13 @@
         "mastering",
         "oracle"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Beyond the Big Three: Mastering Oracle Cloud Security in a Multi-Cloud World.",
-      "summary": null,
+      "teaser": "Shows how to enforce region limits and block public network access in Oracle Cloud using native guardrails.",
+      "summary": "The speaker, a product manager at a cloud security startup, explains why customers move workloads to OCI, often because of existing Oracle ties or infrastructure cost, and why they tend to leave the provider's free preventive controls underused. He contrasts OCI's structure with AWS, Azure and GCP, noting that a compartment acts both as a container and as a resource holder, and that policies inherit downward from the root compartment. He also highlights built-in encryption at rest, network separation per customer, granular IAM conditions, and mostly free security services.\n\nThe first use case restricts workloads to approved regions for data residency, smaller attack surface and reduced monitoring scope. It can be done with governance rules, which set zero quotas for all resource families and lift them for allowed regions, or with IAM conditions added to each statement. The quota approach has a catch: users can still create some resources, such as object storage, but cannot use them. The second case blocks direct inbound internet access to a sensitive compartment using Security Zones, a CloudGuard feature with built-in policies, and pairs it with a zero quota for public DNS zones to cover managed services.\n\nThe talk closes with limitations: one security zone per compartment, no native exclusions, and built-in policies that cannot be customised. Deny statements in IAM had just reached limited availability, and a new simulator was mentioned. The practical takeaway is to combine several native tools instead of relying on one. In the audience Q&A, the speaker said visibility into layered policies exists in his own system and that a simulator is coming.",
       "durationSeconds": 1269,
       "conference": "fwd-cloudsec",
       "viewCount": 179,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "M1hXUcBMf1Q",
@@ -864,12 +910,13 @@
         "encrypt",
         "roles"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding IAM Roles Anywhere - now for everyone with Let's Encrypt.",
-      "summary": null,
+      "teaser": "Shows how to use free Let's Encrypt certificates with AWS IAM Roles Anywhere, plus a TOTP check to detect misuse of stolen keys.",
+      "summary": "Workloads outside AWS, such as on-premises servers, GPU providers or legacy Jenkins jobs, often cannot use static keys, OIDC or hardware modules. IAM Roles Anywhere offers a way to assume roles in that situation, but it needs a certificate authority, and public CAs are not accepted as trust anchors. The speaker uses Let's Encrypt's staging intermediate certificates instead, since no browser needs to trust them. Certificates are obtained through ACME with DNS validation, using a cheap domain hosted in Route 53 and a narrowly scoped IAM user with the Lego client. The role's trust policy limits the certificate subject to that domain and its subdomains.\n\nWithout an HSM the private key cannot be fully protected, so the speaker binds it to the host instead. A fingerprint of the environment, drawn from files such as /proc and /sys, seeds a time-based one-time password. That six-digit code is sent as the role session name, which the trust policy requires to be exactly six characters. CloudTrail logs the session name, so a script can compare each event with the expected codes and alert on a mismatch. Weekly CRLs are too slow for revocation, so a deny clause on a compromised common name takes effect at once.\n\nThe key remains exposed, but misuse becomes detectable. The speaker suggests a 15-minute session duration and monitoring certificate transparency logs for the domain. Six-day Let's Encrypt certificates are planned, which the speaker expects to strengthen the approach.",
       "durationSeconds": 1184,
       "conference": "fwd-cloudsec",
       "viewCount": 314,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "edcr__VzLUU",
@@ -890,7 +937,9 @@
       "youtubeId": "BdACXlRMdEA",
       "slug": "read-between-the-logs-a-new-vulnerability-in-gemini-cloud-assist",
       "title": "Read Between The Logs: A New Vulnerability in Gemini Cloud Assist Proves the Threat is Real",
-      "speakers": [],
+      "speakers": [
+        "Liv Matan"
+      ],
       "track": "cloud",
       "topics": [
         "read",
@@ -899,12 +948,13 @@
         "gemini",
         "cloud"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Read Between The Logs: A New Vulnerability in Gemini Cloud Assist Proves the Threat is Real.",
-      "summary": null,
+      "teaser": "Shows how attacker-controlled cloud log entries can inject prompts into Gemini Cloud Assist and lure users into phishing.",
+      "summary": "Gemini Cloud Assist is Google Cloud's Gemini integration in the console, used to suggest CLI commands and summarize logs, including through an explain-this-log-entry button. The talk asks what happens when attackers control the content of those logs. The attack begins with an HTTP request to a public cloud function that places instructions in the User-Agent header, which then appears in the resulting log entry.\n\nWhen a victim clicks the button, the generated prompt includes the full log entry as JSON. Injected special characters break out of that structure so the attacker's text reads as an instruction. The full prompt is hidden behind a details view, so the payload stays out of sight. In the demo, Gemini returned a phishing link presented as more details. The same payload could also be triggered by a user asking Gemini about a broken function. Because Gemini could query resources through the Cloud Asset API, the speaker showed the impact could extend to reading and exfiltrating cloud data via links. Google stopped rendering links, though the speaker noted the prompt injection risk remains.\n\nA comparable test on Azure Copilot did not yield a vulnerability at the time. It could be coaxed into printing a link through its handler parameters, but it could not read the text inside logs. For defenders, the speaker suggested a Log Explorer query that flags prompt-like words such as instruction or markdown in User-Agent headers, and advised treating AI assistants as untrusted, especially if they gain write access.",
       "durationSeconds": 1147,
       "conference": "fwd-cloudsec",
       "viewCount": 573,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "PH6wh0rhNOs",
@@ -917,12 +967,13 @@
         "state",
         "vulnerability-research"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding fwd:cloudsec State of the Conference 2025.",
-      "summary": null,
+      "teaser": "Organizers review the conference's budget, speaker mix, sponsors and community efforts, and invite volunteers to step up.",
+      "summary": "The organizers give their periodic state-of-the-conference update for Forward CloudSec, a nonprofit-owned, independent event meant to make strong cloud security accessible to everyone. Most of the session is a series of bar charts covering the venue history, talk counts, expenses and income, and sponsor trends. Expenses rose largely because of venue and food costs, and this year speakers received a $600 honorarium. Ticket prices went from $100 to $150, and 11 of 51 sponsors have been acquired, which is 22%.\n\nThe speakers flag several concerns. Submitted and accepted talks have levelled off since 2023, and the share of talks from practitioners at companies that are not cloud security vendors has declined, which the honorarium was meant to address. The Slack community keeps gaining members, but many rarely post. The technical oversight committee has taken on the Granted credential tool, so that a single maintainer leaving would not leave it unsupported.\n\nThe question-and-answer period covered volunteering, nonprofit finances, venue choice and whether a future event could be held in Canada. The organizers asked attendees to become understudies for sponsorship, logistics and audio-visual work, and to propose new projects they could own. For practitioners, the practical takeaways are to submit talks, mentor scholarship recipients and get involved in the community.",
       "durationSeconds": 2538,
       "conference": "fwd-cloudsec",
       "viewCount": 237,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     }
   ]
 }

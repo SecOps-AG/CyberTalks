@@ -147,19 +147,22 @@
       "youtubeId": "MVsAFCSQoJ8",
       "slug": "maciej-broniarz",
       "title": "Maciej Broniarz",
-      "speakers": [],
+      "speakers": [
+        "Maciej Broniarz"
+      ],
       "track": "blue-team",
       "topics": [
         "maciej",
         "broniarz",
         "vulnerability-research"
       ],
-      "teaser": "SOC z listka figowego analyzes Maciej Broniarz.",
-      "summary": null,
+      "teaser": "Shows where managed SOC services fail in practice, from vague contracts and missed assets to exposed monitoring.",
+      "summary": "The talk asks whether running a security operations centre (SOC) actually makes an organisation safer, or mainly satisfies regulatory checkboxes. The presenter draws on incident work where clients who already had a SOC were still hit, and on offers and contracts gathered from several providers. The argument is that many failures come from how a SOC is bought and integrated rather than from the idea of monitoring itself.\n\nSeveral concrete cases are shown. One provider filtered out technical accounts to reduce log noise, and a ransomware victim's domain controller later showed a printer logged in as an administrator. Another provider's monitoring agents were reachable from the internet, and a mesh VPN used to connect client hosts had no access controls, so devices from unrelated organisations could be seen from one another. Contracts were also examined: asset additions could slip into the following month, urgent additions took 10 business days, and one provider analysed only the simple 2FA scenario.\n\nThe practical takeaways are to inventory assets, data flows and log sources before buying monitoring, run a real risk analysis instead of a template, require staff to work on EDR-managed devices, monitor availability and exposed services, and track vulnerabilities and supply chain risk. A SOC does not transfer responsibility for an organisation's own infrastructure, and the presenter argues that the cited regulations do not clearly mandate one.",
       "durationSeconds": 1779,
       "conference": "confidence",
       "viewCount": 649,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "NLi5uD6TzTM",
@@ -214,18 +217,19 @@
       "speakers": [
         "Clientless Torification"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "bartosz",
         "wawrzyniak",
         "vulnerability-research"
       ],
-      "teaser": "Clientless Torification explores Bartosz Wawrzyniak.",
-      "summary": null,
+      "teaser": "Examines ways malware could reach Tor without a local client, using public SOCKS proxies, TLS fronting and DNS tunnelling.",
+      "summary": "The talk starts from a case where a known malware sample ships the official Tor library and opens a local port, which makes it easy to spot. The speaker also looks at onion-based C2 agents written in Rust, which avoid binding ports but still expose Tor use through entry node connections and binaries larger than 20 MB. He then reviews Tor's built-in ways to hide traffic, including obfs4 bridges, meek fronting on Azure, Snowflake and WebTunnel. Each of these still needs a client implemented inside the malware, which adds complexity and detection risk.\n\nThe middle section tests three hypotheses. First, Tor is reached through public SOCKS proxies found with Shodan and Censys: about 5000 results were collected, of which 380 worked, port 9050 was the most common, and the largest hosting network was a GPU farm provider, with a Russian bulletproof host in second place. Commands run through these proxies via curl, PowerShell and mshta succeeded, and Defender raised no Tor-specific event. Second, a hidden service was fronted behind a legitimate-looking domain with a valid certificate, with the traffic reaching it through SOCKS and address mapping, and the domain had no DNS records of its own. Third, a DNS tunnel using iodine was attempted, but it needed elevated privileges and a driver, and debugging it was hard, so the speaker abandoned it.\n\nThe conclusions are that external proxies add operational separation and skip relay connections, though proxy lists must be rotated and kept current. Network hunting for relays can still reveal activity, and detection needs deeper work. The speaker plans to package the TLS fronting method as a reusable container and to explore monitoring onion service requests through a public relay's control port, acknowledging the ethical concerns of that approach.",
       "durationSeconds": 1931,
       "conference": "confidence",
       "viewCount": 191,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Vv1Av-TZ4Ks",
@@ -269,8 +273,11 @@
       "youtubeId": "Oz5S76qwghE",
       "slug": "julia-puczynska-joanna-gajewska",
       "title": "Julia Puczyńska, Joanna Gajewska",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Julia Puczyńska",
+        "Joanna Gajewska"
+      ],
+      "track": "ai-security",
       "topics": [
         "julia",
         "puczy",
@@ -278,11 +285,12 @@
         "gajewska"
       ],
       "teaser": "Jakościowe podejście do wykrywania fejków investigates Julia Puczyńska, Joanna Gajewska.",
-      "summary": null,
+      "summary": "The talk starts with how large volumes of online content and automated decisions make fake material easier to spread and harder to catch. The speakers point to a recent Russian disinformation campaign and to a thought experiment in which a fake text message about a power discount overloads a city's electricity grid. Bots and platform algorithms that reward engagement can reinforce what people already believe, which creates both detection and fairness problems.\n\nThe second part covers deepfake types seen in the Polish online space: text-to-speech voice clones, lip-synced real footage, and edited attributes such as age or appearance. It then describes masking tactics meant to defeat automatic detectors, including visual overlays, stock footage spliced into genuine clips, and long real videos padded around a short fake. In an experiment, five state-of-the-art detector architectures were trained on a public benchmark and on a Polish incident dataset. Models trained on lab benchmarks performed poorly on real-world recordings, and noise augmentation pushed the largest model to label nearly everything as real.\n\nThe closing section argues that newer multilingual datasets did not fix the error rates, which stayed around 40 at best in the combined setup. The takeaways are that small but genuine real-world datasets matter more than large synthetic ones, that detection scores need calibrated uncertainty, and that human review and explainable decisions are needed for moderation. Generative AI, the speakers say, cannot replace data collection, human verification or regulation of large platforms.",
       "durationSeconds": 2314,
       "conference": "confidence",
       "viewCount": 216,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "gGl8JJzIjso",
@@ -335,7 +343,9 @@
       "youtubeId": "b9QWYmsKvAw",
       "slug": "szymon-chadam-zero-day-w-twojej-kieszeni-atakowanie-budzetowych",
       "title": "Szymon Chadam - Zero day w Twojej kieszeni - atakowanie budżetowych Androidów",
-      "speakers": [],
+      "speakers": [
+        "Szymon Chadam"
+      ],
       "track": "mobile",
       "topics": [
         "android",
@@ -345,12 +355,13 @@
         "zero",
         "twojej"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Szymon Chadam - Zero day w Twojej kieszeni - atakowanie budżetowych Androidów.",
-      "summary": null,
+      "teaser": "Shows how cheap Android phones ship vendor-added apps whose flaws let a zero-permission app spy on users and wipe devices.",
+      "summary": "The talk opens with a malware-as-a-service Android family: a victim installs a lure app, grants accessibility access, and the operator then controls the phone remotely. A short primer follows on the Android sandbox, runtime permissions, and inter-app communication through exported components and intents. The main part examines budget phones, whose vendors preload extra apps with added privileges.\n\nEach case is a live demo: an app with no permissions abuses a vendor component. A preloaded weather app exposed location data to other apps, a TCL camera app allowed deleting arbitrary files through path traversal, and a Bluebird file manager service running with system privileges could copy any file. A Bluebird kiosk app's settings interface let the malicious app enable accessibility for itself, which unlocked an engineering menu with an ADB shell on another vendor's device. A PIN-protected app lock leaked its PIN, an intent injection flaw opened a 2FA app's internal screen without login, and a factory-test app could trigger a reset. Chained together, these gave the demo malware location, files, code execution, messages and OTP codes.\n\nOf seven tested phones, every one had flaws added by vendor changes rather than by Android itself. A vendor's update server was also open to SQL injection, exposing employee and customer data and the update packages, and that flaw was patched after disclosure. Many other vendors ignored the reports, so the flaws may remain. Practical advice includes removing preloaded apps where possible, keeping devices updated, using MDM on work phones, and having developers test their own IPC components.",
       "durationSeconds": 1952,
       "conference": "confidence",
       "viewCount": 395,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "AKC4An6Lje8",
@@ -508,8 +519,10 @@
       "youtubeId": "ZHJ6khv61_4",
       "slug": "micha-k-aput-akuku-mam-cie-jak-namierzyc-operatora-drona-w-sercu",
       "title": "Michał Kłaput - Akuku, Mam Cię! - Jak Namierzyć Operatora Drona w Sercu Wojny",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Michał Kłaput"
+      ],
+      "track": "wireless",
       "topics": [
         "micha",
         "aput",
@@ -518,12 +531,13 @@
         "operatora",
         "drona"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Michał Kłaput - Akuku, Mam Cię! - Jak Namierzyć Operatora Drona w Sercu Wojny.",
-      "summary": null,
+      "teaser": "Traces how unencrypted DJI OcuSync telemetry leaks operator home coordinates and how spectrum tools expose pilots on the battlefield.",
+      "summary": "The presentation opens by contrasting hobby drones with the scale of modern combat UAVs, then walks through Ukraine’s shift from costly platforms such as Bayraktar toward mass-produced FPV and improvised strike drones. Examples include truck-borne swarm launches deep inside Russia and strikes on airfields, emphasizing cost asymmetry when even a fraction of cheap drones reach high-value targets.\n\nThe core problem for defenders is not only downing aircraft but finding the human operator, who often matters more than disposable hardware. The speaker explains why front-line control still relies on radio links when cellular and satellite options fail, notes common jamming and GPS disruption, and describes how consumer DJI gear encodes a return-to-home point tied to the pilot’s position.\n\nThe closing section covers open-source and commercial detection gear, spectrum views of OcuSync modes, and decoded telemetry fields that reveal serial data, flight state, and home X/Y coordinates without encryption. A practical Mac Mini and software-defined radio setup can turn those frames into map coordinates. Mitigations mentioned include firmware that strips telemetry or injects false home positions to misdirect counter-battery fire.",
       "durationSeconds": 1950,
       "conference": "confidence",
       "viewCount": 337,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "JMzj49IZsHw",
@@ -576,8 +590,12 @@
       "youtubeId": "I2O6Jnx0Nbo",
       "slug": "kamil-baczyk-kacper-sygu-a-tomasz-bukowski",
       "title": "Kamil Bączyk, Kacper Syguła, Tomasz Bukowski",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Kamil Bączyk",
+        "Kacper Syguła",
+        "Tomasz Bukowski"
+      ],
+      "track": "purple-team",
       "topics": [
         "kamil",
         "czyk",
@@ -586,12 +604,13 @@
         "tomasz",
         "bukowski"
       ],
-      "teaser": "Papier przyjmie wszystko details Kamil Bączyk, Kacper Syguła, Tomasz Bukowski.",
-      "summary": null,
+      "teaser": "Maps architect, red team, and blue team work through audits, silos, documentation gaps, and cloud in large regulated firms.",
+      "summary": "Three practitioners from a large, highly regulated pharmaceutical company describe how security architect, red team, and blue team roles line up across the system lifecycle—from design and architecture review through testing to incident response. They argue that many failures in such environments are not missing gadgets but mismatched paper, diagrams, and reality: huge Word compliance packs, copied internet drawings, and AI-generated threat models that nobody can defend under audit.\n\nThe red team section reframes success as testing organizational resilience—not chasing one-off exploits—and spells out when costly exercises make sense versus when basics still need work. The blue team portion covers triage, monitoring, SIEM and SOAR, hunting, and moving from siloed groups toward shared playbooks, tabletops, and automation. Architecture receives extended treatment on standards, as-is versus target gaps, and an internal “offensive architecture” mindset to catch weak designs early, plus ideas like compliance checks expressed as repeatable scripts.\n\nThey close with cultural tactics to break silos informally and warn that cloud hybrid connectivity opens fresh entry paths once email-centric assumptions fade. Specific internal case studies are omitted for confidentiality, but the through-line is coordinated roles, honest documentation, and timing offensive validation after foundations exist.",
       "durationSeconds": 2675,
       "conference": "confidence",
       "viewCount": 305,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "dmLgOrfttrg",

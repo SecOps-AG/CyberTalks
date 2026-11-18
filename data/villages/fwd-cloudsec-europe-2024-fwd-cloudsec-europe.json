@@ -141,7 +141,9 @@
       "youtubeId": "E_6HwlCzqUk",
       "slug": "kubernetes-audit-log-gotchas-shay-berkovich",
       "title": "Kubernetes Audit Log Gotchas ~ Shay Berkovich",
-      "speakers": [],
+      "speakers": [
+        "Shay Berkovich"
+      ],
       "track": "cloud",
       "topics": [
         "kubernetes",
@@ -151,12 +153,13 @@
         "shay",
         "berkovich"
       ],
-      "teaser": "Security researchers examine technical aspects of Kubernetes Audit Log Gotchas ~ Shay Berkovich.",
-      "summary": null,
+      "teaser": "Explains how managed Kubernetes providers handle audit logs differently, and how that breaks detection rules across clouds.",
+      "summary": "The talk covers why Kubernetes audit logs are hard to rely on for detection in managed clusters. The speaker, from Wiz's threat research group, opens with a campaign where attackers reached misconfigured clusters through anonymous access and ran crypto-mining workloads disguised as control-plane components. Spotting that requires the Kubernetes context audit logs provide, which the speaker's team needed while building a multicloud detection product.\n\nThe main problem is that managed providers control the audit configuration. On EKS, auditing is off by default and logs flow to CloudWatch, where ingestion and storage are paid. Oracle's engine logs by default with no way to turn that off. Audit policies are hard to see: EKS's has not changed since 2021 as far as the speaker knows, AKS's repository is archived, and GKE's follows vanilla Kubernetes. Formats also diverge. EKS keeps the original event, AKS keeps it in a properties field, and GKE rewrites it into its own format. GKE also drops command-line parameters, and some events, such as pod specs, are never logged. The options are separate rulesets, rules with embedded format logic, or normalizing events first.\n\nAs an alternative, the speaker suggested dynamic admission webhooks, which give a consistent event format across providers and let teams choose what to send. Their limits are that they do not record reads, impersonation details or unauthenticated attempts. In Q&A, the speaker said log retention costs are a provider choice, and suggested that audit policies could be reverse-engineered by running API verbs against each object and comparing the results.",
       "durationSeconds": 1466,
       "conference": "fwd-cloudsec",
       "viewCount": 530,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "1kk7STIsQsg",
@@ -185,7 +188,9 @@
       "youtubeId": "f7AuDxlYCzE",
       "slug": "hidden-among-the-clouds-a-look-at-undocumented-aws-apis-nick-fri",
       "title": "Hidden Among the Clouds: A Look at Undocumented AWS APIs ~ Nick Frichette",
-      "speakers": [],
+      "speakers": [
+        "Nick Frichette"
+      ],
       "track": "cloud",
       "topics": [
         "aws",
@@ -194,12 +199,13 @@
         "look",
         "undocumented"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Hidden Among the Clouds: A Look at Undocumented AWS APIs ~ Nick Frichette.",
-      "summary": null,
+      "teaser": "Shows how undocumented AWS APIs were mined from console JavaScript, and why their endpoints are hard to find.",
+      "summary": "Nick Frichette presents research into undocumented AWS API operations, meaning any operation missing from public documentation. Such operations have enabled cross-account access, CloudTrail bypasses and privilege escalation. His hypothesis was that service teams add new operations when the console needs them, and that the console's front-end JavaScript embeds service models as plain strings. He built a tool that uses a headless browser to crawl the console, extracts those models with a regular expression, and compares them against botocore.\n\nThe extracted set held 669 models against 419 in botocore. Counting gaps across categories gave 3,295 undocumented parameters on documented actions, 2,957 undocumented actions on documented services and 8,442 actions on undocumented services, about 14,692 items in total. Testing them all would take around 102 days at ten minutes each. The harder step is finding a working endpoint: model prefixes often do not resolve, and an internal SES operation answered only through a front-end internal hostname. A zero-permission role exposed the proxied operation in error messages, and those calls were not logged to CloudTrail. Certificate transparency logs helped list candidate endpoints, at least 49791 of them.\n\nFrichette encouraged researchers to use the open-sourced models and tool while studying a specific service, since the data can show which undocumented parameters or operations exist. The endpoint dataset stayed private because it contained AWS employee names and aliases. In questions, he reported a 20 to 30% drop in models on a rerun, possibly from restrictions, and urged AWS to be more open about these APIs.",
       "durationSeconds": 1536,
       "conference": "fwd-cloudsec",
       "viewCount": 1000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "N3kWr47O1mQ",
@@ -227,7 +233,9 @@
       "youtubeId": "PPJgxGMGwEY",
       "slug": "build-your-own-cloudtrail-chris-norman",
       "title": "Build Your Own CloudTrail ~ Chris Norman",
-      "speakers": [],
+      "speakers": [
+        "Chris Norman"
+      ],
       "track": "cloud",
       "topics": [
         "build",
@@ -236,12 +244,13 @@
         "norman",
         "chris"
       ],
-      "teaser": "Security researchers examine technical aspects of Build Your Own CloudTrail ~ Chris Norman.",
-      "summary": null,
+      "teaser": "Walks through building a CloudTrail-style audit log for an app's authorization decisions, using Cedar policies in AWS.",
+      "summary": "The talk looks at how to record authorization decisions inside an application, modelled on AWS CloudTrail, which logs control plane activity in AWS. The speaker, co-founder of Common Fate, starts from a growing set of access rules for a cloud access tool, such as on-call approvals and group-based conditions. He argues these rules needed a separate policy layer that could be tested, simulated and audited on its own.\n\nThe chosen option is Cedar, an open source policy language from AWS released under an Apache 2 license. Policies are written as code, validated against a schema, and checked in continuous integration. They are evaluated inside the workload rather than in a central service. Each request is first checked against Cedar, then an audit event is written, and only then is the operation carried out, such as fetching an object from S3. Each event records the decision, the operation details and any AWS request IDs, so it can be tied back to CloudTrail.\n\nIn a live demo with a receipt-tracking app, one user could reach another user's S3 object. The speaker tightened the policy so only the resource owner could get a receipt, previewed the diff, and watched a failing cross-user test start passing. The takeaways are to treat policy as code, consider this approach for user-to-service or service-to-service authorization, and begin by having developers emit audit logs from application middleware.",
       "durationSeconds": 1650,
       "conference": "fwd-cloudsec",
       "viewCount": 453,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "oD-d9B71yLo",

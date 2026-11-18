@@ -322,18 +322,19 @@
       "speakers": [
         "Simon Vernin"
       ],
-      "track": "community",
+      "track": "malware",
       "topics": [
         "lt13",
         "vulnerability-research",
         "threat-detection"
       ],
-      "teaser": "Security researchers investigate LT13 and analyze defensive countermeasures.",
-      "summary": null,
+      "teaser": "Shows two hunting approaches for the MintLoader malware loader: patterns in its obfuscated JavaScript and its redirect domains.",
+      "summary": "MintLoader is a two-stage loader. The first stage is heavily obfuscated JavaScript and the second is obfuscated PowerShell, and it is usually delivered through ClickFix-style lures. The speaker said it has been seen since early 2023 and that its samples use several URL patterns, some built around a recognizable name and others made of plain numbers. A typical infection chain was walked through to set up the rest of the talk.\n\nThe first hunting method focuses on the JavaScript itself. The speaker explained why the script contains an odd mix of church and Scotland related words and randomly capitalized terms: comments and some identifiers draw on a specific book, and capitalized words follow the chapter headings in that text. Once that pattern is understood, a simple search for JavaScript containing the same kinds of terms can surface more samples.\n\nThe second method looks at infrastructure. Searching for recently registered domains can reveal sites that redirect to randomly generated domains of a fixed length that are not registered. The speaker said many operators expose this behavior, and that several of these pages were hosted with one provider. The talk closed by presenting both techniques as new ways to track MintLoader infrastructure.",
       "durationSeconds": 181,
       "conference": "botconf",
       "viewCount": 37,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "89TAgcBVwkU",
@@ -402,18 +403,19 @@
       "speakers": [
         "Geoff Serrao"
       ],
-      "track": "community",
+      "track": "ai-security",
       "topics": [
         "lt10",
         "vulnerability-research",
         "threat-detection"
       ],
-      "teaser": "Security researchers investigate LT10 and analyze defensive countermeasures.",
-      "summary": null,
+      "teaser": "Demonstrates an LLM pipeline that turns a spoken request into a script producing network traffic captures.",
+      "summary": "The talk presents a short prototype in which an AI model generates network traffic on request. The speaker explains the uses: building packet captures for testing, supporting malware work, checking Snort rules during QA, and simply making the idea fun. Several generation approaches were weighed, including writing Python code that crafts packets, or a more involved setup where a model switches live packet capture on and off. The speaker chose a tool whose human-readable intermediate language describes traffic and renders it as a pcap.\n\nThe pipeline works in stages. A spoken request is converted to text by a speech model, then passed to GPT-4o together with a prompt that explains the language, its syntax and examples, and formatting instructions. The model writes a script in that language, which runs in Docker and produces the capture. The live demo produced a DNS query and response for snort.org, and an HTTP request and response were shown as an example script.\n\nTo finish, the speaker suggested that the voice input is impractical and could be dropped. A retrieval-augmented generation layer supplying detailed protocol instructions could improve output for whichever protocol is being generated.",
       "durationSeconds": 175,
       "conference": "botconf",
       "viewCount": 72,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "4OXrQtgCaU4",
@@ -422,18 +424,19 @@
       "speakers": [
         "Théo Letailleur"
       ],
-      "track": "community",
+      "track": "malware",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Security researchers investigate LT2 and analyze defensive countermeasures.",
-      "summary": null,
+      "teaser": "An IR case study unpacks SmokeHam from a fake RV Tools installer through registry-staged payloads to encrypted headless malware.",
+      "summary": "At the end of 2024, an incident response team investigated ransomware tied to an international affiliate. Initial access came from an administrator who installed a counterfeit RV Tools package that dropped SmokeHam, a PowerShell backdoor delivered through a Nullsoft installer script and launched via DLL sideloading beside a legitimate view.exe. Attackers moved laterally and deployed ESXi ransomware across hundreds of hypervisors.\n\nWeeks later, hunting turned up a fresh SmokeHam installer. Automated analysis pulled the malicious Nullsoft script, confirming the backdoor and run-key persistence. Running the sample in an isolated environment showed command-and-control through Cloudflare Workers. After further observation, the implant captured desktop screenshots to AWS, retrieved a payload from a Russian Proton66 host, hid it in an encoded registry value, and masqueraded as a Microsoft Edge update scheduled task that fired every two hours.\n\nThe staged PowerShell was simplified with a deobfuscation tool without execution, then decrypted and reflectively loaded a final headless PE module. That stage decrypts each function immediately before use, communicates over DNS tunneling, and exposes shell, file-blur, and shellcode-blur capabilities while removing its persistence. Practitioners gain a concrete picture of installer abuse, hunting payoff, staged C2, and anti-analysis in a post-ransomware intrusion.",
       "durationSeconds": 187,
       "conference": "botconf",
       "viewCount": 78,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "c6Z8BZpUJeM",
@@ -468,12 +471,13 @@
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Security researchers investigate LT 10 and analyze defensive countermeasures.",
-      "summary": null,
+      "teaser": "Shows how a conference stream controller uses a mini video mixer, OBS, Stream Deck and Companion to start and stop talk streams.",
+      "summary": "The speaker, who joined the conference stream team this year, describes the problem of streaming and recording a multi-track conference: each talk has to go live and be captured at the right moment, without unwanted recordings or crashes. The setup is built around a mini video mixer with hardware sound control, OBS on a PC feed for scene handling, a Stream Deck for physical buttons, and YouTube Studio for setting up the live events.\n\nEach talk gets its own stream key, and the stream goes live when that key is active. Companion software ties the devices together. The Stream Deck offers three main buttons. One changes talk and runs four actions at once: it stops recording and streaming, loads the configuration for the next talk, and puts the screen into a waiting mode showing the schedule. Another starts the talk by switching the scene to the speaker's PC and starting the conference feed when the speaker begins, with recording and YouTube streaming started if the talk is scheduled for them. The speaker also showed a photo of the device layout.\n\nCompanion also disables mixer buttons that are not valid for the current presentation, so nobody can start a stream or recording by mistake. The takeaway is that a schedule-driven setup with hardware controls removes many manual steps from live event streaming. The speaker closed by pointing to a blog post with more detail and offering to answer questions afterwards.",
       "durationSeconds": 180,
       "conference": "botconf",
       "viewCount": 78,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "-58vnJp8QHk",

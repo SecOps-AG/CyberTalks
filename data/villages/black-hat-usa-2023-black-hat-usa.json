@@ -1374,18 +1374,19 @@
       "speakers": [
         "Michael Bargury"
       ],
-      "track": "community",
+      "track": "cloud",
       "topics": [
         "guest",
         "vulnerability-research",
         "need"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding All You Need is Guest.",
-      "summary": "Black Hat session on All You Need is Guest.",
+      "teaser": "Shows how Azure AD guest accounts can reach over-shared Power Platform credentials and dump corporate SQL data.",
+      "summary": "Guest accounts in Azure AD are commonly assumed to be low risk, since an invited outsider should see nothing until something is shared explicitly. The talk opens with why organisations invite external parties into a tenant, and how business users rather than IT staff often make those sharing choices. A guest who signs in first sees an empty screen, then reaches Power Platform connections that a business user shared with the whole organisation, guests included.\n\nOpening one of these shared apps first hit a licence check, which the guest cleared by obtaining a free plan in their home tenant. A data loss prevention policy then blocked that route. The speaker explained that these policies only allow or deny connectors and do not inspect data patterns. A SQL-backed app exposed customer records, and replaying its request revealed the API Management gateway behind it. Generating a token for that internal API was refused for ordinary apps, so the demonstration used a token exchange across the family of Microsoft client IDs through a pre-approved public client. With the PowerOn tool, the guest could list connections, dump SQL tables and run arbitrary queries.\n\nFor defenders, the recommendations are to avoid sharing apps with large groups or everyone, to use the OWASP low-code guidance for business builders, to change tenant and Power Platform defaults, and to bring citizen-built applications under security ownership. Microsoft's response team worked with the speaker on mitigations. The speaker urged teams to test their own environments with the tool.",
       "durationSeconds": 2274,
       "conference": "black-hat",
       "viewCount": 3700,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "8B8k_VZ-Zj4",
@@ -1617,19 +1618,20 @@
       "speakers": [
         "Mitigating MS-RPC Based Threats"
       ],
-      "track": "community",
+      "track": "blue-team",
       "topics": [
         "lifting",
         "vulnerability-research",
         "threat-detection"
       ],
-      "teaser": "Monitoring investigates Lifting the Fog of War.",
-      "summary": "Black Hat session on Lifting the Fog of War.",
+      "teaser": "Shows how Windows event tracing and RPC filters can detect and block MS-RPC lateral movement and credential attacks.",
+      "summary": "The talk explains why MS-RPC activity is hard to monitor on Windows. The protocol is layered, dynamic endpoints are often ephemeral ports or named pipes, and server processes usually run as service hosts or protected processes, so network tools mostly see connection metadata. The speaker first walks through RPC concepts such as interfaces, transports, endpoints, bindings and opnums, the numeric identifiers that appear on the wire in place of function names.\n\nThe core technique uses the RPC event tracing provider. Server-side call start events expose the interface, opnum and endpoint but not the client address, so the speaker correlates them with TCP and SMB provider events to recover source addresses. The resulting tool, RPC visibility, stores this data in a graph database. Attacks covered include PsExec, where filtering on the create-service call avoids noise from monitoring agents; DCSync, flagged through the GetNCChanges replication call; and an EFS-based coercion attack, spotted by an outbound UNC SMB connection right after an EFS request. Task registration and WMI over DCOM are also discussed, the latter using heuristics on interface identifiers and method names.\n\nThe speaker notes limits: traffic wrapped in DCOM is harder to resolve, and event tracing only observes activity. For response, the talk turns to RPC filters in the Windows Firewall, which can restrict access to interfaces but cannot match on opnum. Suggested uses include blocking unused interfaces, deploying an emergency rule set to halt lateral movement during an incident, or restricting compromised user tokens.",
       "durationSeconds": 2101,
       "conference": "black-hat",
       "aiSummary": "Overview:\nSteve, a security researcher at Akamai with a background in Windows incident response and threat hunting, presents a defensive analysis of Microsoft Remote Procedure Call (MSRPC). Despite originating in the 1990s, MSRPC remains a ubiquitous protocol heavily leveraged by adversaries for credential theft, privilege escalation, and lateral movement in enterprise environments. The presentation examines MSRPC internal architecture and outlines defensive strategies utilizing Event Tracing for Windows (ETW) and Windows Firewall RPC filters to overcome traditional network inspection blind spots.\n\nKey Topics:\n- Adversarial exploitation of MSRPC (DCSync, PsExec, WMI, PetitPotam, ZeroLogon)\n- Protocol architecture: IDL, MIDL compiler, UUIDs, bindings, and dynamic endpoints\n- Limitations of network-based RPC inspection and ephemeral port tracking\n- Telemetry enrichment and defense via Event Tracing for Windows (ETW) and Windows Firewall\n\nTechnical Details:\nMSRPC serves as a fundamental inter-process communication backbone in Windows, underpinning key administrative and domain functions. Steve illustrates that MSRPC is prominently represented across the MITRE ATT&CK matrix, specifically highlighting DCSync for credential dumping, PsExec via the Service Control Manager and WMI for lateral movement, and critical vulnerabilities such as PetitPotam and ZeroLogon. Furthermore, threat intelligence indicates that the vast majority of modern ransomware groups maintain or actively deploy PsExec capabilities during attacks.\n\nDefending against MSRPC attacks presents significant operational hurdles. MSRPC encapsulates application requests inside higher-level protocols running across ephemeral TCP ports or SMB named pipes, making deep packet inspection resource-intensive for network appliances. Host-level visibility is similarly challenged because RPC servers predominantly execute inside protected processes or generic svchost.exe instances. Crucially, client calls routed through the rpcrt4.dll runtime library via NdrClientCall marshal parameters without transmitting human-readable function names across the wire or API interfaces; instead, functions are identified strictly by numerical operation numbers (OpNums) defined in the server's Interface Definition Language (IDL) file compiled with the MIDL compiler.\n\nTo bridge these visibility gaps, defenders can leverage built-in Windows instrumentation. Communication begins when clients query the RPC Endpoint Mapper on well-known TCP port 135 to resolve dynamic server endpoints associated with a specific interface UUID. By tapping into native Event Tracing for Windows (ETW) providers for RPC, security teams can decode OpNums, capture interface UUIDs, and monitor client-server bindings without relying on unstable user-mode hooks or third-party process injection. Steve additionally demonstrates how native Windows Firewall RPC filters can restrict unauthorized RPC communications to sensitive endpoints.\n\nKey Takeaways:\nSecurity operations teams cannot rely exclusively on standard network metadata or ephemeral port monitoring to detect MSRPC-based lateral movement and privilege escalation. Organizations should deploy host-level ETW logging to capture interface UUIDs and resolve OpNums to specific RPC function calls. Implementing Windows Firewall RPC filtering policies provides native, low-overhead network segmentation to block malicious RPC abuse without third-party agent hooks.\n\n(AI summary — Gemini Flash)",
       "viewCount": 1200,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "SqAL8rYWgTY",

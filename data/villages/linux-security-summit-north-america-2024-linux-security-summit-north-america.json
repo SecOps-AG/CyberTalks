@@ -141,17 +141,18 @@
         "Roberto Sassu",
         "Huawei Technologies Duesseldorf GmbH"
       ],
-      "track": "community",
+      "track": "supply-chain",
       "topics": [
         "digest",
         "cache",
         "vulnerability-research"
       ],
-      "teaser": "Roberto Sassu analyzes The Digest_cache LSM.",
-      "summary": null,
+      "teaser": "Shows a kernel LSM that lets integrity checks use package digests, cutting TPM measurement cost and keeping PCR values stable.",
+      "summary": "The talk covers the Integrity Measurement Architecture (IMA) in the Linux kernel, which records file measurements in a TPM-protected list and appraises files by checking their signatures. Two problems are described: measuring with a physical TPM is slow (about 640 microseconds per measurement without a TPM, about 7,000 with a physical TPM and about 1,900 with an emulated one), and PCR values change with the order in which services start, so TPM keys sealed to them stop working after a reboot.\n\nThe proposed answer is the Digest Cache LSM, which reads file digests from distribution package metadata, such as RPM headers already signed with PGP, and exposes them to IMA or a BPF LSM. If a file's digest is found in a verified package, IMA skips the measurement and the appraisal succeeds; a file with no matching digest causes attestation to fail. Digest lists are loaded on demand and attached to security blobs, and a deterministic directory scan with sequence-number prefixes keeps the measurement order stable. In benchmarks on Fedora 38, the approach sharply reduced the number of TPM measurements and made appraisal much faster than standard IMA, at the cost of some extra memory.\n\nThe speaker acknowledged the trade-off: a remote verifier learns which packages were touched but not which files or in what order. Questions compared the design with measured boot manifests and asked about signed bills of material for allowed package sets, and the speaker noted that other package formats need their own parsers. The practical takeaway is that integrity checks can reuse vendor-signed package data without changing distribution tooling, and that a patch set and a user-space tool are available.",
       "durationSeconds": 1874,
       "viewCount": 99,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "HJ5BMX52dhI",
@@ -161,7 +162,7 @@
         "John Johansen",
         "Georgia Garcia"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "access-control",
         "unprivileged",
@@ -170,11 +171,12 @@
         "apparmor",
         "access"
       ],
-      "teaser": "John Johansen details Unprivileged Access Control in AppArmor.",
-      "summary": null,
+      "teaser": "Explains how applications can build their own AppArmor policy and map OpenBSD pledge and unveil onto it.",
+      "summary": "The talk covers application-directed unprivileged access control in AppArmor, where a program defines its own confinement rather than relying only on a system administrator. The speakers describe a small API that lets an application start from a base profile, confine itself, and later add rules. Policy is compiled into a bounded state machine before loading into the kernel, which makes it verifiable enough for unprivileged users to load. Once loaded, a profile can be locked so it can no longer be replaced.\n\nA major theme is the difficulty of confining multithreaded programs, since each kernel task holds its own credential and profile updates reach sibling threads asynchronously. The speakers then map OpenBSD's pledge and unveil onto AppArmor. Pledge promises can only shrink, so early designs stacked a new profile for each reduction; the team is moving toward locked profiles with runtime Boolean conditionals. Differences in error behaviour, such as killing a process versus returning EACCES or ENOSYS, are handled with per-rule flags. Unveil's directory-tree semantics and directories added after an unveil remain hard cases.\n\nIn the questions, the speakers explain that stacked profiles are ordered by policy namespace hierarchy, and that this is a different design from Landlock rather than a rival. They note that BSD forks let semantics drift, which makes cherry-picking patches difficult. The takeaway is that the pledge and unveil mapping is still a work in progress, and a dedicated system call for loading policy is expected later, while a prctl-based interface serves for now.",
       "durationSeconds": 2890,
       "viewCount": 208,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "C0u_3Rok--s",
@@ -184,7 +186,7 @@
         "Stacked LSMs",
         "User Space"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "space",
         "stacked",
@@ -193,11 +195,12 @@
         "casey",
         "schaufler"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Stacked LSMs and User Space - Casey Schaufler, The Smack Project.",
-      "summary": null,
+      "teaser": "Explains a proposed library that lets applications read and set Linux security module attributes through new system calls.",
+      "summary": "The talk starts from a practical gap. Linux security modules attach labels and other attributes to processes, files and other objects, and applications need to read and change them. Until recently the only route was special filesystem entries and /proc/self/attr, which suit shell scripts but are awkward for programs. Newer kernels add LSM system calls that list the active modules and get or set attributes using numeric module IDs instead of name and value string pairs.\n\nThe speaker presents a proposed user space library, libLSM, built around those calls. It would include helpers for the LSM context buffer, such as a function to step to the next entry and a function that fills the buffer and handles alignment, along with mappings between module names and IDs and between attribute names and IDs. For older kernels it would emulate the system calls by reading /proc/self/attr, though results cannot match exactly because policies differ. Smack and AppArmor use per-module subdirectories there, while the SELinux maintainers declined one, which complicates emulation. The survey of packages showed 93 Fedora 39 packages with SELinux in the name and 157 depending on libselinux, against 16 and 38 for AppArmor on Ubuntu, with little overlap. Systemd contains an assertion that blocks SELinux and Smack running together, which caused trouble during module stacking tests.\n\nThe remaining work includes a new audit record type so that attributes from every stacked module are logged, not just one, and a way to return peer context over network sockets as an LSM context. The main takeaway is to write applications against the system calls instead of module-specific interfaces, so they stay module-agnostic. The library will first be released in a simple form to collect feedback from users.",
       "durationSeconds": 1406,
       "viewCount": 117,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "5cXDrIx8Qgo",
@@ -206,17 +209,18 @@
       "speakers": [
         "Tushar Sugandhi"
       ],
-      "track": "community",
+      "track": "blue-team",
       "topics": [
         "snapshotting",
         "vulnerability-research",
         "threat-detection"
       ],
-      "teaser": "Tushar Sugandhi analyzes Snapshotting IMA Log.",
-      "summary": null,
+      "teaser": "Explains snapshotting the kernel's IMA measurement log to ease memory pressure while keeping remote attestation verifiable.",
+      "summary": "The talk looks at snapshotting the Integrity Measurement Architecture (IMA) log in Linux. That log lives in kernel memory and keeps growing, because flushing it would break replay against the TPM PCR values used for remote attestation. On long-running servers, such as those in gaming, e-commerce or finance, reboots to free memory are unacceptable, and cloud verifiers need to process large logs quickly.\n\nThe proposed design has the kernel emit a snapshot aggregate marker, copy existing entries to a persistent location set by policy, and then truncate the in-memory log while keeping the marker. Snapshots could be triggered by a user-space agent, a kexec boot, or event-count and memory thresholds. A verifier that has already attested earlier snapshots only needs the newer in-memory portion plus later snapshot files. In a live demo, a file open triggered a snapshot, the entries were copied out, and the log was truncated.\n\nThe speaker stressed that this change is disruptive: truncating the log before clients and servers support it would cause attestation failures, so the work was first aimed at getting community agreement. Kernel-side truncation was not yet upstream, and the demo used a prototype. The Q&A covered locking, whether user space should handle copying, and a possible handler model, with the maintainers favouring a simple kernel truncate.",
       "durationSeconds": 2500,
       "viewCount": 212,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "ewv3kX-p7-o",
@@ -248,18 +252,19 @@
       "speakers": [
         "Guoren Li"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "linux",
         "kernel",
         "linux-kernel",
         "framework"
       ],
-      "teaser": "Guoren Li details A Hybrid Alias Analysis Framework and Its Application to Protecting the Linux Kernel.",
-      "summary": null,
+      "teaser": "Presents a pointer analysis that blends data-flow and type-based methods to find which kernel globals can be made read-only.",
+      "summary": "Linux kernel exploits often corrupt global variables such as modprobe_path. A hardening mechanism called read-only after init can lock such globals once boot finishes, but it is rarely used. Deciding whether a global is ever written after initialization means knowing every pointer that might reach it, and the rules produced by earlier alias analyses were either unsound or too imprecise for the kernel. Developers had manually tagged only about 500 globals in six years.\n\nThe proposed framework is a hybrid alias analysis. It starts with data-flow tracing and, at chosen points, jumps to type-based shortcuts, with the choice of shortcuts adjustable per query and per variable. Type casts are matched at the level of individual objects instead of merging whole types, and pointer arithmetic is normalized to byte offsets, so container_of is handled without a special model. The analysis is built on SVF, answers queries as graph reachability problems, and runs on demand. On kernel 5.4 with the default configuration, it analyzed all roughly 12,000 global variables within a one-hour budget, where a data-flow analysis finished about 3,000. About 5,000 variables were identified as candidates for read-only after init. The speaker reported around 23 false negatives, caused by inline assembly and pointer-to-integer casts. The derived rules also flagged illegal pointers in the recent public exploits that targeted globals.\n\nThe main takeaway is that the framework is sound by design except for the undefined-behavior cases noted above. Its output is best used as a list for developers to review, not applied automatically, because marking a variable that is still written as read-only crashes the kernel. The same pointer information could also support other access-control rules and general program analysis tasks.",
       "durationSeconds": 2141,
       "viewCount": 109,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "CsXBovJwUgw",

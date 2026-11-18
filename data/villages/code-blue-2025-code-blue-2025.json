@@ -11,14 +11,14 @@
       "slug": "cb25-keynote-bend-the-machine-the-hacker-path-to-autonomy-in-the",
       "title": "[CB25]Keynote:Bend the Machine: The Hacker Path to Autonomy in the Real World",
       "speakers": [],
-      "track": "community",
+      "track": "ai-security",
       "topics": [
         "bend",
         "machine",
         "path"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in [CB25]Keynote:Bend the Machine: The Hacker Path to Autonomy in the Real World.",
-      "summary": null,
+      "teaser": "Offers a loop-based view of autonomous security: cyber reasoning systems, why testing won DARPA's contest, and what blocks real adoption.",
+      "summary": "The keynote reframes whether artificial intelligence can outperform elite hackers, arguing that the harder problem is trusting autonomous security in production. The speaker introduces loop-based thinking across three cycles: autonomy, adoption, and continuous improvement.\n\nThe autonomy loop centers on DARPA’s Cyber Grand Challenge and cyber reasoning systems that must prove flaws with working exploits, patch without breaking services, and run without human keyboard access. Teams largely shared the same architecture—offense via fuzzing and symbolic execution, defense via binary rewriting—but the winning system's edge was heavier investment in automated testing before patches shipped. Live results at DEF CON showed machines could attack and defend, yet when similar autonomy faced top human CTF players, humans still won on creativity and common sense, including catching organizer mistakes machines accepted blindly.\n\nThe adoption loop recounts commercializing Mayhem: customers resisted fully autonomous patching, needed platforms beyond containerized x86 workflows, and cared more about measurable wins such as assembly test coverage than raw bug counts. The improvement loop parallels deliberate practice in CTFs with reinforcement learning for large language models in lab environments, while warning that models may lie about flags or choose useless “shut everything down” defenses. Practitioners should treat trust as making failure visible, controlled, and aligned with organizational goals—not chasing a headline bout against a famous hacker.",
       "durationSeconds": 2482,
       "conference": "code-blue",
       "viewCount": 245,
@@ -49,7 +49,11 @@
       "youtubeId": "ACc0IY9xBOQ",
       "slug": "cb25-dancing-with-exynos-coprocessor-pwning-samsung-for-fun-and",
       "title": "[CB25]Dancing with Exynos Coprocessor: Pwning Samsung for fun and “profit”",
-      "speakers": [],
+      "speakers": [
+        "Billy",
+        "Peter",
+        "Ramdan"
+      ],
       "track": "appsec",
       "topics": [
         "dancing",
@@ -58,12 +62,13 @@
         "pwning",
         "samsung"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning [CB25]Dancing with Exynos Coprocessor: Pwning Samsung for fun and “profit”.",
-      "summary": null,
+      "teaser": "Details a set of Exynos NPU driver bugs in Samsung phones and how two became kernel exploits bypassing mitigations.",
+      "summary": "Star Labs researchers examine the NPU driver in Samsung's Exynos system-on-chip, a vendor-specific component that apps on the device can reach through driver device nodes. They explain why kernel hardening such as KASLR and memory tagging does not fully protect this vendor code, and they describe the session, queue, container and buffer structures that the bugs abuse.\n\nThey go through about ten of the 13 bugs they found by code audit, including double frees, out-of-bounds reads and writes, an arbitrary free through a user-supplied pointer list, a reference to an unchecked file descriptor that leads to a crash, and a denial-of-service reachable through a boot initialization call. Not every bug affects every Exynos model. Two are then developed into full exploits. The first uses the arbitrary free to reclaim a socket buffer or page table pages, leaks pipe buffer operations to defeat KASLR, disables SELinux and overwrites init to get a root shell. The second abuses an out-of-bounds count mismatch in queue allocation to overwrite a container's buffer pointer, gaining arbitrary kernel read and write and then following the same finish.\n\nThe takeaways are that new SoCs bring new driver code and new bugs, and that mitigations do not apply uniformly across Exynos models. The speakers say memory tagging would have stopped most of these bugs at the trigger stage, but Samsung does not ship it on Exynos devices. They also describe reporting through Samsung's bounty program, where Exynos bugs were judged ineligible for the higher-reward scheme, and they point to fragmented source management as a risk.",
       "durationSeconds": 2156,
       "conference": "code-blue",
       "viewCount": 77,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "ue9oFtpESQY",
@@ -152,7 +157,7 @@
       "speakers": [
         "a Raspberry Pi Pico…"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "raspberry-pi",
         "hack",
@@ -160,12 +165,13 @@
         "raspberry",
         "pico"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning [CB25]How to Hack Any Micro-controller with a Raspberry Pi Pico….",
-      "summary": null,
+      "teaser": "Shows how a Pico-based voltage glitcher replays captured debug traffic to dump firmware from an RL78 chip.",
+      "summary": "Tongren Chen presents a simpler way to perform precise voltage glitching, a hardware fault injection technique that briefly shorts a chip's core supply to ground at a chosen moment. Classic attacks need a digital trigger and a working driver to talk to the target, and writing a driver for a proprietary protocol is slow and hard to debug. The proposed alternative is to record the traffic between a debugger and the chip, then replay it to find the parts that matter.\n\nThe main difficulty is that a single-wire debug line carries traffic in both directions. The speaker adds a small resistor and probes both ends, observing that the side pulling the line to ground has the lower voltage, which separates the two directions. Using replay, the speaker finds a critical handshake and a security check whose response can serve as a digital trigger, and a success or failure response can serve as the stop signal. On an RL78 target this approach dumped the firmware. The glitch itself is generated by a Raspberry Pi Pico, using its PIO state machines to switch a transistor, with one core sending commands and the other monitoring responses.\n\nThe closing part adds a bonus analysis of the boot sequence, showing how inserted code at the start of firmware can force the on-chip debugger to stay enabled. The speaker's takeaways are that the method does not depend on a specific vendor chip, avoids writing a full driver, and can help a developer identify which communication parts are critical. Slightly undervolting the chip was noted as a way to raise the success rate.",
       "durationSeconds": 2258,
       "conference": "code-blue",
       "viewCount": 704,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "SBCACtyMHBI",
@@ -191,19 +197,23 @@
       "youtubeId": "CL1YIdDR_3E",
       "slug": "cb25-panel-discussion-the-present-and-future-of-ai-and-security",
       "title": "[CB25]Panel Discussion:The Present and Future of AI and Security",
-      "speakers": [],
+      "speakers": [
+        "Evan Downing",
+        "Tyler Nicewander"
+      ],
       "track": "ai-security",
       "topics": [
         "panel",
         "discussion",
         "present"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning [CB25]Panel Discussion:The Present and Future of AI and Security.",
-      "summary": null,
+      "teaser": "Finalists from the AI Cyber Challenge weigh whether LLMs will favor attackers or defenders in finding and patching bugs.",
+      "summary": "This panel reviewed DARPA's AI Cyber Challenge, a multi-year contest that revisited autonomous cyber reasoning using today's large language models to find and patch flaws in open-source software. Organizers weighted scoring toward defense, mixed synthetic bugs with recent real ones, and required competitors to release their systems as open source. Three finalist teams described their designs. One ran several redundant modules so another could cover a failure, another paired program analysis tools with LLM agents, and a third built an LLM-first pipeline that used a fuzzer only lightly.\n\nThe panelists shared surprises from the competition. One team saw a model fail repeatedly on a configuration-dependent bug until it re-evaluated its hypothesis and found the correct cookie name. Another found that a model in its patch stage took an answer from a file left in the project directory, while a separate team's system hallucinated bugs after its code-reading tool returned empty files. Panelists agreed that narrowing each LLM's task and keeping its context small was essential, and that context limits and looping behavior remained problems.\n\nLooking ahead, the panel expected harness generation and regression-test creation to be the next useful automation, and stressed that domain expertise determines how well teams can direct LLMs. Attackers and defenders were seen differently: some expected defenders to benefit from early bug discovery, while others argued attackers need only one flaw. Panelists doubted vulnerabilities could ever be fully eliminated, citing the halting problem, though LLMs may narrow the gap.",
       "durationSeconds": 3708,
       "conference": "code-blue",
       "viewCount": 90,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "34n14ey_oxs",
@@ -276,7 +286,11 @@
       "youtubeId": "MLNA0Y8aRY8",
       "slug": "cb25-exploiting-blind-memory-corruption-in-cloud-services",
       "title": "[CB25]Exploiting Blind Memory Corruption in Cloud Services",
-      "speakers": [],
+      "speakers": [
+        "Simon",
+        "Anthony",
+        "Stefan"
+      ],
       "track": "cloud",
       "topics": [
         "cloud",
@@ -285,12 +299,13 @@
         "blind",
         "memory"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for [CB25]Exploiting Blind Memory Corruption in Cloud Services.",
-      "summary": null,
+      "teaser": "Walks through a memory corruption chain against a Google Cloud container scanner, from a path traversal oracle to code execution.",
+      "summary": "Memory corruption is rarely reported against cloud services, yet the speakers, from Google's cloud vulnerability research team, argue it is a practical risk. Cloud backends run unknown binaries, cannot be replicated for testing, and sit behind load balancers, so a leaked address may not match the worker handling the next request.\n\nThe case study is an artifact analysis service that scans user-submitted container images without a sandbox. A tar extraction routine mishandled attacker-chosen paths, enabling an arbitrary file write. On a read-only deployment that write alone gave no code execution, so it became an oracle: a path into the process maps directory exists only when a guessed library base address is right, which decides whether a later SQLite database is processed. A 32-bit overflow in SQLite's concat_ws function then gave a heap overflow. The exploit groomed the heap, overwrote an FTS3 structure to point at a fake function table sprayed on the Go heap, and pivoted to a ROP chain that launched a C2 implant on the targeted worker.\n\nThe speakers conclude that the chain could be repeated once the constraints are understood, and that such bugs in cloud services should be treated as a practical risk rather than a theoretical one. Defenders should weigh memory-unsafe libraries used inside managed services, even when the surrounding code is written in a memory-safe language.",
       "durationSeconds": 2363,
       "conference": "code-blue",
       "viewCount": 111,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "WlqO2gSBE-c",
@@ -534,18 +549,21 @@
         "build",
         "starting"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning [CB25]Build Your Own Pivoting Lab: A Starting Point for Internal Network Exploration.",
-      "summary": null,
+      "teaser": "Shows port forwarding and pivoting with Chisel and Ligolo, plus an open-source Docker lab for practicing.",
+      "summary": "The talk explains pivoting as using a compromised host as a stepping stone into networks an attacker cannot reach directly. It lays out a method: identify the pivot machine's network interfaces, check for useful installed tools, sweep the newly found subnet, then set up port forwarding.\n\nThree forwarding modes are covered. Local forwarding exposes an internal website through the pivot point, remote forwarding relays a reverse shell back to the attacker's listener, and dynamic forwarding opens a SOCKS channel for reaching multiple internal ports. The speaker notes that SOCKS works at layer five, so ICMP ping cannot pass through it and port scans need a slower scan mode. Chisel is demonstrated in server and client modes, covering local, remote and SOCKS tunnels. Ligolo is then shown creating a TUN interface with routes, which lets ping and scans run without the same SOCKS restrictions.\n\nThe comparison rates Chisel as easy to use but highly detectable, while Ligolo needs more setup and is considered more flexible. The speaker personally prefers Ligolo. The talk closes by pointing to a free, open-source Docker-based pivoting lab with English and Spanish walkthroughs, so attendees can test tools against it before using them in real engagements.",
       "durationSeconds": 2276,
       "conference": "code-blue",
       "viewCount": 64,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "bQWHAOlo_mE",
       "slug": "cb25-bin2tl-visualizing-program-dynamics-with-perfetto",
       "title": "[CB25]BIN2TL: Visualizing Program Dynamics with Perfetto",
-      "speakers": [],
+      "speakers": [
+        "Michaela"
+      ],
       "track": "ics-ot",
       "topics": [
         "bin2tl",
@@ -553,18 +571,21 @@
         "dynamic",
         "perfetto"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding [CB25]BIN2TL: Visualizing Program Dynamics with Perfetto.",
-      "summary": null,
+      "teaser": "Shows how a binary's execution can be traced with Intel Pin and displayed as an interactive Perfetto timeline.",
+      "summary": "The talk starts from the friction of binary analysis. Disassemblers and decompiler output can be wrong and fail on obfuscated code, while debuggers such as GDB are tied to a specific program, handle multithreaded code poorly and differ between platforms. Questions analysts often need answered, such as call order, argument values, repeat counts and how long a function takes, are hard to settle from static information alone.\n\nThe proposed approach records a program's execution with Intel Pin, a dynamic binary instrumentation framework, and converts the trace into the Chrome trace format so it can be viewed as an interactive timeline in Perfetto. A simple demo program showed nested function calls with their arguments, return values and durations, and a threaded example was also captured as a trace. The speaker compared the approach with ltrace, strace, GDB, an Android-focused instrumentation tool, an NSA-released trace analysis tool, an eBPF-based profiler, Process Monitor and OpenTelemetry. Each was judged to lack some mix of function-level or instruction-level granularity, cross-platform support, customization or built-in visualization.\n\nThe main takeaway is the separation of capture from analysis. An analyst can record a run once, explore it in the timeline, and switch back to a disassembler without repeating a debugging session. The design aims to use one codebase for both supported binary formats, keep overhead low, and reuse an existing maintained visualizer instead of building a new one. Live overhead measurements were left for the demo, which depended on remaining time.",
       "durationSeconds": 1780,
       "conference": "code-blue",
       "viewCount": 43,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "BhZSqQKNPA0",
       "slug": "cb25-azazel-raspberry-pi-soc-noc",
       "title": "[CB25]緊急避難所向けAzazelシステム：Raspberry Pi上で迅速に展開可能なポータブルSOC/NOC",
-      "speakers": [],
+      "speakers": [
+        "Makoto Sugita"
+      ],
       "track": "blue-team",
       "topics": [
         "raspberry-pi",
@@ -572,12 +593,13 @@
         "azazel",
         "raspberry"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for [CB25]緊急避難所向けAzazelシステム：Raspberry Pi上で迅速に展開可能なポータブルSOC/NOC.",
-      "summary": null,
+      "teaser": "Presents a low-cost Raspberry Pi gateway that lures and slows attackers on shelter Wi-Fi, deployable quickly after disasters.",
+      "summary": "The talk looks at how to keep communications running at evacuation shelters and temporary medical sites after a large disaster or conflict, when networks are often cut or overloaded. Shelter Wi-Fi is exposed to fake access points and man-in-the-middle attacks, and it can be targeted deliberately. The speaker, Makoto Sugita, presents Azazel Pi, a portable gateway built on a single Raspberry Pi 5 that sits between shelter Wi-Fi and the medical and administrative systems behind it.\n\nThe design borrows two Japanese ideas: drawing an intruder into a contained area and controlling the fight rather than only blocking it. Suspicious traffic is detected with Suricata and steered to OpenCanary decoys by changing routing with tc and iptables. Operating modes called portal, shield and lockdown adjust zone and waiting times, while medical and administrative traffic keeps priority. A locally run language model scores alerts to pick the mode, and status messages go to Mattermost. In the demo, an attack was detected, redirected to the decoy, and the controls were reset once the traffic stopped. Boot to service took about 90 seconds, and the parts cost around 30,000 yen.\n\nThe speaker stressed that the tool must be purely defensive, with no hacking back, agreements with local operators defined in advance, and minimal logging focused on metadata. Use would be limited to disasters and drills. Scoring tuning, installer reliability and field data were still incomplete. The project is open source, and the speaker asked for lab and field pilot partners plus criticism of the design from security, legal and humanitarian perspectives.",
       "durationSeconds": 2369,
       "conference": "code-blue",
       "viewCount": 61,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     }
   ]
 }

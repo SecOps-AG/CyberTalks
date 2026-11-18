@@ -124,19 +124,23 @@
       "youtubeId": "bYwE8NA5hqY",
       "slug": "26-sakura-and-r1nd0",
       "title": "26 - sakura and R1nd0",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Sakura",
+        "Shilin Chen"
+      ],
+      "track": "appsec",
       "topics": [
         "sakura",
         "r1nd0",
         "vulnerability-research"
       ],
-      "teaser": "Coverage of 26 - sakura and R1nd0 from the conference program.",
-      "summary": null,
+      "teaser": "Researchers detail twenty-three remote code execution flaws in Edge's JIT-less WebAssembly interpreter and how they chain to compromise.",
+      "summary": "Microsoft Edge’s enhanced security mode turns off V8 JIT so system mitigations such as ACG can apply, but that breaks normal WebAssembly compilation. Edge instead runs untrusted Wasm through a pure software interpreter that had seen little outside scrutiny, which the presenters argue creates a distinct attack surface.\n\nThey adapted V8’s random WebAssembly module generator and AFL-driven pipeline to target jitless execution, using assertions to surface memory corruption. That work yielded twenty-three remote code execution issues, including a tail-call handler that continues into unreachable bytecode, a branch-on-null path that leaves extra references on the stack, and reference-stack indexing that adds the frame offset twice. They also summarize stale exception state, bytecode stack tracking mistakes, missing GC write barriers, and integer overflow in array copy checks.\n\nMost flaws reduce to reference type confusion between struct and array layouts. The shared exploit path treats a struct field as array length for out-of-bounds access, corrupts a JavaScript array’s length, and reaches familiar V8 primitives for arbitrary read and write. The closing message is that new interpreters parsing hostile input need systematic fuzzing and review early, because dual-stack Wasm semantics multiply invariant failures across many handlers.",
       "durationSeconds": 1711,
       "conference": "offensivecon",
       "viewCount": 740,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "UcAcCsEg7PA",
@@ -256,18 +260,19 @@
         "Xingyu Jin",
         "Martijn Bogaard"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Coverage of 26 from the conference program.",
-      "summary": null,
+      "teaser": "Shows how a PowerVR GPU free-list flaw lets an untrusted app write kernel memory and reach root on Pixel.",
+      "summary": "Two members of the Android Red Team describe GPU hardware behavior they found while preparing Google's Pixel 10, which uses an Imagination Technologies PowerVR GPU in a Google product for the first time. They first outline the driver stack, from user-mode libraries through the kernel driver's bridge server to the GPU, and explain how device memory heaps, physical memory resources and free lists are set up for tile-based deferred rendering.\n\nThe core issue is that the kernel driver does not fully validate free list growth parameters. An oversized value corrupts the stack pointer register the GPU hardware uses to pick the next physical page, so the GPU can write geometry and page-table data to pages outside its protected region. With no documentation for the hardware's behavior, the researchers mapped its write patterns through repeated experiments. They eventually reached a write primitive covering about 32 bits at the start of a physical page, with a few bits they could not control.\n\nThey used that primitive to patch kernel instructions. One patched register made a pseudo file print kernel format strings, which leaked the kernel's address layout. Another step overrode a hash key so a socket object's address could be recovered, and a patched syscall gave arbitrary kernel writes. A live demo ran a two-app chain that reached root. The speakers stressed that the exploit was fragile, since another process crashing mid-exploit could panic the device. Their takeaway is that GPU hardware outside normal memory protection can undermine kernel security, and that parameters passed from user space to GPU firmware deserve close scrutiny. The vendor worked with them on fixes before launch.",
       "durationSeconds": 3427,
       "conference": "offensivecon",
       "viewCount": 676,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "I1-D_sck6to",
@@ -346,18 +351,19 @@
         "Chris",
         "Benedict"
       ],
-      "track": "community",
+      "track": "hardware",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Coverage of 26 from the conference program.",
-      "summary": null,
+      "teaser": "Shows how rerouting AMD's Infinity Fabric and abusing the PSP breaks SEV-SNP confidential VM protections.",
+      "summary": "The talk looks at what happens between AMD x86 cores and DRAM, focusing on the Infinity Fabric interconnect and the platform security processor (PSP) that anchors confidential computing on AMD. The speakers argue that a trusted execution environment's protection depends on the interconnect that routes its memory traffic. They set out the threat model, in which the BIOS and hypervisor are untrusted, and explain how SEV-SNP uses encrypted guest memory and the RMP integrity structure.\n\nThe first attack, called Fabric, abuses the data fabric's MMIO routing tables. The speakers unlocked the data fabric configuration by suppressing the BIOS call that locks it, so routing rules could be changed from the operating system. A malicious rerouting configuration then sent PSP accesses away from DRAM, so writes never landed and SEV-SNP broke. The second attack, Breakfast, uses the PSP as a confused deputy. By driving PSP page moves and changing a window selector, the attacker reaches the system management network, the control plane of the SoC. Corrupting the guest context page to re-enable the debug API gave arbitrary read and write into guest memory and allowed forged launch measurements. Zen 4 and Zen 5 platforms were named as affected, and firmware API versions above 1.58.03 are reported as mitigated.\n\nThe root causes are that the PSP does not explicitly request DRAM and that the fabric stays reconfigurable after initialization. Mitigations include locking the relevant bits before SEV-SNP initializes and locking on-SoC components against relocation. The takeaway is that TEEs, CPUs and their interconnects are complex, and that complexity leaves many places for failures.",
       "durationSeconds": 3032,
       "conference": "offensivecon",
       "viewCount": 398,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "2ytQDhLSDMg",
@@ -394,12 +400,13 @@
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Coverage of 25 from the conference program.",
-      "summary": null,
+      "teaser": "Announces the Pwn2Own winners, their prize totals and standout exploits against ESXi, VirtualBox and AI targets.",
+      "summary": "Dustin Childs and Brian Gorren from ZDI close the Pwn2Own contest at Offensive Con in Berlin by reviewing the results. They highlight two ESXi entries, a VirtualBox chain that went from guest code to kernel access on the host, and a new AI category where several teams targeted AI-related products. Vendors such as Oracle and Microsoft joined the judging, and VMware helped prepare the target builds.\n\nThe top five were then announced. Whiz Research took fifth with $70,000 and seven Master of Pwn points. Synactive placed fourth after an $80,000 exploit against VMware Workstation, Reverse Tactics was third with $112,500 and 11 and a quarter points, and Vatel Cyber Security finished second with $155,000. Star Labs SG won the Master of Pwn title with $320,000 and 35 points, receiving a beer stein and a hiking jacket as stand-ins because the trophy was lost in the mail.\n\nA Star Labs member accepted the award and explained that two people had made six attempts across six categories, while four other targets were handled by colleagues at their company. Closing remarks thanked the host Binary Gecko, the vendors who receive and fix bugs, and the ZDI staff who set up the networks and licences. The next event is in Ireland in early October and focuses on small hardware, printers, Wi-Fi routers and phones.",
       "durationSeconds": 602,
       "conference": "offensivecon",
       "viewCount": 2300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "goEb7eKj660",
@@ -409,18 +416,19 @@
         "Cedric Halbronn",
         "Jael Koh"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Coverage of 25 from the conference program.",
-      "summary": null,
+      "teaser": "Walks through two Windows 11 KTM kernel use-after-free bugs, their exploitation, and how an overlooked object led to them.",
+      "summary": "This talk looks at the Windows Kernel Transaction Manager (KTM) and how two kernel vulnerabilities were found in a part of it that had received little public analysis. The speakers describe the basic kernel objects involved, including the protocol and propagate request structures, and explain how they reversed those objects before looking for bugs. Their approach stresses understanding a component first, and treating the many failed ideas along the way as a normal part of the work.\n\nThe first bug is a race condition in the propagate request dispatch path, where a promoting protocol can be freed after it is located but before its resource manager field is read. Reaching it requires a clustered disk and the KTM resource manager service context, so the speakers patched those checks in a debugger to test the bug, then showed a medium-integrity shell reaching SYSTEM. A low-integrity route needs more engineering, including a way to leak kernel pointers. The second bug is in enlistment migration, where the destination transaction's lock is not held, so an enlistment can be freed through a read-only conversion call during a small race window. The speakers forced that window open with a debugger script for a demonstration, then discussed how Microsoft changed the code and how later Windows builds reset previous mode on each system call.\n\nFor practitioners, the talk points to remaining attack surface such as the transactional file system, the transactional registry, and the MSDTC service and its OTX protocol. The main takeaways are to learn how an overlooked component works before hunting for flaws, to keep going through repeated failure, and not to assume that deep code has already been audited.",
       "durationSeconds": 3093,
       "conference": "offensivecon",
       "viewCount": 3000,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "PgnRkL0sd0w",
@@ -449,20 +457,23 @@
       "youtubeId": "LAIr2laU-So",
       "slug": "25-ken-gannon-chainspotting-2-the-unofficial-sequel-to-the-2018",
       "title": "25 - Ken Gannon- Chainspotting 2: The Unofficial Sequel to the 2018 Talk “Chainspotting”",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Ken Gannon"
+      ],
+      "track": "mobile",
       "topics": [
         "gannon",
         "chainspotting",
         "unofficial",
         "sequel"
       ],
-      "teaser": "25 - Ken Gannon- Chainspotting 2: The Unofficial Sequel to the 2018 Talk “Chainspotting”.",
-      "summary": null,
+      "teaser": "Details chaining logic bugs across Samsung apps to achieve remote code execution on a Galaxy S24 at Pwn2Own Ireland 2024.",
+      "summary": "Ken Gannon recounts competing at Pwn2Own Ireland 2024 as the sole mobile entrant against a Samsung Galaxy S24. Prior years relied on silent install behavior in the Galaxy App Store, but that path was removed for 2024, forcing a hunt through other on-device attack surface while avoiding noisy server-side probing.\n\nThe resulting chain strings logic flaws across multiple preinstalled applications. Samsung Gaming Hub exposes an unfiltered WebView, a JavaScript enablement check bypassed via domain prefix tricks, and 302-driven intent launches that become a small command channel. Gaming Hub then reaches Samsung Smart Switch Agent, which installs attacker-supplied APKs without signature checks from file or content URIs. A path traversal in Samsung Quick Share’s private-share transfer mode—after Frida tweaks the transfer metadata—places the payload where Smart Switch expects it, using GPU Watch’s exported content provider for storage. Two Samsung handsets cooperate so the victim downloads the APK from an attacker-controlled peer.\n\nThe talk closes with a live demonstration: one tap on a malicious link, staged Web and Flask endpoints, automatic install, and Drozer running on the compromised device. The practical lesson is how exported activities, WebViews, and weak install trust combine into a full mobile compromise when storefront shortcuts disappear.",
       "durationSeconds": 2095,
       "conference": "offensivecon",
       "viewCount": 4600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "rHyFnkrJ3Ws",
@@ -855,18 +866,19 @@
         "Half Measures",
         "Full Compromise"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "piotr",
         "bazydlo",
         "vulnerability-research"
       ],
-      "teaser": "Coverage of 24 - Piotr Bazydlo from the conference program.",
-      "summary": null,
+      "teaser": "Shows how Exchange PowerShell remoting deserialization gadgets led to code execution, and how Microsoft's patches were bypassed.",
+      "summary": "Microsoft Exchange PowerShell remoting builds on Windows PowerShell remoting and adds Exchange-specific extensions. Any domain user with a mailbox can call its cmdlets, so the attack surface is mostly reachable by insiders. Earlier, the ProxyShell path confusion allowed unauthenticated access from the internet. That access was closed, but the underlying flaw stayed unpatched. The core weakness is how remoting deserializes complex objects: it tries type conversions in a fixed order, and Exchange's custom converter, built on a binary formatter, depended on allow and block lists.\n\nOne allowed class let a payload override the target type, which then reached a .NET type that gives code execution. After Microsoft added type controls, a generic MultiValueProperty class bridged to arbitrary types, and that route was later closed too. A block-list fix was then bypassed using a command gadget that had been reported earlier but never blocked. For internal attackers, the talk also covered a Windows extract path traversal that Microsoft did not fix, and an expand argument injection that loaded a DLL from a GUID path. The GUID was leaked through an XXE gadget reading Windows logs.\n\nThe talk closes with the current state: allow-listing is in place, and payloads must be signed with a certificate. Setter and member handling also widened the surface, exposing further XXE, file read and NTLM relay gadgets inside allowed classes. Takeaways: block lists age poorly, conversion order matters, and reported gadgets can resurface when vendors leave them unfixed.",
       "durationSeconds": 1863,
       "conference": "offensivecon",
       "viewCount": 2600,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "BZWf9lYMIfc",
@@ -1077,18 +1089,19 @@
         "Simon Scannell",
         "Anthony Weems"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "vulnerability-research",
         "threat-detection",
         "defensive-security"
       ],
-      "teaser": "Coverage of 24 from the conference program.",
-      "summary": null,
+      "teaser": "Walks through blindly exploiting a memory corruption bug in a JPEG 2000 library behind a cloud load balancer.",
+      "summary": "Load-balanced cloud services often hide their internals, so a memory-unsafe image library may look unattractive because the allocator, OS, architecture and library build are unknown. Two-stage memory corruption exploits are also unreliable, since the next request may reach a different worker. The speakers propose conditional corruption: reusing application logic so corruption fires only when the request hits the intended worker and address layout.\n\nThe target library is Kakadu, a JPEG 2000 processor whose demo binaries are public. The first bug abuses a fragmentation feature from the standard to read arbitrary local files; a comment-marker jump table turns leaked bytes into pixel colours, giving about 20 kilobytes per request. The second bug is a signed 32-bit integer overflow in pixel buffer writes that lets writes move backwards on the heap, made predictable by TCMalloc's handling of large allocations. A superbox-based object offers a write-what-where primitive, and a heap spray with per-offset payloads yields reliable code execution.\n\nTo avoid crashing production, the exploit first checks a seek to an unmapped address, which fails safely, and then confirms the heap layout with another file read. The demo leaked a binary and memory map and ended with a reverse shell. The takeaway is that conditional gadgets add a tool for load-balanced targets, and remote library fingerprinting deserves more research; the standard was changed after reporting, but custom implementations may still be vulnerable.",
       "durationSeconds": 1769,
       "conference": "offensivecon",
       "viewCount": 940,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "sFsllHllXss",
@@ -1502,8 +1515,11 @@
       "youtubeId": "H03b0UaogVs",
       "slug": "23-maddie-stone-and-james-forshaw-the-print-spooler-bug-that-was",
       "title": "23- Maddie Stone & James Forshaw- The Print Spooler Bug that Wasn’t in the Print Spooler",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Maddie Stone",
+        "James Forshaw"
+      ],
+      "track": "red-team",
       "topics": [
         "print-spooler",
         "maddie",
@@ -1512,8 +1528,8 @@
         "forshaw",
         "print"
       ],
-      "teaser": "23- Maddie Stone & James Forshaw- The Print Spooler Bug that Wasn’t in the Print Spooler.",
-      "summary": null,
+      "teaser": "Researchers dissect an in-the-wild Windows elevation bug that abuses side-by-side manifests rather than print spooler DLL loading.",
+      "summary": "The presentation opens with CVE-2022-41073, billed as a print spooler elevation of privilege and known to be exploited in the wild. Comparing October and November builds shows a one-function change in windspool around impersonation during load library, which echoes a 2015 device-map issue James Forshaw had reported. An in-the-wild sample instead plants a fake C: tree and uses a symlink so privileged code still loads legitimate printconfig.dll while the side-by-side path goes wrong.\n\nJames Forshaw walks through side-by-side assemblies, XML manifests, activation contexts, and the CSRSS RPC service that resolves them. The exploit chains embedded isolation-aware manifests, directory traversal in dependency metadata, and impersonation so the print filter pipeline service loads attacker-controlled printvpt.dll at SYSTEM integrity. December 2022 mitigations reuse the ignore-impersonated-device-map idea behind a feature flag that only a pair of spooler-related processes enable until January 2023.\n\nThey tie the same pattern to a May 2022 print spooler variant, critique point fixes versus allowing users to remap the system drive for impersonating services, and outline hunting with Process Monitor, mitigation flags in kernelbase, manifest resources, and SxSTrace. A live demo shows a variant entry point still yielding elevated execution on a patched Windows 11 build, with the issue reported upstream.",
       "durationSeconds": 2548,
       "conference": "offensivecon",
       "viewCount": 3500,
@@ -2157,14 +2173,14 @@
       "speakers": [
         "3D Accelerated Exploitation"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "jason",
         "matthyser",
         "vulnerability-research"
       ],
-      "teaser": "Coverage of 19 - Jason Matthyser from the conference program.",
-      "summary": null,
+      "teaser": "Demonstrates guest-to-host exploitation of VirtualBox 3D acceleration via Chromium bugs, AFL fuzzing, and heap primitives.",
+      "summary": "The presentation walks through attacking VirtualBox’s 3D acceleration path, which routes guest graphics work through Chromium as an OpenGL abstraction layer. Unprivileged guests reach that stack via guest additions and HGCM, so malformed Chromium messages and opcode handlers become a large attack surface—on the order of hundreds of opcodes—worth fuzzing and debugging despite slow server startup and awkward VirtualBox debugging behavior.\n\nThe speaker describes building fuzzing and host-side tooling to exercise the same interfaces as the guest, then chaining two Chromium flaws under deliberate constraints. An out-of-bounds read tied to packet length leaks host pointers and helps defeat ASLR; a separate integer overflow undersizes an allocation so attacker-controlled initialization corrupts service buffer metadata, yielding arbitrary heap write through UI size and buffer pointers. Partial and fully controlled service buffers are combined to regain primitives after frees.\n\nWith arbitrary write and read staged through dispatch-table hooks and fake buffered responses, the talk shows reaching CR spawn for process creation on a Windows host from a Linux guest without relying on kernel32 shellcode, and notes that fuzzing lessons may extend to other guest-addition services. Example harnesses and library code are slated for public release.",
       "durationSeconds": 1544,
       "conference": "offensivecon",
       "viewCount": 1100,

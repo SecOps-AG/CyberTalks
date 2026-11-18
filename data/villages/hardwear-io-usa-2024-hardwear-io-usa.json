@@ -10,8 +10,11 @@
       "youtubeId": "BhqyPchfK9o",
       "slug": "exposing-critical-threats-in-millions-of-connected-devices-alexa",
       "title": "Exposing Critical Threats In Millions Of Connected Devices - Alexander; Sergey",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Alexander",
+        "Sergey"
+      ],
+      "track": "hardware",
       "topics": [
         "exposing",
         "critical",
@@ -20,18 +23,21 @@
         "connected",
         "device"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for Exposing Critical Threats In Millions Of Connected Devices - Alexander; Sergey.",
-      "summary": null,
+      "teaser": "Researchers trace firmware flaws in a widely deployed cellular modem from local midlet abuse to full remote compromise over SMS.",
+      "summary": "Cellular modems sit inside cars, medical gear, payment terminals, industrial systems, and laptops, yet public vulnerability data for one heavily used module was almost empty before this work. The presenters map the software stack—firmware, applications, remote control, and privileged Java midlets—and explain why midlet confidentiality features blocked normal filesystem listing while leaving integrity weak.\n\nFirmware came from decapping NAND and rebuilding logical flash blocks; JTAG on the baseband processor was abandoned after probing. Analysis of installed midlets uncovered paths to leak hidden storage locations, abuse FTP-related AT commands, and overwrite permission files to reach manufacturer privilege locally without reverse engineering the whole native image. Deeper firmware review found hundreds of AT commands, vendor script namespaces, and fuzzing that surfaced a heap overflow on the command interface, plus a SUPL SMS fragmentation bug that overflows heap buffers and enables controlled crashes.\n\nUsing slow memory disclosure through fault logs, they built write primitives, unlocked vendor memory read/write namespaces, executed injected code, and activated OTA provisioning to install a persistent midlet—demonstrating end-to-end remote compromise from SMS alone. They reported two critical issues to the vendor, plan a fuller paper, and urge disabling non-essential SMS, enforcing midlet signature checks, and limiting physical AT access where feasible.",
       "durationSeconds": 2618,
       "conference": "hardwear",
       "viewCount": 639,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "bm6-8KiEJ38",
       "slug": "tpm-2-0-attestable-firmware-recovering-trust-after-firmware-flaw",
       "title": "TPM 2.0 Attestable Firmware: Recovering Trust After Firmware Flaws",
-      "speakers": [],
+      "speakers": [
+        "Chris"
+      ],
       "track": "hardware",
       "topics": [
         "tpm",
@@ -40,18 +46,22 @@
         "recovering",
         "trust"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding TPM 2.0 Attestable Firmware: Recovering Trust After Firmware Flaws.",
-      "summary": null,
+      "teaser": "Shows how TPM-based attestation can restore trust after firmware bugs, using version-unique secrets and a smaller trusted base.",
+      "summary": "The talk covers how a machine can prove which software it runs after a bug is found and patched, and where a TPM fits into that proof. Because bugs are unavoidable, fleets need a recovery plan that can be verified remotely. Measured boot records each mutable component before it runs, and the TPM keeps the secrets used to vouch for those measurements. A leak of those secrets would break attestation and recovery, which makes the TPM part of the trusted computing base.\n\nThe proposed fix shrinks that base to a small bootloader that measures the firmware and derives a unique secret for each version, so a leaked old version cannot reveal a newer secret. The speakers showed how a TPM create-primary command can mix that secret into new keys without touching existing seeds, and how an endorsement key can be certified through an embedded CA, following the DICE approach. In a Titan chip demo, a memory check bug was found and patched, then a rollback attempt failed its integrity check because the version secret had changed.\n\nThe takeaway is that code should be attestable so recovery can work at scale. The speakers urged TPM vendors to implement the optional feature in the newest library specification and customers to ask for it. In Q&A they said the design guards against leaked seeds as well as downgrades, and needs only persistent bootloader-readable data that later firmware can be locked out of.",
       "durationSeconds": 1499,
       "conference": "hardwear",
       "viewCount": 462,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "pzWaXD5zklI",
       "slug": "panel-a-new-root-of-trust-changing-computing-with-tee",
       "title": "Panel: A New Root Of Trust: Changing Computing With TEE",
-      "speakers": [],
+      "speakers": [
+        "Mike basal",
+        "Nathaniel mum"
+      ],
       "track": "hardware",
       "topics": [
         "root",
@@ -60,12 +70,13 @@
         "changing",
         "computing"
       ],
-      "teaser": "Security researchers examine technical aspects of Panel: A New Root Of Trust: Changing Computing With TEE.",
-      "summary": null,
+      "teaser": "Explains how trusted execution environments use hardware attestation and memory encryption to keep data safe from cloud hosts.",
+      "summary": "This panel introduces trusted execution environments (TEEs) as a new root of trust for cloud computing. The panelists contrast them with TPMs: a TPM attests the hardware and firmware, but applications run unencrypted, whereas a TEE encrypts the memory of a protected environment so that a host, hypervisor or administrator cannot read it. A hardware-signed attestation report lets a user check that the environment is genuine and in a known good state before sending sensitive data. The reference values come from endorsements across the hardware, firmware and software supply chains.\n\nThe discussion then turns to trust and verification. The speakers argued that users should be able to validate attestations themselves, not rely only on a third-party verifier, which matters for auditing if a verifier is later compromised. They listed current options from Intel, Arm, AMD and Nvidia GPUs, and used a confidential AI example in which a financial firm wants to run proprietary models in the cloud. Intel's TDX Connect was described as a direct link that lets devices reach a trust domain, while current device I/O relies on shared memory with extra copying. On performance, they said modern memory encryption costs below 1 percent, while communicating with other devices or the network still carries a penalty.\n\nToward the end, the panelists stressed the limits of TEEs: they do not stop physical attacks, denial of service or very low-level hardware probing, and scope depends on the implementation. Open source was debated, with the view that credibility, not just open code, builds trust. Intel pointed to its TDX module source code and bug bounty program as ways to invite review. The practical takeaway was that attestation has to be built into deployment, and that firmware supply chains are harder to inspect than software ones.",
       "durationSeconds": 2483,
       "conference": "hardwear",
       "viewCount": 216,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "kj9j2yurtYk",
@@ -80,12 +91,13 @@
         "remanence",
         "soc"
       ],
-      "teaser": "Engineers explore architecture and security mechanisms for SRAM Data Remanence In SoCs: Covert Storage And Exfiltration Risks In TEE.",
-      "summary": null,
+      "teaser": "Shows how SRAM aging can hide covert data in chips and leak TrustZone secrets through accelerated power-on state readout.",
+      "summary": "The talk examines data remanence in SRAM, the on-chip memory used for microcontroller caches and scratchpads, whose power-on state can retain traces of earlier values. The speaker explains that a bit held in an SRAM cell slowly shifts the race between the two cross-coupled inverters, so the cell later powers up with a predictable value. Heating the chip and raising its voltage shortens this aging from years to a few hours. On that basis the speaker builds a plausibly deniable covert channel. Error correction and counter-mode AES make the hidden data recoverable, and encrypting it pushes the power-on statistics close to those of a clean device.\n\nThe second part turns to trusted execution environments such as Arm TrustZone. Secure and normal worlds share the same physical SRAM and cache lines, so an attacker with physical access can use accelerated aging to read back secure contents. Reported results include recovering secure SRAM content with sub-3% accuracy without pre-characterization, narrowing the search space to about 8,000 keys when a cache line is pre-characterized, dumping Cortex-A L1 cache contents through a coprocessor interface after boot, and extracting a full AES operation that runs entirely in cache, with over 93% of the data recovered.\n\nThe closing discussion covers limits. Aging is largely irreversible, temperature has a much smaller effect than voltage, and software-only overvolting is constrained by the processor. For defenders, built-in memory self-test controllers that clear SRAM before software runs were suggested as a practical countermeasure, and the speaker noted that SRAM physical unclonable functions can be cloned with high accuracy under this attack.",
       "durationSeconds": 2516,
       "conference": "hardwear",
       "viewCount": 466,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "e2nz3vUUs30",
@@ -137,7 +149,9 @@
       "youtubeId": "euH8eVwbL60",
       "slug": "panel-the-right-to-secure-what-who-how-and-why",
       "title": "Panel: The Right To Secure; What, Who, How And Why!",
-      "speakers": [],
+      "speakers": [
+        "Travis Goodspeed"
+      ],
       "track": "hardware",
       "topics": [
         "panel",
@@ -145,12 +159,13 @@
         "secure",
         "what"
       ],
-      "teaser": "Industry experts analyze emerging threats surrounding Panel: The Right To Secure; What, Who, How And Why!.",
-      "summary": null,
+      "teaser": "Panelists debate whether owners of end-of-life embedded and industrial devices should get a legal right to apply security fixes.",
+      "summary": "This panel asks whether owners and operators should have a legal right to secure embedded devices that vendors no longer support. The discussion centers on end-of-life equipment in critical infrastructure where known vulnerabilities go unpatched because the manufacturer will not issue a fix and no one else is permitted to change the firmware. The panelists separated this from right to repair, which they described as mostly about cost and waste, and they discussed a 2023 manufacturer white paper that argued against repair rights on cybersecurity and intellectual property grounds.\n\nOne panelist, a reverse engineer, argued that researchers already patch devices without permission, so the real gap is whether owners can deploy those fixes legally. That work involved patching a handheld radio's firmware, where editing code was manageable but missing test cases, hardware documentation and hardware variants caused lasting problems. An operator said over 50 percent of the equipment still in use is effectively unsupported, that warranty and insurance terms often make modifications a liability, and that changing controllers is hard to validate at scale. Panelists also cited DARPA's micro-patching research as a sign that automated firmware changes are becoming practical.\n\nProposals for a path forward included treating reverse engineering of legally owned products as allowed under copyright law, asking insurers to assess embedded systems explicitly, and negotiating contract clauses that let owners apply fixes when vendors decline. The panel agreed that waiting for end of life is too late, but did not settle on a single legal request. Audience questions covered vendor lock-in and whether open source security history offers useful lessons for embedded devices.",
       "durationSeconds": 2500,
       "conference": "hardwear",
       "viewCount": 176,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "beginner"
     },
     {
       "youtubeId": "WA9E-BxEMDk",
@@ -222,7 +237,9 @@
       "youtubeId": "Bn4FdhS_tyM",
       "slug": "trimmed-welcome-note-john-mcmaster",
       "title": "Trimmed: Welcome Note John McMaster",
-      "speakers": [],
+      "speakers": [
+        "John McMaster"
+      ],
       "track": "community",
       "topics": [
         "welcome",
@@ -231,8 +248,8 @@
         "john",
         "mcmaster"
       ],
-      "teaser": "Security researchers examine technical aspects of Trimmed: Welcome Note John McMaster.",
-      "summary": null,
+      "teaser": "An opening welcome traces how a hands-on hardware security gathering grew from 2019 into a worldwide community with labs and tooling.",
+      "summary": "The session opens the fourth United States edition in 2024 with a rallying call for hardware hacking rather than a technical deep dive. The presenter recalls struggling around 2014 to find Bay Area meetups focused on kernel work, reverse engineering, and opening real devices, which motivated interest in a dedicated hardware security community. He describes the first conference in 2019 as blending forward-looking research with practical workshops—USB reverse engineering, Bluetooth, hands-on gear, and demonstrations people could touch in person.\n\nA keynote by Chris Tarnovski is highlighted as emblematic of the culture: satellite television card breaking, semiconductor challenges, and a contrast between underground hackers and formal industry dress at social events. The narrative follows how topics widened from narrow radio or USB niches toward large IoT, vehicles, and AI-scale systems, while events keep offering tools such as Pico EMP and hallway equipment like wire bonders and X-ray machines. Attendees from Brazil and France illustrate growing international draw.\n\nThe close emphasizes succession in the field—veterans alongside newer chip-focused researchers—and sponsor-backed lab gear as proof of momentum. The audience is urged to meet in the hallways and help raise expectations for what partners might bring next year.",
       "durationSeconds": 785,
       "conference": "hardwear",
       "viewCount": 10,

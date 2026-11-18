@@ -367,7 +367,10 @@
       "youtubeId": "AWKsyqhxY0o",
       "slug": "azure-networking-dark-arts-the-implicit-paths-your-diagrams-dont",
       "title": "Azure Networking Dark Arts: The Implicit Paths Your Diagrams Don't Show-Achia Rosenfeld & Kobi Rubin",
-      "speakers": [],
+      "speakers": [
+        "Achia Rosenfeld",
+        "Kobi Rubin"
+      ],
       "track": "cloud",
       "topics": [
         "azure",
@@ -377,12 +380,13 @@
         "implicit",
         "path"
       ],
-      "teaser": "Security researchers examine technical aspects of Azure Networking Dark Arts: The Implicit Paths Your Diagrams Don't Show-Achia Rosenfeld & Kobi Rubin.",
-      "summary": null,
+      "teaser": "Shows how Azure service endpoints and VPN gateways add hidden routes that bypass firewalls, and how to verify real traffic paths.",
+      "summary": "Achia Rosenfeld and Kobi Rubin talk about Azure networking behaviour that does not match what architecture diagrams show. Their example is a trading company with a hub-and-spoke network, where a public Cosmos DB is locked down with a service endpoint so that only a virtual desktop spoke can reach it. After the change, a next-hop check in Network Watcher showed traffic going straight to the service endpoint instead of the firewall. Azure had injected a more specific route for the Cosmos DB addresses, and that route won on longest prefix match. The fix was to override it with a service tag route to the firewall, then move the database's network rule from the spoke to the hub and give the firewall subnet service endpoint access.\n\nThe second scenario covers a site-to-site VPN to an on-premises SQL server. Connections from the hub worked, and the Azure connection troubleshoot tool reported a valid path for the spoke even though queries from the spoke failed. DNS checked out, and a packet capture showed the handshake stalling after the first SYN-ACK, which the speakers attributed to asymmetric routing between the VPN gateway and the firewall. The gateway subnet cannot be checked with effective routes, so they confirmed the suspicion only by adding a user-defined route that sent spoke traffic through the firewall, which resolved the problem.\n\nThe speakers conclude that both issues came from Azure defaults rather than from misconfiguration, and that diagnostic tools do not show the full picture. Their takeaways are to read the documentation closely, verify the actual path rather than trusting that the destination is reachable, and re-verify the network after every change. An audience member said they had seen similar undocumented behaviour in AWS network firewall.",
       "durationSeconds": 1168,
       "conference": "fwd-cloudsec",
       "viewCount": 194,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "y7ANSpQYD-g",

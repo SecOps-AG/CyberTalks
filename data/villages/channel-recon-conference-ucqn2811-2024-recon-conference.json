@@ -10,7 +10,11 @@
       "youtubeId": "iDJDmie8XaQ",
       "slug": "recon-2026-the-ai-reversing-panel-are-we-all-powerful-or-out-of",
       "title": "RECON 2026 - The AI Reversing Panel: Are we all powerful, or out of a Job?",
-      "speakers": [],
+      "speakers": [
+        "Aaron Portnoy",
+        "Marion Marschalek",
+        "John McIntosh"
+      ],
       "track": "ai-security",
       "topics": [
         "recon",
@@ -19,13 +23,14 @@
         "powerful"
       ],
       "teaser": "Analysts investigate attack surfaces and defenses concerning RECON 2026 - The AI Reversing Panel: Are we all powerful, or out of a Job?.",
-      "summary": null,
+      "summary": "The panel, moderated by Gadi Evron, set out to move past AI buzzwords in reverse engineering and security research. Thai Duong described a campaign to find and exploit vulnerabilities with AI, arguing that turning discovered bugs into reliable exploits still needs a skilled human, including against Apple's memory integrity enforcement. He placed the current state in the Deep Blue era, where humans and machines work together, rather than the AlphaGo era where the machine no longer needs the human.\n\nJohn McIntosh described agentic patch diffing that once took him months by hand and now takes days or less. Aaron Portnoy argued that harnesses hold the strategic judgment about where to look and when to stop, so they must be rebuilt as models improve. Marion Marschalek questioned how to verify AI malware analysis results and noted that a packer can be understood without running the sample. Dragos said models struggle with firmware and embedded binaries because of limited context and little training material. On disclosure, the panel saw maintainers slow to respond and debated whether a vulnerability in code now means a vulnerability in public.\n\nOn careers, the panel agreed that roles will shift, but human judgment and accountability remain necessary, while worrying about disappearing entry-level jobs. Its advice for newcomers was to pick a specific niche, push AI to the edge of that field, and keep learning rather than handing off the work.",
       "durationSeconds": 5177,
       "conference": "recon",
       "viewCount": 801,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2026,
-      "eventLabel": "RECON 2026"
+      "eventLabel": "RECON 2026",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "Spda7RZEAkE",
@@ -143,7 +148,10 @@
       "youtubeId": "BSpG0A2slEE",
       "slug": "recon-2026-chaining-microsoft-binaries-to-get-privileged-primiti",
       "title": "RECON 2026 - Chaining Microsoft binaries to get privileged primitives in Windows kernel",
-      "speakers": [],
+      "speakers": [
+        "Angelo",
+        "Alex"
+      ],
       "track": "recon",
       "topics": [
         "recon",
@@ -152,19 +160,23 @@
         "binaries"
       ],
       "teaser": "Presenters detail vulnerability discovery and exploitation in RECON 2026 - Chaining Microsoft binaries to get privileged primitives in Windows kernel.",
-      "summary": null,
+      "summary": "The talk examines System Runtime Monitor, a deprecated Windows Defender extension that uses a Lua-based attestation engine to watch kernel integrity. The speakers focus on its SgrmAgent driver, which routes privileged requests through one dispatcher with about 20 internal routines. Some of those routines can reference processes and threads and freeze them by queuing a kernel APC that waits on an event. Access to the driver is limited to the SgrmBroker service, and only one handle can be open at a time, so reaching it means running inside that broker.\n\nTo get there, the speakers describe a PPL injection technique into a WinTcb-protected process. It works by redirecting a COM threading model in the registry so that a protected process instantiates a vulnerable COM interface. Because the original exploit path had been patched, they bring an older, counter-signed DLL that is open to DLL hijacking, then use a shared section and NtContinue to reach a memory write that places shellcode into a loaded module. That shellcode enumerates system handles, duplicates the driver handle held by SgrmBroker, and freezes every thread of MsMpEng.exe.\n\nIn the demo, a test file that Defender would normally flag was opened without detection while the threads were frozen, then flagged again once the driver cleanup restored them. For defenders, the speakers recommend monitoring the COM threading model registry values in both HKLM and HKCU, since a non-admin path to the same injection would only require the HKCU version to be changed.",
       "durationSeconds": 2734,
       "conference": "recon",
       "viewCount": 376,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2026,
-      "eventLabel": "RECON 2026"
+      "eventLabel": "RECON 2026",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "4LahQG09NzI",
       "slug": "recon-2026-failure-is-not-an-option-a-reliable-process-to-exploi",
       "title": "RECON 2026 - Failure Is Not an Option: A Reliable Process to Exploit STM32F2/F4 Microcontrollers",
-      "speakers": [],
+      "speakers": [
+        "Joe Grand",
+        "Lennert Wouters"
+      ],
       "track": "wireless",
       "topics": [
         "microcontrollers",
@@ -174,13 +186,14 @@
         "reliable"
       ],
       "teaser": "Industry experts analyze emerging threats surrounding RECON 2026 - Failure Is Not an Option: A Reliable Process to Exploit STM32F2/F4 Microcontrollers.",
-      "summary": null,
+      "summary": "Joe Grand and Lennert Wouters describe three years of work on extracting protected flash memory from STM32F2 and STM32F4 microcontrollers, which are common in embedded devices, including cryptocurrency hardware wallets. The talk begins with the chip's security levels, where an option byte locks debug access, and explains why earlier fault-injection techniques were risky: they could wipe flash, permanently change option bytes or leave a device unrecoverable. Because each target held real funds, the team needed an attack that worked on the first try and across chips from different factories and packaging houses.\n\nThe middle of the talk covers the engineering path. The presenters moved from voltage glitching to electromagnetic fault injection, scanning a probe over the package to map sensitive areas, then used side-channel power traces rather than fixed time offsets to align glitches reliably. They found that packaging differences, such as bond wire height in chips from different packaging locations, changed where the probe had to sit. For the F4 they adapted a voltage approach that avoided the extra protections on that chip, and used a two-glitch method that downgrades the device, loads a small payload into SRAM, and remaps the reset vector so the payload can read flash.\n\nThey closed with results: about 50 F2 devices and more than 10 F4 devices tested, over 100 million glitches in characterization, and a 100% success rate on customer-owned wallets. Their takeaways were that repeatable triggering and off-the-shelf hardware make such attacks far more practical, and they planned to release their notebooks, templates and hardware designs.",
       "durationSeconds": 3559,
       "conference": "recon",
       "viewCount": 1000,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2026,
-      "eventLabel": "RECON 2026"
+      "eventLabel": "RECON 2026",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "mNIyFBhLMC8",
@@ -251,7 +264,9 @@
       "youtubeId": "fjdBLq52RL4",
       "slug": "recon-2026-mixed-boolean-arithmetic-obfuscation-what-we-build-wh",
       "title": "RECON 2026 - Mixed Boolean-Arithmetic Obfuscation: What We Build, What We Break, and What We Can’t",
-      "speakers": [],
+      "speakers": [
+        "Arnau"
+      ],
       "track": "recon",
       "topics": [
         "recon",
@@ -260,13 +275,14 @@
         "boolean-arithmetic"
       ],
       "teaser": "Engineers explore architecture and security mechanisms for RECON 2026 - Mixed Boolean-Arithmetic Obfuscation: What We Build, What We Break, and What We Can’t.",
-      "summary": null,
+      "summary": "The talk argues that mixed Boolean-arithmetic (MBA) obfuscation is not one problem but a family of them. The speaker says the field often lacks precise names and boundaries: linear versus polynomial, whether arbitrary constants or right shifts are allowed, and what labels such as \"semilinear\" or \"binary polynomial\" actually mean. He separates expressions, which are written syntax, from the mappings they compute, which are semantics, and describes function classes as the set of meanings a grammar can express. Working modulo powers of two, many different polynomial expressions collapse to the same mapping, and the number of distinct polynomial mappings over eight bits can be counted in closed form.\n\nHe then argues that research tends to break only what it builds. Attacks reuse the same algebra as the constructions they target, rewrite-rule catalogues are copied between papers, and evaluation datasets are biased toward the technique they were made for. In real binaries, MBA expressions are usually buried inside other obfuscation and mangled by compilers, lifters and decompilers, so local simplification is rarely enough and analysts need iterative deobfuscation loops. A central point is that \"simpler\" depends on the chosen metric, such as degree, sparsity, syntax tree size or runtime cost, and on the reference it is compared against. A normal form gives one representative per mapping and makes algebra possible. He also presents a result on T-functions, partitioning the input domain so each piece has a polynomial representation, and reviews a newly released MBA simplifier, showing failures with non-constant right shifts, polynomials inside bitwise subexpressions, missed involutions and a suboptimal canonical form.\n\nHe closes by proposing algebraic synthesis, a generalisation of interpolation that aims to recover a function class and a useful normal form from black-box samples under bounded alphabets, degrees and input ranges. His takeaways are to state the slice being studied, name the metrics and references, standardise datasets, and invest in foundational work.",
       "durationSeconds": 2196,
       "conference": "recon",
       "viewCount": 547,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2026,
-      "eventLabel": "RECON 2026"
+      "eventLabel": "RECON 2026",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "SirLKywqerU",
@@ -450,7 +466,10 @@
       "youtubeId": "cH0lDqTtFew",
       "slug": "recon-2025-abusing-domestic-ev-chargers-through-bluetooth-and-us",
       "title": "Recon 2025 - Abusing Domestic EV Chargers through Bluetooth and USB",
-      "speakers": [],
+      "speakers": [
+        "Alex Sazar",
+        "Ricardo"
+      ],
       "track": "wireless",
       "topics": [
         "recon",
@@ -458,19 +477,22 @@
         "usb"
       ],
       "teaser": "Presenters detail vulnerability discovery and exploitation in Recon 2025 - Abusing Domestic EV Chargers through Bluetooth and USB.",
-      "summary": null,
+      "summary": "The talk looks at level two EV chargers, the AC units found in homes and some car parks, and why their connected attack surface (USB, Ethernet, NFC, Wi-Fi, Bluetooth) matters. The researchers obtained the firmware by reversing a vendor Android app, which exposed an over-the-air update flow that returned a download link for a correctly formed request. The downloaded image was encrypted, with low entropy and failing statistical tests. By estimating a 256-byte key length and then combining known-plaintext pairs with an SMT solver, they recovered the firmware.\n\nWith the firmware readable, they mapped the controller board, a microcontroller that talks to a Bluetooth and Wi-Fi module over UART, and found no ASLR or stack canaries. A Bluetooth Low Energy path led to a stack buffer overflow in a command parser, reached by hiding a write command inside a buffered message. Because the overflow only allowed a return-address overwrite, they built a jump-oriented chain. Staged shellcode then spawned a FreeRTOS task so the normal service kept running. A separate USB control request with an unchecked length field gave a buffer over-read and overwrite.\n\nOnce they had code execution on the control board, they could reflash the other components and planted a persistent implant in the bootloader, which survives updates. The talk outlined pivots into home networks, billing abuse and power-control abuse, and noted that pairing needed no user input. The takeaway is that the charger is a bridge between internal and external networks.",
       "durationSeconds": 1785,
       "conference": "recon",
       "viewCount": 798,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2025,
-      "eventLabel": "Recon 2025"
+      "eventLabel": "Recon 2025",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "bre5bA-h11I",
       "slug": "recon-2025-call-crash-repeat-hacking-whatsapp",
       "title": "Recon 2025 - Call, Crash, Repeat: Hacking WhatsApp",
-      "speakers": [],
+      "speakers": [
+        "Luke McLaren"
+      ],
       "track": "recon",
       "topics": [
         "recon",
@@ -480,13 +502,14 @@
         "whatsapp"
       ],
       "teaser": "Security researchers examine technical aspects of Recon 2025 - Call, Crash, Repeat: Hacking WhatsApp.",
-      "summary": null,
+      "summary": "Luke McLaren walks through research into WhatsApp's calling and messaging layers. He begins with the platform: about two billion users, end-to-end encrypted messaging, and clients on web, desktop, Android and iOS. Android, iOS and macOS builds share one C and C++ core, so a native flaw can surface on several platforms. Call setup relies on XMPP signalling, while media runs over a heavily modified PJSIP and WebRTC stack.\n\nThe four bugs grow in complexity. An iOS client did not validate the deep link attached to an event's join button, so it could open any website, a risk for phishing. A malformed capability blob inside a group call offer caused a null pointer write in native code, crashing every participant. Another case abused a silence attribute with voice chat reasons so Android treated a video call as a voice chat and enabled a recipient's video stream without consent; it was reported in December and patched within a week. The last involved an injected transport message of type two, which the speaker linked to a use-after-free in the macOS media thread and, on an older iOS build, a crash at an address that might be groomable.\n\nFor practitioners, raw byte fields in protocol messages are a likely source of deserialization bugs. The talk also shows how server-side changes can close a bug quickly, and why researchers should answer vendor questions while their proof of concept still works.",
       "durationSeconds": 3212,
       "conference": "recon",
       "viewCount": 3400,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2025,
-      "eventLabel": "Recon 2025"
+      "eventLabel": "Recon 2025",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "_JiuYkFzVgg",
@@ -579,7 +602,9 @@
       "youtubeId": "G2CfMWXLU1U",
       "slug": "recon-2025-the-finer-details-of-lsa-credential-recovery",
       "title": "Recon 2025 - The Finer Details of LSA Credential Recovery",
-      "speakers": [],
+      "speakers": [
+        "Evan McBroom"
+      ],
       "track": "recon",
       "topics": [
         "recon",
@@ -589,13 +614,14 @@
         "recovery"
       ],
       "teaser": "Presenters detail vulnerability discovery and exploitation in Recon 2025 - The Finer Details of LSA Credential Recovery.",
-      "summary": null,
+      "summary": "The talk explains where Windows keeps logon credentials in memory after a user signs in, and why existing public material is hard to use. The speaker says Mimikatz source is difficult to follow and that its reverse-engineered structures do not match Microsoft's private symbols, so he points to leaked old source code, archived private PDBs, patents and reversing Windows 11 24H2 modules as better references.\n\nThe talk then walks through the credential stores kept by each authentication package, including MSV1, Kerberos, PKU2U, WDigest, TSPkg and the cloud package. For each, it shows how to find entries from a public global symbol or magic value and what they hold, such as passwords, NT hashes, DPAPI keys, tickets and session keys. Mitigations like Credential Guard and disabled WDigest remove much of this, so the talk moves on to bypasses: calling package APIs through LsaCallAuthenticationPackage, reading memory from protected-process bypasses, and a reported Credential Guard bypass that obfuscates the TGT service name.\n\nThe main takeaways are that public symbols are enough to locate most structures, that Credential Guard blocks many but not all paths, and that defenders should still enable these mitigations. The speaker urges researchers to write their own tools, study the cloud package internals and other Kerberos name encodings, and suggests adding PKU2U support to Credential Guard.",
       "durationSeconds": 3560,
       "conference": "recon",
       "viewCount": 175,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2025,
-      "eventLabel": "Recon 2025"
+      "eventLabel": "Recon 2025",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "9LJdIgof9jA",
@@ -846,7 +872,9 @@
       "youtubeId": "DmA3GBJzABE",
       "slug": "recon-brussels-2018-starcraft-emulating-a-buffer-overflow-for-fu",
       "title": "Recon Brussels 2018 - Starcraft: Emulating a buffer overflow for fun and profit",
-      "speakers": [],
+      "speakers": [
+        "Elias"
+      ],
       "track": "recon",
       "topics": [
         "buffer-overflow",
@@ -856,17 +884,20 @@
         "emulating"
       ],
       "teaser": "Analysts investigate attack surfaces and defenses concerning Recon Brussels 2018 - Starcraft: Emulating a buffer overflow for fun and profit.",
-      "summary": null,
+      "summary": "Starcraft, released in 1998, shipped with a buffer overflow in the extended unit death trigger counter array. Map makers, many of them from South Korea, used it to build custom games with keyboard input, a Mario-style level editor and tower defense, gaining read and write access to game memory from trigger scripts. Blizzard fixed the bug in patch 1.18 and later remastered the game, but the community wanted their older maps to keep working.\n\nThe talk covered how the overflow was reproduced on a game with a different memory layout and no original sources. The work involved about three weeks of reverse engineering the 1.16.1 binary, matching it against an older Visual Studio build, and labelling globals in IDA. The maps were scanned for out-of-bounds indices, and a table of almost 800 address entries was built from them. A tracer injected into the old game caught any addresses missing from that table during play.\n\nTo translate old addresses, the emulator used a shadow memory layer and a set of adapters for pointer arithmetic, restructured data, linked trigger lists and deferred writes. The map language lacked a direct memory-copy primitive, so maps built one from comparisons, and the speaker also handled the encrypted map format and the chat buffer. The takeaway is that legacy exploit-dependent behaviour can be preserved through data-driven emulation, without shipping the bug itself.",
       "durationSeconds": 3880,
       "conference": "recon",
       "viewCount": 345,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "HP2gHl1cI5E",
       "slug": "recon-brussels-2018-robin-hood-vs-cisco-asa-anyconnect",
       "title": "Recon Brussels 2018 - Robin Hood vs Cisco ASA AnyConnect",
-      "speakers": [],
+      "speakers": [
+        "Cedric"
+      ],
       "track": "recon",
       "topics": [
         "cisco",
@@ -876,11 +907,12 @@
         "hood"
       ],
       "teaser": "Industry experts analyze emerging threats surrounding Recon Brussels 2018 - Robin Hood vs Cisco ASA AnyConnect.",
-      "summary": null,
+      "summary": "The talk covers a memory-corruption bug in the SSL VPN component of Cisco ASA firewalls, devices that often sit at the edge of enterprise networks as the entry point to internal VPN access. The speaker found it by mutating XML requests sent to a device over the network, with no instrumentation and a deliberately simple setup. Crashes were then sorted with GDB-based tooling that compared backtraces, and the smallest reproducer was minimised. Reversing the XML parser callbacks showed that a buffer pointer was freed but kept, so a second packet triggered a double free on the heap.\n\nExploiting the bug meant shaping the heap. The speaker used IKEv1 fragmentation, spread across several sessions, to create holes and adjacent chunks. A flaw in how the reassembled packet size was calculated allowed a small overflow, which corrupted chunk metadata and produced mirror-write primitives. Those primitives were used to overwrite a function pointer and reach code execution. The working exploit targets a 32-bit build without ASLR or DEP. A 64-bit version would need a remote information leak, which was still being explored.\n\nThe talk closes with the disclosure to Cisco and a look at how software branches differ in mitigations. Builds with ASLR and DEP make this kind of exploitation much harder, so the speaker suggests running those branches as a way to raise the bar against unpatched bugs.",
       "durationSeconds": 3610,
       "conference": "recon",
       "viewCount": 99,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "JyuVFa2X7AU",
@@ -988,11 +1020,12 @@
         "microcode"
       ],
       "teaser": "Engineers explore architecture and security mechanisms for Recon Brussels 2018 - Decompiler internals: microcode.",
-      "summary": null,
+      "summary": "This talk looks at the microcode, the intermediate language inside a long-running decompiler that turns processor instructions into a common form. The speaker explains why an intermediate language is needed, since each processor has its own quirks, such as x86 segment registers, the floating point stack, PowerPC's multiple carry registers, MIPS delay slots and SPARC register windows. The language was built to stay small, with about 72 instruction types, simple operands, explicit operand sizes and no side effects, and it targets compiler-generated code only.\n\nThe middle of the talk covers how microcode is produced and reduced. Each machine instruction expands into several micro instructions, which are then shortened by constant propagation, per-block optimization and global data flow analysis. Hundreds of hardcoded rules rewrite the result, and some of them match patterns across interleaved instructions or across basic blocks, such as a 64-bit comparison split into three 32-bit comparisons. The speaker walks through the hard parts: a stack frame modelled as registers, aliasable memory, 64-bit values on 32-bit platforms, and structures passed in scattered registers. Stack regions are split into aliasable and unaliasable parts so the analysis can reason soundly about them.\n\nThe closing part covers trade-offs and plans. Exceptions and memory access order are not preserved, and unknown instructions are kept as external operations that are tracked only by their data references. Verification routines run after each transformation, and plugin authors can add their own rules, with a C++ interface first and Python later. The main takeaway is that an intermediate language for analysis needs careful design, and that early mistakes are easier to fix before a public API exists.",
       "durationSeconds": 4390,
       "conference": "recon",
       "viewCount": 239,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "8RuTd7d7o68",
@@ -1199,7 +1232,9 @@
       "youtubeId": "KDn5XiKODtQ",
       "slug": "recon-2019-matt-graeber-using-wpp-and-tracelogging-tracing-to-fa",
       "title": "Recon 2019 Matt Graeber Using WPP and TraceLogging Tracing to Facilitate Dynamic and Static Windows",
-      "speakers": [],
+      "speakers": [
+        "Matt Graeber"
+      ],
       "track": "recon",
       "topics": [
         "windows",
@@ -1209,19 +1244,22 @@
         "graeber"
       ],
       "teaser": "Analysts investigate attack surfaces and defenses concerning Recon 2019 Matt Graeber Using WPP and TraceLogging Tracing to Facilitate Dynamic and Static Windows.",
-      "summary": null,
+      "summary": "Graeber opens with a gap in common detection data: much endpoint tooling consumes manifest-based ETW, while WPP and TraceLogging providers, which were built for debugging, remain largely untapped. He notes that Windows binaries such as Defender's antimalware engine are heavily instrumented with these providers, making them a rich source for dynamic analysis without attaching to a protected process.\n\nFor WPP, provider metadata is stripped, so he recovers TMF schemas by hand. He starts from the provider GUID found at registration calls, then decodes format strings, argument types and message numbers, using public symbols as a reference. Running a trace with logman and tracefmt then shows Defender engine strings in real time. For TraceLogging, a PowerShell parser he wrote reads the metadata blob marked by an etw0 signature, and a live trace can be converted to evtx. In that case, event IDs shift between binary versions.\n\nOn security, he audited the default ETW security descriptors and found a Performance Log Users misconfiguration. It let an unprivileged user consume Defender ATP telemetry, and he reported it to Microsoft. He also argues that installing Visual Studio adds a broadly granted group, which weakens the model further. He closes by suggesting that EDR builders focus on manifest-based ETW, with caution because Microsoft gives no stability guarantee, and that researchers use WPP and TraceLogging to supplement static analysis.",
       "durationSeconds": 3275,
       "conference": "recon",
       "viewCount": 131,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2019,
-      "eventLabel": "Recon 2019"
+      "eventLabel": "Recon 2019",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "NOhLp2MFq9k",
       "slug": "x-ray-reverse-engineering-by-george-tarnovsky",
       "title": "X Ray Reverse Engineering by George Tarnovsky",
-      "speakers": [],
+      "speakers": [
+        "George Tarnovsky"
+      ],
       "track": "malware",
       "topics": [
         "reverse-engineering",
@@ -1231,11 +1269,12 @@
         "tarnovsky"
       ],
       "teaser": "Security researchers examine technical aspects of X Ray Reverse Engineering by George Tarnovsky.",
-      "summary": null,
+      "summary": "The talk covers using X-ray imaging to reverse engineer circuit boards, presented as an alternative to backlighting and mechanical delayering. Backlighting can read a simple two-layer board, but multilayer boards with internal plane layers block the view, and delayering destroys the sample. The presenter showed how a live X-ray view, combined with an angled view that separates layers, lets you follow traces between layers. Geometric zoom, which moves the target closer to the emitter, was contrasted with optical zoom, which loses signal to noise.\n\nThe middle section looks at ball grid array packages, where not every ball connects to a via, so some signals cannot be reached from the surface. Several concealment attempts were shown. A processor sealed under epoxy was still identified and replicated, a smart card embedded in epoxy showed up clearly, and a lead sheet between epoxy layers remained visible though harder to read. A radiation-hardened device was also seen through its surroundings. For failure analysis, X-ray revealed missing balls and shorts before power-up, which can save costly boards.\n\nIn the final case, a defective board hid a Xilinx FPGA whose JTAG signal was not routed to any accessible via. Using the X-ray to locate the ball, the presenter drilled into it with a pin vise and attached a wire to reach the signal, after which the device responded and its data was dumped. In questions, the presenter said the vendor software only offers image enhancement and measurement, and that the machine, rated to about five microns, is aimed at failure analysis and quality control rather than schematic recovery.",
       "durationSeconds": 1388,
       "conference": "recon",
       "viewCount": 329,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "kkAmei0QWNc",
@@ -1332,7 +1371,9 @@
       "youtubeId": "C7xqKd2EY-g",
       "slug": "recon-2019-the-road-to-qualcomm-trust-zone-apps-fuzzing-by-slava",
       "title": "Recon 2019 - The Road to Qualcomm Trust Zone apps fuzzing by Slava Makkaveev",
-      "speakers": [],
+      "speakers": [
+        "Slava Makkaveev"
+      ],
       "track": "recon",
       "topics": [
         "fuzzing",
@@ -1342,19 +1383,22 @@
         "trust"
       ],
       "teaser": "Industry experts analyze emerging threats surrounding Recon 2019 - The Road to Qualcomm Trust Zone apps fuzzing by Slava Makkaveev.",
-      "summary": null,
+      "summary": "The talk covers fuzzing trusted applications that run in the secure world of Qualcomm's TrustZone-based mobile environment. The speaker explains why this area matters: the trusted environment holds key storage, secure storage, authentication and mobile payment functions, and there has been little public research on Qualcomm trusted apps. He describes how Android's normal world reaches the secure world through a driver and secure monitor calls, and how trusted apps are signed ELF files, split into segments, that the trusted OS verifies before loading.\n\nTo test these apps, the speaker dumped a trusted app's data segment from a Nexus 6 device and used an emulator as a bridge between the two worlds. A loader program on Android ran the app in the normal world, which allowed feedback-based fuzzing with coverage measurement. Loading a modified app required getting past the verification chain, which the speaker did with an exploit that allowed writes to memory not protected by hardware, overwriting the hash block after its signature check. Apps extracted from other vendors' devices needed adaptation, such as replacing hash tables, merging data segments and fixing address references.\n\nThe fuzzing results included a Samsung trusted app that crashed biometric authentication when sent 32 bytes, according to the speaker. Trusted apps from Samsung and Qualcomm were all found to contain vulnerabilities. The main takeaway is that the trusted environment protecting payments and authentication deserves the same testing rigour as other attack surfaces, and that developers should fuzz these apps during implementation.",
       "durationSeconds": 1748,
       "conference": "recon",
       "viewCount": 379,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2019,
-      "eventLabel": "Recon 2019"
+      "eventLabel": "Recon 2019",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "ERUoeg9JzbQ",
       "slug": "recon-2019-minimum-failure-stealing-bitcoins-with-electromagneti",
       "title": "Recon 2019 -MINimum Failure Stealing Bitcoins with Electromagnetic Fault Injection by Colin O'Flynn",
-      "speakers": [],
+      "speakers": [
+        "Colin O'Flynn"
+      ],
       "track": "hardware",
       "topics": [
         "recon",
@@ -1362,19 +1406,22 @@
         "injection"
       ],
       "teaser": "Analysts investigate attack surfaces and defenses concerning Recon 2019 -MINimum Failure Stealing Bitcoins with Electromagnetic Fault Injection by Colin O'Flynn.",
-      "summary": null,
+      "summary": "Colin O'Flynn, creator of the open source ChipWhisperer project, opens with a short overview of blockchain and why Bitcoin wallets are attractive targets. He notes that hardware wallets are sold through ordinary retail channels, and that the security of a wallet rests mostly on the cheap microcontroller inside it. His target is a Trezor wallet, whose firmware is open source, which let him study the code and its memory layout directly.\n\nThe core of the talk is a flaw in how the bootloader answers a USB GET_DESCRIPTOR request. The host states how many bytes it wants, and the firmware is meant to clamp that value to the size of the descriptor. Skipping that comparison with a precisely timed glitch would make the device return far more memory, including the stored recovery seed. He first confirmed the idea in simulation by stepping past the check with a debugger on a rewired board. He then ran the real attack with electromagnetic fault injection, triggering on USB traffic with a protocol analyzer and sweeping the glitch timing with ChipWhisperer hardware. The attempts were unreliable and often crashed the device, so only one success was needed.\n\nHe closed with mitigations: capping the length returned to the host, locking sensitive flash regions with the memory protection unit, and encrypting data at rest. Recent firmware already includes some of these fixes, and wallets using a passphrase keep less secret material on the device. His main point is that fixing a single area is not enough. He also previewed an open source USB fault-injection board that was still in development.",
       "durationSeconds": 1566,
       "conference": "recon",
       "viewCount": 142,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2019,
-      "eventLabel": "Recon 2019"
+      "eventLabel": "Recon 2019",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "JDlnJaqZi-M",
       "slug": "recon-2019-the-last-generic-win32k-kaslr-defeat-in-windows-by-al",
       "title": "Recon 2019 - The Last Generic Win32K KASLR Defeat in Windows by Alex Ionescu",
-      "speakers": [],
+      "speakers": [
+        "Alex Ionescu"
+      ],
       "track": "recon",
       "topics": [
         "windows",
@@ -1383,13 +1430,14 @@
         "win32k"
       ],
       "teaser": "Industry experts analyze emerging threats surrounding Recon 2019 - The Last Generic Win32K KASLR Defeat in Windows by Alex Ionescu.",
-      "summary": null,
+      "summary": "The talk traces how Windows kernel address space layout randomization changed from Vista onward. Early versions left fixed kernel regions and exposed kernel pointers through unprivileged system calls, so randomization offered little protection against a real attacker. Later releases added restricted caller checks, hardware-assisted blocking of descriptor-table instructions from user mode, and randomization of most kernel memory regions.\n\nThe central case study is the Windows graphics subsystem, win32k. The first graphics call gives a process kernel-linked structures and shared heaps, and each mitigation in turn closed one path while leaving another, such as heap headers and neighbouring user objects that still allowed address recovery. The newer kernel fixed segment heap encodes callbacks and headers with a per-boot key. In the chain shown, a kernel heap pointer found in a user-mode mapping, offset by a fixed amount, recovered that key, which then decoded kernel module addresses. Microsoft fixed it in December by not mapping the first page of the section into user space.\n\nThe takeaway is that pointer leaks are harder to find than before but not gone. The speaker expects remaining bypasses to come from third-party drivers and CPU-level side channels, which are slower and noisier. Kernel ASLR bypasses are now treated as in scope for bounty, and hardening such as zeroing output slack space and initializing kernel stack variables removes whole bug categories.",
       "durationSeconds": 3329,
       "conference": "recon",
       "viewCount": 97,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2019,
-      "eventLabel": "Recon 2019"
+      "eventLabel": "Recon 2019",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "4J4WLIJmdiY",
@@ -1509,7 +1557,9 @@
       "youtubeId": "PH1nNK-P7mY",
       "slug": "recon-2019-defeating-apt10-compiler-level-obfuscation-by-takahir",
       "title": "Recon 2019 - Defeating APT10 Compiler-level Obfuscation by Takahiro Haruyama",
-      "speakers": [],
+      "speakers": [
+        "Takahiro Haruyama"
+      ],
       "track": "threat-intel",
       "topics": [
         "recon",
@@ -1519,13 +1569,14 @@
         "compiler-level"
       ],
       "teaser": "Industry experts analyze emerging threats surrounding Recon 2019 - Defeating APT10 Compiler-level Obfuscation by Takahiro Haruyama.",
-      "summary": null,
+      "summary": "Takahiro Haruyama examines compiler-level obfuscation found in malware linked to the APT10 group. The control flow in these samples is flattened into a dispatcher structure with opaque predicates, which makes manual reverse engineering slow and tedious. Existing Hex-Rays plugins failed on these samples because they had been written for a different obfuscation variant.\n\nThe talk first introduces microcode, the intermediate representation the decompiler builds at different maturity levels, and the structures that make it up: blocks, instructions and operands. The speaker then explains the changes made to an existing plugin. A new pattern handler covers two opaque predicate forms, one built from a global variable multiplied by itself minus one and one using a read-only global compared against an immediate value. Other additions handle duplicated dispatcher variables and five jump cases, including one where the dispatcher variable is assigned in the first blocks. Version 7.3 of the decompiler added improvements to value propagation and basic block duplication that the modified code relies on. On version 7.2, the modified plugin cleaned up 92 percent of the obfuscated functions in the first sample; the remaining failures came from the next-block guessing step, which is imperfect.\n\nThe modified code is publicly available. On 7.3 it handles almost every function except where the next-block guess fails. The speaker concludes that automated cleanup is needed, because manual analysis of this kind of obfuscation is painful and time consuming, and hopes the work helps other analysts. In the Q&A, an attendee asked how much effort it would take to adapt the approach to a similar obfuscator.",
       "durationSeconds": 1740,
       "conference": "recon",
       "viewCount": 225,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2019,
-      "eventLabel": "Recon 2019"
+      "eventLabel": "Recon 2019",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "mWNNeKuSuwI",
@@ -1667,7 +1718,9 @@
       "youtubeId": "ikEaPPyGIgk",
       "slug": "recon-2018-reverse-engineering-windows-defender-part-ii",
       "title": "Recon 2018 - Reverse Engineering Windows Defender Part II",
-      "speakers": [],
+      "speakers": [
+        "Alexei Bulazel"
+      ],
       "track": "recon",
       "topics": [
         "reverse-engineering",
@@ -1676,19 +1729,22 @@
         "windows-defender"
       ],
       "teaser": "Presenters detail vulnerability discovery and exploitation in Recon 2018 - Reverse Engineering Windows Defender Part II.",
-      "summary": null,
+      "summary": "This talk takes a close look at the binary emulator inside Microsoft's Defender antivirus, the component that executes unknown Windows PE files on the endpoint when simpler checks cannot classify them. The speaker explains why the target matters: the engine runs unsandboxed with SYSTEM privileges on a large share of Windows 10 machines, and it is reportedly reachable through ordinary delivery paths such as email attachments.\n\nTo study it, the speaker drove the scanning engine directly through a custom loader and a command-line client, then added coverage tracing and hooks that let the emulated malware print messages to the host. From there the talk walked through the emulator's layers: a dynamic translation engine that lifts code into a proprietary intermediate language and back to x86, escape handlers for complex instructions such as CPUID, a virtual file system of roughly 1,500 functions, fake registry entries and a fake process list, and virtual DLLs that return hardcoded values such as a default username. It also covered emulated NT kernel objects and reporting calls that flag suspicious behavior, like terminating processes whose IDs fall in a range used by AV products.\n\nFor practitioners, the main takeaways are that the emulator's fake environment and fixed values can be used by malware to detect analysis, that its native emulation code and control interface form attack surface, and that Defender's emulator was not sandboxed at the time. The speaker said code for some of the instrumentation would be released later.",
       "durationSeconds": 4007,
       "conference": "recon",
       "viewCount": 482,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2018,
-      "eventLabel": "Recon 2018"
+      "eventLabel": "Recon 2018",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "CD9qzjWxHtE",
       "slug": "recon-2018-montreal-previce-static-detection-of-hooking-capabili",
       "title": "Recon 2018 Montreal - PreVice: Static Detection of Hooking Capabilities in Machine Code",
-      "speakers": [],
+      "speakers": [
+        "Derek"
+      ],
       "track": "recon",
       "topics": [
         "detection",
@@ -1698,13 +1754,14 @@
         "static"
       ],
       "teaser": "Presenters detail vulnerability discovery and exploitation in Recon 2018 Montreal - PreVice: Static Detection of Hooking Capabilities in Machine Code.",
-      "summary": null,
+      "summary": "The talk presents PreVice, a standalone static analyzer that determines whether a Windows binary can hook code without running it. Hooking is treated as unsanctioned interception of execution, and the speaker walks through common forms: inline detours that overwrite a function's opening bytes, changes to import and export tables, and kernel targets such as model-specific registers, the interrupt descriptor table and the system service descriptor table. Earlier tools such as Vice, Volatility plugins and dynamic detonation mostly looked for hooks after they were installed or while a sample ran.\n\nThe core of the talk explains the analysis pipeline. Bytes are parsed into instructions, basic blocks and functions, then converted to static single assignment form, where type information such as image base or code pointer is carried through operations and control-flow joins. Known values are emulated and unknown ones are tracked symbolically, so a write to a code pointer can be tied to the module and function it targets. Case studies included a sample that overwrote a console-related routine with a return instruction so the call did nothing, a hook on a process-open call, and a kernel patch to the system information query that cleared write protection through CR0.\n\nThe team ran the tool over a corpus of about three million samples and used a live demo to show detected hook locations and the bytes written. For practitioners, the takeaway is that static analysis can point a researcher to where a sample changes execution, with fewer false positives and less runtime cost than emulation or detonation. Known limits include unknown initial conditions, anti-disassembly tricks and the lack of call-graph tracking for computed addresses.",
       "durationSeconds": 3746,
       "conference": "recon",
       "viewCount": 100,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2018,
-      "eventLabel": "Recon 2018"
+      "eventLabel": "Recon 2018",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "5ggIOAlJRSU",
@@ -1754,7 +1811,10 @@
       "youtubeId": "PeiWMYvSjMU",
       "slug": "recon-2018-montreal-pwning-intel-pin-by-julian-kirsch-and-zhechk",
       "title": "Recon 2018 Montreal - Pwning Intel PIN by Julian Kirsch and Zhechko Zhechev",
-      "speakers": [],
+      "speakers": [
+        "Julian Kirsch",
+        "Zhechko Zhechev"
+      ],
       "track": "recon",
       "topics": [
         "pin",
@@ -1764,13 +1824,14 @@
         "intel"
       ],
       "teaser": "Security researchers examine technical aspects of Recon 2018 Montreal - Pwning Intel PIN by Julian Kirsch and Zhechko Zhechev.",
-      "summary": null,
+      "summary": "Intel PIN is a dynamic binary instrumentation framework that injects analysis code into binaries while they run, and it is widely used for malware analysis, taint tracking and code coverage. The presenters ask whether an instrumented program can tell it is being watched, and whether the framework isolates the analysed code. They frame the talk around four properties expected of analysis systems: interposition, inspection, isolation and stealthiness.\n\nThe first part covers stealthiness. The presenters show several ways a program can detect PIN, such as scanning memory for read-write-execute pages, reading injected environment variables, and comparing masked instruction pointers with values saved by FPU state instructions. They also show that PIN will run data placed on a non-executable stack, so a program can reveal the framework by trying to execute such data. A later technique patches the code cache so execution escapes the framework; in the demo, a system call tracer stops receiving callbacks while the program keeps running.\n\nThe final part looks at a 2017 wget bug involving chunked encoding in redirects, which allows a stack buffer overflow. Because ASLR works at page granularity, an attacker needs to brute-force only one nibble of a saved return address to reach a stack-lifting gadget, which then jumps to attacker-supplied data that PIN lets run. The takeaway is that DBI frameworks should not be trusted as isolation boundaries; analysts should run them inside a virtual machine and be cautious about adding security checks such as shadow stacks in a pin tool.",
       "durationSeconds": 2294,
       "conference": "recon",
       "viewCount": 120,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2018,
-      "eventLabel": "Recon 2018"
+      "eventLabel": "Recon 2018",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "JPnZVa30PMI",
@@ -1936,7 +1997,9 @@
       "youtubeId": "CisbUMZiktI",
       "slug": "recon-2017-montreal-reverse-engineering-of-blockchain-smart-cont",
       "title": "Recon 2017 Montreal - Reverse Engineering Of Blockchain Smart Contracts by Patrick Ventuzelo",
-      "speakers": [],
+      "speakers": [
+        "Patrick Ventuzelo"
+      ],
       "track": "recon",
       "topics": [
         "reverse-engineering",
@@ -1945,13 +2008,14 @@
         "smart-contracts"
       ],
       "teaser": "Presenters detail vulnerability discovery and exploitation in Recon 2017 Montreal - Reverse Engineering Of Blockchain Smart Contracts by Patrick Ventuzelo.",
-      "summary": null,
+      "summary": "The talk looks at reverse engineering the bytecode of smart contracts, the programs that run on blockchains. The research began from a threat intelligence angle, since threat actors had started using smart contracts to fund and move their activity. Many contracts are published only as compiled EVM bytecode with no source, so the speaker explains how that bytecode is laid out: a loader, the runtime code, and a trailing hash. Linear disassembly is straightforward, but jump targets popped from the stack can make a static control flow graph incomplete, so dynamic stack evaluation is needed to recover the real branches. Dispatcher functions that switch on function signatures can be matched against a signature database to recover readable function names.\n\nThe talk then compares other platforms. NEO contracts run on a stack-based virtual machine with static jump offsets, which makes splitting code into basic blocks and functions easier, though the bytecode is verbose. EOS contracts compile to WebAssembly, and the speaker walks through its binary and text forms, including import and export tables and the difficulty of recovering control flow from block, loop, if and else constructs. A research team's reported out-of-bounds write in EOS binary tooling is mentioned as a reason to examine this area closely.\n\nThe speaker presents Octopus, a toolbox that decompiles bytecode into a control flow graph and exports it in DOT format, with work under way on an SSA-based intermediate representation. The main takeaway is that smart contract reversing closely resembles reversing an unknown binary, and that analysis tooling for NEO and EOS is still limited. The tool was announced for release, and contributions were invited.",
       "durationSeconds": 2723,
       "conference": "recon",
       "viewCount": 141,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2017,
-      "eventLabel": "Recon 2017"
+      "eventLabel": "Recon 2017",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "Zxd3bqS_DBM",
@@ -2044,7 +2108,10 @@
       "youtubeId": "gfDOil_WU6Q",
       "slug": "embedded-devices-reverse-engineering-by-vitor-ventura-and-vladan",
       "title": "Embedded devices reverse engineering by Vitor Ventura & Vladan Nikolić",
-      "speakers": [],
+      "speakers": [
+        "Vitor Ventura",
+        "Vladan Nikolić"
+      ],
       "track": "malware",
       "topics": [
         "reverse-engineering",
@@ -2052,18 +2119,21 @@
         "embedded-devices"
       ],
       "teaser": "Security researchers examine technical aspects of Embedded devices reverse engineering by Vitor Ventura & Vladan Nikolić.",
-      "summary": null,
+      "summary": "The talk covers reverse engineering firmware built on FreeRTOS, a real-time operating system common in embedded devices. The speakers explain why embedded work differs from desktop analysis: memory, power and timing are tightly constrained, and the code is closely tied to one microcontroller. They walk through FreeRTOS internals, including the task scheduler, idle task, control blocks, queues, semaphores and priority handling for mutexes, along with its built-in protections such as a compact SSL library and stack checks.\n\nTo demonstrate, they build a small LED-toggle application on an STM32F0 board, first with a polling design and then with an interrupt and binary semaphore. For analysis, they note that firmware has few readable strings and no familiar system calls, so the vector table becomes the starting point: the initial stack pointer and reset handler give an entry point. From there, peripheral register addresses from the chip documentation reveal clock, GPIO and SysTick configuration, and searching for interrupt enable and disable instructions highlights critical sections. They built an IDA plugin that labels these registers and adds comments automatically.\n\nThe main takeaway is that the method depends heavily on knowing the target microcontroller, since register maps and vector layouts differ between chips. Automating vector table decoding and identifying the image type are still open work. The talk also notes that the FreeRTOS TCP stack is fragile under heavy scanning, so live scans of production devices should be avoided.",
       "durationSeconds": 2529,
       "conference": "recon",
       "viewCount": 686,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "Q6Gnn2aEpEw",
       "slug": "contributor-analysis-by-francisco-blas-izquierdo-riera-klondike",
       "title": "Contributor analysis by Francisco Blas Izquierdo Riera (Klondike)",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Francisco Blas Izquierdo Riera"
+      ],
+      "track": "malware",
       "topics": [
         "contributor",
         "analysi",
@@ -2073,7 +2143,7 @@
         "riera"
       ],
       "teaser": "Security researchers examine technical aspects of Contributor analysis by Francisco Blas Izquierdo Riera (Klondike).",
-      "summary": null,
+      "summary": "The session introduces contributor analysis as a way to study diffusion in block and stream ciphers without building full algebraic models. After revisiting Shannon’s confusion and diffusion, the speaker explains how primitive operations—substitution boxes, bitwise logic, shifts, additions, and multiplications—propagate lists of which input bits can influence each output bit. Black-box treatment covers unknown S-boxes and hard cases such as modulus; white-box analysis can reveal inputs that never reach certain outputs, as in wide S-box designs.\n\nThe approach is demonstrated with a Python library that reimplements cipher steps as contributor tracking instead of normal arithmetic. Simple XOR and TEA-style addition ciphers show outputs depending on only one or two inputs per bit, enabling staged attacks. A one-round add-rotate-XOR construction narrows contributor counts further. Petya’s mixing function is then modeled: some state bits depend on very few contributors, so known plaintext XOR recoveries can expose key material that was poorly mixed. Comparisons against two-round Salsa variants versus Salsa20 illustrate when diffusion looks complete (hundreds of contributors per bit) versus when it does not.\n\nContributor analysis is contrasted with algebraic cryptanalysis: it is easier to reason about and fast (roughly two cipher runs over bit width), but less precise and prone to false negatives. It suits penetration testers and malware reverse engineers hunting blatant cipher flaws, not proving production algorithms secure. A live-demo glitch aside, the takeaway is to use the technique to find weaknesses in custom or recovered crypto, then apply stronger analysis where diffusion still looks broken.",
       "durationSeconds": 1528,
       "conference": "recon",
       "viewCount": 26,
@@ -2196,8 +2266,11 @@
       "youtubeId": "DVM0O1ofI1U",
       "slug": "taint-based-return-oriented-programming-colas-le-guernic-and-fra",
       "title": "Taint-based return oriented programming Colas Le Guernic & François Khourbiga",
-      "speakers": [],
-      "track": "community",
+      "speakers": [
+        "Colas Le Guernic",
+        "François Khourbiga"
+      ],
+      "track": "red-team",
       "topics": [
         "return-oriented-programming",
         "taint-based",
@@ -2206,7 +2279,7 @@
         "cola"
       ],
       "teaser": "Presenters detail vulnerability discovery and exploitation in Taint-based return oriented programming Colas Le Guernic & François Khourbiga.",
-      "summary": null,
+      "summary": "The presenters frame return-oriented programming as a practical answer when data execution prevention blocks classic shellcode, and explain why security auditors must still chain gadgets: clients otherwise treat DEP as sufficient and defer sandboxes or control-flow integrity.\n\nThey contrast syntactic gadget harvesters with symbolic analyzers such as ungroup, then introduce an intermediate method that records how registers depend on one another across short instruction snippets without full symbolic execution. A live stack-pivot scenario shows manual regex-style searching becoming tedious while symbolic runs choke on multi-megabyte binaries unless fast modes drop gadgets. Their prototype composes sparse Boolean dependency matrices, superposes gadget graphs, models chain conditions and limited stack memory, and loops over influence paths to propose two-gadget pivots in minutes.\n\nThe talk closes with implementation notes using Capstone and sparse matrix code, benchmark positioning between rp++-style and angr-style tools, and pointers to a public script plus future blending with symbolic filters on smaller candidate sets.",
       "durationSeconds": 1530,
       "conference": "recon",
       "viewCount": 65,
@@ -2238,7 +2311,9 @@
       "youtubeId": "hFjvkzKcq9c",
       "slug": "sandbagility-reverse-engineering-framework-for-windows-dynamic-a",
       "title": "Sandbagility - Reverse Engineering Framework for Windows dynamic analysis by F.Khourbiga & E.Deligne",
-      "speakers": [],
+      "speakers": [
+        "F.Khourbiga"
+      ],
       "track": "malware",
       "topics": [
         "reverse-engineering",
@@ -2246,11 +2321,12 @@
         "framework"
       ],
       "teaser": "Security researchers examine technical aspects of Sandbagility - Reverse Engineering Framework for Windows dynamic analysis by F.Khourbiga & E.Deligne.",
-      "summary": null,
+      "summary": "Malware analysis often means choosing between slow manual debugging and fast sandboxes, which malware can detect or defeat when they run inside the guest. The talk presents Sandbagility, a Python framework for introspecting a Windows virtual machine from outside, without any agent, driver or guest cooperation. It runs on a modified VirtualBox hypervisor that implements a virtual machine introspection protocol, the Fast Debugging Protocol, and can be driven from an IPython console or scripts.\n\nThe demonstrations showed breakpoints on file functions, with the calling process identified from kernel structures. The speaker explained how the framework closes the semantic gap by locating the kernel, loading matching debug symbols and resolving handles through per-process tables to reach the file object. A helper layer understands Windows objects, and monitors and plugins trace events. A final demo logged file writes from a ransomware sample as they happened and saved the dropped files to the host.\n\nIn the question round, the speaker said the framework was mainly tested on one Windows 10 build and could be extended to other builds, while other operating systems would need more work. The guest still shows up as a VirtualBox machine, so hiding the hypervisor from malware needs a separate patch outside the framework's scope. The takeaway is a way to observe malware behaviour from outside the guest while leaving the guest untouched.",
       "durationSeconds": 1823,
       "conference": "recon",
       "viewCount": 86,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "tETOaMyI8M8",
@@ -2351,19 +2427,22 @@
         "smm"
       ],
       "teaser": "Analysts investigate attack surfaces and defenses concerning recon 2017 Brussels-Baring the system:New vulnerabilities in SMM of Coreboot and UEFI based systems.",
-      "summary": null,
+      "summary": "The talk covers a class of firmware bugs in x86 System Management Mode (SMM), the most privileged CPU mode, where SMI handlers accept input prepared by the operating system. It first recaps earlier pointer bugs, where a buffer address supplied by ring-zero code points into SMRAM or hypervisor memory, giving an attacker a write primitive. Vendor fixes that validate the address, plus a Windows SMM mitigation table that constrains communication buffers, close part of that surface.\n\nThe main new issue involves PCIe memory-mapped I/O. Firmware reads a device's BAR from configuration space and writes registers at that base, treating it as trusted hardware. Because ring-zero code can relocate many BARs, an attacker can move a range over SMRAM so an SMI handler writes into memory it should never touch. Examples were shown in UEFI and Coreboot firmware, involving SPI, EHCI, GbE, xHCI and graphics ranges, plus a Coreboot backlight handler that a button press triggers. A tool that snapshots MMIO ranges around SMIs was presented to find changed registers, though it produces false positives and needs manual review.\n\nLimits include attackers often controlling only a base plus fixed offsets, while larger BARs and complex device protocols make exploitation harder. Mitigations include checking that a BAR does not overlap SMRAM, requiring it to sit in the MMIO window, and forcing it back to a fixed default location, shown with a live restore of the SPI range. Because some devices legitimately relocate BARs, combining these with locking and caching is advised. The core takeaway is that firmware should not treat register base addresses as immutable.",
       "durationSeconds": 3945,
       "conference": "recon",
       "viewCount": 107,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2017,
-      "eventLabel": "recon 2017"
+      "eventLabel": "recon 2017",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "LptGbbl9VJ8",
       "slug": "recon-2017-brussels-legacy-crypto-never-dies-by-david-hulton",
       "title": "recon 2017 Brussels - Legacy Crypto Never Dies by David Hulton",
-      "speakers": [],
+      "speakers": [
+        "David Hulton"
+      ],
       "track": "recon",
       "topics": [
         "legacy",
@@ -2372,13 +2451,14 @@
         "crypto"
       ],
       "teaser": "Presenters detail vulnerability discovery and exploitation in recon 2017 Brussels - Legacy Crypto Never Dies by David Hulton.",
-      "summary": null,
+      "summary": "The talk revisits MS-CHAPv2, the challenge-response protocol behind PPTP VPNs, WPA2 Enterprise and other logins. A 2012 talk showed that the NT hash behind it splits into three DES keys, so the search costs about 2^56 DES operations rather than a password guess, and a public cracking service made this available for a small fee. Years later, many VPN providers still offer PPTP, and the same exchange appears in NTLMv1 relay and rogue access point attacks, where captured values are submitted to recover an NT or LM hash.\n\nThe speaker then described newer features of the service. A masked job type accepts known plaintext with up to 24 zero bits and returns matching keys for checking. A Kerberos capture filter forces a downgrade to DES-CBC during the initial exchange, so known plaintext can be pulled from the traffic. He also took on DESCrypt hashes, searching the printable keyspace in about three days with 25 rounds of DES, and a sample from an in-vehicle system fell almost instantly.\n\nThe closing point is that broken ciphers persist long after they are known to be weak, and that legacy protocols such as DES, RC4 and NTLMv1 still show up on real networks. Listeners were invited to send any DES material they encounter, with results returned by email within about a day.",
       "durationSeconds": 1333,
       "conference": "recon",
       "viewCount": 29,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2017,
-      "eventLabel": "recon 2017"
+      "eventLabel": "recon 2017",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "C_n0Kav4aNI",
@@ -2449,7 +2529,10 @@
       "youtubeId": "hBFAdEqnv7w",
       "slug": "recon-2022-the-mysterious-life-of-an-exception",
       "title": "Recon 2022 - The Mysterious Life of an Exception",
-      "speakers": [],
+      "speakers": [
+        "Fabian",
+        "Marius"
+      ],
       "track": "recon",
       "topics": [
         "recon",
@@ -2459,13 +2542,14 @@
         "mysterious"
       ],
       "teaser": "Engineers explore architecture and security mechanisms for Recon 2022 - The Mysterious Life of an Exception.",
-      "summary": null,
+      "summary": "The talk looks at how C++ exceptions work beneath the language level and how a reverse engineer can read that machinery out of a compiled binary. It sets aside hardware and operating system traps, try/catch in scripting languages, and exploitation. The speakers start with the stack: when a throw crosses function frames, the unwinder has to recover saved return addresses, even when frame pointers are omitted, and that is where DWARF call frame metadata comes in.\n\nNext they walk through the eh_frame section with its frame description and common information entries, the personality routine that decides whether a frame has a handler or cleanup work, and the language specific data area holding call site, action and type tables. They explain the two unwinding phases, search and cleanup, and how landing pads receive the exception object and a handler switch value. Apple's unwind info and Windows structured exception handling are briefly contrasted.\n\nFor a live demo they open a sample program in Binary Ninja with a plugin they wrote that parses these structures and marks catch and cleanup handlers in the disassembly. The main takeaway is that this exception metadata remains present in stripped binaries, so it can help recover function boundaries and handler logic. The plugin was said to be coming to the plugin manager after the talk.",
       "durationSeconds": 3322,
       "conference": "recon",
       "viewCount": 250,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2022,
-      "eventLabel": "Recon 2022"
+      "eventLabel": "Recon 2022",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "WKsmWi_TVyA",
@@ -2559,7 +2643,10 @@
       "youtubeId": "FalMFNlTLaY",
       "slug": "recon-2022-malware-wars-darkside-strikes-back-as-blackmatter",
       "title": "Recon 2022 - Malware Wars DarkSide Strikes Back as BlackMatter",
-      "speakers": [],
+      "speakers": [
+        "James Niven",
+        "Lindsey K"
+      ],
       "track": "malware",
       "topics": [
         "recon",
@@ -2569,13 +2656,14 @@
         "strike"
       ],
       "teaser": "Presenters detail vulnerability discovery and exploitation in Recon 2022 - Malware Wars DarkSide Strikes Back as BlackMatter.",
-      "summary": null,
+      "summary": "The talk traces how the DarkSide ransomware operation changed its name to BlackMatter and later to Alpha after outside pressure and internal problems. The speakers link the shift to the Colonial Pipeline attack, which drew law enforcement attention and pushed forums to crack down on ransomware sales. They describe how affiliates were recruited and how BlackMatter's affiliate panel let operators generate Windows, ESXi and Linux lockers.\n\nThe malware analysis covered several BlackMatter builds released between July and September 2021. The Windows samples used simple XOR string obfuscation, an unusual function-call obfuscation scheme driven by a magic value, and stack strings that reused the same key across builds. Later versions added features such as printing ransom notes on local printers, encrypting Exchange files and partially encrypting large files. A Salsa20 implementation shared with DarkSide, and a decrypter that exploited key reuse, pointed to a technical link between the groups. When the operation was rebuilt in Rust, the Alpha variant added name-mangled function names and junk code, which the speakers said was aimed at antivirus detection.\n\nThe talk closes with how the groups were tracked: operator typos and technical flaws, public boasting on forums, and human intelligence gathered from people who engaged with them. The speakers presented these as lessons on how ransomware brands rebuild after pressure, and noted that some attribution remains uncertain.",
       "durationSeconds": 1678,
       "conference": "recon",
       "viewCount": 67,
       "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
       "year": 2022,
-      "eventLabel": "Recon 2022"
+      "eventLabel": "Recon 2022",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "eboMa361r7M",

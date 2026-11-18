@@ -13,18 +13,19 @@
       "speakers": [
         "Ignat Korchagin"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "linux",
         "kernel",
         "linux-kernel"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Ignat Korchagin: What is Linux kernel keystore and why you should use it in your next application.",
-      "summary": null,
+      "teaser": "Explains Linux kernel keyrings and how they keep cryptographic keys out of application memory.",
+      "summary": "The talk starts from a simple risk: code running inside a process can read its memory, so a memory bug or a compromised library can expose cryptographic keys. Core dumps and debugging sessions can leak them too, and clearing memory is hard in garbage-collected languages. The speaker proposes moving keys out of the application, using the same idea as an SSH agent, where a separate process holds the key and answers requests through a narrow interface.\n\nThe Linux kernel key retention service plays the agent role. Keys are kernel objects organised into keyrings, and their lifetimes are tied to session, process, user or persistent keyrings, so they are destroyed when the owning context ends. A logout demo showed a session key being removed automatically. Key types range from user keys to logon keys that cannot be read back, and asymmetric keys that the kernel uses for signing or decryption without releasing the private material. Encrypted and trusted keys go further: wrapped blobs are unwrapped inside the kernel, and trusted keys use a TPM once to decrypt a root key. A request_key call lets an application ask for a key by name, while a user-space helper, extensible with modules in any language, fetches it from a backend such as Vault or a cloud KMS.\n\nThe takeaway is that applications can keep secrets out of their own memory while the backend stays swappable, with access controlled by kernel permissions and helper modules that can check the requesting process. The speaker pointed to documentation, a blog post with code, and an experimental OpenSSH patch that uses kernel keys instead of an agent.",
       "durationSeconds": 2100,
       "conference": "confidence",
       "viewCount": 325,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "advanced"
     },
     {
       "youtubeId": "aCNM_ub7XR8",
@@ -324,19 +325,20 @@
       "speakers": [
         "Alon Leviev"
       ],
-      "track": "community",
+      "track": "red-team",
       "topics": [
         "party",
         "alon",
         "leviev",
         "pool"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Alon Leviev: The Pool Party You Will Never Forget | CONFidence.",
-      "summary": null,
+      "teaser": "Shows how Windows thread pool internals enable process injection that evades major EDR products.",
+      "summary": "The talk starts from process injection, an evasion technique that runs code inside another process by chaining allocation, writing and execution primitives. The speaker explains that classic methods such as CreateRemoteThread are flagged by endpoint detection products, which mostly key on the execution step and check whether one process is acting on another. The research goal was to find injection methods that avoid this check and work across Windows processes without special prerequisites.\n\nThe research targets the Windows user-mode thread pool, which every process has by default. The speaker walks through its worker factory, which can be reached by duplicating a handle from the target, and its task, I/O completion and timer queues. Each variant reads the target's thread pool structures, inserts a malicious work item, and then triggers execution through a legitimate action, such as setting a timer or writing to a file associated with a completion queue. These variants are gathered in a tool called Pool Party, which covers eight techniques.\n\nIn demonstrations against several commercial EDR products, the injected code spawned child processes under Notepad without any detection, while a classic injection was flagged. The speaker argues that execution-focused detection is not generic enough, since techniques built on legitimate features can slip past it. The main takeaway for practitioners is that thread pool internals offer a wide and largely unexplored injection surface.",
       "durationSeconds": 2077,
       "conference": "confidence",
       "viewCount": 324,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "expert"
     },
     {
       "youtubeId": "_cmXf2vNVhQ",
@@ -345,7 +347,7 @@
       "speakers": [
         "Piotr Żabrowski"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "threat-modeling",
         "piotr",
@@ -354,8 +356,8 @@
         "modeling",
         "scale"
       ],
-      "teaser": "Analysts investigate attack surfaces and defenses concerning Piotr Żabrowski: Threat modeling at scale of Allegro. From STRIDE to success | CONFidence.",
-      "summary": null,
+      "teaser": "Explains scaling developer-led threat modeling through questionnaires and dual workflows for microservices and generative AI projects.",
+      "summary": "The presentation opens with threat modeling fundamentals: a structured, proactive way to spot and mitigate issues before production, distinct from risk analysis that weighs probability. It sketches STRIDE’s history, clarifies terms such as vulnerability, threat, attack, and mitigation, and notes that few organizations treat threat modeling as daily practice.\n\nAt Allegro, committee-style tools failed to match more than two thousand microservices. The team built a yes-or-no question tree from internal testing and bug bounty data, piloted it with twenty development teams, and tied completion to static analysis after merge requests while keeping participation optional. Deployment took roughly six months; participation rate became the main KPI. Early 2023 brought mandatory, methodology-flexible threat modeling for generative AI work—LLMs, multimodal systems, and varied stacks—using frameworks such as PLOT4AI, facilitator-led sessions, data flow diagrams, diverse groups of up to six people, and an internal guide. Sessions run about six to eight hours; training reduces one-person anti-patterns.\n\nBoth models still operate in parallel. The speaker stresses developer ownership, early design fixes, and plans to pursue automation because existing frameworks resist it. Question sets stay company-specific; the AI path trades standardization for coverage and depth.",
       "durationSeconds": 2065,
       "conference": "confidence",
       "viewCount": 172,
@@ -368,7 +370,7 @@
       "speakers": [
         "Iwona Polak"
       ],
-      "track": "community",
+      "track": "appsec",
       "topics": [
         "iwona",
         "polak",
@@ -377,12 +379,13 @@
         "podr",
         "cznej"
       ],
-      "teaser": "Presenters detail vulnerability discovery and exploitation in Iwona Polak: Co tam słychać w pamięci podręcznej? | CONFidence.",
-      "summary": null,
+      "teaser": "Explains how web caches get poisoned or tricked into serving one user's response to another, with live demos.",
+      "summary": "The talk starts with how a request travels from a user's browser through CDNs, reverse proxies and load balancers to an origin server. Caches sit along that path to speed up delivery, reduce load on the server and hide the origin's address. The speaker explains that a cache decides whether to serve a stored copy based on a cache key, built only from a few parts of the request such as the method, the request line and the host. Other headers are ignored by that key, which is where trouble starts. Two families of attacks are covered: cache poisoning, where an attacker stores a malicious response that is then served to others, and cache deception, where a victim's private page ends up stored under a URL that looks static.\n\nThe live demos show these ideas in practice. A homepage is poisoned through an unkeyed forwarded-host header, so an injected payload is cached and served to every visitor for the cache lifetime, which the demo set to 30 seconds. A method override header makes a GET request behave like a POST, which can turn an error page into a cached one until the poison is removed. A profile page is cached by appending a slash and a static-looking extension to its path, after which another visitor sees the first user's data. The speaker also notes that modern browsers send only the origin in the referer by default, which blocks one referer-based variant of these attacks.\n\nThe practical takeaways are to cache only static resources, avoid reflecting headers or cookies into cacheable pages, and disable headers the application does not need, such as method override. Client-side flaws like self-XSS should also be fixed, since caching can turn them into wider issues.",
       "durationSeconds": 2650,
       "conference": "confidence",
       "viewCount": 300,
-      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z"
+      "viewCountFetchedAt": "2026-09-18T07:01:26.563Z",
+      "difficulty": "intermediate"
     },
     {
       "youtubeId": "GqnFNNcycxQ",
