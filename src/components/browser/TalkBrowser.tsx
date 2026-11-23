@@ -34,6 +34,7 @@ import {
 import { fetchListingTalks, type ListingKind } from "@/lib/fetch-listing";
 import { inDefconVillage } from "@/lib/hubs";
 import { fetchAdditionalTalkIndexChunks } from "@/lib/fetch-talk-index";
+import { homepageNeedsFullIndex } from "@/lib/home-catalog";
 import { archiveSearchHref, searchVariantRel } from "@/lib/search-index/href";
 import { summaryYearsToLoad } from "@/lib/summary-years";
 import type { SearchEntry, TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
@@ -75,9 +76,10 @@ export type TalkBrowserProps = {
    */
   alwaysShowDifficulties?: boolean;
   /**
-   * When true, ignore the initial `talks` prop for data and load the full
-   * catalog from /data/talk-index/ year shards on the client (newest first).
-   * Keeps SSR HTML thin for homepage/saved.
+   * When true, load the catalog from /data/talk-index/ year shards on the
+   * client (newest first). With `initialFacets` (the homepage) that fetch
+   * waits until a search, filter, sort, or later page needs it. The first
+   * page stays the talks passed in. Saved talks still load immediately.
    */
   remoteIndex?: boolean;
   /**
@@ -175,15 +177,31 @@ export function TalkBrowser({
   const resultsRef = useRef<HTMLDivElement>(null);
   const [remoteTalks, setRemoteTalks] = useState<TalkIndexEntry[]>(remoteIndex ? talksProp : []);
   const [catalogReady, setCatalogReady] = useState(!remoteIndex || talksProp.length > 0);
-  const [catalogLoading, setCatalogLoading] = useState(remoteIndex);
+  // Homepage already has the first page and facet counts. Leave the shards
+  // alone until someone searches, filters, sorts, or pages.
+  const deferRemoteCatalog = Boolean(remoteIndex && initialFacets);
+  const [catalogArmed, setCatalogArmed] = useState(false);
+  const [settledHint, setSettledHint] = useState<string | null>(null);
+  const [catalogLoading, setCatalogLoading] = useState(remoteIndex && !deferRemoteCatalog);
   const [listedTalks, setListedTalks] = useState<TalkIndexEntry[] | null>(null);
   const [listReady, setListReady] = useState(!listing);
   // Without `initialFacets` the listing loads on mount, as it always has.
   const [listWanted, setListWanted] = useState(!initialFacets);
   const wakeListing = useCallback(() => setListWanted(true), []);
+  const armCatalog = useCallback(() => setCatalogArmed(true), []);
+  const wake = useCallback(() => {
+    setListWanted(true);
+    setCatalogArmed(true);
+  }, []);
   const intent = initialFacets && !listWanted
     ? { onPointerDownCapture: wakeListing, onFocusCapture: wakeListing }
     : {};
+  // Search and the filter rail arm the homepage index. A pointer on the
+  // results themselves does not: scrolling and opening a talk stay light.
+  const catalogIntent = {
+    onPointerDownCapture: wake,
+    onFocusCapture: wake,
+  };
   const loadedChunkFilesRef = useRef<Set<string>>(new Set());
   const loadedSummaryYearsRef = useRef<Set<number>>(new Set());
   const remoteTalksRef = useRef<TalkIndexEntry[]>([]);
@@ -219,9 +237,29 @@ export function TalkBrowser({
     : filters.conferences;
   const yearFilterKey = hintYears.join(",");
   const conferenceFilterKey = hintConferences.join(",");
+  const hintKey = `${yearFilterKey}|${conferenceFilterKey}`;
+  // Applied controls. Staging a phone filter must not swap the card grid.
+  const viewNeedsIndex =
+    !deferRemoteCatalog ||
+    homepageNeedsFullIndex({
+      query: draftQuery,
+      page: filters.page,
+      sort: filters.sort,
+      activeFilters: countActive({ ...filters, q: "" }),
+    });
+  const stagedNeedsIndex = staged
+    ? homepageNeedsFullIndex({
+        query: "",
+        page: 1,
+        sort: "relevance",
+        activeFilters: countActive({ ...staged, q: "" }),
+      })
+    : false;
+  const loadCatalog = !deferRemoteCatalog || catalogArmed || viewNeedsIndex || stagedNeedsIndex;
+  const indexReady = !remoteIndex || settledHint === hintKey;
 
   useEffect(() => {
-    if (!remoteIndex || !ready) return;
+    if (!remoteIndex || !ready || !loadCatalog) return;
     let cancelled = false;
     const controller = new AbortController();
 
@@ -270,11 +308,13 @@ export function TalkBrowser({
         setRemoteTalks(talks);
         setCatalogReady(true);
         setCatalogLoading(false);
+        setSettledHint(hintKey);
       })
       .catch(() => {
         if (cancelled) return;
         setCatalogReady(true);
         setCatalogLoading(false);
+        setSettledHint(hintKey);
       });
 
     return () => {
@@ -282,7 +322,7 @@ export function TalkBrowser({
       if (timer) clearTimeout(timer);
       controller.abort();
     };
-  }, [remoteIndex, ready, yearFilterKey, conferenceFilterKey]);
+  }, [remoteIndex, ready, loadCatalog, yearFilterKey, conferenceFilterKey, hintKey]);
 
   const listingKind = listing?.kind;
   const listingKey = listing?.key;
@@ -311,12 +351,25 @@ export function TalkBrowser({
     };
   }, [listingKind, listingKey, listWanted]);
 
-  const talks = remoteIndex ? remoteTalks : (listedTalks ?? talksProp);
+  // Until a search or filter needs the index, keep the server's first page.
+  // Swapping in shards as they arrive was rewriting the card grid.
+  const talks =
+    remoteIndex && deferRemoteCatalog && !viewNeedsIndex && !stagedNeedsIndex && !indexReady
+      ? talksProp
+      : remoteIndex
+        ? remoteTalks
+        : (listedTalks ?? talksProp);
+  const freezeGrid = deferRemoteCatalog && !viewNeedsIndex;
   const listingPending = Boolean(listing) && !listReady;
   const listingLoading = listingPending && listWanted;
 
-  const hasExtras = useMemo(() => talks.some((t) => t.kind !== "talk"), [talks]);
-  const allExtras = useMemo(() => talks.length > 0 && talks.every((t) => t.kind !== "talk"), [talks]);
+  // The frozen first page must not grow a "clips" checkbox once the full index lands.
+  const chromeTalks = freezeGrid ? talksProp : talks;
+  const hasExtras = useMemo(() => chromeTalks.some((t) => t.kind !== "talk"), [chromeTalks]);
+  const allExtras = useMemo(
+    () => chromeTalks.length > 0 && chromeTalks.every((t) => t.kind !== "talk"),
+    [chromeTalks],
+  );
   // Village sort is DEF CON-only: hide it on the homepage and other non-village browsers.
   const sortOptions = useMemo(() => {
     const hideVillage = hide.includes("villages") || !talks.some((talk) => inDefconVillage(talk));
@@ -385,6 +438,8 @@ export function TalkBrowser({
   // One fetch per year. Later list changes (chunks, filters) must not refetch
   // a shard that already landed. The browser cache can reuse the response.
   useEffect(() => {
+    // Summary text is only for search. The default page and a facet pick do not need it.
+    if (deferRemoteCatalog && draftQuery.trim().length < MIN_QUERY_LENGTH) return;
     const years = summaryYearsToLoad(loadedSummaryYearsRef.current, talks);
     if (years.length === 0) return;
     for (const year of years) loadedSummaryYearsRef.current.add(year);
@@ -404,7 +459,7 @@ export function TalkBrowser({
         }
       })();
     }
-  }, [talks, queueSummaries]);
+  }, [talks, queueSummaries, deferRemoteCatalog, draftQuery]);
 
   // The box shows every keystroke at once. Results follow once typing pauses
   // for a moment, so a burst of keys costs one search instead of one per key.
@@ -455,9 +510,10 @@ export function TalkBrowser({
   // Until the listing or the remote catalog lands, the rail shows the server's
   // counts. The page's own talks are only the first 24 and would hide
   // Conference (one event) and count the rest wrong.
-  const catalogPending = Boolean(remoteIndex) && catalogLoading;
+  const catalogPending = Boolean(remoteIndex) && !indexReady;
   const serverFacets =
-    initialFacets != null && activeCount === 0 && (listingPending || catalogPending);
+    initialFacets != null &&
+    ((listingPending && activeCount === 0) || (deferRemoteCatalog && !indexReady));
   // Match the search text once per (deferred) keystroke; facets and results
   // both start from this list. Typing forward narrows the previous matches.
   const matchTextRef = useRef<ReturnType<typeof createTextMatcher> | null>(null);
@@ -499,6 +555,9 @@ export function TalkBrowser({
     return hit.facets;
   }, [serverFacets, initialFacets, source, effective, alwaysShowDifficulties, textMatched, resultCache]);
   const sorted = useMemo(() => {
+    // The default homepage page is the server slice. Don't sort the whole
+    // archive just to throw that order away.
+    if (freezeGrid) return [];
     const hit = cached(effective.q);
     if (hit.sorted) return hit.sorted;
     const pin =
@@ -509,7 +568,7 @@ export function TalkBrowser({
     const filtered = filterTalks(source, effective, textMatched);
     hit.sorted = sortTalks(filtered, effective.sort, effective.q, { pinPopularDc34: pin });
     return hit.sorted;
-  }, [source, effective, textMatched, pinPopularDc34, resultCache]);
+  }, [source, effective, textMatched, pinPopularDc34, resultCache, freezeGrid]);
   const paged = useMemo(() => {
     const page = paginate(sorted, effective.page);
     return { ...page, items: markSummaryMatches(page.items, effective.q) };
@@ -530,7 +589,9 @@ export function TalkBrowser({
     [topicLabels],
   );
 
-  const pendingUnfiltered = listingPending && activeCount === 0 && resultSize != null;
+  const pendingUnfiltered =
+    (listingPending && activeCount === 0 && resultSize != null) ||
+    (freezeGrid && resultSize != null && activeCount === 0 && filters.sort === "relevance");
   // Only the first page is in hand: anything else waits for the listing.
   const awaitingListing = listingPending && (activeCount > 0 || filters.page > 1);
   const pendingTotalPages = Math.max(1, Math.ceil((resultSize ?? 0) / PAGE_SIZE));
@@ -578,6 +639,7 @@ export function TalkBrowser({
   // Focus goes back to whichever control opened the panel (bar or edge tab).
   const preparePush = () => setStaged(filters);
   const openPush = (opener: HTMLElement | null) => {
+    armCatalog();
     pushOpenerRef.current = opener;
     setStaged(filters);
     push?.setOpen(true);
@@ -608,7 +670,7 @@ export function TalkBrowser({
       current ? { ...EMPTY_FILTERS, includeExtras: allExtras, sort: current.sort } : current,
     );
 
-  const awaitingCatalog = remoteIndex && talks.length === 0 && (catalogLoading || !catalogReady);
+  const awaitingCatalog = Boolean(remoteIndex) && viewNeedsIndex && !indexReady;
 
   const clearAll = () => {
     setDraftQuery("");
@@ -913,7 +975,7 @@ export function TalkBrowser({
   });
 
   const search = (
-    <div {...intent}>
+    <div {...catalogIntent}>
       <div
         className={`panel flex items-center gap-3 transition focus-within:border-cyan/60 ${
           large ? "px-4 py-3.5 sm:px-5 sm:py-4" : "p-3 sm:p-4"
@@ -1011,7 +1073,7 @@ export function TalkBrowser({
 
       <div className="fold-layout grid gap-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start lg:gap-8">
         {/* Desktop rail grows with the page; only compact facets scroll internally. */}
-        <aside className="fold-rail hidden lg:block" {...intent}>
+        <aside className="fold-rail hidden lg:block" {...catalogIntent}>
           <div className="space-y-5">
             <div className="flex items-center justify-between">
               <p className="font-display text-xs uppercase tracking-[0.2em] text-acid">Filters</p>
@@ -1029,7 +1091,7 @@ export function TalkBrowser({
           {/* Mobile facets */}
           <details
             open
-            {...intent}
+            {...catalogIntent}
             className={`fold-drawer panel group lg:hidden ${push ? "max-[599px]:hidden" : ""}`}
           >
             <summary className="cursor-pointer list-none px-4 py-3 font-display text-xs uppercase tracking-[0.2em] text-acid">
@@ -1083,7 +1145,7 @@ export function TalkBrowser({
                 <span className="text-mint/30"> / {universe}</span>
               ) : null}
               {/* Not in the server HTML: `ready` only flips after mount, so crawlers see a plain count. */}
-              {ready && (catalogLoading || listingLoading) ? (
+              {ready && viewNeedsIndex && (catalogLoading || !indexReady || listingLoading) ? (
                 <span className="text-mint/30"> · loading…</span>
               ) : null}
             </p>
@@ -1144,7 +1206,7 @@ export function TalkBrowser({
                 </div>
               ))}
             </div>
-          ) : paged.items.length === 0 ? (
+          ) : !freezeGrid && paged.items.length === 0 ? (
             <div className="panel min-h-[18rem] px-4 py-12 text-center">
               <p className="text-sm uppercase tracking-[0.16em] text-warn">{emptyHint}</p>
               {activeCount > 0 ? (
@@ -1155,8 +1217,8 @@ export function TalkBrowser({
             </div>
           ) : (
             <div className="fold-cards grid gap-4 max-[599px]:gap-2 sm:grid-cols-2 xl:grid-cols-3">
-              {paged.items.map((talk, index) => (
-                <TalkCard key={talk.id} talk={talk} priority={paged.page === 1 && index === 0} />
+              {(freezeGrid ? talksProp : paged.items).map((talk, index) => (
+                <TalkCard key={talk.id} talk={talk} priority={(freezeGrid || paged.page === 1) && index === 0} />
               ))}
             </div>
           )}
@@ -1165,7 +1227,7 @@ export function TalkBrowser({
             page={pendingUnfiltered ? pendingPage : paged.page}
             totalPages={pendingUnfiltered ? pendingTotalPages : paged.totalPages}
             onChange={goToPage}
-            onIntent={initialFacets && !listWanted ? wakeListing : undefined}
+            onIntent={initialFacets && !listWanted ? wake : armCatalog}
           />
           </div>
       </div>
@@ -1187,7 +1249,7 @@ export function TalkBrowser({
           count={stagedCount}
           activeCount={activeCount}
           stagedActive={staged ? countActive({ ...staged, q: "" }) : 0}
-          loading={ready && catalogLoading}
+          loading={ready && ((remoteIndex && loadCatalog && !indexReady) || listingLoading)}
           sections={pushSections()}
           extras={
             hasExtras && staged ? (

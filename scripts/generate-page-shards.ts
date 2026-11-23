@@ -44,6 +44,7 @@ import {
   seriesPagePath,
   sitemapPagePath,
   speakersIndexPath,
+  speakersSearchPath,
   topicsIndexPath,
   trackPagePath,
   tracksIndexPath,
@@ -101,7 +102,12 @@ export function writePageShards(): string {
   });
   put(tracksIndexPath, trackCounts);
   put(topicsIndexPath, getTopicCounts());
-  put(speakersIndexPath, getSpeakers());
+  const speakers = getSpeakers();
+  put(speakersIndexPath, speakers);
+  put(
+    speakersSearchPath,
+    speakers.map((speaker) => [speaker.name, speaker.slug, speaker.talkCount]),
+  );
   put(villagesIndexPath, getDefconVillages());
 
   const villageCoverage = getCoverageByVillage();
@@ -195,7 +201,7 @@ export function writePageShards(): string {
       villages: getDefconVillages(),
       tracks: getTracks(),
       talks,
-      speakers: getSpeakers().map((speaker) => ({
+      speakers: speakers.map((speaker) => ({
         slug: speaker.slug,
         talkCount: speaker.talkCount,
       })),

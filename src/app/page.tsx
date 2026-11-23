@@ -21,8 +21,9 @@ const EXAMPLES = ["ransomware", "osint", "supply chain", "purple team"];
  * searching or filtering).
  *
  * The first page of cards is in the HTML so the leading image can paint
- * without waiting on the catalog. The rest of the archive still loads from
- * the year shards.
+ * without waiting on the catalog. Year shards stay unloaded until a search,
+ * filter, sort, or later page needs them, so the first page does not move
+ * while the rest of the archive arrives.
  */
 export default async function HomePage() {
   const { stats, conferences, mostWatched, trackCounts, initialTalks, initialFacets, catalogSize, resultSize } =

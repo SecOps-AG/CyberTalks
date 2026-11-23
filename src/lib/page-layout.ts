@@ -16,6 +16,8 @@ export const homePagePath = "/catalog/pages/home.json";
 export const tracksIndexPath = "/catalog/pages/tracks.json";
 export const topicsIndexPath = "/catalog/pages/topics.json";
 export const speakersIndexPath = "/catalog/pages/speakers.json";
+/** [name, slug, talkCount], most talks first. The speakers page and its search read this. */
+export const speakersSearchPath = "/catalog/pages/speakers-search.json";
 export const villagesIndexPath = "/catalog/pages/defcon-villages.json";
 export const coveragePagePath = "/catalog/pages/coverage.json";
 export const sitemapPagePath = "/catalog/pages/sitemap.json";

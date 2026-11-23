@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { DC34_EVENT_SLUG } from "./dc34";
+import { homepageNeedsFullIndex } from "./home-catalog";
 import {
   DC34_LIKE_WEIGHT,
   PAGE_SIZE,
@@ -160,5 +161,17 @@ describe("homepage first page", () => {
       initial.facets.conferences.map((option) => option.value).sort(),
       ["black-hat", "defcon", "rsa"],
     );
+  });
+});
+
+describe("homepage index load", () => {
+  it("keeps the first page local until a search, filter, sort, or later page", () => {
+    const idle = { query: "", page: 1, sort: "relevance", activeFilters: 0 };
+    assert.equal(homepageNeedsFullIndex(idle), false);
+    assert.equal(homepageNeedsFullIndex({ ...idle, query: " " }), false);
+    assert.equal(homepageNeedsFullIndex({ ...idle, query: "a" }), true);
+    assert.equal(homepageNeedsFullIndex({ ...idle, page: 2 }), true);
+    assert.equal(homepageNeedsFullIndex({ ...idle, sort: "newest" }), true);
+    assert.equal(homepageNeedsFullIndex({ ...idle, activeFilters: 1 }), true);
   });
 });

@@ -19,6 +19,7 @@ import {
   seriesPagePath,
   sitemapPagePath,
   speakersIndexPath,
+  speakersSearchPath,
   topicsIndexPath,
   trackPagePath,
   tracksIndexPath,
@@ -138,6 +139,17 @@ export const loadTopicCounts = cache((): Promise<TopicCount[]> =>
 
 export const loadSpeakers = cache((): Promise<Speaker[]> =>
   fromShardRequired(speakersIndexPath, (data) => data.getSpeakers()),
+);
+
+/** `[name, slug, talkCount]` for every speaker, most talks first. */
+export type SpeakerSearchRow = readonly [string, string, number];
+
+export const loadSpeakerSearch = cache((): Promise<SpeakerSearchRow[]> =>
+  fromShardRequired(speakersSearchPath, (data) =>
+    data
+      .getSpeakers()
+      .map((speaker) => [speaker.name, speaker.slug, speaker.talkCount] as const),
+  ),
 );
 
 export const loadDefconVillages = cache((): Promise<VillageSeries[]> =>

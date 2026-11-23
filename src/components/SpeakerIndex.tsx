@@ -1,20 +1,20 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Speaker } from "@/lib/types";
 import { Pagination } from "@/components/browser/Pagination";
+import { SPEAKER_SEARCH_MIN_QUERY, SPEAKER_SEARCH_PAGE_SIZE } from "@/lib/speaker-search";
 
-const PAGE_SIZE = 100;
+const PAGE_SIZE = SPEAKER_SEARCH_PAGE_SIZE;
 const REPEAT_CAP = 48;
-const MIN_QUERY = 2;
+const MIN_QUERY = SPEAKER_SEARCH_MIN_QUERY;
 
 export type SpeakerRow = Pick<Speaker, "name" | "slug" | "talkCount">;
 
 /**
- * Search-first speaker directory. The page only ships the frequent presenters
- * and the person count; the full name list loads the first time the search
- * field is used.
+ * Search-first speaker directory. The page ships the frequent presenters
+ * and the speaker count. Each search asks the server for one page of matches.
  */
 export function SpeakerIndex({
   repeats,
@@ -26,49 +26,62 @@ export function SpeakerIndex({
   const [needle, setNeedle] = useState("");
   const [page, setPage] = useState(1);
   const [people, setPeople] = useState<SpeakerRow[] | null>(null);
+  const [total, setTotal] = useState(0);
   const [failed, setFailed] = useState(false);
-  const requested = useRef(false);
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const query = needle.trim().toLowerCase();
   const searching = query.length >= MIN_QUERY;
 
-  const loadPeople = useCallback(() => {
-    if (requested.current) return;
-    requested.current = true;
-    fetch("/api/speakers")
-      .then((response) => {
-        if (!response.ok) throw new Error(`Speakers returned ${response.status}`);
-        return response.json() as Promise<{ speakers?: [string, string, number][] }>;
-      })
-      .then((body) =>
-        setPeople((body.speakers ?? []).map(([name, slug, talkCount]) => ({ name, slug, talkCount }))),
-      )
-      .catch(() => {
-        requested.current = false;
-        setFailed(true);
-      });
-  }, []);
+  useEffect(() => {
+    if (!searching) {
+      setPeople(null);
+      setTotal(0);
+      setFailed(false);
+      setLoading(false);
+      return;
+    }
+    const controller = new AbortController();
+    const timer = setTimeout(() => {
+      setLoading(true);
+      setFailed(false);
+      const params = new URLSearchParams({ q: query, page: String(page) });
+      fetch(`/api/speakers?${params}`, { signal: controller.signal })
+        .then((response) => {
+          if (!response.ok) throw new Error(`Speakers returned ${response.status}`);
+          return response.json() as Promise<{
+            total?: number;
+            speakers?: [string, string, number][];
+          }>;
+        })
+        .then((body) => {
+          setPeople(
+            (body.speakers ?? []).map(([name, slug, talkCount]) => ({ name, slug, talkCount })),
+          );
+          setTotal(body.total ?? 0);
+          setLoading(false);
+        })
+        .catch((error: unknown) => {
+          if (error instanceof Error && error.name === "AbortError") return;
+          setPeople(null);
+          setFailed(true);
+          setLoading(false);
+        });
+    }, 120);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [page, query, searching]);
 
   // Wider screens focus the field on load. Phones do not: it would open the keyboard.
   useEffect(() => {
     if (window.matchMedia("(min-width: 600px)").matches) inputRef.current?.focus();
   }, []);
 
-  const matching = useMemo(() => {
-    if (!searching || !people) return [];
-    return people.filter((speaker) => speaker.name.toLowerCase().includes(query));
-  }, [people, query, searching]);
-
-  const alphabetical = useMemo(
-    () => matching.slice().sort((a, b) => a.name.localeCompare(b.name)),
-    [matching],
-  );
-
-  const totalPages = Math.max(1, Math.ceil(alphabetical.length / PAGE_SIZE));
-  const pageItems = useMemo(() => {
-    const start = (page - 1) * PAGE_SIZE;
-    return alphabetical.slice(start, start + PAGE_SIZE);
-  }, [alphabetical, page]);
+  const alphabetical = people ?? [];
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const pageItems = alphabetical;
 
   useEffect(() => {
     setPage(1);
@@ -84,9 +97,7 @@ export function SpeakerIndex({
         type="search"
         value={needle}
         ref={inputRef}
-        onFocus={loadPeople}
         onChange={(event) => {
-          loadPeople();
           setNeedle(event.target.value);
         }}
         placeholder="Search speakers by name…"
@@ -97,9 +108,7 @@ export function SpeakerIndex({
       {!searching ? (
         <p className="max-w-2xl text-sm text-mint/50">
           Type at least {MIN_QUERY} characters to search{" "}
-          {personCount.toLocaleString("en-US")} person names. Company names,
-          conference titles, and other non-speaker credits are hidden here until the catalog
-          cleanup lands.
+          {personCount.toLocaleString("en-US")} speaker names.
         </p>
       ) : null}
 
@@ -127,20 +136,20 @@ export function SpeakerIndex({
         <p className="text-sm text-mint/50">Search for a speaker name to browse the archive.</p>
       ) : null}
 
-      {searching && !people ? (
+      {searching && (loading || !people) ? (
         <p className="text-sm text-mint/50" role="status">
           {failed ? "Could not load speaker names. Try again." : "Loading speaker names…"}
         </p>
       ) : null}
 
-      {searching && people ? (
+      {searching && people && !loading ? (
         <section>
           <h2 className="mb-3 border-b border-acid/15 pb-2 font-display text-xs uppercase tracking-[0.2em] text-cyan">
-            {alphabetical.length.toLocaleString("en-US")} matching
+            {total.toLocaleString("en-US")} matching
             {totalPages > 1 ? ` · page ${page} of ${totalPages}` : ""}
           </h2>
           {alphabetical.length === 0 ? (
-            <p className="text-sm text-mint/50">No person name matches “{needle.trim()}”.</p>
+            <p className="text-sm text-mint/50">No name matches “{needle.trim()}”.</p>
           ) : (
             <>
               <ul className="grid gap-x-6 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
