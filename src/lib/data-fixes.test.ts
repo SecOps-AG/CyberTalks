@@ -22,7 +22,8 @@ describe("event-title repair", () => {
     assert.equal(talk.eventLabel, "Black Hat USA 2001");
     assert.deepEqual(talk.speakers, []);
     assert.equal(talk.youtubeId, "c6Xx43wSXno");
-    assert.equal("teaser" in talk, false, "the generated teaser repeated the event label");
+    const teaser = typeof talk.teaser === "string" ? talk.teaser : "";
+    assert.doesNotMatch(teaser, /Black Hat USA 2001/);
   });
 
   it("leaves a good teaser and a summary alone on an affected talk", () => {

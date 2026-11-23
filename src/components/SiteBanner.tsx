@@ -1,8 +1,14 @@
 import Link from "next/link";
-import { DC34_BANNER } from "@/lib/dc34";
+import stats from "@/generated/stats.json";
+import { DC34_BANNER, dc34BannerText } from "@/lib/dc34";
 
-/** DEF CON 34 announcement strip under the site header. Server-rendered, so it is in the first paint. */
-export function SiteBanner() {
+/**
+ * DEF CON 34 announcement strip under the site header. The count is written
+ * at build time (src/generated/stats.json) from the same talk list as
+ * /defcon-34, so the layout does not read that page on every request.
+ */
+export function SiteBanner({ talkCount = stats.dc34Talks }: { talkCount?: number | null }) {
+  const text = dc34BannerText(talkCount);
   return (
     <div className="relative overflow-hidden border-b border-acid/30 bg-[linear-gradient(90deg,rgba(57,255,20,0.14),rgba(57,255,20,0.04)_45%,rgba(0,240,255,0.08))]">
       <div
@@ -18,7 +24,7 @@ export function SiteBanner() {
           <span className="after:content-['DC34']" />
         </span>
         <p className="min-w-0 flex-1 text-[13px] leading-snug text-[#c8ffc0] max-[599px]:text-xs sm:text-[15px]">
-          {DC34_BANNER.text}
+          {text}
         </p>{" "}
         <Link
           href={DC34_BANNER.href}

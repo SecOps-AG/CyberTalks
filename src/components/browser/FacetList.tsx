@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { FacetOption } from "@/lib/search";
+import { visibleFacetOptions, type FacetOption } from "@/lib/search";
 
 const COLLAPSED = 8;
 const SEARCHABLE_AT = 12;
@@ -35,14 +35,15 @@ export function FacetList<T extends string | number>({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [needle, setNeedle] = useState("");
+  const optionsShown = useMemo(() => visibleFacetOptions(options), [options]);
 
-  const searchable = options.length >= SEARCHABLE_AT;
+  const searchable = optionsShown.length >= SEARCHABLE_AT;
 
   const matching = useMemo(() => {
     const query = needle.trim().toLowerCase();
-    if (!query) return options;
-    return options.filter((option) => option.label.toLowerCase().includes(query));
-  }, [options, needle]);
+    if (!query) return optionsShown;
+    return optionsShown.filter((option) => option.label.toLowerCase().includes(query));
+  }, [optionsShown, needle]);
 
   // Compact: every matching option stays in the scroll box. Otherwise selected
   // values always stay visible, even below the collapse cut.
@@ -57,7 +58,7 @@ export function FacetList<T extends string | number>({
 
   const hidden = compact ? 0 : matching.length - visible.length;
 
-  if (options.length === 0) return null;
+  if (optionsShown.length === 0) return null;
 
   return (
     <section>

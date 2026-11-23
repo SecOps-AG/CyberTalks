@@ -1,3 +1,4 @@
+import { visibleFacetOptions } from "@/lib/search";
 import type { Difficulty } from "@/lib/types";
 import { hrefFromQuery, searchVariantRel } from "@/lib/search-index/href";
 import type { SearchQuery } from "@/lib/search-index/params";
@@ -59,12 +60,13 @@ function FacetLinks({
   hrefFor: (value: string | number) => string;
   scroll?: boolean;
 }) {
-  if (options.length === 0) return null;
+  const shown = visibleFacetOptions(options);
+  if (shown.length === 0) return null;
   return (
     <section>
       <p className="label mb-1.5">{label}</p>
       <div className={`scroll-list space-y-0.5 pr-1 ${scroll ? "max-h-40 overflow-y-auto" : ""}`}>
-        {options.map((option) => {
+        {shown.map((option) => {
           const active = selected.includes(option.value);
           const href = hrefFor(option.value);
           return (

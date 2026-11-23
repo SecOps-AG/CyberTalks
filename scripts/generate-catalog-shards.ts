@@ -22,6 +22,7 @@ import {
   bucketIndex,
 } from "../src/lib/catalog-layout";
 import { getSpeakers, getStats, getTalks } from "../src/lib/data";
+import { DC34_EVENT_SLUG } from "../src/lib/dc34";
 import { relatedForAll, relatedTalks } from "../src/lib/related";
 import { writePageShards } from "./generate-page-shards";
 import { buildIndexEntry } from "../src/lib/search";
@@ -216,7 +217,8 @@ function main() {
   }
 
   const stats = getStats();
-  writePretty(path.join(generatedDir, "stats.json"), stats);
+  const dc34Talks = getTalks().filter((talk) => talk.eventSlug === DC34_EVENT_SLUG).length;
+  writePretty(path.join(generatedDir, "stats.json"), { ...stats, dc34Talks });
   writePretty(path.join(generatedDir, "catalog-meta.json"), { largeTopics });
   const pageSummary = writePageShards();
 

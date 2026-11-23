@@ -485,6 +485,23 @@ export type FacetOption<T extends string | number> = {
   count: number;
 };
 
+/**
+ * Facet rows a person can read. A missing value (a talk with no track) is not
+ * an option. A blank label is replaced with the value so the row is not empty.
+ */
+export function visibleFacetOptions<T extends { value: string | number; label: string }>(
+  options: readonly T[],
+): T[] {
+  const out: T[] = [];
+  for (const option of options) {
+    const value = String(option.value).trim();
+    if (!value) continue;
+    const label = option.label.trim() || value;
+    out.push(label === option.label ? option : { ...option, label });
+  }
+  return out;
+}
+
 export type Facets = {
   conferences: FacetOption<string>[];
   years: FacetOption<number>[];
@@ -503,9 +520,14 @@ function tally<T extends string | number>(
 ): Map<T, FacetOption<T>> {
   const counts = new Map<T, FacetOption<T>>();
   const add = (value: T, label: string) => {
+    // A missing track, topic, or speaker is not a facet. An empty label would
+    // render as a blank row.
+    if (typeof value === "string" && value.trim() === "") return;
+    const shown = label.trim() || (typeof value === "string" ? value.trim() : String(value));
+    if (!shown) return;
     const existing = counts.get(value);
     if (existing) existing.count += 1;
-    else counts.set(value, { value, label, count: 1 });
+    else counts.set(value, { value, label: shown, count: 1 });
   };
   for (const entry of entries) pick(entry, add);
   return counts;

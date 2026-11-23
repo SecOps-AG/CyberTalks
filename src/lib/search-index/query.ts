@@ -293,6 +293,17 @@ function tallyYears(index: RuntimeIndex, ids: Uint32Array): YearFacet[] {
     .sort((a, b) => b.value - a.value);
 }
 
+/** Drop a facet whose value is missing. A blank label falls back to the value so the row is not empty. */
+function presentFacets(facets: readonly Facet[]): Facet[] {
+  const out: Facet[] = [];
+  for (const facet of facets) {
+    if (facet.value.trim() === "") continue;
+    const label = facet.label.trim() || facet.value.trim();
+    out.push(label === facet.label ? facet : { ...facet, label });
+  }
+  return out;
+}
+
 function tallyDict(
   ids: Uint32Array,
   pick: (id: number) => number,
@@ -304,7 +315,9 @@ function tallyDict(
   for (let i = 0; i < rows.length; i++) {
     if (counts[i] === 0) continue;
     const row = rows[i];
-    facets.push({ value: row.slug, label: row.label ?? row.name ?? row.slug, count: counts[i] });
+    if (row.slug.trim() === "") continue;
+    const label = (row.label ?? row.name ?? "").trim() || row.slug.trim();
+    facets.push({ value: row.slug, label, count: counts[i] });
   }
   facets.sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
   return facets;
@@ -323,12 +336,11 @@ function tallyDifficulties(index: RuntimeIndex, ids: Uint32Array): Facet[] {
   }));
 }
 
-function topicFacet(index: RuntimeIndex, topicIndex: number, count: number): Facet {
-  return {
-    value: readString(index, index.topicSlugSid[topicIndex]),
-    label: readString(index, index.topicLabelSid[topicIndex]),
-    count,
-  };
+function topicFacet(index: RuntimeIndex, topicIndex: number, count: number): Facet | null {
+  const value = readString(index, index.topicSlugSid[topicIndex]);
+  if (value.trim() === "") return null;
+  const label = readString(index, index.topicLabelSid[topicIndex]).trim() || value.trim();
+  return { value, label, count };
 }
 
 function tallyTopics(
@@ -342,6 +354,7 @@ function tallyTopics(
     const count = index.topicCount[id];
     for (let n = 0; n < count; n++) {
       const topic = index.topicRefs[start + n];
+      if (readString(index, index.topicSlugSid[topic]).trim() === "") continue;
       counts.set(topic, (counts.get(topic) ?? 0) + 1);
     }
   }
@@ -354,7 +367,10 @@ function tallyTopics(
     head.push([found, counts.get(found) ?? 0]);
     chosen.add(found);
   }
-  const topics = head.map(([topic, count]) => topicFacet(index, topic, count));
+  const topics = head.flatMap(([topic, count]) => {
+    const facet = topicFacet(index, topic, count);
+    return facet ? [facet] : [];
+  });
   for (const slug of selected) {
     if (!topics.some((topic) => topic.value === slug)) {
       topics.push({ value: slug, label: topicLabel(slug), count: 0 });
@@ -372,16 +388,16 @@ function topicsFromMeta(
   meta: SearchMeta,
   selected: readonly string[],
 ): Pick<SearchFacets, "topics" | "topicsTruncated" | "topicTotal"> {
-  const topics = meta.topicsTop.map((topic) => ({ ...topic }));
+  const topics = presentFacets(meta.topicsTop.map((topic) => ({ ...topic })));
   const seen = new Set(topics.map((topic) => topic.value));
   for (const slug of selected) {
     if (seen.has(slug)) continue;
     const found = findTopic(index, slug);
-    topics.push(
+    const facet =
       found == null
         ? { value: slug, label: topicLabel(slug), count: 0 }
-        : topicFacet(index, found, index.topicPostCount[found]),
-    );
+        : topicFacet(index, found, index.topicPostCount[found]);
+    if (facet && facet.value.trim()) topics.push(facet);
     seen.add(slug);
   }
   return {
@@ -411,16 +427,20 @@ function buildFacets(
     query.years,
   );
   const conferences = ensureValues(
-    conferencePool === "all" && meta
-      ? meta.conferences
-      : tallyDict(conferencePool === "all" ? index.newestOrder : conferencePool, (id) => index.conference[id], index.conferences),
+    presentFacets(
+      conferencePool === "all" && meta
+        ? meta.conferences
+        : tallyDict(conferencePool === "all" ? index.newestOrder : conferencePool, (id) => index.conference[id], index.conferences),
+    ),
     query.conferences,
     (slug) => index.conferences.find((row) => row.slug === slug)?.label ?? slug,
   );
   const tracks = ensureValues(
-    trackPool === "all" && meta
-      ? meta.tracks
-      : tallyDict(trackPool === "all" ? index.newestOrder : trackPool, (id) => index.track[id], index.tracks),
+    presentFacets(
+      trackPool === "all" && meta
+        ? meta.tracks
+        : tallyDict(trackPool === "all" ? index.newestOrder : trackPool, (id) => index.track[id], index.tracks),
+    ),
     query.tracks,
     (slug) => index.tracks.find((row) => row.slug === slug)?.name ?? slug,
   );

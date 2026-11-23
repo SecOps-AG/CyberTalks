@@ -99,7 +99,7 @@ Adding talks for a new event is adding a JSON file. No code change is needed.
 
 ## Running it locally
 
-Needs Node 18.18 or newer.
+Needs Node 22 or newer.
 
 ```bash
 npm install

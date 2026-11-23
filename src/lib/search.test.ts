@@ -7,6 +7,7 @@ import {
   filterTalks,
   markSummaryMatches,
   matchText,
+  visibleFacetOptions,
   withHaystack,
   withSummaries,
 } from "./search";
@@ -84,5 +85,34 @@ describe("search speed paths", () => {
       [2024, 2],
       [2023, 1],
     ]);
+  });
+
+  it("does not offer a blank track, topic, or speaker", () => {
+    const entries = withHaystack([
+      talk("tracked", "Tracked talk", { track: "malware", trackName: "Malware", topics: ["ransomware"] }),
+      talk("open", "Open talk", {
+        track: "",
+        trackName: "",
+        topics: ["", "ransomware"],
+        speakers: ["", "Ada Lovelace"],
+      }),
+    ]);
+    const facets = computeFacets(entries, EMPTY_FILTERS);
+    assert.deepEqual(
+      facets.tracks.map((option) => option.value),
+      ["malware"],
+    );
+    assert.deepEqual(facets.topics.map((option) => option.value), ["ransomware"]);
+    assert.equal(
+      facets.speakers.some((option) => option.value.trim() === "" || option.label.trim() === ""),
+      false,
+    );
+    assert.deepEqual(
+      visibleFacetOptions([
+        { value: "", label: "", count: 1 },
+        { value: "malware", label: "   ", count: 2 },
+      ]).map((option) => [option.value, option.label]),
+      [["malware", "malware"]],
+    );
   });
 });

@@ -4,7 +4,9 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { SiteBanner } from "../components/SiteBanner";
 import routes from "../generated/page-routes.json";
-import { DC34_BANNER, DC34_EVENT_SLUG, DC34_PATH } from "./dc34";
+import stats from "../generated/stats.json";
+import { DC34_BANNER, DC34_EVENT_SLUG, DC34_PATH, dc34BannerText } from "./dc34";
+import { loadEventPage } from "./page-runtime";
 import {
   countActive,
   EMPTY_FILTERS,
@@ -16,23 +18,46 @@ import {
 import { sitemapPaths } from "./sitemap-build";
 import type { TalkIndexEntry } from "./types";
 
-const APPROVED =
-  "DEF CON 34 talks are here: 354 talks, summarized and searchable. Browse DEF CON 34";
-
 describe("DEF CON 34 banner", () => {
-  it("uses the approved sentence and links only to /defcon-34", () => {
-    assert.equal(`${DC34_BANNER.text} ${DC34_BANNER.linkLabel}`, APPROVED);
+  it("keeps the approved sentence and fills in the talk count", () => {
+    assert.equal(
+      dc34BannerText(12),
+      "DEF CON 34 talks are here: 12 talks, summarized and searchable.",
+    );
+    assert.equal(
+      dc34BannerText(1200),
+      "DEF CON 34 talks are here: 1,200 talks, summarized and searchable.",
+    );
+    assert.equal(dc34BannerText(0), "DEF CON 34 talks are here, summarized and searchable.");
+    assert.equal(dc34BannerText(null), "DEF CON 34 talks are here, summarized and searchable.");
     assert.equal(DC34_BANNER.href, "/defcon-34");
     assert.equal(DC34_PATH, "/defcon-34");
   });
 
-  it("renders the sentence with a single link", () => {
+  it("renders the build-time count from the DEF CON 34 talk list, with a single link", async () => {
+    const page = await loadEventPage(DC34_EVENT_SLUG);
+    assert.ok(page);
+    assert.equal(stats.dc34Talks, page.talks.length);
+    assert.ok(stats.dc34Talks > 0);
+    const approved = `${dc34BannerText(stats.dc34Talks)} ${DC34_BANNER.linkLabel}`;
     const html = renderToStaticMarkup(createElement(SiteBanner));
     const links = [...html.matchAll(/<a\b[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/g)];
     assert.equal(links.length, 1);
     assert.equal(links[0][1], "/defcon-34");
     assert.equal(links[0][2], "Browse DEF CON 34");
-    assert.equal(html.replace(/<[^>]+>/g, ""), APPROVED);
+    assert.equal(html.replace(/<[^>]+>/g, ""), approved);
+    assert.match(html, new RegExp(`${stats.dc34Talks.toLocaleString("en-US")} talks`));
+  });
+
+  it("hides the count when it is missing or zero", () => {
+    const html = renderToStaticMarkup(createElement(SiteBanner, { talkCount: 0 }));
+    const text = html.replace(/<[^>]+>/g, "");
+    assert.equal(text.includes("0 talks"), false);
+    assert.equal(
+      text,
+      `DEF CON 34 talks are here, summarized and searchable. ${DC34_BANNER.linkLabel}`,
+    );
+    assert.equal(html.includes('href="/defcon-34"'), true);
   });
 });
 
