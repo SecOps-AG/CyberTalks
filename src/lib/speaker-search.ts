@@ -1,6 +1,8 @@
 /** Page size for the speakers directory search. Matches the on-page list. */
 export const SPEAKER_SEARCH_PAGE_SIZE = 100;
 export const SPEAKER_SEARCH_MIN_QUERY = 2;
+/** Long queries are cut here so a huge `q` cannot be scanned in full. */
+export const SPEAKER_SEARCH_MAX_QUERY = 100;
 
 export type SpeakerHit = {
   name: string;
@@ -26,7 +28,7 @@ export function searchSpeakerHits(
   pageSize = SPEAKER_SEARCH_PAGE_SIZE,
 ): SpeakerSearchPage {
   const size = Number.isInteger(pageSize) && pageSize > 0 ? pageSize : SPEAKER_SEARCH_PAGE_SIZE;
-  const needle = query.trim().toLowerCase();
+  const needle = query.slice(0, SPEAKER_SEARCH_MAX_QUERY).trim().toLowerCase();
   if (needle.length < SPEAKER_SEARCH_MIN_QUERY) {
     return { total: 0, page: 1, pageSize: size, speakers: [] };
   }

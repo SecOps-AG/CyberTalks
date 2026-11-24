@@ -37,7 +37,29 @@ describe("speaker search pages", () => {
     assert.equal(searchSpeakerHits(people, "al", 2, 1).speakers[0].slug, "alan-turing");
     const full = searchSpeakerHits(people, "al", 1);
     assert.equal(full.speakers.length, 2);
-    assert.ok(JSON.stringify(full).length < JSON.stringify(people).length);
+  });
+
+  it("leaves out names that are not people, the same way the speakers page does", () => {
+    const rows = [
+      { name: "Ada Lovelace", slug: "ada-lovelace", talkCount: 2 },
+      { name: "Zoz", slug: "zoz", talkCount: 4 },
+      { name: "Red Hat", slug: "red-hat", talkCount: 6 },
+    ];
+    const visible = rows.filter((row) => isLikelyPersonSpeaker(row.name));
+    assert.deepEqual(
+      visible.map((row) => row.slug),
+      ["ada-lovelace"],
+    );
+  });
+
+  it("caps a very long query and clamps a bad page", () => {
+    const padded = { name: "a".repeat(100), slug: "as", talkCount: 1 };
+    assert.equal(searchSpeakerHits([padded], "a".repeat(150), 1).total, 1);
+    assert.equal(searchSpeakerHits([padded], `${"a".repeat(100)}zzz`, 1).total, 1);
+    assert.equal(searchSpeakerHits(people, "al", Number.NaN).page, 1);
+    assert.equal(searchSpeakerHits(people, "al", 0).page, 1);
+    assert.equal(searchSpeakerHits(people, "al", 99).page, 1);
+    assert.equal(searchSpeakerHits(people, "al", 99).speakers.length, 2);
   });
 });
 

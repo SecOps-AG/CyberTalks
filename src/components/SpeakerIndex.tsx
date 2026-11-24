@@ -14,7 +14,7 @@ export type SpeakerRow = Pick<Speaker, "name" | "slug" | "talkCount">;
 
 /**
  * Search-first speaker directory. The page ships the frequent presenters
- * and the speaker count. Each search asks the server for one page of matches.
+ * and the person count. Each search asks the server for one page of matches.
  */
 export function SpeakerIndex({
   repeats,
@@ -30,6 +30,8 @@ export function SpeakerIndex({
   const [failed, setFailed] = useState(false);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
+  const [holdHeight, setHoldHeight] = useState<number | undefined>();
   const query = needle.trim().toLowerCase();
   const searching = query.length >= MIN_QUERY;
 
@@ -39,12 +41,17 @@ export function SpeakerIndex({
       setTotal(0);
       setFailed(false);
       setLoading(false);
+      setHoldHeight(undefined);
       return;
     }
+    const height = resultsRef.current?.getBoundingClientRect().height ?? 0;
+    if (height > 48) setHoldHeight(height);
+    setPeople(null);
+    setTotal(0);
+    setFailed(false);
+    setLoading(true);
     const controller = new AbortController();
     const timer = setTimeout(() => {
-      setLoading(true);
-      setFailed(false);
       const params = new URLSearchParams({ q: query, page: String(page) });
       fetch(`/api/speakers?${params}`, { signal: controller.signal })
         .then((response) => {
@@ -108,7 +115,9 @@ export function SpeakerIndex({
       {!searching ? (
         <p className="max-w-2xl text-sm text-mint/50">
           Type at least {MIN_QUERY} characters to search{" "}
-          {personCount.toLocaleString("en-US")} speaker names.
+          {personCount.toLocaleString("en-US")} person names. Company names,
+          conference titles, and other non-speaker credits are hidden here until the catalog
+          cleanup lands.
         </p>
       ) : null}
 
@@ -136,6 +145,8 @@ export function SpeakerIndex({
         <p className="text-sm text-mint/50">Search for a speaker name to browse the archive.</p>
       ) : null}
 
+      {searching ? (
+        <div ref={resultsRef} style={holdHeight ? { minHeight: holdHeight } : undefined}>
       {searching && (loading || !people) ? (
         <p className="text-sm text-mint/50" role="status">
           {failed ? "Could not load speaker names. Try again." : "Loading speaker names…"}
@@ -149,7 +160,7 @@ export function SpeakerIndex({
             {totalPages > 1 ? ` · page ${page} of ${totalPages}` : ""}
           </h2>
           {alphabetical.length === 0 ? (
-            <p className="text-sm text-mint/50">No name matches “{needle.trim()}”.</p>
+            <p className="text-sm text-mint/50">No person name matches “{needle.trim()}”.</p>
           ) : (
             <>
               <ul className="grid gap-x-6 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
@@ -173,6 +184,8 @@ export function SpeakerIndex({
             </>
           )}
         </section>
+      ) : null}
+        </div>
       ) : null}
     </div>
   );

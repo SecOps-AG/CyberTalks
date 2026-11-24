@@ -34,7 +34,7 @@ import {
 import { fetchListingTalks, type ListingKind } from "@/lib/fetch-listing";
 import { inDefconVillage } from "@/lib/hubs";
 import { fetchAdditionalTalkIndexChunks } from "@/lib/fetch-talk-index";
-import { homepageNeedsFullIndex } from "@/lib/home-catalog";
+import { homepageNeedsFullIndex, shouldFetchTalkIndex, talkGridPhase } from "@/lib/home-catalog";
 import { archiveSearchHref, searchVariantRel } from "@/lib/search-index/href";
 import { summaryYearsToLoad } from "@/lib/summary-years";
 import type { SearchEntry, TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
@@ -178,30 +178,25 @@ export function TalkBrowser({
   const [remoteTalks, setRemoteTalks] = useState<TalkIndexEntry[]>(remoteIndex ? talksProp : []);
   const [catalogReady, setCatalogReady] = useState(!remoteIndex || talksProp.length > 0);
   // Homepage already has the first page and facet counts. Leave the shards
-  // alone until someone searches, filters, sorts, or pages.
+  // alone until a search, filter, sort, or later page actually changes.
   const deferRemoteCatalog = Boolean(remoteIndex && initialFacets);
-  const [catalogArmed, setCatalogArmed] = useState(false);
   const [settledHint, setSettledHint] = useState<string | null>(null);
+  const [catalogPreview, setCatalogPreview] = useState(false);
+  const [catalogError, setCatalogError] = useState(false);
+  const [catalogAttempt, setCatalogAttempt] = useState(0);
   const [catalogLoading, setCatalogLoading] = useState(remoteIndex && !deferRemoteCatalog);
   const [listedTalks, setListedTalks] = useState<TalkIndexEntry[] | null>(null);
   const [listReady, setListReady] = useState(!listing);
   // Without `initialFacets` the listing loads on mount, as it always has.
   const [listWanted, setListWanted] = useState(!initialFacets);
   const wakeListing = useCallback(() => setListWanted(true), []);
-  const armCatalog = useCallback(() => setCatalogArmed(true), []);
-  const wake = useCallback(() => {
-    setListWanted(true);
-    setCatalogArmed(true);
+  const retryCatalog = useCallback(() => {
+    setCatalogError(false);
+    setCatalogAttempt((attempt) => attempt + 1);
   }, []);
   const intent = initialFacets && !listWanted
     ? { onPointerDownCapture: wakeListing, onFocusCapture: wakeListing }
     : {};
-  // Search and the filter rail arm the homepage index. A pointer on the
-  // results themselves does not: scrolling and opening a talk stay light.
-  const catalogIntent = {
-    onPointerDownCapture: wake,
-    onFocusCapture: wake,
-  };
   const loadedChunkFilesRef = useRef<Set<string>>(new Set());
   const loadedSummaryYearsRef = useRef<Set<number>>(new Set());
   const remoteTalksRef = useRef<TalkIndexEntry[]>([]);
@@ -255,7 +250,12 @@ export function TalkBrowser({
         activeFilters: countActive({ ...staged, q: "" }),
       })
     : false;
-  const loadCatalog = !deferRemoteCatalog || catalogArmed || viewNeedsIndex || stagedNeedsIndex;
+  const loadCatalog = shouldFetchTalkIndex({
+    remote: Boolean(remoteIndex),
+    defer: deferRemoteCatalog,
+    viewNeedsIndex,
+    stagedNeedsIndex,
+  });
   const indexReady = !remoteIndex || settledHint === hintKey;
 
   useEffect(() => {
@@ -264,6 +264,7 @@ export function TalkBrowser({
     const controller = new AbortController();
 
     setCatalogLoading(true);
+    setCatalogError(false);
 
     // Shards land a few dozen at a time. Each new list re-filters and re-sorts
     // the whole catalog, so apply them at most a few times a second rather
@@ -276,6 +277,7 @@ export function TalkBrowser({
       if (cancelled || !pending) return;
       setRemoteTalks(pending);
       setCatalogReady(true);
+      setCatalogPreview(true);
       pending = null;
       applied = true;
     };
@@ -307,14 +309,16 @@ export function TalkBrowser({
         for (const file of loadedFiles) loadedChunkFilesRef.current.add(file);
         setRemoteTalks(talks);
         setCatalogReady(true);
+        setCatalogPreview(true);
         setCatalogLoading(false);
+        setCatalogError(false);
         setSettledHint(hintKey);
       })
-      .catch(() => {
+      .catch((error: unknown) => {
         if (cancelled) return;
-        setCatalogReady(true);
+        if (error instanceof Error && error.name === "AbortError") return;
         setCatalogLoading(false);
-        setSettledHint(hintKey);
+        setCatalogError(true);
       });
 
     return () => {
@@ -322,7 +326,7 @@ export function TalkBrowser({
       if (timer) clearTimeout(timer);
       controller.abort();
     };
-  }, [remoteIndex, ready, loadCatalog, yearFilterKey, conferenceFilterKey, hintKey]);
+  }, [remoteIndex, ready, loadCatalog, yearFilterKey, conferenceFilterKey, hintKey, catalogAttempt]);
 
   const listingKind = listing?.kind;
   const listingKey = listing?.key;
@@ -359,7 +363,14 @@ export function TalkBrowser({
       : remoteIndex
         ? remoteTalks
         : (listedTalks ?? talksProp);
-  const freezeGrid = deferRemoteCatalog && !viewNeedsIndex;
+  const gridPhase = talkGridPhase({
+    defer: deferRemoteCatalog,
+    viewNeedsIndex,
+    indexReady,
+    batchApplied: catalogPreview,
+    failed: catalogError,
+  });
+  const freezeGrid = gridPhase === "frozen";
   const listingPending = Boolean(listing) && !listReady;
   const listingLoading = listingPending && listWanted;
 
@@ -639,7 +650,6 @@ export function TalkBrowser({
   // Focus goes back to whichever control opened the panel (bar or edge tab).
   const preparePush = () => setStaged(filters);
   const openPush = (opener: HTMLElement | null) => {
-    armCatalog();
     pushOpenerRef.current = opener;
     setStaged(filters);
     push?.setOpen(true);
@@ -670,7 +680,7 @@ export function TalkBrowser({
       current ? { ...EMPTY_FILTERS, includeExtras: allExtras, sort: current.sort } : current,
     );
 
-  const awaitingCatalog = Boolean(remoteIndex) && viewNeedsIndex && !indexReady;
+  const awaitingCatalog = gridPhase === "waiting";
 
   const clearAll = () => {
     setDraftQuery("");
@@ -975,7 +985,7 @@ export function TalkBrowser({
   });
 
   const search = (
-    <div {...catalogIntent}>
+    <div>
       <div
         className={`panel flex items-center gap-3 transition focus-within:border-cyan/60 ${
           large ? "px-4 py-3.5 sm:px-5 sm:py-4" : "p-3 sm:p-4"
@@ -1073,7 +1083,7 @@ export function TalkBrowser({
 
       <div className="fold-layout grid gap-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start lg:gap-8">
         {/* Desktop rail grows with the page; only compact facets scroll internally. */}
-        <aside className="fold-rail hidden lg:block" {...catalogIntent}>
+        <aside className="fold-rail hidden lg:block">
           <div className="space-y-5">
             <div className="flex items-center justify-between">
               <p className="font-display text-xs uppercase tracking-[0.2em] text-acid">Filters</p>
@@ -1091,7 +1101,6 @@ export function TalkBrowser({
           {/* Mobile facets */}
           <details
             open
-            {...catalogIntent}
             className={`fold-drawer panel group lg:hidden ${push ? "max-[599px]:hidden" : ""}`}
           >
             <summary className="cursor-pointer list-none px-4 py-3 font-display text-xs uppercase tracking-[0.2em] text-acid">
@@ -1145,7 +1154,7 @@ export function TalkBrowser({
                 <span className="text-mint/30"> / {universe}</span>
               ) : null}
               {/* Not in the server HTML: `ready` only flips after mount, so crawlers see a plain count. */}
-              {ready && viewNeedsIndex && (catalogLoading || !indexReady || listingLoading) ? (
+              {ready && (gridPhase === "waiting" || gridPhase === "partial" || listingLoading) ? (
                 <span className="text-mint/30"> · loading…</span>
               ) : null}
             </p>
@@ -1190,7 +1199,14 @@ export function TalkBrowser({
             </div>
           </div>
 
-          {awaitingCatalog || awaitingListing ? (
+          {gridPhase === "error" ? (
+            <div className="panel min-h-[18rem] px-4 py-12 text-center" role="alert">
+              <p className="text-sm uppercase tracking-[0.16em] text-warn">The talk index did not load.</p>
+              <button type="button" onClick={retryCatalog} className="link mt-4 text-[11px] uppercase">
+                Try again
+              </button>
+            </div>
+          ) : awaitingCatalog || awaitingListing ? (
             <div
               className="fold-cards grid min-h-[70vh] gap-4 max-[599px]:gap-2 sm:grid-cols-2 xl:grid-cols-3"
               aria-hidden
@@ -1227,7 +1243,7 @@ export function TalkBrowser({
             page={pendingUnfiltered ? pendingPage : paged.page}
             totalPages={pendingUnfiltered ? pendingTotalPages : paged.totalPages}
             onChange={goToPage}
-            onIntent={initialFacets && !listWanted ? wake : armCatalog}
+            onIntent={listing && initialFacets && !listWanted ? wakeListing : undefined}
           />
           </div>
       </div>
