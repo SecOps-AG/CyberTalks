@@ -6,10 +6,21 @@ import type { Track } from "@/lib/types";
  * Talks per track as plain HTML bars — no chart library. One series, so one
  * color; every bar carries its count, and each row links to the track page.
  */
-export function TrackChart({ counts }: { counts: { track: Track; count: number }[] }) {
+export function TrackChart({
+  counts,
+  totalTalks,
+}: {
+  counts: { track: Track; count: number }[];
+  /**
+   * Archive size. Talks with no catalog track are not drawn as a bar, but they
+   * still belong in this number so the caption matches the site total.
+   */
+  totalTalks?: number;
+}) {
   if (counts.length === 0) return null;
   const max = Math.max(...counts.map((entry) => entry.count));
-  const total = counts.reduce((sum, entry) => sum + entry.count, 0);
+  const counted = counts.reduce((sum, entry) => sum + entry.count, 0);
+  const total = totalTalks ?? counted;
 
   return (
     <section aria-label="Talks by track">
@@ -22,7 +33,7 @@ export function TrackChart({ counts }: { counts: { track: Track; count: number }
 
       <ul className="grid gap-x-8 gap-y-1 md:grid-cols-2">
         {counts.map(({ track, count }) => {
-          const share = ((count / total) * 100).toFixed(1);
+          const share = total > 0 ? ((count / total) * 100).toFixed(1) : "0.0";
           return (
             <li key={track.slug}>
               <Link

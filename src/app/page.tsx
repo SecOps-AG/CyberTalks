@@ -63,7 +63,7 @@ export default async function HomePage() {
         footer={
           <>
             <MostWatched talks={mostWatched} />
-            <TrackChart counts={trackCounts} />
+            <TrackChart counts={trackCounts} totalTalks={stats.talks} />
           </>
         }
         size="lg"

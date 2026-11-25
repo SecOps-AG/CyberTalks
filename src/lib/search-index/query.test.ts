@@ -346,4 +346,41 @@ describe("search index", () => {
     );
     assert.equal(getTalkBySlug(collision, "defcon-30-main-aaaaaaaaaaa", ORIGIN)?.title, "Slug matches another id");
   });
+
+  it("omits a blank track from facets when a talk has no track", () => {
+    const rows = [
+      talk({
+        youtubeId: "aaaaaaaaaaa",
+        title: "Ransomware payments",
+        topics: ["ransomware"],
+        track: "malware",
+        trackName: "Malware",
+      }),
+      talk({
+        youtubeId: "bbbbbbbbbbb",
+        title: "Ghosts of REvil",
+        topics: ["ransomware"],
+        track: "",
+        trackName: "",
+        eventSlug: "defcon-33",
+        villageSlug: "dc33-media",
+        eventShortName: "DC33",
+      }),
+    ];
+    const filtered = run(rows, "q=ransomware");
+    assert.equal(filtered.result.total, 2);
+    assert.deepEqual(
+      filtered.result.facets.tracks.map((facet) => [facet.value, facet.label, facet.count]),
+      [["malware", "Malware", 1]],
+    );
+    assert.equal(
+      filtered.result.facets.tracks.some((facet) => facet.value.trim() === "" || facet.label.trim() === ""),
+      false,
+    );
+    const all = run(rows, "");
+    assert.deepEqual(
+      all.result.facets.tracks.map((facet) => facet.value),
+      ["malware"],
+    );
+  });
 });

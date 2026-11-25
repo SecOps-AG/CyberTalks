@@ -4,9 +4,19 @@ export const DC34_EVENT_SLUG = "defcon-34";
 
 export const DC34_PATH = `/${DC34_EVENT_SLUG}`;
 
-/** Approved copy — do not reword. The link label is the only link. */
+/**
+ * Approved sentence — do not reword. `talkCount` is the DEF CON 34 talk list
+ * (the same list as /defcon-34), so the banner cannot drift from that page.
+ */
+export function dc34BannerText(talkCount: number | null | undefined): string {
+  if (talkCount == null || talkCount <= 0) {
+    return "DEF CON 34 talks are here, summarized and searchable.";
+  }
+  return `DEF CON 34 talks are here: ${talkCount.toLocaleString("en-US")} talks, summarized and searchable.`;
+}
+
+/** The link label is the only link. */
 export const DC34_BANNER = {
-  text: "DEF CON 34 talks are here: 354 talks, summarized and searchable.",
   linkLabel: "Browse DEF CON 34",
   href: DC34_PATH,
 } as const;
