@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/page-meta";
 import { SpeakerIndex } from "@/components/SpeakerIndex";
-import { loadSpeakers } from "@/lib/page-runtime";
-import { isLikelyPersonSpeaker } from "@/lib/speakerHeuristics";
+import { loadSpeakerSearch } from "@/lib/page-runtime";
 
 /** Frequent presenters shown before anyone searches. */
 const REPEAT_CAP = 48;
@@ -14,12 +13,11 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default async function SpeakersPage() {
-  const speakers = await loadSpeakers();
-  const people = speakers.filter((speaker) => isLikelyPersonSpeaker(speaker.name));
-  const repeats = people
-    .filter((speaker) => speaker.talkCount > 1)
+  const rows = await loadSpeakerSearch();
+  const repeats = rows
+    .filter(([, , talkCount]) => talkCount > 1)
     .slice(0, REPEAT_CAP)
-    .map(({ name, slug, talkCount }) => ({ name, slug, talkCount }));
+    .map(([name, slug, talkCount]) => ({ name, slug, talkCount }));
 
   return (
     <div className="space-y-6">
@@ -30,7 +28,7 @@ export default async function SpeakersPage() {
           are listed on. Open one, or filter by speaker from any browser.
         </p>
       </div>
-      <SpeakerIndex repeats={repeats} personCount={people.length} />
+      <SpeakerIndex repeats={repeats} personCount={rows.length} />
     </div>
   );
 }

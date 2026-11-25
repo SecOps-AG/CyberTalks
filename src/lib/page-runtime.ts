@@ -10,6 +10,7 @@ import { cache } from "react";
 import { onWorker, readPublicJson } from "./catalog-runtime";
 import { HUBS, inDefconVillage } from "./hubs";
 import { initialBrowse, type Facets } from "./search";
+import { isLikelyPersonSpeaker } from "./speakerHeuristics";
 import {
   coveragePagePath,
   editionPagePath,
@@ -18,7 +19,7 @@ import {
   hubPagePath,
   seriesPagePath,
   sitemapPagePath,
-  speakersIndexPath,
+  speakersSearchPath,
   topicsIndexPath,
   trackPagePath,
   tracksIndexPath,
@@ -28,7 +29,6 @@ import type { CoverageStats, VillageCoverage } from "./data";
 import type {
   ArchiveStats,
   ConEvent,
-  Speaker,
   Talk,
   TalkIndexEntry,
   Track,
@@ -136,9 +136,29 @@ export const loadTopicCounts = cache((): Promise<TopicCount[]> =>
   fromShardRequired(topicsIndexPath, (data) => data.getTopicCounts()),
 );
 
-export const loadSpeakers = cache((): Promise<Speaker[]> =>
-  fromShardRequired(speakersIndexPath, (data) => data.getSpeakers()),
-);
+/** `[name, slug, talkCount]` for people, most talks first. */
+export type SpeakerSearchRow = readonly [string, string, number];
+
+function readSpeakerSearchRows(): Promise<SpeakerSearchRow[]> {
+  return fromShardRequired(speakersSearchPath, (data) =>
+    data
+      .getSpeakers()
+      .filter((speaker) => isLikelyPersonSpeaker(speaker.name))
+      .map((speaker) => [speaker.name, speaker.slug, speaker.talkCount] as const),
+  ).then((rows) => rows.filter((row) => isLikelyPersonSpeaker(row[0])));
+}
+
+// React cache() lasts one request. This promise lasts for the life of the
+// isolate, so the parsed shard is not rebuilt on every keystroke.
+let speakerSearchRows: Promise<SpeakerSearchRow[]> | undefined;
+
+export function loadSpeakerSearch(): Promise<SpeakerSearchRow[]> {
+  speakerSearchRows ??= readSpeakerSearchRows().catch((error: unknown) => {
+    speakerSearchRows = undefined;
+    throw error;
+  });
+  return speakerSearchRows;
+}
 
 export const loadDefconVillages = cache((): Promise<VillageSeries[]> =>
   fromShardRequired(villagesIndexPath, (data) => data.getDefconVillages()),

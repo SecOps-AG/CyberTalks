@@ -12,6 +12,56 @@ import {
 import { getSpeakers, getTalks } from "./data";
 import { ONE_WORD_SPEAKER_TALKS, countOneWordSpeakers, speakerCredits, speakerVerdict } from "./speaker-credits";
 import { cleanSpeakerName, isLikelyPersonSpeaker, isSpeakerPageName, speakerPageVerdict } from "./speakerHeuristics";
+import { searchSpeakerHits } from "./speaker-search";
+
+describe("speaker search pages", () => {
+  const people = [
+    { name: "Ada Lovelace", slug: "ada-lovelace", talkCount: 4 },
+    { name: "Alan Kay", slug: "alan-kay", talkCount: 2 },
+    { name: "Alan Turing", slug: "alan-turing", talkCount: 3 },
+    { name: "Grace Hopper", slug: "grace-hopper", talkCount: 3 },
+  ];
+
+  it("returns nothing until the query is two characters, then one page of matches", () => {
+    assert.deepEqual(searchSpeakerHits(people, "a", 1), {
+      total: 0,
+      page: 1,
+      pageSize: 100,
+      speakers: [],
+    });
+    const page = searchSpeakerHits(people, "al", 1, 1);
+    assert.equal(page.total, 2);
+    assert.equal(page.page, 1);
+    assert.equal(page.speakers.length, 1);
+    assert.equal(page.speakers[0].slug, "alan-kay");
+    assert.equal(searchSpeakerHits(people, "al", 2, 1).speakers[0].slug, "alan-turing");
+    const full = searchSpeakerHits(people, "al", 1);
+    assert.equal(full.speakers.length, 2);
+  });
+
+  it("leaves out names that are not people, the same way the speakers page does", () => {
+    const rows = [
+      { name: "Ada Lovelace", slug: "ada-lovelace", talkCount: 2 },
+      { name: "Zoz", slug: "zoz", talkCount: 4 },
+      { name: "Red Hat", slug: "red-hat", talkCount: 6 },
+    ];
+    const visible = rows.filter((row) => isLikelyPersonSpeaker(row.name));
+    assert.deepEqual(
+      visible.map((row) => row.slug),
+      ["ada-lovelace"],
+    );
+  });
+
+  it("caps a very long query and clamps a bad page", () => {
+    const padded = { name: "a".repeat(100), slug: "as", talkCount: 1 };
+    assert.equal(searchSpeakerHits([padded], "a".repeat(150), 1).total, 1);
+    assert.equal(searchSpeakerHits([padded], `${"a".repeat(100)}zzz`, 1).total, 1);
+    assert.equal(searchSpeakerHits(people, "al", Number.NaN).page, 1);
+    assert.equal(searchSpeakerHits(people, "al", 0).page, 1);
+    assert.equal(searchSpeakerHits(people, "al", 99).page, 1);
+    assert.equal(searchSpeakerHits(people, "al", 99).speakers.length, 2);
+  });
+});
 
 describe("speaker names", () => {
   it("keeps ordinary people, including accents and particles", () => {

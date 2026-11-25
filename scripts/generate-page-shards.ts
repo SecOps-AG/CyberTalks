@@ -34,6 +34,7 @@ import {
 import { HUBS, inDefconVillage } from "../src/lib/hubs";
 import { initialBrowse, initialBrowsePage } from "../src/lib/search";
 import { chunkList, sitemapPaths } from "../src/lib/sitemap-build";
+import { isLikelyPersonSpeaker } from "../src/lib/speakerHeuristics";
 import { buildTitleIndex } from "../src/lib/talk-title";
 import {
   coveragePagePath,
@@ -43,7 +44,7 @@ import {
   hubPagePath,
   seriesPagePath,
   sitemapPagePath,
-  speakersIndexPath,
+  speakersSearchPath,
   topicsIndexPath,
   trackPagePath,
   tracksIndexPath,
@@ -101,7 +102,16 @@ export function writePageShards(): string {
   });
   put(tracksIndexPath, trackCounts);
   put(topicsIndexPath, getTopicCounts());
-  put(speakersIndexPath, getSpeakers());
+  const speakers = getSpeakers();
+  // Slim rows for the speakers directory. The full speaker record file is not
+  // written: no page reads it. Names that are not people are left out here,
+  // and again when the page and the search route read the rows.
+  put(
+    speakersSearchPath,
+    speakers
+      .filter((speaker) => isLikelyPersonSpeaker(speaker.name))
+      .map((speaker) => [speaker.name, speaker.slug, speaker.talkCount]),
+  );
   put(villagesIndexPath, getDefconVillages());
 
   const villageCoverage = getCoverageByVillage();
@@ -195,7 +205,7 @@ export function writePageShards(): string {
       villages: getDefconVillages(),
       tracks: getTracks(),
       talks,
-      speakers: getSpeakers().map((speaker) => ({
+      speakers: speakers.map((speaker) => ({
         slug: speaker.slug,
         talkCount: speaker.talkCount,
       })),
