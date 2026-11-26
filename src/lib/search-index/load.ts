@@ -56,31 +56,39 @@ async function readD1Bundle(db: SqlClient): Promise<SearchBundle> {
   return { index, meta };
 }
 
+/**
+ * A warm isolate re-checks which copy is current at most this often, so a
+ * search does not wait on D1 before every answer. A sync shows up within a minute.
+ */
+const SOURCE_CHECK_MS = 60_000;
+let checkedAt = 0;
+
 async function resolveBundle(): Promise<SearchBundle> {
+  if (cached && Date.now() - checkedAt < SOURCE_CHECK_MS) return cached.bundle;
   const db = await talksSql().catch(() => null);
   let source: "d1" | "assets" = "assets";
   let key = "assets";
   if (db) {
     try {
-      const [countRows, assetMeta] = await Promise.all([
-        db.all<{ value: string }>("SELECT value FROM meta WHERE key = 'search_index_talks'"),
+      const [metaRows, assetMeta] = await Promise.all([
+        db.all<{ key: string; value: string }>(
+          "SELECT key, value FROM meta WHERE key IN ('search_index_talks', 'search_index_sha')",
+        ),
         readPublicJson<SearchMeta>(SEARCH_INDEX_META),
       ]);
-      const d1Talks = countRows[0] ? Number(countRows[0].value) : null;
+      const value = (name: string) => metaRows.find((row) => row.key === name)?.value;
+      const talksValue = value("search_index_talks");
+      const d1Talks = talksValue != null ? Number(talksValue) : null;
       const count = d1Talks != null && Number.isFinite(d1Talks) ? d1Talks : null;
       source = chooseSearchSource(count, assetMeta?.talks ?? null);
-      if (source === "d1") {
-        const shaRows = await db.all<{ value: string }>(
-          "SELECT value FROM meta WHERE key = 'search_index_sha'",
-        );
-        key = `d1:${shaRows[0]?.value ?? ""}`;
-      }
+      if (source === "d1") key = `d1:${value("search_index_sha") ?? ""}`;
     } catch (error) {
       console.error(error);
       source = "assets";
       key = "assets";
     }
   }
+  checkedAt = Date.now();
 
   if (cached?.key === key) return cached.bundle;
 

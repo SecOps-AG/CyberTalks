@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { shouldFetchTalkIndex, talkGridPhase } from "@/lib/home-catalog";
+import { catalogUniverse, shouldFetchTalkIndex, talkGridPhase } from "@/lib/home-catalog";
 
 const idle = {
   defer: true,
@@ -75,5 +75,16 @@ describe("homepage talk index", () => {
       true,
     );
     assert.equal(talkGridPhase({ ...idle, defer: false }), "ready");
+  });
+});
+
+describe("homepage result count", () => {
+  it("shows the whole catalog, not the first page, before the index loads", () => {
+    assert.equal(catalogUniverse({ catalogSize: 52096, loadedTalks: 24, indexPending: true }), 52096);
+  });
+
+  it("uses the loaded catalog once the index is in", () => {
+    assert.equal(catalogUniverse({ catalogSize: 52096, loadedTalks: 52100, indexPending: false }), 52100);
+    assert.equal(catalogUniverse({ catalogSize: undefined, loadedTalks: 12, indexPending: true }), 12);
   });
 });

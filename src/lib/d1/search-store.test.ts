@@ -81,6 +81,39 @@ test("search index chunks round-trip through D1", async () => {
   assert.equal(index.docCount, 1);
 });
 
+test("a large stored index is read in overlapping batches, not one after another", async () => {
+  const bytes = new Uint8Array(2 * 1024 * 1024);
+  for (let index = 0; index < bytes.length; index += 1) bytes[index] = (index * 31) % 251;
+  const parts = encodeSearchChunks(bytes);
+  assert.ok(parts.length > 40);
+
+  const db = new DatabaseSync(":memory:");
+  const base = sqlite(db);
+  await ensureSchema(base);
+  const sha = await sha256Hex(bytes);
+  await base.batch(searchIndexStatements(parts, sha, 7, "{}"));
+
+  let inFlight = 0;
+  let peak = 0;
+  const slow: SqlClient = {
+    ...base,
+    async all<T>(sql: string, params?: unknown[]): Promise<T[]> {
+      inFlight += 1;
+      peak = Math.max(peak, inFlight);
+      await new Promise((resolve) => setTimeout(resolve, 5));
+      inFlight -= 1;
+      return base.all<T>(sql, params);
+    },
+  };
+  const stored = await readStoredSearchIndex(slow);
+  assert.ok(stored);
+  assert.deepEqual(stored.bytes, bytes);
+  assert.ok(peak > 1, `reads overlapped (peak ${peak})`);
+
+  db.prepare("DELETE FROM search_index_chunk WHERE seq = ?").run(3);
+  assert.equal(await readStoredSearchIndex(base), null);
+});
+
 test("sync writes material rows and the slides flag", async () => {
   const { rowFromTalk } = await import("./rows");
   const db = new DatabaseSync(":memory:");

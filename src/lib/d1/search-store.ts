@@ -63,32 +63,52 @@ export async function sha256Hex(bytes: Uint8Array): Promise<string> {
   return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
+/** Chunks per read. About 0.5 MB of base64 per query. */
+const SEARCH_READ_CHUNKS = 8;
+/** Reads in flight at once. The index is about 50 reads, so this is a few waves, not 50 in a row. */
+const SEARCH_READ_PARALLEL = 6;
+
 export async function readStoredSearchIndex(
   db: SqlClient,
 ): Promise<{ bytes: Uint8Array; talks: number; sha: string } | null> {
-  const meta = await db.all<{ key: string; value: string }>(
-    "SELECT key, value FROM meta WHERE key IN ('search_index_sha', 'search_index_talks')",
-  );
+  const [meta, countRows] = await Promise.all([
+    db.all<{ key: string; value: string }>(
+      "SELECT key, value FROM meta WHERE key IN ('search_index_sha', 'search_index_talks')",
+    ),
+    db.all<{ n: number }>("SELECT COUNT(*) AS n FROM search_index_chunk"),
+  ]);
   const sha = meta.find((row) => row.key === "search_index_sha")?.value ?? "";
   const talks = Number(meta.find((row) => row.key === "search_index_talks")?.value);
-  if (!sha || !Number.isFinite(talks)) return null;
+  const chunkCount = Number(countRows[0]?.n);
+  if (!sha || !Number.isFinite(talks) || !Number.isFinite(chunkCount) || chunkCount <= 0) return null;
+
+  const starts: number[] = [];
+  for (let seq = 0; seq < chunkCount; seq += SEARCH_READ_CHUNKS) starts.push(seq);
+  const pages: { seq: number; data: string }[][] = new Array(starts.length);
+  let next = 0;
+  const worker = async () => {
+    while (next < starts.length) {
+      const slot = next;
+      next += 1;
+      const from = starts[slot];
+      pages[slot] = await db.all<{ seq: number; data: string }>(
+        "SELECT seq, data FROM search_index_chunk WHERE seq >= ? AND seq < ? ORDER BY seq",
+        [from, from + SEARCH_READ_CHUNKS],
+      );
+    }
+  };
+  await Promise.all(
+    Array.from({ length: Math.min(SEARCH_READ_PARALLEL, starts.length) }, () => worker()),
+  );
 
   const parts: string[] = [];
-  let seq = 0;
-  for (;;) {
-    const rows = await db.all<{ seq: number; data: string }>(
-      "SELECT seq, data FROM search_index_chunk WHERE seq >= ? ORDER BY seq LIMIT 8",
-      [seq],
-    );
-    if (rows.length === 0) break;
+  for (const rows of pages) {
     for (const row of rows) {
-      if (Number(row.seq) !== seq || typeof row.data !== "string") return null;
+      if (Number(row.seq) !== parts.length || typeof row.data !== "string") return null;
       parts.push(row.data);
-      seq += 1;
     }
-    if (rows.length < 8) break;
   }
-  if (parts.length === 0) return null;
+  if (parts.length !== chunkCount) return null;
   const bytes = decodeSearchChunks(parts);
   const actual = await sha256Hex(bytes);
   if (actual !== sha) return null;
