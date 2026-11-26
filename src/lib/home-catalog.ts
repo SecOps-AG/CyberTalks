@@ -56,3 +56,16 @@ export function shouldFetchTalkIndex(input: {
   if (!input.defer) return true;
   return input.viewNeedsIndex || input.stagedNeedsIndex;
 }
+
+/**
+ * The "/ N" after the result count is the whole catalog, extras included.
+ * Before the full index loads, the browser only holds the first page the
+ * server sent, so it must use the server's catalog size, not that page's length.
+ */
+export function catalogUniverse(input: {
+  catalogSize: number | undefined;
+  loadedTalks: number;
+  indexPending: boolean;
+}): number {
+  return input.catalogSize != null && input.indexPending ? input.catalogSize : input.loadedTalks;
+}

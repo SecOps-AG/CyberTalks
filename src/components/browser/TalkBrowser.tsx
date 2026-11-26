@@ -34,7 +34,12 @@ import {
 import { fetchListingTalks, type ListingKind } from "@/lib/fetch-listing";
 import { inDefconVillage } from "@/lib/hubs";
 import { fetchAdditionalTalkIndexChunks } from "@/lib/fetch-talk-index";
-import { homepageNeedsFullIndex, shouldFetchTalkIndex, talkGridPhase } from "@/lib/home-catalog";
+import {
+  catalogUniverse,
+  homepageNeedsFullIndex,
+  shouldFetchTalkIndex,
+  talkGridPhase,
+} from "@/lib/home-catalog";
 import { archiveSearchHref, searchVariantRel } from "@/lib/search-index/href";
 import { summaryYearsToLoad } from "@/lib/summary-years";
 import type { SearchEntry, TalkIndexEntry, TalkSummaryEntry } from "@/lib/types";
@@ -135,6 +140,12 @@ const SORTS: { value: SortKey; label: string }[] = [
   { value: "title", label: "Title" },
   { value: "village", label: "Village" },
 ];
+
+
+/** Fixed locale so the server HTML and the hydrated page print the same digits. */
+function formatCount(value: number | undefined): string {
+  return (value ?? 0).toLocaleString("en-US");
+}
 
 export function TalkBrowser({
   talks: talksProp,
@@ -616,7 +627,11 @@ export function TalkBrowser({
   const shownTo = pendingUnfiltered
     ? Math.min(pendingPage * PAGE_SIZE, resultSize ?? 0)
     : paged.to;
-  const universe = listingPending && catalogSize != null ? catalogSize : talks.length;
+  const universe = catalogUniverse({
+    catalogSize,
+    loadedTalks: talks.length,
+    indexPending: listingPending || catalogPending,
+  });
 
   const stagedEffective = useMemo<Filters | null>(
     () => (staged ? { ...staged, q: deferredQuery } : null),
@@ -1149,9 +1164,9 @@ export function TalkBrowser({
             <p className="text-[11px] uppercase tracking-[0.16em] text-mint/60">
               {shownTotal === 0
                 ? "0 talks"
-                : `${shownFrom}–${shownTo} of ${shownTotal} talk${shownTotal === 1 ? "" : "s"}`}
+                : `${formatCount(shownFrom)}–${formatCount(shownTo)} of ${formatCount(shownTotal)} talk${shownTotal === 1 ? "" : "s"}`}
               {shownTotal !== universe ? (
-                <span className="text-mint/30"> / {universe}</span>
+                <span className="text-mint/30"> / {formatCount(universe)}</span>
               ) : null}
               {/* Not in the server HTML: `ready` only flips after mount, so crawlers see a plain count. */}
               {ready && (gridPhase === "waiting" || gridPhase === "partial" || listingLoading) ? (
